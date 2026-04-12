@@ -1,0 +1,29 @@
+###
+GET http://localhost:8080/logger/user?userId=user123
+Accept: text/plain
+
+###
+GET http://localhost:8080/logger/order?orderNo=order123
+Accept: text/plain
+
+
+###
+GET http://localhost:8080/need-permission/user/query
+Accept: text/plain
+
+###
+GET http://localhost:8080/need-permission/user/add
+Accept: text/plain
+
+###
+GET http://localhost:8080/need-permission/order/add
+Accept: text/plain
+
+
+###
+POST http://localhost:8080/check-param/user/save
+Content-Type: application/json
+
+{
+  "userId": "1"
+}
