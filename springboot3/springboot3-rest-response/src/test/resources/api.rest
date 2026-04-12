@@ -1,0 +1,29 @@
+###
+GET http://localhost:8080/success/empty
+Accept: application/json
+
+###
+GET http://localhost:8080/success/single
+Accept: application/json
+
+###
+GET http://localhost:8080/success/list
+Accept: application/json
+
+###
+GET http://localhost:8080/success/page
+Accept: application/json
+
+###
+GET http://localhost:8080/fail/param
+Accept: application/json
+
+###
+GET http://localhost:8080/fail/business
+Accept: application/json
+
+###
+GET http://localhost:8080/error/system
+Accept: application/json
+
+

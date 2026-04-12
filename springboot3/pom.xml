@@ -20,6 +20,7 @@
 
     <modules>
         <module>springboot3-custom-annotation</module>
+        <module>springboot3-rest-response</module>
     </modules>
 
     <dependencyManagement>
