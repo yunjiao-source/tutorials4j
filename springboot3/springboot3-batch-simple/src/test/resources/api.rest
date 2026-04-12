@@ -1,0 +1,16 @@
+###
+GET http://localhost:8080/actuator/prometheus
+Accept: text/plain
+
+
+###
+GET http://localhost:8080/actuator/metrics
+Accept: application/json
+
+###
+GET http://localhost:8080/actuator/metrics/spring.batch.job
+Accept: application/json
+
+###
+GET http://localhost:8080/actuator/metrics/spring.batch.step
+Accept: application/json
