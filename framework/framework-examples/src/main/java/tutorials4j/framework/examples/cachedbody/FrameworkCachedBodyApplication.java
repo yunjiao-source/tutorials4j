@@ -12,7 +12,7 @@ import tutorials4j.framework.examples.DemoApplication;
  */
 @EnableCachedBody
 @SpringBootApplication
-public class CachedBodyApplication {
+public class FrameworkCachedBodyApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(DemoApplication.class)
                 .properties("spring.config.location=classpath:application-common.yml,classpath:cached-body.yml")
