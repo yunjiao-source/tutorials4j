@@ -21,6 +21,7 @@
     <modules>
         <module>springboot3-custom-annotation</module>
         <module>springboot3-rest-response</module>
+        <module>springboot3-rest-signature</module>
     </modules>
 
     <dependencyManagement>
@@ -29,6 +30,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>3.5.13</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>yunjiao-source.turorials4j.framework</groupId>
+                <artifactId>framework-bom</artifactId>
+                <version>${revision}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

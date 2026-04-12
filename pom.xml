@@ -23,6 +23,9 @@
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
 
         <javafaker.version>1.0.2</javafaker.version>
+        <commons-io.version>2.21.0</commons-io.version>
+        <commons-text.version>1.14.0</commons-text.version>
+        <commons-net.version>3.12.0</commons-net.version>
     </properties>
 
     <modules>
@@ -65,8 +68,28 @@
                 <artifactId>javafaker</artifactId>
                 <version>${javafaker.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>${commons-net.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
     <build>
         <pluginManagement>
             <plugins>
