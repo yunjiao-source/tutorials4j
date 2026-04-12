@@ -1,0 +1,10 @@
+###
+POST http://localhost:8080/cached-body/body
+Content-Type: text/plain
+
+{
+"Hello, CachedBody!"
+}
+
+
+

@@ -1,0 +1,7 @@
+tutorials4j:
+  servlet:
+    cached-body:
+      max-content-length: 1MB   # 允许的最大请求体大小
+      url-patterns: /cached-body/*
+      order: -999
+      dispatcher-types: REQUEST, FORWARD
