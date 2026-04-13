@@ -25,6 +25,7 @@
         <module>springboot3-rest-signature</module>
         <module>springboot3-batch-simple</module>
         <module>springboot3-captcha-simple</module>
+        <module>springboot3-caffeine-redis</module>
     </modules>
 
     <dependencyManagement>
