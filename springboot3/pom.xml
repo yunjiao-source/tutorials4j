@@ -24,6 +24,7 @@
         <module>springboot3-rest-response</module>
         <module>springboot3-rest-signature</module>
         <module>springboot3-batch-simple</module>
+        <module>springboot3-captcha-simple</module>
     </modules>
 
     <dependencyManagement>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>验证码示例</title>
+</head>
+<body>
+<h2>表单提交（带验证码）</h2>
+
+<!-- 显示消息 -->
+<div th:if="${message}" th:text="${message}" style="color:green;"></div>
+<div th:if="${error}" th:text="${error}" style="color:red;"></div>
+
+<form th:action="@{/submit}" method="post">
+    <div>
+        <label>验证码：</label>
+        <input type="text" name="captchaInput" required />
+        <img id="captchaImg" th:src="@{/captcha}" alt="验证码" style="cursor:pointer;" />
+        <a href="javascript:void(0)" onclick="refreshCaptcha()">看不清？换一张</a>
+    </div>
+    <button type="submit">提交</button>
+</form>
+
+<script>
+    function refreshCaptcha() {
+        // 给图片 src 加时间戳，强制浏览器重新加载
+        document.getElementById('captchaImg').src = '/captcha?' + new Date().getTime();
+    }
+</script>
+</body>
+</html>
