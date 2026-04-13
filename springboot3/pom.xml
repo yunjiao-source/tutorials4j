@@ -26,6 +26,7 @@
         <module>springboot3-batch-simple</module>
         <module>springboot3-captcha-simple</module>
         <module>springboot3-caffeine-redis</module>
+        <module>springboot3-micrometer-annotation</module>
     </modules>
 
     <dependencyManagement>
