@@ -8,8 +8,12 @@ import org.springframework.data.redis.cache.CacheKeyPrefix;
  * @author Yun Jiao
  */
 public interface RedisUtils {
+    String PREFIX = "tutorials4j:cache:";
+    static CacheKeyPrefix cacheKeyPrefix() {
+        return CacheKeyPrefix.prefixed(PREFIX);
+    }
 
-    static CacheKeyPrefix tutorials4jCacheKeyPrefix() {
-        return CacheKeyPrefix.prefixed("tutorials4j:");
+    static CacheKeyPrefix cacheKeyPrefix(String name) {
+        return CacheKeyPrefix.prefixed(PREFIX + name + ":");
     }
 }

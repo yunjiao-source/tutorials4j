@@ -19,7 +19,7 @@ import tutorials4j.framework.core.servlet.CachedBodyFilter;
 public class CachedBodyConfig {
     @PostConstruct
     public void postConstruct() {
-        log.debug("[Turorials4j] - Cached Body Filter Config");
+        log.debug("Turorials4j |- Cached Body Filter Config");
     }
 
     @Bean
@@ -35,7 +35,7 @@ public class CachedBodyConfig {
         registration.setName(properties.getName());
         registration.setDispatcherTypes(properties.getDispatcherTypes());
 
-        log.debug("[Turorials4j] - Filter Registration Bean - {}", registration);
+        log.debug("Turorials4j |- Filter Registration Bean - {}", registration);
         return registration;
     }
 }

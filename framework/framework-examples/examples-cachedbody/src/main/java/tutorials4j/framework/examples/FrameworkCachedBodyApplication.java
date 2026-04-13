@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.cachedbody;
+package tutorials4j.framework.examples;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

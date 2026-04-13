@@ -4,6 +4,7 @@ import jakarta.servlet.DispatcherType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.unit.DataSize;
+import tutorials4j.framework.core.constants.BasePropertiesConstants;
 
 import java.util.EnumSet;
 
@@ -13,7 +14,7 @@ import java.util.EnumSet;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = "tutorials4j.servlet.cached-body")
+@ConfigurationProperties(prefix = BasePropertiesConstants.PROPERTY_PREFIX_SERVLET_CACHE_BODY)
 public class CachedBodyProperties {
 
     private String[] urlPatterns = new String[]{"/*"};

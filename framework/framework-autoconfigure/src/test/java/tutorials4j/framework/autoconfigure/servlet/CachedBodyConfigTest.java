@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import tutorials4j.framework.core.constants.BasePropertiesConstants;
 import tutorials4j.framework.core.servlet.CachedBodyFilter;
 
 import java.util.EnumSet;
@@ -21,14 +22,15 @@ public class CachedBodyConfigTest {
 
     @BeforeEach
     public void setUp() {
+        String prefix = BasePropertiesConstants.PROPERTY_PREFIX_SERVLET_CACHE_BODY + ".";
         applicationContextRunner = new ApplicationContextRunner()
                 .withUserConfiguration(CachedBodyConfig.class)
                 .withPropertyValues(
-                        "tutorials4j.servlet.cached-body.max-content-length=2MB",
-                        "tutorials4j.servlet.cached-body.url-patterns=/api/*,/admin/*",
-                        "tutorials4j.servlet.cached-body.order=1",
-                        "tutorials4j.servlet.cached-body.name=customCachedBodyFilter",
-                        "tutorials4j.servlet.cached-body.dispatcher-types=REQUEST,FORWARD"
+                        prefix + "max-content-length=2MB",
+                        prefix + "url-patterns=/api/*,/admin/*",
+                        prefix + "order=1",
+                        prefix + "name=customCachedBodyFilter",
+                        prefix + "dispatcher-types=REQUEST,FORWARD"
                 );;
     }
 
