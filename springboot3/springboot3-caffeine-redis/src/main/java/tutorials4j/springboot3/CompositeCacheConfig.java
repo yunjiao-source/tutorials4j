@@ -40,7 +40,7 @@ public class CompositeCacheConfig implements CachingConfigurer {
                 .expireAfterAccess(10, TimeUnit.SECONDS));
 
         RedisCacheConfiguration redisCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .computePrefixWith(RedisUtils.tutorials4jCacheKeyPrefix());
+                .computePrefixWith(RedisUtils.cacheKeyPrefix());
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         configMap.put("orders", redisCacheConfig.entryTtl(Duration.ofSeconds(10)));
 
