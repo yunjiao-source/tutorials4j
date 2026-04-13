@@ -5,3 +5,7 @@ tutorials4j:
       url-patterns: /cached-body/*
       order: -999
       dispatcher-types: REQUEST, FORWARD
+
+logging:
+  level:
+    tutorials4j: DEBUG

@@ -4,28 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>yunjiao-source.turorials4j.framework</groupId>
-        <artifactId>framework</artifactId>
+        <artifactId>framework-examples</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>framework-examples</artifactId>
-    <packaging>pom</packaging>
-    <name>Framework :: Examples</name>
+    <artifactId>framework-examples-cachedbody</artifactId>
+    <packaging>jar</packaging>
+    <name>Examples :: Cached Body</name>
     <description>
-        Framework Examples
+        Cached Body
     </description>
-
-    <modules>
-        <module>framework-examples-cachedbody</module>
-    </modules>
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.turorials4j.framework</groupId>
-            <artifactId>framework-autoconfigure</artifactId>
-            <version>${revision}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 </project>

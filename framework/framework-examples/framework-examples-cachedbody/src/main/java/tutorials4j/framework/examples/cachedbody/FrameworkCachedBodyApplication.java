@@ -1,9 +1,8 @@
 package tutorials4j.framework.examples.cachedbody;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import tutorials4j.framework.autoconfigure.servlet.EnableCachedBody;
-import tutorials4j.framework.examples.DemoApplication;
 
 /**
  * 主应用类
@@ -14,8 +13,6 @@ import tutorials4j.framework.examples.DemoApplication;
 @SpringBootApplication
 public class FrameworkCachedBodyApplication {
     public static void main(String[] args) {
-        new SpringApplicationBuilder(DemoApplication.class)
-                .properties("spring.config.location=classpath:application-common.yml,classpath:cached-body.yml")
-                .run(args);
+        SpringApplication.run(FrameworkCachedBodyApplication.class, args);
     }
 }

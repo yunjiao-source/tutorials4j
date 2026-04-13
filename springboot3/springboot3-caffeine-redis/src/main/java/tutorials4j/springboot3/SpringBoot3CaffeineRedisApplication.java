@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author yangyunjiao
  */
 @SpringBootApplication
-public class SpringBootCaffeineRedisApplication {
+public class SpringBoot3CaffeineRedisApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootCaffeineRedisApplication.class, args);
+        SpringApplication.run(SpringBoot3CaffeineRedisApplication.class, args);
     }
 }

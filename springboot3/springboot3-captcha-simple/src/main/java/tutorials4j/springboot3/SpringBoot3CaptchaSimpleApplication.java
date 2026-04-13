@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author yangyunjiao
  */
 @SpringBootApplication
-public class SpringBootBatchSimpleApplication {
+public class SpringBoot3CaptchaSimpleApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootBatchSimpleApplication.class, args);
+        SpringApplication.run(SpringBoot3CaptchaSimpleApplication.class, args);
     }
 }
