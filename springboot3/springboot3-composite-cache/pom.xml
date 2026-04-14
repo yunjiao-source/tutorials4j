@@ -10,9 +10,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>springboot3-caffeine-redis</artifactId>
+    <artifactId>springboot3-composite-cache</artifactId>
     <packaging>jar</packaging>
-    <name>Spring Boot3 :: Caffeine Redis</name>
+    <name>Spring Boot3 :: Composite Cache</name>
     <description>
         caffeine + redis 实现组合缓存
     </description>

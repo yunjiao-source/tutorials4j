@@ -1,6 +1,6 @@
 # springboot3-rest-signature
 
-项目使用了[@EnableCachedBody]注解
+项目使用了[@EnableCachedBody]注解，创建FilterRegistrationBean实例，实现请求体重复可读
 
 ## HandlerInterceptor 与 FilterRegistrationBean 执行顺序
 
