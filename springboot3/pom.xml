@@ -28,6 +28,7 @@
         <module>springboot3-caffeine-redis</module>
         <module>springboot3-micrometer-annotation</module>
         <module>springboot3-debezium-simple</module>
+        <module>springboot3-routing-dataSource-jpa</module>
     </modules>
 
     <dependencyManagement>

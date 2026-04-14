@@ -1,0 +1,12 @@
+###
+GET http://localhost:8080/users
+Accept: application/json
+X-Tenant-ID:tenant-a
+
+###
+GET http://localhost:8080/users
+Accept: application/json
+X-Tenant-ID:tenant-b
+
+
+
