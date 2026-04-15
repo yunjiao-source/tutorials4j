@@ -20,7 +20,8 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.turorials4j.framework</groupId>
-            <artifactId>framework-autoconfigure</artifactId>
+            <artifactId>web-cached-request-body-spring-boot-starter</artifactId>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>

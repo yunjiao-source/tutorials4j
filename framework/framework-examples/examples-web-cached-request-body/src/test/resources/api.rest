@@ -1,0 +1,18 @@
+###
+POST http://localhost:8080/demo/cached
+Content-Type: text/plain
+
+{
+"Hello, CachedBody!"
+}
+
+###
+POST http://localhost:8080/demo/non-cached
+Content-Type: text/plain
+
+{
+"Hello, CachedBody!"
+}
+
+
+

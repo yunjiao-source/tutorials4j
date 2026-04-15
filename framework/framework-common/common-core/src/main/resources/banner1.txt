@@ -1,0 +1,12 @@
+${AnsiColor.BLUE}
+    .--.              .--.
+   : (\ ". _......_ ." /) :
+    '.    `        `    .'
+     /'   _        _   `\
+    /     0}      {0     \
+   |       /      \       |
+   |     /'        `\     |
+    \   | .  .==.  . |   /
+     '._ \.' \__/ './ _.'
+jgs  /  ``'._-''-_.'``  \
+${AnsiColor.BRIGHT_YELLOW} :: YunJiao Tutorials4j :: ${application.formatted-version}  based on  ${AnsiColor.RED}:: Spring Boot :: ${spring-boot.formatted-version} ${AnsiColor.BLUE}

@@ -1,0 +1,18 @@
+
+tutorials4j:
+  cache:
+    named-redis-caches:
+      users:
+        timeToLive: 30s
+        cacheNullValues: false
+        keyPrefix: user
+        useKeyPrefix: true
+      orders:
+        timeToLive: 60s
+        cacheNullValues: true
+        keyPrefix: order
+        useKeyPrefix: false
+
+logging:
+  level:
+    tutorials4j: DEBUG

@@ -18,20 +18,8 @@
     </description>
 
     <modules>
-        <module>examples-cachedbody</module>
-        <module>examples-initial-redis-cache</module>
+        <module>examples-web-cached-request-body</module>
+        <module>examples-cache-named-redis-spring-boot-starter</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>yunjiao-source.turorials4j.framework</groupId>
-            <artifactId>framework-autoconfigure</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-    </dependencies>
 </project>

@@ -1,8 +1,0 @@
-<configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.springframework" level="DEBUG"/>
-    <logger name="turorials4j" level="DEBUG"/>
-    <root level="DEBUG">
-        <appender-ref ref="CONSOLE" />
-    </root>
-</configuration>

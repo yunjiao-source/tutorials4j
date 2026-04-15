@@ -20,7 +20,8 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.turorials4j.framework</groupId>
-            <artifactId>framework-spring</artifactId>
+            <artifactId>cache-named-redis-spring-boot-starter</artifactId>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
