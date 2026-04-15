@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import tutorials4j.framework.spring.redis.RedisUtils;
+import tutorials4j.framework.cache.redis.RedisUtils;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -40,7 +40,7 @@ public class CompositeCacheConfig implements CachingConfigurer {
                 .expireAfterAccess(10, TimeUnit.SECONDS));
 
         RedisCacheConfiguration redisCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .computePrefixWith(RedisUtils.cacheKeyPrefix());
+                .computePrefixWith(RedisUtils.tutorials4jCacheKeyPrefix());
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         configMap.put("orders", redisCacheConfig.entryTtl(Duration.ofSeconds(10)));
 
