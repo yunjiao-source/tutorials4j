@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import tutorials4j.framework.web.core.constant.WebPropertiesConsts;
+import tutorials4j.framework.web.core.WebPropertiesConsts;
 
 import java.util.EnumSet;
 

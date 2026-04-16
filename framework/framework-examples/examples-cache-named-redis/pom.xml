@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>examples-cache-named-redis-spring-boot-starter</artifactId>
+    <artifactId>examples-cache-named-redis</artifactId>
     <packaging>jar</packaging>
     <name>Examples :: Cache Named Redis Spring Boot Starter</name>
 

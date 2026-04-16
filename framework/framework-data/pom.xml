@@ -10,16 +10,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>framework-examples</artifactId>
+    <artifactId>framework-data</artifactId>
     <packaging>pom</packaging>
-    <name>Framework :: Examples</name>
+    <name>Framework :: Data</name>
     <description>
-        Framework Examples
+        Data模块
     </description>
 
     <modules>
-        <module>examples-web-cached-request-body</module>
-        <module>examples-cache-named-redis</module>
+        <module>data-core</module>
+        <module>data-hibernate</module>
+        <module>data-hibernate-tenant-db-spring-boot-starter</module>
     </modules>
 
 </project>

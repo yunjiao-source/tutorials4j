@@ -1,0 +1,60 @@
+package tutorials4j.framework.data.hibernate;
+
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.util.LinkedCaseInsensitiveMap;
+import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.data.core.tenant.TenantProperties;
+
+import javax.sql.DataSource;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * 多租户数据源提供者
+ *
+ * @author Yun Jiao
+ */
+@Slf4j
+public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource> extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl<String>
+        implements HibernatePropertiesCustomizer {
+    protected Map<String, T> dataSources = new ConcurrentHashMap<>();
+    protected T defaultDataSource;
+    protected LinkedCaseInsensitiveMap<TenantProperties.DataSourceProperties> dataSourcePropertiesMap = new LinkedCaseInsensitiveMap<>();
+
+    protected abstract T createDataSource(TenantProperties.DataSourceProperties properties);
+
+    protected T createDataSource(String tenant) {
+        TenantProperties.DataSourceProperties dataSourceProperties = dataSourcePropertiesMap.get(tenant);
+
+        log.debug("Tutorials4j |- 创建租户数据源：[{},{}]", tenant, dataSourceProperties.getUrl());
+        return createDataSource(dataSourceProperties);
+    }
+
+    public void init(DataSource dataSource, TenantProperties properties) {
+        dataSources.clear();
+        dataSourcePropertiesMap.clear();
+
+        dataSourcePropertiesMap.putAll(properties.getDatasource());
+        this.defaultDataSource = (T) dataSource;
+        dataSources.put(DefaultConsts.DEFAULT_TENTANT_CODE, this.defaultDataSource);
+    }
+
+
+    @Override
+    protected DataSource selectAnyDataSource() {
+        return defaultDataSource;
+    }
+
+    @Override
+    protected DataSource selectDataSource(String tenantIdentifier) {
+        return dataSources.computeIfAbsent(tenantIdentifier, this::createDataSource);
+    }
+
+    @Override
+    public void customize(Map<String, Object> hibernateProperties) {
+        hibernateProperties.put(AvailableSettings.MULTI_TENANT_CONNECTION_PROVIDER, this);
+    }
+}

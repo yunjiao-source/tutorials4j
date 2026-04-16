@@ -4,7 +4,7 @@ import jakarta.servlet.DispatcherType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.unit.DataSize;
-import tutorials4j.framework.web.core.constant.WebPropertiesConsts;
+import tutorials4j.framework.web.core.WebPropertiesConsts;
 
 import java.util.EnumSet;
 

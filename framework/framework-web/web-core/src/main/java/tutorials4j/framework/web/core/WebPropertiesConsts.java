@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.core.constant;
+package tutorials4j.framework.web.core;
 
 import tutorials4j.framework.common.lang.PropertiesConsts;
 
