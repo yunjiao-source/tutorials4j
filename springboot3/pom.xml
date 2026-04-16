@@ -29,6 +29,7 @@
         <module>springboot3-micrometer-annotation</module>
         <module>springboot3-debezium-simple</module>
         <module>springboot3-routing-dataSource-jpa</module>
+        <module>springboot3-ftp-file</module>
     </modules>
 
     <dependencyManagement>

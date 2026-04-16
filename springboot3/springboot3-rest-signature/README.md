@@ -1,7 +1,5 @@
 # springboot3-rest-signature
 
-项目使用了[@EnableCachedBody]注解，创建FilterRegistrationBean实例，实现请求体重复可读
-
 ## HandlerInterceptor 与 FilterRegistrationBean 执行顺序
 
 `Filter`（通过 `FilterRegistrationBean` 注册）的执行优先级**高于** `HandlerInterceptor`，它在请求处理链的更前端工作，执行的先后顺序是固定的：
