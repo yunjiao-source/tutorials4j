@@ -17,7 +17,7 @@ public class TenantContextHolder {
         if (StringUtils.isBlank(tenant)) {
             tenant = DefaultConsts.DEFAULT_TENTANT_CODE;
         }
-        return tenant;
+        return tenant.toUpperCase();
     }
 
     public static void set(final String tenant) {

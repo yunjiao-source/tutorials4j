@@ -10,30 +10,33 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>examples-common-jpa</artifactId>
+    <artifactId>examples-data-hibernate-tenant-table</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Common JPA</name>
+    <name>Examples :: Data Hibernate Tenant Table</name>
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- PostgreSQL 驱动 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-hibernate</artifactId>
+            <artifactId>examples-common-jpa</artifactId>
             <version>${revision}</version>
-            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>data-hibernate-tenant-table-spring-boot-starter</artifactId>
+            <version>${revision}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
     </dependencies>
 </project>

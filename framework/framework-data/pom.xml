@@ -21,6 +21,7 @@
         <module>data-core</module>
         <module>data-hibernate</module>
         <module>data-hibernate-tenant-db-spring-boot-starter</module>
+        <module>data-hibernate-tenant-table-spring-boot-starter</module>
     </modules>
 
 </project>

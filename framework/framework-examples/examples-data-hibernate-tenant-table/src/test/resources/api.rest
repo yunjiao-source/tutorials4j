@@ -1,0 +1,35 @@
+###
+POST http://localhost:8080/user-tenant/create
+Content-Type: application/json
+X-Tenant-Code:DEMO1
+
+{
+  "name": "tom"
+}
+
+###
+GET http://localhost:8080/user-tenant/get
+Content-Type: application/json
+X-Tenant-Code:DEMO1
+
+###
+POST http://localhost:8080/user-tenant/create
+Content-Type: application/json
+X-Tenant-Code:DEFAULT
+
+{
+  "name": "kate"
+}
+
+###
+GET http://localhost:8080/user-tenant/get
+Content-Type: application/json
+X-Tenant-Code:DEFAULT
+
+###
+GET http://localhost:8080/users
+Content-Type: application/json
+
+
+
+

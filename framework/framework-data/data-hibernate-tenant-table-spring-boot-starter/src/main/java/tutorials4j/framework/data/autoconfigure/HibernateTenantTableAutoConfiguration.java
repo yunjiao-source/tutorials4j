@@ -5,20 +5,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.data.core.tenant.TenantConfiguration;
-import tutorials4j.framework.data.hibernate.tenant.HibernateDBTenantConfiguration;
+import tutorials4j.framework.data.hibernate.tenant.HibernateTableTenantConfiguration;
 
 /**
- * 独立数据库租户自动配置
+ * 共享表租户自动配置
  *
  * @author Yun Jiao
  */
 @Slf4j
 @AutoConfiguration
-@Import({TenantConfiguration.class, HibernateDBTenantConfiguration.class})
-public class HibernateTenantDBAutoConfiguration {
+@Import({TenantConfiguration.class, HibernateTableTenantConfiguration.class})
+public class HibernateTenantTableAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j |- Hibernate Tenant DB Auto Configuration");
+        log.debug("Tutorials4j |- Hibernate Tenant Table Auto Configuration");
     }
 
 }
