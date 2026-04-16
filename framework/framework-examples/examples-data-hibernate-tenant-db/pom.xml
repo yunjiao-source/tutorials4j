@@ -10,20 +10,33 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>examples-cache-named-redis</artifactId>
+    <artifactId>examples-data-hibernate-tenant-db</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Cache Named Redis</name>
+    <name>Examples :: Data Hibernate Tenant DB</name>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- PostgreSQL 驱动 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-named-redis-spring-boot-starter</artifactId>
+            <artifactId>examples-common-jpa</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>data-hibernate-tenant-db-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+
     </dependencies>
 </project>

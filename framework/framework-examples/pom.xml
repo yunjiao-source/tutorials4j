@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>yunjiao-source.turorials4j.framework</groupId>
+        <groupId>yunjiao-source.tutorials4j.framework</groupId>
         <artifactId>framework</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -18,8 +18,10 @@
     </description>
 
     <modules>
+        <module>examples-common-jpa</module>
         <module>examples-web-cached-request-body</module>
         <module>examples-cache-named-redis</module>
+        <module>examples-data-hibernate-tenant-db</module>
     </modules>
 
 </project>

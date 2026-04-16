@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>yunjiao-source.turorials4j</groupId>
-        <artifactId>turorials4j</artifactId>
+        <groupId>yunjiao-source.tutorials4j</groupId>
+        <artifactId>tutorials4j</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>yunjiao-source.turorials4j.framework</groupId>
+    <groupId>yunjiao-source.tutorials4j.framework</groupId>
     <artifactId>framework</artifactId>
     <packaging>pom</packaging>
     <name>Tutorials4j :: Framework</name>
