@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate;
+package tutorials4j.framework.data.hibernate.tenant;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;

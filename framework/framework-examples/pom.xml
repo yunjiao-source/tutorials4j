@@ -22,6 +22,8 @@
         <module>examples-web-cached-request-body</module>
         <module>examples-cache-named-redis</module>
         <module>examples-data-hibernate-tenant-db</module>
+        <module>examples-data-hibernate-tenant-db-dbcp2</module>
+        <module>examples-data-hibernate-tenant-db-druid</module>
     </modules>
 
 </project>

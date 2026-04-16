@@ -1,0 +1,36 @@
+###
+GET http://localhost:8080/demo/tenant
+Accept: application/json
+
+###
+GET http://localhost:8080/demo/tenant
+Accept: application/json
+X-Tenant-Code:DEFAULT
+
+###
+GET http://localhost:8080/demo/tenant
+Accept: application/json
+X-Tenant-Code:DEMO1
+
+###
+GET http://localhost:8080/demo/tenant
+Accept: application/json
+X-Tenant-Code:default
+
+###
+GET http://localhost:8080/demo/tenant
+Accept: application/json
+X-Tenant-Code:WRONG
+
+###
+GET http://localhost:8080/users
+Accept: application/json
+X-Tenant-Code:DEMO1
+
+
+### 监控页
+GET http://localhost:8080/druid
+Accept: application/json
+
+
+

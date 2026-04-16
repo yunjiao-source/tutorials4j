@@ -3,6 +3,10 @@ package tutorials4j.framework.data.hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import tutorials4j.framework.data.core.tenant.TenantProperties;
+import tutorials4j.framework.data.hibernate.tenant.DefaultCurrentTenantIdentifierResolver;
+import tutorials4j.framework.data.hibernate.tenant.DruidMultiTenantConnectionProvider;
+import tutorials4j.framework.data.hibernate.tenant.HibernateDBTenantConfiguration;
+import tutorials4j.framework.data.hibernate.tenant.HikariMultiTenantConnectionProvider;
 
 import javax.sql.DataSource;
 

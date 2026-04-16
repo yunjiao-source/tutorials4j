@@ -1,17 +1,18 @@
-package tutorials4j.framework.data.hibernate;
+package tutorials4j.framework.data.hibernate.tenant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
-import org.springframework.util.LinkedCaseInsensitiveMap;
 import tutorials4j.framework.common.lang.DefaultConsts;
 import tutorials4j.framework.data.core.FrameworkDataException;
 import tutorials4j.framework.data.core.tenant.TenantProperties;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 多租户数据源提供者
@@ -23,9 +24,9 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
         implements HibernatePropertiesCustomizer {
     protected Map<String, T> dataSources = new ConcurrentHashMap<>();
     protected T defaultDataSource;
-    protected LinkedCaseInsensitiveMap<TenantProperties.DataSourceProperties> dataSourcePropertiesMap = new LinkedCaseInsensitiveMap<>();
+    protected Map<String, TenantProperties.DataSourceProperties> dataSourcePropertiesMap = new HashMap<>();
 
-    protected abstract T createDataSource(TenantProperties.DataSourceProperties properties);
+    protected abstract T createDataSource(String tenant, TenantProperties.DataSourceProperties properties);
 
     protected T createDataSource(String tenant) {
         TenantProperties.DataSourceProperties dataSourceProperties = dataSourcePropertiesMap.get(tenant);
@@ -33,25 +34,20 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
             throw new FrameworkDataException("未配置租户数据源：" + tenant);
         }
         log.debug("Tutorials4j |- 创建租户数据源：[{},{}]", tenant, dataSourceProperties.getUrl());
-        return createDataSource(dataSourceProperties);
+        return createDataSource(tenant, dataSourceProperties);
     }
 
     public void init(DataSource dataSource, TenantProperties properties) {
         dataSources.clear();
-        dataSourcePropertiesMap.clear();
 
-        dataSourcePropertiesMap.putAll(properties.getDatasource());
+        // 将key转换成大写
+        dataSourcePropertiesMap = properties.getDatasource().entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().toUpperCase(),
+                        Map.Entry::getValue
+                ));
         this.defaultDataSource = (T) dataSource;
         dataSources.put(DefaultConsts.DEFAULT_TENTANT_CODE, this.defaultDataSource);
-    }
-
-    // 租户代码装饰：转换成大写
-    protected String tenantIdentifierDecorator(String tenantIdentifier) {
-        if (tenantIdentifier != null) {
-            return tenantIdentifier.toUpperCase();
-        }
-
-        return tenantIdentifier;
     }
 
     @Override
@@ -61,7 +57,7 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
 
     @Override
     protected DataSource selectDataSource(String tenantIdentifier) {
-        return dataSources.computeIfAbsent(tenantIdentifierDecorator(tenantIdentifier), this::createDataSource);
+        return dataSources.computeIfAbsent(tenantIdentifier, this::createDataSource);
     }
 
     @Override

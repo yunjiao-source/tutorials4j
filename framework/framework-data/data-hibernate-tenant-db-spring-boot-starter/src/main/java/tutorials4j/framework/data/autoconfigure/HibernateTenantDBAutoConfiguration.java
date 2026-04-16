@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.data.core.tenant.TenantConfiguration;
-import tutorials4j.framework.data.hibernate.HibernateDBTenantConfiguration;
+import tutorials4j.framework.data.hibernate.tenant.HibernateDBTenantConfiguration;
 
 /**
  * 租户自动配置

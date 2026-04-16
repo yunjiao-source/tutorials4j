@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate;
+package tutorials4j.framework.data.hibernate.tenant;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -13,7 +13,7 @@ import tutorials4j.framework.data.core.tenant.TenantProperties;
 @Slf4j
 public class HikariMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<HikariDataSource> {
     @Override
-    protected HikariDataSource createDataSource(TenantProperties.DataSourceProperties dataSourceProperties) {
+    protected HikariDataSource createDataSource(String tenant, TenantProperties.DataSourceProperties dataSourceProperties) {
         final HikariConfig hikariConfig = new HikariConfig();
         defaultDataSource.copyStateTo(hikariConfig);
         hikariConfig.setDriverClassName(dataSourceProperties.getDriverClassName());
