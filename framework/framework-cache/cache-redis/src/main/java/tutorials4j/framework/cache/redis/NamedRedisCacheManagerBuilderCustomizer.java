@@ -25,7 +25,7 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
     @Override
     public void customize(RedisCacheManager.RedisCacheManagerBuilder builder) {
         if (CollectionUtils.isEmpty(properties.getNamedRedisCaches())) {
-            log.debug("Turorials4j |- 没有配置初始化缓存");
+            log.debug("Tutorials4j |- 没有配置初始化缓存");
             return;
         }
 
@@ -53,6 +53,6 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
         });
 
         builder.cacheDefaults(defaultCacheConfig).withInitialCacheConfigurations(configMap);
-        log.debug("Turorials4j |- 成功初始化缓存[{}]", String.join(",", configMap.keySet()));
+        log.debug("Tutorials4j |- 成功初始化缓存[{}]", String.join(",", configMap.keySet()));
     }
 }

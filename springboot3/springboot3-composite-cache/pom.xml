@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>yunjiao-source.turorials4j.springboot3</groupId>
+        <groupId>yunjiao-source.tutorials4j.springboot3</groupId>
         <artifactId>springboot3</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -19,7 +19,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.turorials4j.framework</groupId>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>cache-redis</artifactId>
             <version>${revision}</version>
         </dependency>

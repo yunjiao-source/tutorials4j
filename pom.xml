@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>yunjiao-source.turorials4j</groupId>
-    <artifactId>turorials4j</artifactId>
+    <groupId>yunjiao-source.tutorials4j</groupId>
+    <artifactId>tutorials4j</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 

@@ -6,6 +6,7 @@ import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTen
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.data.core.FrameworkDataException;
 import tutorials4j.framework.data.core.tenant.TenantProperties;
 
 import javax.sql.DataSource;
@@ -28,7 +29,9 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
 
     protected T createDataSource(String tenant) {
         TenantProperties.DataSourceProperties dataSourceProperties = dataSourcePropertiesMap.get(tenant);
-
+        if (dataSourceProperties == null) {
+            throw new FrameworkDataException("未配置租户数据源：" + tenant);
+        }
         log.debug("Tutorials4j |- 创建租户数据源：[{},{}]", tenant, dataSourceProperties.getUrl());
         return createDataSource(dataSourceProperties);
     }
@@ -42,6 +45,14 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
         dataSources.put(DefaultConsts.DEFAULT_TENTANT_CODE, this.defaultDataSource);
     }
 
+    // 租户代码装饰：转换成大写
+    protected String tenantIdentifierDecorator(String tenantIdentifier) {
+        if (tenantIdentifier != null) {
+            return tenantIdentifier.toUpperCase();
+        }
+
+        return tenantIdentifier;
+    }
 
     @Override
     protected DataSource selectAnyDataSource() {
@@ -50,7 +61,7 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
 
     @Override
     protected DataSource selectDataSource(String tenantIdentifier) {
-        return dataSources.computeIfAbsent(tenantIdentifier, this::createDataSource);
+        return dataSources.computeIfAbsent(tenantIdentifierDecorator(tenantIdentifier), this::createDataSource);
     }
 
     @Override
