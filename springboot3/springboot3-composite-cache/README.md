@@ -1,4 +1,4 @@
-# springboot3-caffeine-redis
+# springboot3-composite-cache
 
 代码实现了一个**多级（组合）缓存**的配置，主要功能如下：
 

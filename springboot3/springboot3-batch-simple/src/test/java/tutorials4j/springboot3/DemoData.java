@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.stream.IntStream;
 
 /**
- * 示例数据
+ * 示例数据生成
  *
  * @author Yun Jiao
  */

@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
     <name>Spring Boot3 :: Common JPA</name>
     <description>
-        通用jpa
+        通用jpa，其他包引用，避免重复代码
     </description>
 
     <dependencies>

@@ -49,7 +49,8 @@ public class SimpleJobRunner implements CommandLineRunner {
      *
      * @throws Exception
      */
-    @Scheduled(fixedDelay = 15000L, initialDelay = 3000L)
+
+    @Scheduled(initialDelay = 30000, fixedDelay = 60000)
     public void runJob() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("run.id", System.currentTimeMillis())

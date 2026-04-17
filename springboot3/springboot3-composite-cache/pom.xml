@@ -15,6 +15,8 @@
     <name>Spring Boot3 :: Composite Cache</name>
     <description>
         caffeine + redis 实现组合缓存
+
+        使用@Cacheable注解，根据缓存名称绑定caffeine或redis缓存
     </description>
 
     <dependencies>

@@ -15,6 +15,8 @@
     <name>Spring Boot3 :: Batch Simple</name>
     <description>
         Spring Batch简单示例
+
+        将csv中的用户信息导入到数据库表中
     </description>
 
     <dependencies>
