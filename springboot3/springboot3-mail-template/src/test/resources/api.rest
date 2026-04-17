@@ -1,0 +1,9 @@
+###
+POST http://localhost:8080/sendTemplateEmail?to=23@qq.com&subject=测试邮件
+Content-Type: application/json
+
+
+
+
+
+
