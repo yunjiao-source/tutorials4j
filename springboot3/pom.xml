@@ -33,6 +33,7 @@
         <module>springboot3-hikari-scaler</module>
         <module>springboot3-http-message-convert</module>
         <module>springboot3-mail-template</module>
+        <module>springboot3-web-distributed-tracing</module>
     </modules>
 
     <dependencyManagement>
