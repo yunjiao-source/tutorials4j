@@ -5,7 +5,7 @@ import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import tutorials4j.framework.common.lang.DefaultConsts;
-import tutorials4j.framework.data.core.FrameworkDataException;
+import tutorials4j.framework.data.core.DataFrameworkException;
 import tutorials4j.framework.data.core.tenant.TenantProperties;
 
 import javax.sql.DataSource;
@@ -31,7 +31,7 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
     protected T createDataSource(String tenant) {
         TenantProperties.DataSourceProperties dataSourceProperties = dataSourcePropertiesMap.get(tenant);
         if (dataSourceProperties == null) {
-            throw new FrameworkDataException("未配置租户数据源：" + tenant);
+            throw new DataFrameworkException("未配置租户数据源：" + tenant);
         }
         log.debug("Tutorials4j |- 创建租户数据源：[{},{}]", tenant, dataSourceProperties.getUrl());
         return createDataSource(tenant, dataSourceProperties);

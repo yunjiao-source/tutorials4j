@@ -2,7 +2,7 @@ package tutorials4j.framework.data.hibernate.tenant;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.data.core.FrameworkDataException;
+import tutorials4j.framework.data.core.DataFrameworkException;
 import tutorials4j.framework.data.core.tenant.TenantProperties;
 
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConne
             newDataSource.init();
             return newDataSource;
         } catch (Exception e) {
-            throw new FrameworkDataException("创建租户数据源异常",e);
+            throw new DataFrameworkException("创建租户数据源异常",e);
         }
     }
 
