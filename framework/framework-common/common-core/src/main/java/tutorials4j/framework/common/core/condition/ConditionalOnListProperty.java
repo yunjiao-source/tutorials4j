@@ -1,19 +1,19 @@
-package tutorials4j.framework.data.core.condition;
+package tutorials4j.framework.common.core.condition;
 
 import org.springframework.context.annotation.Conditional;
 
 import java.lang.annotation.*;
 
 /**
- * Map条件注解
+ * List条件注解
  *
  * @author Yun Jiao
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Conditional(OnCollectionMapCondition.class)
-public @interface ConditionalOnMapProperty {
+@Conditional(OnCollectionListCondition.class)
+public @interface ConditionalOnListProperty {
 
     /**
      * 配置前缀，例如 "my.map"

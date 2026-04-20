@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.util;
+package tutorials4j.framework.common.core.util;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ConditionContext;

@@ -4,31 +4,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>yunjiao-source.tutorials4j.framework</groupId>
-        <artifactId>framework-examples</artifactId>
+        <artifactId>framework-web</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>examples-common-jpa</artifactId>
+    <artifactId>web-client-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Common JPA</name>
+    <name>Web :: Client Http5 Spring Boot Starter</name>
+    <description>
+        基于Http5的，web客户端启动器
+    </description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-hibernate</artifactId>
+            <artifactId>web-client</artifactId>
             <version>${revision}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
     </dependencies>
+
 </project>

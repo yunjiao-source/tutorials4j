@@ -1,9 +1,9 @@
-package tutorials4j.framework.data.core.condition;
+package tutorials4j.framework.common.core.util;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.core.env.Environment;
-import tutorials4j.framework.data.core.util.EnvtPropertyFinder;
+import tutorials4j.framework.common.core.util.EnvtPropertyFinder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

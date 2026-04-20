@@ -1,0 +1,21 @@
+spring:
+  http:
+    client:
+      connect-timeout: 1s
+      read-timeout: 3s
+
+
+tutorials4j:
+  web:
+    client:
+      logger-enabled: true
+      buffering-client-http-request-enabled: true
+      base-url: https://jsonplaceholder.typicode.com
+      default-headers:
+        X-abc: abcd
+
+
+logging:
+  level:
+    tutorials4j: DEBUG
+

@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.condition;
+package tutorials4j.framework.common.core.condition;
 
 import lombok.Builder;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
@@ -16,11 +16,12 @@ import org.springframework.util.StringUtils;
 public abstract class AbstractOnCollectionCollecitonCondition extends SpringBootCondition {
 
     protected abstract Decision makeDecision(String fullKey, ConditionContext context, AnnotationAttributes attributes);
+    protected abstract Class<?> getAnnotationClass();
 
     @Override
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
         AnnotationAttributes attributes = AnnotationAttributes.fromMap(
-                metadata.getAnnotationAttributes(ConditionalOnListProperty.class.getName()));
+                metadata.getAnnotationAttributes(getAnnotationClass().getName()));
         if (attributes == null) {
             return ConditionOutcome.noMatch("@ConditionalOnMapProperty is not present");
         }

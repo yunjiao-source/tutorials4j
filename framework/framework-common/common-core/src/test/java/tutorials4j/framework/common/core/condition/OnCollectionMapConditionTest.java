@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.condition;
+package tutorials4j.framework.common.core.condition;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;

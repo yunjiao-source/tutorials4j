@@ -25,6 +25,7 @@
         <module>examples-data-hibernate-tenant-db-dbcp2</module>
         <module>examples-data-hibernate-tenant-db-druid</module>
         <module>examples-data-hibernate-tenant-table</module>
+        <module>examples-web-client</module>
     </modules>
 
 </project>

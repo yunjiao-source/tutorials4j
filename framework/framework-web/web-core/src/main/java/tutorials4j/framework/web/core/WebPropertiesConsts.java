@@ -9,4 +9,5 @@ import tutorials4j.framework.common.lang.PropertiesConsts;
  */
 public interface WebPropertiesConsts extends PropertiesConsts {
     String PROPERTY_PREFIX_WEB_CACHED_REQUEST_BODY = PROPERTY_PREFIX_WEB + ".cached-request-body";
+    String PROPERTY_PREFIX_WEB_CLIENT = PROPERTY_PREFIX_WEB + ".client";
 }

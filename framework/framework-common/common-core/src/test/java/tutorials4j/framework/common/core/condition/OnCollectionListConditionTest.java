@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.condition;
+package tutorials4j.framework.common.core.condition;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Yun Jiao
  */
-class ConditionalOnListPropertyTest {
+class OnCollectionListConditionTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner();
 
