@@ -22,6 +22,7 @@ tutorials4j:
   data:
     tenant:
       path-patterns: /user-tenant/*
+      type: table
 
 
 logging:

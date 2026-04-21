@@ -12,7 +12,7 @@
 
     <artifactId>examples-web-http</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Web Cached Request Body</name>
+    <name>Examples :: Web Http</name>
 
     <dependencies>
         <dependency>

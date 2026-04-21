@@ -3,7 +3,7 @@ package tutorials4j.framework.data.hibernate.tenant;
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.data.core.DataFrameworkException;
-import tutorials4j.framework.data.core.tenant.TenantProperties;
+import tutorials4j.framework.data.core.properties.TenantProperties;
 
 import java.sql.SQLException;
 
@@ -15,13 +15,13 @@ import java.sql.SQLException;
 @Slf4j
 public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<DruidDataSource> {
     @Override
-    protected DruidDataSource createDataSource(String tenant, TenantProperties.DataSourceProperties properties) {
+    protected DruidDataSource createDataSource(String tenant, TenantProperties.DataSourceOptions options) {
         try {
             DruidDataSource newDataSource = copyDataSource(defaultDataSource);
-            newDataSource.setDriverClassName(properties.getDriverClassName());
-            newDataSource.setUrl(properties.getUrl());
-            newDataSource.setUsername(properties.getUsername());
-            newDataSource.setPassword(properties.getPassword());
+            newDataSource.setDriverClassName(options.getDriverClassName());
+            newDataSource.setUrl(options.getUrl());
+            newDataSource.setUsername(options.getUsername());
+            newDataSource.setPassword(options.getPassword());
             newDataSource.init();
             return newDataSource;
         } catch (Exception e) {

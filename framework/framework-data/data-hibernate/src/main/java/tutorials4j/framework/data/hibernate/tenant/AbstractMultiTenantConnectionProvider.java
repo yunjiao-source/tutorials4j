@@ -6,7 +6,7 @@ import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTen
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import tutorials4j.framework.common.lang.DefaultConsts;
 import tutorials4j.framework.data.core.DataFrameworkException;
-import tutorials4j.framework.data.core.tenant.TenantProperties;
+import tutorials4j.framework.data.core.properties.TenantProperties;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -24,24 +24,24 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
         implements HibernatePropertiesCustomizer {
     protected Map<String, T> dataSources = new ConcurrentHashMap<>();
     protected T defaultDataSource;
-    protected Map<String, TenantProperties.DataSourceProperties> dataSourcePropertiesMap = new HashMap<>();
+    protected Map<String, TenantProperties.DataSourceOptions> dataSourceOptionsMap = new HashMap<>();
 
-    protected abstract T createDataSource(String tenant, TenantProperties.DataSourceProperties properties);
+    protected abstract T createDataSource(String tenant, TenantProperties.DataSourceOptions options);
 
     protected T createDataSource(String tenant) {
-        TenantProperties.DataSourceProperties dataSourceProperties = dataSourcePropertiesMap.get(tenant);
-        if (dataSourceProperties == null) {
+        TenantProperties.DataSourceOptions dataSourceOptions = dataSourceOptionsMap.get(tenant);
+        if (dataSourceOptions == null) {
             throw new DataFrameworkException("未配置租户数据源：" + tenant);
         }
-        log.debug("Tutorials4j |- 创建租户数据源：[{},{}]", tenant, dataSourceProperties.getUrl());
-        return createDataSource(tenant, dataSourceProperties);
+        log.debug("Tutorials4j |- 创建租户数据源：[{},{}]", tenant, dataSourceOptions.getUrl());
+        return createDataSource(tenant, dataSourceOptions);
     }
 
     public void init(DataSource dataSource, TenantProperties properties) {
         dataSources.clear();
 
         // 将key转换成大写
-        dataSourcePropertiesMap = properties.getDatasource().entrySet().stream()
+        dataSourceOptionsMap = properties.getDatasource().entrySet().stream()
                 .collect(Collectors.toMap(
                         entry -> entry.getKey().toUpperCase(),
                         Map.Entry::getValue

@@ -12,7 +12,7 @@
 
     <artifactId>examples-web-client</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Web Client Http5</name>
+    <name>Examples :: Web Client</name>
 
     <dependencies>
         <dependency>

@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-hibernate-tenant-table-spring-boot-starter</artifactId>
+            <artifactId>data-hibernate</artifactId>
             <version>${revision}</version>
         </dependency>
 

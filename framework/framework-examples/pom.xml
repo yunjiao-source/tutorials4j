@@ -20,10 +20,8 @@
     <modules>
         <module>examples-common-jpa</module>
         <module>examples-web-http</module>
-        <module>examples-cache-named-redis</module>
-        <module>examples-data-hibernate-tenant-db</module>
-        <module>examples-data-hibernate-tenant-db-dbcp2</module>
-        <module>examples-data-hibernate-tenant-db-druid</module>
+        <module>examples-cache-redis</module>
+        <module>examples-data-hibernate</module>
         <module>examples-data-hibernate-tenant-table</module>
         <module>examples-web-client</module>
     </modules>

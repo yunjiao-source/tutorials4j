@@ -12,6 +12,10 @@ import tutorials4j.framework.common.lang.DefaultConsts;
 public class TenantContextHolder {
     private static final ThreadLocal<String> CURRENT_CONTEXT = new TransmittableThreadLocal<>();
 
+    /**
+     * 获取租户代码。注意：代码都会转换为大写
+     * @return 租户代码（大写）
+     */
     public static String get() {
         String tenant = CURRENT_CONTEXT.get();
         if (StringUtils.isBlank(tenant)) {

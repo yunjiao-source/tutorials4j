@@ -2,6 +2,7 @@ package tutorials4j.framework.examples;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import tutorials4j.framework.data.hibernate.tenant.TenantEntity;
 
 /**
@@ -9,6 +10,7 @@ import tutorials4j.framework.data.hibernate.tenant.TenantEntity;
  *
  * @author Yun Jiao
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "t_user_tenant")

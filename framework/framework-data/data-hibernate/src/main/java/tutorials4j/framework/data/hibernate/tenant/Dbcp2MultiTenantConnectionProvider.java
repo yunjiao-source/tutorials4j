@@ -1,7 +1,7 @@
 package tutorials4j.framework.data.hibernate.tenant;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import tutorials4j.framework.data.core.tenant.TenantProperties;
+import tutorials4j.framework.data.core.properties.TenantProperties;
 
 /**
  * dbcp2 多租户数据源提供者
@@ -10,12 +10,12 @@ import tutorials4j.framework.data.core.tenant.TenantProperties;
  */
 public class Dbcp2MultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<BasicDataSource>  {
     @Override
-    protected BasicDataSource createDataSource(String tenant, TenantProperties.DataSourceProperties properties) {
+    protected BasicDataSource createDataSource(String tenant, TenantProperties.DataSourceOptions options) {
         BasicDataSource newDataSource = copyDataSource(defaultDataSource);
-        newDataSource.setDriverClassName(properties.getDriverClassName());
-        newDataSource.setUrl(properties.getUrl());
-        newDataSource.setUsername(properties.getUsername());
-        newDataSource.setPassword(properties.getPassword());
+        newDataSource.setDriverClassName(options.getDriverClassName());
+        newDataSource.setUrl(options.getUrl());
+        newDataSource.setUsername(options.getUsername());
+        newDataSource.setPassword(options.getPassword());
         return newDataSource;
     }
 

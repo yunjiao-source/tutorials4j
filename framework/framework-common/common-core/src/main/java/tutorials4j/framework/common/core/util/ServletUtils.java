@@ -1,6 +1,5 @@
 package tutorials4j.framework.common.core.util;
 
-import cn.hutool.extra.servlet.ServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import tutorials4j.framework.common.lang.DefaultConsts;
 
@@ -9,7 +8,7 @@ import tutorials4j.framework.common.lang.DefaultConsts;
  *
  * @author Yun Jiao
  */
-public class ServletUtils extends ServletUtil {
+public class ServletUtils{
     public static String getTenant(HttpServletRequest httpServletRequest) {
         return getHeader(httpServletRequest, DefaultConsts.HTTP_HEADER_TENANT);
     }

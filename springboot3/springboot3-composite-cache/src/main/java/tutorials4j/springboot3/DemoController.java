@@ -24,4 +24,9 @@ public class DemoController {
     public String getOrder(@RequestParam("id") Long id) {
         return demoService.getOrder(id);
     }
+
+    @GetMapping("cars")
+    public String getCar(@RequestParam("id") Long id) {
+        return demoService.getCars(id);
+    }
 }

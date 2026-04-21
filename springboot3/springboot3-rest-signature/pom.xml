@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-http-spring-boot-starter</artifactId>
+            <artifactId>web-http</artifactId>
             <version>${revision}</version>
         </dependency>
 

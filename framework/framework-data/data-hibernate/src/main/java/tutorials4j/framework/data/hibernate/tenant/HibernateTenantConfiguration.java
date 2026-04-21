@@ -1,0 +1,75 @@
+package tutorials4j.framework.data.hibernate.tenant;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import com.zaxxer.hikari.HikariDataSource;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import tutorials4j.framework.data.core.DataPropertiesConsts;
+import tutorials4j.framework.data.core.properties.TenantProperties;
+
+import javax.sql.DataSource;
+
+/**
+ * 基于Hibernate的租户配置
+ *
+ * @author Yun Jiao
+ */
+@Slf4j
+@Configuration(proxyBeanMethods = false)
+public class HibernateTenantConfiguration {
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("Tutorials4j |- Hibernate Tenant Configuration");
+    }
+
+    @Bean
+    DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
+        log.debug("Tutorials4j |- Default Current Tenant Identifier Resolver");
+        return new DefaultCurrentTenantIdentifierResolver();
+    }
+
+
+    /**
+     * 独立数据库租户配置
+     */
+    @ConditionalOnBean(DataSource.class)
+    @ConditionalOnProperty(prefix = DataPropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "DATABASE", matchIfMissing = true)
+    static class DatabaseTenantConfiguration {
+        @Bean
+        @ConditionalOnClass(HikariDataSource.class)
+        @ConditionalOnSingleCandidate(HikariDataSource.class)
+        HikariMultiTenantConnectionProvider hikariMultiTenantConnectionProvider(DataSource dataSource, TenantProperties properties) {
+            log.debug("Tutorials4j |- Hikari Multi Tenant Connection Provider");
+            HikariMultiTenantConnectionProvider bean = new HikariMultiTenantConnectionProvider();
+            bean.init(dataSource, properties);
+            return bean;
+        }
+
+        @Bean
+        @ConditionalOnClass(DruidDataSource.class)
+        @ConditionalOnSingleCandidate(DruidDataSource.class)
+        DruidMultiTenantConnectionProvider druidMultiTenantConnectionProvider(DataSource dataSource, TenantProperties properties) {
+            log.debug("Tutorials4j |- Druid Multi Tenant Connection Provider");
+            DruidMultiTenantConnectionProvider bean = new DruidMultiTenantConnectionProvider();
+            bean.init(dataSource, properties);
+            return bean;
+        }
+
+        @Bean
+        @ConditionalOnClass(BasicDataSource.class)
+        @ConditionalOnSingleCandidate(BasicDataSource.class)
+        Dbcp2MultiTenantConnectionProvider dbcp2MultiTenantConnectionProvider(DataSource dataSource, TenantProperties properties) {
+            log.debug("Tutorials4j |- Dbcp2 Multi Tenant Connection Provider");
+            Dbcp2MultiTenantConnectionProvider bean = new Dbcp2MultiTenantConnectionProvider();
+            bean.init(dataSource, properties);
+            return bean;
+        }
+    }
+}

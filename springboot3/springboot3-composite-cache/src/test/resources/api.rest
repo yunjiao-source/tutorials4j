@@ -5,3 +5,7 @@ Accept: text/plain
 ###
 GET http://localhost:8080/orders?id=1
 Accept: text/plain
+
+###
+GET http://localhost:8080/cars?id=1
+Accept: text/plain

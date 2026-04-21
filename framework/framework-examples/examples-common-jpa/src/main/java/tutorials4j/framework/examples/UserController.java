@@ -2,10 +2,7 @@ package tutorials4j.framework.examples;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -23,5 +20,11 @@ public class UserController {
     public ResponseEntity<?> create(@RequestBody User user) {
         userRepository.save(user);
         return ResponseEntity.ok("创建用户成功");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> get(@PathVariable("id") Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        return ResponseEntity.ok(user);
     }
 }

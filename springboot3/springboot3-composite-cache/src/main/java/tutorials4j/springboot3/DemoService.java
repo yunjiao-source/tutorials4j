@@ -27,5 +27,12 @@ public class DemoService {
         log.info("数据库中获取数据：{}", data);
         return data;
     }
+
+    @Cacheable("cars")
+    public String getCars(Long carId) {
+        String data =  "car-" + RandomStringUtils.insecure().nextAlphabetic(5);
+        log.info("数据库中获取数据：{}", data);
+        return data;
+    }
 }
 
