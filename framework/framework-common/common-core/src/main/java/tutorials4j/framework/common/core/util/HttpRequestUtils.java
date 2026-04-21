@@ -27,11 +27,13 @@ public class HttpRequestUtils {
      */
     public static void requestLogging(HttpRequest request, byte[] body) {
         log.info("请求: {} {}", request.getMethod(), request.getURI());
-        log.info("--- 请求头列表: ---");
+        log.info("\t 请求头列表:");
         request.getHeaders().forEach(HttpRequestUtils::logHeader);
 
-        log.info("--- 请求体: ---");
-        log.info(new String(body, getCharset(request.getHeaders())));
+        log.info("\t 请求体:");
+        if (body.length > 0) {
+            log.info("\t\t " + new String(body, getCharset(request.getHeaders())));
+        }
     }
 
     /**
@@ -44,18 +46,17 @@ public class HttpRequestUtils {
         } catch (IOException e) {
             log.error("获取响应状态异常", e);
         }
-        log.info("--- 响应头列表: ---");
+        log.info("\t 响应头列表:");
         response.getHeaders().forEach(HttpRequestUtils::logHeader);
     }
 
-    public static Charset getCharset(HttpHeaders headers)
-    {
-        return Optional.of(headers.getContentType())
+    public static Charset getCharset(HttpHeaders headers) {
+        return Optional.ofNullable(headers.getContentType())
                 .map(MediaType::getCharset)
                 .orElse(DefaultConsts.DEFAULT_CHARSET);
     }
 
     private static void logHeader(String name, List<String> values) {
-        values.forEach(value -> log.info("{}={}", name, value));
+        values.forEach(value -> log.info("\t\t {}={}", name, value));
     }
 }

@@ -18,9 +18,9 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
 import tutorials4j.framework.common.core.condition.ConditionalOnMapProperty;
-import tutorials4j.framework.common.core.util.HttpRequestUtils;
 import tutorials4j.framework.web.core.WebClientFrameworkException;
 import tutorials4j.framework.web.core.WebPropertiesConsts;
+import tutorials4j.framework.web.core.properties.WebClientProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class WebClientConfiguration {
         RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
             log.debug("Tutorials4j |- Log Headers Rest Template Builder Customizer");
             return restTemplate -> {
-                restTemplate.getInterceptors().add(new LogHeaderClientHttpRequestInterceptor());
+                restTemplate.getInterceptors().add(new LogClientHttpRequestInterceptor());
             };
         }
 
@@ -88,7 +88,7 @@ public class WebClientConfiguration {
         RestClientCustomizer logHeadersRestClientCustomizer() {
             log.debug("Tutorials4j |- Log Headers Rest Client Customizer");
             return restClientBuilder -> {
-                restClientBuilder.requestInterceptor(new LogHeaderClientHttpRequestInterceptor());
+                restClientBuilder.requestInterceptor(new LogClientHttpRequestInterceptor());
             };
         }
 
@@ -170,10 +170,10 @@ public class WebClientConfiguration {
         }
 
         private ExchangeFilterFunction logRequest() {
-            return (clientRequest, next) -> {
+            return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
                 ReactiveClientUtils.requestLogging(clientRequest);
-                return next.exchange(clientRequest);
-            };
+                return Mono.just(clientRequest);
+            });
         }
 
     }

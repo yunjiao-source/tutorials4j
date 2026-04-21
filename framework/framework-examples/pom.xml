@@ -19,7 +19,7 @@
 
     <modules>
         <module>examples-common-jpa</module>
-        <module>examples-web-cached-request-body</module>
+        <module>examples-web-http</module>
         <module>examples-cache-named-redis</module>
         <module>examples-data-hibernate-tenant-db</module>
         <module>examples-data-hibernate-tenant-db-dbcp2</module>

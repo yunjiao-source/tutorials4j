@@ -20,7 +20,7 @@ public class ReactiveClientUtils {
      */
     public static void requestLogging(ClientRequest request) {
         log.info("请求: {} {}", request.method(), request.url());
-        log.info("--- 请求头列表: ---");
+        log.info("\t 请求头列表:");
         request.headers().forEach(ReactiveClientUtils::logHeader);
 
     }
@@ -31,11 +31,11 @@ public class ReactiveClientUtils {
      */
     public static void responseLogging(ClientResponse response) {
         log.info("响应: {}", response.statusCode());
-        log.info("--- 响应头列表: ---");
+        log.info("\t 响应头列表:");
         response.headers().asHttpHeaders().forEach(ReactiveClientUtils::logHeader);
     }
 
     private static void logHeader(String name, List<String> values) {
-        values.forEach(value -> log.info("{}={}", name, value));
+        values.forEach(value -> log.info("\t\t {}={}", name, value));
     }
 }

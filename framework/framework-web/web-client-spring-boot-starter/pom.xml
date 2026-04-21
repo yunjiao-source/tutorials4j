@@ -12,9 +12,9 @@
 
     <artifactId>web-client-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <name>Web :: Client Http5 Spring Boot Starter</name>
+    <name>Web :: Client Spring Boot Starter</name>
     <description>
-        基于Http5的，web客户端启动器
+        web客户端启动器
     </description>
 
     <dependencies>
@@ -25,8 +25,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.httpcomponents.client5</groupId>
-            <artifactId>httpclient5</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
     </dependencies>
 

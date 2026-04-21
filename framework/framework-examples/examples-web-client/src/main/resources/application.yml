@@ -3,11 +3,11 @@ spring:
     client:
       connect-timeout: 1s
       read-timeout: 3s
+    codecs:
+      log-request-details: true  # 只对webclient有效
 
 
-tutorials4j:
-  web:
-    client:
+tutorials4j.web.client:
       logger-enabled: true
       buffering-client-http-request-enabled: true
       base-url: https://jsonplaceholder.typicode.com
@@ -17,5 +17,12 @@ tutorials4j:
 
 logging:
   level:
+    org:
+      springframework:
+        web:
+          reactive:
+            function:
+              client:
+                ExchangeFunctions: TRACE
     tutorials4j: DEBUG
 
