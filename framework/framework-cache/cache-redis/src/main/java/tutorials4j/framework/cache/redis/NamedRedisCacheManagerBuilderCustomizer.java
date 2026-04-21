@@ -40,7 +40,7 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
                 redisCacheConfig = redisCacheConfig.entryTtl(redisProp.getTimeToLive());
             }
 
-            if (Objects.equals(Boolean.TRUE, redisProp.isCacheNullValues())) {
+            if (Objects.equals(Boolean.FALSE, redisProp.isCacheNullValues())) {
                 redisCacheConfig = redisCacheConfig.disableCachingNullValues();
             }
 

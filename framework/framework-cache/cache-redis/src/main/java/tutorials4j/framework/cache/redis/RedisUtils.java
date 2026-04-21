@@ -7,20 +7,21 @@ import org.springframework.lang.NonNull;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import static tutorials4j.framework.common.lang.RedisConsts.KEY_PREFIX_CACHE;
+
 /**
  * 工具
  *
  * @author Yun Jiao
  */
 public interface RedisUtils {
-    String PREFIX = "tutorials4j:cache:";
 
     /**
      * 规则：'tutorials4j:cache:'
      * @return {@link CacheKeyPrefix} 实例
      */
     static CacheKeyPrefix tutorials4jCacheKeyPrefix() {
-        return CacheKeyPrefix.prefixed(PREFIX);
+        return CacheKeyPrefix.prefixed(KEY_PREFIX_CACHE);
     }
 
     /**
@@ -29,7 +30,7 @@ public interface RedisUtils {
      * @return {@link CacheKeyPrefix} 实例
      */
     static CacheKeyPrefix tutorials4jCacheKeyPrefix(String name) {
-        return CacheKeyPrefix.prefixed(PREFIX + name + ":");
+        return CacheKeyPrefix.prefixed(KEY_PREFIX_CACHE + name + ":");
     }
 
     /**
