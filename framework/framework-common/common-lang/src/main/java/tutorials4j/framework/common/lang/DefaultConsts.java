@@ -1,5 +1,8 @@
 package tutorials4j.framework.common.lang;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * 默认常量定义
  *
@@ -15,6 +18,11 @@ public interface DefaultConsts {
      * 默认租户代码
      */
     String DEFAULT_TENTANT_CODE = "DEFAULT";
+
+    /**
+     * 默认字符集
+     */
+    Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     /**
      * http header 名称定义

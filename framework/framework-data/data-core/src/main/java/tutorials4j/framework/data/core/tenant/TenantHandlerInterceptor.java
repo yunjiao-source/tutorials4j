@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
-import tutorials4j.framework.common.core.HttpHeaderUtils;
+import tutorials4j.framework.common.core.util.ServletUtils;
 
 /**
  * 租户拦截器
@@ -17,7 +17,7 @@ public class TenantHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String tenant = HttpHeaderUtils.getTenant(request);
+        String tenant = ServletUtils.getTenant(request);
         if (StringUtils.hasText(tenant)) {
             TenantContextHolder.set(tenant);
         }

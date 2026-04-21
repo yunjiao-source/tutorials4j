@@ -1,7 +1,8 @@
-package tutorials4j.framework.common.core;
+package tutorials4j.framework.common.core.util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tutorials4j.framework.common.core.util.SpelExpressionResolver;
 
 import java.lang.reflect.Method;
 

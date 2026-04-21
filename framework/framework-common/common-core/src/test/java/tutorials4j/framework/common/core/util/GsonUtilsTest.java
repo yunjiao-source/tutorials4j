@@ -1,7 +1,8 @@
-package tutorials4j.framework.common.core;
+package tutorials4j.framework.common.core.util;
 
 import com.google.gson.*;
 import org.junit.jupiter.api.Test;
+import tutorials4j.framework.common.core.util.GsonUtils;
 
 import java.lang.reflect.Type;
 import java.util.Date;

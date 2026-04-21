@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.core;
+package tutorials4j.framework.common.core.util;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;

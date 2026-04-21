@@ -18,6 +18,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
 import tutorials4j.framework.common.core.condition.ConditionalOnMapProperty;
+import tutorials4j.framework.common.core.util.HttpRequestUtils;
 import tutorials4j.framework.web.core.WebClientFrameworkException;
 import tutorials4j.framework.web.core.WebPropertiesConsts;
 
@@ -65,7 +66,7 @@ public class WebClientConfiguration {
         RestTemplateCustomizer bufferingClientHttpRequestTemplateBuilderCustomizer() {
             log.debug("Tutorials4j |- Buffering Client Http Request Template Builder Customizer");
             return restTemplate -> {
-                // 特殊处理：避免拦截器执行两次
+                // 避免拦截器执行两次: 创建前先清空拦截器列表或者使用'@Order(1)'注解
                 List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(restTemplate.getInterceptors());
                 restTemplate.getInterceptors().clear();
 
@@ -163,26 +164,17 @@ public class WebClientConfiguration {
 
         private ExchangeFilterFunction logResponse() {
             return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-                log.info("响应: {}", clientResponse.statusCode());
-                log.info("--- 响应头列表: ---");
-
-                clientResponse.headers().asHttpHeaders()
-                        .forEach(this::logHeader);
+                ReactiveClientUtils.responseLogging(clientResponse);
                 return Mono.just(clientResponse);
             });
         }
 
         private ExchangeFilterFunction logRequest() {
             return (clientRequest, next) -> {
-                log.info("请求: {} {}", clientRequest.method(), clientRequest.url());
-                log.info("--- 请求头列表: ---");
-                clientRequest.headers().forEach(this::logHeader);
+                ReactiveClientUtils.requestLogging(clientRequest);
                 return next.exchange(clientRequest);
             };
         }
 
-        private void logHeader(String name, List<String> values) {
-            values.forEach(value -> log.info("{}={}", name, value));
-        }
     }
 }

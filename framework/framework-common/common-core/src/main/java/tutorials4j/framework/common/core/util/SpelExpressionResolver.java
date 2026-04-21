@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.core;
+package tutorials4j.framework.common.core.util;
 
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
