@@ -156,3 +156,129 @@ public class MyTaskDecorators {
 **参考代码**：
 - `CompositeTaskDecorator` 位于 `org.springframework.core.task.support` 包。
 - Spring Boot 自动配置原理参见 `TaskExecutionAutoConfiguration`。
+
+
+# Spring Boot 条件注解扩展：基于 Map/List 配置的精细化控制
+
+本项目代码在:https://gitee.com/yunjiao-source/tutorials4j/tree/master/framework/framework-common/common-core
+
+示例代码在:https://gitee.com/yunjiao-source/tutorials4j/tree/master/framework/framework-examples/examples-common
+
+
+在 Spring Boot 应用中，`@ConditionalOnProperty` 是一个常用的条件注解，它允许根据配置属性的存在与否或具体值来决定 Bean 的加载。然而，当配置属性是 **Map** 或 **List** 结构时，原生的条件注解无法直接判断集合是否为空。例如，我们可能需要根据 `my.servers` 这个 Map 中是否有配置项来决定是否启用某个客户端，或者根据 `app.features` 这个 List 是否为空来决定是否加载某些功能。
+
+为了解决这一痛点，本文介绍一组自定义的 Spring Boot 条件注解 —— **`@ConditionalOnMapProperty`** 和 **`@ConditionalOnListProperty`**，它们能够灵活地判断配置中的 Map 或 List 是否为空，并支持缺失配置时的匹配策略。
+
+## 一、注解概述
+
+这组注解位于 `tutorials4j.framework.common.core.condition` 包下，包含两个核心注解：
+
+- `@ConditionalOnMapProperty`：判断指定的配置键对应的值是否为 **空 Map**（`isEmpty() == true`）。
+- `@ConditionalOnListProperty`：判断指定的配置键对应的值是否为 **空 List**。
+
+两者均支持以下特性：
+- 通过 `prefix` + `name`（或直接使用 `value`）灵活指定配置键。
+- 通过 `isEmpty` 参数控制匹配条件：`true` 表示“Map/List 为空时匹配”，`false` 表示“Map/List 非空时匹配”。
+- 通过 `matchIfMissing` 参数控制当配置键不存在时的匹配行为。
+
+## 二、注解属性详解
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `prefix` | String | `""` | 配置前缀，例如 `"my.map"`。 |
+| `name` | String | `""` | 属性名称，与 `prefix` 拼接形成完整配置键。 |
+| `value` | String | `""` | `name` 的别名，两者互斥，推荐只使用其中一个。 |
+| `isEmpty` | boolean | `false` | `true`：要求 Map/List 为空时条件匹配；`false`：要求 Map/List 非空时匹配。 |
+| `matchIfMissing` | boolean | `false` | `true`：配置键缺失时条件匹配；`false`：缺失时不匹配。 |
+
+> 注：完整配置键的构建规则为：
+> - 若 `prefix` 为空，则直接使用 `name`（或 `value`）。
+> - 若 `name` 为空，则使用 `prefix`。
+> - 否则使用 `prefix + "." + name`。
+
+## 三、使用示例
+
+假设我们在 `application.yml` 中有以下配置：
+
+```yaml
+my:
+  map:
+    servers:
+      usa: "8.8.8.8"
+      europe: "1.1.1.1"
+  list:
+    features: ["cache", "logging"]
+  empty-map: {}
+  missing-key: ~   # 不存在
+```
+
+### 示例 1：当 Map 非空时加载 Bean
+
+```java
+@Bean
+@ConditionalOnMapProperty(prefix = "my.map", name = "servers", isEmpty = false)
+public DataCenterClient dataCenterClient() {
+    return new DataCenterClient();
+}
+```
+由于 `my.map.servers` 是一个包含两个条目的 Map，非空，因此 `isEmpty = false` 匹配，Bean 会被创建。
+
+### 示例 2：当 List 为空时加载配置类
+
+```java
+@Configuration
+@ConditionalOnListProperty(prefix = "my.list", name = "empty-features", isEmpty = true, matchIfMissing = true)
+public class FallbackConfig {
+    // ...
+}
+```
+假设 `my.list.empty-features` 不存在，由于 `matchIfMissing = true`，条件匹配，配置类生效。
+
+### 示例 3：直接使用 `value` 指定完整键
+
+```java
+@Bean
+@ConditionalOnMapProperty(value = "my.empty-map", isEmpty = true)
+public EmptyMapHandler emptyMapHandler() {
+    return new EmptyMapHandler();
+}
+```
+`my.empty-map` 存在且为空 Map，`isEmpty = true` 匹配，Bean 被加载。
+
+## 四、工作原理
+
+该实现基于 Spring Boot 的 `SpringBootCondition` 抽象类，并利用了 `Binder` API 将配置属性绑定为 `Map` 或 `List` 类型。整体流程如下：
+
+1. **注解元数据解析**：`AbstractOnCollectionCollecitonCondition`（抽象基类）在 `getMatchOutcome` 中读取注解属性（`prefix`、`name`、`value`、`isEmpty`、`matchIfMissing`），并构建完整的配置键 `fullKey`。
+2. **委托给子类**：子类 `OnCollectionMapCondition` 或 `OnCollectionListCondition` 实现 `makeDecision` 方法，分别调用 `Binder.get(environment).bind(fullKey, Bindable.mapOf(...))` 或 `Bindable.listOf(...)`。
+3. **绑定结果判断**：
+   - 若 `bindResult.isBound()` 为 `false`（配置缺失），则条件匹配结果等于 `matchIfMissing`。
+   - 若绑定成功，则获取实际集合，判断其是否为 `null` 或空，然后比较 `isEmpty` 与集合的实际空状态是否一致。
+4. **输出条件结果**：返回 `ConditionOutcome`，包含匹配与否及详细日志信息。
+
+> 注意：抽象类名中存在笔误 `Colleciton`，实际应为 `Collection`，但不影响功能。
+
+## 五、注意事项
+
+1. **配置值的类型兼容性**  
+   绑定时，`OnCollectionMapCondition` 会将配置值绑定为 `Map<String, Object>`，`OnCollectionListCondition` 绑定为 `List<Object>`。如果配置的实际结构不匹配（例如将一个普通字符串写在 `fullKey` 下），`Binder` 可能无法绑定成功，此时 `isBound()` 为 `false`，将被视为“配置缺失”，由 `matchIfMissing` 决定结果。建议确保配置结构与注解意图一致。
+
+2. **嵌套集合的限制**  
+   当前实现仅判断 **顶层集合是否为空**，不会递归检查内部元素的空状态。例如，一个 Map 中包含空 List 作为 value，该 Map 整体仍被视为非空。
+
+3. **与 `@ConditionalOnProperty` 的区别**  
+   `@ConditionalOnProperty` 关注的是单个属性的存在性、具体值，而本组注解关注集合类型的**整体空状态**，适合控制依赖于“是否有任何配置项”的功能开关。
+
+4. **性能考量**  
+   每次条件评估都会触发 `Binder` 绑定操作，对于频繁调用的场景（如许多 Bean 依赖同一配置键），可以考虑将条件结果缓存。不过 Spring Boot 的条件评估本身已有缓存机制，通常无需额外优化。
+
+5. **注解名称及文档**  
+   在 `@ConditionalOnListProperty` 的 Javadoc 中，`isEmpty` 的描述误写为“是否要求 Map 为空”，实际应为“是否要求 List 为空”，使用时注意语义。
+
+## 六、总结
+
+`@ConditionalOnMapProperty` 和 `@ConditionalOnListProperty` 为 Spring Boot 的条件化配置提供了更细粒度的集合空判断能力。通过简单的注解属性，开发者可以优雅地根据 Map/List 是否为空来动态装配 Bean，避免编写冗余的 `@Conditional` 实现类。这对于配置驱动的多环境应用、插件化架构或功能开关等场景尤为实用。
+
+该实现代码简洁、依赖 Spring Boot 标准 API（`Binder`），易于集成到现有项目中。如果你需要更复杂的集合判断（如大小阈值、包含特定元素等），可以在其基础上进一步扩展。
+
+---
