@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import tutorials4j.framework.web.core.WebPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 
 import java.util.EnumSet;
 
@@ -21,7 +21,7 @@ public class CachedRequestBodyConfigurationTest {
 
     @BeforeEach
     public void setUp() {
-        String prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_HTTP + ".cached-request-body.";
+        String prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP + ".cached-request-body.";
         applicationContextRunner = new ApplicationContextRunner()
                 .withUserConfiguration(CachedRequestBodyConfiguration.class)
                 .withPropertyValues(

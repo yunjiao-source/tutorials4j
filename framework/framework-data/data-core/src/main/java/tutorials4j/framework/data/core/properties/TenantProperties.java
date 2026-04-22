@@ -2,7 +2,7 @@ package tutorials4j.framework.data.core.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import tutorials4j.framework.data.core.DataPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 import tutorials4j.framework.data.core.tenant.TenantType;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = DataPropertiesConsts.PROPERTY_PREFIX_DATA_TENANT)
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT)
 public class TenantProperties {
     /**
      * 请求路径列表，添加租户代码信息到线程上下文(ThreadLocal)中

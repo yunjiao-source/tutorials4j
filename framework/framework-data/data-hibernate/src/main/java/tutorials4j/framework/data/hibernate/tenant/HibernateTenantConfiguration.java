@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.data.core.DataPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 import tutorials4j.framework.data.core.properties.TenantProperties;
 
 import javax.sql.DataSource;
@@ -40,7 +40,7 @@ public class HibernateTenantConfiguration {
      * 独立数据库租户配置
      */
     @ConditionalOnBean(DataSource.class)
-    @ConditionalOnProperty(prefix = DataPropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "DATABASE", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "DATABASE", matchIfMissing = true)
     static class DatabaseTenantConfiguration {
         @Bean
         @ConditionalOnClass(HikariDataSource.class)

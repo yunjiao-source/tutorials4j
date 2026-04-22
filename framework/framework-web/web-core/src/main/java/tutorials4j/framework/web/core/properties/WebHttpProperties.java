@@ -4,7 +4,7 @@ import jakarta.servlet.DispatcherType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.unit.DataSize;
-import tutorials4j.framework.web.core.WebPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 
 import java.util.EnumSet;
 
@@ -14,7 +14,7 @@ import java.util.EnumSet;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_HTTP)
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP)
 public class WebHttpProperties {
     /**
      * 缓存请求体配置属性

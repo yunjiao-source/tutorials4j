@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.web.core.WebPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 
 import java.util.EnumSet;
 
@@ -32,7 +32,7 @@ public class WebHttpPropertiesTest {
 
     @Test
     void testPropertiesBinding() {
-        String prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_HTTP + ".cached-request-body.";
+        String prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP + ".cached-request-body.";
         contextRunner.withPropertyValues(
                         prefix + "max-content-length=4MB",
                         prefix + "url-patterns=/api/*,/admin/*",

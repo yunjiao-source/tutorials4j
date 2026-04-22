@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.web.core.WebPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 
 import java.util.Map;
 
@@ -39,7 +39,7 @@ class WebClientPropertiesTest {
 
     @Test
     void testCustomValues() {
-        String prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT + ".";
+        String prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT + ".";
         contextRunner
                 .withPropertyValues(
                         prefix + "logger-enabled=true",
@@ -62,7 +62,7 @@ class WebClientPropertiesTest {
 
     @Test
     void testPartialCustomValues() {
-        String prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT + ".";
+        String prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT + ".";
         contextRunner
                 .withPropertyValues(
                         prefix + "base-url=http://localhost:8080"

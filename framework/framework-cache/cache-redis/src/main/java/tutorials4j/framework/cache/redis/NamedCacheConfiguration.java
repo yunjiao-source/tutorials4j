@@ -2,9 +2,9 @@ package tutorials4j.framework.cache.redis;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tutorials4j.framework.cache.core.properties.CachesProperties;
 
 /**
  * 命名缓存配置
@@ -13,22 +13,21 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(NamedRedisCacheProperties.class)
-public class NamedRedisCacheConfiguration {
+public class NamedCacheConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j |- Named Redis Cache Configuration");
+        log.debug("Tutorials4j |- Named Cache Configuration");
     }
 
     @Bean
-    NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(NamedRedisCacheProperties properties) {
+    NamedCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(CachesProperties properties) {
         log.debug("Tutorials4j |- Named Redis Cache Manager Builder Customizer");
-        return new NamedRedisCacheManagerBuilderCustomizer(properties);
+        return new NamedCacheManagerBuilderCustomizer(properties.getRedis());
     }
 
     @Bean
-    NamedRedisCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
+    NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
         log.debug("Tutorials4j |- Named Redis Cache Manager Customizer");
-        return new NamedRedisCacheManagerCustomizer();
+        return new NamedCacheManagerCustomizer();
     }
 }

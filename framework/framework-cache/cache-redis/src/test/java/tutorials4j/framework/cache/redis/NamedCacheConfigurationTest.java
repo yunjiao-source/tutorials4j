@@ -11,21 +11,21 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Yun Jiao
  */
-public class NamedRedisCacheConfigurationTest {
+public class NamedCacheConfigurationTest {
     private ApplicationContextRunner applicationContextRunner;
 
     @BeforeEach
     public void setUp() {
         applicationContextRunner = new ApplicationContextRunner()
-                .withUserConfiguration(NamedRedisCacheConfiguration.class);
+                .withUserConfiguration(NamedCacheConfiguration.class);
     }
 
     @Test
     public void beanExist() {
         applicationContextRunner
                 .run(context -> {
-                    assertThat(context).hasSingleBean(NamedRedisCacheManagerBuilderCustomizer.class);
-                    assertThat(context).hasSingleBean(NamedRedisCacheManagerCustomizer.class);
+                    assertThat(context).hasSingleBean(NamedCacheManagerBuilderCustomizer.class);
+                    assertThat(context).hasSingleBean(NamedCacheManagerCustomizer.class);
                 });
     }
 }

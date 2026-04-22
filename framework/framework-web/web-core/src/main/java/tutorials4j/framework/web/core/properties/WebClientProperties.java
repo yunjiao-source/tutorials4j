@@ -2,7 +2,7 @@ package tutorials4j.framework.web.core.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import tutorials4j.framework.web.core.WebPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT)
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT)
 public class WebClientProperties {
     /**
      * 是否开启日志。默认：false

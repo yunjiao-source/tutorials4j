@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.data.core.DataPropertiesConsts;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 import tutorials4j.framework.data.core.tenant.TenantType;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,7 @@ public class TenantPropertiesTest {
 
     @Test
     void testPropertiesBinding() {
-        String prefix = DataPropertiesConsts.PROPERTY_PREFIX_DATA_TENANT + ".";
+        String prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT + ".";
         contextRunner.withPropertyValues(
                         prefix + "pathPatterns=/admin/*,/log/*",
                         prefix + "type=TABLE",

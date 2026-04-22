@@ -18,8 +18,8 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
 import tutorials4j.framework.common.core.condition.ConditionalOnMapProperty;
+import tutorials4j.framework.common.lang.PropertiesConsts;
 import tutorials4j.framework.web.core.WebClientFrameworkException;
-import tutorials4j.framework.web.core.WebPropertiesConsts;
 import tutorials4j.framework.web.core.properties.WebClientProperties;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class WebClientConfiguration {
     @Configuration(proxyBeanMethods = false)
     static class RestTempalteConfiguration {
         @Bean
-        @ConditionalOnMapProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "default-headers")
+        @ConditionalOnMapProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "default-headers")
         RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(WebClientProperties properties) {
             log.debug("Tutorials4j |- Default Headers Rest Template Request Customizer");
             return request -> {
@@ -53,7 +53,7 @@ public class WebClientConfiguration {
         }
 
         @Bean
-        @ConditionalOnProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "logger-enabled", havingValue = "true")
+        @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "logger-enabled", havingValue = "true")
         RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
             log.debug("Tutorials4j |- Log Headers Rest Template Builder Customizer");
             return restTemplate -> {
@@ -62,7 +62,7 @@ public class WebClientConfiguration {
         }
 
         @Bean
-        @ConditionalOnProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "buffering-client-http-request-enabled", havingValue = "true")
+        @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "buffering-client-http-request-enabled", havingValue = "true")
         RestTemplateCustomizer bufferingClientHttpRequestTemplateBuilderCustomizer() {
             log.debug("Tutorials4j |- Buffering Client Http Request Template Builder Customizer");
             return restTemplate -> {
@@ -84,7 +84,7 @@ public class WebClientConfiguration {
     @Configuration(proxyBeanMethods = false)
     static class RestClientConfiguration {
         @Bean
-        @ConditionalOnProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "logger-enabled", havingValue = "true")
+        @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "logger-enabled", havingValue = "true")
         RestClientCustomizer logHeadersRestClientCustomizer() {
             log.debug("Tutorials4j |- Log Headers Rest Client Customizer");
             return restClientBuilder -> {
@@ -93,7 +93,7 @@ public class WebClientConfiguration {
         }
 
         @Bean
-        @ConditionalOnMapProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "default-headers")
+        @ConditionalOnMapProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "default-headers")
         RestClientCustomizer defaultHeadersRestClientCustomizer(WebClientProperties properties) {
             log.debug("Tutorials4j |- Default Headers Rest Client Customizer");
             return restClientBuilder -> {
@@ -102,7 +102,7 @@ public class WebClientConfiguration {
         }
 
         @Bean
-        @ConditionalOnProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "base-url")
+        @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "base-url")
         RestClientCustomizer BaseUrlRestClientCustomizer(WebClientProperties properties) {
             log.debug("Tutorials4j |- Base Url Rest Client Customizer");
             return restClientBuilder -> {
@@ -114,7 +114,7 @@ public class WebClientConfiguration {
     @Configuration(proxyBeanMethods = false)
     static class SpringWebClientConfiguration {
         @Bean
-        @ConditionalOnProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "base-url")
+        @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "base-url")
         WebClientCustomizer BaseUrlWebClientCustomizer(WebClientProperties properties) {
             log.debug("Tutorials4j |- Base Url Web Client Customizer");
             return webClientBuilder -> {
@@ -123,7 +123,7 @@ public class WebClientConfiguration {
         }
 
         @Bean
-        @ConditionalOnMapProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "default-headers")
+        @ConditionalOnMapProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "default-headers")
         WebClientCustomizer defaultHeadersWebClientCustomizer(WebClientProperties properties) {
             log.debug("Tutorials4j |- Default Headers Web Client Customizer");
             return webClientBuilder -> {
@@ -132,7 +132,7 @@ public class WebClientConfiguration {
         }
 
         @Bean
-        @ConditionalOnProperty(prefix = WebPropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "logger-enabled", havingValue = "true")
+        @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,name = "logger-enabled", havingValue = "true")
         WebClientCustomizer logHeadersWebClientCustomizer() {
             log.debug("Tutorials4j |- Log Headers Web Client Customizer");
             return restClientBuilder -> {

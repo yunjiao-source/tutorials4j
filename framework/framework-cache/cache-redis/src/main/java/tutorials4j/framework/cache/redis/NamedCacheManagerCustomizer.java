@@ -11,7 +11,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
  *
  * @author Yun Jiao
  */
-public class NamedRedisCacheManagerCustomizer implements CacheManagerCustomizer<RedisCacheManager> {
+public class NamedCacheManagerCustomizer implements CacheManagerCustomizer<RedisCacheManager> {
     @Override
     public void customize(RedisCacheManager cacheManager) {
         // 调用初始化方法

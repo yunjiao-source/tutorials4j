@@ -4,7 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.cache.redis.NamedRedisCacheConfiguration;
+import tutorials4j.framework.cache.core.autoconfigure.CacheCoreConfiguration;
+import tutorials4j.framework.cache.redis.NamedCacheConfiguration;
 
 /**
  * 自动配置
@@ -13,7 +14,7 @@ import tutorials4j.framework.cache.redis.NamedRedisCacheConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({NamedRedisCacheConfiguration.class})
+@Import({CacheCoreConfiguration.class, NamedCacheConfiguration.class})
 public class CacheRedisAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
