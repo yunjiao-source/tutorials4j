@@ -1,6 +1,8 @@
 # cache-redis
 
-## `RedisUtils` – 工具接口
+## 工具类
+
+### `RedisUtils` – 工具接口
 
 提供静态方法生成统一的`CacheKeyPrefix`：
 
@@ -10,11 +12,10 @@
 另外还提供了一个基于类名+方法名+参数列表的`KeyGenerator`实现，可用于`@Cacheable`注解的`keyGenerator`属性。
 
 
-## `named-redis-cache`
+## 基于Spring Boot的命名缓存配置Redis设计与实现 
 
-基于Spring Boot的命名Redis缓存配置设计与实现。
 
-本项目代码在[这里](https://gitee.com/yunjiao-source/tutorials4j/tree/master/framework/framework-cache/cache-redis), 示例代码在[这里](https://gitee.com/yunjiao-source/tutorials4j/tree/master/framework/framework-examples/examples-cache-named-redis) 
+本项目代码在[这里](https://gitee.com/yunjiao-source/tutorials4j/tree/master/framework/framework-cache/cache-redis), 示例代码在[这里](https://gitee.com/yunjiao-source/tutorials4j/tree/master/framework/framework-examples/examples-cache-redis) 
 
 ### 一、概述
 
@@ -96,7 +97,7 @@ public void customize(RedisCacheManager.RedisCacheManagerBuilder builder) {
         if (redisProp.getTimeToLive() != null) {
             config = config.entryTtl(redisProp.getTimeToLive());
         }
-        if (Boolean.TRUE.equals(redisProp.isCacheNullValues())) {
+        if (Boolean.False.equals(redisProp.isCacheNullValues())) {
             config = config.disableCachingNullValues();  // 注意：disable意味着不允许缓存null
         }
         if (Boolean.TRUE.equals(redisProp.isUseKeyPrefix())) {
@@ -192,4 +193,4 @@ public class UserService {
 - **声明式配置**：在`application.yml`中集中管理，无需修改代码。
 - **启动时预热**：所有缓存提前初始化，避免首次访问时的延迟创建。
 
-该方案适用于多业务模块共用同一个RedisCacheManager，且各模块对缓存策略要求不同的场景。读者可根据实际需求调整`cacheNullValues`的处理逻辑以及前缀分隔符规范。完整源码可参考作者项目中的`tutorials4j.framework.cache.redis`包。
+该方案适用于多业务模块共用同一个RedisCacheManager，且各模块对缓存策略要求不同的场景。读者可根据实际需求调整`cacheNullValues`的处理逻辑以及前缀分隔符规范。
