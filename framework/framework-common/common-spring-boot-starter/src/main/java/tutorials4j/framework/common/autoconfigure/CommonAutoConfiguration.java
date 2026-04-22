@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.common.core.CommonCoreConfiguration;
+import tutorials4j.framework.common.core.autoconfigure.CommonCoreConfiguration;
 
 /**
  * 通用模块自动配置

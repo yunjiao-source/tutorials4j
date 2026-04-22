@@ -3,7 +3,7 @@ package tutorials4j.framework.data.hibernate.tenant;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
-import tutorials4j.framework.data.core.tenant.TenantContextHolder;
+import tutorials4j.framework.common.core.bean.TenantContextHolder;
 
 import java.util.Map;
 

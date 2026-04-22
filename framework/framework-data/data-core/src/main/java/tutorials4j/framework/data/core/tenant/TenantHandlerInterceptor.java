@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
+import tutorials4j.framework.common.core.bean.TenantContextHolder;
 import tutorials4j.framework.common.core.util.ServletUtils;
 
 /**

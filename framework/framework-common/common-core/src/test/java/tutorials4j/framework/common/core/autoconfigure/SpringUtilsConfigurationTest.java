@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.core;
+package tutorials4j.framework.common.core.autoconfigure;
 
 import cn.hutool.extra.spring.SpringUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +14,20 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Yun Jiao
  */
-public class CommonCoreConfigurationTest {
+public class SpringUtilsConfigurationTest {
     private ApplicationContextRunner applicationContextRunner;
+
+    @Configuration
+    static class ConfigurerConfiguration {
+        @Bean
+        public UserService userService() {
+            return new UserService();
+        }
+
+        static class UserService {
+
+        }
+    }
 
     @BeforeEach
     public void setUp() {
@@ -33,17 +45,5 @@ public class CommonCoreConfigurationTest {
                     assertThat(userService).isNotNull();
 
                 });
-    }
-
-    @Configuration
-    static class ConfigurerConfiguration {
-        @Bean
-        public UserService userService() {
-            return new UserService();
-        }
-
-        static class UserService {
-
-        }
     }
 }

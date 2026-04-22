@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCust
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.util.CollectionUtils;
+import tutorials4j.framework.cache.core.CacheUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
         }
 
         final RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .computePrefixWith(RedisUtils.tutorials4jCacheKeyPrefix());
+                .prefixCacheNameWith(CacheUtils.cacheNamePrefix());
 
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         Map<String, CacheProperties.Redis> redisProps = properties.getNamedRedisCaches();
@@ -45,7 +46,7 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
             }
 
             if (Objects.equals(Boolean.TRUE, redisProp.isUseKeyPrefix())) {
-                redisCacheConfig = redisCacheConfig.computePrefixWith(RedisUtils.tutorials4jCacheKeyPrefix(redisProp.getKeyPrefix()));
+                redisCacheConfig = redisCacheConfig.prefixCacheNameWith(CacheUtils.cacheName(redisProp.getKeyPrefix()));
             }
 
             configMap.put(key, redisCacheConfig);

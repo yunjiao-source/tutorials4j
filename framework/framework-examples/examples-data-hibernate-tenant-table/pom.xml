@@ -28,7 +28,7 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>examples-common-jpa</artifactId>
+            <artifactId>examples-jpa</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

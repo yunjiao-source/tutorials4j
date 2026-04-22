@@ -8,3 +8,24 @@ tutorials4j.web.http:
 logging:
   level:
     tutorials4j: DEBUG
+
+spring:
+  task:
+    execution:
+      pool:
+        # 核心线程数：线程池创建时的初始线程数，默认为8[reference:0]
+        core-size: 10
+        # 最大线程数：线程池允许的最大线程数，默认为Integer.MAX_VALUE[reference:1]
+        max-size: 20
+        # 队列容量：任务队列的大小，默认为Integer.MAX_VALUE[reference:2]
+        queue-capacity: 100
+        # 空闲线程存活时间：当线程数超过核心线程数时，多余的空闲线程能存活的最大时间[reference:3]
+        keep-alive: 60s
+        # 线程名称前缀：便于在日志中追踪任务执行的线程[reference:4]
+        thread-name-prefix: my-async-
+      # 以下为优雅关闭配置[reference:5]
+      shutdown:
+        # 是否等待所有任务完成再关闭应用
+        await-termination: true
+        # 等待任务完成的最大时间
+        await-termination-period: 30s

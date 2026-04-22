@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.tenant;
+package tutorials4j.framework.common.core.bean;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 import org.apache.commons.lang3.StringUtils;

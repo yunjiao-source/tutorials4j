@@ -1,0 +1,7 @@
+###
+GET http://localhost:8080/spring-util/getBean
+Content-Type: application/json
+
+
+
+
