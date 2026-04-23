@@ -5,7 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
-import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.common.core.DefaultConsts;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -2,7 +2,7 @@ package tutorials4j.framework.data.core.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import tutorials4j.framework.common.lang.PropertiesConsts;
+import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.data.core.tenant.TenantType;
 
 import java.util.HashMap;

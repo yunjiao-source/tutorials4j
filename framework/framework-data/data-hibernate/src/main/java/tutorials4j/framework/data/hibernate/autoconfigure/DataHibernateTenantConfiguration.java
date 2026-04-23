@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.common.lang.PropertiesConsts;
+import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.data.core.properties.DataTenantProperties;
 import tutorials4j.framework.data.hibernate.tenant.Dbcp2MultiTenantConnectionProvider;
 import tutorials4j.framework.data.hibernate.tenant.DefaultCurrentTenantIdentifierResolver;

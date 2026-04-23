@@ -1,7 +1,7 @@
 package tutorials4j.framework.web.core;
 
 import org.apache.commons.lang3.exception.ExceptionContext;
-import tutorials4j.framework.common.lang.FrameworkRuntimeException;
+import tutorials4j.framework.common.core.FrameworkRuntimeException;
 
 /**
  * web客户端异常

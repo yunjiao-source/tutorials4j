@@ -21,7 +21,7 @@
         <module>examples-jpa</module>
         <module>examples-common</module>
         <module>examples-web-http</module>
-        <module>examples-cache-redis</module>
+        <module>examples-cache</module>
         <module>examples-data-hibernate</module>
         <module>examples-data-hibernate-tenant-table</module>
         <module>examples-web-client</module>

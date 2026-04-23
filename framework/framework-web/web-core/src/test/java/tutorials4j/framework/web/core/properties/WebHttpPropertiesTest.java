@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.common.lang.PropertiesConsts;
+import tutorials4j.framework.common.core.PropertiesConsts;
 
 import java.util.EnumSet;
 

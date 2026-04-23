@@ -3,7 +3,7 @@ package tutorials4j.framework.common.core.util;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.ObjectUtils;
-import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.common.core.DefaultConsts;
 
 import java.lang.reflect.Type;
 import java.util.List;

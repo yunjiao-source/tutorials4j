@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.common.lang.PropertiesConsts;
+import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
 import tutorials4j.framework.web.http.CachedRequestBodyFilter;
 

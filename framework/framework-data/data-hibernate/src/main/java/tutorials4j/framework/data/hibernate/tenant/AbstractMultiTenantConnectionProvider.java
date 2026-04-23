@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
-import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.data.core.DataFrameworkException;
 import tutorials4j.framework.data.core.properties.DataTenantProperties;
 

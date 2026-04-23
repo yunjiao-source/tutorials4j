@@ -19,7 +19,6 @@
 
     <modules>
         <module>common-core</module>
-        <module>common-lang</module>
         <module>common-spring-boot-starter</module>
     </modules>
 

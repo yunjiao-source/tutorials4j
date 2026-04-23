@@ -1,7 +1,7 @@
 package tutorials4j.framework.common.core.util;
 
 import jakarta.servlet.http.HttpServletRequest;
-import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.common.core.DefaultConsts;
 
 /**
  * http 头工具

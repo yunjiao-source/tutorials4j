@@ -10,7 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import tutorials4j.framework.common.core.bean.TenantContextHolder;
-import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.data.core.autoconfigure.DataTenantConfiguration;
 import tutorials4j.framework.data.core.properties.DataTenantProperties;
 

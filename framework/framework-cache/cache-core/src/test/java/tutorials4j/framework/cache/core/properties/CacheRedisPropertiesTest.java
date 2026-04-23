@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.common.lang.PropertiesConsts;
+import tutorials4j.framework.common.core.PropertiesConsts;
 
 import java.time.Duration;
 
@@ -32,12 +32,6 @@ public class CacheRedisPropertiesTest {
     void testPropertiesBinding() {
         String prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE_REDIS ;
         contextRunner.withPropertyValues(
-                        prefix + ".timeToLive=8s",
-                        prefix + ".cacheNullValues=false",
-                        prefix + ".keyPrefix=share",
-                        prefix + ".useKeyPrefix=false",
-                        prefix + ".enableStatistics=true",
-
 
                         prefix + ".named-caches.user.timeToLive=4s",
                         prefix + ".named-caches.user.cacheNullValues=false",
@@ -53,13 +47,6 @@ public class CacheRedisPropertiesTest {
                 )
                 .run(context -> {
                     CacheRedisProperties properties = context.getBean(CacheRedisProperties.class);
-
-                    assertThat(properties.getTimeToLive()).isEqualTo(Duration.ofSeconds(8));
-                    assertThat(properties.isCacheNullValues()).isFalse();
-                    assertThat(properties.getKeyPrefix()).isEqualTo("share");
-                    assertThat(properties.isUseKeyPrefix()).isFalse();
-                    assertThat(properties.isEnableStatistics()).isTrue();
-
                     assertThat(properties.getNamedCaches().size()).isEqualTo(2);
 
                     CacheProperties.Redis userProp = properties.getNamedCaches().get("user");

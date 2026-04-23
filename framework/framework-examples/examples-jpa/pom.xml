@@ -12,7 +12,7 @@
 
     <artifactId>examples-jpa</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Common JPA</name>
+    <name>Examples :: JPA</name>
 
     <dependencies>
         <dependency>

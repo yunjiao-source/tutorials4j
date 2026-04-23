@@ -2,7 +2,7 @@ package tutorials4j.framework.common.core.bean;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 import org.apache.commons.lang3.StringUtils;
-import tutorials4j.framework.common.lang.DefaultConsts;
+import tutorials4j.framework.common.core.DefaultConsts;
 
 /**
  * 存储/获取当前线程的租户信息

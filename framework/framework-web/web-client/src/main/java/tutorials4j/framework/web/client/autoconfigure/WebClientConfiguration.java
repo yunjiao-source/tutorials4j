@@ -17,7 +17,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
 import tutorials4j.framework.common.core.condition.ConditionalOnMapProperty;
-import tutorials4j.framework.common.lang.PropertiesConsts;
+import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.web.client.LogClientHttpRequestInterceptor;
 import tutorials4j.framework.web.client.ReactiveClientUtils;
 import tutorials4j.framework.web.core.WebClientFrameworkException;

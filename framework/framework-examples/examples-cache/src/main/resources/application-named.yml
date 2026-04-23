@@ -1,0 +1,32 @@
+spring:
+  data:
+    # Redis 配置
+    redis:
+      host: localhost # Redis服务器地址
+      port: 6379 # Redis端口
+
+  # 缓存配置（可选）
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m     # 全局默认缓存过期时间（30分钟）
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: 'yunjiao:share:'
+      enable-statistics: true
+
+tutorials4j:
+  cache:
+    redis:
+      named-caches:
+        users:
+          timeToLive: 30s
+          cacheNullValues: false
+          keyPrefix: user
+          useKeyPrefix: true
+        orders:
+          timeToLive: 60s
+          cacheNullValues: true
+          keyPrefix: order
+          useKeyPrefix: false
+

@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: named
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug

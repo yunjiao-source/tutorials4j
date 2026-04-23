@@ -20,7 +20,7 @@
     <modules>
         <module>cache-core</module>
         <module>cache-redis</module>
-        <module>cache-redis-spring-boot-starter</module>
+        <module>cache-spring-boot-starter</module>
     </modules>
 
 </project>
