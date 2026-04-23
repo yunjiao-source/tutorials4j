@@ -4,7 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.web.http.CachedRequestBodyConfiguration;
+import tutorials4j.framework.web.core.autoconfigure.WebCoreConfiguration;
+import tutorials4j.framework.web.http.autoconfigure.WebHttpConfiguration;
 
 /**
  * 缓存请求体自动配置
@@ -13,11 +14,11 @@ import tutorials4j.framework.web.http.CachedRequestBodyConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({CachedRequestBodyConfiguration.class})
+@Import({WebCoreConfiguration.class, WebHttpConfiguration.class})
 public class WebHttpAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j |- Cached Request Body Auto Configuration");
+        log.debug("Tutorials4j |- Web Http Auto Configuration");
     }
 
 }

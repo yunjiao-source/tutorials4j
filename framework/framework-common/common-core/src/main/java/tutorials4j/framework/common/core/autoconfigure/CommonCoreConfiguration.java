@@ -43,4 +43,6 @@ public class CommonCoreConfiguration {
                 .collect(Collectors.toList());
         return new CompositeTaskDecorator(decoratorList);
     }
+
+
 }

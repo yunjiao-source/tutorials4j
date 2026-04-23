@@ -15,14 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Yun Jiao
  */
-public class TenantPropertiesTest {
+public class DataTenantPropertiesTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withInitializer(new ConfigDataApplicationContextInitializer())
             .withUserConfiguration(TestConfig.class);
 
     // 配置类：启用目标配置属性
     @Configuration
-    @EnableConfigurationProperties(TenantProperties.class)
+    @EnableConfigurationProperties(DataTenantProperties.class)
     static class TestConfig {
     }
 
@@ -44,18 +44,18 @@ public class TenantPropertiesTest {
                         prefix + "datasource.db2.password=123456"
                 )
                 .run(context -> {
-                    TenantProperties properties = context.getBean(TenantProperties.class);
+                    DataTenantProperties properties = context.getBean(DataTenantProperties.class);
                     assertThat(properties.getPathPatterns()).containsExactly("/admin/*", "/log/*");
                     assertThat(properties.getType()).isEqualTo(TenantType.TABLE);
 
                     assertThat(properties.getDatasource().size()).isEqualTo(2);
-                    TenantProperties.DataSourceOptions db1Prop = properties.getDatasource().get("db1");
+                    DataTenantProperties.DataSourceOptions db1Prop = properties.getDatasource().get("db1");
                     assertThat(db1Prop.getUrl()).isEqualTo("jdbc:postgresql://localhost:5432/demo");
                     assertThat(db1Prop.getUsername()).isEqualTo("postgres");
                     assertThat(db1Prop.getPassword()).isEqualTo("postgres");
                     assertThat(db1Prop.getDriverClassName()).isEqualTo("org.postgresql.Driver");
 
-                    TenantProperties.DataSourceOptions db2Prop = properties.getDatasource().get("db2");
+                    DataTenantProperties.DataSourceOptions db2Prop = properties.getDatasource().get("db2");
                     assertThat(db2Prop.getUrl()).isEqualTo("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC");
                     assertThat(db2Prop.getUsername()).isEqualTo("root");
                     assertThat(db2Prop.getPassword()).isEqualTo("123456");

@@ -9,7 +9,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.util.CollectionUtils;
 import tutorials4j.framework.cache.core.CacheUtils;
-import tutorials4j.framework.cache.core.properties.CachesProperties;
+import tutorials4j.framework.cache.core.properties.CacheRedisProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,19 +22,19 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class NamedCacheManagerBuilderCustomizer implements RedisCacheManagerBuilderCustomizer {
-    private final CachesProperties.RedisCacheOptions options;
+    private final CacheRedisProperties properties;
 
     @Override
     public void customize(RedisCacheManager.RedisCacheManagerBuilder builder) {
-        if (CollectionUtils.isEmpty(options.getNamedCaches())) {
+        if (CollectionUtils.isEmpty(properties.getNamedCaches())) {
             log.debug("Tutorials4j |- 没有配置初始化缓存");
             return;
         }
 
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
-        Map<String, CacheProperties.Redis> redisProps = options.getNamedCaches();
+        Map<String, CacheProperties.Redis> redisProps = properties.getNamedCaches();
         redisProps.forEach((key, redisProp) -> {
-            RedisCacheConfiguration defaultCacheConfig = fillConfiguration(RedisCacheConfiguration.defaultCacheConfig(), options);
+            RedisCacheConfiguration defaultCacheConfig = fillConfiguration(RedisCacheConfiguration.defaultCacheConfig(), properties);
 
             // 独立配置
             defaultCacheConfig = fillConfiguration(defaultCacheConfig, redisProp);
@@ -42,7 +42,7 @@ public class NamedCacheManagerBuilderCustomizer implements RedisCacheManagerBuil
 
         });
 
-        final RedisCacheConfiguration defaultCacheConfig = fillConfiguration(RedisCacheConfiguration.defaultCacheConfig(), options);
+        final RedisCacheConfiguration defaultCacheConfig = fillConfiguration(RedisCacheConfiguration.defaultCacheConfig(), properties);
         builder.cacheDefaults(defaultCacheConfig).withInitialCacheConfigurations(configMap);
         log.debug("Tutorials4j |- 成功初始化缓存[{}]", String.join(",", configMap.keySet()));
     }

@@ -11,19 +11,20 @@ import org.springframework.boot.test.context.runner.ContextConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import tutorials4j.framework.data.core.properties.TenantProperties;
+import tutorials4j.framework.data.core.properties.DataTenantProperties;
+import tutorials4j.framework.data.hibernate.autoconfigure.DataHibernateTenantConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link HibernateTenantConfiguration} 单元测试
+ * {@link DataHibernateTenantConfiguration} 单元测试
  *
  * @author Yun Jiao
  */
-class HibernateTenantConfigurationTest {
+class HibernateDataTenantConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(HibernateTenantConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(DataHibernateTenantConfiguration.class))
             .withUserConfiguration(TestDataSourceConfig.class);
 
     // ========== 基础 Bean 测试 ==========
@@ -97,8 +98,8 @@ class HibernateTenantConfigurationTest {
     @Configuration
     static class TestDataSourceConfig {
         @Bean
-        public TenantProperties tenantProperties() {
-            return new TenantProperties();
+        public DataTenantProperties tenantProperties() {
+            return new DataTenantProperties();
         }
     }
 

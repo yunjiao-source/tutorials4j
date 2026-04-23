@@ -6,7 +6,7 @@ import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTen
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import tutorials4j.framework.common.lang.DefaultConsts;
 import tutorials4j.framework.data.core.DataFrameworkException;
-import tutorials4j.framework.data.core.properties.TenantProperties;
+import tutorials4j.framework.data.core.properties.DataTenantProperties;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -24,12 +24,12 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
         implements HibernatePropertiesCustomizer {
     protected Map<String, T> dataSources = new ConcurrentHashMap<>();
     protected T defaultDataSource;
-    protected Map<String, TenantProperties.DataSourceOptions> dataSourceOptionsMap = new HashMap<>();
+    protected Map<String, DataTenantProperties.DataSourceOptions> dataSourceOptionsMap = new HashMap<>();
 
-    protected abstract T createDataSource(String tenant, TenantProperties.DataSourceOptions options);
+    protected abstract T createDataSource(String tenant, DataTenantProperties.DataSourceOptions options);
 
     protected T createDataSource(String tenant) {
-        TenantProperties.DataSourceOptions dataSourceOptions = dataSourceOptionsMap.get(tenant);
+        DataTenantProperties.DataSourceOptions dataSourceOptions = dataSourceOptionsMap.get(tenant);
         if (dataSourceOptions == null) {
             throw new DataFrameworkException("未配置租户数据源：" + tenant);
         }
@@ -37,7 +37,7 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
         return createDataSource(tenant, dataSourceOptions);
     }
 
-    public void init(DataSource dataSource, TenantProperties properties) {
+    public void init(DataSource dataSource, DataTenantProperties properties) {
         dataSources.clear();
 
         // 将key转换成大写

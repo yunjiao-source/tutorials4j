@@ -4,8 +4,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.data.core.tenant.TenantConfiguration;
-import tutorials4j.framework.data.hibernate.tenant.HibernateTenantConfiguration;
+import tutorials4j.framework.data.core.autoconfigure.DataCoreConfiguration;
+import tutorials4j.framework.data.core.autoconfigure.DataTenantConfiguration;
+import tutorials4j.framework.data.hibernate.autoconfigure.DataHibernateTenantConfiguration;
 
 /**
  * 独立数据库租户自动配置
@@ -14,7 +15,7 @@ import tutorials4j.framework.data.hibernate.tenant.HibernateTenantConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({TenantConfiguration.class, HibernateTenantConfiguration.class})
+@Import({DataCoreConfiguration.class, DataTenantConfiguration.class, DataHibernateTenantConfiguration.class})
 public class DataHibernateAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

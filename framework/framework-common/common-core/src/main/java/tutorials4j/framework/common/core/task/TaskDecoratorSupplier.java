@@ -11,7 +11,4 @@ import java.util.function.Supplier;
  */
 @FunctionalInterface
 public interface TaskDecoratorSupplier extends Supplier<TaskDecorator> {
-
-    @Override
-    TaskDecorator get();
 }

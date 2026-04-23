@@ -3,6 +3,7 @@ package tutorials4j.framework.cache.redis;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import tutorials4j.framework.cache.redis.autoconfigure.CacheRedisConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Yun Jiao
  */
-public class NamedCacheConfigurationTest {
+public class CacheRedisConfigurationTest {
     private ApplicationContextRunner applicationContextRunner;
 
     @BeforeEach
     public void setUp() {
         applicationContextRunner = new ApplicationContextRunner()
-                .withUserConfiguration(NamedCacheConfiguration.class);
+                .withUserConfiguration(CacheRedisConfiguration.class);
     }
 
     @Test

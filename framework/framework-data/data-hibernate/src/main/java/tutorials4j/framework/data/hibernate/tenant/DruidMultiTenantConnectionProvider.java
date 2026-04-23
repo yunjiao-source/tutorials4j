@@ -3,7 +3,7 @@ package tutorials4j.framework.data.hibernate.tenant;
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.data.core.DataFrameworkException;
-import tutorials4j.framework.data.core.properties.TenantProperties;
+import tutorials4j.framework.data.core.properties.DataTenantProperties;
 
 import java.sql.SQLException;
 
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 @Slf4j
 public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<DruidDataSource> {
     @Override
-    protected DruidDataSource createDataSource(String tenant, TenantProperties.DataSourceOptions options) {
+    protected DruidDataSource createDataSource(String tenant, DataTenantProperties.DataSourceOptions options) {
         try {
             DruidDataSource newDataSource = copyDataSource(defaultDataSource);
             newDataSource.setDriverClassName(options.getDriverClassName());

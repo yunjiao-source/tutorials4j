@@ -3,7 +3,7 @@ package tutorials4j.framework.data.hibernate.tenant;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.data.core.properties.TenantProperties;
+import tutorials4j.framework.data.core.properties.DataTenantProperties;
 
 /**
  * Hikari 多租户数据源提供者
@@ -13,7 +13,7 @@ import tutorials4j.framework.data.core.properties.TenantProperties;
 @Slf4j
 public class HikariMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<HikariDataSource> {
     @Override
-    protected HikariDataSource createDataSource(String tenant, TenantProperties.DataSourceOptions options) {
+    protected HikariDataSource createDataSource(String tenant, DataTenantProperties.DataSourceOptions options) {
         final HikariConfig hikariConfig = new HikariConfig();
         defaultDataSource.copyStateTo(hikariConfig);
         hikariConfig.setDriverClassName(options.getDriverClassName());

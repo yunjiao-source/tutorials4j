@@ -17,20 +17,20 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Yun Jiao
  */
-public class RedisCachePropertiesTest {
+public class CacheRedisPropertiesTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withInitializer(new ConfigDataApplicationContextInitializer())
             .withUserConfiguration(TestConfig.class);
 
     // 配置类：启用目标配置属性
     @Configuration
-    @EnableConfigurationProperties(CachesProperties.class)
+    @EnableConfigurationProperties(CacheRedisProperties.class)
     static class TestConfig {
     }
 
     @Test
     void testPropertiesBinding() {
-        String prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE + ".redis" ;
+        String prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE_REDIS ;
         contextRunner.withPropertyValues(
                         prefix + ".timeToLive=8s",
                         prefix + ".cacheNullValues=false",
@@ -52,25 +52,24 @@ public class RedisCachePropertiesTest {
                         prefix + ".named-caches.order.enableStatistics=false"
                 )
                 .run(context -> {
-                    CachesProperties properties = context.getBean(CachesProperties.class);
-                    CachesProperties.RedisCacheOptions redisProp = properties.getRedis();
+                    CacheRedisProperties properties = context.getBean(CacheRedisProperties.class);
 
-                    assertThat(redisProp.getTimeToLive()).isEqualTo(Duration.ofSeconds(8));
-                    assertThat(redisProp.isCacheNullValues()).isFalse();
-                    assertThat(redisProp.getKeyPrefix()).isEqualTo("share");
-                    assertThat(redisProp.isUseKeyPrefix()).isFalse();
-                    assertThat(redisProp.isEnableStatistics()).isTrue();
+                    assertThat(properties.getTimeToLive()).isEqualTo(Duration.ofSeconds(8));
+                    assertThat(properties.isCacheNullValues()).isFalse();
+                    assertThat(properties.getKeyPrefix()).isEqualTo("share");
+                    assertThat(properties.isUseKeyPrefix()).isFalse();
+                    assertThat(properties.isEnableStatistics()).isTrue();
 
-                    assertThat(redisProp.getNamedCaches().size()).isEqualTo(2);
+                    assertThat(properties.getNamedCaches().size()).isEqualTo(2);
 
-                    CacheProperties.Redis userProp = redisProp.getNamedCaches().get("user");
+                    CacheProperties.Redis userProp = properties.getNamedCaches().get("user");
                     assertThat(userProp.getTimeToLive()).isEqualTo(Duration.ofSeconds(4));
                     assertThat(userProp.isCacheNullValues()).isFalse();
                     assertThat(userProp.getKeyPrefix()).isEqualTo("user");
                     assertThat(userProp.isUseKeyPrefix()).isFalse();
                     assertThat(userProp.isEnableStatistics()).isTrue();
 
-                    CacheProperties.Redis orderProp = redisProp.getNamedCaches().get("order");
+                    CacheProperties.Redis orderProp = properties.getNamedCaches().get("order");
                     assertThat(orderProp.getTimeToLive()).isEqualTo(Duration.ofSeconds(6));
                     assertThat(orderProp.isCacheNullValues()).isTrue();
                     assertThat(orderProp.getKeyPrefix()).isEqualTo("order");

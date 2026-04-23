@@ -23,6 +23,8 @@
             <artifactId>common-core</artifactId>
             <version>${revision}</version>
         </dependency>
+
+
     </dependencies>
 
 </project>

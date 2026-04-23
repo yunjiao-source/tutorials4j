@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate.tenant;
+package tutorials4j.framework.data.hibernate.autoconfigure;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.zaxxer.hikari.HikariDataSource;
@@ -12,7 +12,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandi
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.lang.PropertiesConsts;
-import tutorials4j.framework.data.core.properties.TenantProperties;
+import tutorials4j.framework.data.core.properties.DataTenantProperties;
+import tutorials4j.framework.data.hibernate.tenant.Dbcp2MultiTenantConnectionProvider;
+import tutorials4j.framework.data.hibernate.tenant.DefaultCurrentTenantIdentifierResolver;
+import tutorials4j.framework.data.hibernate.tenant.DruidMultiTenantConnectionProvider;
+import tutorials4j.framework.data.hibernate.tenant.HikariMultiTenantConnectionProvider;
 
 import javax.sql.DataSource;
 
@@ -23,7 +27,7 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class HibernateTenantConfiguration {
+public class DataHibernateTenantConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("Tutorials4j |- Hibernate Tenant Configuration");
@@ -45,7 +49,7 @@ public class HibernateTenantConfiguration {
         @Bean
         @ConditionalOnClass(HikariDataSource.class)
         @ConditionalOnSingleCandidate(HikariDataSource.class)
-        HikariMultiTenantConnectionProvider hikariMultiTenantConnectionProvider(DataSource dataSource, TenantProperties properties) {
+        HikariMultiTenantConnectionProvider hikariMultiTenantConnectionProvider(DataSource dataSource, DataTenantProperties properties) {
             log.debug("Tutorials4j |- Hikari Multi Tenant Connection Provider");
             HikariMultiTenantConnectionProvider bean = new HikariMultiTenantConnectionProvider();
             bean.init(dataSource, properties);
@@ -55,7 +59,7 @@ public class HibernateTenantConfiguration {
         @Bean
         @ConditionalOnClass(DruidDataSource.class)
         @ConditionalOnSingleCandidate(DruidDataSource.class)
-        DruidMultiTenantConnectionProvider druidMultiTenantConnectionProvider(DataSource dataSource, TenantProperties properties) {
+        DruidMultiTenantConnectionProvider druidMultiTenantConnectionProvider(DataSource dataSource, DataTenantProperties properties) {
             log.debug("Tutorials4j |- Druid Multi Tenant Connection Provider");
             DruidMultiTenantConnectionProvider bean = new DruidMultiTenantConnectionProvider();
             bean.init(dataSource, properties);
@@ -65,7 +69,7 @@ public class HibernateTenantConfiguration {
         @Bean
         @ConditionalOnClass(BasicDataSource.class)
         @ConditionalOnSingleCandidate(BasicDataSource.class)
-        Dbcp2MultiTenantConnectionProvider dbcp2MultiTenantConnectionProvider(DataSource dataSource, TenantProperties properties) {
+        Dbcp2MultiTenantConnectionProvider dbcp2MultiTenantConnectionProvider(DataSource dataSource, DataTenantProperties properties) {
             log.debug("Tutorials4j |- Dbcp2 Multi Tenant Connection Provider");
             Dbcp2MultiTenantConnectionProvider bean = new Dbcp2MultiTenantConnectionProvider();
             bean.init(dataSource, properties);

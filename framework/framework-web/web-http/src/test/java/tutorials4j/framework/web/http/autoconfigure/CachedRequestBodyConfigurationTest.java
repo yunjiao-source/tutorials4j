@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.http;
+package tutorials4j.framework.web.http.autoconfigure;
 
 import jakarta.servlet.DispatcherType;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import tutorials4j.framework.common.lang.PropertiesConsts;
+import tutorials4j.framework.web.http.CachedRequestBodyFilter;
 
 import java.util.EnumSet;
 
@@ -23,8 +24,9 @@ public class CachedRequestBodyConfigurationTest {
     public void setUp() {
         String prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP + ".cached-request-body.";
         applicationContextRunner = new ApplicationContextRunner()
-                .withUserConfiguration(CachedRequestBodyConfiguration.class)
+                .withUserConfiguration(WebHttpConfiguration.CachedRequestBodyConfiguration.class)
                 .withPropertyValues(
+                        prefix + "enabled=true",
                         prefix + "max-content-length=2MB",
                         prefix + "url-patterns=/api/*,/admin/*",
                         prefix + "order=1",

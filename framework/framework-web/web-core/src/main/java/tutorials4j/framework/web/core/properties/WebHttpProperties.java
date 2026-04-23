@@ -26,6 +26,14 @@ public class WebHttpProperties {
      */
     @Data
     public static class CachedRequestBody {
+        /**
+         * 是否开启
+         */
+        private boolean enabled = false;
+
+        /**
+         * 匹配url地址
+         */
         private String[] urlPatterns = new String[]{"/*"};
 
         /**

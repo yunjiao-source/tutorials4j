@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT)
-public class TenantProperties {
+public class DataTenantProperties {
     /**
      * 请求路径列表，添加租户代码信息到线程上下文(ThreadLocal)中
      */

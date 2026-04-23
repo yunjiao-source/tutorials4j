@@ -11,7 +11,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import tutorials4j.framework.common.core.bean.TenantContextHolder;
 import tutorials4j.framework.common.lang.DefaultConsts;
-import tutorials4j.framework.data.core.properties.TenantProperties;
+import tutorials4j.framework.data.core.autoconfigure.DataTenantConfiguration;
+import tutorials4j.framework.data.core.properties.DataTenantProperties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,11 +21,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Yun Jiao
  */
-class TenantConfigurationTest {
+class DataTenantConfigurationTest {
 
     // 1. 测试普通应用上下文（非Web环境），主要验证配置类和属性绑定
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(TenantConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(DataTenantConfiguration.class))
             // 模拟 application.properties 中的配置项
             .withPropertyValues(
                     "tutorials4j.data.tenant.path-patterns=/api/*,/admin/*"
@@ -32,16 +33,16 @@ class TenantConfigurationTest {
 
     // 2. 测试 Web 应用上下文（因为 TenantConfiguration 实现了 WebMvcConfigurer）
     private final WebApplicationContextRunner webContextRunner = new WebApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(TenantConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(DataTenantConfiguration.class))
             .withPropertyValues("tutorials4j.data.tenant.path-patterns=/api/*");
 
     @Test
     void contextLoads() {
         contextRunner.run(context -> {
             // 验证配置类本身存在
-            assertThat(context).hasSingleBean(TenantConfiguration.class);
+            assertThat(context).hasSingleBean(DataTenantConfiguration.class);
             // 验证 TenantProperties bean 存在且值绑定正确
-            TenantProperties properties = context.getBean(TenantProperties.class);
+            DataTenantProperties properties = context.getBean(DataTenantProperties.class);
             assertThat(properties.getPathPatterns()).containsExactly("/api/*", "/admin/*");
         });
     }
@@ -55,7 +56,7 @@ class TenantConfigurationTest {
             // 更可靠的方法是检查 HandlerInterceptor 是否被注册到 Spring 的映射处理器中。
             // 这里采用另一种方式：手动模拟 addInterceptors 调用，验证拦截器被添加。
             // 方案：直接拿到 TenantConfiguration 实例，调用其 addInterceptors，然后断言 registry 中的内容。
-            TenantConfiguration config = context.getBean(TenantConfiguration.class);
+            DataTenantConfiguration config = context.getBean(DataTenantConfiguration.class);
             TestInterceptorRegistry testRegistry = new TestInterceptorRegistry();
             config.addInterceptors(testRegistry);
 

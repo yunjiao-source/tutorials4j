@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("demo")
+@RequestMapping("cached-request-body")
 public class CachedRequestBodyController {
     @PostMapping("cached")
     public Map<String, Object> cached(HttpServletRequest request) throws IOException {
