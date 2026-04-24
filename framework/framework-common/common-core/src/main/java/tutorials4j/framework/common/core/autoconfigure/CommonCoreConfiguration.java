@@ -44,14 +44,12 @@ public class CommonCoreConfiguration {
      * 或 {@link org.springframework.core.annotation.Order}）。然后调用每个 Supplier 的 {@code get()}
      * 方法获得实际的 {@link TaskDecorator} 实例，最后组装成 {@code CompositeTaskDecorator}。
      *
-     * <p>仅当容器中不存在任何 {@link TaskDecorator} 类型的 Bean 时，该自动配置才会生效。
-     *
      * @param taskDecoratorSuppliers 所有实现了 {@link TaskDecoratorSupplier} 接口的 Bean 提供者
      * @return 按顺序组合后的 {@code CompositeTaskDecorator} 实例
      */
     @Bean
-    @ConditionalOnMissingBean(TaskDecorator.class)
-    CompositeTaskDecorator CompositeTaskDecorator(ObjectProvider<TaskDecoratorSupplier> taskDecoratorSuppliers) {
+    @ConditionalOnMissingBean
+    CompositeTaskDecorator compositeTaskDecorator(ObjectProvider<TaskDecoratorSupplier> taskDecoratorSuppliers) {
         log.debug("Tutorials4j - Common - Core |- Composite Task Decorator");
         List<TaskDecorator> decoratorList = taskDecoratorSuppliers
                 .orderedStream()

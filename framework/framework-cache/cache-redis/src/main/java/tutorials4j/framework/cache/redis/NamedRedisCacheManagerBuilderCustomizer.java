@@ -52,19 +52,25 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
     @Override
     public void customize(RedisCacheManager.RedisCacheManagerBuilder builder) {
         if (CollectionUtils.isEmpty(properties.getNamedCaches())) {
-            log.debug("Tutorials4j - Cache - Redis |- 没有配置命名缓存");
             return;
         }
+        // 键前缀添加默认值
+        RedisCacheConfiguration defaultConfig = builder.cacheDefaults();
+        String oldKeyPrefix = RedisUtils.parseCacheNamePrefix(defaultConfig.getKeyPrefix());
+        defaultConfig = defaultConfig.computePrefixWith(RedisUtils.defaultCacheKeyPrefix(oldKeyPrefix));
+
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         Map<String, CacheProperties.Redis> redisProps = properties.getNamedCaches();
+
+        RedisCacheConfiguration finalDefaultConfig = defaultConfig;
         redisProps.forEach((key, redisProp) -> {
             // 独立配置覆盖默认配置
-            RedisCacheConfiguration namedCacheConfiguration = fillConfiguration(builder.cacheDefaults(), redisProp);
+            RedisCacheConfiguration namedCacheConfiguration = fillConfiguration(finalDefaultConfig, redisProp);
             configMap.put(key, namedCacheConfiguration);
 
         });
 
-        builder.withInitialCacheConfigurations(configMap);
+        builder.cacheDefaults(defaultConfig).withInitialCacheConfigurations(configMap);
         log.debug("Tutorials4j - Cache - Redis |- 成功初始化缓存[{}]", String.join(",", configMap.keySet()));
     }
 
@@ -78,21 +84,19 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
     private RedisCacheConfiguration fillConfiguration(RedisCacheConfiguration configuration,
                                                       CacheProperties.Redis prop) {
 
-        // 复制一份
-        RedisCacheConfiguration copyConfig = configuration.computePrefixWith(configuration.getKeyPrefix());
         if (prop.getTimeToLive() != null) {
-            copyConfig = copyConfig.entryTtl(prop.getTimeToLive());
+            configuration = configuration.entryTtl(prop.getTimeToLive());
         }
 
         if (!prop.isCacheNullValues()) {
-            copyConfig = copyConfig.disableCachingNullValues();
+            configuration = configuration.disableCachingNullValues();
         }
 
         if (prop.isUseKeyPrefix() && StringUtils.isNotBlank(prop.getKeyPrefix())) {
-            copyConfig = copyConfig.computePrefixWith(RedisUtils.defaultCacheKeyPrefix(prop.getKeyPrefix()));
+            configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix(prop.getKeyPrefix()));
         }
 
-        return copyConfig;
+        return configuration;
     }
 
 }

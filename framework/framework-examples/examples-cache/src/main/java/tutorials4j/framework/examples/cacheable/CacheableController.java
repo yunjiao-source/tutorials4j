@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.domain;
+package tutorials4j.framework.examples.cacheable;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,30 +13,30 @@ import tutorials4j.framework.common.core.bean.TenantContextHolder;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("cache")
+@RequestMapping("cacheable")
 @RequiredArgsConstructor
-public class CacheController {
-    private final CacheService cacheService;
+public class CacheableController {
+    private final CacheableService cacheableService;
 
     @GetMapping("users")
     public String getUser(@RequestParam("id") Long id) {
-        return cacheService.getUser(id);
+        return cacheableService.getUser(id);
     }
 
     @GetMapping("orders")
     public String getOrder(@RequestParam("id") Long id) {
-        return cacheService.getOrder(id);
+        return cacheableService.getOrder(id);
     }
 
     @GetMapping("cars")
     public String getCar(@RequestParam("id") Long id) {
-        return cacheService.getCar(id);
+        return cacheableService.getCar(id);
     }
 
     @GetMapping("tenant-users")
     public String getTenantUser(@RequestParam("id") Long id) {
         TenantContextHolder.set("DEMO");
-        return cacheService.getUser(id);
+        return cacheableService.getUser(id);
     }
 
 

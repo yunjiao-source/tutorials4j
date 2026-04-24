@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.domain;
+package tutorials4j.framework.examples.cacheable;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class CacheService {
+public class CacheableService {
 
     @Cacheable("users")
     public String getUser(Long userId) {

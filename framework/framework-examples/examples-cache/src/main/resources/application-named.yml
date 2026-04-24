@@ -9,10 +9,10 @@ spring:
   cache:
     type: redis
     redis:
-      time-to-live: 10m     # 全局默认缓存过期时间（30分钟）
+      time-to-live: 1m     # 全局默认缓存过期时间（30分钟）
       cache-null-values: false
       use-key-prefix: true
-      key-prefix: 'yunjiao:share:'
+      key-prefix: 'share:'
       enable-statistics: true
 
 tutorials4j:
@@ -20,12 +20,12 @@ tutorials4j:
     redis:
       named-caches:
         users:
-          timeToLive: 30s
+          timeToLive: 10s
           cacheNullValues: false
           keyPrefix: user
           useKeyPrefix: true
         orders:
-          timeToLive: 60s
+          timeToLive: 30s
           cacheNullValues: true
           keyPrefix: order
           useKeyPrefix: false

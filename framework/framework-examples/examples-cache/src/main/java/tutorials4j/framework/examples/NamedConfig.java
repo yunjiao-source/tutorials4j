@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 应用配置
+ * redis命名缓存应用配置
  *
  * @author Yun Jiao
  */
