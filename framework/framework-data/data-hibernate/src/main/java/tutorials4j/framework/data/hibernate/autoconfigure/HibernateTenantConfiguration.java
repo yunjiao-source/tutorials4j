@@ -41,7 +41,7 @@ public class HibernateTenantConfiguration {
      * TODO
      */
     @ConditionalOnBean(DataSource.class)
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "TABLE", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "TABLE")
     static class TableTenantConfiguration {
         @Bean
         DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
@@ -54,7 +54,7 @@ public class HibernateTenantConfiguration {
      * TODO
      */
     @ConditionalOnBean(DataSource.class)
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "DATABASE", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "DATABASE")
     static class DatabaseTenantConfiguration {
         @Bean
         DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
