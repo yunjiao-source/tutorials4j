@@ -2,7 +2,6 @@ package tutorials4j.framework.common.core.util;
 
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
-import tutorials4j.framework.common.lang.EnumCache;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

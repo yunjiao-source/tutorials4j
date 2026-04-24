@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: table
+#    active: database
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug

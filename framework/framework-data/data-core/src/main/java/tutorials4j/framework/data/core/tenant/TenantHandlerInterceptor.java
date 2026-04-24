@@ -24,7 +24,7 @@ public class TenantHandlerInterceptor implements HandlerInterceptor {
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j |- 租户拦截器[{}]", tenant);
+            log.debug("Tutorials4j - Data |- 租户代码：{}", tenant);
         }
         return true;
     }

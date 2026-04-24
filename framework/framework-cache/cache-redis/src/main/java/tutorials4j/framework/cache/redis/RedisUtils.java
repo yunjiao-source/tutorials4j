@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.lang.NonNull;
-import tutorials4j.framework.cache.core.CacheUtils;
+import tutorials4j.framework.cache.core.util.CacheUtils;
 import tutorials4j.framework.common.core.SymbolConsts;
 
 import java.lang.reflect.Method;

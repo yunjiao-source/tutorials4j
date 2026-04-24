@@ -20,7 +20,7 @@
     <modules>
         <module>data-core</module>
         <module>data-hibernate</module>
-        <module>data-hibernate-spring-boot-starter</module>
+        <module>data-spring-boot-starter</module>
     </modules>
 
 </project>

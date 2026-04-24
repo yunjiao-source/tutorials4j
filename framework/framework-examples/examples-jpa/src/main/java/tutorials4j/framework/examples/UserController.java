@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody User user) {
@@ -26,5 +27,11 @@ public class UserController {
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         User user = userRepository.findById(id).orElse(null);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/asyn/{id}")
+    public ResponseEntity<?> getAsyn(@PathVariable("id") Long id) {
+        userService.findAsynById(id);
+        return ResponseEntity.ok().build();
     }
 }

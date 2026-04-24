@@ -3,7 +3,6 @@ package tutorials4j.framework.common.core.util;
 import lombok.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tutorials4j.framework.common.lang.TreeQuery;
 
 import java.util.Arrays;
 import java.util.HashSet;

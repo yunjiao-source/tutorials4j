@@ -22,6 +22,8 @@
         <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <springboot3.version>3.5.13</springboot3.version>
+        <springboot4.version>4.0.5</springboot4.version>
 
         <javafaker.version>1.0.2</javafaker.version>
         <commons-io.version>2.21.0</commons-io.version>

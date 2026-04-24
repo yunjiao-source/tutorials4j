@@ -17,7 +17,7 @@ import tutorials4j.framework.data.core.properties.DataTenantProperties;
 public class DataCoreConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j |- Data Core Configuration");
+        log.debug("Tutorials4j - Data |- Data Core Configuration");
     }
 
 }

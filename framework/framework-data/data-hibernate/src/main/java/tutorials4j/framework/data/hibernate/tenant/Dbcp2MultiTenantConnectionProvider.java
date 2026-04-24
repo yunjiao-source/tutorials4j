@@ -1,7 +1,10 @@
 package tutorials4j.framework.data.hibernate.tenant;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import tutorials4j.framework.data.core.DataFrameworkException;
 import tutorials4j.framework.data.core.properties.DataTenantProperties;
+
+import javax.sql.DataSource;
 
 /**
  * dbcp2 多租户数据源提供者
@@ -9,6 +12,8 @@ import tutorials4j.framework.data.core.properties.DataTenantProperties;
  * @author Yun Jiao
  */
 public class Dbcp2MultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<BasicDataSource>  {
+    private BasicDataSource defaultDataSource;
+
     @Override
     protected BasicDataSource createDataSource(String tenant, DataTenantProperties.DataSourceOptions options) {
         BasicDataSource newDataSource = copyDataSource(defaultDataSource);
@@ -17,6 +22,21 @@ public class Dbcp2MultiTenantConnectionProvider extends AbstractMultiTenantConne
         newDataSource.setUsername(options.getUsername());
         newDataSource.setPassword(options.getPassword());
         return newDataSource;
+    }
+
+    @Override
+    protected BasicDataSource getDefaultDataSource() {
+        return defaultDataSource;
+    }
+
+    @Override
+    protected void setDefaultDataSource(DataSource dataSource) {
+        if (dataSource instanceof BasicDataSource sourceDataSource) {
+            this.defaultDataSource = sourceDataSource;
+        } else {
+            throw new DataFrameworkException("数据源类型不匹配，需要的类型：" +
+                    BasicDataSource.class.getSimpleName() + ", 提供的类型：" + dataSource.getClass().getSimpleName());
+        }
     }
 
     // 创建数据源并复制属性

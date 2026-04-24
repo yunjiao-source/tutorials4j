@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 public class CacheCoreConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Cache - Core |- Cache Core Configuration");
+        log.debug("Tutorials4j - Cache |- Cache Core Configuration");
     }
 
     @Bean
     @ConditionalOnMissingBean
     CompositeCacheManagerCreator compositeCacheManagerCreator(ObjectProvider<CacheManagerSupplier> cacheManagerSuppliers) {
-        log.debug("Tutorials4j - Cache - Core |- Composite Cache Manager Creator");
+        log.debug("Tutorials4j - Cache |- Composite Cache Manager Creator");
         List<CacheManagerSupplier> cacheManagers = cacheManagerSuppliers
                 .orderedStream()
                 .collect(Collectors.toList());

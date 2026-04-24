@@ -23,17 +23,18 @@ import java.util.stream.Collectors;
 public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource> extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl<String>
         implements HibernatePropertiesCustomizer {
     protected Map<String, T> dataSources = new ConcurrentHashMap<>();
-    protected T defaultDataSource;
     protected Map<String, DataTenantProperties.DataSourceOptions> dataSourceOptionsMap = new HashMap<>();
 
     protected abstract T createDataSource(String tenant, DataTenantProperties.DataSourceOptions options);
+    protected abstract T getDefaultDataSource();
+    protected abstract void setDefaultDataSource(DataSource dataSource);
 
     protected T createDataSource(String tenant) {
         DataTenantProperties.DataSourceOptions dataSourceOptions = dataSourceOptionsMap.get(tenant);
         if (dataSourceOptions == null) {
             throw new DataFrameworkException("未配置租户数据源：" + tenant);
         }
-        log.debug("Tutorials4j |- 创建租户数据源：[{},{}]", tenant, dataSourceOptions.getUrl());
+        log.debug("Tutorials4j - Data |- 创建租户数据源：[{},{}]", tenant, dataSourceOptions.getUrl());
         return createDataSource(tenant, dataSourceOptions);
     }
 
@@ -46,13 +47,13 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
                         entry -> entry.getKey().toUpperCase(),
                         Map.Entry::getValue
                 ));
-        this.defaultDataSource = (T) dataSource;
-        dataSources.put(DefaultConsts.DEFAULT_TENTANT_CODE, this.defaultDataSource);
+        setDefaultDataSource(dataSource);
+        dataSources.put(DefaultConsts.DEFAULT_TENTANT_CODE, this.getDefaultDataSource());
     }
 
     @Override
     protected DataSource selectAnyDataSource() {
-        return defaultDataSource;
+        return getDefaultDataSource();
     }
 
     @Override

@@ -22,7 +22,7 @@ import tutorials4j.framework.cache.redis.NamedRedisCacheManagerBuilderCustomizer
 public class CacheRedisConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Cache - Redis |- Cache Redis Configuration");
+        log.debug("Tutorials4j - Cache |- Cache Redis Configuration");
     }
 
 
@@ -33,13 +33,13 @@ public class CacheRedisConfiguration {
         @Bean
         @Order
         NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(CacheRedisProperties properties) {
-            log.debug("Tutorials4j - Cache - Redis |- Named Redis Cache Manager Builder Customizer");
+            log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Builder Customizer");
             return new NamedRedisCacheManagerBuilderCustomizer(properties);
         }
 
         @Bean
         NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
-            log.debug("Tutorials4j - Cache - Redis |- Named Redis Cache Manager Customizer");
+            log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Customizer");
             return new NamedCacheManagerCustomizer();
         }
     }

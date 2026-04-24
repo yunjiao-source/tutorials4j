@@ -32,7 +32,7 @@ public class CompositeCacheManagerCreator implements Supplier<CompositeCacheMana
             // 防止没有缓存管理器注入
             compositeCacheManager.setFallbackToNoOpCache(true);
         }
-        log.debug("Tutorials4j - Cache - Core |- 组合缓存中缓存管理器信息[{}]", cacheManagers);
+        log.debug("Tutorials4j - Cache |- 组合缓存中缓存管理器信息[{}]", cacheManagers);
         return compositeCacheManager;
     }
 }

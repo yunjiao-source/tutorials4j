@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class CommonCoreConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Common - Core |- Common Core Configuration");
+        log.debug("Tutorials4j - Common |- Common Core Configuration");
     }
 
     /**
@@ -48,13 +48,16 @@ public class CommonCoreConfiguration {
      * @return 按顺序组合后的 {@code CompositeTaskDecorator} 实例
      */
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(TaskDecorator.class)
     CompositeTaskDecorator compositeTaskDecorator(ObjectProvider<TaskDecoratorSupplier> taskDecoratorSuppliers) {
-        log.debug("Tutorials4j - Common - Core |- Composite Task Decorator");
+        log.debug("Tutorials4j - Common |- Composite Task Decorator");
         List<TaskDecorator> decoratorList = taskDecoratorSuppliers
                 .orderedStream()
                 .map(TaskDecoratorSupplier::get)
                 .collect(Collectors.toList());
+        if (!decoratorList.isEmpty()) {
+            log.debug("Tutorials4j - Common |- CompositeTaskDecorator初始化信息: {}", decoratorList);
+        }
         return new CompositeTaskDecorator(decoratorList);
     }
 

@@ -17,6 +17,11 @@ import java.util.Map;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT)
 public class DataTenantProperties {
     /**
+     * 是否启用，默认false（不启用）
+     */
+    private boolean enabled = false;
+
+    /**
      * 请求路径列表，添加租户代码信息到线程上下文(ThreadLocal)中
      */
     private String[] pathPatterns = new String[]{"/**"};

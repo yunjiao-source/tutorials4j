@@ -12,7 +12,7 @@
 
     <artifactId>cache-redis</artifactId>
     <packaging>jar</packaging>
-    <name>Cache :: Core</name>
+    <name>Cache :: Redis</name>
     <description>
         缓存Redis模块
     </description>

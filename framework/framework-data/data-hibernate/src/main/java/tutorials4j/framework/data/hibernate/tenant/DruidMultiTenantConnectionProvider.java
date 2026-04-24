@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.data.core.DataFrameworkException;
 import tutorials4j.framework.data.core.properties.DataTenantProperties;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
@@ -14,6 +15,8 @@ import java.sql.SQLException;
  */
 @Slf4j
 public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<DruidDataSource> {
+    private DruidDataSource defaultDataSource;
+
     @Override
     protected DruidDataSource createDataSource(String tenant, DataTenantProperties.DataSourceOptions options) {
         try {
@@ -26,6 +29,21 @@ public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConne
             return newDataSource;
         } catch (Exception e) {
             throw new DataFrameworkException("创建租户数据源异常",e);
+        }
+    }
+
+    @Override
+    protected DruidDataSource getDefaultDataSource() {
+        return defaultDataSource;
+    }
+
+    @Override
+    protected void setDefaultDataSource(DataSource dataSource) {
+        if (dataSource instanceof DruidDataSource sourceDataSource) {
+            this.defaultDataSource = sourceDataSource;
+        } else {
+            throw new DataFrameworkException("数据源类型不匹配，需要的类型：" +
+                    DruidDataSource.class.getSimpleName() + ", 提供的类型：" + dataSource.getClass().getSimpleName());
         }
     }
 
