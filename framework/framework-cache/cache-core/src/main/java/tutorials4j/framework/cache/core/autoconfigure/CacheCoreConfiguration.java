@@ -11,9 +11,6 @@ import tutorials4j.framework.cache.core.properties.CacheRedisProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerSupplier;
 import tutorials4j.framework.cache.core.support.CompositeCacheManagerCreator;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * 缓存核心配置
  *
@@ -32,9 +29,7 @@ public class CacheCoreConfiguration {
     @ConditionalOnMissingBean
     CompositeCacheManagerCreator compositeCacheManagerCreator(ObjectProvider<CacheManagerSupplier> cacheManagerSuppliers) {
         log.debug("Tutorials4j - Cache |- Composite Cache Manager Creator");
-        List<CacheManagerSupplier> cacheManagers = cacheManagerSuppliers
-                .orderedStream()
-                .collect(Collectors.toList());
-        return new CompositeCacheManagerCreator(cacheManagers);
+
+        return new CompositeCacheManagerCreator(cacheManagerSuppliers);
     }
 }
