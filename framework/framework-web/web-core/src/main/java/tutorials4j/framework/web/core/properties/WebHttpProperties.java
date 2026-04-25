@@ -34,7 +34,7 @@ public class WebHttpProperties {
         /**
          * 匹配url地址
          */
-        private String[] urlPatterns = new String[]{"/*"};
+        private String[] urlPatterns = new String[]{"/**"};
 
         /**
          * 过滤器启动排序，数值越小越先执行

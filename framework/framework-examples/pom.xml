@@ -20,10 +20,9 @@
     <modules>
         <module>examples-jpa</module>
         <module>examples-common</module>
-        <module>examples-web-http</module>
         <module>examples-cache</module>
         <module>examples-data</module>
-        <module>examples-web-client</module>
+        <module>examples-web</module>
     </modules>
 
 </project>

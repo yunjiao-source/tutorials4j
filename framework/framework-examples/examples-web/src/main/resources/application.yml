@@ -1,0 +1,9 @@
+spring:
+  profiles:
+#    active: cached-request-body
+    active: client
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug

@@ -19,35 +19,37 @@ import java.util.Optional;
  */
 @Slf4j
 public class HttpRequestUtils {
-    /**
-     * 请求日志记录
-     *
-     * @param request 请求
-     * @param body 体
-     */
-    public static void requestLogging(HttpRequest request, byte[] body) {
-        log.info("请求: {} {}", request.getMethod(), request.getURI());
-        log.info("\t 请求头列表:");
-        request.getHeaders().forEach(HttpRequestUtils::logHeader);
 
-        log.info("\t 请求体:");
+    public static void requestLogger(HttpRequest request, byte[] body) {
+        StringBuilder sb = new StringBuilder("\n");
+        sb.append("[HttpRequest]请求: ")
+                .append(request.getMethod())
+                .append(" ")
+                .append(request.getURI())
+                .append("\n");
+        sb.append("请求头列表: \n");
+        request.getHeaders().forEach((k, v) -> headerLogger(sb, k, v));
+
+        sb.append("请求体:\n");
         if (body.length > 0) {
-            log.info("\t\t " + new String(body, getCharset(request.getHeaders())));
+            sb.append(new String(body, getCharset(request.getHeaders()))).append("\n");
         }
+        log.info(sb.toString());
     }
 
-    /**
-     * 响应日志记录，不包括'响应体'
-     * @param response 响应
-     */
-    public static void responseLogging(ClientHttpResponse response) {
+
+    public static void responseLogger(ClientHttpResponse response) {
         try {
-            log.info("响应: {}", response.getStatusCode());
+            StringBuilder sb = new StringBuilder("\n");
+            sb.append("[ClientHttpResponse]响应: ")
+                    .append(response.getStatusCode())
+                    .append("\n");
+            sb.append("响应头列表: \n");
+            response.getHeaders().forEach((k, v) -> headerLogger(sb, k, v));
+            log.info(sb.toString());
         } catch (IOException e) {
             log.error("获取响应状态异常", e);
         }
-        log.info("\t 响应头列表:");
-        response.getHeaders().forEach(HttpRequestUtils::logHeader);
     }
 
     public static Charset getCharset(HttpHeaders headers) {
@@ -56,7 +58,7 @@ public class HttpRequestUtils {
                 .orElse(DefaultConsts.DEFAULT_CHARSET);
     }
 
-    private static void logHeader(String name, List<String> values) {
-        values.forEach(value -> log.info("\t\t {}={}", name, value));
+    private static void headerLogger(StringBuilder logBuilder, String name, List<String> values) {
+        values.forEach(value -> logBuilder.append(name).append("=").append(value).append("\n"));
     }
 }

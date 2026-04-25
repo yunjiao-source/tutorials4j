@@ -3,6 +3,7 @@ package tutorials4j.framework.examples.task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.annotation.EnableAsync;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
@@ -17,8 +18,15 @@ import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 @Configuration
 public class CompositeTaskDecoratorConfig {
     @Bean
+    @Order(2)
     TaskDecoratorSupplier logTaskDecoratorSupplier() {
         return LogTaskDecorator::new;
+    }
+
+    @Bean
+    @Order(1)
+    TaskDecoratorSupplier logAroundTaskDecoratorSupplier() {
+        return LogAroundTaskDecorator::new;
     }
 
     public static class LogTaskDecorator implements TaskDecorator {
@@ -26,8 +34,20 @@ public class CompositeTaskDecoratorConfig {
         @Override
         public Runnable decorate(Runnable runnable) {
             return () -> {
-                log.info(">>>>>>>>LogTaskDecorator");
+                log.info(">>>>>>>>LogTaskDecorator1");
                 runnable.run();
+            };
+        }
+    }
+
+    public static class LogAroundTaskDecorator implements TaskDecorator {
+
+        @Override
+        public Runnable decorate(Runnable runnable) {
+            return () -> {
+                log.info(">>>>>>>>LogAroundTaskDecorator begin");
+                runnable.run();
+                log.info(">>>>>>>>LogAroundTaskDecorator end");
             };
         }
     }

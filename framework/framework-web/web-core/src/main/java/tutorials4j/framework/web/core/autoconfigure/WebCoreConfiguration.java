@@ -18,7 +18,7 @@ import tutorials4j.framework.web.core.properties.WebHttpProperties;
 public class WebCoreConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j |- Web Core Configuration");
+        log.debug("Tutorials4j - Web |- Web Core Configuration");
     }
 
 }

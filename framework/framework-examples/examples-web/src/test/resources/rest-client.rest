@@ -1,0 +1,14 @@
+###
+GET http://localhost:8080/client/rest-client/get
+Content-Type: application/json
+
+###
+GET http://localhost:8080/client/rest-client/get/1
+Content-Type: application/json
+
+###
+POST http://localhost:8080/client/rest-client/post
+Content-Type: application/json
+
+
+

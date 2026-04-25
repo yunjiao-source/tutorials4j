@@ -1,0 +1,19 @@
+spring:
+  http:
+    client:
+      connect-timeout: 1s
+      read-timeout: 3s
+    codecs:
+      log-request-details: true  # 只对webclient有效
+
+logging:
+  level:
+    org.springframework.web.reactive.function.client: debug
+    org.springframework.http.codec: debug
+
+
+tutorials4j.web.client:
+      logger: true
+      default-headers:
+        X-abc: abcd
+

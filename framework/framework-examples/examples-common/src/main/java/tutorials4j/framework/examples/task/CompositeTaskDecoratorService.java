@@ -18,6 +18,6 @@ public class CompositeTaskDecoratorService {
     @Async
     public void exec() throws InterruptedException {
         log.info("async exec");
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(3);
     }
 }

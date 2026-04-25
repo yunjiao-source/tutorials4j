@@ -18,22 +18,11 @@ public class WebClientProperties {
     /**
      * 是否开启日志。默认：false
      */
-    private boolean loggerEnabled = false;
-
-    /**
-     * 缓存客户端请求，响应，可重复读取。默认：false
-     */
-    private boolean bufferingClientHttpRequestEnabled = false;
-
-    /**
-     * 基础url
-     */
-    private String baseUrl;
+    private boolean logger = false;
 
     /**
      * 默认请求头
      */
     private Map<String, String> defaultHeaders = new HashMap<>();
-
 
 }

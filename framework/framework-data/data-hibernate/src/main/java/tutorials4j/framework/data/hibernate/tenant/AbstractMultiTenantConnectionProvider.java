@@ -29,7 +29,12 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
     protected abstract T getDefaultDataSource();
     protected abstract void setDefaultDataSource(DataSource dataSource);
 
-    protected T createDataSource(String tenant) {
+    protected synchronized T createDataSource(String tenant) {
+        // 同步方法 + 校验，解决多线程问题
+        if (dataSources.containsKey(tenant)) {
+            return dataSources.get(tenant);
+        }
+
         DataTenantProperties.DataSourceOptions dataSourceOptions = dataSourceOptionsMap.get(tenant);
         if (dataSourceOptions == null) {
             throw new DataFrameworkException("未配置租户数据源：" + tenant);

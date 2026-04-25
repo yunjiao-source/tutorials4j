@@ -20,9 +20,8 @@
     <modules>
         <module>web-core</module>
         <module>web-http</module>
-        <module>web-client</module>
-        <module>web-http-spring-boot-starter</module>
-        <module>web-client-spring-boot-starter</module>
+        <module>web-rest</module>
+        <module>web-spring-boot-starter</module>
     </modules>
 
 </project>
