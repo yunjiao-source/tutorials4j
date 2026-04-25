@@ -9,9 +9,16 @@ import tutorials4j.framework.data.core.properties.DataTenantProperties;
 import javax.sql.DataSource;
 
 /**
- * Hikari 多租户数据源提供者
+ * 基于 HikariCP 连接池的多租户连接提供者实现。
+ * <p>
+ * 利用 HikariCP 的 {@link HikariConfig} 复制默认数据源的配置，
+ * 为每个租户创建独立的 {@link HikariDataSource} 实例。
+ * 要求默认数据源必须是 {@link HikariDataSource} 类型。
+ * </p>
  *
  * @author Yun Jiao
+ * @see HikariDataSource
+ * @see HikariConfig
  */
 @Slf4j
 public class HikariMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<HikariDataSource> {

@@ -12,7 +12,7 @@ import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 
 /**
- * 核心配置
+ * 公共核心模块的配置类
  *
  * @author Yun Jiao
  */
@@ -25,6 +25,16 @@ public class CommonCoreConfiguration {
         log.debug("Tutorials4j - Common |- Common Core Configuration");
     }
 
+    /**
+     * 创建复合任务装饰器创建器的默认 Bean。
+     *
+     * <p>该 Bean 会从容器中收集所有 {@link TaskDecoratorSupplier} 实例，
+     * 并提供一个 {@link CompositeTaskDecoratorCreator} 用于生成组合装饰器。
+     * 如果用户已经手动定义了该类型的 Bean，则此默认定义不会生效。
+     *
+     * @param taskDecoratorSuppliers 容器中所有可用的任务装饰器供应商
+     * @return 复合任务装饰器创建器实例
+     */
     @Bean
     @ConditionalOnMissingBean
     CompositeTaskDecoratorCreator compositeTaskDecoratorCreator(ObjectProvider<TaskDecoratorSupplier> taskDecoratorSuppliers) {

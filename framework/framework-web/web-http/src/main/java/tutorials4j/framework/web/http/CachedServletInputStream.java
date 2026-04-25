@@ -8,9 +8,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 缓存的字节数组包装为 ServletInputStream，支持多次读取。
+ * 基于字节数组的 {@link ServletInputStream} 实现，支持多次读取。
+ *
+ * <p>该类内部使用 {@link ByteArrayInputStream} 来存储缓存的请求体数据，因此可以从头开始反复读取。
+ * 所有读取操作都委托给内部的字节数组流。
+ *
+ * <p>注意：当前实现不支持异步非阻塞 I/O，调用 {@link #setReadListener(ReadListener)} 会抛出
+ * {@link UnsupportedOperationException}。
  *
  * @author Yun Jiao
+ * @see ServletInputStream
+ * @see ByteArrayInputStream
  */
 public class CachedServletInputStream extends ServletInputStream {
 

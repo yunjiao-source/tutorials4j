@@ -12,15 +12,31 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * TODO
+ * 组合缓存管理器创建器。
+ *
+ * <p>该创建器从 Spring 容器中获取所有 {@link CacheManagerSupplier} 实例，
+ * 将其提供的 {@link CacheManager} 收集起来，构建一个 {@link CompositeCacheManager}。
+ * 如果没有找到任何缓存管理器，则设置 {@code fallbackToNoOpCache} 为 {@code true}，
+ * 使用 NoOp 缓存作为后备。
  *
  * @author Yun Jiao
+ * @see CompositeCacheManager
+ * @see CacheManagerSupplier
  */
 @Slf4j
 @RequiredArgsConstructor
 public class CompositeCacheManagerCreator implements Supplier<CompositeCacheManager> {
     private final ObjectProvider<CacheManagerSupplier> cacheManagerSuppliers;
 
+    /**
+     * 创建并返回组合缓存管理器。
+     *
+     * <p>按顺序获取所有 {@link CacheManagerSupplier} 提供的 {@link CacheManager} 实例，
+     * 若列表非空则设置到 {@link CompositeCacheManager} 中；
+     * 若列表为空，则启用后备 NoOp 缓存策略，避免无可用缓存管理器导致错误。
+     *
+     * @return 配置好的 {@link CompositeCacheManager} 实例
+     */
     @Override
     public CompositeCacheManager get() {
         CompositeCacheManager compositeCacheManager = new CompositeCacheManager();

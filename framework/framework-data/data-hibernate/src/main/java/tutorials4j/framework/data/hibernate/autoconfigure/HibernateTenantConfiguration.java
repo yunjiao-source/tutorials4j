@@ -38,7 +38,7 @@ public class HibernateTenantConfiguration {
 
 
     /**
-     * TODO
+     * 租户配置：共享表
      */
     @ConditionalOnBean(DataSource.class)
     @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "TABLE")
@@ -51,7 +51,7 @@ public class HibernateTenantConfiguration {
     }
 
     /**
-     * TODO
+     * 租户配置：独立数据库
      */
     @ConditionalOnBean(DataSource.class)
     @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_TENANT, name = "type", havingValue = "DATABASE")

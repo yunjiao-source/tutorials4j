@@ -11,14 +11,20 @@ import java.util.function.Supplier;
  * @author Yun Jiao
  */
 public class CacheUtils {
-    public static final String PREFFIX_CACHE_NAME_DEFAULT = "tutorials4j";
+    public static final String PREFIX_CACHE_NAME_DEFAULT = "tutorials4j";
 
     /**
-     * 默认缓存前缀
-     * @return
+     * 提供默认的缓存名称前缀生成器。
+     * <p>
+     * 生成的前缀格式为：{@code tutorials4j:{当前租户ID}:} 。
+     * 其中租户ID通过 {@link TenantContextHolder#get()} 动态获取。
+     * </p>
+     *
+     * @return 一个 {@link Supplier}，每次调用 {@link Supplier#get()} 都会根据当前租户上下文
+     *         实时生成缓存前缀字符串。
      */
     public static Supplier<String> defaultCacheNamePrefix() {
-        return () -> PREFFIX_CACHE_NAME_DEFAULT + SymbolConsts.COLON
+        return () -> PREFIX_CACHE_NAME_DEFAULT + SymbolConsts.COLON
                 + TenantContextHolder.get() + SymbolConsts.COLON;
     }
 

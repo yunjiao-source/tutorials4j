@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.tenant;
+package tutorials4j.framework.data.core.autoconfigure;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
-import tutorials4j.framework.data.core.autoconfigure.DataTenantConfiguration;
 import tutorials4j.framework.data.core.properties.DataTenantProperties;
+import tutorials4j.framework.data.core.tenant.TenantTaskDecorator;
 
 import java.util.List;
 

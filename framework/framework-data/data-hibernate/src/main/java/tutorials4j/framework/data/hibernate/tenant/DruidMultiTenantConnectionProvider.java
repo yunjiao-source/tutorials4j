@@ -9,9 +9,16 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- * Druid 多租户数据源提供者
+ * 基于阿里巴巴 Druid 连接池的多租户连接提供者实现。
+ * <p>
+ * 为每个租户动态创建独立的 Druid 数据源实例。
+ * 新建数据源会复制默认数据源的大部分连接池参数（容量、检测、回收策略等），
+ * 然后覆盖其驱动类名、URL、用户名和密码。
+ * 该实现依赖 Druid 特有的配置属性，要求默认数据源必须是 {@link DruidDataSource} 类型。
+ * </p>
  *
  * @author Yun Jiao
+ * @see DruidDataSource
  */
 @Slf4j
 public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<DruidDataSource> {
@@ -47,7 +54,13 @@ public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConne
         }
     }
 
-    // 创建数据源并复制属性
+    /**
+     * 复制 Druid 数据源的连接池配置。
+     *
+     * @param original 原始默认数据源
+     * @return 配置属性相同但尚未初始化的新数据源
+     * @throws SQLException 如果获取原数据源配置时发生异常
+     */
     private DruidDataSource copyDataSource(DruidDataSource original) throws SQLException {
         if (original == null) {
             return null;
