@@ -1,0 +1,16 @@
+
+### 指定租户查询
+GET http://localhost:8080/cacheable/users?id=1
+Content-Type: application/json
+X-Tenant-Code:DEFAULT
+
+### 指定租户查询
+GET http://localhost:8080/cacheable/users?id=1
+Content-Type: application/json
+X-Tenant-Code:demo1
+
+
+
+
+
+

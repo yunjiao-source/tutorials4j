@@ -28,6 +28,6 @@ public interface PropertiesConsts {
 
     /** tenant */
     String PROPERTY_PREFIX_TENANT = PROPERTY_PREFIX_TUTORIALS4J + ".tenant";
-    String PROPERTY_PREFIX_TENANT_DATABASE = PROPERTY_PREFIX_TENANT + ".database";
+    String PROPERTY_PREFIX_TENANT_DATASOURCE = PROPERTY_PREFIX_TENANT + ".datasource";
     String PROPERTY_PREFIX_TENANT_CACHE = PROPERTY_PREFIX_TENANT + ".cache";
 }

@@ -5,7 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
 import tutorials4j.framework.tenant.core.exception.DataSourceTypeMismatch;
-import tutorials4j.framework.tenant.core.properties.TenantDatabaseProperties;
+import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
 
 import javax.sql.DataSource;
 
@@ -26,7 +26,7 @@ public class HikariMultiTenantConnectionProvider extends AbstractMultiTenantConn
     private HikariDataSource defaultDataSource;
 
     @Override
-    protected HikariDataSource createDataSource(String tenant, TenantDatabaseProperties.DataSourceOptions options) {
+    protected HikariDataSource createDataSource(String tenant, TenantDataSourceProperties.ConnectionOptions options) {
         final HikariConfig hikariConfig = new HikariConfig();
         defaultDataSource.copyStateTo(hikariConfig);
         hikariConfig.setDriverClassName(options.getDriverClassName());

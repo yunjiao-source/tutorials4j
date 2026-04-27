@@ -2,7 +2,7 @@ package tutorials4j.framework.tenant.hibernate;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import tutorials4j.framework.tenant.core.exception.DataSourceTypeMismatch;
-import tutorials4j.framework.tenant.core.properties.TenantDatabaseProperties;
+import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
 
 import javax.sql.DataSource;
 
@@ -22,7 +22,7 @@ public class Dbcp2MultiTenantConnectionProvider extends AbstractMultiTenantConne
     private BasicDataSource defaultDataSource;
 
     @Override
-    protected BasicDataSource createDataSource(String tenant, TenantDatabaseProperties.DataSourceOptions options) {
+    protected BasicDataSource createDataSource(String tenant, TenantDataSourceProperties.ConnectionOptions options) {
         BasicDataSource newDataSource = copyDataSource(defaultDataSource);
         newDataSource.setDriverClassName(options.getDriverClassName());
         newDataSource.setUrl(options.getUrl());

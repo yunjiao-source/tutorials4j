@@ -10,25 +10,36 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>examples-jpa</artifactId>
+    <artifactId>examples-tenant</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: JPA</name>
+    <name>Examples :: Tenant</name>
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-hibernate</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>cache-spring-boot-starter</artifactId>
+            <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>data-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>tenant-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-3-starter</artifactId>
         </dependency>
     </dependencies>
 </project>

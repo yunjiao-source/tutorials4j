@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
 import tutorials4j.framework.tenant.core.exception.DataSourceTypeMismatch;
 import tutorials4j.framework.tenant.core.exception.TenantFrameworkException;
-import tutorials4j.framework.tenant.core.properties.TenantDatabaseProperties;
+import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -27,7 +27,7 @@ public class DruidMultiTenantConnectionProvider extends AbstractMultiTenantConne
     private DruidDataSource defaultDataSource;
 
     @Override
-    protected DruidDataSource createDataSource(String tenant, TenantDatabaseProperties.DataSourceOptions options) {
+    protected DruidDataSource createDataSource(String tenant, TenantDataSourceProperties.ConnectionOptions options) {
         try {
             DruidDataSource newDataSource = copyDataSource(defaultDataSource);
             newDataSource.setDriverClassName(options.getDriverClassName());

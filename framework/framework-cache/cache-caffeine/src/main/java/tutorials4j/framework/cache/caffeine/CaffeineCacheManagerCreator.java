@@ -32,12 +32,16 @@ public class CaffeineCacheManagerCreator implements Supplier<CaffeineCacheManage
                 return instance;
             }
 
-            FlexibleCaffeineCacheManager caffeineCacheManager = new FlexibleCaffeineCacheManager(properties);
-            caffeineCacheManager.setCaffeine(caffeine);
-
-            instance = caffeineCacheManager;
+            instance = newInstance();
         }
 
         return instance;
     }
+
+    public CaffeineCacheManager newInstance() {
+        FlexibleCaffeineCacheManager caffeineCacheManager = new FlexibleCaffeineCacheManager(properties);
+        caffeineCacheManager.setCaffeine(caffeine);
+        return caffeineCacheManager;
+    }
+
 }

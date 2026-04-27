@@ -1,8 +1,10 @@
 package tutorials4j.framework.examples.app;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * 租户配置
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @Profile("table")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.tenant"})
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.table"})
+@EnableJpaRepositories(basePackages = {"tutorials4j.framework.examples.table"})
+@EntityScan(basePackages = {"tutorials4j.framework.examples.table"})
 public class TenantdTableConfig {
 }

@@ -1,10 +1,10 @@
-package tutorials4j.framework.examples;
+package tutorials4j.framework.examples.table;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import tutorials4j.framework.common.core.bean.TenantContextHolder;
+import tutorials4j.framework.common.core.TenantContextHolder;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserTenantService {
-    private final UserTenantRepository userTenantRepository;
+public class UserService {
+    private final UserRepository userRepository;
 
-    public List<UserTenant> getAllUsers() {
-        return userTenantRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Async

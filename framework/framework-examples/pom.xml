@@ -18,11 +18,11 @@
     </description>
 
     <modules>
-        <module>examples-jpa</module>
         <module>examples-common</module>
         <module>examples-cache</module>
         <module>examples-data</module>
         <module>examples-web</module>
+        <module>examples-tenant</module>
     </modules>
 
 </project>

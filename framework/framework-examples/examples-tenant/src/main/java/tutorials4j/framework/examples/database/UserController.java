@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples;
+package tutorials4j.framework.examples.database;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +11,29 @@ import org.springframework.web.bind.annotation.*;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("/user-tenant")
+@RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserTenantController {
-    private final UserTenantRepository userTenantRepository;
+public class UserController {
+    private final UserRepository userRepository;
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody UserTenant user) {
-        UserTenant newUser = userTenantRepository.save(user);
-        return ResponseEntity.ok(newUser);
+    public ResponseEntity<?> create(@RequestBody User user) {
+        User u = userRepository.save(user);
+        return ResponseEntity.ok(u);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(userRepository.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        UserTenant user = userTenantRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElse(null);
         return ResponseEntity.ok(user);
     }
+
     @GetMapping("/asyn/{id}")
     public ResponseEntity<?> getAsyn(@PathVariable("id") Long id) {
         userService.findAsynById(id);

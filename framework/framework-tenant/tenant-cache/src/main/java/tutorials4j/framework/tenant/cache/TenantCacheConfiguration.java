@@ -25,7 +25,7 @@ public class TenantCacheConfiguration {
     @Bean
     @ConditionalOnMissingBean
     TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator(CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
-        log.debug("Tutorials4j - Cache |- Tenant Caffeine Cache Manager Creator");
+        log.debug("Tutorials4j - Tenant |- Tenant Caffeine Cache Manager Creator");
 
         return new TenantCaffeineCacheManagerCreator(caffeineCacheManagerCreator);
     }
@@ -34,7 +34,7 @@ public class TenantCacheConfiguration {
     @ConditionalOnMissingBean
     TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator(TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator,
                                                                             RedisCacheManagerCreator redisCacheManagerCreator) {
-        log.debug("Tutorials4j - Cache |- Tenant Multi Level Cache Manager Creator");
+        log.debug("Tutorials4j - Tenant |- Tenant Multi Level Cache Manager Creator");
 
         return new TenantMultiLevelCacheManagerCreator(tenantCaffeineCacheManagerCreator, redisCacheManagerCreator);
     }

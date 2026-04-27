@@ -1,38 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/demo
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-
-    druid:
-      initial-size: 2
-      min-idle: 1
-      max-active: 10
-      max-wait: 60000
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 300000
-      validation-query: SELECT 1
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      # 监控配置
-      filters: stat,wall,slf4j
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        login-username: admin
-        login-password: 123456
-        reset-enable: true
-      web-stat-filter:
-        enabled: true
-        url-pattern: /*
-        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
-
-
   jpa:
     open-in-view: false
     hibernate:

@@ -1,9 +1,9 @@
-package tutorials4j.framework.examples;
+package tutorials4j.framework.examples.table;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import tutorials4j.framework.data.hibernate.tenant.TenantEntity;
+import tutorials4j.framework.tenant.hibernate.TenantEntity;
 
 /**
  * 用戶
@@ -14,7 +14,7 @@ import tutorials4j.framework.data.hibernate.tenant.TenantEntity;
 @Data
 @Entity
 @Table(name = "t_user_tenant")
-public class UserTenant extends TenantEntity {
+public class User extends TenantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -24,8 +24,8 @@ public class UserTenant extends TenantEntity {
     private Integer age;
     private String secretKey ;
 
-    public static UserTenant of(String name, String email) {
-        UserTenant user = new UserTenant();
+    public static User of(String name, String email) {
+        User user = new User();
         user.name = name;
         user.email = email;
         return user;

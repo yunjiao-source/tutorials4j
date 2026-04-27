@@ -6,7 +6,7 @@ import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTen
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.tenant.core.exception.DataSourceNotFound;
-import tutorials4j.framework.tenant.core.properties.TenantDatabaseProperties;
+import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
     /**
      * 租户标识符到其数据源配置选项的映射。
      */
-    protected Map<String, TenantDatabaseProperties.DataSourceOptions> dataSourceOptionsMap = new HashMap<>();
+    protected Map<String, TenantDataSourceProperties.ConnectionOptions> dataSourceOptionsMap = new HashMap<>();
 
     /**
      * 为指定租户创建新的数据源实例。
@@ -46,7 +46,7 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
      * @param options 该租户的数据源配置（URL、用户名、密码等）
      * @return 新建的数据源
      */
-    protected abstract T createDataSource(String tenant, TenantDatabaseProperties.DataSourceOptions options);
+    protected abstract T createDataSource(String tenant, TenantDataSourceProperties.ConnectionOptions options);
 
     /**
      * 获取默认租户的数据源。
@@ -71,12 +71,12 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
      * @throws DataSourceNotFound 如果未找到该租户的配置
      */
     protected T createDataSource(String tenant) {
-        TenantDatabaseProperties.DataSourceOptions dataSourceOptions = dataSourceOptionsMap.get(tenant);
-        if (dataSourceOptions == null) {
+        TenantDataSourceProperties.ConnectionOptions connectionOptions = dataSourceOptionsMap.get(tenant);
+        if (connectionOptions == null) {
             throw new DataSourceNotFound("未配置租户数据源：" + tenant);
         }
-        log.debug("Tutorials4j - Tenant |- 创建租户数据源：[{},{}]", tenant, dataSourceOptions.getUrl());
-        return createDataSource(tenant, dataSourceOptions);
+        log.debug("Tutorials4j - Tenant |- 创建租户数据源：[{},{}]", tenant, connectionOptions.getUrl());
+        return createDataSource(tenant, connectionOptions);
     }
 
     /**
@@ -89,11 +89,11 @@ public abstract class AbstractMultiTenantConnectionProvider<T extends DataSource
      * @param dataSource 默认数据源（通常是主数据源）
      * @param properties 包含所有租户数据源配置的属性对象
      */
-    public void init(DataSource dataSource, TenantDatabaseProperties properties) {
+    public void init(DataSource dataSource, TenantDataSourceProperties properties) {
         dataSources.clear();
 
         // 将key转换成大写
-        dataSourceOptionsMap = properties.getDatasource().entrySet().stream()
+        dataSourceOptionsMap = properties.getConnections().entrySet().stream()
                 .collect(Collectors.toMap(
                         entry -> entry.getKey().toUpperCase(),
                         Map.Entry::getValue

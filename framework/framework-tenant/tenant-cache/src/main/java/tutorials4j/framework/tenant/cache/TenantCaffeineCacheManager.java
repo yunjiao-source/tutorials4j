@@ -26,6 +26,6 @@ public class TenantCaffeineCacheManager extends AbstractRoutingCacheManager<Caff
     protected CaffeineCacheManager createCacheManager(Object name) {
         log.debug("Tutorials4j - Cache |- 创建[Caffeine]租户缓存管理器: {}", name);
 
-        return caffeineCacheManagerCreator.get();
+        return caffeineCacheManagerCreator.newInstance();
     }
 }

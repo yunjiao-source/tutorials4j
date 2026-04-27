@@ -14,8 +14,8 @@ import java.util.Map;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT_DATABASE)
-public class TenantDatabaseProperties {
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT_DATASOURCE)
+public class TenantDataSourceProperties {
     /**
      * 租户策略，默认：独立数据库(DATABASE)
      */
@@ -24,13 +24,13 @@ public class TenantDatabaseProperties {
     /**
      * 数据源属性，可以配置多个
      */
-    private Map<String, DataSourceOptions> datasource = new HashMap<>();
+    private Map<String, ConnectionOptions> connections = new HashMap<>();
 
     /**
      * 数据源属性
      */
     @Data
-    public static class DataSourceOptions {
+    public static class ConnectionOptions {
         private String driverClassName;
 
         private String url;

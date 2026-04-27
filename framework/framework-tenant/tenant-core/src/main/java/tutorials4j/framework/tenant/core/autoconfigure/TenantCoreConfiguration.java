@@ -14,7 +14,7 @@ import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 import tutorials4j.framework.tenant.core.TenantHandlerInterceptor;
 import tutorials4j.framework.tenant.core.TenantTaskDecorator;
 import tutorials4j.framework.tenant.core.properties.TenantCacheProperties;
-import tutorials4j.framework.tenant.core.properties.TenantDatabaseProperties;
+import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
 import tutorials4j.framework.tenant.core.properties.TenantProperties;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @EnableConfigurationProperties({TenantProperties.class
         , TenantCacheProperties.class
-        , TenantDatabaseProperties.class})
+        , TenantDataSourceProperties.class})
 public class TenantCoreConfiguration implements WebMvcConfigurer {
     private final TenantProperties properties;
 
