@@ -2,6 +2,7 @@ package tutorials4j.framework.tenant.cache;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
@@ -21,10 +22,11 @@ public class TenantCacheConfiguration {
 
 
     @Bean
-    TenantCaffeineCacheManager tenantCaffeineCacheManager(CaffeineCacheManagerCreator CaffeineCacheManagerCreator) {
-        log.debug("Tutorials4j - Cache |- Tenant Caffeine CacheManager");
+    @ConditionalOnMissingBean
+    TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator(CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
+        log.debug("Tutorials4j - Cache |- Tenant Caffeine Cache Manager Creator");
 
-        return new TenantCaffeineCacheManager(CaffeineCacheManagerCreator);
+        return new TenantCaffeineCacheManagerCreator(caffeineCacheManagerCreator);
     }
 
 }
