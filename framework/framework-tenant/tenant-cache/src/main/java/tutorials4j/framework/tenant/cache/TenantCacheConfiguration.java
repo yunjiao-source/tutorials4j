@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
+import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
 /**
  * TODO
@@ -27,6 +28,15 @@ public class TenantCacheConfiguration {
         log.debug("Tutorials4j - Cache |- Tenant Caffeine Cache Manager Creator");
 
         return new TenantCaffeineCacheManagerCreator(caffeineCacheManagerCreator);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator(TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator,
+                                                                            RedisCacheManagerCreator redisCacheManagerCreator) {
+        log.debug("Tutorials4j - Cache |- Tenant Multi Level Cache Manager Creator");
+
+        return new TenantMultiLevelCacheManagerCreator(tenantCaffeineCacheManagerCreator, redisCacheManagerCreator);
     }
 
 }
