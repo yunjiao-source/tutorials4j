@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import tutorials4j.framework.data.core.autoconfigure.DataCoreConfiguration;
 
 /**
- * 独立数据库租户自动配置
+ * Data模块自动配置
  *
  * @author Yun Jiao
  */
