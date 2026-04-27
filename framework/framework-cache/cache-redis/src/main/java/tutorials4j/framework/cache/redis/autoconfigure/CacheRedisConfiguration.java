@@ -46,11 +46,12 @@ public class CacheRedisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    RedisCacheManagerCreator redisCacheManagerCreator(RedisConnectionFactory factory,
+    RedisCacheManagerCreator redisCacheManagerCreator(CacheRedisProperties properties,
+                                                      RedisConnectionFactory factory,
                                                       ObjectProvider<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizers,
                                                       ObjectProvider<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizers) {
         log.debug("Tutorials4j - Cache |- Redis Cache Manager Creator");
-        return new RedisCacheManagerCreator(factory,
+        return new RedisCacheManagerCreator(properties,factory,
                 redisCacheManagerBuilderCustomizers.orderedStream().collect(Collectors.toList()),
                 cacheManagerCustomizers.orderedStream().collect(Collectors.toList()));
     }

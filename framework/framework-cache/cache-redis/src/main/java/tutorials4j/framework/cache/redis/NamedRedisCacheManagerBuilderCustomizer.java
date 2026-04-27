@@ -2,7 +2,6 @@ package tutorials4j.framework.cache.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -54,15 +53,14 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
         if (CollectionUtils.isEmpty(properties.getNamedCaches())) {
             return;
         }
-        // 键前缀添加默认值
-        RedisCacheConfiguration defaultConfig = fillConfiguration(builder.cacheDefaults(), properties);
 
+        RedisCacheConfiguration defaultConfig = builder.cacheDefaults();
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         Map<String, RedisOptions> redisOption = properties.getNamedCaches();
 
         redisOption.forEach((key, redisProp) -> {
             // 独立配置覆盖默认配置
-            RedisCacheConfiguration namedCacheConfiguration = fillConfiguration(defaultConfig, redisProp);
+            RedisCacheConfiguration namedCacheConfiguration = RedisUtils.fillConfiguration(defaultConfig, redisProp);
             configMap.put(key, namedCacheConfiguration);
 
         });
@@ -74,29 +72,5 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
         log.debug("Tutorials4j - Cache |- Redis缓存管理器初始化缓存：{}", String.join(",", configMap.keySet()));
     }
 
-    /**
-     * 根据给定的 {@link RedisOptions} 属性填充 {@link RedisCacheConfiguration} 配置。
-     *
-     * @param configuration 原始的 {@link RedisCacheConfiguration} 实例，将基于它进行修改
-     * @param prop          包含具体缓存配置的 {@link RedisOptions} 对象
-     * @return 填充后的 {@link RedisCacheConfiguration} 实例
-     */
-    private RedisCacheConfiguration fillConfiguration(RedisCacheConfiguration configuration,
-                                                      RedisOptions prop) {
-
-        if (prop.getTimeToLive() != null) {
-            configuration = configuration.entryTtl(prop.getTimeToLive());
-        }
-
-        if (!prop.isCacheNullValues()) {
-            configuration = configuration.disableCachingNullValues();
-        }
-
-        if (prop.isUseKeyPrefix() && StringUtils.isNotBlank(prop.getKeyPrefix())) {
-            configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix(prop.getKeyPrefix()));
-        }
-
-        return configuration;
-    }
 
 }
