@@ -2,14 +2,20 @@ package tutorials4j.framework.cache.redis.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
+import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import tutorials4j.framework.cache.core.properties.CacheRedisProperties;
 import tutorials4j.framework.cache.redis.NamedCacheManagerCustomizer;
 import tutorials4j.framework.cache.redis.NamedRedisCacheManagerBuilderCustomizer;
+import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
+
+import java.util.stream.Collectors;
 
 /**
  * 命名缓存配置
@@ -17,7 +23,6 @@ import tutorials4j.framework.cache.redis.NamedRedisCacheManagerBuilderCustomizer
  * @author Yun Jiao
  */
 @Slf4j
-@ConditionalOnClass(RedisCacheManager.class)
 @Configuration(proxyBeanMethods = false)
 public class CacheRedisConfiguration {
     @PostConstruct
@@ -25,22 +30,28 @@ public class CacheRedisConfiguration {
         log.debug("Tutorials4j - Cache |- Cache Redis Configuration");
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(CacheRedisProperties properties) {
+        log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Builder Customizer");
+        return new NamedRedisCacheManagerBuilderCustomizer(properties);
+    }
 
-    @Configuration(proxyBeanMethods = false)
-    public static class NamedCacheConfiguration {
+    @Bean
+    @ConditionalOnMissingBean
+    NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
+        log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Customizer");
+        return new NamedCacheManagerCustomizer();
+    }
 
-
-        @Bean
-        @Order
-        NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(CacheRedisProperties properties) {
-            log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Builder Customizer");
-            return new NamedRedisCacheManagerBuilderCustomizer(properties);
-        }
-
-        @Bean
-        NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
-            log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Customizer");
-            return new NamedCacheManagerCustomizer();
-        }
+    @Bean
+    @ConditionalOnMissingBean
+    RedisCacheManagerCreator redisCacheManagerCreator(RedisConnectionFactory factory,
+                                                      ObjectProvider<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizers,
+                                                      ObjectProvider<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizers) {
+        log.debug("Tutorials4j - Cache |- Redis Cache Manager Creator");
+        return new RedisCacheManagerCreator(factory,
+                redisCacheManagerBuilderCustomizers.orderedStream().collect(Collectors.toList()),
+                cacheManagerCustomizers.orderedStream().collect(Collectors.toList()));
     }
 }

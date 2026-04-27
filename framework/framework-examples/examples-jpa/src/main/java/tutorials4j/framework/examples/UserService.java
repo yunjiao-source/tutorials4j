@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import tutorials4j.framework.common.core.bean.TenantContextHolder;
+import tutorials4j.framework.common.core.TenantContextHolder;
 
 import java.util.List;
 

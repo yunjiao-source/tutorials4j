@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.data.core.autoconfigure.DataCoreConfiguration;
-import tutorials4j.framework.data.core.autoconfigure.DataTenantConfiguration;
-import tutorials4j.framework.data.hibernate.autoconfigure.HibernateTenantConfiguration;
 
 /**
  * 独立数据库租户自动配置
@@ -15,7 +13,7 @@ import tutorials4j.framework.data.hibernate.autoconfigure.HibernateTenantConfigu
  */
 @Slf4j
 @AutoConfiguration
-@Import({DataCoreConfiguration.class, DataTenantConfiguration.class, HibernateTenantConfiguration.class})
+@Import({DataCoreConfiguration.class})
 public class DataAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

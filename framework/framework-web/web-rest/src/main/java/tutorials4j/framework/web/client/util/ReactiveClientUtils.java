@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
-import tutorials4j.framework.web.core.WebClientFrameworkException;
+import tutorials4j.framework.web.core.WebFrameworkException;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class ReactiveClientUtils {
      * 创建一个用于捕获异常并转换为框架自定义异常的 {@link ExchangeFilterFunction}。
      * <p>
      * 该过滤器会对响应状态码进行检查，如果状态码大于 300（即非成功状态码，2xx 除外），
-     * 则读取响应体内容，并将其作为异常消息，抛出 {@link WebClientFrameworkException}；
+     * 则读取响应体内容，并将其作为异常消息，抛出 {@link WebFrameworkException}；
      * 否则直接返回原始响应。
      * </p>
      * <p>
@@ -35,7 +35,7 @@ public class ReactiveClientUtils {
             HttpStatusCode status = response.statusCode();
             if (status.value() > 300) {
                 return response.bodyToMono(String.class)
-                        .flatMap(body -> Mono.error(new WebClientFrameworkException("接口调用异常: " + body)));
+                        .flatMap(body -> Mono.error(new WebFrameworkException("接口调用异常: " + body)));
             }
 
             return Mono.just(response);

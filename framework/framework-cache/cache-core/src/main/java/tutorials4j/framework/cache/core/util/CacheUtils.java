@@ -1,33 +1,41 @@
 package tutorials4j.framework.cache.core.util;
 
-import tutorials4j.framework.common.core.SymbolConsts;
-import tutorials4j.framework.common.core.bean.TenantContextHolder;
+import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.lang.NonNull;
 
-import java.util.function.Supplier;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
- * 缓存工具
+ * TODO
  *
  * @author Yun Jiao
  */
-public class CacheUtils {
-    public static final String PREFIX_CACHE_NAME_DEFAULT = "tutorials4j";
-
+public interface CacheUtils {
     /**
-     * 提供默认的缓存名称前缀生成器。
-     * <p>
-     * 生成的前缀格式为：{@code tutorials4j:{当前租户ID}:} 。
-     * 其中租户ID通过 {@link TenantContextHolder#get()} 动态获取。
-     * </p>
+     * 生成基于类名、方法名和参数列表的缓存键生成器。
      *
-     * @return 一个 {@link Supplier}，每次调用 {@link Supplier#get()} 都会根据当前租户上下文
-     *         实时生成缓存前缀字符串。
+     * <p>规则：{@code 目标类名:方法名:[参数1, 参数2, ...]}
+     * <ul>
+     *     <li>类名：目标对象的 {@link Class#getSimpleName()}</li>
+     *     <li>方法名：当前执行的方法名称</li>
+     *     <li>参数列表：通过 {@link Arrays#toString(Object[])} 格式化</li>
+     * </ul>
+     *
+     * <p>此生成器可确保在同一类、同一方法、相同参数的情况下生成相同的缓存键，
+     * 适用于需要细粒度缓存控制的场景。
+     *
+     * @return 自定义的 {@link KeyGenerator} 实例
      */
-    public static Supplier<String> defaultCacheNamePrefix() {
-        return () -> PREFIX_CACHE_NAME_DEFAULT + SymbolConsts.COLON
-                + TenantContextHolder.get() + SymbolConsts.COLON;
+    static KeyGenerator classMethodParamsKeyGenerator() {
+        return (Object target, Method method, @NonNull Object... params) -> {
+            // 自定义 key 生成规则，例如：
+            return target.getClass().getSimpleName() +
+                    ":" +
+                    method.getName() +
+                    ":" +
+                    Arrays.toString(params);
+        };
     }
-
-
 
 }

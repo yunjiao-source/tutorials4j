@@ -1,6 +1,6 @@
 package tutorials4j.framework.data.core;
 
-import tutorials4j.framework.common.core.FrameworkRuntimeException;
+import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 
 /**
  * Data异常

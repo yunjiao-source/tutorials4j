@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-hibernate</artifactId>
+            <artifactId>common-core</artifactId>
             <version>${revision}</version>
             <scope>provided</scope>
         </dependency>

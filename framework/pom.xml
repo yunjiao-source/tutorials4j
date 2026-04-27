@@ -27,6 +27,7 @@
         <module>framework-web</module>
         <module>framework-cache</module>
         <module>framework-data</module>
+        <module>framework-tenant</module>
 
         <module>framework-examples</module>
     </modules>

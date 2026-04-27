@@ -1,7 +1,7 @@
 package tutorials4j.framework.cache.core.properties;
 
 import lombok.Data;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import tutorials4j.framework.common.core.PropertiesConsts;
 
@@ -13,11 +13,12 @@ import java.util.Map;
  *
  * @author Yun Jiao
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE_REDIS)
-public class CacheRedisProperties{
+public class CacheRedisProperties extends RedisOptions{
     /**
      * 命名缓存配置
      */
-    private Map<String, CacheProperties.Redis> namedCaches = new HashMap<>();
+    private Map<String, RedisOptions> namedCaches = new HashMap<>();
 }

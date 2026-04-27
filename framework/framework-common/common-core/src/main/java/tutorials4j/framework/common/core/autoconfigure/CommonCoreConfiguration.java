@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Import;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 公共核心模块的配置类
  *
@@ -40,7 +43,8 @@ public class CommonCoreConfiguration {
     CompositeTaskDecoratorCreator compositeTaskDecoratorCreator(ObjectProvider<TaskDecoratorSupplier> taskDecoratorSuppliers) {
         log.debug("Tutorials4j - Common |- Composite Task Decorator Creator");
 
-        return new CompositeTaskDecoratorCreator(taskDecoratorSuppliers);
+        List<TaskDecoratorSupplier> suppliers = taskDecoratorSuppliers.orderedStream().collect(Collectors.toList());
+        return new CompositeTaskDecoratorCreator(suppliers);
     }
 
 

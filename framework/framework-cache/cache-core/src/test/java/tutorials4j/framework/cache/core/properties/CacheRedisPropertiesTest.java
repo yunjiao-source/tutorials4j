@@ -49,14 +49,14 @@ public class CacheRedisPropertiesTest {
                     CacheRedisProperties properties = context.getBean(CacheRedisProperties.class);
                     assertThat(properties.getNamedCaches().size()).isEqualTo(2);
 
-                    CacheProperties.Redis userProp = properties.getNamedCaches().get("user");
+                    RedisOptions userProp = properties.getNamedCaches().get("user");
                     assertThat(userProp.getTimeToLive()).isEqualTo(Duration.ofSeconds(4));
                     assertThat(userProp.isCacheNullValues()).isFalse();
                     assertThat(userProp.getKeyPrefix()).isEqualTo("user");
                     assertThat(userProp.isUseKeyPrefix()).isFalse();
                     assertThat(userProp.isEnableStatistics()).isTrue();
 
-                    CacheProperties.Redis orderProp = properties.getNamedCaches().get("order");
+                    RedisOptions orderProp = properties.getNamedCaches().get("order");
                     assertThat(orderProp.getTimeToLive()).isEqualTo(Duration.ofSeconds(6));
                     assertThat(orderProp.isCacheNullValues()).isTrue();
                     assertThat(orderProp.getKeyPrefix()).isEqualTo("order");

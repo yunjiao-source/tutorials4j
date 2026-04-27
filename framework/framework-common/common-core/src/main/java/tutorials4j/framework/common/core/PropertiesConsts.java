@@ -15,7 +15,7 @@ public interface PropertiesConsts {
     /** cache */
     String PROPERTY_PREFIX_CACHE = PROPERTY_PREFIX_TUTORIALS4J + ".cache";
     String PROPERTY_PREFIX_CACHE_REDIS = PROPERTY_PREFIX_CACHE + ".redis";
-
+    String PROPERTY_PREFIX_CACHE_CAFFEINE = PROPERTY_PREFIX_CACHE + ".caffeine";
 
     /** web */
     String PROPERTY_PREFIX_WEB = PROPERTY_PREFIX_TUTORIALS4J + ".web";
@@ -25,5 +25,9 @@ public interface PropertiesConsts {
 
     /** data */
     String PROPERTY_PREFIX_DATA = PROPERTY_PREFIX_TUTORIALS4J + ".data";
-    String PROPERTY_PREFIX_DATA_TENANT = PROPERTY_PREFIX_DATA + ".tenant";
+
+    /** tenant */
+    String PROPERTY_PREFIX_TENANT = PROPERTY_PREFIX_TUTORIALS4J + ".tenant";
+    String PROPERTY_PREFIX_TENANT_DATABASE = PROPERTY_PREFIX_TENANT + ".database";
+    String PROPERTY_PREFIX_TENANT_CACHE = PROPERTY_PREFIX_TENANT + ".cache";
 }
