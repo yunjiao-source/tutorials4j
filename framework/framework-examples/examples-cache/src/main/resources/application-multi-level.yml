@@ -1,0 +1,28 @@
+
+logging:
+  level:
+    org.springframework.cache: debug
+
+tutorials4j:
+  cache:
+    caffeine:
+      expire-after-write: 20s
+      recordStats: true
+      named-caches:
+        users:
+          expire-after-write: 10s
+    redis:
+      timeToLive: 10s
+      cacheNullValues: false
+      keyPrefix: share
+      useKeyPrefix: true
+      enable-statistics: true
+      named-caches:
+        users:
+          timeToLive: 20s
+          cacheNullValues: false
+          keyPrefix: user
+          useKeyPrefix: true
+
+
+

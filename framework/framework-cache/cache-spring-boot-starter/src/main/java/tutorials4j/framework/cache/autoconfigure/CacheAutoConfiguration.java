@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.cache.caffeine.CacheCaffeineConfiguration;
 import tutorials4j.framework.cache.core.autoconfigure.CacheCoreConfiguration;
+import tutorials4j.framework.cache.multi.CacheMultiLevelConfiguration;
 import tutorials4j.framework.cache.redis.autoconfigure.CacheRedisConfiguration;
 
 /**
@@ -15,7 +16,10 @@ import tutorials4j.framework.cache.redis.autoconfigure.CacheRedisConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({CacheCoreConfiguration.class, CacheRedisConfiguration.class, CacheCaffeineConfiguration.class})
+@Import({CacheCoreConfiguration.class
+        , CacheRedisConfiguration.class
+        , CacheCaffeineConfiguration.class
+        , CacheMultiLevelConfiguration.class})
 public class CacheAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

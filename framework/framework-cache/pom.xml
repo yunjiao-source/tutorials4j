@@ -21,6 +21,7 @@
         <module>cache-core</module>
         <module>cache-caffeine</module>
         <module>cache-redis</module>
+        <module>cache-multi-level</module>
         <module>cache-spring-boot-starter</module>
     </modules>
 

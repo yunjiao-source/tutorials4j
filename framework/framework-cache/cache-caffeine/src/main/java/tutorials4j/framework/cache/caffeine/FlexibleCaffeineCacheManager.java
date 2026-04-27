@@ -42,7 +42,7 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
                 Caffeine<Object, Object> caffeine = Caffeine.newBuilder();
                 CaffeineUtils.copyOption(caffeine, caffeineOptions);
 
-                log.debug("Tutorials4j - Cache |- 创建Caffeine缓存，{}", name);
+                log.debug("Tutorials4j - Cache |- Caffeine缓存管理器初始化缓存: {}", name);
                 return caffeine.build();
             }
         }
