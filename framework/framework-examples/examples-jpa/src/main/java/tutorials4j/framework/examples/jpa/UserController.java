@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples;
+package tutorials4j.framework.examples.jpa;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody User user) {
-        userRepository.save(user);
-        return ResponseEntity.ok("创建用户成功");
+        User u = userRepository.save(user);
+        return ResponseEntity.ok(u);
     }
 
     @GetMapping("/{id}")

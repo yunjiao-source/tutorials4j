@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.examples.User;
-import tutorials4j.framework.examples.UserRepository;
+import tutorials4j.framework.examples.jpa.User;
+import tutorials4j.framework.examples.jpa.UserRepository;
 
 /**
  * 勿租户过滤器示例

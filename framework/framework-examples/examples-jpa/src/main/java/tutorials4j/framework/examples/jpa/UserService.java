@@ -1,12 +1,14 @@
-package tutorials4j.framework.examples;
+package tutorials4j.framework.examples.jpa;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import tutorials4j.framework.common.core.TenantContextHolder;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 服務
@@ -25,7 +27,9 @@ public class UserService {
 
 
     @Async
+    @SneakyThrows
     public void findAsynById(Long id) {
         log.info("多线程租户: {}", TenantContextHolder.get());
+        TimeUnit.SECONDS.sleep(3);
     }
 }

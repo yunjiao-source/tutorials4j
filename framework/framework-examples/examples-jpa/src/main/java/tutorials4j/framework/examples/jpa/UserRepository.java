@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples;
+package tutorials4j.framework.examples.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
