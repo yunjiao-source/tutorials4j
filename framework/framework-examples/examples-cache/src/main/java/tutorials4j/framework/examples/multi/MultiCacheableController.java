@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.framework.examples.Car;
 
 /**
  * 示例
@@ -28,7 +29,7 @@ public class MultiCacheableController {
     }
 
     @GetMapping("cars")
-    public String getCar(@RequestParam("id") Long id) {
+    public Car getCar(@RequestParam("id") Long id) {
         return multiCacheableService.getCar(id);
     }
 

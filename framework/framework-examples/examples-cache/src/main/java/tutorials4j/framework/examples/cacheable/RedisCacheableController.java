@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.core.TenantContextHolder;
+import tutorials4j.framework.examples.Car;
 
 /**
  * 示例
@@ -29,7 +30,7 @@ public class RedisCacheableController {
     }
 
     @GetMapping("cars")
-    public String getCar(@RequestParam("id") Long id) {
+    public Car getCar(@RequestParam("id") Long id) {
         return redisCacheableService.getCar(id);
     }
 

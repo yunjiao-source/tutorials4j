@@ -5,6 +5,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import tutorials4j.framework.examples.Car;
+
+import java.util.Date;
 
 /**
  * 服务
@@ -31,10 +34,10 @@ public class CaffeineCacheableService {
     }
 
     @Cacheable("cars")
-    public String getCar(Long orderId) {
-        String data =  "car-" + RandomStringUtils.insecure().nextAlphabetic(5);
-        log.info("数据库中获取数据：{}", data);
-        return data;
+    public Car getCar(Long carId) {
+        Car car = new Car(carId, RandomStringUtils.insecure().nextAlphabetic(5), new Date());
+        log.info("数据库中获取数据：{}", car);
+        return car;
     }
 }
 
