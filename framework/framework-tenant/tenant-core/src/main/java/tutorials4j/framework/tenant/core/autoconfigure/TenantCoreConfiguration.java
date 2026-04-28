@@ -3,13 +3,14 @@ package tutorials4j.framework.tenant.core.autoconfigure;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 import tutorials4j.framework.tenant.core.TenantHandlerInterceptor;
 import tutorials4j.framework.tenant.core.TenantTaskDecorator;
@@ -40,7 +41,12 @@ public class TenantCoreConfiguration implements WebMvcConfigurer {
 
 
     @Bean
-    @ConditionalOnBean(CompositeTaskDecorator.class)
+    @ConditionalOnMissingBean
+    CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
+        return creator.get();
+    }
+
+    @Bean
     TaskDecoratorSupplier tenantTaskDecoratorSupplier() {
         log.debug("Tutorials4j - Tenant |- Tenant Task Decorator Supplier");
         return TenantTaskDecorator::new;

@@ -9,7 +9,7 @@ import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
 /**
- * TODO
+ * 租户缓存配置
  *
  * @author Yun Jiao
  */

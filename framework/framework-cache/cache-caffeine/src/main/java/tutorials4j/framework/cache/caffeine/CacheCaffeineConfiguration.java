@@ -9,9 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
 
 /**
- * TODO
+ * Spring配置类，用于装配Caffeine缓存相关的Bean。
  *
  * @author Yun Jiao
+ * @see Caffeine
+ * @see CacheCaffeineProperties
+ * @see CaffeineCacheManagerCreator
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
@@ -21,6 +24,12 @@ public class CacheCaffeineConfiguration {
         log.debug("Tutorials4j - Cache |- Cache Caffeine Configuration");
     }
 
+    /**
+     * 创建并配置一个{@link Caffeine}实例。
+     *
+     * @param properties Caffeine缓存配置属性
+     * @return 配置好的Caffeine实例
+     */
     @Bean
     Caffeine<Object, Object> caffeine(CacheCaffeineProperties properties) {
         log.debug("Tutorials4j - Cache |- Caffeine");
@@ -30,6 +39,14 @@ public class CacheCaffeineConfiguration {
         return caffeine;
     }
 
+    /**
+     * 创建{@link CaffeineCacheManagerCreator} Bean，用于生成Caffeine缓存管理器。
+     * <p>若上下文中已存在{@link CaffeineCacheManagerCreator}类型的Bean，则不会重复创建。</p>
+     *
+     * @param caffeine   配置好的Caffeine实例
+     * @param properties Caffeine缓存配置属性
+     * @return 缓存管理器创建器实例
+     */
     @Bean
     @ConditionalOnMissingBean(CaffeineCacheManagerCreator.class)
     CaffeineCacheManagerCreator caffeineCacheManagerCreator(Caffeine<Object, Object> caffeine,

@@ -11,25 +11,48 @@ import tutorials4j.framework.cache.core.properties.CaffeineOptions;
 import java.util.Map;
 
 /**
- * TODO
+ * 灵活的Caffeine缓存管理器，扩展自{@link CaffeineCacheManager}。
+ * <p>支持为每个缓存名称单独配置参数，通过{@link CacheCaffeineProperties#getNamedCaches()}获取特定缓存的配置。
+ * 如果某个缓存名称存在单独配置，则使用该配置创建对应的原生Caffeine缓存；否则回退到父类的默认创建逻辑。</p>
  *
  * @author Yun Jiao
+ * @see CaffeineCacheManager
+ * @see CacheCaffeineProperties
  */
 @Slf4j
 public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
     private final CacheCaffeineProperties properties;
 
+    /**
+     * 使用给定的全局配置构造一个缓存管理器。
+     *
+     * @param properties 全局Caffeine缓存配置属性
+     */
     public FlexibleCaffeineCacheManager(CacheCaffeineProperties properties) {
         this.properties = properties;
         this.setAllowNullValues(properties.getAllowNullValues());
     }
 
+    /**
+     * 使用给定的全局配置和一组缓存名称构造缓存管理器。
+     *
+     * @param properties 全局Caffeine缓存配置属性
+     * @param cacheNames 初始化的缓存名称列表
+     */
     public FlexibleCaffeineCacheManager(CacheCaffeineProperties properties, String... cacheNames) {
         super(cacheNames);
         this.properties = properties;
         this.setAllowNullValues(properties.getAllowNullValues());
     }
 
+    /**
+     * 创建指定缓存名称的原生Caffeine缓存对象。
+     * <p>若{@link CacheCaffeineProperties#getNamedCaches()}中包含该缓存名称的单独配置，
+     * 则根据该配置新建一个{@link Caffeine}实例并构建缓存；否则调用父类方法创建默认缓存。</p>
+     *
+     * @param name 缓存名称
+     * @return 原生Caffeine缓存实例
+     */
     @Override
     protected Cache<Object, Object> createNativeCaffeineCache(String name) {
         Map<String, CaffeineOptions> optionsMap = properties.getNamedCaches();

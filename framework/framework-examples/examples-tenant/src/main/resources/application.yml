@@ -1,8 +1,8 @@
 spring:
   profiles:
 #    active: table
-#    active: database
-    active: cache
+    active: database
+#    active: cache
 
   datasource:
     url: jdbc:postgresql://localhost:5432/demo

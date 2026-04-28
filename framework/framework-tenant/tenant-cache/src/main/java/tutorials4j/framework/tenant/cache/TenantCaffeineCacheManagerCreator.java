@@ -6,7 +6,7 @@ import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import java.util.function.Supplier;
 
 /**
- * TODO
+ * 租户级 Caffeine 缓存管理器的创建器（Supplier 模式）。
  *
  * @author Yun Jiao
  */
@@ -16,6 +16,12 @@ public class TenantCaffeineCacheManagerCreator implements Supplier<TenantCaffein
 
     private TenantCaffeineCacheManager instance;
 
+    /**
+     * 获取租户级 Caffeine 缓存管理器单例。
+     * <p>使用双重检查锁保证线程安全且高效。</p>
+     *
+     * @return {@link TenantCaffeineCacheManager} 单例实例
+     */
     @Override
     public TenantCaffeineCacheManager get() {
         if (instance != null) {

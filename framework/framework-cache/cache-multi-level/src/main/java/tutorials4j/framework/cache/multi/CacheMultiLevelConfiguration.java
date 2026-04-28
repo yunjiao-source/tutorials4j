@@ -9,9 +9,12 @@ import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
 /**
- * TODO
+ * Spring 配置类，用于启用多级缓存（本地 Caffeine + 远程 Redis）支持。
  *
  * @author Yun Jiao
+ * @see MultiLevelCacheManagerCreator
+ * @see MultiLevelCacheManager
+ * @see MultiLevelCache
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)

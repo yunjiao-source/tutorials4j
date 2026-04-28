@@ -15,32 +15,43 @@ public class CaffeineOptions {
     private Long maximumSize = 1000L;
     private Duration expireAfterWrite;
     private Duration expireAfterAccess;
-    private Duration refreshAfterWrite;
     private Boolean recordStats;
 
-    public void mergeNullValue(CaffeineOptions target) {
+    // 高级配置
+    private Boolean weakKeys = false;
+    private Boolean weakValues = false;
+    private Boolean softValues = false;
+
+    /**
+     * 将未设置的属性（null）从默认配置中合并。
+     *
+     * @param defaults 默认配置
+     */
+    public void mergeNullValue(CaffeineOptions defaults) {
+        if (defaults == null) return;
+
         if (this.maximumSize == null) {
-            this.maximumSize = target.getMaximumSize();
+            this.maximumSize = defaults.getMaximumSize();
         }
 
         if (this.initialCapacity == null) {
-            this.initialCapacity = target.getInitialCapacity();
+            this.initialCapacity = defaults.getInitialCapacity();
         }
 
         if (this.expireAfterAccess == null) {
-            this.expireAfterAccess =target.getExpireAfterAccess();
+            this.expireAfterAccess =defaults.getExpireAfterAccess();
         }
 
         if (this.expireAfterWrite == null) {
-            this.expireAfterWrite = target.getExpireAfterWrite();
-        }
-
-        if (this.refreshAfterWrite == null) {
-            this.refreshAfterWrite = target.getRefreshAfterWrite();
+            this.expireAfterWrite = defaults.getExpireAfterWrite();
         }
 
         if (this.recordStats == null) {
-            this.recordStats = target.recordStats;
+            this.recordStats = defaults.recordStats;
         }
+
+        if (this.weakKeys == null) this.weakKeys = defaults.weakKeys;
+        if (this.weakValues == null) this.weakValues = defaults.weakValues;
+        if (this.softValues == null) this.softValues = defaults.softValues;
     }
 }

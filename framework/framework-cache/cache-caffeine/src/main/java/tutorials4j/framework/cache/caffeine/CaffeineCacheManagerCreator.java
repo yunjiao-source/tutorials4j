@@ -9,9 +9,13 @@ import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
 import java.util.function.Supplier;
 
 /**
- * TODO
+ * {@link CaffeineCacheManager}的创建器，实现{@link Supplier}接口，并提供单例的缓存管理器实例。
+ * <p>采用双重检查锁（DCL）保证线程安全且延迟加载。实际创建的缓存管理器为{@link FlexibleCaffeineCacheManager}，
+ * 支持每个缓存名称的独立配置。</p>
  *
  * @author Yun Jiao
+ * @see FlexibleCaffeineCacheManager
+ * @see CaffeineCacheManager
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -21,6 +25,12 @@ public class CaffeineCacheManagerCreator implements Supplier<CaffeineCacheManage
 
     private CaffeineCacheManager instance;
 
+    /**
+     * 获取单例的{@link CaffeineCacheManager}实例。
+     * <p>首次调用时会创建新实例，后续调用返回已创建的实例。</p>
+     *
+     * @return 缓存管理器实例（单例）
+     */
     @Override
     public CaffeineCacheManager get() {
         if (instance != null) {
@@ -38,6 +48,12 @@ public class CaffeineCacheManagerCreator implements Supplier<CaffeineCacheManage
         return instance;
     }
 
+    /**
+     * 创建一个新的{@link CaffeineCacheManager}实例。
+     * <p>使用{@link FlexibleCaffeineCacheManager}，并将配置的Caffeine实例设置到其中。</p>
+     *
+     * @return 新创建的缓存管理器实例
+     */
     public CaffeineCacheManager newInstance() {
         FlexibleCaffeineCacheManager caffeineCacheManager = new FlexibleCaffeineCacheManager(properties);
         caffeineCacheManager.setCaffeine(caffeine);
