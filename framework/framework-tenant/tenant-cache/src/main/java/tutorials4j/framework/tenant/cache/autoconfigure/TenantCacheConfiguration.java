@@ -1,4 +1,4 @@
-package tutorials4j.framework.tenant.cache;
+package tutorials4j.framework.tenant.cache.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
+import tutorials4j.framework.tenant.cache.TenantCaffeineCacheManagerCreator;
+import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
 
 /**
  * 租户缓存配置

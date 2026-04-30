@@ -1,10 +1,8 @@
-package tutorials4j.framework.common.core.cache;
+package tutorials4j.framework.common.core.support;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.Map;
@@ -19,8 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Yun Jiao
  */
 public abstract class AbstractRoutingCacheManager<T extends CacheManager> implements CacheManager {
-    @Nullable
-    private Map<Object, T> targetCacheManagers = new ConcurrentHashMap<>();
+    private final Map<Object, T> targetCacheManagers = new ConcurrentHashMap<>();
 
     /**
      * 根据缓存名称获取对应的 {@link Cache} 实例。
@@ -39,12 +36,6 @@ public abstract class AbstractRoutingCacheManager<T extends CacheManager> implem
     @Override
     public Collection<String> getCacheNames() {
         return this.determineTargetDataSource().getCacheNames();
-    }
-
-    public void addCacheManager(Object name, T cacheManager) {
-        Assert.notNull(name, "name must not be null");
-        Assert.notNull(cacheManager, "cacheManager must not be null");
-        targetCacheManagers.put(name, cacheManager);
     }
 
     /**

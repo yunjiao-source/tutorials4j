@@ -4,37 +4,48 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>yunjiao-source.tutorials4j.framework</groupId>
-        <artifactId>framework-tenant</artifactId>
+        <artifactId>framework-data</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tenant-hibernate</artifactId>
+    <artifactId>data-jdbc</artifactId>
     <packaging>jar</packaging>
-    <name>Tenant :: Hibernate</name>
+    <name>Data :: Jdbc</name>
     <description>
-        租户hibernate模块
+        数据Jdbc模块
     </description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>tenant-core</artifactId>
+            <artifactId>data-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-jdbc</artifactId>
-            <version>${revision}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>

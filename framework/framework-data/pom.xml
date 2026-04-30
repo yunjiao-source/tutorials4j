@@ -19,6 +19,7 @@
 
     <modules>
         <module>data-core</module>
+        <module>data-jdbc</module>
         <module>data-hibernate</module>
         <module>data-spring-boot-starter</module>
     </modules>

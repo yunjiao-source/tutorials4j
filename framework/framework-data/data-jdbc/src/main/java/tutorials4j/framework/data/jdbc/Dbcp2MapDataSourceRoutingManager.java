@@ -1,47 +1,30 @@
-package tutorials4j.framework.tenant.hibernate;
+package tutorials4j.framework.data.jdbc;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import tutorials4j.framework.tenant.core.exception.DataSourceTypeMismatch;
-import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
+import tutorials4j.framework.common.core.JdbcOptions;
+import tutorials4j.framework.data.core.exception.DataSourceTypeMismatchException;
 
 import javax.sql.DataSource;
 
 /**
- * 基于 Apache Commons DBCP2 连接池的多租户连接提供者实现。
- * <p>
- * 为每个租户动态创建独立的 {@link BasicDataSource} 实例。
- * 新建数据源会复制默认数据源的连接池核心参数（初始大小、最大连接数、空闲数、等待时间等），
- * 以及连接校验、事务隔离等配置，然后覆盖驱动类名、URL、用户名和密码。
- * 要求默认数据源必须是 {@link BasicDataSource} 类型。
- * </p>
+ * TODO
  *
  * @author Yun Jiao
- * @see BasicDataSource
  */
-public class Dbcp2MultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider<BasicDataSource>  {
-    private BasicDataSource defaultDataSource;
-
+public class Dbcp2MapDataSourceRoutingManager extends AbstractMapDataSourceRoutingManager {
     @Override
-    protected BasicDataSource createDataSource(String tenant, TenantDataSourceProperties.ConnectionOptions options) {
-        BasicDataSource newDataSource = copyDataSource(defaultDataSource);
-        newDataSource.setDriverClassName(options.getDriverClassName());
-        newDataSource.setUrl(options.getUrl());
-        newDataSource.setUsername(options.getUsername());
-        newDataSource.setPassword(options.getPassword());
-        return newDataSource;
-    }
+    protected DataSource createDataSource(String name, JdbcOptions options) {
+        DataSource defaultDataSource = getDefaultDataSource();
 
-    @Override
-    protected BasicDataSource getDefaultDataSource() {
-        return defaultDataSource;
-    }
-
-    @Override
-    protected void setDefaultDataSource(DataSource dataSource) {
-        if (dataSource instanceof BasicDataSource sourceDataSource) {
-            this.defaultDataSource = sourceDataSource;
+        if (defaultDataSource instanceof BasicDataSource basicDataSource) {
+            BasicDataSource newDataSource = copyDataSource(basicDataSource);
+            newDataSource.setDriverClassName(options.getDriverClassName());
+            newDataSource.setUrl(options.getUrl());
+            newDataSource.setUsername(options.getUsername());
+            newDataSource.setPassword(options.getPassword());
+            return newDataSource;
         } else {
-            throw new DataSourceTypeMismatch(BasicDataSource.class.getSimpleName(), dataSource.getClass().getSimpleName());
+            throw new DataSourceTypeMismatchException(BasicDataSource.class.getSimpleName(), defaultDataSource.getClass().getSimpleName());
         }
     }
 

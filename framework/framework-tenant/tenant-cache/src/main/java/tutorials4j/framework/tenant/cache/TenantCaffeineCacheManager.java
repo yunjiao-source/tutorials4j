@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.common.core.TenantContextHolder;
-import tutorials4j.framework.common.core.cache.AbstractRoutingCacheManager;
+import tutorials4j.framework.common.core.support.AbstractRoutingCacheManager;
 
 /**
  * 租户隔离的 Caffeine 缓存管理器。

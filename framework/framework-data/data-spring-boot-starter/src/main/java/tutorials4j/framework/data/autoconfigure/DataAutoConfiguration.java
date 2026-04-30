@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.data.core.autoconfigure.DataCoreConfiguration;
+import tutorials4j.framework.data.jdbc.autoconfigure.DataJdbcConfiguration;
 
 /**
  * Data模块自动配置
@@ -13,7 +14,7 @@ import tutorials4j.framework.data.core.autoconfigure.DataCoreConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({DataCoreConfiguration.class})
+@Import({DataCoreConfiguration.class, DataJdbcConfiguration.class})
 public class DataAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

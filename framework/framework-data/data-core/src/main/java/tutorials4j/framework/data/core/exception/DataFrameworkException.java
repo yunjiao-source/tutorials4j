@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core;
+package tutorials4j.framework.data.core.exception;
 
 import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 

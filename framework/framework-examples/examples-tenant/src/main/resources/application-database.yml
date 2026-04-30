@@ -1,8 +1,8 @@
 tutorials4j:
   tenant:
     datasource:
-      strategy: DATABASE
-      connections:
+      strategy: hibernate_database
+      jdbc:
         demo1:
           url: jdbc:postgresql://localhost:5432/demo1
           username: postgres

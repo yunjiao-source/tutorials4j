@@ -1,4 +1,4 @@
 tutorials4j:
   tenant:
     datasource:
-      strategy: TABLE
+      strategy: hibernate_table
