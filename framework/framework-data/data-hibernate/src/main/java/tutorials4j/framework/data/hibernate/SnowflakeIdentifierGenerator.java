@@ -11,9 +11,14 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
 /**
- * TODO
+ * Hibernate 主键生成器，基于雪花算法（Snowflake）生成分布式唯一 ID。
+ * <p>
+ * 该类与 {@link SnowflakeIDGenerator} 注解配合使用，根据实体主键的类型自动返回字符串或数值型 ID。
+ * </p>
  *
  * @author Yun Jiao
+ * @see SnowflakeIDGenerator
+ * @see SnowflakeUtils
  */
 public class SnowflakeIdentifierGenerator implements IdentifierGenerator, StandardGenerator {
     private final Class<?> propertyType;
