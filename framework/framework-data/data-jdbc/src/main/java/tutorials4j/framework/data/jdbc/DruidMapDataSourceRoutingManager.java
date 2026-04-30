@@ -83,4 +83,10 @@ public class DruidMapDataSourceRoutingManager extends AbstractMapDataSourceRouti
         return dataSource;
     }
 
+    @Override
+    protected void doShutdown(DataSource dataSource) throws SQLException {
+        if (dataSource instanceof DruidDataSource druidDataSource) {
+            druidDataSource.close();
+        }
+    }
 }

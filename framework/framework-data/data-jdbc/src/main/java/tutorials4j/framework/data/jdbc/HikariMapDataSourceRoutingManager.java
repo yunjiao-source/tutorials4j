@@ -7,6 +7,7 @@ import tutorials4j.framework.common.core.JdbcOptions;
 import tutorials4j.framework.data.core.exception.DataSourceTypeMismatchException;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 /**
  * 基于 HikariCP 连接池的数据源路由管理器实现。
@@ -36,6 +37,13 @@ public class HikariMapDataSourceRoutingManager extends AbstractMapDataSourceRout
             return new HikariDataSource(hikariConfig);
         } else {
             throw new DataSourceTypeMismatchException(BasicDataSource.class.getSimpleName(), defaultDataSource.getClass().getSimpleName());
+        }
+    }
+
+    @Override
+    protected void doShutdown(DataSource dataSource) throws SQLException {
+        if (dataSource instanceof HikariDataSource hikariDataSource) {
+            hikariDataSource.close();
         }
     }
 }

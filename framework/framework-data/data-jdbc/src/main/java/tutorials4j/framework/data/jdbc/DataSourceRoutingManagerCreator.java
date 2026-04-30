@@ -1,5 +1,6 @@
 package tutorials4j.framework.data.jdbc;
 
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.common.core.support.DataSourceRoutingManager;
 import tutorials4j.framework.data.core.exception.DataSourceNotSupportException;
@@ -89,5 +90,12 @@ public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRouti
             default -> throw new DataSourceNotSupportException(dataSource.getClass().getName());
         }
 
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        if (instance != null) {
+            instance.shutdown();
+        }
     }
 }

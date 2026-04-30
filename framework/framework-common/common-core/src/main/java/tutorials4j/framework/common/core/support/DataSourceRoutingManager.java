@@ -41,4 +41,9 @@ public interface DataSourceRoutingManager {
      * @param jdbcOptions  JDBC 连接选项，包含驱动、URL、用户名、密码等
      */
     void addRoutingJdbcOptions(String name, JdbcOptions jdbcOptions);
+
+    /**
+     * 关闭
+     */
+    void shutdown();
 }

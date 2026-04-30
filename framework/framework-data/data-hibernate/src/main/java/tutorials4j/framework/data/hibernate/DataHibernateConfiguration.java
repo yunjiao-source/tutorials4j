@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
- * TODO
+ * Hibernate配置
  *
  * @author Yun Jiao
  */

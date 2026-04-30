@@ -5,6 +5,7 @@ import tutorials4j.framework.common.core.JdbcOptions;
 import tutorials4j.framework.data.core.exception.DataSourceTypeMismatchException;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 /**
  * 基于 Apache DBCP2 连接池的数据源路由管理器实现。
@@ -63,5 +64,12 @@ public class Dbcp2MapDataSourceRoutingManager extends AbstractMapDataSourceRouti
         copy.setDefaultTransactionIsolation(original.getDefaultTransactionIsolation());
 
         return copy;
+    }
+
+    @Override
+    protected void doShutdown(DataSource dataSource) throws SQLException {
+        if (dataSource instanceof BasicDataSource basicDataSource) {
+            basicDataSource.close();
+        }
     }
 }

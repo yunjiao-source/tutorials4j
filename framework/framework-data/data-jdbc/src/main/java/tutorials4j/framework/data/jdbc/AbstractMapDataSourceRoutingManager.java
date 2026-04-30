@@ -5,7 +5,9 @@ import org.springframework.util.Assert;
 import tutorials4j.framework.common.core.DefaultConsts;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,4 +58,25 @@ public abstract class AbstractMapDataSourceRoutingManager extends AbstractDataSo
         Assert.notNull(name, "name must not be null");
         return targetDataSources.computeIfAbsent(name, this::createDataSource);
     }
+
+    @Override
+    public void shutdown() {
+        Iterator<Map.Entry<String, DataSource>> it = targetDataSources.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, DataSource> entry = it.next();
+
+            log.debug("Tutorials4j - Data |- 关闭数据源：{}", entry.getKey());
+            try {
+                doShutdown(entry.getValue());
+            } catch (SQLException e) {
+                log.error("关闭数据源异常", e);
+            }
+
+            it.remove();
+        }
+
+    }
+
+    protected abstract void doShutdown(DataSource dataSource) throws SQLException;
 }
