@@ -11,8 +11,11 @@ Java 教程
 | `springboot4`       | 基于Spring Boot4的示例项目                    |
 
 
-## 许可证
-本项目使用 MIT License 进行许可。
-完整的许可证文本请见 [LICENSE](./LICENSE) 文件。
+## 公众号
+
+如果对我的项目代码感兴趣，请关注我的公众号，有很多文章等着你
+
+
+![杨运交](qrcode_for_gh_31209a11b93e_258.jpg)
 
 
