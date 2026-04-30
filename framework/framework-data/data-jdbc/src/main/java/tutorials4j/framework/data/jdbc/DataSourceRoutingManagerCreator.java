@@ -8,9 +8,20 @@ import javax.sql.DataSource;
 import java.util.function.Supplier;
 
 /**
- * TODO
+ * 数据源路由管理器的创建器，实现 {@link Supplier} 接口以提供单例实例。
+ * <p>
+ * 根据默认数据源的实际类型（HikariCP、DBCP2、Druid）自动选择并实例化对应的
+ * {@link DataSourceRoutingManager} 实现类，并执行初始化。
+ * </p>
+ * <p>
+ * 该类采用双重检查锁定的懒加载模式，确保线程安全且仅创建一次实例。
+ * </p>
  *
  * @author Yun Jiao
+ * @see DataSourceRoutingManager
+ * @see HikariMapDataSourceRoutingManager
+ * @see Dbcp2MapDataSourceRoutingManager
+ * @see DruidMapDataSourceRoutingManager
  */
 @RequiredArgsConstructor
 public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRoutingManager> {
@@ -18,6 +29,11 @@ public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRouti
 
     private DataSourceRoutingManager instance;
 
+    /**
+     * 获取数据源路由管理器实例（懒加载、单例）。
+     *
+     * @return 数据源路由管理器实例
+     */
     @Override
     public DataSourceRoutingManager get() {
         if (instance != null) {
@@ -35,6 +51,20 @@ public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRouti
         return instance;
     }
 
+    /**
+     * 创建新的数据源路由管理器实例。
+     * <p>
+     * 根据默认数据源的类名匹配对应的管理器实现：
+     * <ul>
+     *   <li>com.zaxxer.hikari.HikariDataSource → {@link HikariMapDataSourceRoutingManager}</li>
+     *   <li>org.apache.commons.dbcp2.BasicDataSource → {@link Dbcp2MapDataSourceRoutingManager}</li>
+     *   <li>com.alibaba.druid.pool.DruidDataSource 或 com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceWrapper → {@link DruidMapDataSourceRoutingManager}</li>
+     * </ul>
+     * </p>
+     *
+     * @return 新创建的路由管理器实例
+     * @throws DataSourceNotSupportException 如果数据源类型不受支持
+     */
     public DataSourceRoutingManager newInstance() {
         switch (dataSource.getClass().getName()) {
             case "com.zaxxer.hikari.HikariDataSource" -> {

@@ -7,9 +7,15 @@ import tutorials4j.framework.data.core.exception.DataSourceTypeMismatchException
 import javax.sql.DataSource;
 
 /**
- * TODO
+ * 基于 Apache DBCP2 连接池的数据源路由管理器实现。
+ * <p>
+ * 当默认数据源为 {@link BasicDataSource} 时，通过复制其配置并为每个租户创建独立的 {@code BasicDataSource} 实例。
+ * 复制的属性包括连接池核心参数、连接校验与超时、事务相关配置等。
+ * </p>
  *
  * @author Yun Jiao
+ * @see AbstractMapDataSourceRoutingManager
+ * @see BasicDataSource
  */
 public class Dbcp2MapDataSourceRoutingManager extends AbstractMapDataSourceRoutingManager {
     @Override

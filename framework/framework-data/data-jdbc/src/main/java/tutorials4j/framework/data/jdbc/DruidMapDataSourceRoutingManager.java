@@ -9,9 +9,15 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- * TODO
+ * 基于 Alibaba Druid 连接池的数据源路由管理器实现。
+ * <p>
+ * 当默认数据源为 {@link DruidDataSource} 时，通过复制其配置并为每个租户创建独立的 {@code DruidDataSource} 实例。
+ * 复制完成后调用 {@link DruidDataSource#init()} 方法初始化数据源。
+ * </p>
  *
  * @author Yun Jiao
+ * @see AbstractMapDataSourceRoutingManager
+ * @see DruidDataSource
  */
 public class DruidMapDataSourceRoutingManager extends AbstractMapDataSourceRoutingManager {
     @Override

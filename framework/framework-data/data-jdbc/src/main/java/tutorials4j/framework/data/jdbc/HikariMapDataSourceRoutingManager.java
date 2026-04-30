@@ -9,9 +9,16 @@ import tutorials4j.framework.data.core.exception.DataSourceTypeMismatchException
 import javax.sql.DataSource;
 
 /**
- * TODO
+ * 基于 HikariCP 连接池的数据源路由管理器实现。
+ * <p>
+ * 当默认数据源为 {@link HikariDataSource} 时，通过 {@link HikariDataSource#copyStateTo(HikariConfig)} 复制配置，
+ * 并为每个租户创建独立的 {@code HikariDataSource} 实例。
+ * </p>
  *
  * @author Yun Jiao
+ * @see AbstractMapDataSourceRoutingManager
+ * @see HikariDataSource
+ * @see HikariConfig
  */
 public class HikariMapDataSourceRoutingManager extends AbstractMapDataSourceRoutingManager {
     @Override

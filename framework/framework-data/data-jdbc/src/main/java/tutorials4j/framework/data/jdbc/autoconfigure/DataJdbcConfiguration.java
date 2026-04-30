@@ -10,7 +10,7 @@ import tutorials4j.framework.data.jdbc.DataSourceRoutingManagerCreator;
 import javax.sql.DataSource;
 
 /**
- * 基于Hibernate的租户配置
+ * Jdbc配置
  *
  * @author Yun Jiao
  */

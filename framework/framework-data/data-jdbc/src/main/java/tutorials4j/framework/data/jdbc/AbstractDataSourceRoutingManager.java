@@ -12,12 +12,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO
+ * 数据源路由管理的抽象基类。
+ * <p>
+ * 实现了默认数据源存储、路由 {@link JdbcOptions} 的添加与管理，并提供了根据名称创建具体数据源的模板方法。
+ * 子类需实现 {@link #createDataSource(String, JdbcOptions)} 以完成特定连接池的数据源创建。
+ * </p>
  *
  * @author Yun Jiao
+ * @see DataSourceRoutingManager
+ * @see JdbcOptions
  */
 @Slf4j
 public abstract class AbstractDataSourceRoutingManager implements DataSourceRoutingManager {
+    /**
+     * 默认数据源
+     */
     private DataSource defaultDataSource;
 
     private final Map<String, JdbcOptions> jdbcOptionsMap = new HashMap<>();
@@ -37,6 +46,13 @@ public abstract class AbstractDataSourceRoutingManager implements DataSourceRout
         return Collections.unmodifiableMap(jdbcOptionsMap);
     }
 
+    /**
+     * 添加一条路由 JDBC 配置。
+     *
+     * @param name         路由名称，不能为 {@code null}
+     * @param jdbcOptions  JDBC 连接选项，不能为 {@code null}
+     * @throws IllegalArgumentException 如果任一参数为 {@code null}
+     */
     @Override
     public void addRoutingJdbcOptions(String name, JdbcOptions jdbcOptions) {
         Assert.notNull(name, "name must not be null");
@@ -45,6 +61,13 @@ public abstract class AbstractDataSourceRoutingManager implements DataSourceRout
         jdbcOptionsMap.put(name, jdbcOptions);
     }
 
+    /**
+     * 初始化路由管理器。
+     *
+     * @param dataSource     默认数据源，不能为 {@code null}
+     * @param jdbcOptionsMap 初始路由配置映射，不能为 {@code null}
+     * @throws IllegalArgumentException 如果任一参数为 {@code null}
+     */
     public void init(DataSource dataSource, Map<String, JdbcOptions> jdbcOptionsMap) {
         Assert.notNull(dataSource, "dataSource must not be null");
         Assert.notNull(jdbcOptionsMap, "jdbcOptionsMap must not be null");
@@ -53,6 +76,17 @@ public abstract class AbstractDataSourceRoutingManager implements DataSourceRout
         this.jdbcOptionsMap.putAll(jdbcOptionsMap);
     }
 
+    /**
+     * 根据路由名称创建数据源。
+     * <p>
+     * 先从 {@link #getJdbcOptionsMap()} 中获取对应的 {@code JdbcOptions}，
+     * 若不存在则抛出 {@link DataSourceNameNotFoundException}。
+     * </p>
+     *
+     * @param name 路由名称，不能为 {@code null}
+     * @return 新创建的数据源
+     * @throws DataSourceNameNotFoundException 如果未找到对应名称的 JdbcOptions
+     */
     protected DataSource createDataSource(String name) {
         JdbcOptions jdbcOptions = jdbcOptionsMap.get(name);
         if (jdbcOptions == null) {
@@ -62,5 +96,15 @@ public abstract class AbstractDataSourceRoutingManager implements DataSourceRout
         return createDataSource(name, jdbcOptions);
     }
 
-    protected abstract DataSource createDataSource(String tenant, JdbcOptions jdbcOptions);
+    /**
+     * 根据路由名称和 JDBC 配置创建具体的数据源实例。
+     * <p>
+     * 由子类实现，用于不同连接池（如 HikariCP、DBCP2、Druid）的数据源创建逻辑。
+     * </p>
+     *
+     * @param name      路由名称
+     * @param jdbcOptions JDBC 连接选项
+     * @return 新创建的数据源
+     */
+    protected abstract DataSource createDataSource(String name, JdbcOptions jdbcOptions);
 }

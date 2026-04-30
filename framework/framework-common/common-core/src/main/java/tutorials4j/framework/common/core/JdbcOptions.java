@@ -3,7 +3,7 @@ package tutorials4j.framework.common.core;
 import lombok.Data;
 
 /**
- * TODO
+ * JDBC 连接选项
  *
  * @author Yun Jiao
  */
