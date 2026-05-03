@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.framework.cache.core.exception.CounterOverflowException;
 
 /**
  * 示例
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DemoTemplateController {
     private final CaptchaCacheTemplate captchaCacheTemplate;
+    private final SimpleCounterTemplate simpleCounterTemplate;
 
     @GetMapping("get")
     public Pair<String, String> get() {
@@ -29,6 +31,11 @@ public class DemoTemplateController {
     @GetMapping("check")
     public Boolean check(@RequestParam("key") String key,@RequestParam("input") String input) {
         return captchaCacheTemplate.check(key, input);
+    }
+
+    @GetMapping("counter")
+    public Integer check(@RequestParam("key") String key) throws CounterOverflowException {
+        return simpleCounterTemplate.counting(key, 5);
     }
 
 

@@ -13,8 +13,8 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
  * @param <V> 缓存值类型
  * @author Yun Jiao
  */
-public abstract class RedisCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
-    public RedisCacheTemplate(String cacheName) {
+public abstract class AbstractRedisCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
+    public AbstractRedisCacheTemplate(String cacheName) {
         super(cacheName);
     }
 

@@ -13,8 +13,8 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
  * @param <V> 缓存值类型
  * @author Yun Jiao
  */
-public abstract class MultiLevelCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
-    protected MultiLevelCacheTemplate(String cacheName) {
+public abstract class AbstractMultiLevelCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
+    protected AbstractMultiLevelCacheTemplate(String cacheName) {
         super(cacheName);
     }
 

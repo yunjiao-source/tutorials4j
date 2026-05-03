@@ -13,8 +13,8 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
  * @param <V> 缓存值类型
  * @author Yun Jiao
  */
-public abstract class CaffeineCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
-    public CaffeineCacheTemplate(String cacheName) {
+public abstract class AbstractCaffeineCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
+    public AbstractCaffeineCacheTemplate(String cacheName) {
         super(cacheName);
     }
 

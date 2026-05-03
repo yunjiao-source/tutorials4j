@@ -17,6 +17,9 @@ tutorials4j:
         captcha:
           timeToLive: 10s
           cacheNullValues: false
+        counter:
+          timeToLive: 10s
+          cacheNullValues: false
 
 
 

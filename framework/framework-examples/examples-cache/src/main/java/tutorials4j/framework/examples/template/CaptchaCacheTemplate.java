@@ -2,7 +2,7 @@ package tutorials4j.framework.examples.template;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
-import tutorials4j.framework.cache.core.template.MultiLevelCacheTemplate;
+import tutorials4j.framework.cache.core.template.AbstractMultiLevelCacheTemplate;
 
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author Yun Jiao
  */
 @Service
-public class CaptchaCacheTemplate extends MultiLevelCacheTemplate<String, String> {
+public class CaptchaCacheTemplate extends AbstractMultiLevelCacheTemplate<String, String> {
     public CaptchaCacheTemplate() {
         super("captcha");
     }
