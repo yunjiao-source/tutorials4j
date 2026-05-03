@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
-
-import java.util.function.Supplier;
+import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 
 /**
- * {@link CaffeineCacheManager}的创建器，实现{@link Supplier}接口，并提供单例的缓存管理器实例。
+ * {@link CaffeineCacheManager}的创建器，实现{@link CacheManagerCreator}接口，并提供单例的缓存管理器实例。
  * <p>采用双重检查锁（DCL）保证线程安全且延迟加载。实际创建的缓存管理器为{@link FlexibleCaffeineCacheManager}，
  * 支持每个缓存名称的独立配置。</p>
  *
@@ -19,7 +18,7 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class CaffeineCacheManagerCreator implements Supplier<CaffeineCacheManager> {
+public class CaffeineCacheManagerCreator implements CacheManagerCreator<CaffeineCacheManager> {
     private final CacheCaffeineProperties properties;
     private final Caffeine<Object, Object> caffeine;
 
@@ -32,7 +31,7 @@ public class CaffeineCacheManagerCreator implements Supplier<CaffeineCacheManage
      * @return 缓存管理器实例（单例）
      */
     @Override
-    public CaffeineCacheManager get() {
+    public CaffeineCacheManager getInstance() {
         if (instance != null) {
             return instance;
         }
@@ -54,10 +53,16 @@ public class CaffeineCacheManagerCreator implements Supplier<CaffeineCacheManage
      *
      * @return 新创建的缓存管理器实例
      */
+    @Override
     public CaffeineCacheManager newInstance() {
         FlexibleCaffeineCacheManager caffeineCacheManager = new FlexibleCaffeineCacheManager(properties);
         caffeineCacheManager.setCaffeine(caffeine);
         return caffeineCacheManager;
+    }
+
+    @Override
+    public Class<CaffeineCacheManager> getCacheManagerClass() {
+        return CaffeineCacheManager.class;
     }
 
 }

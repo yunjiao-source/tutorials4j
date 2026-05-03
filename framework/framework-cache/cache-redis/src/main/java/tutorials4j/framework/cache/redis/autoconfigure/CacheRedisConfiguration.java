@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import tutorials4j.framework.cache.core.properties.CacheRedisProperties;
-import tutorials4j.framework.cache.redis.JsonSerializerValueRedisCacheManagerBuilderCustomizer;
+import tutorials4j.framework.cache.redis.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.NamedCacheManagerCustomizer;
 import tutorials4j.framework.cache.redis.NamedRedisCacheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
@@ -33,9 +33,9 @@ public class CacheRedisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    JsonSerializerValueRedisCacheManagerBuilderCustomizer jsonSerializerRedisCacheManagerBuilderCustomizer() {
+    ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer jsonSerializerRedisCacheManagerBuilderCustomizer() {
         log.debug("Tutorials4j - Cache |- Json Serializer Value Redis Cache Manager Builder Customizerr");
-        return new JsonSerializerValueRedisCacheManagerBuilderCustomizer();
+        return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer();
     }
 
     @Bean

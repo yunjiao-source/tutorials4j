@@ -27,13 +27,13 @@ public class CacheableConfig implements CachingConfigurer {
 
     @Bean
     CaffeineCacheManager caffeineCacheManager(CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
-        return caffeineCacheManagerCreator.get();
+        return caffeineCacheManagerCreator.getInstance();
     }
 
 
     @Bean
     @Override
     public CacheManager cacheManager() {
-        return redisCacheManagerCreator.get();
+        return redisCacheManagerCreator.getInstance();
     }
 }

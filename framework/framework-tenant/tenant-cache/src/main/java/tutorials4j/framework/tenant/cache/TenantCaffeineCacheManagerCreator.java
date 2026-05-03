@@ -2,16 +2,15 @@ package tutorials4j.framework.tenant.cache;
 
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
-
-import java.util.function.Supplier;
+import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 
 /**
- * 租户级 Caffeine 缓存管理器的创建器（Supplier 模式）。
+ * 租户级 Caffeine 缓存管理器的创建器。
  *
  * @author Yun Jiao
  */
 @RequiredArgsConstructor
-public class TenantCaffeineCacheManagerCreator implements Supplier<TenantCaffeineCacheManager> {
+public class TenantCaffeineCacheManagerCreator implements CacheManagerCreator<TenantCaffeineCacheManager> {
     private final CaffeineCacheManagerCreator caffeineCacheManagerCreator;
 
     private TenantCaffeineCacheManager instance;
@@ -23,7 +22,7 @@ public class TenantCaffeineCacheManagerCreator implements Supplier<TenantCaffein
      * @return {@link TenantCaffeineCacheManager} 单例实例
      */
     @Override
-    public TenantCaffeineCacheManager get() {
+    public TenantCaffeineCacheManager getInstance() {
         if (instance != null) {
             return instance;
         }
@@ -35,9 +34,19 @@ public class TenantCaffeineCacheManagerCreator implements Supplier<TenantCaffein
 
 
 
-            instance = new TenantCaffeineCacheManager(caffeineCacheManagerCreator);
+            instance = newInstance();
         }
 
         return instance;
+    }
+
+    @Override
+    public TenantCaffeineCacheManager newInstance() {
+        return new TenantCaffeineCacheManager(caffeineCacheManagerCreator);
+    }
+
+    @Override
+    public Class<TenantCaffeineCacheManager> getCacheManagerClass() {
+        return TenantCaffeineCacheManager.class;
     }
 }

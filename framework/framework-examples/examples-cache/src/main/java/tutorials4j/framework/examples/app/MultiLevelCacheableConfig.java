@@ -26,6 +26,6 @@ public class MultiLevelCacheableConfig implements CachingConfigurer {
     @Bean
     @Override
     public CacheManager cacheManager() {
-        return cacheManagerCreator.get();
+        return cacheManagerCreator.getInstance();
     }
 }

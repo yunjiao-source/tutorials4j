@@ -1,0 +1,8 @@
+### 获取验证码
+GET http://localhost:8080/template/get
+Content-Type: application/json
+
+### 校验验证码
+GET http://localhost:8080/template/check?key=dd79f0d1c76d4a6ca7e84a30bf08a94c&input=wuPh
+Content-Type: application/json
+

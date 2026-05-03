@@ -2,12 +2,13 @@ package tutorials4j.framework.cache.multi;
 
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
 import java.util.function.Supplier;
 
 /**
- * 多级缓存管理器的创建器，实现 {@link Supplier} 接口，以单例模式提供 {@link MultiLevelCacheManager} 实例。
+ * 多级缓存管理器的创建器，实现 {@link CacheManagerCreator} 接口，以单例模式提供 {@link MultiLevelCacheManager} 实例。
  * <p>内部通过双重检查锁（Double-Checked Locking）保证线程安全且只创建一个实例。</p>
  *
  * @author Yun Jiao
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
  * @see Supplier
  */
 @RequiredArgsConstructor
-public class MultiLevelCacheManagerCreator implements Supplier<MultiLevelCacheManager> {
+public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiLevelCacheManager> {
     private final CaffeineCacheManagerCreator caffeineCacheManagerCreator;
     private final RedisCacheManagerCreator redisCacheManagerCreator;
 
@@ -28,7 +29,7 @@ public class MultiLevelCacheManagerCreator implements Supplier<MultiLevelCacheMa
      * @return 唯一的多级缓存管理器实例
      */
     @Override
-    public MultiLevelCacheManager get() {
+    public MultiLevelCacheManager getInstance() {
         if (instance != null) {
             return instance;
         }
@@ -38,10 +39,22 @@ public class MultiLevelCacheManagerCreator implements Supplier<MultiLevelCacheMa
                 return instance;
             }
 
-            instance = new MultiLevelCacheManager(caffeineCacheManagerCreator.get(),
-                    redisCacheManagerCreator.get());
+            instance = newInstance();
         }
 
         return instance;
     }
+
+    @Override
+    public MultiLevelCacheManager newInstance() {
+        return new MultiLevelCacheManager(caffeineCacheManagerCreator.getInstance(),
+                redisCacheManagerCreator.getInstance());
+    }
+
+    @Override
+    public Class<MultiLevelCacheManager> getCacheManagerClass() {
+        return MultiLevelCacheManager.class;
+    }
+
+
 }

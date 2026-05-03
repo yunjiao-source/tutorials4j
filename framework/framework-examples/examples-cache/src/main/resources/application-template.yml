@@ -1,0 +1,22 @@
+
+tutorials4j:
+  cache:
+    caffeine:
+      expire-after-write: 2m
+      recordStats: true
+      named-caches:
+        captcha:
+          expire-after-write: 10s
+    redis:
+      timeToLive: 2m
+      cacheNullValues: false
+      keyPrefix: share
+      useKeyPrefix: true
+      enable-statistics: true
+      named-caches:
+        captcha:
+          timeToLive: 10s
+          cacheNullValues: false
+
+
+

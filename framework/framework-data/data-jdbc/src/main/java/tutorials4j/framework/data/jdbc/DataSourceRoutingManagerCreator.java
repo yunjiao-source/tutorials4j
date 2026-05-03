@@ -2,11 +2,13 @@ package tutorials4j.framework.data.jdbc;
 
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
+import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.core.support.DataSourceRoutingManager;
 import tutorials4j.framework.data.core.exception.DataSourceNotSupportException;
 
 import javax.sql.DataSource;
 import java.util.function.Supplier;
+
 
 /**
  * 数据源路由管理器的创建器，实现 {@link Supplier} 接口以提供单例实例。
@@ -68,20 +70,20 @@ public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRouti
      */
     public DataSourceRoutingManager newInstance() {
         switch (dataSource.getClass().getName()) {
-            case "com.zaxxer.hikari.HikariDataSource" -> {
+            case DefaultConsts.CLASS_HIKARI_DATA_SOURCE -> {
                 HikariMapDataSourceRoutingManager dataSourceRoutingManager = new HikariMapDataSourceRoutingManager();
 
                 dataSourceRoutingManager.init(dataSource);
                 return dataSourceRoutingManager;
             }
-            case "org.apache.commons.dbcp2.BasicDataSource" -> {
+            case DefaultConsts.CLASS_DBCP2_BASIC_DATA_SOURCE -> {
                 Dbcp2MapDataSourceRoutingManager dataSourceRoutingManager = new Dbcp2MapDataSourceRoutingManager();
 
                 dataSourceRoutingManager.init(dataSource);
                 return dataSourceRoutingManager;
             }
-            case "com.alibaba.druid.pool.DruidDataSource"
-                    , "com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceWrapper" -> {
+            case DefaultConsts.CLASS_DRUID_DATA_SOURCE
+                    , DefaultConsts.CLASS_DRUID_DATA_SOURCE_WRAPPER -> {
                 DruidMapDataSourceRoutingManager dataSourceRoutingManager = new DruidMapDataSourceRoutingManager();
 
                 dataSourceRoutingManager.init(dataSource);

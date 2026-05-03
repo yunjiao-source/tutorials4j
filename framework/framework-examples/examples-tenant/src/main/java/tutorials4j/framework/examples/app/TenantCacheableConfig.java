@@ -36,9 +36,9 @@ public class TenantCacheableConfig implements CachingConfigurer {
     @Bean
     @Override
     public CacheManager cacheManager() {
-        //return redisCacheManagerCreator.get();
-        return tenantMultiLevelCacheManagerCreator.get();
-        //return tenantCaffeineCacheManagerCreator.get();
-        //return caffeineCacheManagerCreator.get();
+        //return redisCacheManagerCreator.getInstance();
+        return tenantMultiLevelCacheManagerCreator.getInstance();
+        //return tenantCaffeineCacheManagerCreator.getInstance();
+        //return caffeineCacheManagerCreator.getInstance();
     }
 }

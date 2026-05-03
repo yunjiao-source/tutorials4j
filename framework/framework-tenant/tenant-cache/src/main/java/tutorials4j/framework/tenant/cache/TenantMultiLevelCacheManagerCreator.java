@@ -1,18 +1,17 @@
 package tutorials4j.framework.tenant.cache;
 
 import lombok.RequiredArgsConstructor;
+import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.multi.MultiLevelCacheManager;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
-import java.util.function.Supplier;
-
 /**
- * 租户级多级缓存管理器的创建器（Supplier 模式）。
+ * 租户级多级缓存管理器的创建器。
  *
  * @author Yun Jiao
  */
 @RequiredArgsConstructor
-public class TenantMultiLevelCacheManagerCreator implements Supplier<MultiLevelCacheManager> {
+public class TenantMultiLevelCacheManagerCreator implements CacheManagerCreator<MultiLevelCacheManager> {
     private final TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator;
     private final RedisCacheManagerCreator redisCacheManagerCreator;
 
@@ -26,7 +25,7 @@ public class TenantMultiLevelCacheManagerCreator implements Supplier<MultiLevelC
      * @return {@link MultiLevelCacheManager} 单例实例
      */
     @Override
-    public MultiLevelCacheManager get() {
+    public MultiLevelCacheManager getInstance() {
         if (instance != null) {
             return instance;
         }
@@ -36,10 +35,20 @@ public class TenantMultiLevelCacheManagerCreator implements Supplier<MultiLevelC
                 return instance;
             }
 
-            instance = new MultiLevelCacheManager(tenantCaffeineCacheManagerCreator.get(),
-                    redisCacheManagerCreator.get());
+            instance = newInstance();
         }
 
         return instance;
+    }
+
+    @Override
+    public MultiLevelCacheManager newInstance() {
+        return new MultiLevelCacheManager(tenantCaffeineCacheManagerCreator.getInstance(),
+                redisCacheManagerCreator.getInstance());
+    }
+
+    @Override
+    public Class<MultiLevelCacheManager> getCacheManagerClass() {
+        return MultiLevelCacheManager.class;
     }
 }
