@@ -4,7 +4,7 @@ import cn.hutool.crypto.SecureUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.Assert;
-import tutorials4j.framework.cache.core.exception.CounterOverflowException;
+import tutorials4j.framework.common.core.exception.CounterOverflowException;
 
 /**
  * 基于 Redis 的计数器缓存模板抽象类。
@@ -107,7 +107,7 @@ public abstract class AbstractCounterCacheTemplate extends AbstractRedisCacheTem
         } else {
             put(newKey, index + 1);
             if (index >= maxTimes - 1) {
-                throw new CounterOverflowException();
+                throw new CounterOverflowException(String.valueOf(maxTimes));
             }
         }
 
