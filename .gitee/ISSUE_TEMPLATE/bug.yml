@@ -1,0 +1,16 @@
+name: 🐞 报告Bug
+description: 使用此模板报告Bug
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 当前行为与预期行为
+      description: 清晰描述Bug是什么，以及你期望的正常行为是什么
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      description: 提供具体、可操作的复现步骤[reference:11]
