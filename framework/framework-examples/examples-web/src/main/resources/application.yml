@@ -1,7 +1,8 @@
 spring:
   profiles:
+    active: security
 #    active: cached-request
-    active: trace
+#    active: trace
 #    active: client
 
 logging:

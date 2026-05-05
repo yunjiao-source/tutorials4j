@@ -2,7 +2,6 @@ package tutorials4j.framework.common.core;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 /**
  * 默认常量定义
@@ -27,6 +26,11 @@ public interface DefaultConsts {
 
     String MDC_CONTEXT_KEY  = "mdcSnapshot";
 
+    String[] SESSION_IDS = new String[]{"JSESSIONID, SESSION"};
+
+    String BEARER_TYPE = "Bearer";
+    String BEARER_TOKEN = BEARER_TYPE + SymbolConsts.SPACE;
+
     /**
      * http header 名称定义
      */
@@ -37,7 +41,7 @@ public interface DefaultConsts {
     String HTTP_TRACE_ID = "X-Trace-Id";
     String HTTP_TRACE_SPAN_ID = "X-Trace-Span-Id";
     String HTTP_TRACE_PARENT_SPAN_ID = "X-Trace-Parent-Span-Id";
-    List<String> HTTP_MDC_KEYS = List.of(DefaultConsts.HTTP_TRACE_ID,DefaultConsts.HTTP_TRACE_SPAN_ID,DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID);
+    String[] HTTP_MDC_KEYS = new String[]{DefaultConsts.HTTP_TRACE_ID,DefaultConsts.HTTP_TRACE_SPAN_ID,DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID};
 
 
 

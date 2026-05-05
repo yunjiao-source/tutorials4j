@@ -10,23 +10,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>web-rest</artifactId>
+    <artifactId>web-mvc</artifactId>
     <packaging>jar</packaging>
-    <name>Web :: Rest</name>
+    <name>Web :: Mvc</name>
     <description>
-        web客户端模块
+        web Mvc 模块
     </description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-mvc</artifactId>
+            <artifactId>web-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webflux</artifactId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
     </dependencies>
 

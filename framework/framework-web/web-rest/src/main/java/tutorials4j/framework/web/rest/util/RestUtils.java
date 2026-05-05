@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
-import tutorials4j.framework.web.core.WebFrameworkException;
+import tutorials4j.framework.web.core.exception.WebFrameworkException;
 
 import java.util.List;
 

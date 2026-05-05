@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.web.http.CachedHttpServletRequestWrapper;
+import tutorials4j.framework.web.mvc.support.CachedHttpServletRequestWrapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;

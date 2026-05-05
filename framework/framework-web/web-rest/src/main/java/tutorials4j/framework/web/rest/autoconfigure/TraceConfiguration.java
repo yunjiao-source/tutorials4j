@@ -11,7 +11,6 @@ import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
@@ -79,7 +78,6 @@ public class TraceConfiguration {
         FilterRegistrationBean<TraceFilter> registration = new FilterRegistrationBean<>();
         TraceFilter filter = new TraceFilter();
         registration.setFilter(filter);
-        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         if (ObjectUtils.isNotEmpty(options.getUrlPatterns())) {
             registration.addUrlPatterns(options.getUrlPatterns());
@@ -87,11 +85,14 @@ public class TraceConfiguration {
         if (StringUtils.isNotBlank(options.getName())) {
             registration.setName(options.getName());
         }
+        if (options.getOrder() != null ) {
+            registration.setOrder(options.getOrder());
+        }
         if (ObjectUtils.isNotEmpty(options.getDispatcherTypes())) {
             registration.setDispatcherTypes(options.getDispatcherTypes());
         }
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 跟踪信息过滤器[TraceFilter]成功注册，配置信息：{}", options);
+            log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", options);
         }
         return registration;
     }

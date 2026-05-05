@@ -1,5 +1,6 @@
 package tutorials4j.framework.cache.core.template;
 
+import lombok.Getter;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.cache.Cache;
 
@@ -20,6 +21,8 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractCacheTemplate<K, V> implements CacheTemplate<K, V> , SmartInitializingSingleton {
     protected Cache cache;
+
+    @Getter
     protected final String cacheName;
 
     protected AbstractCacheTemplate(String cacheName) {

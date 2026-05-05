@@ -13,6 +13,7 @@ import reactor.util.context.Context;
 import tutorials4j.framework.common.core.DefaultConsts;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -36,8 +37,9 @@ public class TraceExchangeFilterFunction implements ExchangeFilterFunction {
         Map<String, String> currentMdc = MDC.getCopyOfContextMap() != null ? MDC.getCopyOfContextMap() : Map.of();
 
         // 过滤出需要传播的键值对
+        Set<String> mdcKeys = Set.of(DefaultConsts.HTTP_MDC_KEYS);
         Map<String, String> toPropagate = currentMdc.entrySet().stream()
-                .filter(entry -> DefaultConsts.HTTP_MDC_KEYS.contains(entry.getKey()))
+                .filter(entry -> mdcKeys.contains(entry.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         // 将 MDC 值添加到请求头
@@ -46,7 +48,7 @@ public class TraceExchangeFilterFunction implements ExchangeFilterFunction {
                 .build();
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 跟踪信息WebFlux过滤器：{}", request.url());
+            log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", request.url());
         }
         // 继续执行请求，并将当前 MDC 快照存入 Reactor Context
         return next.exchange(filteredRequest)

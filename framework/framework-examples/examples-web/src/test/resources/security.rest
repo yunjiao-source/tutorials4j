@@ -1,0 +1,13 @@
+###
+GET http://localhost:8080/security/idempotent
+Content-Type: application/json
+
+###
+GET http://localhost:8080/security/access-limited
+Content-Type: application/json
+
+
+
+
+
+

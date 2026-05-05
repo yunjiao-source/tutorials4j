@@ -71,6 +71,10 @@ public abstract class AbstractCounterCacheTemplate extends AbstractRedisCacheTem
         return counting(key, maxTimes, false);
     }
 
+    public int counting(String key, boolean useMd5) throws CounterOverflowException {
+        return counting(key, maxTimes, useMd5);
+    }
+
     /**
      * 对指定键执行计数操作，可选择是否对键进行 MD5 摘要处理。
      * <p>
@@ -105,10 +109,10 @@ public abstract class AbstractCounterCacheTemplate extends AbstractRedisCacheTem
             // 第一次读取剩余次数，因为缓存中还没有值，所以先创建缓存，同时缓存中计数为1。
             create(newKey);
         } else {
-            put(newKey, index + 1);
-            if (index >= maxTimes - 1) {
-                throw new CounterOverflowException(String.valueOf(maxTimes));
+            if (index >= maxTimes) {
+                throw new CounterOverflowException(maxTimes);
             }
+            put(newKey, index + 1);
         }
 
         return index + 1;

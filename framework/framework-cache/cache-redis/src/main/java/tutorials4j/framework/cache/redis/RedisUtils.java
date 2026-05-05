@@ -59,6 +59,7 @@ public interface RedisUtils {
     static RedisCacheConfiguration fillConfiguration(RedisCacheConfiguration configuration,
                                                       RedisOptions prop) {
 
+        configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix());
         if (prop.getTimeToLive() != null) {
             configuration = configuration.entryTtl(prop.getTimeToLive());
         }

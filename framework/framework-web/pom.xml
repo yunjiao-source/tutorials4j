@@ -19,7 +19,7 @@
 
     <modules>
         <module>web-core</module>
-        <module>web-http</module>
+        <module>web-mvc</module>
         <module>web-rest</module>
         <module>web-spring-boot-starter</module>
     </modules>

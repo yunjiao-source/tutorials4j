@@ -1,0 +1,25 @@
+spring:
+  data:
+    # Redis 配置
+    redis:
+      host: localhost # Redis服务器地址
+      port: 6379 # Redis端口
+
+
+tutorials4j:
+  cache:
+    redis:
+      timeToLive: 2m
+      cacheNullValues: false
+      enable-statistics: true
+      named-caches:
+        idempotent:
+          timeToLive: 3s
+          cacheNullValues: false
+          keyPrefix: token
+          useKeyPrefix: true
+        access_limited:
+          timeToLive: 5s
+          cacheNullValues: true
+          keyPrefix: token
+          useKeyPrefix: false

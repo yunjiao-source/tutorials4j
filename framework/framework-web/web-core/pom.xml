@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-core</artifactId>
+            <artifactId>cache-multi-level</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

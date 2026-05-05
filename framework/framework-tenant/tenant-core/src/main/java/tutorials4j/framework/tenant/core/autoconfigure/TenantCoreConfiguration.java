@@ -56,9 +56,9 @@ public class TenantCoreConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         TenantHandlerInterceptor interceptor = new TenantHandlerInterceptor();
-        log.debug("Tutorials4j - Tenant |- 租户拦截器[TenantHandlerInterceptor]注册到InterceptorRegistry, 有效路径：{}",
-                Arrays.toString(properties.getPathPatterns()));
         registry.addInterceptor(interceptor).addPathPatterns(properties.getPathPatterns());
+        log.debug("Tutorials4j - Tenant |- 添加请求拦截器: {}, 路径：{}",
+                interceptor, Arrays.toString(properties.getPathPatterns()));
     }
 
 }

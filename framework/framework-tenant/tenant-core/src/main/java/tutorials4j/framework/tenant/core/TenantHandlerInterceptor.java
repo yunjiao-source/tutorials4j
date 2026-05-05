@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.TenantContextHolder;
-import tutorials4j.framework.common.core.util.ServletUtils;
+import tutorials4j.framework.common.core.util.HeaderUtils;
 
 /**
  * 租户拦截器
@@ -18,13 +18,13 @@ public class TenantHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String tenant = ServletUtils.getTenant(request);
+        String tenant = HeaderUtils.getTenantId(request);
         if (StringUtils.hasText(tenant)) {
             TenantContextHolder.set(tenant);
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Data |- 租户代码：{}", tenant);
+            log.debug("Tutorials4j - Data |- 租户请求拦截器：{}, {}", request.getRequestURI(), tenant);
         }
         return true;
     }

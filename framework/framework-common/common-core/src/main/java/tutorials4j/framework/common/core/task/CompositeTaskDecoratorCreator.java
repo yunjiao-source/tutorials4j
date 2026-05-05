@@ -52,11 +52,11 @@ public class CompositeTaskDecoratorCreator implements Supplier<CompositeTaskDeco
                 return instance;
             }
 
-            List<TaskDecorator> taskDecorator = taskDecoratorSuppliers.stream()
+            List<TaskDecorator> taskDecorators = taskDecoratorSuppliers.stream()
                     .map(TaskDecoratorSupplier::get)
                     .collect(Collectors.toList());
-            log.debug("Tutorials4j - Common |- 组合任务装饰器[CompositeTaskDecorator]中组合实例信息：{}", taskDecorator);
-            instance = new CompositeTaskDecorator(taskDecorator);
+            log.debug("Tutorials4j - Common |- 组合任务装饰器：{}", taskDecorators);
+            instance = new CompositeTaskDecorator(taskDecorators);
         }
         return instance;
     }

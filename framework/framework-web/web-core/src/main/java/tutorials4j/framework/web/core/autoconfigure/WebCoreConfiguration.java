@@ -3,7 +3,10 @@ package tutorials4j.framework.web.core.autoconfigure;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
+import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.properties.WebClientProperties;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
 
@@ -21,4 +24,15 @@ public class WebCoreConfiguration {
         log.debug("Tutorials4j - Web |- Web Core Configuration");
     }
 
+    @Bean
+    AccessLimitedCacheTemplate accessLimitedCacheTemplate() {
+        log.debug("Tutorials4j - Web |- Access Limited Cache Template");
+        return new AccessLimitedCacheTemplate();
+    }
+
+    @Bean
+    IdempotentCacheTemplate idempotentCacheTemplate() {
+        log.debug("Tutorials4j - Web |- Idempotent Cache Template");
+        return new IdempotentCacheTemplate();
+    }
 }
