@@ -1,7 +1,8 @@
 spring:
   profiles:
-#    active: cached-request-body
-    active: client
+#    active: cached-request
+    active: trace
+#    active: client
 
 logging:
   level:

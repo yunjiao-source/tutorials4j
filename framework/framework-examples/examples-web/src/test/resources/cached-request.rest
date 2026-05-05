@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/cached-request-body/cached
+POST http://localhost:8080/cached-request/cached
 Content-Type: text/plain
 
 {
@@ -7,7 +7,7 @@ Content-Type: text/plain
 }
 
 ###
-POST http://localhost:8080/cached-request-body/non-cached
+POST http://localhost:8080/cached-request/non-cached
 Content-Type: text/plain
 
 {

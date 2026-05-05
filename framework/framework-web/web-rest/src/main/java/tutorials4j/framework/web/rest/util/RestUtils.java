@@ -1,5 +1,6 @@
-package tutorials4j.framework.web.client.util;
+package tutorials4j.framework.web.rest.util;
 
+import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.ClientRequest;
@@ -16,7 +17,15 @@ import java.util.List;
  * @author Yun Jiao
  */
 @Slf4j
-public class ReactiveClientUtils {
+public class RestUtils {
+    public static String generateTraceId() {
+        return IdUtil.fastSimpleUUID();
+    }
+
+    public static String generateSpanId() {
+        return IdUtil.fastSimpleUUID().substring(0, 8);
+    }
+
     /**
      * 创建一个用于捕获异常并转换为框架自定义异常的 {@link ExchangeFilterFunction}。
      * <p>

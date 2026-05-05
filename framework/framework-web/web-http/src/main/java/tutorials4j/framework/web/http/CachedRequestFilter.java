@@ -20,12 +20,12 @@ import java.io.IOException;
  *
  * @author Yun Jiao
  * @see CachedHttpServletRequestWrapper
- * @see WebHttpProperties.CachedRequestBody
+ * @see WebHttpProperties.CachedRequest
  */
 @Slf4j
 @RequiredArgsConstructor
-public class CachedRequestBodyFilter  implements Filter {
-    private final WebHttpProperties.CachedRequestBody crb;
+public class CachedRequestFilter implements Filter {
+    private final WebHttpProperties.CachedRequest cachedRequest;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -34,10 +34,14 @@ public class CachedRequestBodyFilter  implements Filter {
         if (request instanceof HttpServletRequest httpRequest) {
             // 避免重复包装
             if (!(httpRequest instanceof CachedHttpServletRequestWrapper)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Tutorials4j - Web |- 缓存请求体内容过滤器：{}", httpRequest.getRequestURI());
+                }
+
                 // 检查 Content-Length
                 int length = httpRequest.getContentLength();
-                if (length > crb.getMaxContentLength().toBytes()) {
-                    log.warn("请求体长度(Content Length)超过最大值[字节]：{} 。放弃包装，请求体将不可重复读取", crb.getMaxContentLength().toBytes());
+                if (length > cachedRequest.getMaxContentLength().toBytes()) {
+                    log.warn("请求体长度(Content Length)超过最大值[字节]：{} 。放弃包装，请求体将不可重复读取", cachedRequest.getMaxContentLength().toBytes());
                 } else {
                     httpRequest = new CachedHttpServletRequestWrapper(httpRequest);
                 }

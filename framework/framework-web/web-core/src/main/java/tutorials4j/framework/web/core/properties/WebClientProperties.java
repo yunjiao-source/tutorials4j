@@ -16,11 +16,6 @@ import java.util.Map;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT)
 public class WebClientProperties {
     /**
-     * 是否开启日志。默认：false
-     */
-    private boolean logger = false;
-
-    /**
      * 默认请求头
      */
     private Map<String, String> defaultHeaders = new HashMap<>();

@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.client.interceptor;
+package tutorials4j.framework.web.rest.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;

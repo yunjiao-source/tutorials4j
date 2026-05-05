@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Slf4j
 @Configuration
-@Profile("cached-request-body")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.cachedrequestbody"})
-public class CachedRequestBodyConfig {
+@Profile("cached-request")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.cachedrequest"})
+public class CachedRequestConfig {
 }

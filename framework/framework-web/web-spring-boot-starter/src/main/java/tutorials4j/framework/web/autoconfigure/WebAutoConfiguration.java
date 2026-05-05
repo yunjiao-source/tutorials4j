@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.web.client.autoconfigure.WebRestConfiguration;
+import tutorials4j.framework.web.rest.autoconfigure.WebRestConfiguration;
 import tutorials4j.framework.web.core.autoconfigure.WebCoreConfiguration;
 import tutorials4j.framework.web.http.autoconfigure.WebHttpConfiguration;
 

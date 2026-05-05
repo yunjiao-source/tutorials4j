@@ -1,12 +1,11 @@
 package tutorials4j.framework.web.core.properties;
 
-import jakarta.servlet.DispatcherType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.unit.DataSize;
 import tutorials4j.framework.common.core.PropertiesConsts;
-
-import java.util.EnumSet;
 
 /**
  * Web Http 属性
@@ -19,35 +18,23 @@ public class WebHttpProperties {
     /**
      * 缓存请求体配置属性
      */
-    private CachedRequestBody cachedRequestBody = new CachedRequestBody();
+    private CachedRequest cachedRequest = new CachedRequest();
+
+    @NestedConfigurationProperty
+    private ServletFilterOptions trace = new ServletFilterOptions();
+
+    {
+        trace.setName("traceServletFilter");
+        cachedRequest.setUrlPatterns(new String[]{"/cached-request/*"});
+        cachedRequest.setName("cachedRequestServletFilter");
+    }
 
     /**
      * 缓存请求体配置属性
      */
+    @EqualsAndHashCode(callSuper = true)
     @Data
-    public static class CachedRequestBody {
-        /**
-         * 是否开启
-         */
-        private boolean enabled = false;
-
-        /**
-         * 匹配url地址
-         */
-        private String[] urlPatterns = new String[]{"/**"};
-
-        /**
-         * 过滤器启动排序，数值越小越先执行
-         */
-        private Integer order = 1;
-
-        /**
-         * 过滤器名称
-         */
-        private String name = "defaultCachedBodyFilter";
-
-        private EnumSet<DispatcherType> dispatcherTypes = EnumSet.allOf(DispatcherType.class);
-
+    public static class CachedRequest extends ServletFilterOptions {
         /**
          * 支持最大长度，默认:2M
          */

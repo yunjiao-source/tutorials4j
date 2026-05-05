@@ -2,6 +2,7 @@ package tutorials4j.framework.common.core;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * 默认常量定义
@@ -24,6 +25,8 @@ public interface DefaultConsts {
      */
     Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
+    String MDC_CONTEXT_KEY  = "mdcSnapshot";
+
     /**
      * http header 名称定义
      */
@@ -31,6 +34,12 @@ public interface DefaultConsts {
     String HTTP_HEADER_INNER_CALL = "X-Inner-Call";
     String HTTP_HEADER_SESSION_ID = "X-Session-Id";
     String HTTP_HEADER_OPEN_ID = "X-Open-Id";
+    String HTTP_TRACE_ID = "X-Trace-Id";
+    String HTTP_TRACE_SPAN_ID = "X-Trace-Span-Id";
+    String HTTP_TRACE_PARENT_SPAN_ID = "X-Trace-Parent-Span-Id";
+    List<String> HTTP_MDC_KEYS = List.of(DefaultConsts.HTTP_TRACE_ID,DefaultConsts.HTTP_TRACE_SPAN_ID,DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID);
+
+
 
     /**
      * Class 名称定义
@@ -44,4 +53,6 @@ public interface DefaultConsts {
     String CLASS_REDIS_CACHE_MANAGER_CREATOR = "tutorials4j.framework.cache.redis.RedisCacheManagerCreator";
     String CLASS_TENANT_CAFFEINE_CACHE_MANAGER_CREATOR = "tutorials4j.framework.tenant.cache.TenantCaffeineCacheManagerCreator";
     String CLASS_TENANT_MULTI_LEVEL_CACHE_MANAGER_CREATOR = "tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator";
+
+
 }

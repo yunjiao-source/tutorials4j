@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.cachedrequestbody;
+package tutorials4j.framework.examples.cachedrequest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("cached-request-body")
-public class CachedRequestBodyController {
+@RequestMapping("cached-request")
+public class CachedRequestController {
     @PostMapping("cached")
     public Map<String, Object> cached(HttpServletRequest request) throws IOException {
         Map<String, Object> result = new HashMap<>();

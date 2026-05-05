@@ -13,7 +13,6 @@ logging:
 
 
 tutorials4j.web.client:
-      logger: true
       default-headers:
         X-abc: abcd
 

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequest;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.web.core.properties.WebClientProperties;
+import tutorials4j.framework.web.rest.autoconfigure.WebRestConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;

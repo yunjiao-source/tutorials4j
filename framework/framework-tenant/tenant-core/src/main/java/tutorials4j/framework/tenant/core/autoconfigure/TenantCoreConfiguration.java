@@ -43,6 +43,7 @@ public class TenantCoreConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean
     CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
+        log.debug("Tutorials4j - Tenant |- Composite Task Decorator");
         return creator.get();
     }
 
