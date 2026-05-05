@@ -11,9 +11,15 @@ import tutorials4j.framework.web.rest.util.RestUtils;
 import java.io.IOException;
 
 /**
- * TODO
+ * Servlet 过滤器，用于在 Web 请求处理入口处初始化和传播链路追踪标识。
+ * <p>该过滤器从 HTTP 请求头中读取 traceId、spanId 和 parentSpanId，若缺失则自动生成。
+ * 将追踪标识存入 MDC（Mapped Diagnostic Context），以便后续日志输出和下游调用时使用。
+ * 同时将 traceId 和 spanId 写入 HTTP 响应头，便于客户端或网关获取调用链信息。
+ * 请求处理完成后，清理当前线程的 MDC，防止线程池复用导致上下文污染。</p>
  *
  * @author Yun Jiao
+ * @see jakarta.servlet.Filter
+ * @see org.slf4j.MDC
  */
 @Slf4j
 public class TraceFilter implements Filter {

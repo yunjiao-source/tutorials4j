@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO
+ * Caffeine缓存配置属性
  *
  * @author Yun Jiao
  */

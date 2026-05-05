@@ -1,7 +1,7 @@
 package tutorials4j.framework.data.core.exception;
 
 /**
- * TODO
+ * 不支持的数据源
  *
  * @author Yun Jiao
  */

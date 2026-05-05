@@ -12,7 +12,11 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import java.util.List;
 
 /**
- * TODO
+ * 基于 Redis 的 {@link RedisCacheManager} 创建器实现。
+ * <p>
+ * 根据 {@link CacheRedisProperties} 配置、{@link RedisConnectionFactory} 以及自定义扩展点
+ * （{@link RedisCacheManagerBuilderCustomizer} 和 {@link CacheManagerCustomizer}）构建
+ * {@link RedisCacheManager} 实例。提供单例复用和新建实例的能力。
  *
  * @author Yun Jiao
  */

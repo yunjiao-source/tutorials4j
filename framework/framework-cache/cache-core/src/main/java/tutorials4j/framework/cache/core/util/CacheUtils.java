@@ -7,11 +7,11 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
- * TODO
+ * 缓存工具
  *
  * @author Yun Jiao
  */
-public interface CacheUtils {
+public class CacheUtils {
     /**
      * 生成基于类名、方法名和参数列表的缓存键生成器。
      *
@@ -27,7 +27,7 @@ public interface CacheUtils {
      *
      * @return 自定义的 {@link KeyGenerator} 实例
      */
-    static KeyGenerator classMethodParamsKeyGenerator() {
+    public static KeyGenerator classMethodParamsKeyGenerator() {
         return (Object target, Method method, @NonNull Object... params) -> {
             // 自定义 key 生成规则，例如：
             return target.getClass().getSimpleName() +

@@ -12,9 +12,15 @@ import tutorials4j.framework.web.rest.util.RestUtils;
 import java.io.IOException;
 
 /**
- * TODO
+ * RestTemplate 客户端请求拦截器，用于在同步 HTTP 调用中向下游服务传递链路追踪信息。
+ * <p>该拦截器从当前线程的 MDC 中获取 traceId 和 spanId，然后将它们添加到 HTTP 请求头中。
+ * 同时为当前调用生成一个新的子 spanId，并将原始的 spanId 作为 parentSpanId 一同传递，
+ * 使得下游服务能够还原完整的调用层级关系。</p>
  *
  * @author Yun Jiao
+ * @see org.springframework.http.client.ClientHttpRequestInterceptor
+ * @see org.slf4j.MDC
+ * @since 1.0
  */
 @Slf4j
 public class TraceRestTemplateInterceptor  implements ClientHttpRequestInterceptor {

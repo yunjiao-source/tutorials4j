@@ -4,7 +4,7 @@ import org.apache.commons.lang3.exception.ExceptionContext;
 import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 
 /**
- * TODO
+ * 缓存异常
  *
  * @author Yun Jiao
  */

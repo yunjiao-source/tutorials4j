@@ -16,10 +16,13 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP)
 public class WebHttpProperties {
     /**
-     * 缓存请求体配置属性
+     * 缓存请求体配置属性，用于 {@code CachedRequestServletFilter}。
      */
     private CachedRequest cachedRequest = new CachedRequest();
 
+    /**
+     * 链路追踪 Servlet 过滤器配置属性。
+     */
     @NestedConfigurationProperty
     private ServletFilterOptions trace = new ServletFilterOptions();
 

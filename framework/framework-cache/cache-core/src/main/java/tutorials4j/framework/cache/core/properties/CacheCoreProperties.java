@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import tutorials4j.framework.common.core.PropertiesConsts;
 
 /**
- * TODO
+ * 核心缓存配置
  *
  * @author Yun Jiao
  */

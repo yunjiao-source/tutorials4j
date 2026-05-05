@@ -17,9 +17,15 @@ import java.util.stream.Collectors;
 
 
 /**
- * TODO
+ * 用于 WebClient 的 ExchangeFilterFunction 实现，负责在响应式 HTTP 请求中传播和恢复链路追踪信息。
+ * <p>该过滤器从当前线程的 MDC 中提取需要传播的追踪键值对（如 traceId、spanId），将其添加到请求头中，
+ * 并将 MDC 快照存入 Reactor 的上下文（Context）中，以保证在响应式操作链的任意线程上都能恢复上下文。
+ * 同时在收到响应时，从响应头中提取追踪信息并更新当前 MDC，支持下游服务生成新追踪标识后的回传。</p>
  *
  * @author Yun Jiao
+ * @see org.springframework.web.reactive.function.client.ExchangeFilterFunction
+ * @see org.slf4j.MDC
+ * @see reactor.util.context.Context
  */
 @Slf4j
 public class TraceExchangeFilterFunction implements ExchangeFilterFunction {

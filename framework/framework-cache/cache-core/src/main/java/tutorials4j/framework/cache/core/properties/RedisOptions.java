@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 
 /**
- * TODO
+ * redis属性
  *
  * @author Yun Jiao
  */

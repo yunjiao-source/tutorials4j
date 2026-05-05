@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.Duration;
 
 /**
- * TODO
+ * Caffeine属性
  *
  * @author Yun Jiao
  */
