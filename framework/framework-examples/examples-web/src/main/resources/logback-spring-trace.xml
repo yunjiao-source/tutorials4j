@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="trace">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>
+                    %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{X-Trace-Id:-NO_TRACE}] [%X{X-Trace-Parent-Span-Id:-NO_PARENT_SPAN}] [%X{X-Trace-Span-Id:-NO_SPAN}] %-5level %logger{36} - %msg%n
+                </pattern>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+</configuration>
