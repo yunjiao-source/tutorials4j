@@ -1,0 +1,26 @@
+###
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "name1",
+  "age": 30
+}
+
+###
+GET http://localhost:8080/users/1
+Accept: application/json
+
+###
+GET http://localhost:8080/users/exception
+Accept: application/json
+
+###
+GET http://localhost:8080/actuator
+Accept: application/json
+
+
+###
+GET http://localhost:8080/actuator/httpexchanges
+Accept: application/json
+

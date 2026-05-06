@@ -35,6 +35,8 @@
         <module>springboot3-mail-template</module>
         <module>springboot3-web-distributed-tracing</module>
         <module>springboot3-mongodb-simple</module>
+        <module>springboot3-http-exchange-repository</module>
+
     </modules>
 
     <dependencyManagement>
