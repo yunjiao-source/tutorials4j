@@ -58,8 +58,8 @@ spring:
 
 tutorials4j:
   tenant:
-    path-patterns: /users/**,/cacheable/**
-
+    path:
+      include-path-patterns: /users/**,/cacheable/**
 
 logging:
   level:

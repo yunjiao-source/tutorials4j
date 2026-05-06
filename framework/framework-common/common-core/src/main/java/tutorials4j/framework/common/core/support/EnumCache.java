@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.core.util;
+package tutorials4j.framework.common.core.support;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

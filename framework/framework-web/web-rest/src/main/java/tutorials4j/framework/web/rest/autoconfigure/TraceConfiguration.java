@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
-import tutorials4j.framework.web.core.properties.ServletFilterOptions;
+import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
 import tutorials4j.framework.web.rest.mdc.TraceExchangeFilterFunction;
 import tutorials4j.framework.web.rest.mdc.TraceFilter;

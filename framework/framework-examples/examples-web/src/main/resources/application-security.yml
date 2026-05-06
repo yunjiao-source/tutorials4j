@@ -24,6 +24,11 @@ tutorials4j:
           keyPrefix: token
           useKeyPrefix: false
 
-  web.http:
-    xss:
-      url-patterns: /security/xss/safe/*
+  web:
+    http:
+      xss:
+        url-patterns: /security/xss/safe/*
+      idempotent:
+        include-path-patterns: /security/**
+      access-limited:
+        include-path-patterns: /security/**

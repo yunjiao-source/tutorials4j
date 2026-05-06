@@ -22,6 +22,10 @@ Content-Type: application/json
 GET http://localhost:8080/trace/non-logger
 Content-Type: application/json
 
+### 此请求不在filter范围内
+GET http://localhost:8080/demo/get
+Content-Type: application/json
+
 
 
 

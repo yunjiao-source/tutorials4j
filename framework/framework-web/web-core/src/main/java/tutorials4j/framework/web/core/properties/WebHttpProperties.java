@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.unit.DataSize;
 import tutorials4j.framework.common.core.PropertiesConsts;
+import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
+import tutorials4j.framework.common.core.support.ServletFilterOptions;
 
 /**
  * Web Http 属性
@@ -31,6 +33,18 @@ public class WebHttpProperties {
      */
     @NestedConfigurationProperty
     private ServletFilterOptions xss = new ServletFilterOptions();
+
+    /**
+     * 幂等配置
+     */
+    @NestedConfigurationProperty
+    private HandlerInterceptorOptions idempotent = new HandlerInterceptorOptions();
+
+    /**
+     * 访问限制
+     */
+    @NestedConfigurationProperty
+    private HandlerInterceptorOptions accessLimited = new HandlerInterceptorOptions();
 
     {
         xss.setName("xssServletFilter");

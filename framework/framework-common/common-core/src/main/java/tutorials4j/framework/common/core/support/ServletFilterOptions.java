@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.core.properties;
+package tutorials4j.framework.common.core.support;
 
 import jakarta.servlet.DispatcherType;
 import lombok.Data;
@@ -7,12 +7,10 @@ import java.util.EnumSet;
 
 /**
  * Servlet 过滤器的通用配置选项，用于封装过滤器的 URL 模式、顺序、名称及 Dispatcher 类型。
- * <p>该类的实例通常被嵌套在更高级的配置类中（如 {@link WebHttpProperties}），
- * 允许用户通过配置文件自定义特定过滤器的行为而不修改代码。</p>
+ * <p>该类的实例通常被嵌套在更高级的配置类中，允许用户通过配置文件自定义特定过滤器的行为而不修改代码。</p>
  *
  * @author Yun Jiao
- * @see jakarta.servlet.DispatcherType
- * @see org.springframework.boot.web.servlet.FilterRegistrationBean
+ * @see DispatcherType
  */
 @Data
 public class ServletFilterOptions {

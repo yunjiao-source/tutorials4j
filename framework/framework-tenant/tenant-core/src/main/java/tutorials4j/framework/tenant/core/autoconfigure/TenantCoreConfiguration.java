@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 import tutorials4j.framework.tenant.core.TenantHandlerInterceptor;
@@ -17,8 +18,6 @@ import tutorials4j.framework.tenant.core.TenantTaskDecorator;
 import tutorials4j.framework.tenant.core.properties.TenantCacheProperties;
 import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
 import tutorials4j.framework.tenant.core.properties.TenantProperties;
-
-import java.util.Arrays;
 
 /**
  * TODO
@@ -55,10 +54,12 @@ public class TenantCoreConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        HandlerInterceptorOptions pathOptions = properties.getPath();
         TenantHandlerInterceptor interceptor = new TenantHandlerInterceptor();
-        registry.addInterceptor(interceptor).addPathPatterns(properties.getPathPatterns());
-        log.debug("Tutorials4j - Tenant |- 添加请求拦截器: {}, 路径：{}",
-                interceptor, Arrays.toString(properties.getPathPatterns()));
+        registry.addInterceptor(interceptor).addPathPatterns(pathOptions.getIncludePathPatterns())
+                .excludePathPatterns(pathOptions.getExcludePathPatterns());
+        log.debug("Tutorials4j - Tenant |- 添加请求拦截器: {}, {}",
+                interceptor, pathOptions);
     }
 
 }
