@@ -1,0 +1,27 @@
+###
+POST http://localhost:8080/users
+Content-Type: application/json
+X-Tenant-ID: master
+
+{
+  "name": "张三"
+}
+
+###
+POST http://localhost:8080/users
+Content-Type: application/json
+X-Tenant-ID: demo
+
+{
+  "name": "李四"
+}
+
+###
+GET http://localhost:8080/users
+Content-Type: application/json
+X-Tenant-ID: master
+
+###
+GET http://localhost:8080/users
+Content-Type: application/json
+X-Tenant-ID: demo

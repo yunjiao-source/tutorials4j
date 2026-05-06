@@ -36,6 +36,7 @@
         <guava.version>33.1.0-jre</guava.version>
         <zxing.version>3.5.3</zxing.version>
         <antisamy.version>1.7.5</antisamy.version>
+        <mybatis-plus.version>3.5.15</mybatis-plus.version>
     </properties>
 
     <modules>
@@ -146,6 +147,19 @@
                 <artifactId>antisamy</artifactId>
                 <version>${antisamy.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-jsqlparser</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
