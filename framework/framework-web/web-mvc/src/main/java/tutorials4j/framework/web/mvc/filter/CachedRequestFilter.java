@@ -1,10 +1,11 @@
-package tutorials4j.framework.web.mvc.support;
+package tutorials4j.framework.web.mvc.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.mvc.support.CachedHttpServletRequestWrapper;
 
 import java.io.IOException;
 

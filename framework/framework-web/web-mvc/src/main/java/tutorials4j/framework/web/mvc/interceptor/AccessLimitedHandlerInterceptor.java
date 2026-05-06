@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.mvc.security;
+package tutorials4j.framework.web.mvc.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,39 +9,39 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.exception.CounterOverflowException;
 import tutorials4j.framework.common.core.util.SessionUtils;
-import tutorials4j.framework.web.core.annotation.Idempotent;
-import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
-import tutorials4j.framework.web.core.exception.IdempotentException;
+import tutorials4j.framework.web.core.annotation.AccessLimited;
+import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
+import tutorials4j.framework.web.core.exception.AccessLimitedException;
 
 import java.lang.reflect.Method;
 
 /**
- * 幂等性校验的处理器拦截器。
+ * 访问频率限制的处理器拦截器。
  * <p>
- * 拦截带有 {@link Idempotent} 注解的处理器方法，在方法执行前进行幂等性检查。
- * 通过 {@link IdempotentCacheTemplate} 对当前请求生成的唯一键进行计数，
- * 由于该模板的最大次数固定为 1，因此同一请求键的第二次访问将抛出 {@link IdempotentException}。
+ * 拦截带有 {@link AccessLimited} 注解的处理器方法，在方法执行前进行访问次数校验。
+ * 通过 {@link AccessLimitedCacheTemplate} 对当前请求生成的唯一键进行计数，
+ * 若超出允许的最大次数则抛出 {@link AccessLimitedException}。
  * </p>
  * <p>
  * 请求键的生成由 {@link SessionUtils#generateRequestKey(HttpServletRequest)} 负责，
- * 通常结合用户标识、请求 URI、请求参数等，确保同一请求的唯一性。
+ * 通常结合用户标识、请求 URI、IP 等信息，确保不同请求的区分度。
  * </p>
  *
  * @author Yun Jiao
- * @see Idempotent
- * @see IdempotentCacheTemplate
+ * @see AccessLimited
+ * @see AccessLimitedCacheTemplate
  * @see HandlerInterceptor
  */
 @Slf4j
 @RequiredArgsConstructor
-public class IdempotentHandlerInterceptor implements HandlerInterceptor {
-    private final IdempotentCacheTemplate idempotentCacheTemplate;
+public class AccessLimitedHandlerInterceptor implements HandlerInterceptor {
+    private final AccessLimitedCacheTemplate accessLimitedCacheTemplate;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 幂等拦截器：{}", request.getRequestURI());
+            log.debug("Tutorials4j - Web |- 访问限制拦截器：{}", request.getRequestURI());
         }
 
         Method method = null;
@@ -53,14 +53,14 @@ public class IdempotentHandlerInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Idempotent idempotent = method.getAnnotation(Idempotent.class);
-        if (ObjectUtils.isNotEmpty(idempotent)) {
+        AccessLimited accessLimited = method.getAnnotation(AccessLimited.class);
+        if (ObjectUtils.isNotEmpty(accessLimited)) {
             String key = SessionUtils.generateRequestKey(request);
 
             try {
-                idempotentCacheTemplate.counting(key, true);
+                accessLimitedCacheTemplate.counting(key, accessLimited.maxTimes(), true);
             } catch (CounterOverflowException e) {
-                throw new IdempotentException(e);
+                throw new AccessLimitedException(e);
             }
         }
 

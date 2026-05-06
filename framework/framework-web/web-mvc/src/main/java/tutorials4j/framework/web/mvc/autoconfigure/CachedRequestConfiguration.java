@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
-import tutorials4j.framework.web.mvc.support.CachedRequestFilter;
+import tutorials4j.framework.web.mvc.filter.CachedRequestFilter;
 
 /**
  * http 缓存请求体配置

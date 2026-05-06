@@ -26,7 +26,14 @@ public class WebHttpProperties {
     @NestedConfigurationProperty
     private ServletFilterOptions trace = new ServletFilterOptions();
 
+    /**
+     * xss攻击配置
+     */
+    @NestedConfigurationProperty
+    private ServletFilterOptions xss = new ServletFilterOptions();
+
     {
+        xss.setName("xssServletFilter");
         trace.setName("traceServletFilter");
         cachedRequest.setUrlPatterns(new String[]{"/cached-request/*"});
         cachedRequest.setName("cachedRequestServletFilter");

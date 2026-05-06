@@ -23,3 +23,7 @@ tutorials4j:
           cacheNullValues: true
           keyPrefix: token
           useKeyPrefix: false
+
+  web.http:
+    xss:
+      url-patterns: /security/xss/safe/*

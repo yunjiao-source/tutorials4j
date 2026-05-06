@@ -3,7 +3,9 @@ package tutorials4j.framework.common.core.util;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 
 /**
  * 雪花算法ID生成工具类（基于Hutool实现）。
@@ -28,17 +30,17 @@ public class SnowflakeUtils {
      * 系统属性名：Worker ID（工作机器ID）。
      * 可通过 JVM 启动参数设置：-DTUTORIALS4J_SNOWFLAKE_WORKER_ID=xxx
      */
-    public static final String PRO_WORKER_ID = "TUTORIALS4J_SNOWFLAKE_WORKER_ID";
+    public static final String WORKER_ID = "TUTORIALS4J_SNOWFLAKE_WORKER_ID";
 
     /**
      * 系统属性名：Datacenter ID（数据中心ID）。
      * 可通过 JVM 启动参数设置：-DTUTORIALS4J_SNOWFLAKE_DATACENTER_ID=xxx
      */
-    public static final String PRO_DATACENTER_ID = "TUTORIALS4J_SNOWFLAKE_DATACENTER_ID";
+    public static final String DATACENTER_ID = "TUTORIALS4J_SNOWFLAKE_DATACENTER_ID";
 
     private Snowflake snowflake;
 
-    private static final SnowflakeUtils INSTANCE = new SnowflakeUtils();
+    private static SnowflakeUtils INSTANCE;
     private SnowflakeUtils() {
         initSnowflake();
     }
@@ -55,24 +57,24 @@ public class SnowflakeUtils {
         }
 
         long datacenterId = 1;
-        String datacenterIdStr = System.getProperty(PRO_DATACENTER_ID);
+        String datacenterIdStr = System.getProperty(DATACENTER_ID);
         if (StringUtils.isNotBlank(datacenterIdStr)) {
             try {
                 datacenterId = Long.parseLong(datacenterIdStr);
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(
-                        "Environment variable " + PRO_DATACENTER_ID + " must be number");
+                throw new FrameworkRuntimeException(
+                        "Environment variable " + DATACENTER_ID + " must be number");
             }
         }
 
         long workerId = 1;
-        String workerIdStr = System.getProperty(PRO_WORKER_ID);
+        String workerIdStr = System.getProperty(WORKER_ID);
         if (StringUtils.isNotBlank(workerIdStr)) {
             try {
                 workerId = Long.parseLong(workerIdStr);
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(
-                        "Environment variable " + PRO_WORKER_ID + " must be number");
+                throw new FrameworkRuntimeException(
+                        "Environment variable " + WORKER_ID + " must be number");
             }
         }
 
@@ -82,19 +84,31 @@ public class SnowflakeUtils {
         }
     }
 
-    protected long nextId_() {
+    protected static SnowflakeUtils getInstance() {
+        if (ObjectUtils.isEmpty(INSTANCE)) {
+            synchronized (SnowflakeUtils.class) {
+                if (ObjectUtils.isEmpty(INSTANCE)) {
+                    INSTANCE = new SnowflakeUtils();
+                }
+            }
+        }
+
+        return INSTANCE;
+    }
+
+    protected long nextLongId() {
         return snowflake.nextId();
     }
 
-    protected String nextIdStr_() {
+    protected String nextStrId() {
         return snowflake.nextIdStr();
     }
 
     public static long nextId() {
-        return INSTANCE.nextId_();
+        return getInstance().nextLongId();
     }
 
     public static String nextIdStr() {
-        return INSTANCE.nextIdStr_();
+        return getInstance().nextStrId();
     }
 }
