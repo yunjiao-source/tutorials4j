@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/demo
+      # 或者分开配置：
+      # host: localhost
+      # port: 27017
+      # database: blogdb
+      # username: user (如果有认证)
+      # password: pass

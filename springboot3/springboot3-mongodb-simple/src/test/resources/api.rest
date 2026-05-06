@@ -1,0 +1,39 @@
+###创建文章
+POST http://localhost:8080/posts
+Content-Type: application/json
+
+{
+  "title": "Spring Boot 3 with MongoDB",
+  "content": "This is a tutorial.",
+  "author": "John"
+}
+
+### 获取所有文章
+GET http://localhost:8080/posts
+
+### 添加评论
+POST  http://localhost:8080/posts/69cb5e64f8d3a9ebe71819a8/comments
+Content-Type: application/json
+
+{
+  "content": "Great post!",
+  "author": "Tom"
+}
+
+### 按作者查询
+GET http://localhost:8080/posts/author/John
+
+### 按评论作者查询
+GET http://localhost:8080/posts/comment-author/Alice
+
+
+
+
+
+
+
+
+
+
+
+
