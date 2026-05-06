@@ -2,8 +2,6 @@ package tutorials4j.framework.web.rest.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
@@ -12,9 +10,9 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.CompositeTaskDecorator;
+import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
-import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
 import tutorials4j.framework.web.rest.mdc.TraceExchangeFilterFunction;
 import tutorials4j.framework.web.rest.mdc.TraceFilter;
@@ -78,19 +76,8 @@ public class TraceConfiguration {
         FilterRegistrationBean<TraceFilter> registration = new FilterRegistrationBean<>();
         TraceFilter filter = new TraceFilter();
         registration.setFilter(filter);
+        options.fill(registration);
 
-        if (ObjectUtils.isNotEmpty(options.getUrlPatterns())) {
-            registration.addUrlPatterns(options.getUrlPatterns());
-        }
-        if (StringUtils.isNotBlank(options.getName())) {
-            registration.setName(options.getName());
-        }
-        if (options.getOrder() != null ) {
-            registration.setOrder(options.getOrder());
-        }
-        if (ObjectUtils.isNotEmpty(options.getDispatcherTypes())) {
-            registration.setDispatcherTypes(options.getDispatcherTypes());
-        }
         if (log.isDebugEnabled()) {
             log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", options);
         }

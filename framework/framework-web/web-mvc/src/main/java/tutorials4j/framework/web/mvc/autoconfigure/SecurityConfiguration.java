@@ -2,8 +2,6 @@ package tutorials4j.framework.web.mvc.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -45,19 +43,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<XssHttpServletFilter> registration = new FilterRegistrationBean<>();
         XssHttpServletFilter filter = new XssHttpServletFilter();
         registration.setFilter(filter);
-
-        if (ObjectUtils.isNotEmpty(options.getUrlPatterns())) {
-            registration.addUrlPatterns(options.getUrlPatterns());
-        }
-        if (options.getOrder() != null ) {
-            registration.setOrder(options.getOrder());
-        }
-        if (StringUtils.isNotBlank(options.getName())) {
-            registration.setName(options.getName());
-        }
-        if (ObjectUtils.isNotEmpty(options.getDispatcherTypes())) {
-            registration.setDispatcherTypes(options.getDispatcherTypes());
-        }
+        options.fill(registration);
         if (log.isDebugEnabled()) {
             log.debug("Tutorials4j - Web |- Xss攻击过滤器：{}", options);
         }

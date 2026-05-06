@@ -20,19 +20,19 @@ public class WebHttpProperties {
     /**
      * 缓存请求体配置属性，用于 {@code CachedRequestServletFilter}。
      */
-    private CachedRequest cachedRequest = new CachedRequest();
+    private CachedRequest cachedRequest = new CachedRequest("cachedRequestServletFilter");
 
     /**
      * 链路追踪 Servlet 过滤器配置属性。
      */
     @NestedConfigurationProperty
-    private ServletFilterOptions trace = new ServletFilterOptions();
+    private ServletFilterOptions trace = new ServletFilterOptions("traceServletFilter");
 
     /**
      * xss攻击配置
      */
     @NestedConfigurationProperty
-    private ServletFilterOptions xss = new ServletFilterOptions();
+    private ServletFilterOptions xss = new ServletFilterOptions("xssServletFilter");
 
     /**
      * 幂等配置
@@ -49,7 +49,6 @@ public class WebHttpProperties {
     {
         xss.setName("xssServletFilter");
         trace.setName("traceServletFilter");
-        cachedRequest.setUrlPatterns(new String[]{"/cached-request/*"});
         cachedRequest.setName("cachedRequestServletFilter");
     }
 
@@ -59,6 +58,10 @@ public class WebHttpProperties {
     @EqualsAndHashCode(callSuper = true)
     @Data
     public static class CachedRequest extends ServletFilterOptions {
+        public CachedRequest(String name) {
+            super(name);
+        }
+
         /**
          * 支持最大长度，默认:2M
          */

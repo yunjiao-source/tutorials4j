@@ -2,8 +2,6 @@ package tutorials4j.framework.web.mvc.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,25 +24,14 @@ public class CachedRequestConfiguration {
 
     @Bean
     public FilterRegistrationBean<CachedRequestFilter> cachedBodyFilterRegistration(WebHttpProperties properties) {
-        WebHttpProperties.CachedRequest cachedRequest = properties.getCachedRequest();
+        WebHttpProperties.CachedRequest options = properties.getCachedRequest();
         FilterRegistrationBean<CachedRequestFilter> registration = new FilterRegistrationBean<>();
         CachedRequestFilter filter = new CachedRequestFilter(properties.getCachedRequest());
         registration.setFilter(filter);
+        options.fill(registration);
 
-        if (ObjectUtils.isNotEmpty(cachedRequest.getUrlPatterns())) {
-            registration.addUrlPatterns(cachedRequest.getUrlPatterns());
-        }
-        if (cachedRequest.getOrder() != null ) {
-            registration.setOrder(cachedRequest.getOrder());
-        }
-        if (StringUtils.isNotBlank(cachedRequest.getName())) {
-            registration.setName(cachedRequest.getName());
-        }
-        if (ObjectUtils.isNotEmpty(cachedRequest.getDispatcherTypes())) {
-            registration.setDispatcherTypes(cachedRequest.getDispatcherTypes());
-        }
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 缓存请求体过滤器：{}", cachedRequest);
+            log.debug("Tutorials4j - Web |- 缓存请求体过滤器：{}", options);
         }
         return registration;
     }

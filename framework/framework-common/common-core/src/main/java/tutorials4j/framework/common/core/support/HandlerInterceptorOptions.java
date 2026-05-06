@@ -9,6 +9,6 @@ import lombok.Data;
  */
 @Data
 public class HandlerInterceptorOptions {
-    private String[] includePathPatterns = new String[]{"/**"};
+    private String[] includePathPatterns = new String[]{};
     private String[] excludePathPatterns = new String[]{};
 }
