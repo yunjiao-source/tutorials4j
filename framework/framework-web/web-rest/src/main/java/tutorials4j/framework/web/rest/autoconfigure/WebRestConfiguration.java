@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({ClientDefaultConfiguration.class, ClientLoggerConfiguration.class, TraceConfiguration.class})
+@Import({WebRestClientDefaultConfiguration.class, WebRestClientLoggerConfiguration.class, WebRestTraceConfiguration.class})
 public class WebRestConfiguration {
     @PostConstruct
     public void postConstruct() {

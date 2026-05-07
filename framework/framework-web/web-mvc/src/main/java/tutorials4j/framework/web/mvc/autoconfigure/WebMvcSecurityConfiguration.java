@@ -24,7 +24,7 @@ import tutorials4j.framework.web.mvc.interceptor.IdempotentHandlerInterceptor;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class SecurityConfiguration implements WebMvcConfigurer {
+public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
     @Autowired
     private AccessLimitedCacheTemplate accessLimitedCacheTemplate;
     @Autowired

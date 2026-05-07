@@ -17,7 +17,7 @@ import tutorials4j.framework.web.rest.util.RestUtils;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class ClientLoggerConfiguration {
+public class WebRestClientLoggerConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("Tutorials4j - Web |- Rest Client Logger Configuration");

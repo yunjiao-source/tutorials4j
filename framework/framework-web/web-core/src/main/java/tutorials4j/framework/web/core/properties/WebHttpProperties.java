@@ -20,7 +20,7 @@ public class WebHttpProperties {
     /**
      * 缓存请求体配置属性，用于 {@code CachedRequestServletFilter}。
      */
-    private CachedRequest cachedRequest = new CachedRequest("cachedRequestServletFilter");
+    private CachedRequestOptions cachedRequest = new CachedRequestOptions("cachedRequestServletFilter");
 
     /**
      * 链路追踪 Servlet 过滤器配置属性。
@@ -46,19 +46,13 @@ public class WebHttpProperties {
     @NestedConfigurationProperty
     private HandlerInterceptorOptions accessLimited = new HandlerInterceptorOptions();
 
-    {
-        xss.setName("xssServletFilter");
-        trace.setName("traceServletFilter");
-        cachedRequest.setName("cachedRequestServletFilter");
-    }
-
     /**
      * 缓存请求体配置属性
      */
     @EqualsAndHashCode(callSuper = true)
     @Data
-    public static class CachedRequest extends ServletFilterOptions {
-        public CachedRequest(String name) {
+    public static class CachedRequestOptions extends ServletFilterOptions {
+        public CachedRequestOptions(String name) {
             super(name);
         }
 

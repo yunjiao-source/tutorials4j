@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.support.DataSourceRoutingManager;
 import tutorials4j.framework.data.jdbc.DataSourceRoutingManagerCreator;
-import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
+import tutorials4j.framework.tenant.core.properties.TenantProperties;
 import tutorials4j.framework.tenant.hibernate.DefaultCurrentTenantIdentifierResolver;
 import tutorials4j.framework.tenant.hibernate.TenantDataSourceBasedMultiTenantConnectionProvider;
 
@@ -34,7 +34,7 @@ public class TenantHibernateConfiguration {
      * 租户配置：共享表
      */
     @ConditionalOnBean(DataSource.class)
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT_DATASOURCE, name = "strategy", havingValue = "hibernate_table")
+    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT, name = "datasource.strategy", havingValue = "hibernate_table")
     static class TableTenantConfiguration {
 
         @PostConstruct
@@ -52,7 +52,7 @@ public class TenantHibernateConfiguration {
     /**
      * 租户配置：独立数据库
      */
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT_DATASOURCE, name = "strategy", havingValue = "hibernate_database")
+    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT, name = "datasource.strategy", havingValue = "hibernate_database")
     static class DatabaseTenantConfiguration {
         @PostConstruct
         public void postConstruct() {
@@ -67,11 +67,11 @@ public class TenantHibernateConfiguration {
         @Bean
         @ConditionalOnMissingBean
         TenantDataSourceBasedMultiTenantConnectionProvider tenantDataSourceBasedMultiTenantConnectionProvider(DataSourceRoutingManagerCreator creator,
-                                                                                                              TenantDataSourceProperties properties) {
+                                                                                                              TenantProperties properties) {
             log.debug("Tutorials4j - Tenant |- Tenant Data Source Based Multi Tenant Connection Provider");
             DataSourceRoutingManager dataSourceRoutingManager = creator.get();
 
-            properties.getJdbc().forEach((k, v) -> dataSourceRoutingManager.addRoutingJdbcOptions(k.toUpperCase(), v));
+            properties.getDatasource().getJdbc().forEach((k, v) -> dataSourceRoutingManager.addRoutingJdbcOptions(k.toUpperCase(), v));
             return new TenantDataSourceBasedMultiTenantConnectionProvider(dataSourceRoutingManager);
         }
 

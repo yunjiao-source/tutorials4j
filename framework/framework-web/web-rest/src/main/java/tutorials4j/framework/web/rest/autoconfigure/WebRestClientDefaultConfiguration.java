@@ -8,8 +8,8 @@ import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequest;
+import tutorials4j.framework.web.core.properties.WebProperties;
 import tutorials4j.framework.web.rest.util.RestUtils;
-import tutorials4j.framework.web.core.properties.WebClientProperties;
 
 /**
  * Rest 客户端默认配置
@@ -18,33 +18,33 @@ import tutorials4j.framework.web.core.properties.WebClientProperties;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class ClientDefaultConfiguration {
+public class WebRestClientDefaultConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("Tutorials4j - Web |- Rest Client Default Configuration");
     }
 
     @Bean
-    RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(WebClientProperties properties) {
+    RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(WebProperties properties) {
         log.debug("Tutorials4j - Web |- Default Headers Rest Template Request Customizer");
         return request -> {
-            properties.getDefaultHeaders().forEach(request.getHeaders()::set);
+            properties.getClient().getDefaultHeaders().forEach(request.getHeaders()::set);
         };
     }
 
     @Bean
-    RestClientCustomizer defaultHeadersRestClientCustomizer(WebClientProperties properties) {
+    RestClientCustomizer defaultHeadersRestClientCustomizer(WebProperties properties) {
         log.debug("Tutorials4j - Web |- Default Headers Rest Client Customizer");
         return restClientBuilder -> {
-            restClientBuilder.defaultHeaders(header -> properties.getDefaultHeaders().forEach(header::set));
+            restClientBuilder.defaultHeaders(header -> properties.getClient().getDefaultHeaders().forEach(header::set));
         };
     }
 
     @Bean
-    WebClientCustomizer defaultHeadersWebClientCustomizer(WebClientProperties properties) {
+    WebClientCustomizer defaultHeadersWebClientCustomizer(WebProperties properties) {
         log.debug("Tutorials4j - Web |- Default Headers Web Client Customizer");
         return webClientBuilder -> {
-            webClientBuilder.defaultHeaders(header -> properties.getDefaultHeaders().forEach(header::set));
+            webClientBuilder.defaultHeaders(header -> properties.getClient().getDefaultHeaders().forEach(header::set));
         };
     }
 

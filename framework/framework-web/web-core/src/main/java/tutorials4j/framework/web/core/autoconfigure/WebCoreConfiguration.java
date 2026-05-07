@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
-import tutorials4j.framework.web.core.properties.WebClientProperties;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.properties.WebProperties;
 
 /**
  * web core 配置
@@ -17,7 +17,7 @@ import tutorials4j.framework.web.core.properties.WebHttpProperties;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({WebHttpProperties.class, WebClientProperties.class})
+@EnableConfigurationProperties({WebHttpProperties.class, WebProperties.class})
 public class WebCoreConfiguration {
     @PostConstruct
     public void postConstruct() {

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({CachedRequestConfiguration.class, SecurityConfiguration.class})
+@Import({WebMvcCachedRequestConfiguration.class, WebMvcSecurityConfiguration.class})
 public class WebMvcConfiguration {
     @PostConstruct
     public void postConstruct() {

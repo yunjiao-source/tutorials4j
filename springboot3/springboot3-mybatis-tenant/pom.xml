@@ -14,9 +14,9 @@
     <packaging>jar</packaging>
     <name>Spring Boot3 :: MyBatis Tenant</name>
     <description>
-
-    </description>
         MyBatis Plus 的多租户
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

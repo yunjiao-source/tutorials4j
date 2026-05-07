@@ -1,0 +1,33 @@
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+ "name": "张三",
+  "password": "123",
+"email": "123@qq.com",
+  "age": 18
+}
+
+###
+PUT http://localhost:8080/api/users/2052387585426329600
+Content-Type: application/json
+
+{
+  "name": "张三1"
+}
+
+###
+DELETE http://localhost:8080/api/users/2052387585426329600
+Content-Type: application/json
+
+###
+GET http://localhost:8080/api/users
+Content-Type: application/json
+
+###
+GET http://localhost:8080/api/users/search?name=三
+Content-Type: application/json
+
+
+

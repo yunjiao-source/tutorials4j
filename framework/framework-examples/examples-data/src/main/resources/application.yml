@@ -1,6 +1,7 @@
 spring:
   profiles:
-    active: common
+    active: mybatis
+  #    active: jpa
 
   datasource:
     url: jdbc:postgresql://localhost:5432/demo
@@ -23,7 +24,7 @@ spring:
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20
       # 监控配置
-      filters: stat,wall,slf4j
+      filters: stat,slf4j
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
@@ -34,7 +35,6 @@ spring:
         enabled: true
         url-pattern: /*
         exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
-
 
 logging:
   level:

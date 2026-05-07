@@ -19,15 +19,14 @@ import javax.sql.DataSource;
 public class DataJdbcConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Data |- Tenant Jdbc Configuration");
+        log.debug("Tutorials4j - Data |- Data Jdbc Configuration");
     }
 
     @Bean
     @ConditionalOnBean(DataSource.class)
-    DataSourceRoutingManagerCreator DataSourceRoutingManagerCreator(DataSource dataSource) {
+    DataSourceRoutingManagerCreator dataSourceRoutingManagerCreator(DataSource dataSource) {
         log.debug("Tutorials4j - Data |- Data Source Routing Manager Creator");
-        DataSourceRoutingManagerCreator bean = new DataSourceRoutingManagerCreator(dataSource);
-        return bean;
+        return new DataSourceRoutingManagerCreator(dataSource);
     }
 
 }

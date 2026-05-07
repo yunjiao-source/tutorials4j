@@ -26,7 +26,7 @@ import tutorials4j.framework.web.rest.mdc.TraceTaskDecorator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class TraceConfiguration {
+public class WebRestTraceConfiguration {
 
     @PostConstruct
     public void postConstruct() {

@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate;
+package tutorials4j.framework.data.hibernate.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;

@@ -26,7 +26,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class CachedRequestFilter implements Filter {
-    private final WebHttpProperties.CachedRequest cachedRequest;
+    private final WebHttpProperties.CachedRequestOptions options;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -41,8 +41,8 @@ public class CachedRequestFilter implements Filter {
 
                 // 检查 Content-Length
                 int length = httpRequest.getContentLength();
-                if (length > cachedRequest.getMaxContentLength().toBytes()) {
-                    log.warn("请求体长度(Content Length)超过最大值[字节]：{} 。放弃包装，请求体将不可重复读取", cachedRequest.getMaxContentLength().toBytes());
+                if (length > options.getMaxContentLength().toBytes()) {
+                    log.warn("请求体长度(Content Length)超过最大值[字节]：{} 。放弃包装，请求体将不可重复读取", options.getMaxContentLength().toBytes());
                 } else {
                     httpRequest = new CachedHttpServletRequestWrapper(httpRequest);
                 }

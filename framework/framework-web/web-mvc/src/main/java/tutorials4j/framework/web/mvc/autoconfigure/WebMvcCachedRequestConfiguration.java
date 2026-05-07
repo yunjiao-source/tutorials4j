@@ -15,7 +15,7 @@ import tutorials4j.framework.web.mvc.filter.CachedRequestFilter;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class CachedRequestConfiguration {
+public class WebMvcCachedRequestConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("Tutorials4j - Web |- Cached Request Body Configuration");
@@ -24,7 +24,7 @@ public class CachedRequestConfiguration {
 
     @Bean
     public FilterRegistrationBean<CachedRequestFilter> cachedBodyFilterRegistration(WebHttpProperties properties) {
-        WebHttpProperties.CachedRequest options = properties.getCachedRequest();
+        WebHttpProperties.CachedRequestOptions options = properties.getCachedRequest();
         FilterRegistrationBean<CachedRequestFilter> registration = new FilterRegistrationBean<>();
         CachedRequestFilter filter = new CachedRequestFilter(properties.getCachedRequest());
         registration.setFilter(filter);

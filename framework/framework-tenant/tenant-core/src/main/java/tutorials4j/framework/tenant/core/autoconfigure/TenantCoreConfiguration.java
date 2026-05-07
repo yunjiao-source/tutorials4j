@@ -15,8 +15,6 @@ import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 import tutorials4j.framework.tenant.core.TenantHandlerInterceptor;
 import tutorials4j.framework.tenant.core.TenantTaskDecorator;
-import tutorials4j.framework.tenant.core.properties.TenantCacheProperties;
-import tutorials4j.framework.tenant.core.properties.TenantDataSourceProperties;
 import tutorials4j.framework.tenant.core.properties.TenantProperties;
 
 /**
@@ -27,9 +25,7 @@ import tutorials4j.framework.tenant.core.properties.TenantProperties;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
-@EnableConfigurationProperties({TenantProperties.class
-        , TenantCacheProperties.class
-        , TenantDataSourceProperties.class})
+@EnableConfigurationProperties({TenantProperties.class})
 public class TenantCoreConfiguration implements WebMvcConfigurer {
     private final TenantProperties properties;
 
