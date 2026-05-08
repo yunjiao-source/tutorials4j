@@ -13,7 +13,7 @@ public interface JsonConsts {
      */
     Version JSON_VERSION = new Version(2, 21, 2, null, null, null);
 
-    int CUSTOMIZER_ORDER_DEFAULT = 1;
+    int MODULE_ORDER_DEFAULT = 1;
 
-    int CUSTOMIZER_ORDER_XSS = CUSTOMIZER_ORDER_DEFAULT + 1;
+    int MODULE_ORDER_XSS =  2;
 }

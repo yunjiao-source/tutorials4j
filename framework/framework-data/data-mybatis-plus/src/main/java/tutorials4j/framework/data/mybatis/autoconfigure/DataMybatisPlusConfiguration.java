@@ -15,6 +15,7 @@ import org.springframework.core.annotation.Order;
 import tutorials4j.framework.data.core.properties.DataProperties;
 import tutorials4j.framework.data.mybatis.DefaultIdentifierGenerator;
 import tutorials4j.framework.data.mybatis.InnerInterceptorCreator;
+import tutorials4j.framework.data.mybatis.MybatisPlusConsts;
 
 /**
  * MyBatis Plus 的自动配置类
@@ -41,7 +42,7 @@ public class DataMybatisPlusConfiguration {
     }
 
     @Bean
-    @Order(100)
+    @Order(MybatisPlusConsts.INTERCEPTOR_ORDER_PAGINATION)
     @ConditionalOnMissingBean
     InnerInterceptorCreator paginationInnerInterceptorCreator(DataProperties properties) {
         log.debug("Tutorials4j - Data |- Pagination Inner Interceptor Creator");
@@ -49,7 +50,7 @@ public class DataMybatisPlusConfiguration {
     }
 
     @Bean
-    @Order(200)
+    @Order(MybatisPlusConsts.INTERCEPTOR_ORDER_OPTIMISTIC_LOCKER)
     @ConditionalOnMissingBean
     InnerInterceptorCreator optimisticLockerInnerInterceptorCreator() {
         log.debug("Tutorials4j - Data |- Optimistic Locker Inner Interceptor Creator");
@@ -57,7 +58,7 @@ public class DataMybatisPlusConfiguration {
     }
 
     @Bean
-    @Order(300)
+    @Order(MybatisPlusConsts.INTERCEPTOR_ORDER_BLOCK_ATTACK)
     @ConditionalOnMissingBean
     InnerInterceptorCreator blockAttackInnerInterceptorCreator() {
         log.debug("Tutorials4j - Data |- Block Attack Inner Interceptor Creator");

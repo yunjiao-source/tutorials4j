@@ -26,9 +26,7 @@ tutorials4j:
 
   web:
     http:
-      xss:
-        url-patterns: /security/xss/safe/*
       idempotent:
-        include-path-patterns: /security/**
+        include-path-patterns: /annotation/**
       access-limited:
-        include-path-patterns: /security/**
+        include-path-patterns: /annotation/**

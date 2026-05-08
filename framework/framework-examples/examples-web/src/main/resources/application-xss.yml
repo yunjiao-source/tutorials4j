@@ -1,0 +1,5 @@
+tutorials4j:
+  web:
+    http:
+      xss:
+        url-patterns: /xss/*

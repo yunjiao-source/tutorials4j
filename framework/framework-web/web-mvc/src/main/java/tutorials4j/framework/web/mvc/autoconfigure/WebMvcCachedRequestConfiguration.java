@@ -6,10 +6,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.util.WebUtils;
 import tutorials4j.framework.web.mvc.filter.CachedRequestFilter;
 
 /**
- * http 缓存请求体配置
+ * 缓存请求体配置
  *
  * @author Yun Jiao
  */
@@ -28,7 +29,7 @@ public class WebMvcCachedRequestConfiguration {
         FilterRegistrationBean<CachedRequestFilter> registration = new FilterRegistrationBean<>();
         CachedRequestFilter filter = new CachedRequestFilter(properties.getCachedRequest());
         registration.setFilter(filter);
-        options.fill(registration);
+        WebUtils.fill(registration, options);
 
         if (log.isDebugEnabled()) {
             log.debug("Tutorials4j - Web |- 缓存请求体过滤器：{}", options);
