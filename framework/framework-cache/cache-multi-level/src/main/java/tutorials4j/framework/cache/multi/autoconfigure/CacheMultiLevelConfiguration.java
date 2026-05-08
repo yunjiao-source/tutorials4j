@@ -1,4 +1,4 @@
-package tutorials4j.framework.cache.multi;
+package tutorials4j.framework.cache.multi.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
+import tutorials4j.framework.cache.multi.MultiLevelCache;
+import tutorials4j.framework.cache.multi.MultiLevelCacheManager;
+import tutorials4j.framework.cache.multi.MultiLevelCacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
 /**
@@ -25,7 +28,7 @@ public class CacheMultiLevelConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(MultiLevelCacheManagerCreator.class)
+    @ConditionalOnMissingBean
     MultiLevelCacheManagerCreator multiLevelCacheManagerCreator(CaffeineCacheManagerCreator caffeineCacheManagerCreator,
                                                                 RedisCacheManagerCreator redisCacheManagerCreator) {
         log.debug("Tutorials4j - Cache |- Multi Level Cache Manager Creator");

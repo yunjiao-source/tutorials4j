@@ -5,9 +5,16 @@ import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 
 /**
- * 租户级 Caffeine 缓存管理器的创建器。
+ * 租户级 Caffeine 缓存管理器的创建器，实现双重检查锁定的单例模式。
+ * <p>
+ * 该创建器负责创建和缓存 {@link TenantCaffeineCacheManager} 实例。
+ * 它内部委托给普通的 {@link CaffeineCacheManagerCreator} 来完成底层 Caffeine 缓存管理器的构建，
+ * 然后用租户隔离的包装器进行装饰。
+ * </p>
  *
  * @author Yun Jiao
+ * @see TenantCaffeineCacheManager
+ * @see CaffeineCacheManagerCreator
  */
 @RequiredArgsConstructor
 public class TenantCaffeineCacheManagerCreator implements CacheManagerCreator<TenantCaffeineCacheManager> {
@@ -32,8 +39,6 @@ public class TenantCaffeineCacheManagerCreator implements CacheManagerCreator<Te
                 return instance;
             }
 
-
-
             instance = newInstance();
         }
 
@@ -46,7 +51,7 @@ public class TenantCaffeineCacheManagerCreator implements CacheManagerCreator<Te
     }
 
     @Override
-    public Class<TenantCaffeineCacheManager> getCacheManagerClass() {
+    public Class<TenantCaffeineCacheManager> getBeanClass() {
         return TenantCaffeineCacheManager.class;
     }
 }

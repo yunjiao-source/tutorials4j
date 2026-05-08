@@ -8,13 +8,15 @@ import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 
 /**
- * {@link CaffeineCacheManager}的创建器，实现{@link CacheManagerCreator}接口，并提供单例的缓存管理器实例。
- * <p>采用双重检查锁（DCL）保证线程安全且延迟加载。实际创建的缓存管理器为{@link FlexibleCaffeineCacheManager}，
- * 支持每个缓存名称的独立配置。</p>
+ * Caffeine 缓存管理器的创建器，实现双重检查锁定的单例模式。
+ * <p>
+ * 该创建器负责创建和缓存 {@link CaffeineCacheManager} 实例。
+ * 使用 {@link FlexibleCaffeineCacheManager} 作为实际实现，并允许通过外部配置和 Caffeine 规范进行定制。
+ * </p>
  *
  * @author Yun Jiao
+ * @see CacheCaffeineProperties
  * @see FlexibleCaffeineCacheManager
- * @see CaffeineCacheManager
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -24,12 +26,7 @@ public class CaffeineCacheManagerCreator implements CacheManagerCreator<Caffeine
 
     private CaffeineCacheManager instance;
 
-    /**
-     * 获取单例的{@link CaffeineCacheManager}实例。
-     * <p>首次调用时会创建新实例，后续调用返回已创建的实例。</p>
-     *
-     * @return 缓存管理器实例（单例）
-     */
+
     @Override
     public CaffeineCacheManager getInstance() {
         if (instance != null) {
@@ -47,12 +44,7 @@ public class CaffeineCacheManagerCreator implements CacheManagerCreator<Caffeine
         return instance;
     }
 
-    /**
-     * 创建一个新的{@link CaffeineCacheManager}实例。
-     * <p>使用{@link FlexibleCaffeineCacheManager}，并将配置的Caffeine实例设置到其中。</p>
-     *
-     * @return 新创建的缓存管理器实例
-     */
+
     @Override
     public CaffeineCacheManager newInstance() {
         FlexibleCaffeineCacheManager caffeineCacheManager = new FlexibleCaffeineCacheManager(properties);
@@ -61,7 +53,7 @@ public class CaffeineCacheManagerCreator implements CacheManagerCreator<Caffeine
     }
 
     @Override
-    public Class<CaffeineCacheManager> getCacheManagerClass() {
+    public Class<CaffeineCacheManager> getBeanClass() {
         return CaffeineCacheManager.class;
     }
 

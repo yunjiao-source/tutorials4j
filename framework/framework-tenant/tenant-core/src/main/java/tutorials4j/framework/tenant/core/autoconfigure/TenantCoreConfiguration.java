@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
-import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
+import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 import tutorials4j.framework.tenant.core.TenantHandlerInterceptor;
 import tutorials4j.framework.tenant.core.TenantTaskDecorator;
 import tutorials4j.framework.tenant.core.properties.TenantProperties;
@@ -39,12 +39,13 @@ public class TenantCoreConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingBean
     CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
         log.debug("Tutorials4j - Tenant |- Composite Task Decorator");
-        return creator.get();
+        return creator.getInstance();
     }
 
     @Bean
-    TaskDecoratorSupplier tenantTaskDecoratorSupplier() {
-        log.debug("Tutorials4j - Tenant |- Tenant Task Decorator Supplier");
+    @ConditionalOnMissingBean
+    TaskDecoratorCreator tenantTaskDecoratorCreator() {
+        log.debug("Tutorials4j - Tenant |- Tenant Task Decorator Creator");
         return TenantTaskDecorator::new;
     }
 

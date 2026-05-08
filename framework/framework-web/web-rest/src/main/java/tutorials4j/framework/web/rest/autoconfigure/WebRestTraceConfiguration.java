@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
-import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
+import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
 import tutorials4j.framework.web.rest.mdc.TraceExchangeFilterFunction;
 import tutorials4j.framework.web.rest.mdc.TraceFilter;
@@ -37,12 +37,13 @@ public class WebRestTraceConfiguration {
     @ConditionalOnMissingBean
     CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
         log.debug("Tutorials4j - Web |- Composite Task Decorator");
-        return creator.get();
+        return creator.getInstance();
     }
 
     @Bean
-    TaskDecoratorSupplier traceTaskDecoratorSupplier() {
-        log.debug("Tutorials4j - Web |- Trace Task Decorator");
+    @ConditionalOnMissingBean
+    TaskDecoratorCreator traceTaskDecoratorCreator() {
+        log.debug("Tutorials4j - Web |- Trace Task Decorator Creator");
         return TraceTaskDecorator::new;
     }
 

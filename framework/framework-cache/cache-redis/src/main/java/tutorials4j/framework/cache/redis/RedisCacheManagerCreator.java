@@ -12,13 +12,16 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import java.util.List;
 
 /**
- * 基于 Redis 的 {@link RedisCacheManager} 创建器实现。
+ * Redis 缓存管理器的创建器，实现双重检查锁定的单例模式。
  * <p>
- * 根据 {@link CacheRedisProperties} 配置、{@link RedisConnectionFactory} 以及自定义扩展点
- * （{@link RedisCacheManagerBuilderCustomizer} 和 {@link CacheManagerCustomizer}）构建
- * {@link RedisCacheManager} 实例。提供单例复用和新建实例的能力。
+ * 该创建器负责创建和缓存 {@link RedisCacheManager} 实例。
+ * 支持通过 {@link CacheRedisProperties} 配置默认缓存策略，并允许使用自定义的 {@link RedisCacheManagerBuilderCustomizer}
+ * 和 {@link CacheManagerCustomizer} 进行扩展。
+ * </p>
  *
  * @author Yun Jiao
+ * @see CacheRedisProperties
+ * @see RedisUtils
  */
 @RequiredArgsConstructor
 public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheManager> {
@@ -65,7 +68,7 @@ public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheM
     }
 
     @Override
-    public Class<RedisCacheManager> getCacheManagerClass() {
+    public Class<RedisCacheManager> getBeanClass() {
         return RedisCacheManager.class;
     }
 }

@@ -3,15 +3,15 @@ package tutorials4j.framework.data.jdbc;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.common.core.DefaultConsts;
+import tutorials4j.framework.common.core.support.BeanCreator;
 import tutorials4j.framework.common.core.support.DataSourceRoutingManager;
 import tutorials4j.framework.data.core.exception.DataSourceNotSupportException;
 
 import javax.sql.DataSource;
-import java.util.function.Supplier;
 
 
 /**
- * 数据源路由管理器的创建器，实现 {@link Supplier} 接口以提供单例实例。
+ * 数据源路由管理器的创建器，实现 {@link BeanCreator} 接口以提供单例实例。
  * <p>
  * 根据默认数据源的实际类型（HikariCP、DBCP2、Druid）自动选择并实例化对应的
  * {@link DataSourceRoutingManager} 实现类，并执行初始化。
@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  * @see DruidMapDataSourceRoutingManager
  */
 @RequiredArgsConstructor
-public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRoutingManager> {
+public class DataSourceRoutingManagerCreator implements BeanCreator<DataSourceRoutingManager> {
     private final DataSource dataSource;
 
     private DataSourceRoutingManager instance;
@@ -38,7 +38,7 @@ public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRouti
      * @return 数据源路由管理器实例
      */
     @Override
-    public DataSourceRoutingManager get() {
+    public DataSourceRoutingManager getInstance() {
         if (instance != null) {
             return instance;
         }
@@ -68,6 +68,7 @@ public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRouti
      * @return 新创建的路由管理器实例
      * @throws DataSourceNotSupportException 如果数据源类型不受支持
      */
+    @Override
     public DataSourceRoutingManager newInstance() {
         switch (dataSource.getClass().getName()) {
             case DefaultConsts.CLASS_HIKARI_DATA_SOURCE -> {
@@ -92,6 +93,15 @@ public class DataSourceRoutingManagerCreator implements Supplier<DataSourceRouti
             default -> throw new DataSourceNotSupportException(dataSource.getClass().getName());
         }
 
+    }
+
+    @Override
+    public Class<DataSourceRoutingManager> getCacheManagerClass() {
+        return DataSourceRoutingManager.class;
+    }
+
+    public DataSource getDefaultDataSource() {
+        return this.dataSource;
     }
 
     @PreDestroy

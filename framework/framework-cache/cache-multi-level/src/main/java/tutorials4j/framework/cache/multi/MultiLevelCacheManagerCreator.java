@@ -5,15 +5,18 @@ import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
-import java.util.function.Supplier;
 
 /**
- * 多级缓存管理器的创建器，实现 {@link CacheManagerCreator} 接口，以单例模式提供 {@link MultiLevelCacheManager} 实例。
- * <p>内部通过双重检查锁（Double-Checked Locking）保证线程安全且只创建一个实例。</p>
+ * {@link MultiLevelCacheManager} 的创建器，实现双重检查锁定的单例模式。
+ * <p>
+ * 该创建器组合了 Caffeine（一级缓存）和 Redis（二级缓存）的创建器，
+ * 在 {@link #getInstance()} 中通过双重检查锁定保证只有一个 {@link MultiLevelCacheManager} 实例被创建。
+ * </p>
  *
  * @author Yun Jiao
  * @see MultiLevelCacheManager
- * @see Supplier
+ * @see CaffeineCacheManagerCreator
+ * @see RedisCacheManagerCreator
  */
 @RequiredArgsConstructor
 public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiLevelCacheManager> {
@@ -22,12 +25,6 @@ public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiL
 
     private MultiLevelCacheManager instance;
 
-    /**
-     * 获取多级缓存管理器单例。
-     * <p>首次调用时会通过本地和远程缓存管理器创建器分别获取底层管理器，并构造 {@link MultiLevelCacheManager} 实例。</p>
-     *
-     * @return 唯一的多级缓存管理器实例
-     */
     @Override
     public MultiLevelCacheManager getInstance() {
         if (instance != null) {
@@ -52,7 +49,7 @@ public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiL
     }
 
     @Override
-    public Class<MultiLevelCacheManager> getCacheManagerClass() {
+    public Class<MultiLevelCacheManager> getBeanClass() {
         return MultiLevelCacheManager.class;
     }
 

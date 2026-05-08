@@ -10,7 +10,7 @@ import org.springframework.core.task.TaskDecorator;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import org.springframework.scheduling.annotation.EnableAsync;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
-import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
+import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 
 /**
  * 组合任务装饰器配置
@@ -25,18 +25,18 @@ import tutorials4j.framework.common.core.task.TaskDecoratorSupplier;
 public class CompositeTaskDecoratorConfig {
     @Bean
     CompositeTaskDecorator CompositeTaskDecorator(CompositeTaskDecoratorCreator compositeTaskDecoratorCreator) {
-        return compositeTaskDecoratorCreator.get();
+        return compositeTaskDecoratorCreator.getInstance();
     }
 
     @Bean
     @Order(1)
-    TaskDecoratorSupplier logAroundTaskDecoratorSupplier1() {
+    TaskDecoratorCreator logAroundTaskDecoratorCreator1() {
         return LogAroundTaskDecorator1::new;
     }
 
     @Bean
     @Order(2)
-    TaskDecoratorSupplier logAroundTaskDecoratorSupplier2() {
+    TaskDecoratorCreator logAroundTaskDecoratorCreator2() {
         return LogAroundTaskDecorator2::new;
     }
 

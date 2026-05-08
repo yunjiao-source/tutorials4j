@@ -4,9 +4,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.cache.caffeine.CacheCaffeineConfiguration;
+import tutorials4j.framework.cache.caffeine.autoconfigure.CacheCaffeineConfiguration;
 import tutorials4j.framework.cache.core.autoconfigure.CacheCoreConfiguration;
-import tutorials4j.framework.cache.multi.CacheMultiLevelConfiguration;
+import tutorials4j.framework.cache.multi.autoconfigure.CacheMultiLevelConfiguration;
 import tutorials4j.framework.cache.redis.autoconfigure.CacheRedisConfiguration;
 
 /**

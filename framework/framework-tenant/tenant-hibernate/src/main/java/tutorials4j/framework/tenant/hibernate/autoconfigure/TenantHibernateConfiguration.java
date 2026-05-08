@@ -43,6 +43,7 @@ public class TenantHibernateConfiguration {
         }
 
         @Bean
+        @ConditionalOnMissingBean
         DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
             log.debug("Tutorials4j - Tenant |- Default Current Tenant Identifier Resolver");
             return new DefaultCurrentTenantIdentifierResolver();
@@ -59,6 +60,7 @@ public class TenantHibernateConfiguration {
             log.debug("Tutorials4j - Tenant |- Database Tenant Configuration");
         }
         @Bean
+        @ConditionalOnMissingBean
         DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
             log.debug("Tutorials4j - Tenant |- Default Current Tenant Identifier Resolver");
             return new DefaultCurrentTenantIdentifierResolver();
@@ -69,7 +71,7 @@ public class TenantHibernateConfiguration {
         TenantDataSourceBasedMultiTenantConnectionProvider tenantDataSourceBasedMultiTenantConnectionProvider(DataSourceRoutingManagerCreator creator,
                                                                                                               TenantProperties properties) {
             log.debug("Tutorials4j - Tenant |- Tenant Data Source Based Multi Tenant Connection Provider");
-            DataSourceRoutingManager dataSourceRoutingManager = creator.get();
+            DataSourceRoutingManager dataSourceRoutingManager = creator.getInstance();
 
             properties.getDatasource().getJdbc().forEach((k, v) -> dataSourceRoutingManager.addRoutingJdbcOptions(k.toUpperCase(), v));
             return new TenantDataSourceBasedMultiTenantConnectionProvider(dataSourceRoutingManager);

@@ -1,4 +1,4 @@
-package tutorials4j.framework.cache.caffeine;
+package tutorials4j.framework.cache.caffeine.autoconfigure;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.annotation.PostConstruct;
@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
+import tutorials4j.framework.cache.caffeine.CaffeineUtils;
 import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
 
 /**
@@ -31,7 +33,8 @@ public class CacheCaffeineConfiguration {
      * @return 配置好的Caffeine实例
      */
     @Bean
-    Caffeine<Object, Object> caffeine(CacheCaffeineProperties properties) {
+    @ConditionalOnMissingBean
+    Caffeine<Object, Object> defaultCaffeine(CacheCaffeineProperties properties) {
         log.debug("Tutorials4j - Cache |- Caffeine");
 
         Caffeine<Object, Object> caffeine = Caffeine.newBuilder();
@@ -48,7 +51,7 @@ public class CacheCaffeineConfiguration {
      * @return 缓存管理器创建器实例
      */
     @Bean
-    @ConditionalOnMissingBean(CaffeineCacheManagerCreator.class)
+    @ConditionalOnMissingBean
     CaffeineCacheManagerCreator caffeineCacheManagerCreator(Caffeine<Object, Object> caffeine,
                                               CacheCaffeineProperties properties) {
         log.debug("Tutorials4j - Cache |- Caffeine Cache Manager Creator");

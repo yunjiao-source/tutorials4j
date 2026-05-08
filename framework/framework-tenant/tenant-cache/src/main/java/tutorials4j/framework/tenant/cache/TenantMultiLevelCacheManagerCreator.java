@@ -6,9 +6,16 @@ import tutorials4j.framework.cache.multi.MultiLevelCacheManager;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
 /**
- * 租户级多级缓存管理器的创建器。
+ * 租户级多级缓存管理器的创建器，实现双重检查锁定的单例模式。
+ * <p>
+ * 该创建器组合了租户级 Caffeine 缓存管理器（一级缓存）和 Redis 缓存管理器（二级缓存），
+ * 用于构建支持租户隔离的多级缓存。
+ * </p>
  *
  * @author Yun Jiao
+ * @see MultiLevelCacheManager
+ * @see TenantCaffeineCacheManagerCreator
+ * @see RedisCacheManagerCreator
  */
 @RequiredArgsConstructor
 public class TenantMultiLevelCacheManagerCreator implements CacheManagerCreator<MultiLevelCacheManager> {
@@ -17,13 +24,6 @@ public class TenantMultiLevelCacheManagerCreator implements CacheManagerCreator<
 
     private MultiLevelCacheManager instance;
 
-    /**
-     * 获取租户级多级缓存管理器单例。
-     * <p>先获取租户级 Caffeine 缓存管理器和 Redis 缓存管理器，然后组装成多级管理器。
-     * 使用双重检查锁保证线程安全。</p>
-     *
-     * @return {@link MultiLevelCacheManager} 单例实例
-     */
     @Override
     public MultiLevelCacheManager getInstance() {
         if (instance != null) {
@@ -48,7 +48,7 @@ public class TenantMultiLevelCacheManagerCreator implements CacheManagerCreator<
     }
 
     @Override
-    public Class<MultiLevelCacheManager> getCacheManagerClass() {
+    public Class<MultiLevelCacheManager> getBeanClass() {
         return MultiLevelCacheManager.class;
     }
 }
