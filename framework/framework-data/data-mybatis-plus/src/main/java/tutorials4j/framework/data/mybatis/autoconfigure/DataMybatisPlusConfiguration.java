@@ -14,7 +14,7 @@ import tutorials4j.framework.data.core.properties.DataProperties;
 import tutorials4j.framework.data.mybatis.InnerInterceptorSupplier;
 
 /**
- * TODO
+ * MyBatis Plus 的自动配置类
  *
  * @author Yun Jiao
  */
