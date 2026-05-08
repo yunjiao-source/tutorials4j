@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import tutorials4j.framework.examples.SexEnum;
 
 /**
  * 请求DTO类
@@ -24,4 +25,6 @@ public class CreateUserRequest {
 
     @Positive(message = "年龄必须为正数")
     private Integer age;
+
+    private SexEnum sex;
 }

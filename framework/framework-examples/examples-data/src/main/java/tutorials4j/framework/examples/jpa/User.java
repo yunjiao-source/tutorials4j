@@ -1,6 +1,7 @@
 package tutorials4j.framework.examples.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import tutorials4j.framework.data.hibernate.SnowflakeIDGenerator;
+import tutorials4j.framework.examples.SexEnum;
 
 /**
  * 用戶
@@ -34,6 +36,9 @@ public class User {
     @Email(message = "邮箱格式不正确")
     @NotBlank(message = "邮箱不能为空")
     private String email;
+
+    @Convert(converter = SexEnumAttributeConverter.class)
+    private SexEnum sex;
 
     @Positive(message = "年龄必须为正数")
     private Integer age;

@@ -96,7 +96,7 @@ public class DataSourceRoutingManagerCreator implements BeanCreator<DataSourceRo
     }
 
     @Override
-    public Class<DataSourceRoutingManager> getCacheManagerClass() {
+    public Class<DataSourceRoutingManager> getBeanClass() {
         return DataSourceRoutingManager.class;
     }
 

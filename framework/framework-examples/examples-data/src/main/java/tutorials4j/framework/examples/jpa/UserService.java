@@ -32,6 +32,7 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setAge(request.getAge());
         user.setSecretKey(UUID.randomUUID().toString());  // 生成随机密钥
+        user.setSex(request.getSex());
         return userRepository.save(user);
     }
 

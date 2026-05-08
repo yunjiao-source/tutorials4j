@@ -1,5 +1,6 @@
 package tutorials4j.framework.data.mybatis.autoconfigure;
 
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import tutorials4j.framework.data.core.properties.DataProperties;
+import tutorials4j.framework.data.mybatis.DefaultIdentifierGenerator;
 import tutorials4j.framework.data.mybatis.InnerInterceptorCreator;
 
 /**
@@ -60,5 +62,11 @@ public class DataMybatisPlusConfiguration {
     InnerInterceptorCreator blockAttackInnerInterceptorCreator() {
         log.debug("Tutorials4j - Data |- Block Attack Inner Interceptor Creator");
         return BlockAttackInnerInterceptor::new;
+    }
+
+    @Bean
+    public MybatisPlusPropertiesCustomizer defaultIdentifierGeneratorMybatisPlusPropertiesCustomizer() {
+        log.debug("Tutorials4j - Data |- Default Identifier Generator Mybatis Plus Properties Customizer");
+        return plusProperties -> plusProperties.getGlobalConfig().setIdentifierGenerator(new DefaultIdentifierGenerator());
     }
 }

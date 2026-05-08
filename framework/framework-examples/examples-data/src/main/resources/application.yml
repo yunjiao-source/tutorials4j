@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: mybatis
-  #    active: jpa
+#    active: jpa
 
   datasource:
     url: jdbc:postgresql://localhost:5432/demo

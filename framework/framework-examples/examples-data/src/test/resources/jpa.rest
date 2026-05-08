@@ -3,10 +3,11 @@ POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
- "name": "张三",
+ "name": "张三1",
   "password": "123",
-"email": "123@qq.com",
-  "age": 18
+  "email": "123@qq.com",
+  "age": 18,
+  "sex": "female"
 }
 
 ###

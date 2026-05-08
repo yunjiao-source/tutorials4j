@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tutorials4j.framework.data.core.jpa.PageResult;
 
 /**
  *
@@ -50,18 +51,18 @@ public class UserController {
 
     // 分页查询所有用户（支持排序）
     @GetMapping
-    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable) {
+    public ResponseEntity<PageResult<User>> getAllUsers(Pageable pageable) {
         Page<User> users = userService.getAllUsers(pageable);
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(PageResult.of(users));
     }
 
     // 按姓名模糊分页查询
     @GetMapping("/search")
-    public ResponseEntity<Page<User>> searchUsersByName(
+    public ResponseEntity<PageResult<User>> searchUsersByName(
             @RequestParam(name="name") String name,
             Pageable pageable) {
         Page<User> users = userService.searchUsersByName(name, pageable);
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(PageResult.of(users));
     }
 
 }
