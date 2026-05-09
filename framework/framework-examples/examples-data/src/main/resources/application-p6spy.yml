@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+  datasource:
+    username: postgres
+    password: postgres
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:postgresql://localhost:5432/demo
+
+mybatis-plus:
+  configuration:
+    default-enum-type-handler: tutorials4j.framework.data.mybatis.BaseEnumTypeHandler

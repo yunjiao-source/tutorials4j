@@ -5,9 +5,5 @@ spring:
       ddl-auto: update
 
 
-  messages:
-    basename: i18n/messages   # 放在 resources/i18n/ 下
-    encoding: UTF-8
-
 
 

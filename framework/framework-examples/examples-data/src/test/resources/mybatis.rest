@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/api/users
+POST http://localhost:8080/mybatis/users
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8080/api/users/2052404491620646914
+PUT http://localhost:8080/mybatis/users/2052404491620646914
 Content-Type: application/json
 
 {
@@ -19,15 +19,15 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/users/2052404491620646914
+DELETE http://localhost:8080/mybatis/users/2052404491620646914
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/api/users
+GET http://localhost:8080/mybatis/users
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/api/users?name=1
+GET http://localhost:8080/mybatis/users?name=1
 Content-Type: application/json
 
 

@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/api/users
+POST http://localhost:8080/jpa/users
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8080/api/users/2052387585426329600
+PUT http://localhost:8080/jpa/users/2052387585426329600
 Content-Type: application/json
 
 {
@@ -19,15 +19,15 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/users/2052387585426329600
+DELETE http://localhost:8080/jpa/users/2052387585426329600
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/api/users
+GET http://localhost:8080/jpa/users
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/api/users/search?name=三
+GET http://localhost:8080/jpa/users/search?name=三
 Content-Type: application/json
 
 

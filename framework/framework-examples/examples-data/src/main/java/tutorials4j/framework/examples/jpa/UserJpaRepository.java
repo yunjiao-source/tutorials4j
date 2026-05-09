@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  * @author Yun Jiao
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserJpaRepository extends JpaRepository<User, Long> {
     // 分页模糊查询（按姓名）
     Page<User> findByNameContaining(String name, Pageable pageable);
 }

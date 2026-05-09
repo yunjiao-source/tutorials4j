@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author Yun Jiao
  */
 @Service
-public class UserService extends ServiceImpl<UserMapper, User>{
+public class UserMybatisService extends ServiceImpl<UserMapper, User>{
 
     // 重写保存方法，加密密码并生成secretKey
     public boolean save(User entity) {

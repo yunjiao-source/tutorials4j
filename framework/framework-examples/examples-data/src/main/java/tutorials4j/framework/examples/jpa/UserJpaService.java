@@ -18,8 +18,8 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
-    private final UserRepository userRepository;
+public class UserJpaService {
+    private final UserJpaRepository userJpaRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -33,12 +33,12 @@ public class UserService {
         user.setAge(request.getAge());
         user.setSecretKey(UUID.randomUUID().toString());  // 生成随机密钥
         user.setSex(request.getSex());
-        return userRepository.save(user);
+        return userJpaRepository.save(user);
     }
 
     // 更新用户（仅更新传入的非空字段）
     public User updateUser(Long id, UpdateUserRequest request) {
-        User user = userRepository.findById(id)
+        User user = userJpaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("用户不存在，id: " + id));
         if (request.getName() != null && !request.getName().isEmpty()) {
             user.setName(request.getName());
@@ -52,30 +52,30 @@ public class UserService {
         if (request.getAge() != null) {
             user.setAge(request.getAge());
         }
-        return userRepository.save(user);
+        return userJpaRepository.save(user);
     }
 
     // 根据ID查询用户
     public User getUserById(Long id) {
-        return userRepository.findById(id)
+        return userJpaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("用户不存在，id: " + id));
     }
 
     // 删除用户
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
+        if (!userJpaRepository.existsById(id)) {
             throw new EntityNotFoundException("用户不存在，id: " + id);
         }
-        userRepository.deleteById(id);
+        userJpaRepository.deleteById(id);
     }
 
     // 分页查询所有用户
     public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+        return userJpaRepository.findAll(pageable);
     }
 
     // 按姓名模糊分页查询
     public Page<User> searchUsersByName(String name, Pageable pageable) {
-        return userRepository.findByNameContaining(name, pageable);
+        return userJpaRepository.findByNameContaining(name, pageable);
     }
 }

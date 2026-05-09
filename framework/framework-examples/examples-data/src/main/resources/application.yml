@@ -1,6 +1,7 @@
 spring:
   profiles:
-    active: mybatis
+    active: p6spy
+#    active: mybatis
 #    active: jpa
 
   datasource:

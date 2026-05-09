@@ -17,42 +17,42 @@ import tutorials4j.framework.data.core.jpa.PageResult;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
-public class UserController {
-    private final UserService userService;
+@RequestMapping("/jpa/users")
+public class UserJpaController {
+    private final UserJpaService userJpaService;
 
     // 创建用户
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserRequest request) {
-        User user = userService.createUser(request);
+        User user = userJpaService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     // 更新用户
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserRequest request) {
-        User user = userService.updateUser(id, request);
+        User user = userJpaService.updateUser(id, request);
         return ResponseEntity.ok(user);
     }
 
     // 查询单个用户
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        User user = userService.getUserById(id);
+        User user = userJpaService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
     // 删除用户
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
+        userJpaService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
     // 分页查询所有用户（支持排序）
     @GetMapping
     public ResponseEntity<PageResult<User>> getAllUsers(Pageable pageable) {
-        Page<User> users = userService.getAllUsers(pageable);
+        Page<User> users = userJpaService.getAllUsers(pageable);
         return ResponseEntity.ok(PageResult.of(users));
     }
 
@@ -61,7 +61,7 @@ public class UserController {
     public ResponseEntity<PageResult<User>> searchUsersByName(
             @RequestParam(name="name") String name,
             Pageable pageable) {
-        Page<User> users = userService.searchUsersByName(name, pageable);
+        Page<User> users = userJpaService.searchUsersByName(name, pageable);
         return ResponseEntity.ok(PageResult.of(users));
     }
 
