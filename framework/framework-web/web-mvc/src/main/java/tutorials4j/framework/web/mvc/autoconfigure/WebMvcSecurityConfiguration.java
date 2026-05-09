@@ -17,7 +17,7 @@ import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
-import tutorials4j.framework.web.mvc.filter.XssHttpServletFilter;
+import tutorials4j.framework.web.mvc.filter.XssRequestFilter;
 import tutorials4j.framework.web.mvc.interceptor.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.mvc.interceptor.IdempotentHandlerInterceptor;
 import tutorials4j.framework.web.mvc.support.XssSimpleModule;
@@ -39,7 +39,7 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Web Mvc Security Configuration");
+        log.debug("Tutorials4j - Web |- Security Configuration");
     }
 
     @Bean
@@ -51,10 +51,10 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
 
 
     @Bean
-    public FilterRegistrationBean<XssHttpServletFilter> xssHttpServletFilterRegistration() {
+    FilterRegistrationBean<XssRequestFilter> xssRequestFilterRegistration() {
         ServletFilterOptions options = properties.getXss();
-        FilterRegistrationBean<XssHttpServletFilter> registration = new FilterRegistrationBean<>();
-        XssHttpServletFilter filter = new XssHttpServletFilter();
+        FilterRegistrationBean<XssRequestFilter> registration = new FilterRegistrationBean<>();
+        XssRequestFilter filter = new XssRequestFilter();
         registration.setFilter(filter);
         options.fill(registration);
         if (log.isDebugEnabled()) {

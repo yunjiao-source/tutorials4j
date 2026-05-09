@@ -3,7 +3,6 @@ package tutorials4j.framework.examples.xss;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import tutorials4j.framework.web.mvc.filter.XssHttpServletFilter;
 import tutorials4j.framework.web.mvc.support.XssSimpleModule;
 
 /**
@@ -19,7 +18,7 @@ public class XssDemoController {
     /**
      * GET 请求示例：通过查询参数传递可能含有 XSS 的内容。
      * <p>
-     * 由于 {@link XssHttpServletFilter} 会包装 HttpServletRequest，
+     * 由于 {@link tutorials4j.framework.web.mvc.filter.XssRequestFilter} 会包装 HttpServletRequest，
      * 因此 {@code @RequestParam} 获取到的值已经被 AntiSamy 清洗过。
      * </p>
      *

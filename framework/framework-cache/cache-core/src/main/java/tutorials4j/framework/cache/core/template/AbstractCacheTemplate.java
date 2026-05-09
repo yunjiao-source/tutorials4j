@@ -50,6 +50,11 @@ public abstract class AbstractCacheTemplate<K, V> implements CacheTemplate<K, V>
     }
 
     @Override
+    public boolean exist(K key) {
+        return get(key) != null;
+    }
+
+    @Override
     public void delete(K key) {
         cache.evict(key);
     }

@@ -1,4 +1,0 @@
-tutorials4j.web.http:
-  cached-request:
-    max-content-length: 1MB   # 允许的最大请求体大小
-    url-patterns: /cached-request/cached

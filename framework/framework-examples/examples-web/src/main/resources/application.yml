@@ -1,9 +1,9 @@
 spring:
   profiles:
-    active: request-logging
+#    active: request-logging
 #    active: xss
 #    active: annotation
-#    active: cached-request
+    active: cached-body
 #    active: trace
 #    active: client
 

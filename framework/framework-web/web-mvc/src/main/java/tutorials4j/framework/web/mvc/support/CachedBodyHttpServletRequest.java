@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  * @see HttpServletRequestWrapper
  * @see CachedServletInputStream
  */
-public class CachedHttpServletRequestWrapper extends HttpServletRequestWrapper {
+public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
     /**
      * 缓存的请求体字节数组。
      */
@@ -34,7 +34,7 @@ public class CachedHttpServletRequestWrapper extends HttpServletRequestWrapper {
      * @param request 原始的 HttpServletRequest 对象
      * @throws IOException 如果读取原始请求体时发生 I/O 错误
      */
-    public CachedHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
+    public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
         super(request);
         // 读取原始请求体并缓存
         String charset = request.getCharacterEncoding();

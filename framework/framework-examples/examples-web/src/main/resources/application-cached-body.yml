@@ -1,0 +1,3 @@
+tutorials4j.web.http:
+  cached-body:
+    url-patterns: /cached-body/cached

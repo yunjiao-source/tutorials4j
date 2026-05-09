@@ -1,8 +1,11 @@
 package tutorials4j.framework.web.mvc.filter;
 
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.filter.OncePerRequestFilter;
 import tutorials4j.framework.web.mvc.support.XssHttpServletRequestWrapper;
 
 import java.io.IOException;
@@ -18,15 +21,15 @@ import java.io.IOException;
  * @see XssHttpServletRequestWrapper
  */
 @Slf4j
-public class XssHttpServletFilter implements Filter {
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
+public class XssRequestFilter extends OncePerRequestFilter {
 
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper(request);
         if (log.isDebugEnabled()) {
             log.debug("Tutorials4j - Web |- Xss攻击过滤器：{}", request.getRequestURI());
         }
-        filterChain.doFilter(xssRequest, servletResponse);
+        filterChain.doFilter(xssRequest, response);
     }
 }

@@ -15,7 +15,7 @@ import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
 import tutorials4j.framework.web.rest.mdc.TraceExchangeFilterFunction;
-import tutorials4j.framework.web.rest.mdc.TraceFilter;
+import tutorials4j.framework.web.rest.mdc.TraceRequestFilter;
 import tutorials4j.framework.web.rest.mdc.TraceRestTemplateInterceptor;
 import tutorials4j.framework.web.rest.mdc.TraceTaskDecorator;
 
@@ -72,10 +72,10 @@ public class WebRestTraceConfiguration {
     }
 
     @Bean
-    FilterRegistrationBean<TraceFilter> traceFilterRegistration(WebHttpProperties properties) {
+    FilterRegistrationBean<TraceRequestFilter> traceRequestFilterRegistration(WebHttpProperties properties) {
         ServletFilterOptions options = properties.getTrace();
-        FilterRegistrationBean<TraceFilter> registration = new FilterRegistrationBean<>();
-        TraceFilter filter = new TraceFilter();
+        FilterRegistrationBean<TraceRequestFilter> registration = new FilterRegistrationBean<>();
+        TraceRequestFilter filter = new TraceRequestFilter();
         registration.setFilter(filter);
         options.fill(registration);
 

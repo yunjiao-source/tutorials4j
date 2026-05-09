@@ -1,11 +1,11 @@
-package tutorials4j.framework.examples.cachedrequest;
+package tutorials4j.framework.examples.cachedbody;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.web.mvc.support.CachedHttpServletRequestWrapper;
+import tutorials4j.framework.web.mvc.support.CachedBodyHttpServletRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,14 +19,14 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("cached-request")
-public class CachedRequestController {
+@RequestMapping("cached-body")
+public class CachedBodyController {
     @PostMapping("cached")
     public Map<String, Object> cached(HttpServletRequest request) throws IOException {
         Map<String, Object> result = new HashMap<>();
 
         // 检查是否被 CachedBodyFilter 包装
-        boolean isCached = request instanceof CachedHttpServletRequestWrapper;
+        boolean isCached = request instanceof CachedBodyHttpServletRequest;
         result.put("isRequestWrapped", isCached);
 
         // 第一次读取请求体
@@ -57,7 +57,7 @@ public class CachedRequestController {
         Map<String, Object> result = new HashMap<>();
 
         // 检查是否被 CachedBodyFilter 包装
-        boolean isCached = request instanceof CachedHttpServletRequestWrapper;
+        boolean isCached = request instanceof CachedBodyHttpServletRequest;
         result.put("isRequestWrapped", isCached);
 
         String firstRead = readRequestBody(request);

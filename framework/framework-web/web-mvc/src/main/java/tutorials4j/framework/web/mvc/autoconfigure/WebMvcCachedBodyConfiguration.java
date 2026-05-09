@@ -5,8 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
-import tutorials4j.framework.web.mvc.filter.CachedRequestFilter;
+import tutorials4j.framework.web.mvc.filter.CachedBodyRequestFilter;
 
 /**
  * 缓存请求体配置
@@ -15,18 +16,18 @@ import tutorials4j.framework.web.mvc.filter.CachedRequestFilter;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class WebMvcCachedRequestConfiguration {
+public class WebMvcCachedBodyConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Cached Request Body Configuration");
+        log.debug("Tutorials4j - Web |- Cached Body Configuration");
     }
 
 
     @Bean
-    public FilterRegistrationBean<CachedRequestFilter> cachedBodyFilterRegistration(WebHttpProperties properties) {
-        WebHttpProperties.CachedRequestOptions options = properties.getCachedRequest();
-        FilterRegistrationBean<CachedRequestFilter> registration = new FilterRegistrationBean<>();
-        CachedRequestFilter filter = new CachedRequestFilter(properties.getCachedRequest());
+    FilterRegistrationBean<CachedBodyRequestFilter> cachedBodyFilterRegistration(WebHttpProperties properties) {
+        ServletFilterOptions options = properties.getCachedBody();
+        FilterRegistrationBean<CachedBodyRequestFilter> registration = new FilterRegistrationBean<>();
+        CachedBodyRequestFilter filter = new CachedBodyRequestFilter();
         registration.setFilter(filter);
         options.fill(registration);
 

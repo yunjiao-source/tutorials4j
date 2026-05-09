@@ -1,10 +1,8 @@
 package tutorials4j.framework.web.core.properties;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.util.unit.DataSize;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
@@ -18,9 +16,10 @@ import tutorials4j.framework.common.core.support.ServletFilterOptions;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP)
 public class WebHttpProperties {
     /**
-     * 缓存请求体配置属性，用于 {@code CachedRequestServletFilter}。
+     * 缓存请求体配置属性
      */
-    private CachedRequestOptions cachedRequest = new CachedRequestOptions();
+    @NestedConfigurationProperty
+    private ServletFilterOptions cachedBody = new ServletFilterOptions();
 
     /**
      * 链路追踪 Servlet 过滤器配置属性。
@@ -113,24 +112,14 @@ public class WebHttpProperties {
         private String afterMessageSuffix = "]";
 
         {
-            filter.setName("requestLoggingServletFilter");
+            filter.setName("requestLoggingRequestFilter");
         }
     }
-    /**
-     * 缓存请求体配置属性
-     */
-    @EqualsAndHashCode(callSuper = true)
-    @Data
-    public static class CachedRequestOptions extends ServletFilterOptions {
-        /**
-         * 支持最大长度，默认:2M
-         */
-        private DataSize maxContentLength = DataSize.ofMegabytes(2);
-    }
+
 
     {
-        cachedRequest.setName("cachedRequestServletFilter");
-        trace.setName("traceServletFilter");
-        xss.setName("xssServletFilter");
+        cachedBody.setName("cachedBodyRequestFilter");
+        trace.setName("traceRequestFilter");
+        xss.setName("xssRequestFilter");
     }
 }

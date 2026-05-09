@@ -23,7 +23,7 @@ import tutorials4j.framework.web.mvc.filter.DefaultCommonsRequestLoggingFilter;
 public class WebMvcRequestLoggingConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Web Mvc Request Logging Configuration");
+        log.debug("Tutorials4j - Web |- Request Logging Configuration");
     }
 
 
@@ -39,7 +39,7 @@ public class WebMvcRequestLoggingConfiguration {
      * @return 过滤器注册 Bean，用于将过滤器添加到 Servlet 容器
      */
     @Bean
-    public FilterRegistrationBean<DefaultCommonsRequestLoggingFilter> requestLoggingFilterRegistration(WebHttpProperties properties) {
+    FilterRegistrationBean<DefaultCommonsRequestLoggingFilter> defaultCommonsRequestLoggingFilterRegistration(WebHttpProperties properties) {
         WebHttpProperties.RequestLoggingOptions options = properties.getRequestLogging();
         ServletFilterOptions servletFilterOptions = options.getFilter();
 

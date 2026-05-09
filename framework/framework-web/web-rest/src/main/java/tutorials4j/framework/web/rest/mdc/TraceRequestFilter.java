@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.web.filter.OncePerRequestFilter;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.web.rest.util.RestUtils;
 
@@ -18,21 +19,17 @@ import java.io.IOException;
  * 请求处理完成后，清理当前线程的 MDC，防止线程池复用导致上下文污染。</p>
  *
  * @author Yun Jiao
- * @see jakarta.servlet.Filter
  * @see org.slf4j.MDC
  */
 @Slf4j
-public class TraceFilter implements Filter {
+public class TraceRequestFilter extends OncePerRequestFilter {
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
-
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 1. 获取或生成追踪ID
-        String traceId = httpRequest.getHeader(DefaultConsts.HTTP_TRACE_ID);
-        String spanId = httpRequest.getHeader(DefaultConsts.HTTP_TRACE_SPAN_ID);
-        String parentSpanId = httpRequest.getHeader(DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID);
+        String traceId = request.getHeader(DefaultConsts.HTTP_TRACE_ID);
+        String spanId = request.getHeader(DefaultConsts.HTTP_TRACE_SPAN_ID);
+        String parentSpanId = request.getHeader(DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID);
 
         if (traceId == null || traceId.isEmpty()) {
             traceId = RestUtils.generateTraceId();
@@ -49,7 +46,7 @@ public class TraceFilter implements Filter {
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", httpRequest.getRequestURI());
+            log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", request.getRequestURI());
         }
 
         try {
@@ -59,7 +56,7 @@ public class TraceFilter implements Filter {
                 httpResponse.setHeader(DefaultConsts.HTTP_TRACE_SPAN_ID, spanId);
             }
 
-            chain.doFilter(request, response);
+            filterChain.doFilter(request, response);
         } finally {
             // 4. 清理MDC
             MDC.clear();

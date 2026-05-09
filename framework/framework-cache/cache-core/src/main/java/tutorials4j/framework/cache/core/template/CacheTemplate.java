@@ -80,6 +80,14 @@ public interface CacheTemplate<K, V> {
     V get(K key, Callable<V> valueLoader);
 
     /**
+     * 是否存在键值
+     *
+     * @param key 键
+     * @return 存在值，返回true；否则false
+     */
+    boolean exist(K key);
+
+    /**
      * 删除指定 key 的缓存。
      *
      * @param key 键
