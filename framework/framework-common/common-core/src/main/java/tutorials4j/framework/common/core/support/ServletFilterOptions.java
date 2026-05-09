@@ -2,6 +2,7 @@ package tutorials4j.framework.common.core.support;
 
 import jakarta.servlet.DispatcherType;
 import lombok.Data;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
 import java.util.EnumSet;
 
@@ -37,4 +38,14 @@ public class ServletFilterOptions {
             , DispatcherType.INCLUDE, DispatcherType.REQUEST, DispatcherType.FORWARD);
 
 
+    public void fill(FilterRegistrationBean<?> registrationBean) {
+        if (this.getUrlPatterns().length == 0) {
+            registrationBean.setEnabled(false);
+            return;
+        }
+        registrationBean.addUrlPatterns(this.getUrlPatterns());
+        registrationBean.setOrder(this.getOrder());
+        registrationBean.setName(this.getName());
+        registrationBean.setDispatcherTypes(this.getDispatcherTypes());
+    }
 }

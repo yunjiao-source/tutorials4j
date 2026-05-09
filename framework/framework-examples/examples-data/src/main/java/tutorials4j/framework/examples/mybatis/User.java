@@ -1,14 +1,14 @@
 package tutorials4j.framework.examples.mybatis;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import tutorials4j.framework.examples.SexEnum;
+
+import java.util.Date;
 
 /**
  * 用戶
@@ -39,4 +39,9 @@ public class User {
 
     private SexEnum sex;
 
+    @TableField(fill = FieldFill.INSERT)
+    private Date createdDate;
+
+    @TableField(fill = FieldFill.UPDATE)
+    private Date lastModifiedDate;
 }

@@ -24,6 +24,7 @@ public interface PropertiesConsts {
 
     /** data */
     String PROPERTY_PREFIX_DATA = PROPERTY_PREFIX_TUTORIALS4J + ".data";
+    String PROPERTY_PREFIX_DATA_MYBATIS_PLUS = PROPERTY_PREFIX_TUTORIALS4J + ".mybatis-plus";
 
     /** tenant */
     String PROPERTY_PREFIX_TENANT = PROPERTY_PREFIX_TUTORIALS4J + ".tenant";

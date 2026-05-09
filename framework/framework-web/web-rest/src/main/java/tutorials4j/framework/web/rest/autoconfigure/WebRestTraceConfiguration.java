@@ -14,7 +14,6 @@ import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
-import tutorials4j.framework.web.core.util.WebUtils;
 import tutorials4j.framework.web.rest.mdc.TraceExchangeFilterFunction;
 import tutorials4j.framework.web.rest.mdc.TraceFilter;
 import tutorials4j.framework.web.rest.mdc.TraceRestTemplateInterceptor;
@@ -78,7 +77,7 @@ public class WebRestTraceConfiguration {
         FilterRegistrationBean<TraceFilter> registration = new FilterRegistrationBean<>();
         TraceFilter filter = new TraceFilter();
         registration.setFilter(filter);
-        WebUtils.fill(registration, options);
+        options.fill(registration);
 
         if (log.isDebugEnabled()) {
             log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", options);

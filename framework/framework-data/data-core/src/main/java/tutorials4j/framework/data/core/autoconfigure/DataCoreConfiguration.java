@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import tutorials4j.framework.data.core.properties.DataMybatisPlusProperties;
 import tutorials4j.framework.data.core.properties.DataProperties;
 
 /**
@@ -13,7 +14,7 @@ import tutorials4j.framework.data.core.properties.DataProperties;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({DataProperties.class})
+@EnableConfigurationProperties({DataProperties.class, DataMybatisPlusProperties.class})
 public class DataCoreConfiguration {
     @PostConstruct
     public void postConstruct() {

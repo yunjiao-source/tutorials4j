@@ -17,7 +17,6 @@ import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
-import tutorials4j.framework.web.core.util.WebUtils;
 import tutorials4j.framework.web.mvc.filter.XssHttpServletFilter;
 import tutorials4j.framework.web.mvc.interceptor.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.mvc.interceptor.IdempotentHandlerInterceptor;
@@ -57,7 +56,7 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<XssHttpServletFilter> registration = new FilterRegistrationBean<>();
         XssHttpServletFilter filter = new XssHttpServletFilter();
         registration.setFilter(filter);
-        WebUtils.fill(registration, options);
+        options.fill(registration);
         if (log.isDebugEnabled()) {
             log.debug("Tutorials4j - Web |- Xss攻击过滤器：{}", options);
         }

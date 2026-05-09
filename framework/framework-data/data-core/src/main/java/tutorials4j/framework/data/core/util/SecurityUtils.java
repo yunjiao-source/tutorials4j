@@ -10,8 +10,8 @@ import java.util.Optional;
  *
  * @author Yun Jiao
  */
-public interface DataUtils {
-    static Optional<String> getAccount() {
+public interface SecurityUtils {
+    static Optional<String> getAccountOpt() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
@@ -19,5 +19,15 @@ public interface DataUtils {
         }
 
         return Optional.ofNullable(authentication.getName());
+    }
+
+    static String getAccount() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            return null;
+        }
+
+        return authentication.getName();
     }
 }

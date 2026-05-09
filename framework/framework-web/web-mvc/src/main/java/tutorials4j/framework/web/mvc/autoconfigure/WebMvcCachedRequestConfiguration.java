@@ -6,7 +6,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
-import tutorials4j.framework.web.core.util.WebUtils;
 import tutorials4j.framework.web.mvc.filter.CachedRequestFilter;
 
 /**
@@ -29,7 +28,7 @@ public class WebMvcCachedRequestConfiguration {
         FilterRegistrationBean<CachedRequestFilter> registration = new FilterRegistrationBean<>();
         CachedRequestFilter filter = new CachedRequestFilter(properties.getCachedRequest());
         registration.setFilter(filter);
-        WebUtils.fill(registration, options);
+        options.fill(registration);
 
         if (log.isDebugEnabled()) {
             log.debug("Tutorials4j - Web |- 缓存请求体过滤器：{}", options);
