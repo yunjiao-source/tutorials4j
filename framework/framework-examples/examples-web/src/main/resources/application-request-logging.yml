@@ -1,0 +1,13 @@
+tutorials4j:
+  web:
+    http:
+      request-logging:
+        include-timestamp: true
+        include-query-string: true
+        include-client-info: true
+        include-headers: true
+        include-payload: true
+        filter:
+          url-patterns: /request-logging/*
+          order: 1
+

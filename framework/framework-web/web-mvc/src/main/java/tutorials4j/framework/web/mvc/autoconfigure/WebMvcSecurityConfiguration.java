@@ -39,7 +39,7 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Security Configuration");
+        log.debug("Tutorials4j - Web |- Web Mvc Security Configuration");
     }
 
     @Bean

@@ -41,7 +41,6 @@ public interface DefaultConsts {
     String HTTP_TRACE_ID = "X-Trace-Id";
     String HTTP_TRACE_SPAN_ID = "X-Trace-Span-Id";
     String HTTP_TRACE_PARENT_SPAN_ID = "X-Trace-Parent-Span-Id";
-    String[] HTTP_MDC_KEYS = new String[]{DefaultConsts.HTTP_TRACE_ID,DefaultConsts.HTTP_TRACE_SPAN_ID,DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID};
 
 
 
@@ -59,4 +58,8 @@ public interface DefaultConsts {
     String CLASS_TENANT_MULTI_LEVEL_CACHE_MANAGER_CREATOR = "tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator";
 
 
+    /**
+     * 其他定义
+     */
+    String[] HTTP_MDC_KEYS = new String[]{DefaultConsts.HTTP_TRACE_ID,DefaultConsts.HTTP_TRACE_SPAN_ID,DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID};
 }

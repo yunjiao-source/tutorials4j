@@ -21,7 +21,7 @@ import java.io.IOException;
  *
  * @author Yun Jiao
  * @see CachedHttpServletRequestWrapper
- * @see WebHttpProperties.CachedRequest
+ * @see WebHttpProperties.CachedRequestOptions
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -53,13 +53,4 @@ public class CachedRequestFilter implements Filter {
         }
     }
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // 可选初始化逻辑
-    }
-
-    @Override
-    public void destroy() {
-        // 可选销毁逻辑
-    }
 }
