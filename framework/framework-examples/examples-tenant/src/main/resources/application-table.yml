@@ -1,4 +1,0 @@
-tutorials4j:
-  tenant:
-    datasource:
-      strategy: hibernate_table

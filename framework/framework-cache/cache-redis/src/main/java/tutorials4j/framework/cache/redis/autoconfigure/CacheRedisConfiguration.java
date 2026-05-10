@@ -28,27 +28,27 @@ import java.util.stream.Collectors;
 public class CacheRedisConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Cache |- Cache Redis Configuration");
+        log.debug("[CACHE-REDIS] Cache Redis Configuration");
     }
 
     @Bean
     @ConditionalOnMissingBean
     ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer jsonSerializerRedisCacheManagerBuilderCustomizer() {
-        log.debug("Tutorials4j - Cache |- Json Serializer Value Redis Cache Manager Builder Customizerr");
+        log.debug("[CACHE-REDIS] Json Serializer Value Redis Cache Manager Builder Customizerr");
         return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer();
     }
 
     @Bean
     @ConditionalOnMissingBean
     NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(CacheRedisProperties properties) {
-        log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Builder Customizer");
+        log.debug("[CACHE-REDIS] Named Redis Cache Manager Builder Customizer");
         return new NamedRedisCacheManagerBuilderCustomizer(properties);
     }
 
     @Bean
     @ConditionalOnMissingBean
     NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
-        log.debug("Tutorials4j - Cache |- Named Redis Cache Manager Customizer");
+        log.debug("[CACHE-REDIS] Named Redis Cache Manager Customizer");
         return new NamedCacheManagerCustomizer();
     }
 
@@ -58,7 +58,7 @@ public class CacheRedisConfiguration {
                                                       RedisConnectionFactory factory,
                                                       ObjectProvider<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizers,
                                                       ObjectProvider<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizers) {
-        log.debug("Tutorials4j - Cache |- Redis Cache Manager Creator");
+        log.debug("[CACHE-REDIS] Redis Cache Manager Creator");
         return new RedisCacheManagerCreator(properties,factory,
                 redisCacheManagerBuilderCustomizers.orderedStream().collect(Collectors.toList()),
                 cacheManagerCustomizers.orderedStream().collect(Collectors.toList()));

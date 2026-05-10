@@ -23,7 +23,7 @@ import tutorials4j.framework.web.mvc.filter.DefaultCommonsRequestLoggingFilter;
 public class WebMvcRequestLoggingConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Request Logging Configuration");
+        log.debug("[WEB-MVC] Request Logging Configuration");
     }
 
 
@@ -57,7 +57,7 @@ public class WebMvcRequestLoggingConfiguration {
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 请求日志过滤器：{}", options);
+            log.debug("[WEB-MVC] 请求日志过滤器：{}", options);
         }
         return registration;
     }

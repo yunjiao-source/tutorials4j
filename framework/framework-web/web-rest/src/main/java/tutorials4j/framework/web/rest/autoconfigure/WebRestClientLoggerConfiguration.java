@@ -20,12 +20,12 @@ import tutorials4j.framework.web.rest.util.RestUtils;
 public class WebRestClientLoggerConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Rest Client Logger Configuration");
+        log.debug("[WEB-REST] Rest Client Logger Configuration");
     }
 
     @Bean
     RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
-        log.debug("Tutorials4j - Web |- Log Headers Rest Template Builder Customizer");
+        log.debug("[WEB-REST] Log Headers Rest Template Builder Customizer");
         return restTemplate -> {
             restTemplate.getInterceptors().add(new LogClientHttpRequestInterceptor());
         };
@@ -33,7 +33,7 @@ public class WebRestClientLoggerConfiguration {
 
     @Bean
     RestClientCustomizer logHeadersRestClientCustomizer() {
-        log.debug("Tutorials4j - Web |- Log Headers Rest Client Customizer");
+        log.debug("[WEB-REST] Log Headers Rest Client Customizer");
         return restClientBuilder -> {
             restClientBuilder.requestInterceptor(new LogClientHttpRequestInterceptor());
         };
@@ -41,7 +41,7 @@ public class WebRestClientLoggerConfiguration {
 
     @Bean
     WebClientCustomizer logHeadersWebClientCustomizer() {
-        log.debug("Tutorials4j - Web |- Log Headers Web Client Customizer");
+        log.debug("[WEB-REST] Log Headers Web Client Customizer");
         return webClientBuilder -> {
             webClientBuilder.filter(RestUtils.ofClientRequestLogger());
             webClientBuilder.filter(RestUtils.ofClientResponseLogger());

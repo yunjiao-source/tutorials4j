@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
 public class WebMvcConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Web Mvc Configuration");
+        log.debug("[WEB-MVC] Web Mvc Configuration");
     }
 
 }

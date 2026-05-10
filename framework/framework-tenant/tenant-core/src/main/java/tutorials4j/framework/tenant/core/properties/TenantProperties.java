@@ -25,6 +25,8 @@ public class TenantProperties {
 
     private DataSourceOptions datasource = new DataSourceOptions();
 
+    private MybatisPlusOptions mybatisPlus = new MybatisPlusOptions();
+
     /**
      * 数据源属性
      */
@@ -33,12 +35,20 @@ public class TenantProperties {
         /**
          * 租户策略，默认：独立数据库(DATABASE)
          */
-        private TenantStrategy strategy = TenantStrategy.HIBERNATE_DATABASE;
+        private TenantStrategy strategy = TenantStrategy.DATABASE;
 
         /**
          * 数据源属性，可以配置多个
          */
         private Map<String, JdbcOptions> jdbc = new HashMap<>();
 
+    }
+
+    /**
+     * mybatis配置
+     */
+    @Data
+    public static class MybatisPlusOptions {
+        private String[] ignoreTable = new String[]{};
     }
 }

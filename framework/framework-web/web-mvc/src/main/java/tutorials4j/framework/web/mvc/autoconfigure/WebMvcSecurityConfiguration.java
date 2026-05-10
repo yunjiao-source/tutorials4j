@@ -39,13 +39,13 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Security Configuration");
+        log.debug("[WEB-MVC] Security Configuration");
     }
 
     @Bean
     @Order(JsonConsts.MODULE_ORDER_XSS)
     XssSimpleModule xssSimpleModule() {
-        log.debug("Tutorials4j - Web |- Xss Simple Module");
+        log.debug("[WEB-MVC] Xss Simple Module");
         return new XssSimpleModule();
     }
 
@@ -58,7 +58,7 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
         registration.setFilter(filter);
         options.fill(registration);
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- Xss攻击过滤器：{}", options);
+            log.debug("[WEB-MVC] Xss攻击过滤器：{}", options);
         }
         return registration;
     }
@@ -77,7 +77,7 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
 
     private void doAddInterceptors(InterceptorRegistry registry, HandlerInterceptor interceptor, HandlerInterceptorOptions options) {
         if (options.getExcludePathPatterns().length == 0 && options.getIncludePathPatterns().length == 0) {
-            log.warn("请求拦截器'{}' 未配置，原因是'include-path-patterns'或‘exclude-path-patterns’没有设置值", interceptor);
+            log.warn("[WEB-MVC] 请求拦截器'{}' 未配置，原因是'include-path-patterns'或‘exclude-path-patterns’没有设置值", interceptor);
             return;
         }
 
@@ -90,6 +90,6 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
             registration.addPathPatterns(options.getIncludePathPatterns());
         }
 
-        log.debug("Tutorials4j - Web |- 添加请求拦截器：{}, {}", interceptor, options);
+        log.debug("[WEB-MVC] 添加请求拦截器：{}, {}", interceptor, options);
     }
 }

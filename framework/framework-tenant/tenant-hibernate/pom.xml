@@ -26,14 +26,10 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-jdbc</artifactId>
+            <artifactId>data-hibernate</artifactId>
             <version>${revision}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-        </dependency>
 
     </dependencies>
 

@@ -48,7 +48,7 @@ public class TraceExchangeFilterFunction implements ExchangeFilterFunction {
                 .build();
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", request.url());
+            log.debug("[WEB-REST] 跟踪信息过滤器：{}", request.url());
         }
         // 继续执行请求，并将当前 MDC 快照存入 Reactor Context
         return next.exchange(filteredRequest)

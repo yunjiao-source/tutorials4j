@@ -70,7 +70,7 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
         }
         builder.cacheDefaults(defaultConfig).withInitialCacheConfigurations(configMap);
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Cache |- Redis缓存管理器初始化缓存：{}", String.join(",", configMap.keySet()));
+            log.debug("[CACHE-REDIS] Redis缓存管理器初始化缓存：{}", String.join(",", configMap.keySet()));
         }
     }
 

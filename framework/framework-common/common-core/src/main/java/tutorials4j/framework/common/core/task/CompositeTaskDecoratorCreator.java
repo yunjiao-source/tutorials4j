@@ -42,7 +42,7 @@ public class CompositeTaskDecoratorCreator implements BeanCreator<CompositeTaskD
             List<TaskDecorator> taskDecorators = taskDecoratorCreators.stream()
                     .map(TaskDecoratorCreator::getInstance)
                     .collect(Collectors.toList());
-            log.debug("Tutorials4j - Common |- 创建组合任务装饰器：{}", taskDecorators);
+            log.debug("[COMMON-CORE] 创建组合任务装饰器：{}", taskDecorators);
             instance = new CompositeTaskDecorator(taskDecorators);
         }
         return instance;
@@ -55,7 +55,7 @@ public class CompositeTaskDecoratorCreator implements BeanCreator<CompositeTaskD
                 .collect(Collectors.toList());
 
         CompositeTaskDecorator decorator = new CompositeTaskDecorator(taskDecorators);
-        log.debug("Tutorials4j - Common |- 创建'{}'组合任务装饰器：{}", decorator, taskDecorators);
+        log.debug("[COMMON-CORE] 创建'{}'组合任务装饰器：{}", decorator, taskDecorators);
         return decorator;
     }
 

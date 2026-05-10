@@ -29,7 +29,7 @@ public class TraceTaskDecorator implements TaskDecorator {
                     MDC.setContextMap(contextMap);
                 }
                 if (log.isDebugEnabled()) {
-                    log.debug("Tutorials4j - Web |- 跟踪信息任务装饰器：{}", contextMap);
+                    log.debug("[WEB-REST] 跟踪信息任务装饰器：{}", contextMap);
                 }
                 runnable.run();
             } finally {

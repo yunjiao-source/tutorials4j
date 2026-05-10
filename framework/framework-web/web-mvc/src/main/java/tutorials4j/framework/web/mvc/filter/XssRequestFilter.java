@@ -28,7 +28,7 @@ public class XssRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper(request);
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- Xss攻击过滤器：{}", request.getRequestURI());
+            log.debug("[WEB-MVC] Xss攻击过滤器：{}", request.getRequestURI());
         }
         filterChain.doFilter(xssRequest, response);
     }

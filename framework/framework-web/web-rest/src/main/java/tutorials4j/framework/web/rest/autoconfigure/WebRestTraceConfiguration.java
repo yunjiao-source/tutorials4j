@@ -30,26 +30,26 @@ public class WebRestTraceConfiguration {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Rest Trace Configuration");
+        log.debug("[WEB-REST] Rest Trace Configuration");
     }
 
     @Bean
     @ConditionalOnMissingBean
     CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
-        log.debug("Tutorials4j - Web |- Composite Task Decorator");
+        log.debug("[WEB-REST] Composite Task Decorator");
         return creator.getInstance();
     }
 
     @Bean
     @ConditionalOnMissingBean
     TaskDecoratorCreator traceTaskDecoratorCreator() {
-        log.debug("Tutorials4j - Web |- Trace Task Decorator Creator");
+        log.debug("[WEB-REST] Trace Task Decorator Creator");
         return TraceTaskDecorator::new;
     }
 
     @Bean
     RestTemplateCustomizer traceRestTemplateCustomizer() {
-        log.debug("Tutorials4j - Web |- Trace Rest Template Customizer");
+        log.debug("[WEB-REST] Trace Rest Template Customizer");
         return restTemplate -> {
             restTemplate.getInterceptors().add(new TraceRestTemplateInterceptor());
         };
@@ -57,7 +57,7 @@ public class WebRestTraceConfiguration {
 
     @Bean
     RestClientCustomizer traceRestClientCustomizer() {
-        log.debug("Tutorials4j - Web |- Trace Rest Client Customizer");
+        log.debug("[WEB-REST] Trace Rest Client Customizer");
         return restClientBuilder -> {
             restClientBuilder.requestInterceptor(new TraceRestTemplateInterceptor());
         };
@@ -65,7 +65,7 @@ public class WebRestTraceConfiguration {
 
     @Bean
     WebClientCustomizer traceWebClientCustomizer() {
-        log.debug("Tutorials4j - Web |- Trace Web Client Customizer");
+        log.debug("[WEB-REST] Trace Web Client Customizer");
         return webClientBuilder -> {
             webClientBuilder.filter(new TraceExchangeFilterFunction());
         };
@@ -80,7 +80,7 @@ public class WebRestTraceConfiguration {
         options.fill(registration);
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 跟踪信息过滤器：{}", options);
+            log.debug("[WEB-REST] 跟踪信息过滤器：{}", options);
         }
         return registration;
     }

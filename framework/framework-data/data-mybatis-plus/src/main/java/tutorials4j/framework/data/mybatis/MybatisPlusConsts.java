@@ -1,7 +1,7 @@
 package tutorials4j.framework.data.mybatis;
 
 /**
- * TODO
+ * MyBatis Plus 框架内部常量定义。
  *
  * @author Yun Jiao
  */

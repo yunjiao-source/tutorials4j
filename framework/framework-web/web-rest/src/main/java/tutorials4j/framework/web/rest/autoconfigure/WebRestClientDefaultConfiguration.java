@@ -21,12 +21,12 @@ import tutorials4j.framework.web.rest.util.RestUtils;
 public class WebRestClientDefaultConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Rest Client Default Configuration");
+        log.debug("[WEB-MVC] Rest Client Default Configuration");
     }
 
     @Bean
     RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(WebProperties properties) {
-        log.debug("Tutorials4j - Web |- Default Headers Rest Template Request Customizer");
+        log.debug("[WEB-MVC] Default Headers Rest Template Request Customizer");
         return request -> {
             properties.getClient().getDefaultHeaders().forEach(request.getHeaders()::set);
         };
@@ -34,7 +34,7 @@ public class WebRestClientDefaultConfiguration {
 
     @Bean
     RestClientCustomizer defaultHeadersRestClientCustomizer(WebProperties properties) {
-        log.debug("Tutorials4j - Web |- Default Headers Rest Client Customizer");
+        log.debug("[WEB-MVC] Default Headers Rest Client Customizer");
         return restClientBuilder -> {
             restClientBuilder.defaultHeaders(header -> properties.getClient().getDefaultHeaders().forEach(header::set));
         };
@@ -42,7 +42,7 @@ public class WebRestClientDefaultConfiguration {
 
     @Bean
     WebClientCustomizer defaultHeadersWebClientCustomizer(WebProperties properties) {
-        log.debug("Tutorials4j - Web |- Default Headers Web Client Customizer");
+        log.debug("[WEB-MVC] Default Headers Web Client Customizer");
         return webClientBuilder -> {
             webClientBuilder.defaultHeaders(header -> properties.getClient().getDefaultHeaders().forEach(header::set));
         };
@@ -50,7 +50,7 @@ public class WebRestClientDefaultConfiguration {
 
     @Bean
     WebClientCustomizer defaultWebClientCustomizer() {
-        log.debug("Tutorials4j - Web |- Default Web Client Customizer");
+        log.debug("[WEB-MVC] Default Web Client Customizer");
         return restClientBuilder -> {
             restClientBuilder.filter(RestUtils.ofCatchExcepitonLogger());
         };

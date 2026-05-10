@@ -26,7 +26,7 @@ import java.util.List;
 public class CacheCoreConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Cache |- Cache Core Configuration");
+        log.debug("[CACHE-CORE] Cache Core Configuration");
     }
 
 
@@ -39,9 +39,9 @@ public class CacheCoreConfiguration {
         public void injectCacheManagerCreators() {
             if (cacheManagerCreators != null && !cacheManagerCreators.isEmpty()) {
                 CacheManagerCreatorFactory.INSTANCE.setCacheManagerCreators(cacheManagerCreators);
-                log.debug("Tutorials4j - Cache |- 成功注入{}个CacheManagerCreator实例到CacheManagerCreatorFactory.INSTANCE", cacheManagerCreators.size());
+                log.debug("[CACHE-CORE] 成功注入{}个CacheManagerCreator实例到CacheManagerCreatorFactory.INSTANCE", cacheManagerCreators.size());
             } else {
-                log.debug("Tutorials4j - Cache |- 未找到CacheManagerCreator实例注入到CacheManagerCreatorFactory");
+                log.debug("[CACHE-CORE] 未找到CacheManagerCreator实例注入到CacheManagerCreatorFactory");
 
             }
         }

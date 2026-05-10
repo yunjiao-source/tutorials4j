@@ -1,0 +1,11 @@
+tutorials4j:
+  tenant:
+    datasource:
+      strategy: database
+      jdbc:
+        demo1:
+          url: jdbc:postgresql://localhost:5432/demo1
+          username: postgres
+          password: postgres
+          driver-class-name: org.postgresql.Driver
+

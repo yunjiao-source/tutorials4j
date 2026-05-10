@@ -7,16 +7,12 @@ package tutorials4j.framework.tenant.core;
  */
 public enum TenantStrategy {
     /**
-     * 路由数据源
+     * 独立数据库
      */
-    ROUTING_DATABASE,
-    /**
-     * 基于Hibernate框架的独立数据库
-     */
-    HIBERNATE_DATABASE,
+    DATABASE,
 
     /**
-     * 基于Hibernate框架的共享表
+     * 共享表
      */
-    HIBERNATE_TABLE
+    TABLE
 }

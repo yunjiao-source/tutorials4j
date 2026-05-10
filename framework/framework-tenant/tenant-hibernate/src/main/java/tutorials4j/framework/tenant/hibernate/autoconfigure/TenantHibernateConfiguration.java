@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 public class TenantHibernateConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Tenant |- Tenant Hibernate Configuration");
+        log.debug("[TENANT-HIBERNATE] Hibernate Configuration");
     }
 
 
@@ -34,18 +34,18 @@ public class TenantHibernateConfiguration {
      * 租户配置：共享表
      */
     @ConditionalOnBean(DataSource.class)
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT, name = "datasource.strategy", havingValue = "hibernate_table")
+    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT, name = "datasource.strategy", havingValue = "table")
     static class TableTenantConfiguration {
 
         @PostConstruct
         public void postConstruct() {
-            log.debug("Tutorials4j - Tenant |- Table Tenant Configuration");
+            log.debug("[TENANT-HIBERNATE] Table Tenant Configuration");
         }
 
         @Bean
         @ConditionalOnMissingBean
         DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
-            log.debug("Tutorials4j - Tenant |- Default Current Tenant Identifier Resolver");
+            log.debug("[TENANT-HIBERNATE] Default Current Tenant Identifier Resolver");
             return new DefaultCurrentTenantIdentifierResolver();
         }
     }
@@ -53,16 +53,16 @@ public class TenantHibernateConfiguration {
     /**
      * 租户配置：独立数据库
      */
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT, name = "datasource.strategy", havingValue = "hibernate_database")
+    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_TENANT, name = "datasource.strategy", havingValue = "database")
     static class DatabaseTenantConfiguration {
         @PostConstruct
         public void postConstruct() {
-            log.debug("Tutorials4j - Tenant |- Database Tenant Configuration");
+            log.debug("[TENANT-HIBERNATE] Database Tenant Configuration");
         }
         @Bean
         @ConditionalOnMissingBean
         DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
-            log.debug("Tutorials4j - Tenant |- Default Current Tenant Identifier Resolver");
+            log.debug("[TENANT-HIBERNATE] Default Current Tenant Identifier Resolver");
             return new DefaultCurrentTenantIdentifierResolver();
         }
 
@@ -70,7 +70,7 @@ public class TenantHibernateConfiguration {
         @ConditionalOnMissingBean
         TenantDataSourceBasedMultiTenantConnectionProvider tenantDataSourceBasedMultiTenantConnectionProvider(DataSourceRoutingManagerCreator creator,
                                                                                                               TenantProperties properties) {
-            log.debug("Tutorials4j - Tenant |- Tenant Data Source Based Multi Tenant Connection Provider");
+            log.debug("[TENANT-HIBERNATE] Tenant Data Source Based Multi Tenant Connection Provider");
             DataSourceRoutingManager dataSourceRoutingManager = creator.getInstance();
 
             properties.getDatasource().getJdbc().forEach((k, v) -> dataSourceRoutingManager.addRoutingJdbcOptions(k.toUpperCase(), v));

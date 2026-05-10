@@ -14,10 +14,10 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.data.core.properties.DataMybatisPlusProperties;
 import tutorials4j.framework.data.mybatis.AuditMetaObjectHandler;
 import tutorials4j.framework.data.mybatis.DefaultIdentifierGenerator;
-import tutorials4j.framework.data.mybatis.MybatisPlusInterceptorCustomizer;
-import tutorials4j.framework.data.mybatis.interceptor.BlockAttackInterceptorCustomizer;
-import tutorials4j.framework.data.mybatis.interceptor.OptimisticLockerInterceptorCustomizer;
-import tutorials4j.framework.data.mybatis.interceptor.PaginationInnerInterceptorCustomizer;
+import tutorials4j.framework.data.mybatis.customizer.MybatisPlusInterceptorCustomizer;
+import tutorials4j.framework.data.mybatis.customizer.BlockAttackInterceptorCustomizer;
+import tutorials4j.framework.data.mybatis.customizer.OptimisticLockerInterceptorCustomizer;
+import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorCustomizer;
 
 /**
  * MyBatis Plus 的自动配置类
@@ -29,13 +29,13 @@ import tutorials4j.framework.data.mybatis.interceptor.PaginationInnerInterceptor
 public class DataMybatisPlusConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Data |- Data Mybatis Plus Configuration");
+        log.debug("[DATA-MYBATIS-PLUS] Data Mybatis Plus Configuration");
     }
 
     @Bean
     @ConditionalOnMissingBean
     MybatisPlusInterceptor mybatisPlusInterceptor(ObjectProvider<MybatisPlusInterceptorCustomizer> customizers) {
-        log.debug("Tutorials4j - Data |- Mybatis Plus Interceptor");
+        log.debug("[DATA-MYBATIS-PLUS] Mybatis Plus Interceptor");
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         customizers.orderedStream()
                 .forEach(customizer -> customizer.custom(interceptor));
@@ -45,34 +45,34 @@ public class DataMybatisPlusConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS, name = "interceptors.pagination", havingValue = "true", matchIfMissing = true)
     MybatisPlusInterceptorCustomizer paginationInnerInterceptorCustomizer(DataMybatisPlusProperties properties) {
-        log.debug("Tutorials4j - Data |- Pagination Inner Interceptor Customizer");
+        log.debug("[DATA-MYBATIS-PLUS] Pagination Inner Interceptor Customizer");
         return new PaginationInnerInterceptorCustomizer(properties.getDbType());
     }
 
     @Bean
     @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS, name = "interceptors.optimistic-locker", havingValue = "true", matchIfMissing = true)
     MybatisPlusInterceptorCustomizer optimisticLockerInnerInterceptorCustomizer() {
-        log.debug("Tutorials4j - Data |- Optimistic Locker Inner Interceptor Customizer");
+        log.debug("[DATA-MYBATIS-PLUS] Optimistic Locker Inner Interceptor Customizer");
         return new OptimisticLockerInterceptorCustomizer();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS, name = "interceptors.block-attack", havingValue = "true", matchIfMissing = true)
     MybatisPlusInterceptorCustomizer blockAttackInnerInterceptorCustomizer() {
-        log.debug("Tutorials4j - Data |- Block Attack Inner Interceptor Customizer");
+        log.debug("[DATA-MYBATIS-PLUS] Block Attack Inner Interceptor Customizer");
         return new BlockAttackInterceptorCustomizer();
     }
 
     @Bean
     MybatisPlusPropertiesCustomizer defaultIdentifierGeneratorMybatisPlusPropertiesCustomizer() {
-        log.debug("Tutorials4j - Data |- Default Identifier Generator Mybatis Plus Properties Customizer");
+        log.debug("[DATA-MYBATIS-PLUS] Default Identifier Generator Mybatis Plus Properties Customizer");
         return plusProperties -> plusProperties.getGlobalConfig().setIdentifierGenerator(new DefaultIdentifierGenerator());
     }
 
     @Bean
     @ConditionalOnMissingBean
     MetaObjectHandler auditMetaObjectHandler() {
-        log.debug("Tutorials4j - Data |- Audit Meta Object Handler");
+        log.debug("[DATA-MYBATIS-PLUS] Audit Meta Object Handler");
         return new AuditMetaObjectHandler();
     }
 }

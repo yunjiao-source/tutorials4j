@@ -44,7 +44,7 @@ public class TraceRestTemplateInterceptor  implements ClientHttpRequestIntercept
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 跟踪信息拦截器：{}", request.getURI());
+            log.debug("[WEB-REST] 跟踪信息拦截器：{}", request.getURI());
         }
 
         return execution.execute(request, body);

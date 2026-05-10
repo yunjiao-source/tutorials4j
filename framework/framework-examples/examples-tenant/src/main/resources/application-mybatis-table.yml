@@ -1,0 +1,4 @@
+tutorials4j:
+  tenant:
+    datasource:
+      strategy: table

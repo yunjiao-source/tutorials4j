@@ -22,20 +22,20 @@ import tutorials4j.framework.web.core.properties.WebProperties;
 public class WebCoreConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Web Core Configuration");
+        log.debug("[WEB-CORE] Web Core Configuration");
     }
 
     @Bean
     @ConditionalOnMissingBean
     AccessLimitedCacheTemplate accessLimitedCacheTemplate() {
-        log.debug("Tutorials4j - Web |- Access Limited Cache Template");
+        log.debug("[WEB-CORE] Access Limited Cache Template");
         return new AccessLimitedCacheTemplate();
     }
 
     @Bean
     @ConditionalOnMissingBean
     IdempotentCacheTemplate idempotentCacheTemplate() {
-        log.debug("Tutorials4j - Web |- Idempotent Cache Template");
+        log.debug("[WEB-CORE] Idempotent Cache Template");
         return new IdempotentCacheTemplate();
     }
 }

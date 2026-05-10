@@ -21,7 +21,7 @@ import tutorials4j.framework.web.mvc.autoconfigure.WebMvcConfiguration;
 public class WebAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Web Auto Configuration");
+        log.debug("[WEB] Web Auto Configuration");
     }
 
 }

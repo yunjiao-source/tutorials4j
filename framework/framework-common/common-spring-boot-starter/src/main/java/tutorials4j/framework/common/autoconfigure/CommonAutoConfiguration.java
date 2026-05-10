@@ -18,7 +18,7 @@ import tutorials4j.framework.common.core.autoconfigure.CommonCoreJsonConfigurati
 public class CommonAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Common |- Common Auto Configuration");
+        log.debug("[COMMON] Common Auto Configuration");
     }
 
 }

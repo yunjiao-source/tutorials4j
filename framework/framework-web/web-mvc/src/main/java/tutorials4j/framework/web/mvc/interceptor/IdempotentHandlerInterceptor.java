@@ -41,7 +41,7 @@ public class IdempotentHandlerInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 幂等拦截器：{}", request.getRequestURI());
+            log.debug("[WEB-MVC] 幂等拦截器：{}", request.getRequestURI());
         }
 
         Method method = null;

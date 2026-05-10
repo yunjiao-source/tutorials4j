@@ -21,6 +21,7 @@
         <module>tenant-core</module>
         <module>tenant-cache</module>
         <module>tenant-hibernate</module>
+        <module>tenant-mybatis-plus</module>
         <module>tenant-spring-boot-starter</module>
     </modules>
 

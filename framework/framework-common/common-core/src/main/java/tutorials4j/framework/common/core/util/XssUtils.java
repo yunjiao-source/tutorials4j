@@ -85,7 +85,7 @@ public class XssUtils {
         temp = temp.replaceAll(getInstance().quot, "\"");
         String result = temp.replaceAll("\n", "");
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Common |- Antisamy 处理完成：{} -> {}", taintedHTML, result);
+            log.debug("[COMMON-CORE] Antisamy 处理完成：{} -> {}", taintedHTML, result);
         }
         return result;
     }
@@ -103,7 +103,7 @@ public class XssUtils {
             URL url = ResourceUtils.getURL("classpath:antisamy/antisamy-anythinggoes.xml");
             return Policy.getInstance(url);
         } catch (IOException | PolicyException e) {
-            log.debug("Tutorials4j - Common |- Antisamy创建策略异常：{}", e.getMessage());
+            log.debug("[COMMON-CORE] Antisamy创建策略异常：{}", e.getMessage());
             return null;
         }
     }
@@ -132,7 +132,7 @@ public class XssUtils {
             final CleanResults cleanResults = scan(taintedHtml);
             return cleanResults.getCleanHTML();
         } catch (ScanException | PolicyException e) {
-            log.debug("Tutorials4j - Common |- Antisamy 扫描异常：{}", e.getMessage());
+            log.debug("[COMMON-CORE] Antisamy 扫描异常：{}", e.getMessage());
             return taintedHtml;
         }
     }

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class CommonCoreConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Common |- Common Core Configuration");
+        log.debug("[COMMON-CORE] Common Core Configuration");
     }
 
     /**
@@ -41,7 +41,7 @@ public class CommonCoreConfiguration {
     @Bean
     @ConditionalOnMissingBean
     CompositeTaskDecoratorCreator compositeTaskDecoratorCreator(ObjectProvider<TaskDecoratorCreator> taskDecoratorCreators) {
-        log.debug("Tutorials4j - Common |- Composite Task Decorator Creator");
+        log.debug("[COMMON-CORE] Composite Task Decorator Creator");
 
         List<TaskDecoratorCreator> creators = taskDecoratorCreators.orderedStream().collect(Collectors.toList());
         return new CompositeTaskDecoratorCreator(creators);

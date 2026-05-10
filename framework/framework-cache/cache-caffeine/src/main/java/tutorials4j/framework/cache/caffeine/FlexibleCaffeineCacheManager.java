@@ -66,7 +66,7 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
                 CaffeineUtils.copyOption(caffeine, caffeineOptions);
 
                 if (log.isDebugEnabled()) {
-                    log.debug("Tutorials4j - Cache |- Caffeine缓存管理器初始化缓存: {}", name);
+                    log.debug("[CACHE-CAFFEINE] Caffeine缓存管理器初始化缓存: {}", name);
                 }
                 return caffeine.build();
             }

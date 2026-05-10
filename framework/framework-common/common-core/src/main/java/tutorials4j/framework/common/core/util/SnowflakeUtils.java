@@ -80,7 +80,7 @@ public class SnowflakeUtils {
 
         snowflake = IdUtil.getSnowflake(workerId, datacenterId);
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Common |- 雪花算法ID工具初始化完成：datacenter = {}, worker = {}", datacenterId, workerId);
+            log.debug("[COMMON-CORE] 雪花算法ID工具初始化完成：datacenter = {}, worker = {}", datacenterId, workerId);
         }
     }
 

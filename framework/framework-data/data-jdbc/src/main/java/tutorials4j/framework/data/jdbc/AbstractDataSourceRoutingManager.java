@@ -93,7 +93,7 @@ public abstract class AbstractDataSourceRoutingManager implements DataSourceRout
             throw new DataSourceNameNotFoundException(name);
         }
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Data |- 创建指定数据源：name = {}, url = {}", name, jdbcOptions.getUrl());
+            log.debug("[DATA-JDBC] 创建指定数据源：name = {}, url = {}", name, jdbcOptions.getUrl());
         }
         return createDataSource(name, jdbcOptions);
     }

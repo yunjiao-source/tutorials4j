@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 public class WebRestConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Web Rest Configuration");
+        log.debug("[WEB-REST] Web Rest Configuration");
     }
 
 }

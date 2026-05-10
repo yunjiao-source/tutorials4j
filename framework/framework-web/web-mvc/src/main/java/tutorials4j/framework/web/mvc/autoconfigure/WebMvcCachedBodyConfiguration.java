@@ -19,7 +19,7 @@ import tutorials4j.framework.web.mvc.filter.CachedBodyRequestFilter;
 public class WebMvcCachedBodyConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Web |- Cached Body Configuration");
+        log.debug("[WEB-MVC] Cached Body Configuration");
     }
 
 
@@ -32,7 +32,7 @@ public class WebMvcCachedBodyConfiguration {
         options.fill(registration);
 
         if (log.isDebugEnabled()) {
-            log.debug("Tutorials4j - Web |- 缓存请求体过滤器：{}", options);
+            log.debug("[WEB-MVC] 缓存请求体过滤器：{}", options);
         }
         return registration;
     }

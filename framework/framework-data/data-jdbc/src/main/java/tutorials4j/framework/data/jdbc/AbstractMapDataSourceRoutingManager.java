@@ -67,7 +67,7 @@ public abstract class AbstractMapDataSourceRoutingManager extends AbstractDataSo
             Map.Entry<String, DataSource> entry = it.next();
 
             if (log.isDebugEnabled()) {
-                log.debug("Tutorials4j - Data |- 关闭数据源：{}", entry.getKey());
+                log.debug("[DATA-JDBC] 关闭数据源：{}", entry.getKey());
             }
             try {
                 doShutdown(entry.getValue());

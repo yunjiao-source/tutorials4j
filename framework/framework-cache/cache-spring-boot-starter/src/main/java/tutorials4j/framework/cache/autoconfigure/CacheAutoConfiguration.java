@@ -23,7 +23,7 @@ import tutorials4j.framework.cache.redis.autoconfigure.CacheRedisConfiguration;
 public class CacheAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Cache |- Cache Auto Configuration");
+        log.debug("[CACHE] Cache Auto Configuration");
     }
 
 }

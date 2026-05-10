@@ -31,21 +31,21 @@ public class TenantCoreConfiguration implements WebMvcConfigurer {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Tenant |- Tenant Configuration");
+        log.debug("[TENANT-CORE] Tenant Configuration");
     }
 
 
     @Bean
     @ConditionalOnMissingBean
     CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
-        log.debug("Tutorials4j - Tenant |- Composite Task Decorator");
+        log.debug("[TENANT-CORE] Composite Task Decorator");
         return creator.getInstance();
     }
 
     @Bean
     @ConditionalOnMissingBean
     TaskDecoratorCreator tenantTaskDecoratorCreator() {
-        log.debug("Tutorials4j - Tenant |- Tenant Task Decorator Creator");
+        log.debug("[TENANT-CORE] Tenant Task Decorator Creator");
         return TenantTaskDecorator::new;
     }
 
@@ -55,7 +55,7 @@ public class TenantCoreConfiguration implements WebMvcConfigurer {
         TenantHandlerInterceptor interceptor = new TenantHandlerInterceptor();
         registry.addInterceptor(interceptor).addPathPatterns(pathOptions.getIncludePathPatterns())
                 .excludePathPatterns(pathOptions.getExcludePathPatterns());
-        log.debug("Tutorials4j - Tenant |- 添加请求拦截器: {}, {}",
+        log.debug("[TENANT-CORE] 添加请求拦截器: {}, {}",
                 interceptor, pathOptions);
     }
 

@@ -17,19 +17,19 @@ import tutorials4j.framework.common.core.json.LongJsSimpleModule;
 public class CommonCoreJsonConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("Tutorials4j - Common |- Common Core Json Configuration");
+        log.debug("[COMMON-CORE] Common Core Json Configuration");
     }
 
 
     @Bean
     BaseEnumSimpleModule baseEnumSimpleModule() {
-        log.debug("Tutorials4j - Common |- Base Enum Simple Module");
+        log.debug("[COMMON-CORE] Base Enum Simple Module");
         return new BaseEnumSimpleModule();
     }
 
     @Bean
     LongJsSimpleModule longJsSimpleModule() {
-        log.debug("Tutorials4j - Common |- Long Js Simple Module");
+        log.debug("[COMMON-CORE] Long Js Simple Module");
         return new LongJsSimpleModule();
     }
 
