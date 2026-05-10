@@ -11,7 +11,7 @@ public class AccessLimitedException extends WebFrameworkException{
     }
 
     public AccessLimitedException(Throwable cause) {
-        super("访问限制", cause);
+        super(cause);
 
     }
 }

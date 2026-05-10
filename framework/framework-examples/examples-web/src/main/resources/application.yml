@@ -3,7 +3,8 @@ spring:
 #    active: request-logging
 #    active: xss
 #    active: annotation
-    active: cached-body
+    active: signature
+#    active: cached-body
 #    active: trace
 #    active: client
 

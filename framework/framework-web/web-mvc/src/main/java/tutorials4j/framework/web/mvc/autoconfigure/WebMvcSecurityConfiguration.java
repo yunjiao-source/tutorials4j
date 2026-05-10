@@ -16,10 +16,13 @@ import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
+import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.support.SignatureKeyRepository;
 import tutorials4j.framework.web.mvc.filter.XssRequestFilter;
 import tutorials4j.framework.web.mvc.interceptor.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.mvc.interceptor.IdempotentHandlerInterceptor;
+import tutorials4j.framework.web.mvc.interceptor.SignatureHandlerInterceptor;
 import tutorials4j.framework.web.mvc.support.XssSimpleModule;
 
 /**
@@ -34,6 +37,10 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
     private AccessLimitedCacheTemplate accessLimitedCacheTemplate;
     @Autowired
     private IdempotentCacheTemplate idempotentCacheTemplate;
+    @Autowired
+    private SignatureCacheTemplate signatureCacheTemplate;
+    @Autowired
+    private SignatureKeyRepository signatureKeyRepository;
     @Autowired
     private WebHttpProperties properties;
 
@@ -73,6 +80,9 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
         IdempotentHandlerInterceptor idempotentHandlerInterceptor = new IdempotentHandlerInterceptor(idempotentCacheTemplate);
         doAddInterceptors(registry, idempotentHandlerInterceptor, idempotentOptions);
 
+        HandlerInterceptorOptions signatureOptions = properties.getSignature().getInterceptor();
+        SignatureHandlerInterceptor signatureHandlerInterceptor = new SignatureHandlerInterceptor(signatureCacheTemplate, signatureKeyRepository);
+        doAddInterceptors(registry, signatureHandlerInterceptor, signatureOptions);
     }
 
     private void doAddInterceptors(InterceptorRegistry registry, HandlerInterceptor interceptor, HandlerInterceptorOptions options) {

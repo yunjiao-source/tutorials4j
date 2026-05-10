@@ -8,8 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
+import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
 import tutorials4j.framework.web.core.properties.WebHttpProperties;
 import tutorials4j.framework.web.core.properties.WebProperties;
+import tutorials4j.framework.web.core.support.SignatureKeyRepository;
+import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
 
 /**
  * web core 配置
@@ -37,5 +40,19 @@ public class WebCoreConfiguration {
     IdempotentCacheTemplate idempotentCacheTemplate() {
         log.debug("[WEB-CORE] Idempotent Cache Template");
         return new IdempotentCacheTemplate();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    SignatureCacheTemplate signatureCacheTemplate() {
+        log.debug("[WEB-CORE] Signature Cache Template");
+        return new SignatureCacheTemplate();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    SignatureKeyRepository simpleSignatureKeyRepository(WebHttpProperties properties) {
+        log.debug("[WEB-MVC] Simple Signature Key Repository");
+        return new SimpleSignatureKeyRepository(properties.getSignature().getKeys());
     }
 }

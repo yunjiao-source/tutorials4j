@@ -11,6 +11,6 @@ public class IdempotentException extends WebFrameworkException{
     }
 
     public IdempotentException(Throwable cause) {
-        super("幂等异常", cause);
+        super( cause);
     }
 }

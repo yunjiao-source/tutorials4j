@@ -1,0 +1,31 @@
+spring:
+  data:
+    # Redis 配置
+    redis:
+      host: localhost # Redis服务器地址
+      port: 6379 # Redis端口
+
+
+tutorials4j:
+  cache:
+    redis:
+      timeToLive: 2m
+      cacheNullValues: false
+      enable-statistics: true
+      named-caches:
+        signature:
+          timeToLive: 1m
+          cacheNullValues: true
+          keyPrefix: security
+          useKeyPrefix: true
+
+  web:
+    http:
+      cached-body:
+        url-patterns: /signature/*
+      signature:
+        interceptor:
+          include-path-patterns: /signature/**
+        keys:
+          appkey1: appSecret1
+          appkey2: appSecret2

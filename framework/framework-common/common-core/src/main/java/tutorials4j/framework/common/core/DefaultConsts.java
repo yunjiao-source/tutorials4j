@@ -41,6 +41,11 @@ public interface DefaultConsts {
     String HTTP_TRACE_ID = "X-Trace-Id";
     String HTTP_TRACE_SPAN_ID = "X-Trace-Span-Id";
     String HTTP_TRACE_PARENT_SPAN_ID = "X-Trace-Parent-Span-Id";
+    String HTTP_SIGNATURE_APP_KEY = "X-Signature-App-Key";
+    String HTTP_SIGNATURE_TIMESTAMP = "X-Signature-Timestamp";
+    String HTTP_SIGNATURE_NONCE = "X-Signature-Nonce";
+    String HTTP_SIGNATURE = "X-Signature";
+
 
 
 

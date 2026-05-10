@@ -7,6 +7,9 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Web Http 属性
  *
@@ -49,6 +52,15 @@ public class WebHttpProperties {
      * 请求日志配置
      */
     private RequestLoggingOptions requestLogging = new RequestLoggingOptions();
+
+    private SignatureOptions signature = new SignatureOptions();
+
+    @Data
+    public static class SignatureOptions {
+        @NestedConfigurationProperty
+        private HandlerInterceptorOptions interceptor = new HandlerInterceptorOptions();
+        private Map<String, String> keys = new HashMap<>();
+    }
 
     /**
      * 请求日志相关配置选项。

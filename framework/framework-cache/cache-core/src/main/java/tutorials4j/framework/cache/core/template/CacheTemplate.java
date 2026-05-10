@@ -85,7 +85,11 @@ public interface CacheTemplate<K, V> {
      * @param key 键
      * @return 存在值，返回true；否则false
      */
-    boolean exist(K key);
+    boolean exists(K key);
+
+    default boolean setIfAbsent(K key) {
+        return putIfAbsent(key, valueGenerator(key)) == null;
+    }
 
     /**
      * 删除指定 key 的缓存。
