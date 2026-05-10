@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 import tutorials4j.framework.cache.multi.MultiLevelCache;
 import tutorials4j.framework.cache.multi.MultiLevelCacheManager;
 import tutorials4j.framework.cache.multi.MultiLevelCacheManagerCreator;
@@ -27,7 +28,7 @@ public class CacheMultiLevelConfiguration {
         log.debug("[CACHE-MULTI-LEVEL] Cache Multi Level Configuration");
     }
 
-    @Bean
+    @Bean(CacheManagerCreatorCategory.MULTI_LEVEL_CREATOR)
     @ConditionalOnMissingBean
     MultiLevelCacheManagerCreator multiLevelCacheManagerCreator(CaffeineCacheManagerCreator caffeineCacheManagerCreator,
                                                                 RedisCacheManagerCreator redisCacheManagerCreator) {

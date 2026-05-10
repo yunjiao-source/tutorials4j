@@ -70,7 +70,7 @@ public class DataSourceRoutingManagerCreator implements BeanCreator<DataSourceRo
      */
     @Override
     public DataSourceRoutingManager newInstance() {
-        switch (dataSource.getClass().getName()) {
+        switch (dataSource.getClass().getSimpleName()) {
             case DefaultConsts.CLASS_HIKARI_DATA_SOURCE -> {
                 HikariMapDataSourceRoutingManager dataSourceRoutingManager = new HikariMapDataSourceRoutingManager();
 

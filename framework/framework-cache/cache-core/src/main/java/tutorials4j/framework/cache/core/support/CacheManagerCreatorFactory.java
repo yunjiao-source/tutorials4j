@@ -2,10 +2,12 @@ package tutorials4j.framework.cache.core.support;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
-import tutorials4j.framework.cache.core.exception.CacheManagerInstanceNotFoundException;
-import tutorials4j.framework.common.core.DefaultConsts;
+import tutorials4j.framework.cache.core.exception.CacheManagerCreatorNotFoundException;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 缓存管理器创建器工厂。
@@ -18,19 +20,27 @@ import java.util.*;
  */
 @Slf4j
 public class CacheManagerCreatorFactory {
-    private final List<CacheManagerCreator<?>> cacheManagerCreators = new ArrayList<>();
+    private final Map<String, CacheManagerCreator<?>> cacheManagerCreators = new ConcurrentHashMap<>();
 
     private CacheManagerCreatorFactory() {
     }
 
     public final static CacheManagerCreatorFactory INSTANCE = new CacheManagerCreatorFactory();
 
-    public void setCacheManagerCreators(List<CacheManagerCreator<?>> cacheManagerCreators) {
-        this.cacheManagerCreators.addAll(cacheManagerCreators);
+    public void setCacheManagerCreators(Map<String, CacheManagerCreator<?>> cacheManagerCreators) {
+        this.cacheManagerCreators.putAll(cacheManagerCreators);
     }
 
-    public List<CacheManagerCreator<?>> getCacheManagerCreators() {
-        return Collections.unmodifiableList(cacheManagerCreators);
+    public Map<String, CacheManagerCreator<?>> getCacheManagerCreators() {
+        return Collections.unmodifiableMap(cacheManagerCreators);
+    }
+
+    public CacheManagerCreator<?> getCacheManagerCreator(String category) {
+        return cacheManagerCreators.get(category);
+    }
+
+    public CacheManagerCreator<?> getCacheManagerCreator(CacheManagerCreatorCategory category) {
+        return cacheManagerCreators.get(category.getCode());
     }
 
     /**
@@ -38,20 +48,20 @@ public class CacheManagerCreatorFactory {
      *
      * @param cacheName 缓存名称
      * @return 多级缓存实例
-     * @throws CacheManagerInstanceNotFoundException 如果未找到对应的缓存管理器创建器
+     * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
      */
     public Cache getMultiLevelCache(String cacheName) {
-        Optional<CacheManagerCreator<?>> creator = getCacheManager(DefaultConsts.CLASS_MULTI_LEVEL_CACHE_MANAGER_CREATOR);
-        if (creator.isPresent()) {
-            return creator.get().getInstance().getCache(cacheName);
+        CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_MULTI_LEVEL);
+        if (creator != null) {
+            return creator.getInstance().getCache(cacheName);
         }
 
-        creator = getCacheManager(DefaultConsts.CLASS_MULTI_LEVEL_CACHE_MANAGER_CREATOR);
-        if (creator.isPresent()) {
-            return creator.get().getInstance().getCache(cacheName);
+        creator = getCacheManagerCreator(CacheManagerCreatorCategory.MULTI_LEVEL);
+        if (creator != null) {
+            return creator.getInstance().getCache(cacheName);
         }
 
-        throw new CacheManagerInstanceNotFoundException("获取两级缓存管理器失败");
+        throw new CacheManagerCreatorNotFoundException("获取两级缓存管理器失败");
     }
 
     /**
@@ -59,15 +69,15 @@ public class CacheManagerCreatorFactory {
      *
      * @param cacheName 缓存名称
      * @return Redis 缓存实例
-     * @throws CacheManagerInstanceNotFoundException 如果未找到对应的缓存管理器创建器
+     * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
      */
     public Cache getRedisCache(String cacheName) {
-        Optional<CacheManagerCreator<?>> creator = getCacheManager(DefaultConsts.CLASS_REDIS_CACHE_MANAGER_CREATOR);
-        if (creator.isPresent()) {
-            return creator.get().getInstance().getCache(cacheName);
+        CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.REDIS);
+        if (creator != null) {
+            return creator.getInstance().getCache(cacheName);
         }
 
-        throw new CacheManagerInstanceNotFoundException("获取Redis缓存管理器失败");
+        throw new CacheManagerCreatorNotFoundException("获取Redis缓存管理器失败");
     }
 
     /**
@@ -78,46 +88,20 @@ public class CacheManagerCreatorFactory {
      *
      * @param cacheName 缓存名称
      * @return Caffeine 缓存实例
-     * @throws CacheManagerInstanceNotFoundException 如果未找到任何本地缓存管理器创建器
+     * @throws CacheManagerCreatorNotFoundException 如果未找到任何本地缓存管理器创建器
      */
     public Cache getCaffeineCache(String cacheName) {
         // 先获取支持租户的
-        Optional<CacheManagerCreator<?>> creator = getCacheManager(DefaultConsts.CLASS_CAFFEINE_CACHE_MANAGER_CREATOR);
-        if (creator.isPresent()) {
-            return creator.get().getInstance().getCache(cacheName);
+        CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_CAFFEINE);
+        if (creator != null) {
+            return creator.getInstance().getCache(cacheName);
         }
 
-        creator = getCacheManager(DefaultConsts.CLASS_TENANT_CAFFEINE_CACHE_MANAGER_CREATOR);
-        if (creator.isPresent()) {
-            return creator.get().getInstance().getCache(cacheName);
+        creator = getCacheManagerCreator(CacheManagerCreatorCategory.CAFFEINE);
+        if (creator != null) {
+            return creator.getInstance().getCache(cacheName);
         }
 
-        throw new CacheManagerInstanceNotFoundException("获取本地缓存管理器失败");
-    }
-
-    /**
-     * 根据类名获取对应的缓存管理器创建器（可选）。
-     *
-     * @param className 创建器的全限定类名
-     * @return 创建器 Optional，若类不存在或未注册则返回空
-     */
-    private Optional<CacheManagerCreator<?>> getCacheManager(String className) {
-        try {
-            Class<?> cacheManagerClass = Class.forName(className);
-            return getCacheManager(cacheManagerClass);
-        } catch (ClassNotFoundException e) {
-            log.debug(e.getMessage());
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * 根据类对象获取对应的缓存管理器创建器（可选）。
-     *
-     * @param cacheManagerClass 创建器的类对象
-     * @return 创建器 Optional，若未注册则返回空
-     */
-    private Optional<CacheManagerCreator<?>> getCacheManager(Class<?> cacheManagerClass) {
-        return cacheManagerCreators.stream().filter(e -> Objects.equals(e.getClass(), cacheManagerClass)).findFirst();
+        throw new CacheManagerCreatorNotFoundException("获取本地缓存管理器失败");
     }
 }
