@@ -8,21 +8,22 @@ spring:
 
 tutorials4j:
   cache:
-    redis:
-      timeToLive: 2m
-      cacheNullValues: false
-      enable-statistics: true
-      named-caches:
+    named:
+      defaults:
+        timeToLive: 2m
+        cacheNullValues: false
+        enable-statistics: true
+      caches:
         idempotent:
           timeToLive: 3s
           cacheNullValues: false
-          keyPrefix: token
-          useKeyPrefix: true
+          redis:
+            keyPrefix: token
         access_limited:
           timeToLive: 5s
           cacheNullValues: true
-          keyPrefix: token
-          useKeyPrefix: false
+          redis:
+            keyPrefix: token
 
   web:
     http:

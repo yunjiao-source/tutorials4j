@@ -4,7 +4,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
-import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
+import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 
 /**
@@ -15,13 +15,13 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreator;
  * </p>
  *
  * @author Yun Jiao
- * @see CacheCaffeineProperties
+ * @see NamedCacheProperties
  * @see FlexibleCaffeineCacheManager
  */
 @Slf4j
 @RequiredArgsConstructor
 public class CaffeineCacheManagerCreator implements CacheManagerCreator<CaffeineCacheManager> {
-    private final CacheCaffeineProperties properties;
+    private final NamedCacheProperties properties;
     private final Caffeine<Object, Object> caffeine;
 
     private CaffeineCacheManager instance;

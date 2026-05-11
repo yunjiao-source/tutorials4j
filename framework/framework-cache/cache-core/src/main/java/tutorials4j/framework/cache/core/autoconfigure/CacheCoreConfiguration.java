@@ -5,9 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
 import tutorials4j.framework.cache.core.properties.CacheCoreProperties;
-import tutorials4j.framework.cache.core.properties.CacheRedisProperties;
+import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 
@@ -20,9 +19,7 @@ import java.util.Map;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({CacheCoreProperties.class,
-        CacheRedisProperties.class,
-        CacheCaffeineProperties.class})
+@EnableConfigurationProperties({CacheCoreProperties.class, NamedCacheProperties.class,})
 public class CacheCoreConfiguration {
     @PostConstruct
     public void postConstruct() {

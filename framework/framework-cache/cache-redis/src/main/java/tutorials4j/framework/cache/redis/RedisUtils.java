@@ -3,9 +3,11 @@ package tutorials4j.framework.cache.redis;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import tutorials4j.framework.cache.core.properties.RedisOptions;
+import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
 import tutorials4j.framework.common.core.SymbolConsts;
 import tutorials4j.framework.common.core.TenantContextHolder;
+
+import java.util.Objects;
 
 /**
  * 工具
@@ -50,26 +52,26 @@ public interface RedisUtils {
     }
 
     /**
-     * 根据给定的 {@link RedisOptions} 属性填充 {@link RedisCacheConfiguration} 配置。
+     * 根据给定的 {@link NamedCacheOptions} 属性填充 {@link RedisCacheConfiguration} 配置。
      *
      * @param configuration 原始的 {@link RedisCacheConfiguration} 实例，将基于它进行修改
-     * @param prop          包含具体缓存配置的 {@link RedisOptions} 对象
+     * @param prop          包含具体缓存配置的 {@link NamedCacheOptions} 对象
      * @return 填充后的 {@link RedisCacheConfiguration} 实例
      */
     static RedisCacheConfiguration fillConfiguration(RedisCacheConfiguration configuration,
-                                                      RedisOptions prop) {
+                                                     NamedCacheOptions prop) {
 
         configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix());
         if (prop.getTimeToLive() != null) {
             configuration = configuration.entryTtl(prop.getTimeToLive());
         }
 
-        if (!prop.isCacheNullValues()) {
+        if (Objects.equals(prop.getEnableStatistics(), Boolean.FALSE)) {
             configuration = configuration.disableCachingNullValues();
         }
 
-        if (prop.isUseKeyPrefix() && StringUtils.isNotBlank(prop.getKeyPrefix())) {
-            configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix(prop.getKeyPrefix()));
+        if (StringUtils.isNotBlank(prop.getRedis().getKeyPrefix())) {
+            configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix(prop.getRedis().getKeyPrefix()));
         }
 
         return configuration;

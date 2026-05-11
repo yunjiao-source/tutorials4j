@@ -1,28 +1,21 @@
 
 tutorials4j:
   cache:
-    caffeine:
-      expire-after-write: 2m
-      recordStats: true
-      named-caches:
-        users:
-          expire-after-write: 5s
-    redis:
-      timeToLive: 2m
-      cacheNullValues: false
-      keyPrefix: share
-      useKeyPrefix: true
-      enable-statistics: true
-      named-caches:
+    named:
+      defaults:
+        timeToLive: 2m
+        cacheNullValues: false
+        enable-statistics: false
+      caches:
         users:
           timeToLive: 10s
           cacheNullValues: false
-          keyPrefix: user
-          useKeyPrefix: true
+          redis:
+            keyPrefix: user
         orders:
           timeToLive: 20s
           cacheNullValues: true
-          keyPrefix: order
-          useKeyPrefix: false
+          redis:
+            keyPrefix: order
 
 

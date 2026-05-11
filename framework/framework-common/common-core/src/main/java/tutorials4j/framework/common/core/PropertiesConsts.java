@@ -14,6 +14,7 @@ public interface PropertiesConsts {
 
     /** cache */
     String PROPERTY_PREFIX_CACHE = PROPERTY_PREFIX_TUTORIALS4J + ".cache";
+    String PROPERTY_PREFIX_CACHE_NAMED = PROPERTY_PREFIX_CACHE + ".named";
     String PROPERTY_PREFIX_CACHE_REDIS = PROPERTY_PREFIX_CACHE + ".redis";
     String PROPERTY_PREFIX_CACHE_CAFFEINE = PROPERTY_PREFIX_CACHE + ".caffeine";
 

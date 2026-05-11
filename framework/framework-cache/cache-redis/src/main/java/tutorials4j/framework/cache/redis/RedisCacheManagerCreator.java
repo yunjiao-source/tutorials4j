@@ -6,26 +6,27 @@ import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCust
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import tutorials4j.framework.cache.core.properties.CacheRedisProperties;
+import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Redis 缓存管理器的创建器，实现双重检查锁定的单例模式。
  * <p>
  * 该创建器负责创建和缓存 {@link RedisCacheManager} 实例。
- * 支持通过 {@link CacheRedisProperties} 配置默认缓存策略，并允许使用自定义的 {@link RedisCacheManagerBuilderCustomizer}
+ * 支持通过 {@link NamedCacheProperties} 配置默认缓存策略，并允许使用自定义的 {@link RedisCacheManagerBuilderCustomizer}
  * 和 {@link CacheManagerCustomizer} 进行扩展。
  * </p>
  *
  * @author Yun Jiao
- * @see CacheRedisProperties
+ * @see NamedCacheProperties
  * @see RedisUtils
  */
 @RequiredArgsConstructor
 public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheManager> {
-    private final CacheRedisProperties properties;
+    private final NamedCacheProperties properties;
     private final RedisConnectionFactory factory;
     private final List<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizer;
     private final List<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizer;
@@ -54,10 +55,10 @@ public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheM
     public RedisCacheManager newInstance() {
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
         // 使用配置默认值
-        defaultCacheConfig = RedisUtils.fillConfiguration(defaultCacheConfig, properties);
+        defaultCacheConfig = RedisUtils.fillConfiguration(defaultCacheConfig, properties.getDefaults());
 
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(factory).cacheDefaults(defaultCacheConfig);
-        if (properties.isEnableStatistics()) {
+        if (Objects.equals(properties.getDefaults().getEnableStatistics(), Boolean.TRUE)) {
             builder.enableStatistics();
         }
         redisCacheManagerBuilderCustomizer.forEach(customizer -> customizer.customize(builder));

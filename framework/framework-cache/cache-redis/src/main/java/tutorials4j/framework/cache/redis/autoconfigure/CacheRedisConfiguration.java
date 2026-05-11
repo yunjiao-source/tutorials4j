@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import tutorials4j.framework.cache.core.properties.CacheRedisProperties;
+import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 import tutorials4j.framework.cache.redis.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.NamedCacheManagerCustomizer;
@@ -41,7 +41,7 @@ public class CacheRedisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(CacheRedisProperties properties) {
+    NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(NamedCacheProperties properties) {
         log.debug("[CACHE-REDIS] Named Redis Cache Manager Builder Customizer");
         return new NamedRedisCacheManagerBuilderCustomizer(properties);
     }
@@ -55,7 +55,7 @@ public class CacheRedisConfiguration {
 
     @Bean(CacheManagerCreatorCategory.REDIS_CREATOR)
     @ConditionalOnMissingBean
-    RedisCacheManagerCreator redisCacheManagerCreator(CacheRedisProperties properties,
+    RedisCacheManagerCreator redisCacheManagerCreator(NamedCacheProperties properties,
                                                       RedisConnectionFactory factory,
                                                       ObjectProvider<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizers,
                                                       ObjectProvider<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizers) {

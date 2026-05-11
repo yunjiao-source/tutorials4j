@@ -8,16 +8,18 @@ spring:
 
 tutorials4j:
   cache:
-    redis:
-      timeToLive: 2m
-      cacheNullValues: false
-      enable-statistics: true
-      named-caches:
+    named:
+      defaults:
+        timeToLive: 2m
+        cacheNullValues: false
+        enable-statistics: true
+      caches:
         signature:
           timeToLive: 1m
           cacheNullValues: true
-          keyPrefix: security
-          useKeyPrefix: true
+          redis:
+            keyPrefix: security
+
 
   web:
     http:

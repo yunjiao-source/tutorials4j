@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @author Yun Jiao
  */
-public class SignatureClientTest {
+public class SignatureClientIT {
     private final static String APP_KEY = "appkey1";
     private final static String APP_SECRET = "appSecret1";
     private final RestTemplate restTemplate = new RestTemplate();

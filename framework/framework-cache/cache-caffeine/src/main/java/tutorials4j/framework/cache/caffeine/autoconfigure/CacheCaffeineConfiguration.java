@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.caffeine.CaffeineUtils;
-import tutorials4j.framework.cache.core.properties.CacheCaffeineProperties;
+import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 
 /**
@@ -16,7 +16,7 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
  *
  * @author Yun Jiao
  * @see Caffeine
- * @see CacheCaffeineProperties
+ * @see NamedCacheProperties
  * @see CaffeineCacheManagerCreator
  */
 @Slf4j
@@ -35,11 +35,11 @@ public class CacheCaffeineConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    Caffeine<Object, Object> defaultCaffeine(CacheCaffeineProperties properties) {
+    Caffeine<Object, Object> defaultCaffeine(NamedCacheProperties properties) {
         log.debug("[CACHE-CAFFEINE] Default Caffeine");
 
         Caffeine<Object, Object> caffeine = Caffeine.newBuilder();
-        CaffeineUtils.copyOption(caffeine, properties);
+        CaffeineUtils.copyOption(caffeine, properties.getDefaults());
         return caffeine;
     }
 
@@ -54,7 +54,7 @@ public class CacheCaffeineConfiguration {
     @Bean(CacheManagerCreatorCategory.CAFFEINE_CREATOR)
     @ConditionalOnMissingBean
     CaffeineCacheManagerCreator caffeineCacheManagerCreator(Caffeine<Object, Object> caffeine,
-                                              CacheCaffeineProperties properties) {
+                                                            NamedCacheProperties properties) {
         log.debug("[CACHE-CAFFEINE] Caffeine Cache Manager Creator");
 
         return new CaffeineCacheManagerCreator(properties, caffeine);
