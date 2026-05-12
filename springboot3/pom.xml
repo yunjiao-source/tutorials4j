@@ -37,6 +37,7 @@
         <module>springboot3-mongodb-simple</module>
         <module>springboot3-http-exchange-repository</module>
         <module>springboot3-mybatis-tenant</module>
+        <module>springboot3-pay</module>
     </modules>
 
     <dependencyManagement>
