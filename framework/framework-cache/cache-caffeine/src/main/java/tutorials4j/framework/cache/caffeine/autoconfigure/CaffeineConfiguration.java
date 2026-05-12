@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.caffeine.CaffeineUtils;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
-import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 
 /**
  * Spring配置类，用于装配Caffeine缓存相关的Bean。
@@ -51,7 +50,7 @@ public class CaffeineConfiguration {
      * @param properties Caffeine缓存配置属性
      * @return 缓存管理器创建器实例
      */
-    @Bean(CacheManagerCreatorCategory.CAFFEINE_CREATOR)
+    @Bean
     @ConditionalOnMissingBean
     CaffeineCacheManagerCreator caffeineCacheManagerCreator(Caffeine<Object, Object> caffeine,
                                                             NamedCacheProperties properties) {

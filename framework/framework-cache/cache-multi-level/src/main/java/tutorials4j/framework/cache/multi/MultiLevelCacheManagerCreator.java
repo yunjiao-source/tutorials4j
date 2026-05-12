@@ -3,6 +3,7 @@ package tutorials4j.framework.cache.multi;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
 
@@ -54,4 +55,8 @@ public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiL
     }
 
 
+    @Override
+    public CacheManagerCreatorCategory getCategory() {
+        return CacheManagerCreatorCategory.TENANT_MULTI_LEVEL;
+    }
 }

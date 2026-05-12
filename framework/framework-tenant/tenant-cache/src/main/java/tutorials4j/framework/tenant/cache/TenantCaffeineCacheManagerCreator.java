@@ -3,6 +3,7 @@ package tutorials4j.framework.tenant.cache;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 
 /**
  * 租户级 Caffeine 缓存管理器的创建器，实现双重检查锁定的单例模式。
@@ -53,5 +54,10 @@ public class TenantCaffeineCacheManagerCreator implements CacheManagerCreator<Te
     @Override
     public Class<TenantCaffeineCacheManager> getBeanClass() {
         return TenantCaffeineCacheManager.class;
+    }
+
+    @Override
+    public CacheManagerCreatorCategory getCategory() {
+        return CacheManagerCreatorCategory.TENANT_CAFFEINE;
     }
 }

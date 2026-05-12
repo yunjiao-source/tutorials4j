@@ -10,7 +10,7 @@ import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * 缓存核心配置类。
@@ -30,12 +30,12 @@ public class CacheConfiguration {
     @Configuration(proxyBeanMethods = false)
     static class CoreUtilsConfiguration {
         @Autowired(required = false)
-        private Map<String, CacheManagerCreator<?>> cacheManagerCreators;
+        private List<CacheManagerCreator<?>> cacheManagerCreators;
 
         @PostConstruct
         public void injectCacheManagerCreators() {
             if (cacheManagerCreators != null && !cacheManagerCreators.isEmpty()) {
-                CacheManagerCreatorFactory.INSTANCE.setCacheManagerCreators(cacheManagerCreators);
+                CacheManagerCreatorFactory.INSTANCE.addCacheManagerCreator(cacheManagerCreators);
                 log.debug("[CACHE-CORE] 工厂CacheManagerCreatorFactory成功注入实例：{}", cacheManagerCreators);
             } else {
                 log.debug("[CACHE-CORE] 工厂CacheManagerCreatorCategory未注入实例");

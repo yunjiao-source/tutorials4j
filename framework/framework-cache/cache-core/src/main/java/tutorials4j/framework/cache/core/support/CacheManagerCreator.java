@@ -14,5 +14,5 @@ import tutorials4j.framework.common.core.support.BeanCreator;
  * @author Yun Jiao
  */
 public interface CacheManagerCreator<T extends CacheManager> extends BeanCreator<T> {
-
+    CacheManagerCreatorCategory getCategory();
 }

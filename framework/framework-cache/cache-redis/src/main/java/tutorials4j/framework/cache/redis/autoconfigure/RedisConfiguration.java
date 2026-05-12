@@ -11,11 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
-import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
-import tutorials4j.framework.cache.redis.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.NamedCacheManagerCustomizer;
 import tutorials4j.framework.cache.redis.NamedRedisCacheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
+import tutorials4j.framework.cache.redis.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
 
 import java.util.stream.Collectors;
 
@@ -53,7 +52,7 @@ public class RedisConfiguration {
         return new NamedCacheManagerCustomizer();
     }
 
-    @Bean(CacheManagerCreatorCategory.REDIS_CREATOR)
+    @Bean
     @ConditionalOnMissingBean
     RedisCacheManagerCreator redisCacheManagerCreator(NamedCacheProperties properties,
                                                       RedisConnectionFactory factory,

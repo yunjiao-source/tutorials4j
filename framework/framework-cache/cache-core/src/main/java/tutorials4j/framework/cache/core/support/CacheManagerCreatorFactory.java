@@ -5,42 +5,41 @@ import org.springframework.cache.Cache;
 import tutorials4j.framework.cache.core.exception.CacheManagerCreatorNotFoundException;
 
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 缓存管理器创建器工厂。
  * <p>
  * 单例工厂，用于根据不同的缓存类型（多级缓存、Redis、Caffeine）获取对应的 {@link CacheManagerCreator}，
- * 并通过该创建器获取指定名称的 {@link Cache} 实例。工厂初始化时需通过 {@link #setCacheManagerCreators(List)} 注册所有可用的创建器。
+ * 并通过该创建器获取指定名称的 {@link Cache} 实例。工厂初始化时需通过 {@link #addCacheManagerCreator(List)} 注册所有可用的创建器。
  * </p>
  *
  * @author Yun Jiao
  */
 @Slf4j
 public class CacheManagerCreatorFactory {
-    private final Map<String, CacheManagerCreator<?>> cacheManagerCreators = new ConcurrentHashMap<>();
+    private final EnumMap<CacheManagerCreatorCategory, CacheManagerCreator<?>> creatorMap
+            = new EnumMap<>(CacheManagerCreatorCategory.class);
 
     private CacheManagerCreatorFactory() {
     }
 
     public final static CacheManagerCreatorFactory INSTANCE = new CacheManagerCreatorFactory();
 
-    public void setCacheManagerCreators(Map<String, CacheManagerCreator<?>> cacheManagerCreators) {
-        this.cacheManagerCreators.putAll(cacheManagerCreators);
+    public Map<CacheManagerCreatorCategory, CacheManagerCreator<?>> getCacheManagerCreators() {
+        return Collections.unmodifiableMap(creatorMap);
     }
 
-    public Map<String, CacheManagerCreator<?>> getCacheManagerCreators() {
-        return Collections.unmodifiableMap(cacheManagerCreators);
-    }
-
-    public CacheManagerCreator<?> getCacheManagerCreator(String category) {
-        return cacheManagerCreators.get(category);
+    public void addCacheManagerCreator(List<CacheManagerCreator<?>> cacheManagerCreators) {
+        for (CacheManagerCreator<?> creator : cacheManagerCreators) {
+            creatorMap.put(creator.getCategory(), creator);
+        }
     }
 
     public CacheManagerCreator<?> getCacheManagerCreator(CacheManagerCreatorCategory category) {
-        return cacheManagerCreators.get(category.getCode());
+        return creatorMap.get(category);
     }
 
     /**
@@ -104,4 +103,6 @@ public class CacheManagerCreatorFactory {
 
         throw new CacheManagerCreatorNotFoundException("获取本地缓存管理器失败");
     }
+
+
 }

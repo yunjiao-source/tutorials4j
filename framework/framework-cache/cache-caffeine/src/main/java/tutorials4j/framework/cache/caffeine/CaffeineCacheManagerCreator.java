@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 
 /**
  * Caffeine 缓存管理器的创建器，实现双重检查锁定的单例模式。
@@ -57,4 +58,8 @@ public class CaffeineCacheManagerCreator implements CacheManagerCreator<Caffeine
         return CaffeineCacheManager.class;
     }
 
+    @Override
+    public CacheManagerCreatorCategory getCategory() {
+        return CacheManagerCreatorCategory.CAFFEINE;
+    }
 }

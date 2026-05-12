@@ -8,6 +8,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 
 import java.util.List;
 import java.util.Objects;
@@ -71,5 +72,10 @@ public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheM
     @Override
     public Class<RedisCacheManager> getBeanClass() {
         return RedisCacheManager.class;
+    }
+
+    @Override
+    public CacheManagerCreatorCategory getCategory() {
+        return CacheManagerCreatorCategory.REDIS;
     }
 }

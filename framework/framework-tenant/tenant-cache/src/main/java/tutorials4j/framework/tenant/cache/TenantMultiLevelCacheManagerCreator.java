@@ -2,6 +2,7 @@ package tutorials4j.framework.tenant.cache;
 
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 import tutorials4j.framework.cache.multi.MultiLevelCacheManager;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
@@ -50,5 +51,10 @@ public class TenantMultiLevelCacheManagerCreator implements CacheManagerCreator<
     @Override
     public Class<MultiLevelCacheManager> getBeanClass() {
         return MultiLevelCacheManager.class;
+    }
+
+    @Override
+    public CacheManagerCreatorCategory getCategory() {
+        return CacheManagerCreatorCategory.TENANT_MULTI_LEVEL;
     }
 }
