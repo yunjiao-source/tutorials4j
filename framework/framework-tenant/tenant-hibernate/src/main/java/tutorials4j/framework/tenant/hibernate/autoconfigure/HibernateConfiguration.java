@@ -23,7 +23,7 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class TenantHibernateConfiguration {
+public class HibernateConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[TENANT-HIBERNATE] Hibernate Configuration");

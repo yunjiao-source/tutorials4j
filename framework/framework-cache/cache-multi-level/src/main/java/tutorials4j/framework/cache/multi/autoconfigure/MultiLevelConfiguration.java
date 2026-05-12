@@ -22,7 +22,7 @@ import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class CacheMultiLevelConfiguration {
+public class MultiLevelConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[CACHE-MULTI-LEVEL] Cache Multi Level Configuration");

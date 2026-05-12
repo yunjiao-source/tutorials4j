@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({CacheCoreProperties.class, NamedCacheProperties.class,})
-public class CacheCoreConfiguration {
+public class CacheConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[CACHE-CORE] Cache Core Configuration");

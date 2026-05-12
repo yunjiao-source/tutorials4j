@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
-import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.properties.HttpProperties;
 import tutorials4j.framework.web.mvc.filter.CachedBodyRequestFilter;
 
 /**
@@ -16,7 +16,7 @@ import tutorials4j.framework.web.mvc.filter.CachedBodyRequestFilter;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class WebMvcCachedBodyConfiguration {
+public class MvcCachedBodyConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[WEB-MVC] Cached Body Configuration");
@@ -24,7 +24,7 @@ public class WebMvcCachedBodyConfiguration {
 
 
     @Bean
-    FilterRegistrationBean<CachedBodyRequestFilter> cachedBodyFilterRegistration(WebHttpProperties properties) {
+    FilterRegistrationBean<CachedBodyRequestFilter> cachedBodyFilterRegistration(HttpProperties properties) {
         ServletFilterOptions options = properties.getCachedBody();
         FilterRegistrationBean<CachedBodyRequestFilter> registration = new FilterRegistrationBean<>();
         CachedBodyRequestFilter filter = new CachedBodyRequestFilter();

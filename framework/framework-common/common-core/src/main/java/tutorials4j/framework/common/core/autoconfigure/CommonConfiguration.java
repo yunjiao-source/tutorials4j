@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @Import({SpringUtil.class})
-public class CommonCoreConfiguration {
+public class CommonConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[COMMON-CORE] Common Core Configuration");

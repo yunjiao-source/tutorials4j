@@ -26,7 +26,7 @@ import tutorials4j.framework.tenant.core.properties.TenantProperties;
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 @EnableConfigurationProperties({TenantProperties.class})
-public class TenantCoreConfiguration implements WebMvcConfigurer {
+public class TenantConfiguration implements WebMvcConfigurer {
     private final TenantProperties properties;
 
     @PostConstruct

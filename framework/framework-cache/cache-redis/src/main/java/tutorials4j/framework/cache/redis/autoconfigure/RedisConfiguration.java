@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class CacheRedisConfiguration {
+public class RedisConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[CACHE-REDIS] Cache Redis Configuration");

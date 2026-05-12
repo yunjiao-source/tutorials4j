@@ -3,12 +3,12 @@ package tutorials4j.framework.web.mvc.filter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.properties.HttpProperties;
 
 /**
  * 默认的请求日志过滤器，扩展自 Spring 的 {@link CommonsRequestLoggingFilter}。
  * <p>
- * 根据 {@link WebHttpProperties.RequestLoggingOptions} 配置以下行为：
+ * 根据 {@link HttpProperties.RequestLoggingOptions} 配置以下行为：
  * <ul>
  *     <li>是否包含客户端信息（IP、会话ID等）</li>
  *     <li>是否包含请求头</li>
@@ -22,11 +22,11 @@ import tutorials4j.framework.web.core.properties.WebHttpProperties;
  *
  * @author Yun Jiao
  * @see CommonsRequestLoggingFilter
- * @see WebHttpProperties.RequestLoggingOptions
+ * @see HttpProperties.RequestLoggingOptions
  */
 @RequiredArgsConstructor
 public class DefaultCommonsRequestLoggingFilter extends CommonsRequestLoggingFilter {
-    private final WebHttpProperties.RequestLoggingOptions options;
+    private final HttpProperties.RequestLoggingOptions options;
 
     @Override
     protected String createMessage(HttpServletRequest request, String prefix, String suffix) {
@@ -45,7 +45,7 @@ public class DefaultCommonsRequestLoggingFilter extends CommonsRequestLoggingFil
     /**
      * 初始化过滤器配置。
      * <p>
-     * 将 {@link WebHttpProperties.RequestLoggingOptions} 中的各项配置应用到当前过滤器实例。
+     * 将 {@link HttpProperties.RequestLoggingOptions} 中的各项配置应用到当前过滤器实例。
      * </p>
      */
     public void init() {

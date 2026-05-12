@@ -18,7 +18,7 @@ import tutorials4j.framework.web.rest.util.RestUtils;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class WebRestClientDefaultConfiguration {
+public class RestClientDefaultConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[WEB-MVC] Rest Client Default Configuration");

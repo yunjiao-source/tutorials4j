@@ -9,9 +9,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
  * @author Yun Jiao
  * @see JsonConsts
  */
-public class LongJsSimpleModule extends SimpleModule {
-    public LongJsSimpleModule() {
-        super(LongJsSimpleModule.class.getName(), JsonConsts.JSON_VERSION);
+public class Long2StringSimpleModule extends SimpleModule {
+    public Long2StringSimpleModule() {
+        super(Long2StringSimpleModule.class.getName(), JsonConsts.JSON_VERSION);
         // 前端js数值溢出问题
         this.addSerializer(Long.class, ToStringSerializer.instance);
         this.addSerializer(Long.TYPE, ToStringSerializer.instance);

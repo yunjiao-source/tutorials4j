@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.json.BaseEnumSimpleModule;
-import tutorials4j.framework.common.core.json.LongJsSimpleModule;
+import tutorials4j.framework.common.core.json.Long2StringSimpleModule;
 
 /**
  * 公共核心Json模块的配置类
@@ -14,7 +14,7 @@ import tutorials4j.framework.common.core.json.LongJsSimpleModule;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class CommonCoreJsonConfiguration {
+public class JsonConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[COMMON-CORE] Common Core Json Configuration");
@@ -28,9 +28,9 @@ public class CommonCoreJsonConfiguration {
     }
 
     @Bean
-    LongJsSimpleModule longJsSimpleModule() {
+    Long2StringSimpleModule longJsSimpleModule() {
         log.debug("[COMMON-CORE] Long Js Simple Module");
-        return new LongJsSimpleModule();
+        return new Long2StringSimpleModule();
     }
 
 }

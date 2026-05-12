@@ -4,9 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.web.rest.autoconfigure.WebRestConfiguration;
-import tutorials4j.framework.web.core.autoconfigure.WebCoreConfiguration;
-import tutorials4j.framework.web.mvc.autoconfigure.WebMvcConfiguration;
+import tutorials4j.framework.web.rest.autoconfigure.RestConfiguration;
+import tutorials4j.framework.web.mvc.autoconfigure.MvcConfiguration;
 
 /**
  * 缓存请求体自动配置
@@ -15,9 +14,9 @@ import tutorials4j.framework.web.mvc.autoconfigure.WebMvcConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({WebCoreConfiguration.class,
-        WebRestConfiguration.class,
-        WebMvcConfiguration.class})
+@Import({tutorials4j.framework.web.core.autoconfigure.WebConfiguration.class,
+        RestConfiguration.class,
+        MvcConfiguration.class})
 public class WebAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

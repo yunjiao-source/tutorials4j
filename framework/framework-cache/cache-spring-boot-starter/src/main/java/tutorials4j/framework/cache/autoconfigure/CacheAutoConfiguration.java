@@ -4,10 +4,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.cache.caffeine.autoconfigure.CacheCaffeineConfiguration;
-import tutorials4j.framework.cache.core.autoconfigure.CacheCoreConfiguration;
-import tutorials4j.framework.cache.multi.autoconfigure.CacheMultiLevelConfiguration;
-import tutorials4j.framework.cache.redis.autoconfigure.CacheRedisConfiguration;
+import tutorials4j.framework.cache.caffeine.autoconfigure.CaffeineConfiguration;
+import tutorials4j.framework.cache.core.autoconfigure.CacheConfiguration;
+import tutorials4j.framework.cache.multi.autoconfigure.MultiLevelConfiguration;
+import tutorials4j.framework.cache.redis.autoconfigure.RedisConfiguration;
 
 /**
  * 自动配置
@@ -16,10 +16,10 @@ import tutorials4j.framework.cache.redis.autoconfigure.CacheRedisConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({CacheCoreConfiguration.class
-        , CacheRedisConfiguration.class
-        , CacheCaffeineConfiguration.class
-        , CacheMultiLevelConfiguration.class})
+@Import({CacheConfiguration.class
+        , RedisConfiguration.class
+        , CaffeineConfiguration.class
+        , MultiLevelConfiguration.class})
 public class CacheAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

@@ -18,7 +18,7 @@ import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class TenantCacheConfiguration {
+public class CacheConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[TENANT-CACHE] Cache Configuration");

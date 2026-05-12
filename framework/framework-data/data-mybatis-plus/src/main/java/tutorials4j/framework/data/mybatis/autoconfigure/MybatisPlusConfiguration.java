@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.data.core.properties.DataMybatisPlusProperties;
+import tutorials4j.framework.data.core.properties.MybatisPlusProperties;
 import tutorials4j.framework.data.mybatis.AuditMetaObjectHandler;
 import tutorials4j.framework.data.mybatis.DefaultIdentifierGenerator;
 import tutorials4j.framework.data.mybatis.customizer.MybatisPlusInterceptorCustomizer;
@@ -26,7 +26,7 @@ import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorC
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class DataMybatisPlusConfiguration {
+public class MybatisPlusConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[DATA-MYBATIS-PLUS] Data Mybatis Plus Configuration");
@@ -44,7 +44,7 @@ public class DataMybatisPlusConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS, name = "interceptors.pagination", havingValue = "true", matchIfMissing = true)
-    MybatisPlusInterceptorCustomizer paginationInnerInterceptorCustomizer(DataMybatisPlusProperties properties) {
+    MybatisPlusInterceptorCustomizer paginationInnerInterceptorCustomizer(MybatisPlusProperties properties) {
         log.debug("[DATA-MYBATIS-PLUS] Pagination Inner Interceptor Customizer");
         return new PaginationInnerInterceptorCustomizer(properties.getDbType());
     }

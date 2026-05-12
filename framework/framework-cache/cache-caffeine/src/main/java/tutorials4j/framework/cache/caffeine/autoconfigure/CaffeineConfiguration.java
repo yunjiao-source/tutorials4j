@@ -21,7 +21,7 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class CacheCaffeineConfiguration {
+public class CaffeineConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[CACHE-CAFFEINE] Cache Caffeine Configuration");

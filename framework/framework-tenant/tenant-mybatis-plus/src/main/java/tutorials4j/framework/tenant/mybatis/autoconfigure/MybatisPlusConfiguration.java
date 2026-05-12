@@ -20,7 +20,7 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class TenantMybatisPlusConfiguration {
+public class MybatisPlusConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[TENANT-MYBATIS-PLUS] Mybatis Plus Configuration");

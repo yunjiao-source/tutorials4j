@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP)
-public class WebHttpProperties {
+public class HttpProperties {
     /**
      * 缓存请求体配置属性
      */

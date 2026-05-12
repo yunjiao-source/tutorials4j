@@ -17,7 +17,7 @@ import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
-import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.properties.HttpProperties;
 import tutorials4j.framework.web.core.support.SignatureKeyRepository;
 import tutorials4j.framework.web.mvc.filter.XssRequestFilter;
 import tutorials4j.framework.web.mvc.interceptor.AccessLimitedHandlerInterceptor;
@@ -32,7 +32,7 @@ import tutorials4j.framework.web.mvc.support.XssSimpleModule;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
+public class MvcSecurityConfiguration implements WebMvcConfigurer {
     @Autowired
     private AccessLimitedCacheTemplate accessLimitedCacheTemplate;
     @Autowired
@@ -42,7 +42,7 @@ public class WebMvcSecurityConfiguration implements WebMvcConfigurer {
     @Autowired
     private SignatureKeyRepository signatureKeyRepository;
     @Autowired
-    private WebHttpProperties properties;
+    private HttpProperties properties;
 
     @PostConstruct
     public void postConstruct() {

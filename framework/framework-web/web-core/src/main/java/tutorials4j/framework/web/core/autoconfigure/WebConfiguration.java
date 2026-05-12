@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
-import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.properties.HttpProperties;
 import tutorials4j.framework.web.core.properties.WebProperties;
 import tutorials4j.framework.web.core.support.SignatureKeyRepository;
 import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
@@ -21,8 +21,8 @@ import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({WebHttpProperties.class, WebProperties.class})
-public class WebCoreConfiguration {
+@EnableConfigurationProperties({HttpProperties.class, WebProperties.class})
+public class WebConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[WEB-CORE] Web Core Configuration");
@@ -51,7 +51,7 @@ public class WebCoreConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    SignatureKeyRepository simpleSignatureKeyRepository(WebHttpProperties properties) {
+    SignatureKeyRepository simpleSignatureKeyRepository(HttpProperties properties) {
         log.debug("[WEB-MVC] Simple Signature Key Repository");
         return new SimpleSignatureKeyRepository(properties.getSignature().getKeys());
     }

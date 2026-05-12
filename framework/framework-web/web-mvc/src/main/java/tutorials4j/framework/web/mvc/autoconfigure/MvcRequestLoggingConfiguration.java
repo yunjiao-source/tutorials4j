@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
-import tutorials4j.framework.web.core.properties.WebHttpProperties;
+import tutorials4j.framework.web.core.properties.HttpProperties;
 import tutorials4j.framework.web.mvc.filter.DefaultCommonsRequestLoggingFilter;
 
 /**
@@ -20,7 +20,7 @@ import tutorials4j.framework.web.mvc.filter.DefaultCommonsRequestLoggingFilter;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class WebMvcRequestLoggingConfiguration {
+public class MvcRequestLoggingConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[WEB-MVC] Request Logging Configuration");
@@ -30,7 +30,7 @@ public class WebMvcRequestLoggingConfiguration {
     /**
      * 注册请求日志过滤器的 {@link FilterRegistrationBean}。
      * <p>
-     * 根据 {@link WebHttpProperties.RequestLoggingOptions} 创建并初始化
+     * 根据 {@link HttpProperties.RequestLoggingOptions} 创建并初始化
      * {@link DefaultCommonsRequestLoggingFilter}，同时应用其内部的过滤器配置（如启用状态、URL 模式等）。
      * 若过滤器启用，还会检查并确保对应日志级别可用。
      * </p>
@@ -39,8 +39,8 @@ public class WebMvcRequestLoggingConfiguration {
      * @return 过滤器注册 Bean，用于将过滤器添加到 Servlet 容器
      */
     @Bean
-    FilterRegistrationBean<DefaultCommonsRequestLoggingFilter> defaultCommonsRequestLoggingFilterRegistration(WebHttpProperties properties) {
-        WebHttpProperties.RequestLoggingOptions options = properties.getRequestLogging();
+    FilterRegistrationBean<DefaultCommonsRequestLoggingFilter> defaultCommonsRequestLoggingFilterRegistration(HttpProperties properties) {
+        HttpProperties.RequestLoggingOptions options = properties.getRequestLogging();
         ServletFilterOptions servletFilterOptions = options.getFilter();
 
         DefaultCommonsRequestLoggingFilter filter = new DefaultCommonsRequestLoggingFilter(options);

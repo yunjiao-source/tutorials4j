@@ -17,7 +17,7 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class DataJdbcConfiguration {
+public class JdbcConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.debug("[DATA-JDBC] Data Jdbc Configuration");

@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.rest.autoconfigure;
+package tutorials4j.framework.web.mvc.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -6,17 +6,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * web client 配置
+ * web http 配置
  *
  * @author Yun Jiao
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({WebRestClientDefaultConfiguration.class, WebRestClientLoggerConfiguration.class, WebRestTraceConfiguration.class})
-public class WebRestConfiguration {
+@Import({MvcCachedBodyConfiguration.class, MvcSecurityConfiguration.class
+        , MvcRequestLoggingConfiguration.class})
+public class MvcConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.debug("[WEB-REST] Web Rest Configuration");
+        log.debug("[WEB-MVC] Web Mvc Configuration");
     }
 
 }
