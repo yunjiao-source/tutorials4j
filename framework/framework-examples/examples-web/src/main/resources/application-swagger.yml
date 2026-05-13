@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: examples-web
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+springdoc:
+  use-fqn: true
+  swagger-ui:
+    show-extensions: true
+    show-common-extensions: true
+
+

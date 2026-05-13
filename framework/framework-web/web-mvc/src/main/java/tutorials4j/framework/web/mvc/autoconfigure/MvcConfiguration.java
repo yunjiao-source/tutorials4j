@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @Import({MvcCachedBodyConfiguration.class, MvcSecurityConfiguration.class
-        , MvcRequestLoggingConfiguration.class})
+        , MvcRequestLoggingConfiguration.class, MvcSpringdocConfiguration.class})
 public class MvcConfiguration {
     @PostConstruct
     public void postConstruct() {
