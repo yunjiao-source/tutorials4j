@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.common.core.autoconfigure.CommonConfiguration;
-import tutorials4j.framework.common.core.autoconfigure.JsonConfiguration;
 
 /**
  * 通用模块自动配置
@@ -14,7 +13,7 @@ import tutorials4j.framework.common.core.autoconfigure.JsonConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({CommonConfiguration.class, JsonConfiguration.class})
+@Import({CommonConfiguration.class})
 public class CommonAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

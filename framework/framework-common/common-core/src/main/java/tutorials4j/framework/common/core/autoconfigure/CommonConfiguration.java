@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({SpringUtil.class})
+@Import({SpringUtil.class, JsonConfiguration.class, ValidatorsConfiguration.class})
 public class CommonConfiguration {
     @PostConstruct
     public void postConstruct() {
@@ -46,6 +46,5 @@ public class CommonConfiguration {
         List<TaskDecoratorCreator> creators = taskDecoratorCreators.orderedStream().collect(Collectors.toList());
         return new CompositeTaskDecoratorCreator(creators);
     }
-
 
 }
