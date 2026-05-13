@@ -1,7 +1,6 @@
 package tutorials4j.framework.cache.core.support;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import tutorials4j.framework.cache.core.exception.CacheManagerCreatorNotFoundException;
 
@@ -84,7 +83,6 @@ public class CacheManagerCreatorFactory {
         throw new CacheManagerCreatorNotFoundException("获取本地缓存管理器失败");
     }
 
-    @Autowired
     public void setCacheManagerCreators(List<CacheManagerCreator<?>> cacheManagerCreators) {
         log.debug("[CACHE-CORE] 工厂CacheManagerCreatorFactory注入实例：{}", cacheManagerCreators);
 

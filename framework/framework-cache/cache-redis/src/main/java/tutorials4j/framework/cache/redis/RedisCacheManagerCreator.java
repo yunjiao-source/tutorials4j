@@ -9,6 +9,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
+import tutorials4j.framework.cache.redis.util.RedisUtils;
 
 import java.util.List;
 import java.util.Objects;

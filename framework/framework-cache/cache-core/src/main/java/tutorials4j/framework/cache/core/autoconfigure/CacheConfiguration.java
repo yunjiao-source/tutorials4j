@@ -7,7 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.core.properties.CacheCoreProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
+import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
+
+import java.util.List;
 
 /**
  * 缓存核心配置类。
@@ -25,8 +28,10 @@ public class CacheConfiguration {
 
 
     @Bean
-    CacheManagerCreatorFactory cacheManagerCreatorFactory() {
+    CacheManagerCreatorFactory cacheManagerCreatorFactory(List<CacheManagerCreator<?>> cacheManagerCreators) {
         log.debug("[CACHE-CORE] Cache Manager Creator Factory");
-        return new CacheManagerCreatorFactory();
+        CacheManagerCreatorFactory factory = new CacheManagerCreatorFactory();
+        factory.setCacheManagerCreators(cacheManagerCreators);
+        return factory;
     }
 }

@@ -3,6 +3,7 @@ package tutorials4j.framework.cache.redis.autoconfigure;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -10,11 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.redis.NamedCacheManagerCustomizer;
 import tutorials4j.framework.cache.redis.NamedRedisCacheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 import tutorials4j.framework.cache.redis.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
+import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
 
 import java.util.stream.Collectors;
 
@@ -62,5 +65,13 @@ public class RedisConfiguration {
         return new RedisCacheManagerCreator(properties,factory,
                 redisCacheManagerBuilderCustomizers.orderedStream().collect(Collectors.toList()),
                 cacheManagerCustomizers.orderedStream().collect(Collectors.toList()));
+    }
+
+    @Bean
+    RedisBitmapUtils redisBitmapUtils(@Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
+        log.debug("[CACHE-REDIS] Redis Bitmap Utils");
+        RedisBitmapUtils utils = new RedisBitmapUtils();
+        utils.setStringRedisTemplate(stringRedisTemplate);
+        return utils;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
+import tutorials4j.framework.cache.redis.util.RedisUtils;
 
 import java.util.HashMap;
 import java.util.Map;

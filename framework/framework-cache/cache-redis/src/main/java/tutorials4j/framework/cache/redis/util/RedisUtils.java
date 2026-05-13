@@ -1,4 +1,4 @@
-package tutorials4j.framework.cache.redis;
+package tutorials4j.framework.cache.redis.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
