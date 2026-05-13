@@ -1,44 +1,24 @@
 package tutorials4j.framework.cache.core.support;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import tutorials4j.framework.cache.core.exception.CacheManagerCreatorNotFoundException;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 缓存管理器创建器工厂。
- * <p>
- * 单例工厂，用于根据不同的缓存类型（多级缓存、Redis、Caffeine）获取对应的 {@link CacheManagerCreator}，
- * 并通过该创建器获取指定名称的 {@link Cache} 实例。工厂初始化时需通过 {@link #addCacheManagerCreator(List)} 注册所有可用的创建器。
- * </p>
  *
  * @author Yun Jiao
  */
 @Slf4j
 public class CacheManagerCreatorFactory {
-    private final EnumMap<CacheManagerCreatorCategory, CacheManagerCreator<?>> creatorMap
+    private static final EnumMap<CacheManagerCreatorCategory, CacheManagerCreator<?>> creatorMap
             = new EnumMap<>(CacheManagerCreatorCategory.class);
 
-    private CacheManagerCreatorFactory() {
-    }
-
-    public final static CacheManagerCreatorFactory INSTANCE = new CacheManagerCreatorFactory();
-
-    public Map<CacheManagerCreatorCategory, CacheManagerCreator<?>> getCacheManagerCreators() {
-        return Collections.unmodifiableMap(creatorMap);
-    }
-
-    public void addCacheManagerCreator(List<CacheManagerCreator<?>> cacheManagerCreators) {
-        for (CacheManagerCreator<?> creator : cacheManagerCreators) {
-            creatorMap.put(creator.getCategory(), creator);
-        }
-    }
-
-    public CacheManagerCreator<?> getCacheManagerCreator(CacheManagerCreatorCategory category) {
+    public static CacheManagerCreator<?> getCacheManagerCreator(CacheManagerCreatorCategory category) {
         return creatorMap.get(category);
     }
 
@@ -49,7 +29,7 @@ public class CacheManagerCreatorFactory {
      * @return 多级缓存实例
      * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
      */
-    public Cache getMultiLevelCache(String cacheName) {
+    public static Cache getMultiLevelCache(String cacheName) {
         CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_MULTI_LEVEL);
         if (creator != null) {
             return creator.getInstance().getCache(cacheName);
@@ -70,7 +50,7 @@ public class CacheManagerCreatorFactory {
      * @return Redis 缓存实例
      * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
      */
-    public Cache getRedisCache(String cacheName) {
+    public static Cache getRedisCache(String cacheName) {
         CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.REDIS);
         if (creator != null) {
             return creator.getInstance().getCache(cacheName);
@@ -89,7 +69,7 @@ public class CacheManagerCreatorFactory {
      * @return Caffeine 缓存实例
      * @throws CacheManagerCreatorNotFoundException 如果未找到任何本地缓存管理器创建器
      */
-    public Cache getCaffeineCache(String cacheName) {
+    public static Cache getCaffeineCache(String cacheName) {
         // 先获取支持租户的
         CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_CAFFEINE);
         if (creator != null) {
@@ -104,5 +84,13 @@ public class CacheManagerCreatorFactory {
         throw new CacheManagerCreatorNotFoundException("获取本地缓存管理器失败");
     }
 
+    @Autowired
+    public void setCacheManagerCreators(List<CacheManagerCreator<?>> cacheManagerCreators) {
+        log.debug("[CACHE-CORE] 工厂CacheManagerCreatorFactory注入实例：{}", cacheManagerCreators);
 
+        for (CacheManagerCreator<?> creator : cacheManagerCreators) {
+            creatorMap.put(creator.getCategory(), creator);
+        }
+
+    }
 }

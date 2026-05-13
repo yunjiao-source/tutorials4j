@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 命名缓存 主应用类
+ * 主应用类
  *
  * @author yangyunjiao
  */

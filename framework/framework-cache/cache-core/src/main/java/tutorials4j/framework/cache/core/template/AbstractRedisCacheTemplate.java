@@ -20,6 +20,6 @@ public abstract class AbstractRedisCacheTemplate<K, V> extends AbstractCacheTemp
 
     @Override
     protected void initCache() {
-        cache = CacheManagerCreatorFactory.INSTANCE.getRedisCache(cacheName);
+        cache = CacheManagerCreatorFactory.getRedisCache(cacheName);
     }
 }

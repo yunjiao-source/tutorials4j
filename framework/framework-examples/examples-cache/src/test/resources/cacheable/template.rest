@@ -3,7 +3,7 @@ GET http://localhost:8080/template/get
 Content-Type: application/json
 
 ### 校验验证码
-GET http://localhost:8080/template/check?key=55541dcd6ab04af8881108a5645eebe5&input=zGBI
+GET http://localhost:8080/template/check?key=53e401eb0b5a4bc788fba8472dbba8f1&input=TtUb
 Content-Type: application/json
 
 

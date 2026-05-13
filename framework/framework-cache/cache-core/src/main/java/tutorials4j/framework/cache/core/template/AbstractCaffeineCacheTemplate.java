@@ -20,6 +20,6 @@ public abstract class AbstractCaffeineCacheTemplate<K, V> extends AbstractCacheT
 
     @Override
     protected void initCache() {
-        cache = CacheManagerCreatorFactory.INSTANCE.getCaffeineCache(cacheName);
+        cache = CacheManagerCreatorFactory.getCaffeineCache(cacheName);
     }
 }
