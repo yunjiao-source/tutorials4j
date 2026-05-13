@@ -3,20 +3,20 @@ package tutorials4j.framework.cache.redis.autoconfigure;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
-import tutorials4j.framework.cache.redis.NamedCacheManagerCustomizer;
-import tutorials4j.framework.cache.redis.NamedRedisCacheManagerBuilderCustomizer;
-import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
-import tutorials4j.framework.cache.redis.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
+import tutorials4j.framework.cache.redis.*;
 import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
 
 import java.util.stream.Collectors;
@@ -73,5 +73,28 @@ public class RedisConfiguration {
         RedisBitmapUtils utils = new RedisBitmapUtils();
         utils.setStringRedisTemplate(stringRedisTemplate);
         return utils;
+    }
+
+
+    @ConditionalOnBean({StringRedisTemplate.class, RedisTemplate.class})
+    @Configuration(proxyBeanMethods = false)
+    public static class InnerConfiguration {
+        @Autowired
+        private StringRedisTemplate stringRedisTemplate;
+        @Autowired
+        private RedisTemplate<Object, Object> redisTemplate;
+
+        @PostConstruct
+        public void postConstruct() {
+            log.debug("[CACHE-REDIS] String Redis Template");
+            PrefixKeyStringRedisSerializer serializer = new PrefixKeyStringRedisSerializer();
+            stringRedisTemplate.setKeySerializer(serializer);
+            stringRedisTemplate.setHashKeySerializer(serializer);
+
+            log.debug("[CACHE-REDIS] Redis Template");
+            redisTemplate.setKeySerializer(serializer);
+            redisTemplate.setHashKeySerializer(serializer);
+        }
+
     }
 }

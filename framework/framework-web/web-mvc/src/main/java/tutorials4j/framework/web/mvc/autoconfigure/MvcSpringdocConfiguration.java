@@ -15,7 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tutorials4j.framework.web.mvc.support.DefaultValidationModelResolver;
+import tutorials4j.framework.web.mvc.support.DefaultSwaggerModelResolver;
 
 /**
  * todo
@@ -54,6 +54,6 @@ public class MvcSpringdocConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingBean
     ModelResolver defaultValidationModelResolver(ObjectMapper mapper) {
         log.debug("[WEB-MVC] Default Validation Model Resolver");
-        return new DefaultValidationModelResolver(mapper);
+        return new DefaultSwaggerModelResolver(mapper);
     }
 }

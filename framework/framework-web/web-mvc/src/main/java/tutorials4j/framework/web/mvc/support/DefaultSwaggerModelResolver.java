@@ -16,7 +16,7 @@ import java.util.Set;
  *
  * @author Yun Jiao
  */
-public class DefaultValidationModelResolver extends ModelResolver {
+public class DefaultSwaggerModelResolver extends ModelResolver {
 
     private final Set<Class<? extends Annotation>> HANDLED_VALIDATIONS = Set.of(
             jakarta.validation.constraints.NotNull.class,
@@ -37,7 +37,7 @@ public class DefaultValidationModelResolver extends ModelResolver {
             LocalDateTimeFormat.class.getPackage().getName()
     );
 
-    public DefaultValidationModelResolver(ObjectMapper mapper) {
+    public DefaultSwaggerModelResolver(ObjectMapper mapper) {
         super(mapper);
     }
 

@@ -23,4 +23,4 @@ management:
 logging:
   level:
     tutorials4j: DEBUG
-#    org.springframework: debug
+    org.springframework: debug
