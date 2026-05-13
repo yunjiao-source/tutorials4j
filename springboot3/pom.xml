@@ -39,6 +39,8 @@
         <module>springboot3-mybatis-tenant</module>
         <module>springboot3-pay</module>
         <module>springboot3-qps</module>
+        <module>springboot3-referer</module>
+
     </modules>
 
     <dependencyManagement>

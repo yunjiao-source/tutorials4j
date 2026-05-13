@@ -1,0 +1,5 @@
+
+
+### 在游览器上输入
+GET http://localhost:8080/image.html
+Accept: text/html
