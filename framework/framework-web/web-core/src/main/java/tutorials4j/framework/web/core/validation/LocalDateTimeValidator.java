@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.core.validation;
+package tutorials4j.framework.web.core.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

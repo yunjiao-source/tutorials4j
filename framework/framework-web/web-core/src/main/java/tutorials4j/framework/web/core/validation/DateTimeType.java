@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.core.validation;
+package tutorials4j.framework.web.core.validation;
 
 /**
  * 日期时间类型枚举，用于标识字符串内容所代表的实际时间类别。

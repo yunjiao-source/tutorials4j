@@ -7,8 +7,8 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.jetbrains.annotations.NotNull;
-import tutorials4j.framework.common.core.validation.DateTimeType;
-import tutorials4j.framework.common.core.validation.LocalDateTimeFormat;
+import tutorials4j.framework.web.core.validation.DateTimeType;
+import tutorials4j.framework.web.core.validation.LocalDateTimeFormat;
 
 /**
  * 人员

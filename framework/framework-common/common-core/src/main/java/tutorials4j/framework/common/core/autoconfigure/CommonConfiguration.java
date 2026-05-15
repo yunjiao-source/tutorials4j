@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({SpringUtil.class, JsonConfiguration.class, ValidatorsConfiguration.class})
+@Import({SpringUtil.class, JsonConfiguration.class})
 public class CommonConfiguration {
     @PostConstruct
     public void postConstruct() {

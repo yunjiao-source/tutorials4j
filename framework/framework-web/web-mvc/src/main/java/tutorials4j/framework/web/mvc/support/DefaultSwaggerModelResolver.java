@@ -3,7 +3,7 @@ package tutorials4j.framework.web.mvc.support;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.oas.models.media.Schema;
-import tutorials4j.framework.common.core.validation.LocalDateTimeFormat;
+import tutorials4j.framework.web.core.validation.LocalDateTimeFormat;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

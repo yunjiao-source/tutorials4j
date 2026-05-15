@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
@@ -22,6 +23,7 @@ import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({HttpProperties.class, WebProperties.class})
+@Import({ValidatorsConfiguration.class})
 public class WebConfiguration {
     @PostConstruct
     public void postConstruct() {
