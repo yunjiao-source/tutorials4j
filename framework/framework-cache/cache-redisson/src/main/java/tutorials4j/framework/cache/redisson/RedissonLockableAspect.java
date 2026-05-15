@@ -14,7 +14,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import tutorials4j.framework.cache.core.lock.LockCacheType;
 import tutorials4j.framework.cache.core.lock.LockServiceFactory;
 import tutorials4j.framework.cache.core.lock.LockType;
-import tutorials4j.framework.common.core.util.SpelExpressionResolver;
+import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * TODO
@@ -29,7 +29,8 @@ public class RedissonLockableAspect {
       Pair.of(LockCacheType.REDISSON, LockType.BLOCK);
   private static final Pair<LockCacheType, LockType> REDISSON_REENTRANT =
       Pair.of(LockCacheType.REDISSON, LockType.REENTRANT);
-  private final SpelExpressionResolver SPEL = SpelExpressionResolver.instance;
+
+  private final SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator;
 
   private final LockServiceFactory lockServiceFactory;
 
@@ -39,7 +40,9 @@ public class RedissonLockableAspect {
     Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
     Object[] args = joinPoint.getArgs();
 
-    String expression = SPEL.evaluate(redissonLockable.key(), method, args, String.class);
+    String expression =
+        spelMethodBasedExpressionEvaluator.getValue(
+            method, args, redissonLockable.key(), String.class);
     String key = generateKey(redissonLockable, expression);
 
     LockType type = redissonLockable.type();
@@ -64,6 +67,7 @@ public class RedissonLockableAspect {
       BlockRedissonLockService lockService) {
     TimeUnit timeUnit = redissonLockable.timeUnit();
     long expireTime = redissonLockable.expireTime();
+
     if (expireTime > 0) {
       return lockService
           .fixedLease()
@@ -100,6 +104,7 @@ public class RedissonLockableAspect {
     TimeUnit timeUnit = redissonLockable.timeUnit();
     long waitTime = redissonLockable.waitTime();
     long expireTime = redissonLockable.expireTime();
+
     if (expireTime > 0) {
       return lockService
           .fixedLease()

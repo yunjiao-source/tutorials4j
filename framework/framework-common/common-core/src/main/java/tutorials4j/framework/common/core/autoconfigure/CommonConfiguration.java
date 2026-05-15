@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 
@@ -45,5 +46,11 @@ public class CommonConfiguration {
     List<TaskDecoratorCreator> creators =
         taskDecoratorCreators.orderedStream().collect(Collectors.toList());
     return new CompositeTaskDecoratorCreator(creators);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator() {
+    return new SpelMethodBasedExpressionEvaluator();
   }
 }

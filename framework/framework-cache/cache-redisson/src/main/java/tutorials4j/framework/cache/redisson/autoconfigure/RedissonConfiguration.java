@@ -12,6 +12,7 @@ import tutorials4j.framework.cache.redisson.BlockRedissonLockService;
 import tutorials4j.framework.cache.redisson.PrefixNameMapper;
 import tutorials4j.framework.cache.redisson.RedissonLockableAspect;
 import tutorials4j.framework.cache.redisson.ReentrantRedissonLockService;
+import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * Redisson 配置
@@ -57,8 +58,10 @@ public class RedissonConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  RedissonLockableAspect redissonLockableAspect(LockServiceFactory lockServiceFactory) {
+  RedissonLockableAspect redissonLockableAspect(
+      LockServiceFactory lockServiceFactory,
+      SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator) {
     log.debug("[CACHE-REDISSON] Redisson Lockable Aspect");
-    return new RedissonLockableAspect(lockServiceFactory);
+    return new RedissonLockableAspect(spelMethodBasedExpressionEvaluator, lockServiceFactory);
   }
 }
