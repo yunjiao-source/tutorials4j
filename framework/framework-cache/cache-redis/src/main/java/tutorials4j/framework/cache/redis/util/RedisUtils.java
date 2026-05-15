@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
-import tutorials4j.framework.common.core.SymbolConsts;
+import tutorials4j.framework.cache.core.support.RedisKeyPrefix;
 import tutorials4j.framework.common.core.TenantContextHolder;
 
 import java.util.Objects;
@@ -26,29 +26,25 @@ public interface RedisUtils {
      *
      * @return 默认的 {@link CacheKeyPrefix} 实例
      */
-    static CacheKeyPrefix defaultCacheKeyPrefix() {
-        return name -> TenantContextHolder.get()  + SymbolConsts.COLON + name + CacheKeyPrefix.SEPARATOR;
+    static CacheKeyPrefix tenantCacheKeyPrefix() {
+        return name -> RedisKeyPrefix.tenant().compute(name);
     }
 
     /**
      * 创建带自定义前缀的缓存键前缀策略。
      *
-     * <p>若传入的 {@code prefix} 为空或空白，则回退到 {@link #defaultCacheKeyPrefix()}。
+     * <p>若传入的 {@code prefix} 为空或空白，则回退到 {@link #tenantCacheKeyPrefix()}。
      * 否则，如果前缀末尾没有冒号，会自动补充一个冒号，然后组合全局默认前缀、自定义前缀、缓存名称和分隔符。
      *
      * @param prefix 自定义前缀，可为空
      * @return 组合后的 {@link CacheKeyPrefix} 实例
      */
-    static CacheKeyPrefix defaultCacheKeyPrefix(String prefix) {
+    static CacheKeyPrefix tenantCacheKeyPrefix(String prefix) {
         if (StringUtils.isBlank(prefix)) {
-            return defaultCacheKeyPrefix();
+            return tenantCacheKeyPrefix();
         }
 
-        if (!prefix.endsWith(SymbolConsts.COLON)) {
-            return name -> TenantContextHolder.get() + SymbolConsts.COLON + prefix + SymbolConsts.COLON + name + CacheKeyPrefix.SEPARATOR;
-        } else {
-            return name -> TenantContextHolder.get() + SymbolConsts.COLON + prefix + name + CacheKeyPrefix.SEPARATOR;
-        }
+        return name -> RedisKeyPrefix.tenantPrefix(prefix).compute(name);
     }
 
     /**
@@ -61,7 +57,7 @@ public interface RedisUtils {
     static RedisCacheConfiguration fillConfiguration(RedisCacheConfiguration configuration,
                                                      NamedCacheOptions prop) {
 
-        configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix());
+        configuration = configuration.computePrefixWith(RedisUtils.tenantCacheKeyPrefix());
         if (prop.getTimeToLive() != null) {
             configuration = configuration.entryTtl(prop.getTimeToLive());
         }
@@ -71,7 +67,7 @@ public interface RedisUtils {
         }
 
         if (StringUtils.isNotBlank(prop.getRedis().getKeyPrefix())) {
-            configuration = configuration.computePrefixWith(RedisUtils.defaultCacheKeyPrefix(prop.getRedis().getKeyPrefix()));
+            configuration = configuration.computePrefixWith(RedisUtils.tenantCacheKeyPrefix(prop.getRedis().getKeyPrefix()));
         }
 
         return configuration;

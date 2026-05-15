@@ -41,6 +41,7 @@
         <p6spy.version>3.9.1</p6spy.version>
         <wechatpay-java.version>0.2.17</wechatpay-java.version>
         <springdoc.version>2.8.17</springdoc.version>
+        <redisson.version>4.2.0</redisson.version>
     </properties>
 
     <modules>
@@ -78,6 +79,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi</artifactId>

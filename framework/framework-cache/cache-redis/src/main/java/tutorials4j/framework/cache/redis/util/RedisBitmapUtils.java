@@ -72,7 +72,7 @@ public class RedisBitmapUtils {
      * @param value  要设置的位值，true 表示 1，false 表示 0
      * @return 该偏移量位置原来的位值（true 表示原为 1，false 表示原为 0）；若操作失败返回 null
      */
-    public static Boolean setBit(String key, Long offset, boolean value) {
+    public static Boolean setBit(String key, long offset, boolean value) {
         return stringRedisTemplate.opsForValue().setBit(key, offset, value);
     }
 

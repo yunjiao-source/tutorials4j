@@ -1,0 +1,17 @@
+###
+GET http://localhost:8080/redisson-lock/block-auto-renewal
+Content-Type: application/json
+
+###
+GET http://localhost:8080/redisson-lock/block-fixed-lease
+Content-Type: application/json
+
+###
+GET http://localhost:8080/redisson-lock/reentrant-auto-renewal
+Content-Type: application/json
+
+###
+GET http://localhost:8080/redisson-lock/reentrant-fixed-lease
+Content-Type: application/json
+
+

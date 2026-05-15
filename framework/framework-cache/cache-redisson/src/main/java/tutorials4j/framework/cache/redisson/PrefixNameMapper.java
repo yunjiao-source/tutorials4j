@@ -1,0 +1,31 @@
+package tutorials4j.framework.cache.redisson;
+
+import org.redisson.config.NameMapper;
+import tutorials4j.framework.cache.core.support.RedisKeyPrefix;
+
+/**
+ * Redisson Key 名称映射器的实现，用于统一为所有 Redis Key 添加租户前缀。
+ * <p>
+ * 通过委托给 {@link RedisKeyPrefix#tenant()} 策略，在写入/读取 Redis 时自动为每个 Key 添加当前租户 ID，
+ * 并能在读取时正确剥离前缀，实现多租户数据隔离。
+ * </p>
+ * <p>
+ * 该实现通常与 Redisson 配置中的 {@code nameMapper} 配合使用，
+ * 使得业务代码中使用的原始 Key 名（如锁的 Key、对象的 Key）自动获得租户隔离能力。
+ * </p>
+ *
+ * @author Yun Jiao
+ * @see RedisKeyPrefix#tenant()
+ * @see org.redisson.config.Config#setNameMapper(NameMapper)
+ */
+public class PrefixNameMapper implements NameMapper {
+    @Override
+    public String map(String s) {
+        return RedisKeyPrefix.tenant().compute(s);
+    }
+
+    @Override
+    public String unmap(String s) {
+        return RedisKeyPrefix.uncompute(s);
+    }
+}

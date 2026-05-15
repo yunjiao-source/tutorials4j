@@ -10,36 +10,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cache-spring-boot-starter</artifactId>
+    <artifactId>cache-redisson</artifactId>
     <packaging>jar</packaging>
-    <name>Cache :: Cache Spring Boot Starter</name>
+    <name>Cache :: Redisson</name>
     <description>
-        Cache 启动器
+        缓存Redisson模块
     </description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-spring-boot-starter</artifactId>
+            <artifactId>cache-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-multi-level</artifactId>
-            <version>${revision}</version>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-redisson</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-
     </dependencies>
+
 </project>

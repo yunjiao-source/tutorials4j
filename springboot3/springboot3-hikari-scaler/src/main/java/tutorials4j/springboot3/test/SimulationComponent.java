@@ -42,7 +42,7 @@ public class SimulationComponent {
                     System.out.println(Thread.currentThread().getName());
                     while (System.currentTimeMillis() < endTime) {
                         try {
-                            List<User> users = userService.getAllUsers();
+
                             successCount.incrementAndGet();
                         } catch (Exception e) {
                             failCount.incrementAndGet();
