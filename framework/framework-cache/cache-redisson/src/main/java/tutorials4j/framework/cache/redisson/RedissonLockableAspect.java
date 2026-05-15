@@ -17,7 +17,17 @@ import tutorials4j.framework.cache.core.lock.LockType;
 import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
 
 /**
- * TODO
+ * Redisson 分布式锁的切面实现。
+ *
+ * <p>拦截带有 {@link RedissonLockable} 注解的方法，根据注解配置动态生成锁的 key， 并通过 {@link LockServiceFactory}
+ * 获取对应的锁服务执行锁保护下的方法调用。
+ *
+ * <p>支持两种锁类型：
+ *
+ * <ul>
+ *   <li>{@link LockType#BLOCK}：阻塞式锁，使用 {@link BlockRedissonLockService}
+ *   <li>{@link LockType#REENTRANT}：可重入锁（非阻塞等待），使用 {@link ReentrantRedissonLockService}
+ * </ul>
  *
  * @author Yun Jiao
  */
@@ -31,9 +41,16 @@ public class RedissonLockableAspect {
       Pair.of(LockCacheType.REDISSON, LockType.REENTRANT);
 
   private final SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator;
-
   private final LockServiceFactory lockServiceFactory;
 
+  /**
+   * 环绕通知：处理 {@link RedissonLockable} 注解的锁逻辑。
+   *
+   * @param joinPoint 切点
+   * @param redissonLockable 锁注解实例
+   * @return 原方法的执行结果
+   * @throws Throwable 原方法或锁执行过程中抛出的异常
+   */
   @Around("@annotation(redissonLockable)")
   public Object around(ProceedingJoinPoint joinPoint, RedissonLockable redissonLockable)
       throws Throwable {
@@ -60,6 +77,15 @@ public class RedissonLockableAspect {
     throw new IllegalStateException("Unexpected value: " + type);
   }
 
+  /**
+   * 执行阻塞式锁（{@link LockType#BLOCK}）的逻辑。
+   *
+   * @param key 锁的 key
+   * @param redissonLockable 锁注解配置
+   * @param joinPoint 切点
+   * @param lockService 阻塞锁服务
+   * @return 方法执行结果
+   */
   private Object executeWithLock(
       String key,
       RedissonLockable redissonLockable,
@@ -96,6 +122,15 @@ public class RedissonLockableAspect {
     }
   }
 
+  /**
+   * 执行可重入锁（{@link LockType#REENTRANT}）的逻辑。
+   *
+   * @param key 锁的 key
+   * @param redissonLockable 锁注解配置
+   * @param joinPoint 切点
+   * @param lockService 可重入锁服务
+   * @return 方法执行结果
+   */
   private Object executeWithLock(
       String key,
       RedissonLockable redissonLockable,
@@ -135,6 +170,13 @@ public class RedissonLockableAspect {
     }
   }
 
+  /**
+   * 生成最终的锁 key，由前缀和 SpEL 表达式的求值结果拼接而成。
+   *
+   * @param redissonLockable 锁注解配置
+   * @param argValues SpEL 表达式求值结果
+   * @return 完整的锁 key
+   */
   private String generateKey(RedissonLockable redissonLockable, String argValues) {
     return redissonLockable.prefix() + argValues;
   }
