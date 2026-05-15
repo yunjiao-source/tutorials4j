@@ -13,6 +13,7 @@ import java.util.Arrays;
  * @author Yun Jiao
  */
 public class SpelExpressionResolver {
+    public final static SpelExpressionResolver instance = new SpelExpressionResolver();
 
     private final SpelExpressionParser PARSER = new SpelExpressionParser();
 

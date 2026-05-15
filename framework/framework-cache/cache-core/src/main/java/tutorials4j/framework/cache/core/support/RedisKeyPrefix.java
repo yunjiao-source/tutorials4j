@@ -1,7 +1,6 @@
 package tutorials4j.framework.cache.core.support;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
 import tutorials4j.framework.common.core.SymbolConsts;
 import tutorials4j.framework.common.core.TenantContextHolder;
 
@@ -14,7 +13,7 @@ import tutorials4j.framework.common.core.TenantContextHolder;
  *
  * @author Yun Jiao
  * @see #tenant()
- * @see #tenantPrefix(String)
+ * @see #tenantPrefixed(String)
  * @see #uncompute(String)
  */
 @FunctionalInterface
@@ -54,7 +53,7 @@ public interface RedisKeyPrefix {
         if (StringUtils.isBlank(key)) {
             return key;
         }
-        int firstColonIndex = key.indexOf(':');
+        int firstColonIndex = key.indexOf(SEPARATOR);
         if (firstColonIndex == -1) {
             return key;
         }
@@ -102,13 +101,12 @@ public interface RedisKeyPrefix {
      * @return 结合租户和自定义前缀的策略函数
      * @throws IllegalArgumentException 如果 prefix 为 {@code null}
      */
-    static RedisKeyPrefix tenantPrefix(String prefix) {
-        Assert.notNull(prefix, "Prefix must not be null");
-        if (prefix.endsWith(SEPARATOR)) {
-            return name -> TenantContextHolder.get() + SEPARATOR + prefix + name;
-        } else {
-            return name -> TenantContextHolder.get() + SEPARATOR + prefix + SEPARATOR + name ;
+    static RedisKeyPrefix tenantPrefixed(String prefix) {
+        if (StringUtils.isBlank(prefix)) {
+            return tenant();
         }
+
+        return name -> TenantContextHolder.get() + SEPARATOR + prefix + name;
     }
 
 

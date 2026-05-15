@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import tutorials4j.framework.cache.core.exception.DistributedLockException;
+import tutorials4j.framework.cache.core.lock.LockService;
+import tutorials4j.framework.cache.core.lock.LockCacheType;
+import tutorials4j.framework.cache.core.lock.LockType;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
@@ -13,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 基于 Redisson 的可重入分布式锁执行器，支持非阻塞尝试获取锁（带等待超时）。
  * <p>
- * 与 {@link BlockRedissonLock} 的区别在于：
+ * 与 {@link BlockRedissonLockService} 的区别在于：
  * <ul>
  *     <li>使用 {@link RLock#tryLock(long, long, TimeUnit)} 或 {@link RLock#tryLock(long, TimeUnit)}，
  *     允许指定等待获取锁的超时时间。</li>
@@ -24,11 +27,11 @@ import java.util.concurrent.TimeUnit;
  * 默认等待时间为 3 秒，可通过 {@link #WAIT_SECONDS} 修改。
  *
  * @author Yun Jiao
- * @see BlockRedissonLock 阻塞式版本（无限等待直到获取锁）
+ * @see BlockRedissonLockService 阻塞式版本（无限等待直到获取锁）
  */
 @Slf4j
 @RequiredArgsConstructor
-public class ReentrantRedissonLock {
+public class ReentrantRedissonLockService implements LockService {
     /**
      * 默认等待获取锁的时间（秒）。
      */
@@ -54,6 +57,16 @@ public class ReentrantRedissonLock {
      */
     public AutoRenewal autoRenewal() {
         return new AutoRenewal(redissonClient);
+    }
+
+    @Override
+    public LockCacheType getLockCacheType() {
+        return LockCacheType.REDISSON;
+    }
+
+    @Override
+    public LockType getLockType() {
+        return LockType.REENTRANT;
     }
 
     /**
@@ -163,7 +176,7 @@ public class ReentrantRedissonLock {
         }
 
         /**
-         * 在锁保护下执行有返回值的任务（固定租约模式，使用默认等待时间 {@value ReentrantRedissonLock#WAIT_SECONDS} 秒）。
+         * 在锁保护下执行有返回值的任务（固定租约模式，使用默认等待时间 {@value ReentrantRedissonLockService#WAIT_SECONDS} 秒）。
          *
          * @param lockKey    锁的键名
          * @param expireTime  锁的持有时间，到期自动释放（不续期）
@@ -177,7 +190,7 @@ public class ReentrantRedissonLock {
         }
 
         /**
-         * 在锁保护下执行无返回值的任务（固定租约模式，使用默认等待时间 {@value ReentrantRedissonLock#WAIT_SECONDS} 秒）。
+         * 在锁保护下执行无返回值的任务（固定租约模式，使用默认等待时间 {@value ReentrantRedissonLockService#WAIT_SECONDS} 秒）。
          *
          * @param lockKey    锁的键名
          * @param expireTime  锁的持有时间，到期自动释放（不续期）
@@ -293,7 +306,7 @@ public class ReentrantRedissonLock {
         }
 
         /**
-         * 在锁保护下执行有返回值的任务（自动续期模式，使用默认等待时间 {@value ReentrantRedissonLock#WAIT_SECONDS} 秒）。
+         * 在锁保护下执行有返回值的任务（自动续期模式，使用默认等待时间 {@value ReentrantRedissonLockService#WAIT_SECONDS} 秒）。
          *
          * @param lockKey 锁的键名
          * @param task    需要执行的任务，返回结果
@@ -306,7 +319,7 @@ public class ReentrantRedissonLock {
         }
 
         /**
-         * 在锁保护下执行无返回值的任务（自动续期模式，使用默认等待时间 {@value ReentrantRedissonLock#WAIT_SECONDS} 秒）。
+         * 在锁保护下执行无返回值的任务（自动续期模式，使用默认等待时间 {@value ReentrantRedissonLockService#WAIT_SECONDS} 秒）。
          *
          * @param lockKey 锁的键名
          * @param task    需要执行的任务（无返回值）

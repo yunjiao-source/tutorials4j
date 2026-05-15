@@ -44,7 +44,7 @@ public interface RedisUtils {
             return tenantCacheKeyPrefix();
         }
 
-        return name -> RedisKeyPrefix.tenantPrefix(prefix).compute(name);
+        return name -> RedisKeyPrefix.tenantPrefixed(prefix).compute(name);
     }
 
     /**

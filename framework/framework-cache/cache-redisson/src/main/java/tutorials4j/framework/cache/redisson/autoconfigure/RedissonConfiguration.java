@@ -7,9 +7,11 @@ import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.cache.redisson.BlockRedissonLock;
+import tutorials4j.framework.cache.core.lock.LockServiceFactory;
+import tutorials4j.framework.cache.redisson.BlockRedissonLockService;
 import tutorials4j.framework.cache.redisson.PrefixNameMapper;
-import tutorials4j.framework.cache.redisson.ReentrantRedissonLock;
+import tutorials4j.framework.cache.redisson.RedissonLockableAspect;
+import tutorials4j.framework.cache.redisson.ReentrantRedissonLockService;
 
 /**
  * Redisson 配置
@@ -40,15 +42,22 @@ public class RedissonConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    BlockRedissonLock BlockRedissonLock(RedissonClient redissonClient) {
+    BlockRedissonLockService BlockRedissonLock(RedissonClient redissonClient) {
         log.debug("[CACHE-REDISSON] Block Redisson Lock");
-        return new BlockRedissonLock(redissonClient);
+        return new BlockRedissonLockService(redissonClient);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    ReentrantRedissonLock reentrantRedissonLock(RedissonClient redissonClient) {
+    ReentrantRedissonLockService reentrantRedissonLock(RedissonClient redissonClient) {
         log.debug("[CACHE-REDISSON] Reentrant Redisson Lock");
-        return new ReentrantRedissonLock(redissonClient);
+        return new ReentrantRedissonLockService(redissonClient);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    RedissonLockableAspect redissonLockableAspect(LockServiceFactory lockServiceFactory) {
+        log.debug("[CACHE-REDISSON] Redisson Lockable Aspect");
+        return new RedissonLockableAspect(lockServiceFactory);
     }
 }

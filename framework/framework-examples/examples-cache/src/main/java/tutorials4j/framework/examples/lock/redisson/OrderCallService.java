@@ -3,8 +3,8 @@ package tutorials4j.framework.examples.lock.redisson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tutorials4j.framework.cache.redisson.BlockRedissonLock;
-import tutorials4j.framework.cache.redisson.ReentrantRedissonLock;
+import tutorials4j.framework.cache.redisson.BlockRedissonLockService;
+import tutorials4j.framework.cache.redisson.ReentrantRedissonLockService;
 
 import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,13 +18,13 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OrderService {
-    private final BlockRedissonLock blockRedissonLock;
-    private final ReentrantRedissonLock reentrantRedissonLock;
+public class OrderCallService {
+    private final BlockRedissonLockService blockRedissonLockService;
+    private final ReentrantRedissonLockService reentrantRedissonLockService;
 
     public void blockAutoRenewal(String orderId) {
         String lockKey = "order:" + orderId;
-        blockRedissonLock.autoRenewal().doInLock(lockKey, () -> {
+        blockRedissonLockService.autoRenewal().doInLock(lockKey, () -> {
             log.info("blockAutoRenewal - {}", Thread.currentThread().getName());
             int time = sleep();
             log.info("blockAutoRenewal - {}, 时长：{}", Thread.currentThread().getName(), time);
@@ -33,7 +33,7 @@ public class OrderService {
 
     public void blockFixedLease(String orderId) {
         String lockKey = "order:" + orderId;
-        blockRedissonLock.fixedLease().doInLock(lockKey, Duration.ofSeconds(3), () -> {
+        blockRedissonLockService.fixedLease().doInLock(lockKey, Duration.ofSeconds(3), () -> {
             log.info("blockFixedLease - {}", Thread.currentThread().getName());
             int time = sleep();
             log.info("blockFixedLease - {}, 时长：{}", Thread.currentThread().getName(), time);
@@ -42,7 +42,7 @@ public class OrderService {
 
     public void reentrantAutoRenewal(String orderId) {
         String lockKey = "order:" + orderId;
-        reentrantRedissonLock.autoRenewal().doInLock(lockKey, Duration.ofSeconds(3), () -> {
+        reentrantRedissonLockService.autoRenewal().doInLock(lockKey, Duration.ofSeconds(3), () -> {
             log.info("reentrantAutoRenewal - {}", Thread.currentThread().getName());
             int time = sleep();
             log.info("reentrantAutoRenewal - {}, 时长：{}", Thread.currentThread().getName(), time);
@@ -51,7 +51,7 @@ public class OrderService {
 
     public void reentrantFixedLease(String orderId) {
         String lockKey = "order:" + orderId;
-        reentrantRedissonLock.fixedLease().doInLock(lockKey, Duration.ofSeconds(3), Duration.ofSeconds(5), () -> {
+        reentrantRedissonLockService.fixedLease().doInLock(lockKey, Duration.ofSeconds(3), Duration.ofSeconds(4), () -> {
             log.info("reentrantFixedLease - {}", Thread.currentThread().getName());
             int time = sleep();
             log.info("reentrantFixedLease - {}, 时长：{}", Thread.currentThread().getName(), time);

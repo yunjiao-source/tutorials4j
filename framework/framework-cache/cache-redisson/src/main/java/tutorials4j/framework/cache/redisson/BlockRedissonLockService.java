@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import tutorials4j.framework.cache.core.exception.DistributedLockException;
+import tutorials4j.framework.cache.core.lock.LockService;
+import tutorials4j.framework.cache.core.lock.LockCacheType;
+import tutorials4j.framework.cache.core.lock.LockType;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
@@ -22,11 +25,11 @@ import java.util.concurrent.TimeUnit;
  * </ul>
  *
  * @author Yun Jiao
- * @see ReentrantRedissonLock 支持非阻塞尝试获取锁的版本
+ * @see ReentrantRedissonLockService 支持非阻塞尝试获取锁的版本
  */
 @Slf4j
 @RequiredArgsConstructor
-public class BlockRedissonLock {
+public class BlockRedissonLockService implements LockService {
     private final RedissonClient redissonClient;
 
     /**
@@ -45,6 +48,16 @@ public class BlockRedissonLock {
      */
     public AutoRenewal autoRenewal() {
         return new AutoRenewal(redissonClient);
+    }
+
+    @Override
+    public LockCacheType getLockCacheType() {
+        return LockCacheType.REDISSON;
+    }
+
+    @Override
+    public LockType getLockType() {
+        return LockType.BLOCK;
     }
 
     /**

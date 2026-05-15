@@ -28,7 +28,7 @@ public class CacheManagerCreatorFactory {
      * @return 多级缓存实例
      * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
      */
-    public static Cache getMultiLevelCache(String cacheName) {
+    public static Cache findMultiLevelCache(String cacheName) {
         CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_MULTI_LEVEL);
         if (creator != null) {
             return creator.getInstance().getCache(cacheName);
@@ -49,7 +49,7 @@ public class CacheManagerCreatorFactory {
      * @return Redis 缓存实例
      * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
      */
-    public static Cache getRedisCache(String cacheName) {
+    public static Cache findRedisCache(String cacheName) {
         CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.REDIS);
         if (creator != null) {
             return creator.getInstance().getCache(cacheName);
@@ -68,7 +68,7 @@ public class CacheManagerCreatorFactory {
      * @return Caffeine 缓存实例
      * @throws CacheManagerCreatorNotFoundException 如果未找到任何本地缓存管理器创建器
      */
-    public static Cache getCaffeineCache(String cacheName) {
+    public static Cache findCaffeineCache(String cacheName) {
         // 先获取支持租户的
         CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_CAFFEINE);
         if (creator != null) {
@@ -84,8 +84,6 @@ public class CacheManagerCreatorFactory {
     }
 
     public void setCacheManagerCreators(List<CacheManagerCreator<?>> cacheManagerCreators) {
-        log.debug("[CACHE-CORE] 工厂CacheManagerCreatorFactory注入实例：{}", cacheManagerCreators);
-
         for (CacheManagerCreator<?> creator : cacheManagerCreators) {
             creatorMap.put(creator.getCategory(), creator);
         }

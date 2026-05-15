@@ -1,17 +1,34 @@
 ###
-GET http://localhost:8080/redisson-lock/block-auto-renewal
+GET http://localhost:8080/order-call/block-auto-renewal
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/redisson-lock/block-fixed-lease
+GET http://localhost:8080/order-call/block-fixed-lease
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/redisson-lock/reentrant-auto-renewal
+GET http://localhost:8080/order-call/reentrant-auto-renewal
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/redisson-lock/reentrant-fixed-lease
+GET http://localhost:8080/order-call/reentrant-fixed-lease
+Content-Type: application/json
+
+
+###
+GET http://localhost:8080/order-anno/block-auto-renewal
+Content-Type: application/json
+
+###
+GET http://localhost:8080/order-anno/block-fixed-lease
+Content-Type: application/json
+
+###
+GET http://localhost:8080/order-anno/reentrant-auto-renewal
+Content-Type: application/json
+
+###
+GET http://localhost:8080/order-anno/reentrant-fixed-lease
 Content-Type: application/json
 
 

@@ -5,7 +5,7 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 /**
  * Redis 缓存模板抽象类。
  * <p>
- * 通过 {@link CacheManagerCreatorFactory#getRedisCache(String)} 获取底层 Redis 缓存实例。
+ * 通过 {@link CacheManagerCreatorFactory#findRedisCache(String)} 获取底层 Redis 缓存实例。
  * 子类需实现 {@link #getValueClass()} 和 {@link #valueGenerator(Object)} 等方法。
  * </p>
  *
@@ -20,6 +20,6 @@ public abstract class AbstractRedisCacheTemplate<K, V> extends AbstractCacheTemp
 
     @Override
     protected void initCache() {
-        cache = CacheManagerCreatorFactory.getRedisCache(cacheName);
+        cache = CacheManagerCreatorFactory.findRedisCache(cacheName);
     }
 }

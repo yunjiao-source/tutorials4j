@@ -16,6 +16,6 @@ tutorials4j:
           timeToLive: 20s
           cacheNullValues: true
           redis:
-            keyPrefix: order
+            keyPrefix: 'order:'
 
 

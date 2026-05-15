@@ -11,28 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("/redisson-lock")
+@RequestMapping("/order-anno")
 @RequiredArgsConstructor
-public class RedissonLockController {
-    private final OrderService orderService;
+public class OrderAnnoController {
+    private final OrderAnnoService orderAnnoService;
 
     @GetMapping("block-auto-renewal")
     public void blockAutoRenewal() {
-        orderService.blockAutoRenewal("1");
+        orderAnnoService.blockAutoRenewal("1");
     }
 
     @GetMapping("block-fixed-lease")
     public void blockFixedLease() {
-        orderService.blockFixedLease("2");
+        orderAnnoService.blockFixedLease("2");
     }
 
     @GetMapping("reentrant-auto-renewal")
     public void reentrantAutoRenewal() {
-        orderService.reentrantAutoRenewal("3");
+        orderAnnoService.reentrantAutoRenewal("3");
     }
 
     @GetMapping("reentrant-fixed-lease")
     public void reentrantFixedLease() {
-        orderService.reentrantFixedLease("4");
+        orderAnnoService.reentrantFixedLease("4");
     }
 }
