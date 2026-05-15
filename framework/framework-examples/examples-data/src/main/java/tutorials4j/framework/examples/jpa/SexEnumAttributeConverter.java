@@ -9,7 +9,7 @@ import tutorials4j.framework.examples.SexEnum;
  * @author Yun Jiao
  */
 public class SexEnumAttributeConverter extends AbstractBaseEnumAttributeConverter<SexEnum, String> {
-    public SexEnumAttributeConverter() {
-        super(SexEnum.class);
-    }
+  public SexEnumAttributeConverter() {
+    super(SexEnum.class);
+  }
 }

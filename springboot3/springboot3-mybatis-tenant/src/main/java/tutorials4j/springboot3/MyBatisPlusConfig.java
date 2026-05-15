@@ -15,23 +15,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MyBatisPlusConfig {
 
-    @Bean
-    public TenantLineInnerInterceptor tenantLineInnerInterceptor() {
-        // 添加多租户插件
-        TenantLineHandler tenantLineHandler = new TenantLineHandler() {
-            @Override
-            public Expression getTenantId() {
-                // 返回当前租户ID
-                return new StringValue(TenantContext.getCurrentTenantId());
-            }
+  @Bean
+  public TenantLineInnerInterceptor tenantLineInnerInterceptor() {
+    // 添加多租户插件
+    TenantLineHandler tenantLineHandler =
+        new TenantLineHandler() {
+          @Override
+          public Expression getTenantId() {
+            // 返回当前租户ID
+            return new StringValue(TenantContext.getCurrentTenantId());
+          }
 
-            @Override
-            public boolean ignoreTable(String tableName) {
-                // 忽略多租户的表（比如公共表）
-                return "common_table".equalsIgnoreCase(tableName);
-            }
+          @Override
+          public boolean ignoreTable(String tableName) {
+            // 忽略多租户的表（比如公共表）
+            return "common_table".equalsIgnoreCase(tableName);
+          }
         };
-        return new TenantLineInnerInterceptor(tenantLineHandler);
-    }
+    return new TenantLineInnerInterceptor(tenantLineHandler);
+  }
 }
-

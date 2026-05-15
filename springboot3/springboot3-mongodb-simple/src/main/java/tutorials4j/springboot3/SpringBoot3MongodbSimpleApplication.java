@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class SpringBoot3MongodbSimpleApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SpringBoot3MongodbSimpleApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(SpringBoot3MongodbSimpleApplication.class, args);
+  }
 }

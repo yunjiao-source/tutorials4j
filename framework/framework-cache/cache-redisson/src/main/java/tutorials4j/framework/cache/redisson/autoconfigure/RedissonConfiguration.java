@@ -21,43 +21,44 @@ import tutorials4j.framework.cache.redisson.ReentrantRedissonLockService;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class RedissonConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[CACHE-REDISSON] Redisson Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[CACHE-REDISSON] Redisson Configuration");
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    PrefixNameMapper prefixNameMapper() {
-        log.debug("[CACHE-REDISSON] Prefix Name Mapper");
-        return new PrefixNameMapper();
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  PrefixNameMapper prefixNameMapper() {
+    log.debug("[CACHE-REDISSON] Prefix Name Mapper");
+    return new PrefixNameMapper();
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    RedissonAutoConfigurationCustomizer prefixNameRedissonConfigCustomizer(PrefixNameMapper prefixNameMapper) {
-        log.debug("[CACHE-REDISSON] Prefix Name Redisson Config Customizer");
-        return config -> config.setNameMapper(prefixNameMapper);
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  RedissonAutoConfigurationCustomizer prefixNameRedissonConfigCustomizer(
+      PrefixNameMapper prefixNameMapper) {
+    log.debug("[CACHE-REDISSON] Prefix Name Redisson Config Customizer");
+    return config -> config.setNameMapper(prefixNameMapper);
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    BlockRedissonLockService BlockRedissonLock(RedissonClient redissonClient) {
-        log.debug("[CACHE-REDISSON] Block Redisson Lock");
-        return new BlockRedissonLockService(redissonClient);
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  BlockRedissonLockService BlockRedissonLock(RedissonClient redissonClient) {
+    log.debug("[CACHE-REDISSON] Block Redisson Lock");
+    return new BlockRedissonLockService(redissonClient);
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    ReentrantRedissonLockService reentrantRedissonLock(RedissonClient redissonClient) {
-        log.debug("[CACHE-REDISSON] Reentrant Redisson Lock");
-        return new ReentrantRedissonLockService(redissonClient);
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  ReentrantRedissonLockService reentrantRedissonLock(RedissonClient redissonClient) {
+    log.debug("[CACHE-REDISSON] Reentrant Redisson Lock");
+    return new ReentrantRedissonLockService(redissonClient);
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    RedissonLockableAspect redissonLockableAspect(LockServiceFactory lockServiceFactory) {
-        log.debug("[CACHE-REDISSON] Redisson Lockable Aspect");
-        return new RedissonLockableAspect(lockServiceFactory);
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  RedissonLockableAspect redissonLockableAspect(LockServiceFactory lockServiceFactory) {
+    log.debug("[CACHE-REDISSON] Redisson Lockable Aspect");
+    return new RedissonLockableAspect(lockServiceFactory);
+  }
 }

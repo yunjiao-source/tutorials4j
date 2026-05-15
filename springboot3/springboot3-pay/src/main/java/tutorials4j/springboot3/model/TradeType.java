@@ -13,23 +13,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum TradeType {
+  APP("app", "APP支付"),
+  JSAPI("jsapi", "公众号/小程序支付"),
+  NATIVE("native", "扫码支付"),
+  H5("h5", "H5支付");
 
-    APP("app", "APP支付"),
-    JSAPI("jsapi", "公众号/小程序支付"),
-    NATIVE("native", "扫码支付"),
-    H5("h5", "H5支付");
+  private String code;
 
-    private String code;
+  private String desc;
 
-    private String desc;
-
-    public static TradeType getByCode(String code) {
-        for (TradeType item : values()) {
-            if (item.getCode().equals(code)) {
-                return item;
-            }
-        }
-        return null;
+  public static TradeType getByCode(String code) {
+    for (TradeType item : values()) {
+      if (item.getCode().equals(code)) {
+        return item;
+      }
     }
-
+    return null;
+  }
 }

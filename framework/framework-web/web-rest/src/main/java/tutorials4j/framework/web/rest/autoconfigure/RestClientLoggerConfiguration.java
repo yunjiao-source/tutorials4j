@@ -18,33 +18,33 @@ import tutorials4j.framework.web.rest.util.RestUtils;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class RestClientLoggerConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-REST] Rest Client Logger Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-REST] Rest Client Logger Configuration");
+  }
 
-    @Bean
-    RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
-        log.debug("[WEB-REST] Log Headers Rest Template Builder Customizer");
-        return restTemplate -> {
-            restTemplate.getInterceptors().add(new LogClientHttpRequestInterceptor());
-        };
-    }
+  @Bean
+  RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
+    log.debug("[WEB-REST] Log Headers Rest Template Builder Customizer");
+    return restTemplate -> {
+      restTemplate.getInterceptors().add(new LogClientHttpRequestInterceptor());
+    };
+  }
 
-    @Bean
-    RestClientCustomizer logHeadersRestClientCustomizer() {
-        log.debug("[WEB-REST] Log Headers Rest Client Customizer");
-        return restClientBuilder -> {
-            restClientBuilder.requestInterceptor(new LogClientHttpRequestInterceptor());
-        };
-    }
+  @Bean
+  RestClientCustomizer logHeadersRestClientCustomizer() {
+    log.debug("[WEB-REST] Log Headers Rest Client Customizer");
+    return restClientBuilder -> {
+      restClientBuilder.requestInterceptor(new LogClientHttpRequestInterceptor());
+    };
+  }
 
-    @Bean
-    WebClientCustomizer logHeadersWebClientCustomizer() {
-        log.debug("[WEB-REST] Log Headers Web Client Customizer");
-        return webClientBuilder -> {
-            webClientBuilder.filter(RestUtils.ofClientRequestLogger());
-            webClientBuilder.filter(RestUtils.ofClientResponseLogger());
-        };
-    }
+  @Bean
+  WebClientCustomizer logHeadersWebClientCustomizer() {
+    log.debug("[WEB-REST] Log Headers Web Client Customizer");
+    return webClientBuilder -> {
+      webClientBuilder.filter(RestUtils.ofClientRequestLogger());
+      webClientBuilder.filter(RestUtils.ofClientResponseLogger());
+    };
+  }
 }

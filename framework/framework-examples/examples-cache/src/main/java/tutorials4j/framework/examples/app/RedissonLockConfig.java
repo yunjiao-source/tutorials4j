@@ -12,6 +12,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("redisson-lock")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.lock.redisson"})
-public class RedissonLockConfig {
-
-}
+public class RedissonLockConfig {}

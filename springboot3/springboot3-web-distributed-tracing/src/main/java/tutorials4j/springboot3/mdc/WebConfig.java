@@ -18,36 +18,36 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebConfig {
 
-    @Bean
-    public WebClient webClient() {
-        return WebClient.builder()
-                .filter((request, next) -> {
-                    ClientRequest newRequest = ClientRequest.from(request)
-                            .headers(headers -> {
-                                String traceId = MDC.get(TraceConstants.TRACE_ID);
-                                String spanId = MDC.get(TraceConstants.SPAN_ID);
+  @Bean
+  public WebClient webClient() {
+    return WebClient.builder()
+        .filter(
+            (request, next) -> {
+              ClientRequest newRequest =
+                  ClientRequest.from(request)
+                      .headers(
+                          headers -> {
+                            String traceId = MDC.get(TraceConstants.TRACE_ID);
+                            String spanId = MDC.get(TraceConstants.SPAN_ID);
 
-                                if (traceId != null) {
-                                    headers.set(TraceConstants.TRACE_ID, traceId);
-                                }
-                                if (spanId != null) {
-                                    String childSpanId = TraceIdGenerator.generateSpanId();
-                                    headers.set(TraceConstants.PARENT_SPAN_ID, spanId);
-                                    headers.set(TraceConstants.SPAN_ID, childSpanId);
-                                }
-                                log.info("WebClient添加追踪信息");
-                            })
-                            .build();
-                    return next.exchange(newRequest);
-                })
-                .build();
-    }
+                            if (traceId != null) {
+                              headers.set(TraceConstants.TRACE_ID, traceId);
+                            }
+                            if (spanId != null) {
+                              String childSpanId = TraceIdGenerator.generateSpanId();
+                              headers.set(TraceConstants.PARENT_SPAN_ID, spanId);
+                              headers.set(TraceConstants.SPAN_ID, childSpanId);
+                            }
+                            log.info("WebClient添加追踪信息");
+                          })
+                      .build();
+              return next.exchange(newRequest);
+            })
+        .build();
+  }
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder
-                .additionalInterceptors(new TraceRestTemplateInterceptor())
-                .build();
-    }
+  @Bean
+  public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+    return restTemplateBuilder.additionalInterceptors(new TraceRestTemplateInterceptor()).build();
+  }
 }
-

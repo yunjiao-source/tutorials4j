@@ -2,6 +2,7 @@ package tutorials4j.framework.web.mvc.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -13,19 +14,14 @@ import tutorials4j.framework.web.core.annotation.Idempotent;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.exception.IdempotentException;
 
-import java.lang.reflect.Method;
-
 /**
  * 幂等性校验的处理器拦截器。
- * <p>
- * 拦截带有 {@link Idempotent} 注解的处理器方法，在方法执行前进行幂等性检查。
- * 通过 {@link IdempotentCacheTemplate} 对当前请求生成的唯一键进行计数，
- * 由于该模板的最大次数固定为 1，因此同一请求键的第二次访问将抛出 {@link IdempotentException}。
- * </p>
- * <p>
- * 请求键的生成由 {@link SessionUtils#generateRequestKey(HttpServletRequest)} 负责，
- * 通常结合用户标识、请求 URI、请求参数等，确保同一请求的唯一性。
- * </p>
+ *
+ * <p>拦截带有 {@link Idempotent} 注解的处理器方法，在方法执行前进行幂等性检查。 通过 {@link IdempotentCacheTemplate}
+ * 对当前请求生成的唯一键进行计数， 由于该模板的最大次数固定为 1，因此同一请求键的第二次访问将抛出 {@link IdempotentException}。
+ *
+ * <p>请求键的生成由 {@link SessionUtils#generateRequestKey(HttpServletRequest)} 负责， 通常结合用户标识、请求
+ * URI、请求参数等，确保同一请求的唯一性。
  *
  * @author Yun Jiao
  * @see Idempotent
@@ -35,35 +31,36 @@ import java.lang.reflect.Method;
 @Slf4j
 @RequiredArgsConstructor
 public class IdempotentHandlerInterceptor implements HandlerInterceptor {
-    private final IdempotentCacheTemplate idempotentCacheTemplate;
+  private final IdempotentCacheTemplate idempotentCacheTemplate;
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
 
-        if (log.isDebugEnabled()) {
-            log.debug("[WEB-MVC] 幂等拦截器：{}", request.getRequestURI());
-        }
-
-        Method method = null;
-        if (handler instanceof HandlerMethod handlerMethod) {
-            method = handlerMethod.getMethod();
-        }
-
-        if (method == null) {
-            return true;
-        }
-
-        Idempotent idempotent = method.getAnnotation(Idempotent.class);
-        if (ObjectUtils.isNotEmpty(idempotent)) {
-            String key = SessionUtils.generateRequestKey(request);
-
-            try {
-                idempotentCacheTemplate.counting(key, true);
-            } catch (CounterOverflowException e) {
-                throw new IdempotentException(e);
-            }
-        }
-
-        return true;
+    if (log.isDebugEnabled()) {
+      log.debug("[WEB-MVC] 幂等拦截器：{}", request.getRequestURI());
     }
+
+    Method method = null;
+    if (handler instanceof HandlerMethod handlerMethod) {
+      method = handlerMethod.getMethod();
+    }
+
+    if (method == null) {
+      return true;
+    }
+
+    Idempotent idempotent = method.getAnnotation(Idempotent.class);
+    if (ObjectUtils.isNotEmpty(idempotent)) {
+      String key = SessionUtils.generateRequestKey(request);
+
+      try {
+        idempotentCacheTemplate.counting(key, true);
+      } catch (CounterOverflowException e) {
+        throw new IdempotentException(e);
+      }
+    }
+
+    return true;
+  }
 }

@@ -21,44 +21,43 @@ import tutorials4j.framework.web.mvc.filter.DefaultCommonsRequestLoggingFilter;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class MvcRequestLoggingConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-MVC] Request Logging Configuration");
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-MVC] Request Logging Configuration");
+  }
+
+  /**
+   * 注册请求日志过滤器的 {@link FilterRegistrationBean}。
+   *
+   * <p>根据 {@link HttpProperties.RequestLoggingOptions} 创建并初始化 {@link
+   * DefaultCommonsRequestLoggingFilter}，同时应用其内部的过滤器配置（如启用状态、URL 模式等）。 若过滤器启用，还会检查并确保对应日志级别可用。
+   *
+   * @param properties Web HTTP 配置属性，包含请求日志相关选项
+   * @return 过滤器注册 Bean，用于将过滤器添加到 Servlet 容器
+   */
+  @Bean
+  FilterRegistrationBean<DefaultCommonsRequestLoggingFilter>
+      defaultCommonsRequestLoggingFilterRegistration(HttpProperties properties) {
+    HttpProperties.RequestLoggingOptions options = properties.getRequestLogging();
+    ServletFilterOptions servletFilterOptions = options.getFilter();
+
+    DefaultCommonsRequestLoggingFilter filter = new DefaultCommonsRequestLoggingFilter(options);
+    filter.init();
+
+    FilterRegistrationBean<DefaultCommonsRequestLoggingFilter> registration =
+        new FilterRegistrationBean<>();
+    registration.setFilter(filter);
+    servletFilterOptions.fill(registration);
+
+    if (registration.isEnabled()) {
+      // 设置日志级别
+      Logger logger = LoggerFactory.getLogger(CommonsRequestLoggingFilter.class.getName());
+      logger.isEnabledForLevel(Level.DEBUG);
     }
 
-
-    /**
-     * 注册请求日志过滤器的 {@link FilterRegistrationBean}。
-     * <p>
-     * 根据 {@link HttpProperties.RequestLoggingOptions} 创建并初始化
-     * {@link DefaultCommonsRequestLoggingFilter}，同时应用其内部的过滤器配置（如启用状态、URL 模式等）。
-     * 若过滤器启用，还会检查并确保对应日志级别可用。
-     * </p>
-     *
-     * @param properties Web HTTP 配置属性，包含请求日志相关选项
-     * @return 过滤器注册 Bean，用于将过滤器添加到 Servlet 容器
-     */
-    @Bean
-    FilterRegistrationBean<DefaultCommonsRequestLoggingFilter> defaultCommonsRequestLoggingFilterRegistration(HttpProperties properties) {
-        HttpProperties.RequestLoggingOptions options = properties.getRequestLogging();
-        ServletFilterOptions servletFilterOptions = options.getFilter();
-
-        DefaultCommonsRequestLoggingFilter filter = new DefaultCommonsRequestLoggingFilter(options);
-        filter.init();
-
-        FilterRegistrationBean<DefaultCommonsRequestLoggingFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(filter);
-        servletFilterOptions.fill(registration);
-
-        if (registration.isEnabled()) {
-            // 设置日志级别
-            Logger logger = LoggerFactory.getLogger(CommonsRequestLoggingFilter.class.getName());
-            logger.isEnabledForLevel(Level.DEBUG);
-        }
-
-        if (log.isDebugEnabled()) {
-            log.debug("[WEB-MVC] 请求日志过滤器：{}", options);
-        }
-        return registration;
+    if (log.isDebugEnabled()) {
+      log.debug("[WEB-MVC] 请求日志过滤器：{}", options);
     }
+    return registration;
+  }
 }

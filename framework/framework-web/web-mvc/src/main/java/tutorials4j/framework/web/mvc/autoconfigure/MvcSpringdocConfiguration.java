@@ -26,34 +26,36 @@ import tutorials4j.framework.web.mvc.support.DefaultSwaggerModelResolver;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean({SpringDocConfiguration.class})
 public class MvcSpringdocConfiguration implements WebMvcConfigurer {
-    @Value("${spring.application.name:}")
-    private String name;
+  @Value("${spring.application.name:}")
+  private String name;
 
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-REST] Rest Springdoc Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-REST] Rest Springdoc Configuration");
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    OpenAPI defaultOpenAPI() {
-        log.debug("[WEB-MVC] Default Open API");
-        return new OpenAPI()
-                .info(new Info()
-                        .title("接口文档")
-                        .version("Swagger V3")
-                        .description(name + "的应用服务文档")
-                        .license(new License().name("MIT License").url("https://mit-license.org/")))
-                .externalDocs(new ExternalDocumentation()
-                        .description("Tutorials For Java")
-                        .url("https://gitee.com/yunjiao-source/tutorials4j"));
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  OpenAPI defaultOpenAPI() {
+    log.debug("[WEB-MVC] Default Open API");
+    return new OpenAPI()
+        .info(
+            new Info()
+                .title("接口文档")
+                .version("Swagger V3")
+                .description(name + "的应用服务文档")
+                .license(new License().name("MIT License").url("https://mit-license.org/")))
+        .externalDocs(
+            new ExternalDocumentation()
+                .description("Tutorials For Java")
+                .url("https://gitee.com/yunjiao-source/tutorials4j"));
+  }
 
-    @Bean
-    @ConditionalOnBean(ObjectMapper.class)
-    @ConditionalOnMissingBean
-    ModelResolver defaultValidationModelResolver(ObjectMapper mapper) {
-        log.debug("[WEB-MVC] Default Validation Model Resolver");
-        return new DefaultSwaggerModelResolver(mapper);
-    }
+  @Bean
+  @ConditionalOnBean(ObjectMapper.class)
+  @ConditionalOnMissingBean
+  ModelResolver defaultValidationModelResolver(ObjectMapper mapper) {
+    log.debug("[WEB-MVC] Default Validation Model Resolver");
+    return new DefaultSwaggerModelResolver(mapper);
+  }
 }

@@ -12,14 +12,8 @@ import lombok.Data;
  */
 @Data
 public class UserCreateDTO {
-    @NotBlank
-    private String name;
-    @NotBlank
-    private String password;
-    @NotBlank
-    @Email
-    private String email;
-    @Positive
-    private Integer age;
-
+  @NotBlank private String name;
+  @NotBlank private String password;
+  @NotBlank @Email private String email;
+  @Positive private Integer age;
 }

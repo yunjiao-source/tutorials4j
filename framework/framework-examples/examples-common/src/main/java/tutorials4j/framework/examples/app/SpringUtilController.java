@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SpringUtilController {
 
-    @GetMapping("/getBean")
-    public boolean getBean() {
-        Object bean = SpringUtil.getBean(SpringUtilController.class);
-        return bean != null;
-    }
-
+  @GetMapping("/getBean")
+  public boolean getBean() {
+    Object bean = SpringUtil.getBean(SpringUtilController.class);
+    return bean != null;
+  }
 }

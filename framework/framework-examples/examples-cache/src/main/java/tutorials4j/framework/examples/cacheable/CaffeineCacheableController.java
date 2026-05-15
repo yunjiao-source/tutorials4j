@@ -16,21 +16,20 @@ import tutorials4j.framework.examples.Car;
 @RequestMapping("/caffeine/cacheable")
 @RequiredArgsConstructor
 public class CaffeineCacheableController {
-    private final CaffeineCacheableService caffeineCacheableService;
+  private final CaffeineCacheableService caffeineCacheableService;
 
-    @GetMapping("users")
-    public String getUser(@RequestParam("id") Long id) {
-        return caffeineCacheableService.getUser(id);
-    }
+  @GetMapping("users")
+  public String getUser(@RequestParam("id") Long id) {
+    return caffeineCacheableService.getUser(id);
+  }
 
-    @GetMapping("orders")
-    public String getOrder(@RequestParam("id") Long id) {
-        return caffeineCacheableService.getOrder(id);
-    }
+  @GetMapping("orders")
+  public String getOrder(@RequestParam("id") Long id) {
+    return caffeineCacheableService.getOrder(id);
+  }
 
-    @GetMapping("cars")
-    public Car getCar(@RequestParam("id") Long id) {
-        return caffeineCacheableService.getCar(id);
-    }
-
+  @GetMapping("cars")
+  public Car getCar(@RequestParam("id") Long id) {
+    return caffeineCacheableService.getCar(id);
+  }
 }

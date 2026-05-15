@@ -17,28 +17,26 @@ import tutorials4j.framework.examples.Car;
 @RequestMapping("/redis/cacheable")
 @RequiredArgsConstructor
 public class RedisCacheableController {
-    private final RedisCacheableService redisCacheableService;
+  private final RedisCacheableService redisCacheableService;
 
-    @GetMapping("users")
-    public String getUser(@RequestParam("id") Long id) {
-        return redisCacheableService.getUser(id);
-    }
+  @GetMapping("users")
+  public String getUser(@RequestParam("id") Long id) {
+    return redisCacheableService.getUser(id);
+  }
 
-    @GetMapping("orders")
-    public String getOrder(@RequestParam("id") Long id) {
-        return redisCacheableService.getOrder(id);
-    }
+  @GetMapping("orders")
+  public String getOrder(@RequestParam("id") Long id) {
+    return redisCacheableService.getOrder(id);
+  }
 
-    @GetMapping("cars")
-    public Car getCar(@RequestParam("id") Long id) {
-        return redisCacheableService.getCar(id);
-    }
+  @GetMapping("cars")
+  public Car getCar(@RequestParam("id") Long id) {
+    return redisCacheableService.getCar(id);
+  }
 
-    @GetMapping("tenant-users")
-    public String getTenantUser(@RequestParam("id") Long id) {
-        TenantContextHolder.set("DEMO");
-        return redisCacheableService.getUser(id);
-    }
-
-
+  @GetMapping("tenant-users")
+  public String getTenantUser(@RequestParam("id") Long id) {
+    TenantContextHolder.set("DEMO");
+    return redisCacheableService.getUser(id);
+  }
 }

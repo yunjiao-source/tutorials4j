@@ -12,19 +12,19 @@ import org.springframework.batch.core.StepExecutionListener;
  */
 @Slf4j
 public class LogStepExecutionListener implements StepExecutionListener {
-    @Override
-    public void beforeStep(StepExecution stepExecution) {
-        log.info("Starting step: {}", stepExecution);
-    }
+  @Override
+  public void beforeStep(StepExecution stepExecution) {
+    log.info("Starting step: {}", stepExecution);
+  }
 
-    @Override
-    public ExitStatus afterStep(StepExecution stepExecution) {
-        log.info(String.format(
-                "Step completed: Read=%d, Write=%d, Skip=%d",
-                stepExecution.getReadCount(),
-                stepExecution.getWriteCount(),
-                stepExecution.getSkipCount()
-        ));
-        return stepExecution.getExitStatus();
-    }
+  @Override
+  public ExitStatus afterStep(StepExecution stepExecution) {
+    log.info(
+        String.format(
+            "Step completed: Read=%d, Write=%d, Skip=%d",
+            stepExecution.getReadCount(),
+            stepExecution.getWriteCount(),
+            stepExecution.getSkipCount()));
+    return stepExecution.getExitStatus();
+  }
 }

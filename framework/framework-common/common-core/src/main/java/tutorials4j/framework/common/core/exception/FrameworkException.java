@@ -9,22 +9,21 @@ import org.apache.commons.lang3.exception.ExceptionContext;
  * @author Yun Jiao
  */
 public class FrameworkException extends ContextedException {
-    public FrameworkException() {
-    }
+  public FrameworkException() {}
 
-    public FrameworkException(String message) {
-        super(message);
-    }
+  public FrameworkException(String message) {
+    super(message);
+  }
 
-    public FrameworkException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public FrameworkException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public FrameworkException(String message, Throwable cause, ExceptionContext context) {
-        super(message, cause, context);
-    }
+  public FrameworkException(String message, Throwable cause, ExceptionContext context) {
+    super(message, cause, context);
+  }
 
-    public FrameworkException(Throwable cause) {
-        super(cause);
-    }
+  public FrameworkException(Throwable cause) {
+    super(cause);
+  }
 }

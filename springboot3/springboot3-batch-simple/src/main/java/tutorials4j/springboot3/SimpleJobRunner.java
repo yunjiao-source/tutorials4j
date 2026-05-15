@@ -25,67 +25,63 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class SimpleJobRunner implements CommandLineRunner {
-    private final JobLauncher jobLauncher;
-    private final Job importUserJob;
-    private final JobRepository jobRepository;
+  private final JobLauncher jobLauncher;
+  private final Job importUserJob;
+  private final JobRepository jobRepository;
 
-    /**
-     * 使用CommandLineRunner（应用启动时执行）
-     *
-     * @param args
-     * @throws Exception
-     */
-    @Override
-    public void run(String... args) throws Exception {
-        JobParameters jobParameters = new JobParametersBuilder()
-                .addLong("startAt", System.currentTimeMillis())
-                .toJobParameters();
+  /**
+   * 使用CommandLineRunner（应用启动时执行）
+   *
+   * @param args
+   * @throws Exception
+   */
+  @Override
+  public void run(String... args) throws Exception {
+    JobParameters jobParameters =
+        new JobParametersBuilder().addLong("startAt", System.currentTimeMillis()).toJobParameters();
 
-        jobLauncher.run(importUserJob, jobParameters);
-    }
+    jobLauncher.run(importUserJob, jobParameters);
+  }
 
-    /**
-     * 方式2：使用Scheduled任务（定时执行）
-     *
-     * @throws Exception
-     */
+  /**
+   * 方式2：使用Scheduled任务（定时执行）
+   *
+   * @throws Exception
+   */
+  @Scheduled(initialDelay = 30000, fixedDelay = 60000)
+  public void runJob() throws Exception {
+    JobParameters jobParameters =
+        new JobParametersBuilder()
+            .addLong("run.id", System.currentTimeMillis())
+            .addString("jobName", importUserJob.getName())
+            .toJobParameters();
 
-    @Scheduled(initialDelay = 30000, fixedDelay = 60000)
-    public void runJob() throws Exception {
-        JobParameters jobParameters = new JobParametersBuilder()
-                .addLong("run.id", System.currentTimeMillis())
-                .addString("jobName", importUserJob.getName())
-                .toJobParameters();
+    jobLauncher.run(importUserJob, jobParameters);
+  }
 
-        jobLauncher.run(importUserJob, jobParameters);
-    }
+  /**
+   * 方式3：通过REST API触发（推荐）
+   *
+   * @return
+   * @throws Exception
+   */
+  @PostMapping("/import-users")
+  public ResponseEntity<String> launchJob() throws Exception {
+    JobParameters jobParameters =
+        new JobParametersBuilder()
+            .addLong("timestamp", System.currentTimeMillis())
+            .toJobParameters();
 
-    /**
-     * 方式3：通过REST API触发（推荐）
-     *
-     * @return
-     * @throws Exception
-     */
-    @PostMapping("/import-users")
-    public ResponseEntity<String> launchJob() throws Exception {
-        JobParameters jobParameters = new JobParametersBuilder()
-                .addLong("timestamp", System.currentTimeMillis())
-                .toJobParameters();
+    JobExecution jobExecution = jobLauncher.run(importUserJob, jobParameters);
 
-        JobExecution jobExecution = jobLauncher.run(importUserJob, jobParameters);
+    return ResponseEntity.ok(String.format("Job started with ID: %d", jobExecution.getId()));
+  }
 
-        return ResponseEntity.ok(
-                String.format("Job started with ID: %d", jobExecution.getId())
-        );
-    }
-    @GetMapping("/status/{jobExecutionId}")
-    public ResponseEntity<JobExecution> getJobStatus(
-            @PathVariable Long jobExecutionId) {
-        JobExecution jobExecution = jobRepository.getLastJobExecution(
-                "importUserJob",
-                new JobParameters()
-        );
+  @GetMapping("/status/{jobExecutionId}")
+  public ResponseEntity<JobExecution> getJobStatus(@PathVariable Long jobExecutionId) {
+    JobExecution jobExecution =
+        jobRepository.getLastJobExecution("importUserJob", new JobParameters());
 
-        return ResponseEntity.ok(jobExecution);
-    }
+    return ResponseEntity.ok(jobExecution);
+  }
 }

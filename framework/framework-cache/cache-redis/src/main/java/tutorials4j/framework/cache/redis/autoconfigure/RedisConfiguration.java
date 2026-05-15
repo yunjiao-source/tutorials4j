@@ -1,6 +1,7 @@
 package tutorials4j.framework.cache.redis.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.redis.*;
 import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
 
-import java.util.stream.Collectors;
-
 /**
  * 命名缓存配置
  *
@@ -29,72 +28,74 @@ import java.util.stream.Collectors;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class RedisConfiguration {
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[CACHE-REDIS] Cache Redis Configuration");
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer
+      jsonSerializerRedisCacheManagerBuilderCustomizer() {
+    log.debug("[CACHE-REDIS] Json Serializer Value Redis Cache Manager Builder Customizerr");
+    return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer();
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(
+      NamedCacheProperties properties) {
+    log.debug("[CACHE-REDIS] Named Redis Cache Manager Builder Customizer");
+    return new NamedRedisCacheManagerBuilderCustomizer(properties);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
+    log.debug("[CACHE-REDIS] Named Redis Cache Manager Customizer");
+    return new NamedCacheManagerCustomizer();
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  RedisCacheManagerCreator redisCacheManagerCreator(
+      NamedCacheProperties properties,
+      RedisConnectionFactory factory,
+      ObjectProvider<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizers,
+      ObjectProvider<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizers) {
+    log.debug("[CACHE-REDIS] Redis Cache Manager Creator");
+    return new RedisCacheManagerCreator(
+        properties,
+        factory,
+        redisCacheManagerBuilderCustomizers.orderedStream().collect(Collectors.toList()),
+        cacheManagerCustomizers.orderedStream().collect(Collectors.toList()));
+  }
+
+  @Bean
+  RedisBitmapUtils redisBitmapUtils(
+      @Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
+    log.debug("[CACHE-REDIS] Redis Bitmap Utils");
+    RedisBitmapUtils utils = new RedisBitmapUtils();
+    utils.setStringRedisTemplate(stringRedisTemplate);
+    return utils;
+  }
+
+  @ConditionalOnBean({StringRedisTemplate.class, RedisTemplate.class})
+  @Configuration(proxyBeanMethods = false)
+  public static class InnerConfiguration {
+    @Autowired private StringRedisTemplate stringRedisTemplate;
+    @Autowired private RedisTemplate<Object, Object> redisTemplate;
+
     @PostConstruct
     public void postConstruct() {
-        log.debug("[CACHE-REDIS] Cache Redis Configuration");
+      log.debug("[CACHE-REDIS] String Redis Template");
+      PrefixKeyStringRedisSerializer serializer = new PrefixKeyStringRedisSerializer();
+      stringRedisTemplate.setKeySerializer(serializer);
+      stringRedisTemplate.setHashKeySerializer(serializer);
+
+      log.debug("[CACHE-REDIS] Redis Template");
+      redisTemplate.setKeySerializer(serializer);
+      redisTemplate.setHashKeySerializer(serializer);
     }
-
-    @Bean
-    @ConditionalOnMissingBean
-    ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer jsonSerializerRedisCacheManagerBuilderCustomizer() {
-        log.debug("[CACHE-REDIS] Json Serializer Value Redis Cache Manager Builder Customizerr");
-        return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(NamedCacheProperties properties) {
-        log.debug("[CACHE-REDIS] Named Redis Cache Manager Builder Customizer");
-        return new NamedRedisCacheManagerBuilderCustomizer(properties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
-        log.debug("[CACHE-REDIS] Named Redis Cache Manager Customizer");
-        return new NamedCacheManagerCustomizer();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    RedisCacheManagerCreator redisCacheManagerCreator(NamedCacheProperties properties,
-                                                      RedisConnectionFactory factory,
-                                                      ObjectProvider<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizers,
-                                                      ObjectProvider<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizers) {
-        log.debug("[CACHE-REDIS] Redis Cache Manager Creator");
-        return new RedisCacheManagerCreator(properties,factory,
-                redisCacheManagerBuilderCustomizers.orderedStream().collect(Collectors.toList()),
-                cacheManagerCustomizers.orderedStream().collect(Collectors.toList()));
-    }
-
-    @Bean
-    RedisBitmapUtils redisBitmapUtils(@Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
-        log.debug("[CACHE-REDIS] Redis Bitmap Utils");
-        RedisBitmapUtils utils = new RedisBitmapUtils();
-        utils.setStringRedisTemplate(stringRedisTemplate);
-        return utils;
-    }
-
-
-    @ConditionalOnBean({StringRedisTemplate.class, RedisTemplate.class})
-    @Configuration(proxyBeanMethods = false)
-    public static class InnerConfiguration {
-        @Autowired
-        private StringRedisTemplate stringRedisTemplate;
-        @Autowired
-        private RedisTemplate<Object, Object> redisTemplate;
-
-        @PostConstruct
-        public void postConstruct() {
-            log.debug("[CACHE-REDIS] String Redis Template");
-            PrefixKeyStringRedisSerializer serializer = new PrefixKeyStringRedisSerializer();
-            stringRedisTemplate.setKeySerializer(serializer);
-            stringRedisTemplate.setHashKeySerializer(serializer);
-
-            log.debug("[CACHE-REDIS] Redis Template");
-            redisTemplate.setKeySerializer(serializer);
-            redisTemplate.setHashKeySerializer(serializer);
-        }
-
-    }
+  }
 }

@@ -11,8 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Component
 public class WebDataTypeConfig implements WebMvcConfigurer {
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatterForFieldAnnotation(new StringToUserFormatter()) ;
-    }
+  @Override
+  public void addFormatters(FormatterRegistry registry) {
+    registry.addFormatterForFieldAnnotation(new StringToUserFormatter());
+  }
 }

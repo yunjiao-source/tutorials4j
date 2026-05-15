@@ -9,11 +9,11 @@ import lombok.Data;
  */
 @Data
 public class JdbcOptions {
-    private String driverClassName;
+  private String driverClassName;
 
-    private String url;
+  private String url;
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 }

@@ -14,8 +14,8 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.data.core.properties.MybatisPlusProperties;
 import tutorials4j.framework.data.mybatis.AuditMetaObjectHandler;
 import tutorials4j.framework.data.mybatis.DefaultIdentifierGenerator;
-import tutorials4j.framework.data.mybatis.customizer.MybatisPlusInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.BlockAttackInterceptorCustomizer;
+import tutorials4j.framework.data.mybatis.customizer.MybatisPlusInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.OptimisticLockerInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorCustomizer;
 
@@ -27,52 +27,67 @@ import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorC
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class MybatisPlusConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[DATA-MYBATIS-PLUS] Data Mybatis Plus Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[DATA-MYBATIS-PLUS] Data Mybatis Plus Configuration");
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    MybatisPlusInterceptor mybatisPlusInterceptor(ObjectProvider<MybatisPlusInterceptorCustomizer> customizers) {
-        log.debug("[DATA-MYBATIS-PLUS] Mybatis Plus Interceptor");
-        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        customizers.orderedStream()
-                .forEach(customizer -> customizer.custom(interceptor));
-        return interceptor;
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  MybatisPlusInterceptor mybatisPlusInterceptor(
+      ObjectProvider<MybatisPlusInterceptorCustomizer> customizers) {
+    log.debug("[DATA-MYBATIS-PLUS] Mybatis Plus Interceptor");
+    MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+    customizers.orderedStream().forEach(customizer -> customizer.custom(interceptor));
+    return interceptor;
+  }
 
-    @Bean
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS, name = "interceptors.pagination", havingValue = "true", matchIfMissing = true)
-    MybatisPlusInterceptorCustomizer paginationInnerInterceptorCustomizer(MybatisPlusProperties properties) {
-        log.debug("[DATA-MYBATIS-PLUS] Pagination Inner Interceptor Customizer");
-        return new PaginationInnerInterceptorCustomizer(properties.getDbType());
-    }
+  @Bean
+  @ConditionalOnProperty(
+      prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS,
+      name = "interceptors.pagination",
+      havingValue = "true",
+      matchIfMissing = true)
+  MybatisPlusInterceptorCustomizer paginationInnerInterceptorCustomizer(
+      MybatisPlusProperties properties) {
+    log.debug("[DATA-MYBATIS-PLUS] Pagination Inner Interceptor Customizer");
+    return new PaginationInnerInterceptorCustomizer(properties.getDbType());
+  }
 
-    @Bean
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS, name = "interceptors.optimistic-locker", havingValue = "true", matchIfMissing = true)
-    MybatisPlusInterceptorCustomizer optimisticLockerInnerInterceptorCustomizer() {
-        log.debug("[DATA-MYBATIS-PLUS] Optimistic Locker Inner Interceptor Customizer");
-        return new OptimisticLockerInterceptorCustomizer();
-    }
+  @Bean
+  @ConditionalOnProperty(
+      prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS,
+      name = "interceptors.optimistic-locker",
+      havingValue = "true",
+      matchIfMissing = true)
+  MybatisPlusInterceptorCustomizer optimisticLockerInnerInterceptorCustomizer() {
+    log.debug("[DATA-MYBATIS-PLUS] Optimistic Locker Inner Interceptor Customizer");
+    return new OptimisticLockerInterceptorCustomizer();
+  }
 
-    @Bean
-    @ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS, name = "interceptors.block-attack", havingValue = "true", matchIfMissing = true)
-    MybatisPlusInterceptorCustomizer blockAttackInnerInterceptorCustomizer() {
-        log.debug("[DATA-MYBATIS-PLUS] Block Attack Inner Interceptor Customizer");
-        return new BlockAttackInterceptorCustomizer();
-    }
+  @Bean
+  @ConditionalOnProperty(
+      prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS,
+      name = "interceptors.block-attack",
+      havingValue = "true",
+      matchIfMissing = true)
+  MybatisPlusInterceptorCustomizer blockAttackInnerInterceptorCustomizer() {
+    log.debug("[DATA-MYBATIS-PLUS] Block Attack Inner Interceptor Customizer");
+    return new BlockAttackInterceptorCustomizer();
+  }
 
-    @Bean
-    MybatisPlusPropertiesCustomizer defaultIdentifierGeneratorMybatisPlusPropertiesCustomizer() {
-        log.debug("[DATA-MYBATIS-PLUS] Default Identifier Generator Mybatis Plus Properties Customizer");
-        return plusProperties -> plusProperties.getGlobalConfig().setIdentifierGenerator(new DefaultIdentifierGenerator());
-    }
+  @Bean
+  MybatisPlusPropertiesCustomizer defaultIdentifierGeneratorMybatisPlusPropertiesCustomizer() {
+    log.debug(
+        "[DATA-MYBATIS-PLUS] Default Identifier Generator Mybatis Plus Properties Customizer");
+    return plusProperties ->
+        plusProperties.getGlobalConfig().setIdentifierGenerator(new DefaultIdentifierGenerator());
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    MetaObjectHandler auditMetaObjectHandler() {
-        log.debug("[DATA-MYBATIS-PLUS] Audit Meta Object Handler");
-        return new AuditMetaObjectHandler();
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  MetaObjectHandler auditMetaObjectHandler() {
+    log.debug("[DATA-MYBATIS-PLUS] Audit Meta Object Handler");
+    return new AuditMetaObjectHandler();
+  }
 }

@@ -14,5 +14,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("cached-body")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.cachedbody"})
-public class CachedBodyConfig {
-}
+public class CachedBodyConfig {}

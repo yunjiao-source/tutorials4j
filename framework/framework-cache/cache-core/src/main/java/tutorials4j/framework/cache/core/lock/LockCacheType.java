@@ -6,7 +6,7 @@ package tutorials4j.framework.cache.core.lock;
  * @author Yun Jiao
  */
 public enum LockCacheType {
-    LOCAL,
-    REDIS,
-    REDISSON;
+  LOCAL,
+  REDIS,
+  REDISSON;
 }

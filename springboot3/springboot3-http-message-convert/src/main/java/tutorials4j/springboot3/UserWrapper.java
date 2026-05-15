@@ -11,8 +11,6 @@ import tutorials4j.springboot3.convert.UserFormat;
  */
 @Data
 public class UserWrapper {
-    @UserFormat
-    private User user ;
-    private Integer age ;
+  @UserFormat private User user;
+  private Integer age;
 }
-

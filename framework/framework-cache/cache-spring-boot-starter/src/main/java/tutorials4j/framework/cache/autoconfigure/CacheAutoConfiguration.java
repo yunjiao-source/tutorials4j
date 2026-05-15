@@ -17,15 +17,16 @@ import tutorials4j.framework.cache.redisson.autoconfigure.RedissonConfiguration;
  */
 @Slf4j
 @AutoConfiguration
-@Import({CacheConfiguration.class
-        , RedisConfiguration.class
-        , CaffeineConfiguration.class
-        , MultiLevelConfiguration.class
-        , RedissonConfiguration.class})
+@Import({
+  CacheConfiguration.class,
+  RedisConfiguration.class,
+  CaffeineConfiguration.class,
+  MultiLevelConfiguration.class,
+  RedissonConfiguration.class
+})
 public class CacheAutoConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[CACHE] Cache Auto Configuration");
-    }
-
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[CACHE] Cache Auto Configuration");
+  }
 }

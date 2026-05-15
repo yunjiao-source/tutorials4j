@@ -10,7 +10,7 @@ import tutorials4j.framework.cache.core.template.AbstractCounterCacheTemplate;
  */
 @Service
 public class SimpleCounterTemplate extends AbstractCounterCacheTemplate {
-    public SimpleCounterTemplate() {
-        super("counter");
-    }
+  public SimpleCounterTemplate() {
+    super("counter");
+  }
 }

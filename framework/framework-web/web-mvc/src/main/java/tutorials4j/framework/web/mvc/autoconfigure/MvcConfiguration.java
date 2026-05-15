@@ -12,12 +12,15 @@ import org.springframework.context.annotation.Import;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({MvcCachedBodyConfiguration.class, MvcSecurityConfiguration.class
-        , MvcRequestLoggingConfiguration.class, MvcSpringdocConfiguration.class})
+@Import({
+  MvcCachedBodyConfiguration.class,
+  MvcSecurityConfiguration.class,
+  MvcRequestLoggingConfiguration.class,
+  MvcSpringdocConfiguration.class
+})
 public class MvcConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-MVC] Web Mvc Configuration");
-    }
-
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-MVC] Web Mvc Configuration");
+  }
 }

@@ -11,11 +11,11 @@ import tutorials4j.springboot3.User;
  */
 @Slf4j
 public class LogItemProcessor implements ItemProcessor<User, User> {
-    @Override
-    public User process(User item) throws Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("Processing: {}", item.getName());
-        }
-        return item;
+  @Override
+  public User process(User item) throws Exception {
+    if (log.isDebugEnabled()) {
+      log.debug("Processing: {}", item.getName());
     }
+    return item;
+  }
 }

@@ -8,9 +8,9 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * @author Yun Jiao
  */
 public class TenantRoutingDataSource extends AbstractRoutingDataSource {
-    @Override
-    protected Object determineCurrentLookupKey() {
-        // 从ThreadLocal中获取当前租户标识，决定使用哪个数据源
-        return DataSourceContextHolder.getTenantId();
-    }
+  @Override
+  protected Object determineCurrentLookupKey() {
+    // 从ThreadLocal中获取当前租户标识，决定使用哪个数据源
+    return DataSourceContextHolder.getTenantId();
+  }
 }

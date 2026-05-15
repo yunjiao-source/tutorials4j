@@ -14,6 +14,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("signature")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.signature"})
-public class SignatureConfig {
-
-}
+public class SignatureConfig {}

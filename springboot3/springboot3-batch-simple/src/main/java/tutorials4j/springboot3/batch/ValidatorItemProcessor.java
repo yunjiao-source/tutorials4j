@@ -10,11 +10,11 @@ import org.springframework.batch.item.ItemProcessor;
  */
 @RequiredArgsConstructor
 public class ValidatorItemProcessor implements ItemProcessor<UserCsvRecord, UserCsvRecord> {
-    private final UserCsvValidator userCsvValidator;
+  private final UserCsvValidator userCsvValidator;
 
-    @Override
-    public UserCsvRecord process(UserCsvRecord item) throws Exception {
-        userCsvValidator.validate(item);
-        return item;
-    }
+  @Override
+  public UserCsvRecord process(UserCsvRecord item) throws Exception {
+    userCsvValidator.validate(item);
+    return item;
+  }
 }

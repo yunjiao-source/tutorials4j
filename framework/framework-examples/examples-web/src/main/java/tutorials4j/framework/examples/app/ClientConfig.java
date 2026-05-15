@@ -26,46 +26,55 @@ import org.springframework.web.reactive.function.client.WebClient;
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.client"})
 public class ClientConfig {
 
-    @Bean
-    RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
-    }
+  @Bean
+  RestTemplate restTemplate(RestTemplateBuilder builder) {
+    return builder.build();
+  }
 
-    @Bean
-    RestClient restClient(RestClient.Builder builder) {
-        return builder.baseUrl("https://jsonplaceholder.typicode.com").build();
-    }
+  @Bean
+  RestClient restClient(RestClient.Builder builder) {
+    return builder.baseUrl("https://jsonplaceholder.typicode.com").build();
+  }
 
-    @Bean
-    WebClient webClient(WebClient.Builder builder) {
-        return builder.baseUrl("https://jsonplaceholder.typicode.com").build();
-    }
+  @Bean
+  WebClient webClient(WebClient.Builder builder) {
+    return builder.baseUrl("https://jsonplaceholder.typicode.com").build();
+  }
 
-    /**
-     * 添加自定义请求头,如认证请求头
-     * @return
-     */
-    @Bean
-    public RestTemplateRequestCustomizer<ClientHttpRequest> headerRestTemplateRequestCustomizer() {
-        return request -> {
-            log.info("headerRestTemplateRequestCustomizer - 添加自定义请求头,如认证请求头");
-            request.getHeaders().set("Authorization", "Bearer " + RandomStringUtils.secure().nextAlphabetic(12));
-        };
-    }
+  /**
+   * 添加自定义请求头,如认证请求头
+   *
+   * @return
+   */
+  @Bean
+  public RestTemplateRequestCustomizer<ClientHttpRequest> headerRestTemplateRequestCustomizer() {
+    return request -> {
+      log.info("headerRestTemplateRequestCustomizer - 添加自定义请求头,如认证请求头");
+      request
+          .getHeaders()
+          .set("Authorization", "Bearer " + RandomStringUtils.secure().nextAlphabetic(12));
+    };
+  }
 
-    @Bean
-    RestClientCustomizer headersRestClientCustomizer() {
-        return restClientBuilder -> {
-            log.info("headersRestClientCustomizer - 添加自定义请求头,如认证请求头");
-            restClientBuilder.defaultHeaders(header -> header.set("Authorization", "Bearer " + RandomStringUtils.secure().nextAlphabetic(12)));
-        };
-    }
+  @Bean
+  RestClientCustomizer headersRestClientCustomizer() {
+    return restClientBuilder -> {
+      log.info("headersRestClientCustomizer - 添加自定义请求头,如认证请求头");
+      restClientBuilder.defaultHeaders(
+          header ->
+              header.set(
+                  "Authorization", "Bearer " + RandomStringUtils.secure().nextAlphabetic(12)));
+    };
+  }
 
-    @Bean
-    WebClientCustomizer headersWebClientCustomizer() {
-        return webClientBuilder -> {
-            log.info("headersWebClientCustomizer - 添加自定义请求头,如认证请求头");
-            webClientBuilder.defaultHeaders(header -> header.set("Authorization", "Bearer " + RandomStringUtils.secure().nextAlphabetic(12)));
-        };
-    }
+  @Bean
+  WebClientCustomizer headersWebClientCustomizer() {
+    return webClientBuilder -> {
+      log.info("headersWebClientCustomizer - 添加自定义请求头,如认证请求头");
+      webClientBuilder.defaultHeaders(
+          header ->
+              header.set(
+                  "Authorization", "Bearer " + RandomStringUtils.secure().nextAlphabetic(12)));
+    };
+  }
 }

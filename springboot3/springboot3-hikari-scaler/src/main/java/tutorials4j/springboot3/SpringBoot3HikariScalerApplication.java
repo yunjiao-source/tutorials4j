@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 public class SpringBoot3HikariScalerApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SpringBoot3HikariScalerApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(SpringBoot3HikariScalerApplication.class, args);
+  }
 }

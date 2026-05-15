@@ -15,23 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("check-param")
 public class CheckParamController {
 
-    @PostMapping("/user/save")
-    public String saveUser(@RequestBody UserDTO userDTO) {
-        return "用户保存成功：" + userDTO.getUserName();
-    }
+  @PostMapping("/user/save")
+  public String saveUser(@RequestBody UserDTO userDTO) {
+    return "用户保存成功：" + userDTO.getUserName();
+  }
 
-    @Data
-    public static class UserDTO {
-        @CheckParam(notNull = true, message = "用户ID")
-        private String userId;
+  @Data
+  public static class UserDTO {
+    @CheckParam(notNull = true, message = "用户ID")
+    private String userId;
 
-        @CheckParam(notNull = true, minLength = 2, maxLength = 10, message = "用户名")
-        private String userName;
+    @CheckParam(notNull = true, minLength = 2, maxLength = 10, message = "用户名")
+    private String userName;
 
-        @CheckParam(minLength = 11, maxLength = 11, message = "手机号")
-        private String phone;
+    @CheckParam(minLength = 11, maxLength = 11, message = "手机号")
+    private String phone;
 
-        private Integer age;
-    }
-
+    private Integer age;
+  }
 }

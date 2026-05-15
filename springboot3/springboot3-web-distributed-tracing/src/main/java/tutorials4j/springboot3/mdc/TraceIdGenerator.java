@@ -8,12 +8,11 @@ import java.util.UUID;
  * @author Yun Jiao
  */
 public interface TraceIdGenerator {
-    static String generateTraceId() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
+  static String generateTraceId() {
+    return UUID.randomUUID().toString().replace("-", "");
+  }
 
-    static String generateSpanId() {
-        return UUID.randomUUID().toString().substring(0, 8);
-    }
-
+  static String generateSpanId() {
+    return UUID.randomUUID().toString().substring(0, 8);
+  }
 }

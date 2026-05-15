@@ -15,16 +15,16 @@ import tutorials4j.springboot3.BatchJobProperties;
 @Component
 @ConfigurationProperties(prefix = "batch.user")
 public class UserBatchJobProperties {
-    private String name = "importUserByCSV";
-    private Resource inputPath;
-    private Integer linesToSkip = 1;
-    private String delimiter = ",";
+  private String name = "importUserByCSV";
+  private Resource inputPath;
+  private Integer linesToSkip = 1;
+  private String delimiter = ",";
 
-    private String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+  private String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
-    private Integer nameMinLength = 5;
+  private Integer nameMinLength = 5;
 
-    private Integer nameMaxLength = 30;
+  private Integer nameMaxLength = 30;
 
-    private BatchJobProperties job = new BatchJobProperties();
+  private BatchJobProperties job = new BatchJobProperties();
 }

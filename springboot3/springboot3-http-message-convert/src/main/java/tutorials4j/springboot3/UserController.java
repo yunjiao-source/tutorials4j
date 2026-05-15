@@ -11,23 +11,23 @@ import tutorials4j.springboot3.convert.UserFormat;
  */
 @RestController
 public class UserController {
-    @GetMapping("/user")
-    public User getMappingUser(@UserFormat User user) {
-        return user ;
-    }
+  @GetMapping("/user")
+  public User getMappingUser(@UserFormat User user) {
+    return user;
+  }
 
-    @PostMapping("/user")
-    public User postMappingUser(@RequestParam("user") @UserFormat User user) {
-        return user ;
-    }
+  @PostMapping("/user")
+  public User postMappingUser(@RequestParam("user") @UserFormat User user) {
+    return user;
+  }
 
-    @GetMapping("/user-wrapper")
-    public UserWrapper getMappingWrapper(UserWrapper wrapper) {
-        return wrapper ;
-    }
+  @GetMapping("/user-wrapper")
+  public UserWrapper getMappingWrapper(UserWrapper wrapper) {
+    return wrapper;
+  }
 
-    @PostMapping("/user-wrapper")
-    public UserWrapper postMappingWrapper(@ModelAttribute UserWrapper wrapper) {
-        return wrapper ;
-    }
+  @PostMapping("/user-wrapper")
+  public UserWrapper postMappingWrapper(@ModelAttribute UserWrapper wrapper) {
+    return wrapper;
+  }
 }

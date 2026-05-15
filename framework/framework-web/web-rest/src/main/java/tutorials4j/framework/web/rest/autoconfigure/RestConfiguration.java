@@ -12,11 +12,14 @@ import org.springframework.context.annotation.Import;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({RestClientDefaultConfiguration.class, RestClientLoggerConfiguration.class, RestTraceConfiguration.class})
+@Import({
+  RestClientDefaultConfiguration.class,
+  RestClientLoggerConfiguration.class,
+  RestTraceConfiguration.class
+})
 public class RestConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-REST] Web Rest Configuration");
-    }
-
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-REST] Web Rest Configuration");
+  }
 }

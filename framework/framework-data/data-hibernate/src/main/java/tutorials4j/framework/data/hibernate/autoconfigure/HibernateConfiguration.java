@@ -14,9 +14,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @Configuration(proxyBeanMethods = false)
 @EnableJpaAuditing
 public class HibernateConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[DATA-HIBERNATE] Data Hibernate Configuration");
-    }
-
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[DATA-HIBERNATE] Data Hibernate Configuration");
+  }
 }

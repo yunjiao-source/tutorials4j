@@ -1,10 +1,9 @@
 package tutorials4j.springboot3.qps;
 
+import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.Map;
 
 /**
  * 前端页面控制器
@@ -14,16 +13,16 @@ import java.util.Map;
 @Controller
 public class MethodQpsMonitorController {
 
-    private final MethodQpsAspect methodQpsAspect;
+  private final MethodQpsAspect methodQpsAspect;
 
-    public MethodQpsMonitorController(MethodQpsAspect methodQpsAspect) {
-        this.methodQpsAspect = methodQpsAspect;
-    }
+  public MethodQpsMonitorController(MethodQpsAspect methodQpsAspect) {
+    this.methodQpsAspect = methodQpsAspect;
+  }
 
-    @GetMapping("/monitor/qps/method")
-    public String qpsMonitorPage(Model model) {
-        Map<String, MethodCallStats> stats = methodQpsAspect.getAllRecentCallStats();
-        model.addAttribute("stats", stats);
-        return "method-qps-monitor";
-    }
+  @GetMapping("/monitor/qps/method")
+  public String qpsMonitorPage(Model model) {
+    Map<String, MethodCallStats> stats = methodQpsAspect.getAllRecentCallStats();
+    model.addAttribute("stats", stats);
+    return "method-qps-monitor";
+  }
 }

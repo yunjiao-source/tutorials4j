@@ -9,22 +9,21 @@ import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
  * @author Yun Jiao
  */
 public class CacheFrameworkException extends FrameworkRuntimeException {
-    public CacheFrameworkException() {
-    }
+  public CacheFrameworkException() {}
 
-    public CacheFrameworkException(String message) {
-        super(message);
-    }
+  public CacheFrameworkException(String message) {
+    super(message);
+  }
 
-    public CacheFrameworkException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public CacheFrameworkException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public CacheFrameworkException(String message, Throwable cause, ExceptionContext context) {
-        super(message, cause, context);
-    }
+  public CacheFrameworkException(String message, Throwable cause, ExceptionContext context) {
+    super(message, cause, context);
+  }
 
-    public CacheFrameworkException(Throwable cause) {
-        super(cause);
-    }
+  public CacheFrameworkException(Throwable cause) {
+    super(cause);
+  }
 }

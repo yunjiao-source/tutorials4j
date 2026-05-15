@@ -16,35 +16,36 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class QpsInterceptor implements HandlerInterceptor {
 
-    private final MeterRegistry meterRegistry;
-    private final Counter requestCounter;
-    private final Timer requestTimer;
+  private final MeterRegistry meterRegistry;
+  private final Counter requestCounter;
+  private final Timer requestTimer;
 
-    public QpsInterceptor(MeterRegistry meterRegistry) {
-        this.meterRegistry = meterRegistry;
-        this.requestCounter = Counter.builder("http_requests_total")
-                .description("Total number of HTTP requests")
-                .register(meterRegistry);
-        this.requestTimer = Timer.builder("http_request_duration_seconds")
-                .description("HTTP request duration")
-                .register(meterRegistry);
-    }
+  public QpsInterceptor(MeterRegistry meterRegistry) {
+    this.meterRegistry = meterRegistry;
+    this.requestCounter =
+        Counter.builder("http_requests_total")
+            .description("Total number of HTTP requests")
+            .register(meterRegistry);
+    this.requestTimer =
+        Timer.builder("http_request_duration_seconds")
+            .description("HTTP request duration")
+            .register(meterRegistry);
+  }
 
-    @Override
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response,
-                             Object handler) throws Exception {
-        requestCounter.increment();
-        return true;
-    }
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
+    requestCounter.increment();
+    return true;
+  }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response,
-                                Object handler, Exception ex) throws Exception {
-        Timer.Sample sample = (Timer.Sample) request.getAttribute("timer_sample");
-        if (sample != null) {
-            sample.stop(requestTimer);
-        }
+  @Override
+  public void afterCompletion(
+      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+      throws Exception {
+    Timer.Sample sample = (Timer.Sample) request.getAttribute("timer_sample");
+    if (sample != null) {
+      sample.stop(requestTimer);
     }
+  }
 }

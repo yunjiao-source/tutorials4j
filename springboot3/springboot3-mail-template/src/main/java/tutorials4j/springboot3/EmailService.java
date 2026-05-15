@@ -19,17 +19,18 @@ import org.thymeleaf.context.Context;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private final JavaMailSender mailSender;
-    private final TemplateEngine templateEngine;
+  private final JavaMailSender mailSender;
+  private final TemplateEngine templateEngine;
 
-    public void sendTemplateEmail(String to, String subject, String templateName, Context context) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        String htmlContent = templateEngine.process(templateName, context);
-        helper.setText(htmlContent, true);
-        log.info("发送邮件内容：{}", htmlContent);
-        mailSender.send(message);
-    }
+  public void sendTemplateEmail(String to, String subject, String templateName, Context context)
+      throws MessagingException {
+    MimeMessage message = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(message, true);
+    helper.setTo(to);
+    helper.setSubject(subject);
+    String htmlContent = templateEngine.process(templateName, context);
+    helper.setText(htmlContent, true);
+    log.info("发送邮件内容：{}", htmlContent);
+    mailSender.send(message);
+  }
 }

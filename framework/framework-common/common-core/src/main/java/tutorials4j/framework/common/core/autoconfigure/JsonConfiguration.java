@@ -15,22 +15,20 @@ import tutorials4j.framework.common.core.json.Long2StringSimpleModule;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class JsonConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[COMMON-CORE] Common Core Json Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[COMMON-CORE] Common Core Json Configuration");
+  }
 
+  @Bean
+  BaseEnumSimpleModule baseEnumSimpleModule() {
+    log.debug("[COMMON-CORE] Base Enum Simple Module");
+    return new BaseEnumSimpleModule();
+  }
 
-    @Bean
-    BaseEnumSimpleModule baseEnumSimpleModule() {
-        log.debug("[COMMON-CORE] Base Enum Simple Module");
-        return new BaseEnumSimpleModule();
-    }
-
-    @Bean
-    Long2StringSimpleModule longJsSimpleModule() {
-        log.debug("[COMMON-CORE] Long Js Simple Module");
-        return new Long2StringSimpleModule();
-    }
-
+  @Bean
+  Long2StringSimpleModule longJsSimpleModule() {
+    log.debug("[COMMON-CORE] Long Js Simple Module");
+    return new Long2StringSimpleModule();
+  }
 }

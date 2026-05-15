@@ -11,5 +11,4 @@ import tutorials4j.framework.common.core.PropertiesConsts;
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA)
-public class DataProperties {
-}
+public class DataProperties {}

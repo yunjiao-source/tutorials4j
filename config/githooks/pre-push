@@ -1,0 +1,12 @@
+#!/bin/sh
+# 推送前自动格式化并检查
+
+echo "[pre-push] 执行 spotless:apply + spotless:check ..."
+mvn spotless:apply
+mvn spotless:check
+if [ $? -ne 0 ]; then
+  echo "[pre-push] ❌ 格式化/检查失败，禁止推送"
+  exit 1
+fi
+echo "[pre-push] ✅ 推送前检查通过"
+exit 0

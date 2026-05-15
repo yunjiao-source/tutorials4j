@@ -7,5 +7,4 @@ import java.util.Date;
  *
  * @author Yun Jiao
  */
-public record Car(Long id, String Name, Date date) {
-}
+public record Car(Long id, String Name, Date date) {}

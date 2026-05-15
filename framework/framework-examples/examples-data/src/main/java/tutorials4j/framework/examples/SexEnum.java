@@ -10,22 +10,22 @@ import tutorials4j.framework.common.core.support.BaseEnum;
  */
 @Getter
 public enum SexEnum implements BaseEnum<String> {
-    male("nan"), female("nv");
+  male("nan"),
+  female("nv");
 
-    private final String code;
+  private final String code;
 
-    SexEnum(String code) {
-        this.code = code;
-    }
+  SexEnum(String code) {
+    this.code = code;
+  }
 
-    @Override
-    public String getCode() {
-        return code;
-    }
+  @Override
+  public String getCode() {
+    return code;
+  }
 
-    @Override
-    public String getName() {
-        return name();
-    }
+  @Override
+  public String getName() {
+    return name();
+  }
 }
-

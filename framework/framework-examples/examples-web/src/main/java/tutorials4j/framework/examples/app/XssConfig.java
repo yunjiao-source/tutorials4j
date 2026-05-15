@@ -14,6 +14,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("xss")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.xss"})
-public class XssConfig {
-
-}
+public class XssConfig {}

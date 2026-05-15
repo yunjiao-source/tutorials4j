@@ -1,10 +1,9 @@
 package tutorials4j.springboot3;
 
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import java.time.LocalDateTime;
 
 /**
  * 评论实体（嵌套文档）
@@ -15,9 +14,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Comment {
 
-    private String content;
-    private String author;
+  private String content;
+  private String author;
 
-    @Field("created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+  @Field("created_at")
+  private LocalDateTime createdAt = LocalDateTime.now();
 }

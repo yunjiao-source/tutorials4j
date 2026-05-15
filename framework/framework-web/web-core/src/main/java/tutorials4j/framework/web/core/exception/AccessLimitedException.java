@@ -5,13 +5,12 @@ package tutorials4j.framework.web.core.exception;
  *
  * @author Yun Jiao
  */
-public class AccessLimitedException extends WebFrameworkException{
-    public AccessLimitedException() {
-        super();
-    }
+public class AccessLimitedException extends WebFrameworkException {
+  public AccessLimitedException() {
+    super();
+  }
 
-    public AccessLimitedException(Throwable cause) {
-        super(cause);
-
-    }
+  public AccessLimitedException(Throwable cause) {
+    super(cause);
+  }
 }

@@ -8,11 +8,11 @@ import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
  * @author Yun Jiao
  */
 public class DataFrameworkException extends FrameworkRuntimeException {
-    public DataFrameworkException(String message) {
-        super(message);
-    }
+  public DataFrameworkException(String message) {
+    super(message);
+  }
 
-    public DataFrameworkException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public DataFrameworkException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

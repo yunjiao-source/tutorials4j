@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test-exec")
 @RequiredArgsConstructor
 public class TestExecController {
-    private final SimulationComponent simulationComponent;
+  private final SimulationComponent simulationComponent;
 
-    @GetMapping()
-    public void test(@RequestParam("concurrentRequests") int concurrentRequests
-            , @RequestParam("durationSeconds")  int durationSeconds) {
-        simulationComponent.simulateHighLoad(concurrentRequests, durationSeconds);
-    }
+  @GetMapping()
+  public void test(
+      @RequestParam("concurrentRequests") int concurrentRequests,
+      @RequestParam("durationSeconds") int durationSeconds) {
+    simulationComponent.simulateHighLoad(concurrentRequests, durationSeconds);
+  }
 }

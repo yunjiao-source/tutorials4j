@@ -14,5 +14,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("swagger")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.swagger"})
-public class SwaggerConfig {
-}
+public class SwaggerConfig {}

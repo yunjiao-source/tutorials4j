@@ -16,44 +16,43 @@ import tutorials4j.springboot3.response.*;
 @Component
 public class AlipayStrategy extends AbstractPayStrategy {
 
-    @Override
-    protected PayResponse doPay(PayRequest request) {
-        try {
-            // TODO 业务实现
-            return null;
-        } catch (Exception e) {
-            throw new RuntimeException("支付宝支付失败", e);
-        }
+  @Override
+  protected PayResponse doPay(PayRequest request) {
+    try {
+      // TODO 业务实现
+      return null;
+    } catch (Exception e) {
+      throw new RuntimeException("支付宝支付失败", e);
     }
+  }
 
-    @Override
-    protected QueryResponse doQueryOrder(PayRequest request) {
-        return null;
-    }
+  @Override
+  protected QueryResponse doQueryOrder(PayRequest request) {
+    return null;
+  }
 
-    @Override
-    protected CloseResponse doClose(PayRequest request) {
-        return null;
-    }
+  @Override
+  protected CloseResponse doClose(PayRequest request) {
+    return null;
+  }
 
-    @Override
-    protected RefundResponse doRefund(RefundRequest request) {
-        return null;
-    }
+  @Override
+  protected RefundResponse doRefund(RefundRequest request) {
+    return null;
+  }
 
-    @Override
-    protected RefundResponse doQueryRefund(RefundRequest request) {
-        return null;
-    }
+  @Override
+  protected RefundResponse doQueryRefund(RefundRequest request) {
+    return null;
+  }
 
-    @Override
-    public PayChannel getPayChannel() {
-        return PayChannel.ALI_PAY;
-    }
+  @Override
+  public PayChannel getPayChannel() {
+    return PayChannel.ALI_PAY;
+  }
 
-    @Override
-    public NotifyResponse handleNotify(NotifyRequest request) {
-        return null;
-    }
-
+  @Override
+  public NotifyResponse handleNotify(NotifyRequest request) {
+    return null;
+  }
 }

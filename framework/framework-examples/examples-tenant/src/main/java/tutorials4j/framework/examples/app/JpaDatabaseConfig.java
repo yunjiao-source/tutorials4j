@@ -18,5 +18,4 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.jpa.database"})
 @EnableJpaRepositories(basePackages = {"tutorials4j.framework.examples.jpa.database"})
 @EntityScan(basePackages = {"tutorials4j.framework.examples.jpa.database"})
-public class JpaDatabaseConfig {
-}
+public class JpaDatabaseConfig {}

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.web.core.validation.LocalDateTimeValidator;
 
-
 /**
  * 校验器配置
  *
@@ -16,15 +15,15 @@ import tutorials4j.framework.web.core.validation.LocalDateTimeValidator;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class ValidatorsConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-CORE] Validators Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-CORE] Validators Configuration");
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    LocalDateTimeValidator localDateTimeValidator() {
-        log.debug("[WEB-CORE] Local DateTime Validator");
-        return new LocalDateTimeValidator();
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  LocalDateTimeValidator localDateTimeValidator() {
+    log.debug("[WEB-CORE] Local DateTime Validator");
+    return new LocalDateTimeValidator();
+  }
 }

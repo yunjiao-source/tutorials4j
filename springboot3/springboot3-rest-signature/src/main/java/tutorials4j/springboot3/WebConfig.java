@@ -14,11 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final SignatureInterceptor signatureInterceptor;
+  private final SignatureInterceptor signatureInterceptor;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(signatureInterceptor)
-                .addPathPatterns("/signature/**");
-    }
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(signatureInterceptor).addPathPatterns("/signature/**");
+  }
 }

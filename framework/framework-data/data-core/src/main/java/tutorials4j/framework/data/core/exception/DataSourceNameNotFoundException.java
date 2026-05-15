@@ -6,8 +6,8 @@ package tutorials4j.framework.data.core.exception;
  * @author Yun Jiao
  */
 public class DataSourceNameNotFoundException extends DataFrameworkException {
-    public DataSourceNameNotFoundException(String name) {
-            super("未找到指定数据源名称");
-            addContextValue("数据源名称", name);
-        }
+  public DataSourceNameNotFoundException(String name) {
+    super("未找到指定数据源名称");
+    addContextValue("数据源名称", name);
+  }
 }

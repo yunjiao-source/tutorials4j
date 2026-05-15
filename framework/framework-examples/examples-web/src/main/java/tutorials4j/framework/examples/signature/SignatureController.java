@@ -19,12 +19,13 @@ import tutorials4j.framework.web.core.annotation.RequiredSignature;
 @RequiredArgsConstructor
 public class SignatureController {
 
-    @RequiredSignature(timeWindow = 60)
-    @PostMapping("/pay")
-    public String pay(@RequestBody PayRequest request) {
-        // 支付逻辑
-        return "PAIED, userId=" + request.userId+ " amount=" + request.amount;
-    }
+  @RequiredSignature(timeWindow = 60)
+  @PostMapping("/pay")
+  public String pay(@RequestBody PayRequest request) {
+    // 支付逻辑
+    return "PAIED, userId=" + request.userId + " amount=" + request.amount;
+  }
 
-    public record PayRequest(String userId, Long amount) {};
+  public record PayRequest(String userId, Long amount) {}
+  ;
 }

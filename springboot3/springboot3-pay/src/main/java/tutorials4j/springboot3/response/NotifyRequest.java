@@ -1,6 +1,7 @@
 package tutorials4j.springboot3.response;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,6 @@ import lombok.experimental.SuperBuilder;
 import tutorials4j.springboot3.model.PayChannel;
 import tutorials4j.springboot3.model.TradeMethod;
 import tutorials4j.springboot3.request.BaseRequest;
-
-import java.io.Serializable;
 
 /**
  * 回调处理请求
@@ -22,21 +21,14 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class NotifyRequest extends BaseRequest implements Serializable {
 
-    private static final long serialVersionUID=1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 支付渠道
-     */
-    private PayChannel payChannel;
+  /** 支付渠道 */
+  private PayChannel payChannel;
 
-    /**
-     * 交易方式
-     */
-    private TradeMethod method;
+  /** 交易方式 */
+  private TradeMethod method;
 
-    /**
-     * 请求体
-     */
-    private HttpServletRequest servletRequest;
-
+  /** 请求体 */
+  private HttpServletRequest servletRequest;
 }

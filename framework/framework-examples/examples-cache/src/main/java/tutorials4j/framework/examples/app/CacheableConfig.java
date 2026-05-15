@@ -22,18 +22,17 @@ import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 @Profile("cacheable")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.cacheable"})
 public class CacheableConfig implements CachingConfigurer {
-    @Autowired
-    private RedisCacheManagerCreator redisCacheManagerCreator;
+  @Autowired private RedisCacheManagerCreator redisCacheManagerCreator;
 
-    @Bean
-    CaffeineCacheManager caffeineCacheManager(CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
-        return caffeineCacheManagerCreator.getInstance();
-    }
+  @Bean
+  CaffeineCacheManager caffeineCacheManager(
+      CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
+    return caffeineCacheManagerCreator.getInstance();
+  }
 
-
-    @Bean
-    @Override
-    public CacheManager cacheManager() {
-        return redisCacheManagerCreator.getInstance();
-    }
+  @Bean
+  @Override
+  public CacheManager cacheManager() {
+    return redisCacheManagerCreator.getInstance();
+  }
 }

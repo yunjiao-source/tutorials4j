@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface NeedPermission {
-    // 所需权限编码（如：user:add、user:delete）
-    String[] value();
+  // 所需权限编码（如：user:add、user:delete）
+  String[] value();
 }

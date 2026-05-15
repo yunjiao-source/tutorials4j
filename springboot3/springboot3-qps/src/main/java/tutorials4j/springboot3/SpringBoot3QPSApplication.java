@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class SpringBoot3QPSApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SpringBoot3QPSApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(SpringBoot3QPSApplication.class, args);
+  }
 }

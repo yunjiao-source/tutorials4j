@@ -12,6 +12,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("template")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.template"})
-public class TemplateConfig {
-
-}
+public class TemplateConfig {}

@@ -15,9 +15,8 @@ import tutorials4j.framework.common.core.autoconfigure.CommonConfiguration;
 @AutoConfiguration
 @Import({CommonConfiguration.class})
 public class CommonAutoConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[COMMON] Common Auto Configuration");
-    }
-
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[COMMON] Common Auto Configuration");
+  }
 }

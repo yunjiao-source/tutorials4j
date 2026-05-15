@@ -16,12 +16,15 @@ import tutorials4j.framework.tenant.mybatis.autoconfigure.MybatisPlusConfigurati
  */
 @Slf4j
 @AutoConfiguration
-@Import({TenantConfiguration.class, CacheConfiguration.class
-        , HibernateConfiguration.class, MybatisPlusConfiguration.class})
+@Import({
+  TenantConfiguration.class,
+  CacheConfiguration.class,
+  HibernateConfiguration.class,
+  MybatisPlusConfiguration.class
+})
 public class TenantAutoConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[TENANT] Tenant Auto Configuration");
-    }
-
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[TENANT] Tenant Auto Configuration");
+  }
 }

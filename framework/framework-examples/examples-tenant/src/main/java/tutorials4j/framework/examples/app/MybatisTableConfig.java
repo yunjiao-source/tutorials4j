@@ -14,5 +14,4 @@ import org.springframework.context.annotation.Profile;
 @Profile("mybatis-table")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.mybatis.table"})
 @MapperScan({"tutorials4j.framework.examples.mybatis.table"})
-public class MybatisTableConfig {
-}
+public class MybatisTableConfig {}

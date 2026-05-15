@@ -10,14 +10,13 @@ import org.hibernate.annotations.TenantId;
  */
 @MappedSuperclass
 public class TenantEntity {
-    @TenantId
-    private String tenantId;
+  @TenantId private String tenantId;
 
-    public String getTenantCode() {
-        return tenantId;
-    }
+  public String getTenantCode() {
+    return tenantId;
+  }
 
-    public void setTenantCode(String tenantId) {
-        this.tenantId = tenantId;
-    }
+  public void setTenantCode(String tenantId) {
+    this.tenantId = tenantId;
+  }
 }

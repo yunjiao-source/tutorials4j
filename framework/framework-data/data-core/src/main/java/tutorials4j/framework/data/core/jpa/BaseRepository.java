@@ -1,10 +1,9 @@
 package tutorials4j.framework.data.core.jpa;
 
+import java.io.Serializable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
-
-import java.io.Serializable;
 
 /**
  * TODO
@@ -12,5 +11,5 @@ import java.io.Serializable;
  * @author Yun Jiao
  */
 @NoRepositoryBean
-public interface BaseRepository<E extends BaseEntity, ID extends Serializable> extends JpaRepository<E, ID>, JpaSpecificationExecutor<E> {
-}
+public interface BaseRepository<E extends BaseEntity, ID extends Serializable>
+    extends JpaRepository<E, ID>, JpaSpecificationExecutor<E> {}

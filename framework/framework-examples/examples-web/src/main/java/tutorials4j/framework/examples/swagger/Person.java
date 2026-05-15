@@ -20,31 +20,26 @@ import tutorials4j.framework.web.core.validation.LocalDateTimeFormat;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Person {
 
-    private long id;
+  private long id;
 
-    @Size(min = 2)
-    private String firstName;
+  @Size(min = 2)
+  private String firstName;
 
-    @NotNull
-    @NotBlank
-    private String lastName;
+  @NotNull @NotBlank private String lastName;
 
-    @Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
-    private String email;
+  @Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
+  private String email;
 
-    @Email()
-    private String email1;
+  @Email() private String email1;
 
-    @Min(18)
-    @Max(30)
-    private int age;
+  @Min(18)
+  @Max(30)
+  private int age;
 
-    @CreditCardNumber
-    private String creditCardNumber;
+  @CreditCardNumber private String creditCardNumber;
 
-    @LocalDateTimeFormat(pattern = "yyyyMMdd", dateTimeType = DateTimeType.Date)
-    private String registrationDate;
+  @LocalDateTimeFormat(pattern = "yyyyMMdd", dateTimeType = DateTimeType.Date)
+  private String registrationDate;
 
-    public Person() {
-    }
+  public Person() {}
 }

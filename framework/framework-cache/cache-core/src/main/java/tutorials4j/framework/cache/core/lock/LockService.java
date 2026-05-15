@@ -6,7 +6,7 @@ package tutorials4j.framework.cache.core.lock;
  * @author Yun Jiao
  */
 public interface LockService {
-    LockCacheType getLockCacheType();
+  LockCacheType getLockCacheType();
 
-    LockType getLockType();
+  LockType getLockType();
 }

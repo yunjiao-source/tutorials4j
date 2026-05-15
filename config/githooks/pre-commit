@@ -1,0 +1,11 @@
+#!/bin/sh
+# 提交前执行 spotless 检查，不通过则禁止提交
+
+echo "[pre-commit] 执行 spotless:check ..."
+mvn spotless:check
+if [ $? -ne 0 ]; then
+  echo "[pre-commit] ❌ 代码格式不符合规范，请执行：mvn spotless:apply"
+  exit 1
+fi
+echo "[pre-commit] ✅ 格式检查通过"
+exit 0

@@ -18,46 +18,47 @@ import tutorials4j.springboot3.mdc.TraceConstants;
 @RestController
 @RequiredArgsConstructor
 public class DemoController {
-    private final RestTemplate restTemplate;
-    private final WebClient webClient;
-    private final DemoAsyncService demoAsync;
+  private final RestTemplate restTemplate;
+  private final WebClient webClient;
+  private final DemoAsyncService demoAsync;
 
-    @GetMapping("/rest-template")
-    public String restTemplate() {
-        // 日志会自动包含traceId
-        log.info("Processing request");
+  @GetMapping("/rest-template")
+  public String restTemplate() {
+    // 日志会自动包含traceId
+    log.info("Processing request");
 
-        // 调用其他服务，追踪信息会自动传递
-        restTemplate.getForObject("https://www.baidu.com", String.class);
+    // 调用其他服务，追踪信息会自动传递
+    restTemplate.getForObject("https://www.baidu.com", String.class);
 
-        log.info("Request completed");
-        return "Trace ID: " + MDC.get(TraceConstants.TRACE_ID);
-    }
+    log.info("Request completed");
+    return "Trace ID: " + MDC.get(TraceConstants.TRACE_ID);
+  }
 
-    @GetMapping("/web-client")
-    public String webClient() {
-        // 日志会自动包含traceId
-        log.info("Processing request");
+  @GetMapping("/web-client")
+  public String webClient() {
+    // 日志会自动包含traceId
+    log.info("Processing request");
 
-        // 调用其他服务，追踪信息会自动传递
-        webClient.get() // 指定请求方法为 GET
-                .uri("https://www.baidu.com") // 指定请求地址
-                .retrieve() // 获取响应（自动处理 2xx 状态码，非 2xx 会抛出异常）
-                .bodyToMono(String.class) // 将响应体转换为 Mono<String>（响应式类型）
-                .block();
+    // 调用其他服务，追踪信息会自动传递
+    webClient
+        .get() // 指定请求方法为 GET
+        .uri("https://www.baidu.com") // 指定请求地址
+        .retrieve() // 获取响应（自动处理 2xx 状态码，非 2xx 会抛出异常）
+        .bodyToMono(String.class) // 将响应体转换为 Mono<String>（响应式类型）
+        .block();
 
-        log.info("Request completed");
-        return "Trace ID: " + MDC.get(TraceConstants.TRACE_ID);
-    }
+    log.info("Request completed");
+    return "Trace ID: " + MDC.get(TraceConstants.TRACE_ID);
+  }
 
-    @GetMapping("/async")
-    public String async() {
-        // 日志会自动包含traceId
-        log.info("Processing request");
+  @GetMapping("/async")
+  public String async() {
+    // 日志会自动包含traceId
+    log.info("Processing request");
 
-        demoAsync.async();
+    demoAsync.async();
 
-        log.info("Request completed");
-        return "Trace ID: " + MDC.get(TraceConstants.TRACE_ID);
-    }
+    log.info("Request completed");
+    return "Trace ID: " + MDC.get(TraceConstants.TRACE_ID);
+  }
 }

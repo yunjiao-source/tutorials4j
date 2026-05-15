@@ -27,36 +27,35 @@ import tutorials4j.framework.tenant.core.properties.TenantProperties;
 @RequiredArgsConstructor
 @EnableConfigurationProperties({TenantProperties.class})
 public class TenantConfiguration implements WebMvcConfigurer {
-    private final TenantProperties properties;
+  private final TenantProperties properties;
 
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[TENANT-CORE] Tenant Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[TENANT-CORE] Tenant Configuration");
+  }
 
+  @Bean
+  @ConditionalOnMissingBean
+  CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
+    log.debug("[TENANT-CORE] Composite Task Decorator");
+    return creator.getInstance();
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
-        log.debug("[TENANT-CORE] Composite Task Decorator");
-        return creator.getInstance();
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  TaskDecoratorCreator tenantTaskDecoratorCreator() {
+    log.debug("[TENANT-CORE] Tenant Task Decorator Creator");
+    return TenantTaskDecorator::new;
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    TaskDecoratorCreator tenantTaskDecoratorCreator() {
-        log.debug("[TENANT-CORE] Tenant Task Decorator Creator");
-        return TenantTaskDecorator::new;
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        HandlerInterceptorOptions pathOptions = properties.getPath();
-        TenantHandlerInterceptor interceptor = new TenantHandlerInterceptor();
-        registry.addInterceptor(interceptor).addPathPatterns(pathOptions.getIncludePathPatterns())
-                .excludePathPatterns(pathOptions.getExcludePathPatterns());
-        log.debug("[TENANT-CORE] 添加请求拦截器: {}, {}",
-                interceptor, pathOptions);
-    }
-
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    HandlerInterceptorOptions pathOptions = properties.getPath();
+    TenantHandlerInterceptor interceptor = new TenantHandlerInterceptor();
+    registry
+        .addInterceptor(interceptor)
+        .addPathPatterns(pathOptions.getIncludePathPatterns())
+        .excludePathPatterns(pathOptions.getExcludePathPatterns());
+    log.debug("[TENANT-CORE] 添加请求拦截器: {}, {}", interceptor, pathOptions);
+  }
 }

@@ -16,21 +16,20 @@ import tutorials4j.framework.examples.Car;
 @RequestMapping("/multi-level/cacheable")
 @RequiredArgsConstructor
 public class MultiCacheableController {
-    private final MultiCacheableService multiCacheableService;
+  private final MultiCacheableService multiCacheableService;
 
-    @GetMapping("users")
-    public String getUser(@RequestParam("id") Long id) {
-        return multiCacheableService.getUser(id);
-    }
+  @GetMapping("users")
+  public String getUser(@RequestParam("id") Long id) {
+    return multiCacheableService.getUser(id);
+  }
 
-    @GetMapping("orders")
-    public String getOrder(@RequestParam("id") Long id) {
-        return multiCacheableService.getOrder(id);
-    }
+  @GetMapping("orders")
+  public String getOrder(@RequestParam("id") Long id) {
+    return multiCacheableService.getOrder(id);
+  }
 
-    @GetMapping("cars")
-    public Car getCar(@RequestParam("id") Long id) {
-        return multiCacheableService.getCar(id);
-    }
-
+  @GetMapping("cars")
+  public Car getCar(@RequestParam("id") Long id) {
+    return multiCacheableService.getCar(id);
+  }
 }

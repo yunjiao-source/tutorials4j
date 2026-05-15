@@ -1,9 +1,8 @@
 package tutorials4j.springboot3.domain;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 接口
@@ -14,19 +13,18 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+  @Autowired private UserService userService;
 
-    @GetMapping
-    public List<User> getUsers() {
-        return userService.list();
-    }
+  @GetMapping
+  public List<User> getUsers() {
+    return userService.list();
+  }
 
-    @PostMapping
-    public User createUser(@RequestBody CreateUserModel model) {
-        User user = new User();
-        user.setName(model.getName());
-        userService.save(user);
-        return user;
-    }
+  @PostMapping
+  public User createUser(@RequestBody CreateUserModel model) {
+    User user = new User();
+    user.setName(model.getName());
+    userService.save(user);
+    return user;
+  }
 }

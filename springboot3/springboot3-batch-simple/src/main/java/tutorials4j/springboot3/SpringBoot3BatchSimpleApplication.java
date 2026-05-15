@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 public class SpringBoot3BatchSimpleApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SpringBoot3BatchSimpleApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(SpringBoot3BatchSimpleApplication.class, args);
+  }
 }

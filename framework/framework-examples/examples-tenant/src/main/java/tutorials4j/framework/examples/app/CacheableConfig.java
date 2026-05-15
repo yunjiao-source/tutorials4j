@@ -23,22 +23,17 @@ import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
 @Profile("cache")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.cache"})
 public class CacheableConfig implements CachingConfigurer {
-    @Autowired
-    private RedisCacheManagerCreator redisCacheManagerCreator;
-    @Autowired
-    private TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator;
-    @Autowired
-    private TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator;
-    @Autowired
-    private CaffeineCacheManagerCreator caffeineCacheManagerCreator; // 这个不支持租户
+  @Autowired private RedisCacheManagerCreator redisCacheManagerCreator;
+  @Autowired private TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator;
+  @Autowired private TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator;
+  @Autowired private CaffeineCacheManagerCreator caffeineCacheManagerCreator; // 这个不支持租户
 
-
-    @Bean
-    @Override
-    public CacheManager cacheManager() {
-        //return redisCacheManagerCreator.getInstance();
-        return tenantMultiLevelCacheManagerCreator.getInstance();
-        //return tenantCaffeineCacheManagerCreator.getInstance();
-        //return caffeineCacheManagerCreator.getInstance();
-    }
+  @Bean
+  @Override
+  public CacheManager cacheManager() {
+    // return redisCacheManagerCreator.getInstance();
+    return tenantMultiLevelCacheManagerCreator.getInstance();
+    // return tenantCaffeineCacheManagerCreator.getInstance();
+    // return caffeineCacheManagerCreator.getInstance();
+  }
 }

@@ -5,5 +5,4 @@ package tutorials4j.framework.common.core.util;
  *
  * @author Yun Jiao
  */
-public interface RegexPool extends cn.hutool.core.lang.RegexPool{
-}
+public interface RegexPool extends cn.hutool.core.lang.RegexPool {}

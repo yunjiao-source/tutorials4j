@@ -9,17 +9,17 @@ import tutorials4j.framework.common.core.TenantContextHolder;
  * @author Yun Jiao
  */
 public class TenantTaskDecorator implements TaskDecorator {
-    @Override
-    public Runnable decorate(Runnable runnable) {
-        String tenant = TenantContextHolder.get();
-        return () -> {
-            try {
-                // 设置租户
-                TenantContextHolder.set(tenant);
-                runnable.run();
-            } finally {
-                TenantContextHolder.clear();
-            }
-        };
-    }
+  @Override
+  public Runnable decorate(Runnable runnable) {
+    String tenant = TenantContextHolder.get();
+    return () -> {
+      try {
+        // 设置租户
+        TenantContextHolder.set(tenant);
+        runnable.run();
+      } finally {
+        TenantContextHolder.clear();
+      }
+    };
+  }
 }

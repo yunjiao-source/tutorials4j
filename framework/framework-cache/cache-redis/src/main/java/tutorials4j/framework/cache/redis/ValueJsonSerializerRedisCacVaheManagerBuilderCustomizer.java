@@ -11,12 +11,15 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
  *
  * @author Yun Jiao
  */
-public class ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer implements RedisCacheManagerBuilderCustomizer {
-    @Override
-    public void customize(RedisCacheManager.RedisCacheManagerBuilder builder) {
-        RedisCacheConfiguration defaultConfig = builder.cacheDefaults();
-        defaultConfig = defaultConfig.serializeValuesWith(RedisSerializationContext
-                .SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-        builder.cacheDefaults(defaultConfig);
-    }
+public class ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer
+    implements RedisCacheManagerBuilderCustomizer {
+  @Override
+  public void customize(RedisCacheManager.RedisCacheManagerBuilder builder) {
+    RedisCacheConfiguration defaultConfig = builder.cacheDefaults();
+    defaultConfig =
+        defaultConfig.serializeValuesWith(
+            RedisSerializationContext.SerializationPair.fromSerializer(
+                new GenericJackson2JsonRedisSerializer()));
+    builder.cacheDefaults(defaultConfig);
+  }
 }

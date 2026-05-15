@@ -18,26 +18,23 @@ import tutorials4j.framework.common.core.exception.CounterOverflowException;
 @RequestMapping("/template")
 @RequiredArgsConstructor
 public class DemoTemplateController {
-    private final CaptchaCacheTemplate captchaCacheTemplate;
-    private final SimpleCounterTemplate simpleCounterTemplate;
+  private final CaptchaCacheTemplate captchaCacheTemplate;
+  private final SimpleCounterTemplate simpleCounterTemplate;
 
-    @GetMapping("get")
-    public Pair<String, String> get() {
-        String key = IdUtil.fastSimpleUUID();
-        String captcha = captchaCacheTemplate.create(key);
-        return Pair.of(key, captcha);
-    }
+  @GetMapping("get")
+  public Pair<String, String> get() {
+    String key = IdUtil.fastSimpleUUID();
+    String captcha = captchaCacheTemplate.create(key);
+    return Pair.of(key, captcha);
+  }
 
-    @GetMapping("check")
-    public Boolean check(@RequestParam("key") String key,@RequestParam("input") String input) {
-        return captchaCacheTemplate.check(key, input);
-    }
+  @GetMapping("check")
+  public Boolean check(@RequestParam("key") String key, @RequestParam("input") String input) {
+    return captchaCacheTemplate.check(key, input);
+  }
 
-    @GetMapping("counter")
-    public Integer check(@RequestParam("key") String key) throws CounterOverflowException {
-        return simpleCounterTemplate.counting(key, 5);
-    }
-
-
-
+  @GetMapping("counter")
+  public Integer check(@RequestParam("key") String key) throws CounterOverflowException {
+    return simpleCounterTemplate.counting(key, 5);
+  }
 }

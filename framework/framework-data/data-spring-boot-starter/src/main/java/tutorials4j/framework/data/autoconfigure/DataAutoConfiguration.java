@@ -16,12 +16,15 @@ import tutorials4j.framework.data.mybatis.autoconfigure.MybatisPlusConfiguration
  */
 @Slf4j
 @AutoConfiguration
-@Import({DataConfiguration.class, JdbcConfiguration.class
-        , HibernateConfiguration.class, MybatisPlusConfiguration.class})
+@Import({
+  DataConfiguration.class,
+  JdbcConfiguration.class,
+  HibernateConfiguration.class,
+  MybatisPlusConfiguration.class
+})
 public class DataAutoConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[DATA] Data Auto Configuration");
-    }
-
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[DATA] Data Auto Configuration");
+  }
 }

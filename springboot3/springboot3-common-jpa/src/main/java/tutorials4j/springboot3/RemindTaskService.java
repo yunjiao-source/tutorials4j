@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RemindTaskService {
-    private final RemindTaskRepository remindTaskRepository;
+  private final RemindTaskRepository remindTaskRepository;
 
-    public void saveException(RemindTask task, Throwable t) {
-        // 记录异常
-        log.info("保存任务异常");
-    }
+  public void saveException(RemindTask task, Throwable t) {
+    // 记录异常
+    log.info("保存任务异常");
+  }
 }

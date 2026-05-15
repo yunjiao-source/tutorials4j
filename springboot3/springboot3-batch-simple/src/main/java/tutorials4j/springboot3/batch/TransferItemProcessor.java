@@ -14,9 +14,8 @@ import tutorials4j.springboot3.User;
 @RequiredArgsConstructor
 public class TransferItemProcessor implements ItemProcessor<UserCsvRecord, User> {
 
-    @Override
-    public User process(UserCsvRecord item) throws Exception {
-        return User.of(item.getName(), item.getEmail());
-    }
-
+  @Override
+  public User process(UserCsvRecord item) throws Exception {
+    return User.of(item.getName(), item.getEmail());
+  }
 }

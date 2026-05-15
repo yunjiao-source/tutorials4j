@@ -5,5 +5,4 @@ package tutorials4j.framework.examples.swagger;
  *
  * @author Yun Jiao
  */
-public record Problem(String logRef, String message) {
-}
+public record Problem(String logRef, String message) {}

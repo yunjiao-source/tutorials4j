@@ -7,5 +7,4 @@ import java.io.Serializable;
  *
  * @author Yun Jiao
  */
-public interface BaseEntity extends Serializable {
-}
+public interface BaseEntity extends Serializable {}

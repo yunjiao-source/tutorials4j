@@ -9,19 +9,12 @@ import lombok.Data;
  */
 @Data
 public class BatchJobProperties {
-    /**
-     * 批量分块
-     */
-    private Integer chunkSize = 100;
+  /** 批量分块 */
+  private Integer chunkSize = 100;
 
-    /**
-     * 跳过限制
-     */
-    private Integer skipLimit = 100;
+  /** 跳过限制 */
+  private Integer skipLimit = 100;
 
-    /**
-     * 重试次数
-     */
-    private Integer retryLimit = 3;
-
+  /** 重试次数 */
+  private Integer retryLimit = 3;
 }

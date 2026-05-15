@@ -9,21 +9,24 @@ import org.springframework.web.servlet.HandlerInterceptor;
  *
  * @author Yun Jiao
  */
-public class TenantHandlerInterceptor  implements HandlerInterceptor {
+public class TenantHandlerInterceptor implements HandlerInterceptor {
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 从请求头中获取租户ID并设置到上下文中
-        String tenantId = request.getHeader("X-Tenant-ID");
-        if (tenantId != null) {
-            TenantContext.setCurrentTenantId(tenantId);
-        }
-        return true;
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
+    // 从请求头中获取租户ID并设置到上下文中
+    String tenantId = request.getHeader("X-Tenant-ID");
+    if (tenantId != null) {
+      TenantContext.setCurrentTenantId(tenantId);
     }
+    return true;
+  }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        // 清除租户ID
-        TenantContext.clear();
-    }
+  @Override
+  public void afterCompletion(
+      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+      throws Exception {
+    // 清除租户ID
+    TenantContext.clear();
+  }
 }

@@ -18,27 +18,28 @@ import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class CacheConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[TENANT-CACHE] Cache Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[TENANT-CACHE] Cache Configuration");
+  }
 
+  @Bean
+  @ConditionalOnMissingBean
+  TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator(
+      CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
+    log.debug("[TENANT-CACHE] Tenant Caffeine Cache Manager Creator");
 
-    @Bean
-    @ConditionalOnMissingBean
-    TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator(CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
-        log.debug("[TENANT-CACHE] Tenant Caffeine Cache Manager Creator");
+    return new TenantCaffeineCacheManagerCreator(caffeineCacheManagerCreator);
+  }
 
-        return new TenantCaffeineCacheManagerCreator(caffeineCacheManagerCreator);
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator(
+      TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator,
+      RedisCacheManagerCreator redisCacheManagerCreator) {
+    log.debug("[TENANT-CACHE] Tenant Multi Level Cache Manager Creator");
 
-    @Bean
-    @ConditionalOnMissingBean
-    TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator(TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator,
-                                                                            RedisCacheManagerCreator redisCacheManagerCreator) {
-        log.debug("[TENANT-CACHE] Tenant Multi Level Cache Manager Creator");
-
-        return new TenantMultiLevelCacheManagerCreator(tenantCaffeineCacheManagerCreator, redisCacheManagerCreator);
-    }
-
+    return new TenantMultiLevelCacheManagerCreator(
+        tenantCaffeineCacheManagerCreator, redisCacheManagerCreator);
+  }
 }

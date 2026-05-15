@@ -17,23 +17,23 @@ import tutorials4j.framework.web.mvc.filter.CachedBodyRequestFilter;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class MvcCachedBodyConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-MVC] Cached Body Configuration");
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-MVC] Cached Body Configuration");
+  }
+
+  @Bean
+  FilterRegistrationBean<CachedBodyRequestFilter> cachedBodyFilterRegistration(
+      HttpProperties properties) {
+    ServletFilterOptions options = properties.getCachedBody();
+    FilterRegistrationBean<CachedBodyRequestFilter> registration = new FilterRegistrationBean<>();
+    CachedBodyRequestFilter filter = new CachedBodyRequestFilter();
+    registration.setFilter(filter);
+    options.fill(registration);
+
+    if (log.isDebugEnabled()) {
+      log.debug("[WEB-MVC] 缓存请求体过滤器：{}", options);
     }
-
-
-    @Bean
-    FilterRegistrationBean<CachedBodyRequestFilter> cachedBodyFilterRegistration(HttpProperties properties) {
-        ServletFilterOptions options = properties.getCachedBody();
-        FilterRegistrationBean<CachedBodyRequestFilter> registration = new FilterRegistrationBean<>();
-        CachedBodyRequestFilter filter = new CachedBodyRequestFilter();
-        registration.setFilter(filter);
-        options.fill(registration);
-
-        if (log.isDebugEnabled()) {
-            log.debug("[WEB-MVC] 缓存请求体过滤器：{}", options);
-        }
-        return registration;
-    }
+    return registration;
+  }
 }

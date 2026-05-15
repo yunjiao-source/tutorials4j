@@ -20,12 +20,11 @@ import tutorials4j.framework.cache.multi.MultiLevelCacheManagerCreator;
 @Profile("multi-level")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.multi"})
 public class MultiLevelCacheableConfig implements CachingConfigurer {
-    @Autowired
-    private MultiLevelCacheManagerCreator cacheManagerCreator;
+  @Autowired private MultiLevelCacheManagerCreator cacheManagerCreator;
 
-    @Bean
-    @Override
-    public CacheManager cacheManager() {
-        return cacheManagerCreator.getInstance();
-    }
+  @Bean
+  @Override
+  public CacheManager cacheManager() {
+    return cacheManagerCreator.getInstance();
+  }
 }

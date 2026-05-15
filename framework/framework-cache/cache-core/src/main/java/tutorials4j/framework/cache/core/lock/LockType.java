@@ -6,5 +6,6 @@ package tutorials4j.framework.cache.core.lock;
  * @author Yun Jiao
  */
 public enum LockType {
-    BLOCK, REENTRANT;
+  BLOCK,
+  REENTRANT;
 }

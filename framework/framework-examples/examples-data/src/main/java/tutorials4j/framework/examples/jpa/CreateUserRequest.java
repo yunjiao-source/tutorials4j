@@ -13,18 +13,18 @@ import tutorials4j.framework.examples.SexEnum;
  */
 @Data
 public class CreateUserRequest {
-    @NotBlank(message = "姓名不能为空")
-    private String name;
+  @NotBlank(message = "姓名不能为空")
+  private String name;
 
-    @NotBlank(message = "密码不能为空")
-    private String password;
+  @NotBlank(message = "密码不能为空")
+  private String password;
 
-    @Email(message = "邮箱格式不正确")
-    @NotBlank(message = "邮箱不能为空")
-    private String email;
+  @Email(message = "邮箱格式不正确")
+  @NotBlank(message = "邮箱不能为空")
+  private String email;
 
-    @Positive(message = "年龄必须为正数")
-    private Integer age;
+  @Positive(message = "年龄必须为正数")
+  private Integer age;
 
-    private SexEnum sex;
+  private SexEnum sex;
 }

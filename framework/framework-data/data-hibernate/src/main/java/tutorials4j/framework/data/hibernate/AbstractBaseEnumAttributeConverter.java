@@ -1,20 +1,19 @@
 package tutorials4j.framework.data.hibernate;
 
 import jakarta.persistence.AttributeConverter;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import tutorials4j.framework.common.core.support.BaseEnum;
 import tutorials4j.framework.data.core.exception.DataFrameworkException;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * JPA 属性转换器抽象基类，用于实现 {@link BaseEnum} 枚举与数据库列之间的双向转换。
- * <p>
- * 该转换器将枚举的 {@link BaseEnum#getCode()} 值持久化到数据库，并在从数据库读取时根据 code 还原为枚举实例。
- * 内部使用 {@link ConcurrentHashMap} 缓存 code 到枚举的映射，以提高转换性能。
- * </p>
- * <p>
- * <b>使用示例：</b>
+ *
+ * <p>该转换器将枚举的 {@link BaseEnum#getCode()} 值持久化到数据库，并在从数据库读取时根据 code 还原为枚举实例。 内部使用 {@link
+ * ConcurrentHashMap} 缓存 code 到枚举的映射，以提高转换性能。
+ *
+ * <p><b>使用示例：</b>
+ *
  * <pre>{@code
  * // 定义一个实现 BaseEnum 的枚举
  * public enum Status implements BaseEnum<Integer> {
@@ -30,7 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *     }
  * }
  * }</pre>
- * </p>
  *
  * @param <E> 枚举类型，必须同时实现 {@link Enum} 和 {@link BaseEnum}&lt;T&gt;
  * @param <T> 数据库中存储的编码类型，即 {@code BaseEnum} 中 {@code getCode()} 的返回类型
@@ -39,42 +37,42 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see AttributeConverter
  */
 public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & BaseEnum<T>, T>
-        implements AttributeConverter<E, T> {
+    implements AttributeConverter<E, T> {
 
-    private final Class<E> enumClass;
+  private final Class<E> enumClass;
 
-    private final Map<T, E> codeToEnumCache = new ConcurrentHashMap<>();
+  private final Map<T, E> codeToEnumCache = new ConcurrentHashMap<>();
 
-    protected AbstractBaseEnumAttributeConverter(Class<E> enumClass) {
-        this.enumClass = enumClass;
-        initCache();
+  protected AbstractBaseEnumAttributeConverter(Class<E> enumClass) {
+    this.enumClass = enumClass;
+    initCache();
+  }
+
+  private void initCache() {
+    E[] enumConstants = enumClass.getEnumConstants();
+    if (enumConstants == null) {
+      throw new DataFrameworkException(enumClass.getSimpleName() + " 不是枚举类型");
     }
-
-    private void initCache() {
-        E[] enumConstants = enumClass.getEnumConstants();
-        if (enumConstants == null) {
-            throw new DataFrameworkException(enumClass.getSimpleName() + " 不是枚举类型");
-        }
-        for (E e : enumConstants) {
-            T code = e.getCode();
-            codeToEnumCache.put(code, e);
-        }
+    for (E e : enumConstants) {
+      T code = e.getCode();
+      codeToEnumCache.put(code, e);
     }
+  }
 
-    @Override
-    public T convertToDatabaseColumn(E attribute) {
-        return attribute == null ? null : attribute.getCode();
-    }
+  @Override
+  public T convertToDatabaseColumn(E attribute) {
+    return attribute == null ? null : attribute.getCode();
+  }
 
-    @Override
-    public E convertToEntityAttribute(T dbData) {
-        if (dbData == null) {
-            return null;
-        }
-        E enumValue = codeToEnumCache.get(dbData);
-        if (enumValue == null) {
-            throw new DataFrameworkException("无法识别的数据库值: " + dbData + " ，枚举类: " + enumClass);
-        }
-        return enumValue;
+  @Override
+  public E convertToEntityAttribute(T dbData) {
+    if (dbData == null) {
+      return null;
     }
+    E enumValue = codeToEnumCache.get(dbData);
+    if (enumValue == null) {
+      throw new DataFrameworkException("无法识别的数据库值: " + dbData + " ，枚举类: " + enumClass);
+    }
+    return enumValue;
+  }
 }

@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
  * @author Yun Jiao
  */
 @Repository
-public interface RemindTaskRepository extends JpaRepository<RemindTask, Long> {
-}
+public interface RemindTaskRepository extends JpaRepository<RemindTask, Long> {}

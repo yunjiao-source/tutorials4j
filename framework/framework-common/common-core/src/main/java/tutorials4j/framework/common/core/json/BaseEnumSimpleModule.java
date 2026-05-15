@@ -10,10 +10,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
  * @see JsonConsts
  */
 public class BaseEnumSimpleModule extends SimpleModule {
-    public BaseEnumSimpleModule() {
-        super(BaseEnumSimpleModule.class.getName(), JsonConsts.JSON_VERSION);
-        this.addSerializer(BaseEnumJsonSerializer.instance);
-    }
-
-
+  public BaseEnumSimpleModule() {
+    super(BaseEnumSimpleModule.class.getName(), JsonConsts.JSON_VERSION);
+    this.addSerializer(BaseEnumJsonSerializer.instance);
+  }
 }

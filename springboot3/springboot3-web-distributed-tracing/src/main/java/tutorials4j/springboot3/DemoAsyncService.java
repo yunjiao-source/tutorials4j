@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DemoAsyncService {
 
-    @Async
-    public void async() {
-        log.info("Async...");
-    }
+  @Async
+  public void async() {
+    log.info("Async...");
+  }
 }

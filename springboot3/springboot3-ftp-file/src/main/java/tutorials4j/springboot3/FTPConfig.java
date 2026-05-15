@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "ftp")
 public class FTPConfig {
-    private String server;
-    private int port;
-    private String user;
-    private String password;
+  private String server;
+  private int port;
+  private String user;
+  private String password;
 }

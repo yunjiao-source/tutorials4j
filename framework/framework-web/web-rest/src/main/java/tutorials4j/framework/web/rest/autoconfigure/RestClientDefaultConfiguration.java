@@ -19,40 +19,43 @@ import tutorials4j.framework.web.rest.util.RestUtils;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class RestClientDefaultConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-MVC] Rest Client Default Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-MVC] Rest Client Default Configuration");
+  }
 
-    @Bean
-    RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(WebProperties properties) {
-        log.debug("[WEB-MVC] Default Headers Rest Template Request Customizer");
-        return request -> {
-            properties.getClient().getDefaultHeaders().forEach(request.getHeaders()::set);
-        };
-    }
+  @Bean
+  RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(
+      WebProperties properties) {
+    log.debug("[WEB-MVC] Default Headers Rest Template Request Customizer");
+    return request -> {
+      properties.getClient().getDefaultHeaders().forEach(request.getHeaders()::set);
+    };
+  }
 
-    @Bean
-    RestClientCustomizer defaultHeadersRestClientCustomizer(WebProperties properties) {
-        log.debug("[WEB-MVC] Default Headers Rest Client Customizer");
-        return restClientBuilder -> {
-            restClientBuilder.defaultHeaders(header -> properties.getClient().getDefaultHeaders().forEach(header::set));
-        };
-    }
+  @Bean
+  RestClientCustomizer defaultHeadersRestClientCustomizer(WebProperties properties) {
+    log.debug("[WEB-MVC] Default Headers Rest Client Customizer");
+    return restClientBuilder -> {
+      restClientBuilder.defaultHeaders(
+          header -> properties.getClient().getDefaultHeaders().forEach(header::set));
+    };
+  }
 
-    @Bean
-    WebClientCustomizer defaultHeadersWebClientCustomizer(WebProperties properties) {
-        log.debug("[WEB-MVC] Default Headers Web Client Customizer");
-        return webClientBuilder -> {
-            webClientBuilder.defaultHeaders(header -> properties.getClient().getDefaultHeaders().forEach(header::set));
-        };
-    }
+  @Bean
+  WebClientCustomizer defaultHeadersWebClientCustomizer(WebProperties properties) {
+    log.debug("[WEB-MVC] Default Headers Web Client Customizer");
+    return webClientBuilder -> {
+      webClientBuilder.defaultHeaders(
+          header -> properties.getClient().getDefaultHeaders().forEach(header::set));
+    };
+  }
 
-    @Bean
-    WebClientCustomizer defaultWebClientCustomizer() {
-        log.debug("[WEB-MVC] Default Web Client Customizer");
-        return restClientBuilder -> {
-            restClientBuilder.filter(RestUtils.ofCatchExcepitonLogger());
-        };
-    }
+  @Bean
+  WebClientCustomizer defaultWebClientCustomizer() {
+    log.debug("[WEB-MVC] Default Web Client Customizer");
+    return restClientBuilder -> {
+      restClientBuilder.filter(RestUtils.ofCatchExcepitonLogger());
+    };
+  }
 }

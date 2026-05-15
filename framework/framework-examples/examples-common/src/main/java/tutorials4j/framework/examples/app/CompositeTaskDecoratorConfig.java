@@ -23,44 +23,45 @@ import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 @Profile("task")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.task"})
 public class CompositeTaskDecoratorConfig {
-    @Bean
-    CompositeTaskDecorator CompositeTaskDecorator(CompositeTaskDecoratorCreator compositeTaskDecoratorCreator) {
-        return compositeTaskDecoratorCreator.getInstance();
+  @Bean
+  CompositeTaskDecorator CompositeTaskDecorator(
+      CompositeTaskDecoratorCreator compositeTaskDecoratorCreator) {
+    return compositeTaskDecoratorCreator.getInstance();
+  }
+
+  @Bean
+  @Order(1)
+  TaskDecoratorCreator logAroundTaskDecoratorCreator1() {
+    return LogAroundTaskDecorator1::new;
+  }
+
+  @Bean
+  @Order(2)
+  TaskDecoratorCreator logAroundTaskDecoratorCreator2() {
+    return LogAroundTaskDecorator2::new;
+  }
+
+  public static class LogAroundTaskDecorator1 implements TaskDecorator {
+
+    @Override
+    public Runnable decorate(Runnable runnable) {
+      return () -> {
+        log.info(">>>>>>>>LogAroundTaskDecorator1 begin");
+        runnable.run();
+        log.info(">>>>>>>>LogAroundTaskDecorator1 end");
+      };
     }
+  }
 
-    @Bean
-    @Order(1)
-    TaskDecoratorCreator logAroundTaskDecoratorCreator1() {
-        return LogAroundTaskDecorator1::new;
+  public static class LogAroundTaskDecorator2 implements TaskDecorator {
+
+    @Override
+    public Runnable decorate(Runnable runnable) {
+      return () -> {
+        log.info(">>>>>>>>LogAroundTaskDecorator2 begin");
+        runnable.run();
+        log.info(">>>>>>>>LogAroundTaskDecorator2 end");
+      };
     }
-
-    @Bean
-    @Order(2)
-    TaskDecoratorCreator logAroundTaskDecoratorCreator2() {
-        return LogAroundTaskDecorator2::new;
-    }
-
-    public static class LogAroundTaskDecorator1 implements TaskDecorator {
-
-        @Override
-        public Runnable decorate(Runnable runnable) {
-            return () -> {
-                log.info(">>>>>>>>LogAroundTaskDecorator1 begin");
-                runnable.run();
-                log.info(">>>>>>>>LogAroundTaskDecorator1 end");
-            };
-        }
-    }
-
-    public static class LogAroundTaskDecorator2 implements TaskDecorator {
-
-        @Override
-        public Runnable decorate(Runnable runnable) {
-            return () -> {
-                log.info(">>>>>>>>LogAroundTaskDecorator2 begin");
-                runnable.run();
-                log.info(">>>>>>>>LogAroundTaskDecorator2 end");
-            };
-        }
-    }
+  }
 }

@@ -9,15 +9,14 @@ import lombok.Data;
  */
 @Data
 public class UserCsvRecord {
-    private String name;
-    private String email;
+  private String name;
+  private String email;
 
-    // 必须有无参构造
-    public UserCsvRecord() {}
+  // 必须有无参构造
+  public UserCsvRecord() {}
 
-    public UserCsvRecord(String name, String email) {
-        this.name = name;
-        this.email = email;
-    }
-
+  public UserCsvRecord(String name, String email) {
+    this.name = name;
+    this.email = email;
+  }
 }

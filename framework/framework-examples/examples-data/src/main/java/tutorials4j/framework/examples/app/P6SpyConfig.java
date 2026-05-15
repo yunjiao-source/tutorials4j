@@ -14,12 +14,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @Profile("p6spy")
-
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.mybatis"})
 @MapperScan({"tutorials4j.framework.examples.mybatis"})
-
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.jpa"})
 @EnableJpaRepositories(basePackages = {"tutorials4j.framework.examples.jpa"})
 @EntityScan(basePackages = {"tutorials4j.framework.examples.jpa"})
-public class P6SpyConfig {
-}
+public class P6SpyConfig {}

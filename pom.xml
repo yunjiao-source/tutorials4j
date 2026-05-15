@@ -22,6 +22,9 @@
         <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <spotless-maven-plugin.version>3.4.0</spotless-maven-plugin.version>
+        <git-build-hook-maven-plugin.version>3.6.0</git-build-hook-maven-plugin.version>
+
         <springboot3.version>3.5.13</springboot3.version>
         <springboot4.version>4.0.5</springboot4.version>
 
@@ -256,6 +259,51 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>${spotless-maven-plugin.version}</version>
+                    <configuration>
+                        <java>
+                            <googleJavaFormat/>
+                        </java>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.rudikershaw.gitbuildhook</groupId>
+                    <artifactId>git-build-hook-maven-plugin</artifactId>
+                    <version>${git-build-hook-maven-plugin.version}</version>
+                    <configuration>
+                        <!-- 把项目钩子目录设为 git 默认 hooks -->
+                        <gitConfig>
+                            <core.hooksPath>config/githooks/</core.hooksPath>
+                        </gitConfig>
+                        <!-- 自动安装钩子 -->
+                        <installHooks>
+                            <pre-commit>config/githooks/pre-commit</pre-commit>
+                            <pre-push>.config/githooks/pre-push</pre-push>
+                        </installHooks>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>configure</goal>
+                            </goals>
+                            <!-- 每次构建都确保钩子配置生效 -->
+                            <phase>initialize</phase>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -268,6 +316,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.rudikershaw.gitbuildhook</groupId>
+                <artifactId>git-build-hook-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

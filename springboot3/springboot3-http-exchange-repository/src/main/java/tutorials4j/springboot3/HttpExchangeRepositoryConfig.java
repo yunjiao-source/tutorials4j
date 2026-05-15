@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class HttpExchangeRepositoryConfig {
-    @Bean
-    public HttpExchangeRepository httpExchangeRepository() {
-        InMemoryHttpExchangeRepository repository = new InMemoryHttpExchangeRepository();
-        // 可选：修改内存中存储的记录条数，默认为100
-        repository.setCapacity(1000);
-        return repository;
-    }
+  @Bean
+  public HttpExchangeRepository httpExchangeRepository() {
+    InMemoryHttpExchangeRepository repository = new InMemoryHttpExchangeRepository();
+    // 可选：修改内存中存储的记录条数，默认为100
+    repository.setCapacity(1000);
+    return repository;
+  }
 }

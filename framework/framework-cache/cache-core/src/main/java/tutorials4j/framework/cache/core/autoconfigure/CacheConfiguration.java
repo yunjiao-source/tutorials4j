@@ -1,6 +1,7 @@
 package tutorials4j.framework.cache.core.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,8 +14,6 @@ import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 
-import java.util.List;
-
 /**
  * 缓存核心配置类。
  *
@@ -22,33 +21,36 @@ import java.util.List;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({CacheCoreProperties.class, NamedCacheProperties.class,})
+@EnableConfigurationProperties({
+  CacheCoreProperties.class,
+  NamedCacheProperties.class,
+})
 public class CacheConfiguration {
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[CACHE-CORE] Cache Core Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[CACHE-CORE] Cache Core Configuration");
+  }
 
+  @Bean
+  CacheManagerCreatorFactory cacheManagerCreatorFactory(
+      List<CacheManagerCreator<?>> cacheManagerCreators) {
+    log.debug("[CACHE-CORE] Cache Manager Creator Factory");
+    CacheManagerCreatorFactory factory = new CacheManagerCreatorFactory();
+    factory.setCacheManagerCreators(cacheManagerCreators);
 
-    @Bean
-    CacheManagerCreatorFactory cacheManagerCreatorFactory(List<CacheManagerCreator<?>> cacheManagerCreators) {
-        log.debug("[CACHE-CORE] Cache Manager Creator Factory");
-        CacheManagerCreatorFactory factory = new CacheManagerCreatorFactory();
-        factory.setCacheManagerCreators(cacheManagerCreators);
+    log.debug("[CACHE-CORE] 工厂'CacheManagerCreatorFactory'注入实例：{}", cacheManagerCreators);
+    return factory;
+  }
 
-        log.debug("[CACHE-CORE] 工厂'CacheManagerCreatorFactory'注入实例：{}", cacheManagerCreators);
-        return factory;
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  LockServiceFactory lockServiceFactory(List<LockService> lockServices) {
+    log.debug("[CACHE-CORE] Lock Service Factory");
 
-    @Bean
-    @ConditionalOnMissingBean
-    LockServiceFactory lockServiceFactory(List<LockService> lockServices) {
-        log.debug("[CACHE-CORE] Lock Service Factory");
+    LockServiceFactory factory = new LockServiceFactory();
+    factory.setDistributedLockService(lockServices);
 
-        LockServiceFactory factory = new LockServiceFactory();
-        factory.setDistributedLockService(lockServices);
-
-        log.debug("[CACHE-CORE] 工厂'LockServiceFactory'注入实例：{}", lockServices);
-        return factory;
-    }
+    log.debug("[CACHE-CORE] 工厂'LockServiceFactory'注入实例：{}", lockServices);
+    return factory;
+  }
 }

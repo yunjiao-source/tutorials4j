@@ -11,10 +11,8 @@ import lombok.Data;
  */
 @Data
 public class UserUpdateDTO {
-    private String name;
-    private String password;
-    @Email
-    private String email;
-    @Positive
-    private Integer age;
+  private String name;
+  private String password;
+  @Email private String email;
+  @Positive private Integer age;
 }

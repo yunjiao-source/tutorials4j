@@ -14,6 +14,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("request-logging")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.requestlogging"})
-public class RequestLoggingConfig {
-
-}
+public class RequestLoggingConfig {}

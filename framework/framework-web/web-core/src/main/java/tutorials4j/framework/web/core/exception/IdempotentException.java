@@ -5,12 +5,12 @@ package tutorials4j.framework.web.core.exception;
  *
  * @author Yun Jiao
  */
-public class IdempotentException extends WebFrameworkException{
-    public IdempotentException() {
-        super();
-    }
+public class IdempotentException extends WebFrameworkException {
+  public IdempotentException() {
+    super();
+  }
 
-    public IdempotentException(Throwable cause) {
-        super( cause);
-    }
+  public IdempotentException(Throwable cause) {
+    super(cause);
+  }
 }

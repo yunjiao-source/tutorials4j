@@ -11,5 +11,5 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 @Documented
 public @interface AccessLimited {
-    int maxTimes() default 3;
+  int maxTimes() default 3;
 }

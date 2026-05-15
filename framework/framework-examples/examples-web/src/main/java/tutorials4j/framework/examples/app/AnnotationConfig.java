@@ -14,6 +14,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("annotation")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.annotation"})
-public class AnnotationConfig {
-
-}
+public class AnnotationConfig {}

@@ -28,60 +28,61 @@ import tutorials4j.framework.web.rest.mdc.TraceTaskDecorator;
 @Configuration(proxyBeanMethods = false)
 public class RestTraceConfiguration {
 
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("[WEB-REST] Rest Trace Configuration");
-    }
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-REST] Rest Trace Configuration");
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
-        log.debug("[WEB-REST] Composite Task Decorator");
-        return creator.getInstance();
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
+    log.debug("[WEB-REST] Composite Task Decorator");
+    return creator.getInstance();
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    TaskDecoratorCreator traceTaskDecoratorCreator() {
-        log.debug("[WEB-REST] Trace Task Decorator Creator");
-        return TraceTaskDecorator::new;
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  TaskDecoratorCreator traceTaskDecoratorCreator() {
+    log.debug("[WEB-REST] Trace Task Decorator Creator");
+    return TraceTaskDecorator::new;
+  }
 
-    @Bean
-    RestTemplateCustomizer traceRestTemplateCustomizer() {
-        log.debug("[WEB-REST] Trace Rest Template Customizer");
-        return restTemplate -> {
-            restTemplate.getInterceptors().add(new TraceRestTemplateInterceptor());
-        };
-    }
+  @Bean
+  RestTemplateCustomizer traceRestTemplateCustomizer() {
+    log.debug("[WEB-REST] Trace Rest Template Customizer");
+    return restTemplate -> {
+      restTemplate.getInterceptors().add(new TraceRestTemplateInterceptor());
+    };
+  }
 
-    @Bean
-    RestClientCustomizer traceRestClientCustomizer() {
-        log.debug("[WEB-REST] Trace Rest Client Customizer");
-        return restClientBuilder -> {
-            restClientBuilder.requestInterceptor(new TraceRestTemplateInterceptor());
-        };
-    }
+  @Bean
+  RestClientCustomizer traceRestClientCustomizer() {
+    log.debug("[WEB-REST] Trace Rest Client Customizer");
+    return restClientBuilder -> {
+      restClientBuilder.requestInterceptor(new TraceRestTemplateInterceptor());
+    };
+  }
 
-    @Bean
-    WebClientCustomizer traceWebClientCustomizer() {
-        log.debug("[WEB-REST] Trace Web Client Customizer");
-        return webClientBuilder -> {
-            webClientBuilder.filter(new TraceExchangeFilterFunction());
-        };
-    }
+  @Bean
+  WebClientCustomizer traceWebClientCustomizer() {
+    log.debug("[WEB-REST] Trace Web Client Customizer");
+    return webClientBuilder -> {
+      webClientBuilder.filter(new TraceExchangeFilterFunction());
+    };
+  }
 
-    @Bean
-    FilterRegistrationBean<TraceRequestFilter> traceRequestFilterRegistration(HttpProperties properties) {
-        ServletFilterOptions options = properties.getTrace();
-        FilterRegistrationBean<TraceRequestFilter> registration = new FilterRegistrationBean<>();
-        TraceRequestFilter filter = new TraceRequestFilter();
-        registration.setFilter(filter);
-        options.fill(registration);
+  @Bean
+  FilterRegistrationBean<TraceRequestFilter> traceRequestFilterRegistration(
+      HttpProperties properties) {
+    ServletFilterOptions options = properties.getTrace();
+    FilterRegistrationBean<TraceRequestFilter> registration = new FilterRegistrationBean<>();
+    TraceRequestFilter filter = new TraceRequestFilter();
+    registration.setFilter(filter);
+    options.fill(registration);
 
-        if (log.isDebugEnabled()) {
-            log.debug("[WEB-REST] 跟踪信息过滤器：{}", options);
-        }
-        return registration;
+    if (log.isDebugEnabled()) {
+      log.debug("[WEB-REST] 跟踪信息过滤器：{}", options);
     }
+    return registration;
+  }
 }

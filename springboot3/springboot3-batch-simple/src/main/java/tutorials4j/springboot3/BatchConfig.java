@@ -21,26 +21,25 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableBatchProcessing
 @RequiredArgsConstructor
 public class BatchConfig {
-    private final JobRepository jobRepository;
+  private final JobRepository jobRepository;
 
-    @Bean
-    public JobLauncher jobLauncher() throws Exception {
-        TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
-        jobLauncher.setJobRepository(jobRepository);
-        jobLauncher.setTaskExecutor(taskExecutor());
-        jobLauncher.afterPropertiesSet();
-        return jobLauncher;
-    }
+  @Bean
+  public JobLauncher jobLauncher() throws Exception {
+    TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
+    jobLauncher.setJobRepository(jobRepository);
+    jobLauncher.setTaskExecutor(taskExecutor());
+    jobLauncher.afterPropertiesSet();
+    return jobLauncher;
+  }
 
-    private TaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(3);
-        executor.setMaxPoolSize(6);
-        executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("batch-");
-        executor.setKeepAliveSeconds(60);
-        executor.initialize();
-        return executor;
-    }
-
+  private TaskExecutor taskExecutor() {
+    ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    executor.setCorePoolSize(3);
+    executor.setMaxPoolSize(6);
+    executor.setQueueCapacity(100);
+    executor.setThreadNamePrefix("batch-");
+    executor.setKeepAliveSeconds(60);
+    executor.initialize();
+    return executor;
+  }
 }

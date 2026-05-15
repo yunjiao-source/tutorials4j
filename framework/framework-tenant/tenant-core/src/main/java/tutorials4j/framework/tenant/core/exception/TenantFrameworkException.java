@@ -9,22 +9,21 @@ import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
  * @author Yun Jiao
  */
 public class TenantFrameworkException extends FrameworkRuntimeException {
-    public TenantFrameworkException() {
-    }
+  public TenantFrameworkException() {}
 
-    public TenantFrameworkException(String message) {
-        super(message);
-    }
+  public TenantFrameworkException(String message) {
+    super(message);
+  }
 
-    public TenantFrameworkException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public TenantFrameworkException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public TenantFrameworkException(String message, Throwable cause, ExceptionContext context) {
-        super(message, cause, context);
-    }
+  public TenantFrameworkException(String message, Throwable cause, ExceptionContext context) {
+    super(message, cause, context);
+  }
 
-    public TenantFrameworkException(Throwable cause) {
-        super(cause);
-    }
+  public TenantFrameworkException(Throwable cause) {
+    super(cause);
+  }
 }

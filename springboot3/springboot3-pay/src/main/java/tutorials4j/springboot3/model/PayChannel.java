@@ -13,22 +13,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum PayChannel {
+  WECHAT_PAY("wechat", "微信支付"),
+  ALI_PAY("alipay", "支付宝"),
+  UNION_PAY("union", "银联支付");
 
-    WECHAT_PAY("wechat", "微信支付"),
-    ALI_PAY("alipay", "支付宝"),
-    UNION_PAY("union", "银联支付");
+  private String code;
 
-    private String code;
+  private String name;
 
-    private String name;
-
-    public static PayChannel getByCode(String code) {
-        for (PayChannel item : values()) {
-            if (item.getCode().equals(code)) {
-                return item;
-            }
-        }
-        return null;
+  public static PayChannel getByCode(String code) {
+    for (PayChannel item : values()) {
+      if (item.getCode().equals(code)) {
+        return item;
+      }
     }
-
+    return null;
+  }
 }

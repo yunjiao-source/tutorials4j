@@ -16,5 +16,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.jpa.table"})
 @EnableJpaRepositories(basePackages = {"tutorials4j.framework.examples.jpa.table"})
 @EntityScan(basePackages = {"tutorials4j.framework.examples.jpa.table"})
-public class JpaTableConfig {
-}
+public class JpaTableConfig {}

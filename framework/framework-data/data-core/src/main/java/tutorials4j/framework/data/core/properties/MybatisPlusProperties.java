@@ -13,14 +13,13 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS)
 public class MybatisPlusProperties {
-    private DbType dbType = DbType.POSTGRE_SQL;
-    private InterceptorOptions interceptors = new InterceptorOptions();
+  private DbType dbType = DbType.POSTGRE_SQL;
+  private InterceptorOptions interceptors = new InterceptorOptions();
 
-
-    @Data
-    public static class InterceptorOptions {
-        private boolean pagination = true;
-        private boolean optimisticLocker = true;
-        private boolean blockAttack = true;
-    }
+  @Data
+  public static class InterceptorOptions {
+    private boolean pagination = true;
+    private boolean optimisticLocker = true;
+    private boolean blockAttack = true;
+  }
 }

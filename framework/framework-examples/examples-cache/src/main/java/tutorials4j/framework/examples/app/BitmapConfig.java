@@ -12,6 +12,4 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("bitmap")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.bitmap"})
-public class BitmapConfig {
-
-}
+public class BitmapConfig {}

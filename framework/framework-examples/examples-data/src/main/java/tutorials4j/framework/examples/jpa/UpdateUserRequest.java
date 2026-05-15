@@ -11,10 +11,12 @@ import lombok.Data;
  */
 @Data
 public class UpdateUserRequest {
-    private String name;
-    private String password;
-    @Email(message = "邮箱格式不正确")
-    private String email;
-    @Positive(message = "年龄必须为正数")
-    private Integer age;
+  private String name;
+  private String password;
+
+  @Email(message = "邮箱格式不正确")
+  private String email;
+
+  @Positive(message = "年龄必须为正数")
+  private Integer age;
 }

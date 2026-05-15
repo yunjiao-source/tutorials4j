@@ -19,15 +19,15 @@ import tutorials4j.framework.web.core.annotation.Idempotent;
 @RequiredArgsConstructor
 public class AnnotationController {
 
-    @Idempotent
-    @GetMapping("idempotent")
-    public String idempotent() {
-        return "idempotent";
-    }
+  @Idempotent
+  @GetMapping("idempotent")
+  public String idempotent() {
+    return "idempotent";
+  }
 
-    @AccessLimited(maxTimes = 4)
-    @GetMapping("access-limited")
-    public String accessLimited() {
-        return "accessLimited";
-    }
+  @AccessLimited(maxTimes = 4)
+  @GetMapping("access-limited")
+  public String accessLimited() {
+    return "accessLimited";
+  }
 }

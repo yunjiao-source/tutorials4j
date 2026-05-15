@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class CompositeTaskDecoratorController {
-    private final CompositeTaskDecoratorService service;
+  private final CompositeTaskDecoratorService service;
 
-    @GetMapping("/async-exec")
-    public void asyncExec() throws InterruptedException {
-        service.exec();
-    }
+  @GetMapping("/async-exec")
+  public void asyncExec() throws InterruptedException {
+    service.exec();
+  }
 }

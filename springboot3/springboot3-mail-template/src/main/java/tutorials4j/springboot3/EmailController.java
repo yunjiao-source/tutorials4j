@@ -15,14 +15,15 @@ import org.thymeleaf.context.Context;
 @RestController
 @RequiredArgsConstructor
 public class EmailController {
-    private final EmailService emailService;
+  private final EmailService emailService;
 
-    @PostMapping("/sendTemplateEmail")
-    public String sendTemplateEmail(@RequestParam("to") String to,
-                                    @RequestParam("subject") String subject) throws MessagingException {
-        Context context = new Context();
-        context.setVariable("name", "John Doe");
-        emailService.sendTemplateEmail(to, subject, "email-template", context);
-        return "Template Email sent successfully!";
-    }
+  @PostMapping("/sendTemplateEmail")
+  public String sendTemplateEmail(
+      @RequestParam("to") String to, @RequestParam("subject") String subject)
+      throws MessagingException {
+    Context context = new Context();
+    context.setVariable("name", "John Doe");
+    emailService.sendTemplateEmail(to, subject, "email-template", context);
+    return "Template Email sent successfully!";
+  }
 }
