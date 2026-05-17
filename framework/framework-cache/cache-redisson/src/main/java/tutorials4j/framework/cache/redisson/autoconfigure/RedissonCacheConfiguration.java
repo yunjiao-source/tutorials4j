@@ -21,7 +21,7 @@ import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvalua
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class RedissonConfiguration {
+public class RedissonCacheConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[CACHE-REDISSON] Redisson Configuration");

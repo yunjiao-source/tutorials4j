@@ -15,9 +15,9 @@ import tutorials4j.framework.common.core.json.JsonConsts;
  * @see XssJsonDeserializer
  * @see JsonConsts
  */
-public class XssSimpleModule extends SimpleModule {
-  public XssSimpleModule() {
-    super(XssSimpleModule.class.getName(), JsonConsts.JSON_VERSION);
+public class XssJacksonSimpleModule extends SimpleModule {
+  public XssJacksonSimpleModule() {
+    super(XssJacksonSimpleModule.class.getName(), JsonConsts.JSON_VERSION);
     this.addDeserializer(String.class, XssJsonDeserializer.instance);
   }
 }

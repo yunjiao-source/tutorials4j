@@ -3,7 +3,6 @@ package tutorials4j.framework.web.mvc.autoconfigure;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,17 +12,15 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.framework.common.core.json.JsonConsts;
 import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
-import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
-import tutorials4j.framework.web.core.properties.HttpProperties;
+import tutorials4j.framework.web.core.properties.InterceptorWebProperties;
 import tutorials4j.framework.web.core.support.SignatureKeyRepository;
-import tutorials4j.framework.web.mvc.filter.XssRequestFilter;
 import tutorials4j.framework.web.mvc.interceptor.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.mvc.interceptor.IdempotentHandlerInterceptor;
 import tutorials4j.framework.web.mvc.interceptor.SignatureHandlerInterceptor;
-import tutorials4j.framework.web.mvc.support.XssSimpleModule;
+import tutorials4j.framework.web.mvc.support.XssJacksonSimpleModule;
 
 /**
  * 安全配置
@@ -32,36 +29,23 @@ import tutorials4j.framework.web.mvc.support.XssSimpleModule;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class MvcSecurityConfiguration implements WebMvcConfigurer {
+public class InterceptorWebConfiguration implements WebMvcConfigurer {
   @Autowired private AccessLimitedCacheTemplate accessLimitedCacheTemplate;
   @Autowired private IdempotentCacheTemplate idempotentCacheTemplate;
   @Autowired private SignatureCacheTemplate signatureCacheTemplate;
   @Autowired private SignatureKeyRepository signatureKeyRepository;
-  @Autowired private HttpProperties properties;
+  @Autowired private InterceptorWebProperties properties;
 
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-MVC] Security Configuration");
+    log.debug("[WEB-MVC] Interceptor Web Configuration");
   }
 
   @Bean
   @Order(JsonConsts.MODULE_ORDER_XSS)
-  XssSimpleModule xssSimpleModule() {
-    log.debug("[WEB-MVC] Xss Simple Module");
-    return new XssSimpleModule();
-  }
-
-  @Bean
-  FilterRegistrationBean<XssRequestFilter> xssRequestFilterRegistration() {
-    ServletFilterOptions options = properties.getXss();
-    FilterRegistrationBean<XssRequestFilter> registration = new FilterRegistrationBean<>();
-    XssRequestFilter filter = new XssRequestFilter();
-    registration.setFilter(filter);
-    options.fill(registration);
-    if (log.isDebugEnabled()) {
-      log.debug("[WEB-MVC] Xss攻击过滤器：{}", options);
-    }
-    return registration;
+  XssJacksonSimpleModule xssJacksonSimpleModule() {
+    log.debug("[WEB-MVC] Xss Jackson Simple Module");
+    return new XssJacksonSimpleModule();
   }
 
   @Override
@@ -69,20 +53,20 @@ public class MvcSecurityConfiguration implements WebMvcConfigurer {
     HandlerInterceptorOptions accessLimitedOptions = properties.getAccessLimited();
     AccessLimitedHandlerInterceptor accessLimitedHandlerInterceptor =
         new AccessLimitedHandlerInterceptor(accessLimitedCacheTemplate);
-    doAddInterceptors(registry, accessLimitedHandlerInterceptor, accessLimitedOptions);
+    doAddInterceptor(registry, accessLimitedHandlerInterceptor, accessLimitedOptions);
 
     HandlerInterceptorOptions idempotentOptions = properties.getIdempotent();
     IdempotentHandlerInterceptor idempotentHandlerInterceptor =
         new IdempotentHandlerInterceptor(idempotentCacheTemplate);
-    doAddInterceptors(registry, idempotentHandlerInterceptor, idempotentOptions);
+    doAddInterceptor(registry, idempotentHandlerInterceptor, idempotentOptions);
 
     HandlerInterceptorOptions signatureOptions = properties.getSignature().getInterceptor();
     SignatureHandlerInterceptor signatureHandlerInterceptor =
         new SignatureHandlerInterceptor(signatureCacheTemplate, signatureKeyRepository);
-    doAddInterceptors(registry, signatureHandlerInterceptor, signatureOptions);
+    doAddInterceptor(registry, signatureHandlerInterceptor, signatureOptions);
   }
 
-  private void doAddInterceptors(
+  private void doAddInterceptor(
       InterceptorRegistry registry,
       HandlerInterceptor interceptor,
       HandlerInterceptorOptions options) {

@@ -22,7 +22,7 @@ import tutorials4j.framework.tenant.hibernate.TenantDataSourceBasedMultiTenantCo
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class HibernateConfiguration {
+public class HibernateTenantConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[TENANT-HIBERNATE] Hibernate Configuration");

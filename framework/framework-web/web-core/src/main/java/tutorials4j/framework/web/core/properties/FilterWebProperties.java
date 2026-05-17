@@ -1,12 +1,9 @@
 package tutorials4j.framework.web.core.properties;
 
-import java.util.HashMap;
-import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
 
 /**
@@ -15,8 +12,8 @@ import tutorials4j.framework.common.core.support.ServletFilterOptions;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_HTTP)
-public class HttpProperties {
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_FILTER)
+public class FilterWebProperties {
   /** 缓存请求体配置属性 */
   @NestedConfigurationProperty private ServletFilterOptions cachedBody = new ServletFilterOptions();
 
@@ -26,26 +23,8 @@ public class HttpProperties {
   /** xss攻击配置 */
   @NestedConfigurationProperty private ServletFilterOptions xss = new ServletFilterOptions();
 
-  /** 幂等配置 */
-  @NestedConfigurationProperty
-  private HandlerInterceptorOptions idempotent = new HandlerInterceptorOptions();
-
-  /** 访问限制 */
-  @NestedConfigurationProperty
-  private HandlerInterceptorOptions accessLimited = new HandlerInterceptorOptions();
-
   /** 请求日志配置 */
   private RequestLoggingOptions requestLogging = new RequestLoggingOptions();
-
-  private SignatureOptions signature = new SignatureOptions();
-
-  @Data
-  public static class SignatureOptions {
-    @NestedConfigurationProperty
-    private HandlerInterceptorOptions interceptor = new HandlerInterceptorOptions();
-
-    private Map<String, String> keys = new HashMap<>();
-  }
 
   /** 请求日志相关配置选项。 */
   @Data

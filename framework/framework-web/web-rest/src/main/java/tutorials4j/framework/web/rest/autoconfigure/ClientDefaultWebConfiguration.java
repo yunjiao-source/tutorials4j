@@ -8,7 +8,7 @@ import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequest;
-import tutorials4j.framework.web.core.properties.WebProperties;
+import tutorials4j.framework.web.core.properties.ClientWebProperties;
 import tutorials4j.framework.web.rest.util.RestUtils;
 
 /**
@@ -18,7 +18,7 @@ import tutorials4j.framework.web.rest.util.RestUtils;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class RestClientDefaultConfiguration {
+public class ClientDefaultWebConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[WEB-MVC] Rest Client Default Configuration");
@@ -26,28 +26,28 @@ public class RestClientDefaultConfiguration {
 
   @Bean
   RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(
-      WebProperties properties) {
+      ClientWebProperties properties) {
     log.debug("[WEB-MVC] Default Headers Rest Template Request Customizer");
     return request -> {
-      properties.getClient().getDefaultHeaders().forEach(request.getHeaders()::set);
+      properties.getDefaultHeaders().forEach(request.getHeaders()::set);
     };
   }
 
   @Bean
-  RestClientCustomizer defaultHeadersRestClientCustomizer(WebProperties properties) {
+  RestClientCustomizer defaultHeadersRestClientCustomizer(ClientWebProperties properties) {
     log.debug("[WEB-MVC] Default Headers Rest Client Customizer");
     return restClientBuilder -> {
       restClientBuilder.defaultHeaders(
-          header -> properties.getClient().getDefaultHeaders().forEach(header::set));
+          header -> properties.getDefaultHeaders().forEach(header::set));
     };
   }
 
   @Bean
-  WebClientCustomizer defaultHeadersWebClientCustomizer(WebProperties properties) {
+  WebClientCustomizer defaultHeadersWebClientCustomizer(ClientWebProperties properties) {
     log.debug("[WEB-MVC] Default Headers Web Client Customizer");
     return webClientBuilder -> {
       webClientBuilder.defaultHeaders(
-          header -> properties.getClient().getDefaultHeaders().forEach(header::set));
+          header -> properties.getDefaultHeaders().forEach(header::set));
     };
   }
 

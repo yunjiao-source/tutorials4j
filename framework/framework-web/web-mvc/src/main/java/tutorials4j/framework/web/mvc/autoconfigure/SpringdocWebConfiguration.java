@@ -25,7 +25,7 @@ import tutorials4j.framework.web.mvc.support.DefaultSwaggerModelResolver;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean({SpringDocConfiguration.class})
-public class MvcSpringdocConfiguration implements WebMvcConfigurer {
+public class SpringdocWebConfiguration implements WebMvcConfigurer {
   @Value("${spring.application.name:}")
   private String name;
 

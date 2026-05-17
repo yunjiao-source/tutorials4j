@@ -4,10 +4,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.tenant.cache.autoconfigure.CacheConfiguration;
+import tutorials4j.framework.tenant.cache.autoconfigure.CacheTenantConfiguration;
 import tutorials4j.framework.tenant.core.autoconfigure.TenantConfiguration;
-import tutorials4j.framework.tenant.hibernate.autoconfigure.HibernateConfiguration;
-import tutorials4j.framework.tenant.mybatis.autoconfigure.MybatisPlusConfiguration;
+import tutorials4j.framework.tenant.hibernate.autoconfigure.HibernateTenantConfiguration;
+import tutorials4j.framework.tenant.mybatis.autoconfigure.MybatisPlusTenantConfiguration;
 
 /**
  * 租户（tenant）模块自动配置
@@ -18,9 +18,9 @@ import tutorials4j.framework.tenant.mybatis.autoconfigure.MybatisPlusConfigurati
 @AutoConfiguration
 @Import({
   TenantConfiguration.class,
-  CacheConfiguration.class,
-  HibernateConfiguration.class,
-  MybatisPlusConfiguration.class
+  CacheTenantConfiguration.class,
+  HibernateTenantConfiguration.class,
+  MybatisPlusTenantConfiguration.class
 })
 public class TenantAutoConfiguration {
   @PostConstruct

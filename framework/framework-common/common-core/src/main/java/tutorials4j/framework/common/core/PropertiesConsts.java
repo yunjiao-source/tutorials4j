@@ -22,7 +22,11 @@ public interface PropertiesConsts {
   /** web */
   String PROPERTY_PREFIX_WEB = PROPERTY_PREFIX_TUTORIALS4J + ".web";
 
-  String PROPERTY_PREFIX_WEB_HTTP = PROPERTY_PREFIX_WEB + ".http";
+  String PROPERTY_PREFIX_WEB_FILTER = PROPERTY_PREFIX_WEB + ".filter";
+
+  String PROPERTY_PREFIX_WEB_INTERCEPTOR = PROPERTY_PREFIX_WEB + ".interceptor";
+
+  String PROPERTY_PREFIX_WEB_CLIENT = PROPERTY_PREFIX_WEB + ".client";
 
   /** data */
   String PROPERTY_PREFIX_DATA = PROPERTY_PREFIX_TUTORIALS4J + ".data";

@@ -10,8 +10,9 @@ import org.springframework.context.annotation.Import;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
-import tutorials4j.framework.web.core.properties.HttpProperties;
-import tutorials4j.framework.web.core.properties.WebProperties;
+import tutorials4j.framework.web.core.properties.ClientWebProperties;
+import tutorials4j.framework.web.core.properties.FilterWebProperties;
+import tutorials4j.framework.web.core.properties.InterceptorWebProperties;
 import tutorials4j.framework.web.core.support.SignatureKeyRepository;
 import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
 
@@ -22,8 +23,12 @@ import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({HttpProperties.class, WebProperties.class})
-@Import({ValidatorsConfiguration.class})
+@EnableConfigurationProperties({
+  FilterWebProperties.class,
+  ClientWebProperties.class,
+  InterceptorWebProperties.class
+})
+@Import({ValidatorsWebConfiguration.class})
 public class WebConfiguration {
   @PostConstruct
   public void postConstruct() {
@@ -53,7 +58,7 @@ public class WebConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  SignatureKeyRepository simpleSignatureKeyRepository(HttpProperties properties) {
+  SignatureKeyRepository simpleSignatureKeyRepository(InterceptorWebProperties properties) {
     log.debug("[WEB-MVC] Simple Signature Key Repository");
     return new SimpleSignatureKeyRepository(properties.getSignature().getKeys());
   }

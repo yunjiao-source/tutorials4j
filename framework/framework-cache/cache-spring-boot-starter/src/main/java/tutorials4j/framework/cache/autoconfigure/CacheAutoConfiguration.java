@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.cache.caffeine.autoconfigure.CaffeineConfiguration;
 import tutorials4j.framework.cache.core.autoconfigure.CacheConfiguration;
-import tutorials4j.framework.cache.multi.autoconfigure.MultiLevelConfiguration;
-import tutorials4j.framework.cache.redis.autoconfigure.RedisConfiguration;
-import tutorials4j.framework.cache.redisson.autoconfigure.RedissonConfiguration;
+import tutorials4j.framework.cache.multi.autoconfigure.MultiLevelCacheConfiguration;
+import tutorials4j.framework.cache.redis.autoconfigure.RedisCacheConfiguration;
+import tutorials4j.framework.cache.redisson.autoconfigure.RedissonCacheConfiguration;
 
 /**
  * 自动配置
@@ -19,10 +19,10 @@ import tutorials4j.framework.cache.redisson.autoconfigure.RedissonConfiguration;
 @AutoConfiguration
 @Import({
   CacheConfiguration.class,
-  RedisConfiguration.class,
+  RedisCacheConfiguration.class,
   CaffeineConfiguration.class,
-  MultiLevelConfiguration.class,
-  RedissonConfiguration.class
+  MultiLevelCacheConfiguration.class,
+  RedissonCacheConfiguration.class
 })
 public class CacheAutoConfiguration {
   @PostConstruct

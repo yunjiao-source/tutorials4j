@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.data.core.autoconfigure.DataConfiguration;
-import tutorials4j.framework.data.hibernate.autoconfigure.HibernateConfiguration;
-import tutorials4j.framework.data.jdbc.autoconfigure.JdbcConfiguration;
-import tutorials4j.framework.data.mybatis.autoconfigure.MybatisPlusConfiguration;
+import tutorials4j.framework.data.hibernate.autoconfigure.HibernateDataConfiguration;
+import tutorials4j.framework.data.jdbc.autoconfigure.JdbcDataConfiguration;
+import tutorials4j.framework.data.mybatis.autoconfigure.MybatisPlusDataConfiguration;
 
 /**
  * Data模块自动配置
@@ -18,9 +18,9 @@ import tutorials4j.framework.data.mybatis.autoconfigure.MybatisPlusConfiguration
 @AutoConfiguration
 @Import({
   DataConfiguration.class,
-  JdbcConfiguration.class,
-  HibernateConfiguration.class,
-  MybatisPlusConfiguration.class
+  JdbcDataConfiguration.class,
+  HibernateDataConfiguration.class,
+  MybatisPlusDataConfiguration.class
 })
 public class DataAutoConfiguration {
   @PostConstruct

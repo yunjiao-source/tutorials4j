@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.core.lock.LocalLockService;
 import tutorials4j.framework.cache.core.lock.LocalLockableAspect;
-import tutorials4j.framework.cache.core.properties.CacheCoreProperties;
+import tutorials4j.framework.cache.core.properties.CacheProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
@@ -23,7 +23,7 @@ import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvalua
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
-  CacheCoreProperties.class,
+  CacheProperties.class,
   NamedCacheProperties.class,
 })
 public class CacheConfiguration {

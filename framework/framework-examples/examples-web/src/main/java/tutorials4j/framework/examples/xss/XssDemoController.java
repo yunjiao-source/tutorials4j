@@ -3,7 +3,7 @@ package tutorials4j.framework.examples.xss;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import tutorials4j.framework.web.mvc.support.XssSimpleModule;
+import tutorials4j.framework.web.mvc.support.XssJacksonSimpleModule;
 
 /**
  * XSS 防护示例接口。
@@ -31,7 +31,7 @@ public class XssDemoController {
   }
 
   /**
-   * POST 请求示例：接收 JSON 对象，其中的字符串字段会被 {@link XssSimpleModule} 注册的 {@link
+   * POST 请求示例：接收 JSON 对象，其中的字符串字段会被 {@link XssJacksonSimpleModule} 注册的 {@link
    * tutorials4j.framework.web.mvc.support.XssJsonDeserializer} 自动清洗。
    *
    * @param request JSON 请求体

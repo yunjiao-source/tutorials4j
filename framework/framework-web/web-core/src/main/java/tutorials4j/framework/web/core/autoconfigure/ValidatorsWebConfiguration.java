@@ -14,7 +14,7 @@ import tutorials4j.framework.web.core.validation.LocalDateTimeValidator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class ValidatorsConfiguration {
+public class ValidatorsWebConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[WEB-CORE] Validators Configuration");

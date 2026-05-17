@@ -16,7 +16,7 @@ import tutorials4j.framework.data.jdbc.DataSourceRoutingManagerCreator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class JdbcConfiguration {
+public class JdbcDataConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[DATA-JDBC] Data Jdbc Configuration");

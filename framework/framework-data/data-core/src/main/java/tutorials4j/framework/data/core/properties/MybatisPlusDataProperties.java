@@ -12,7 +12,7 @@ import tutorials4j.framework.common.core.PropertiesConsts;
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS)
-public class MybatisPlusProperties {
+public class MybatisPlusDataProperties {
   private DbType dbType = DbType.POSTGRE_SQL;
   private InterceptorOptions interceptors = new InterceptorOptions();
 

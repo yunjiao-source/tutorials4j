@@ -19,7 +19,7 @@ import tutorials4j.framework.tenant.mybatis.DefaultTenantLineInterceptorCustomiz
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class MybatisPlusConfiguration {
+public class MybatisPlusTenantConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[TENANT-MYBATIS-PLUS] Mybatis Plus Configuration");

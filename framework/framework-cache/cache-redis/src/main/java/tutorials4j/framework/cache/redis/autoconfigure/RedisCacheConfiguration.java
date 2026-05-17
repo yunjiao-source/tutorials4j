@@ -34,7 +34,7 @@ import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvalua
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class RedisConfiguration {
+public class RedisCacheConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[CACHE-REDIS] Cache Redis Configuration");

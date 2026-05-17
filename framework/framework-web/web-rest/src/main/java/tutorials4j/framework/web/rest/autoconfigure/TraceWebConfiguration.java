@@ -13,7 +13,7 @@ import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.core.support.ServletFilterOptions;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
-import tutorials4j.framework.web.core.properties.HttpProperties;
+import tutorials4j.framework.web.core.properties.FilterWebProperties;
 import tutorials4j.framework.web.rest.mdc.TraceExchangeFilterFunction;
 import tutorials4j.framework.web.rest.mdc.TraceRequestFilter;
 import tutorials4j.framework.web.rest.mdc.TraceRestTemplateInterceptor;
@@ -26,7 +26,7 @@ import tutorials4j.framework.web.rest.mdc.TraceTaskDecorator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class RestTraceConfiguration {
+public class TraceWebConfiguration {
 
   @PostConstruct
   public void postConstruct() {
@@ -73,7 +73,7 @@ public class RestTraceConfiguration {
 
   @Bean
   FilterRegistrationBean<TraceRequestFilter> traceRequestFilterRegistration(
-      HttpProperties properties) {
+      FilterWebProperties properties) {
     ServletFilterOptions options = properties.getTrace();
     FilterRegistrationBean<TraceRequestFilter> registration = new FilterRegistrationBean<>();
     TraceRequestFilter filter = new TraceRequestFilter();

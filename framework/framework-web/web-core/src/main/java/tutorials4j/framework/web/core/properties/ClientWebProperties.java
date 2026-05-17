@@ -12,14 +12,8 @@ import tutorials4j.framework.common.core.PropertiesConsts;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB)
-public class WebProperties {
-
-  private ClientOptions client = new ClientOptions();
-
-  @Data
-  public static class ClientOptions {
-    /** 默认请求头 */
-    private Map<String, String> defaultHeaders = new HashMap<>();
-  }
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT)
+public class ClientWebProperties {
+  /** 默认请求头 */
+  private Map<String, String> defaultHeaders = new HashMap<>();
 }
