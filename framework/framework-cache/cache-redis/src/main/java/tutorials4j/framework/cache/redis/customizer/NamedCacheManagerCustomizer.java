@@ -1,4 +1,4 @@
-package tutorials4j.framework.cache.redis;
+package tutorials4j.framework.cache.redis.customizer;
 
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
 import org.springframework.data.redis.cache.RedisCacheManager;

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: redisson-lock
+    active: lock
 #    active: bitmap
 #    active: template
 #    active: multi-level

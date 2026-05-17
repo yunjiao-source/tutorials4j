@@ -45,6 +45,7 @@
         <wechatpay-java.version>0.2.17</wechatpay-java.version>
         <springdoc.version>2.8.17</springdoc.version>
         <redisson.version>4.2.0</redisson.version>
+        <resilience4j-retry.version>2.4.0</resilience4j-retry.version>
     </properties>
 
     <modules>
@@ -206,6 +207,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-3-starter</artifactId>
                 <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-retry</artifactId>
+                <version>${resilience4j-retry.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

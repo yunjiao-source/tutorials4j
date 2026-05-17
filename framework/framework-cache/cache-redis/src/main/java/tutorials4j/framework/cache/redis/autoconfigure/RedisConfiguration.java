@@ -17,8 +17,15 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
-import tutorials4j.framework.cache.redis.*;
+import tutorials4j.framework.cache.redis.PrefixKeyStringRedisSerializer;
+import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
+import tutorials4j.framework.cache.redis.customizer.NamedCacheManagerCustomizer;
+import tutorials4j.framework.cache.redis.customizer.NamedRedisCacheManagerBuilderCustomizer;
+import tutorials4j.framework.cache.redis.customizer.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
+import tutorials4j.framework.cache.redis.lock.RedisLockService;
+import tutorials4j.framework.cache.redis.lock.RedisLockableAspect;
 import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
+import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * 命名缓存配置
@@ -72,12 +79,30 @@ public class RedisConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingBean
   RedisBitmapUtils redisBitmapUtils(
       @Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
     log.debug("[CACHE-REDIS] Redis Bitmap Utils");
     RedisBitmapUtils utils = new RedisBitmapUtils();
     utils.setStringRedisTemplate(stringRedisTemplate);
     return utils;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  RedisLockService redisLockService(
+      @Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
+    log.debug("[CACHE-REDIS] Redis Lock Service");
+    return new RedisLockService(stringRedisTemplate);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  RedisLockableAspect redisLockableAspect(
+      SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
+      RedisLockService redisLockService) {
+    log.debug("[CACHE-REDIS] Redis Lockable Aspect");
+    return new RedisLockableAspect(spelMethodBasedExpressionEvaluator, redisLockService);
   }
 
   @ConditionalOnBean({StringRedisTemplate.class, RedisTemplate.class})

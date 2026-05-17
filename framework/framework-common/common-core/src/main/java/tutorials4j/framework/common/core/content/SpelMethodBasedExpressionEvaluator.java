@@ -89,7 +89,8 @@ public class SpelMethodBasedExpressionEvaluator
    */
   protected EvaluationContext createEvaluationContext(Method method, Object[] args) {
     MethodBasedEvaluationContext context =
-        new MethodBasedEvaluationContext(method, method, args, parameterNameDiscoverer);
+        new MethodBasedEvaluationContext(
+            new MethodArgsHolder(args, method), method, args, parameterNameDiscoverer);
     context.setBeanResolver(beanResolver);
     context.addPropertyAccessor(MAP_ACCESSOR);
     return context;
@@ -120,4 +121,7 @@ public class SpelMethodBasedExpressionEvaluator
   public void setBeanFactory(@NonNull BeanFactory beanFactory) {
     beanResolver = new BeanFactoryResolver(beanFactory);
   }
+
+  // 辅助类，用于支持 #root.args[0]
+  public record MethodArgsHolder(Object[] args, Object methodName) {}
 }

@@ -7,11 +7,11 @@ import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.cache.core.lock.LockServiceFactory;
-import tutorials4j.framework.cache.redisson.BlockRedissonLockService;
 import tutorials4j.framework.cache.redisson.PrefixNameMapper;
-import tutorials4j.framework.cache.redisson.RedissonLockableAspect;
-import tutorials4j.framework.cache.redisson.ReentrantRedissonLockService;
+import tutorials4j.framework.cache.redisson.lock.RedissonBlockLockService;
+import tutorials4j.framework.cache.redisson.lock.RedissonBlockLockableAspect;
+import tutorials4j.framework.cache.redisson.lock.RedissonReentrantLockService;
+import tutorials4j.framework.cache.redisson.lock.RedissonReentrantLockableAspect;
 import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
 
 /**
@@ -44,24 +44,35 @@ public class RedissonConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  BlockRedissonLockService BlockRedissonLock(RedissonClient redissonClient) {
-    log.debug("[CACHE-REDISSON] Block Redisson Lock");
-    return new BlockRedissonLockService(redissonClient);
+  RedissonBlockLockService blockRedissonLock(RedissonClient redissonClient) {
+    log.debug("[CACHE-REDISSON] Redisson Block Lock Service");
+    return new RedissonBlockLockService(redissonClient);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  ReentrantRedissonLockService reentrantRedissonLock(RedissonClient redissonClient) {
+  RedissonReentrantLockService reentrantRedissonLock(RedissonClient redissonClient) {
     log.debug("[CACHE-REDISSON] Reentrant Redisson Lock");
-    return new ReentrantRedissonLockService(redissonClient);
+    return new RedissonReentrantLockService(redissonClient);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  RedissonLockableAspect redissonLockableAspect(
-      LockServiceFactory lockServiceFactory,
-      SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator) {
-    log.debug("[CACHE-REDISSON] Redisson Lockable Aspect");
-    return new RedissonLockableAspect(spelMethodBasedExpressionEvaluator, lockServiceFactory);
+  RedissonBlockLockableAspect blockRedissonLockableAspect(
+      SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
+      RedissonBlockLockService redissonBlockLockService) {
+    log.debug("[CACHE-REDISSON] Redisson Block Lockable Aspect");
+    return new RedissonBlockLockableAspect(
+        spelMethodBasedExpressionEvaluator, redissonBlockLockService);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  RedissonReentrantLockableAspect redissonReentrantLockableAspect(
+      SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
+      RedissonReentrantLockService redissonReentrantLockService) {
+    log.debug("[CACHE-REDISSON] Redisson Reentrant Lockable Aspect");
+    return new RedissonReentrantLockableAspect(
+        spelMethodBasedExpressionEvaluator, redissonReentrantLockService);
   }
 }

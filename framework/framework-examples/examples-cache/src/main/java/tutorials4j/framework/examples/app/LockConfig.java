@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Profile;
  * @author Yun Jiao
  */
 @Configuration
-@Profile("redisson-lock")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.lock.redisson"})
-public class RedissonLockConfig {}
+@Profile("lock")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.lock"})
+public class LockConfig {}

@@ -7,12 +7,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.cache.core.lock.LockService;
-import tutorials4j.framework.cache.core.lock.LockServiceFactory;
+import tutorials4j.framework.cache.core.lock.LocalLockService;
+import tutorials4j.framework.cache.core.lock.LocalLockableAspect;
 import tutorials4j.framework.cache.core.properties.CacheCoreProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
+import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * 缓存核心配置类。
@@ -44,13 +45,17 @@ public class CacheConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  LockServiceFactory lockServiceFactory(List<LockService> lockServices) {
-    log.debug("[CACHE-CORE] Lock Service Factory");
+  LocalLockService localLockService() {
+    log.debug("[CACHE-CORE] Local Lock Service");
+    return new LocalLockService();
+  }
 
-    LockServiceFactory factory = new LockServiceFactory();
-    factory.setDistributedLockService(lockServices);
-
-    log.debug("[CACHE-CORE] 工厂'LockServiceFactory'注入实例：{}", lockServices);
-    return factory;
+  @Bean
+  @ConditionalOnMissingBean
+  LocalLockableAspect localLockableAspect(
+      SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
+      LocalLockService localLockService) {
+    log.debug("[CACHE-CORE] Local Lockable Aspect");
+    return new LocalLockableAspect(spelMethodBasedExpressionEvaluator, localLockService);
   }
 }

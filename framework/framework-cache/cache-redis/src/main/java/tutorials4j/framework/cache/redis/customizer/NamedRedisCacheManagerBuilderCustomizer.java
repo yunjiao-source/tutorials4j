@@ -1,4 +1,4 @@
-package tutorials4j.framework.cache.redis;
+package tutorials4j.framework.cache.redis.customizer;
 
 import java.util.HashMap;
 import java.util.Map;
