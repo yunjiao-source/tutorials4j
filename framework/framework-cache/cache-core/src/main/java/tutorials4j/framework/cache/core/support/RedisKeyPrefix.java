@@ -23,6 +23,8 @@ public interface RedisKeyPrefix {
    */
   String SEPARATOR = SymbolConsts.COLON;
 
+  String DOUBLE_SEPARATOR = "::";
+
   /**
    * 根据给定的缓存名称计算完整 Redis Key。
    *
@@ -70,7 +72,7 @@ public interface RedisKeyPrefix {
    * @see TenantContextHolder
    */
   static RedisKeyPrefix tenant() {
-    return name -> TenantContextHolder.get() + SEPARATOR + name;
+    return name -> TenantContextHolder.get() + SEPARATOR + name + DOUBLE_SEPARATOR;
   }
 
   /**
@@ -102,6 +104,6 @@ public interface RedisKeyPrefix {
       return tenant();
     }
 
-    return name -> TenantContextHolder.get() + SEPARATOR + prefix + name;
+    return name -> TenantContextHolder.get() + SEPARATOR + prefix + name + DOUBLE_SEPARATOR;
   }
 }

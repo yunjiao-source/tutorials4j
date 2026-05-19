@@ -25,7 +25,7 @@ import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 public class CommonConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON-CORE] Common Core Configuration");
+    log.debug("[COMMON-CORE] Common Configuration");
   }
 
   /**

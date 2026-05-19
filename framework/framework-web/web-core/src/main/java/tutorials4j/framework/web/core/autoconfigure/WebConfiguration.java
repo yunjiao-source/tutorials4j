@@ -32,7 +32,7 @@ import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
 public class WebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-CORE] Web Core Configuration");
+    log.debug("[WEB-CORE] Web Configuration");
   }
 
   @Bean
@@ -59,7 +59,7 @@ public class WebConfiguration {
   @Bean
   @ConditionalOnMissingBean
   SignatureKeyRepository simpleSignatureKeyRepository(InterceptorWebProperties properties) {
-    log.debug("[WEB-MVC] Simple Signature Key Repository");
+    log.debug("[WEB-CORE] Simple Signature Key Repository");
     return new SimpleSignatureKeyRepository(properties.getSignature().getKeys());
   }
 }

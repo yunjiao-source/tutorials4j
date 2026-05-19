@@ -18,6 +18,6 @@ import tutorials4j.framework.data.core.properties.MybatisPlusDataProperties;
 public class DataConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[DATA-CORE] Data Core Configuration");
+    log.debug("[DATA-CORE] Data Configuration");
   }
 }

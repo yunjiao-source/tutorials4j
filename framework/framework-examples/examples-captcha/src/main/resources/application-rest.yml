@@ -1,0 +1,17 @@
+
+tutorials4j:
+  cache:
+    named:
+      defaults:
+        timeToLive: 2m
+        cacheNullValues: false
+        enable-statistics: false
+      caches:
+        captcha:
+          timeToLive: 1m
+          cacheNullValues: false
+          redis:
+            keyPrefix: "token:"
+
+
+

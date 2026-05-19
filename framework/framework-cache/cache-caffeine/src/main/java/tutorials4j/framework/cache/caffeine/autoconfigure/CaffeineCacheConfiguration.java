@@ -20,7 +20,7 @@ import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class CaffeineConfiguration {
+public class CaffeineCacheConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[CACHE-CAFFEINE] Cache Caffeine Configuration");

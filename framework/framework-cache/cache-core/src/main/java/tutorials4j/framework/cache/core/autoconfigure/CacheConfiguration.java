@@ -29,7 +29,7 @@ import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvalua
 public class CacheConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CACHE-CORE] Cache Core Configuration");
+    log.debug("[CACHE-CORE] Cache Configuration");
   }
 
   @Bean

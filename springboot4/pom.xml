@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>yunjiao-source.tutorials4j</groupId>
         <artifactId>tutorials4j</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <groupId>yunjiao-source.tutorials4j.springboot4</groupId>
     <artifactId>springboot4</artifactId>
     <packaging>pom</packaging>
     <name>Tutorials4j :: Spring Boot4</name>
-    <description>
-        Spring Boot4
-    </description>
+    <description>Spring Boot4</description>
 
-    <modules>
-
-    </modules>
+    <modules />
 
     <dependencyManagement>
         <dependencies>

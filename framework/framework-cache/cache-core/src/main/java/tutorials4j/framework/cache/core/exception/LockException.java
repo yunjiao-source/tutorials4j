@@ -1,14 +1,14 @@
 package tutorials4j.framework.cache.core.exception;
 
-import java.time.Duration;
 import org.apache.commons.lang3.exception.ExceptionContext;
+import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class LockException extends CacheFrameworkException {
+public class LockException extends FrameworkRuntimeException {
 
   public LockException() {}
 
@@ -35,9 +35,5 @@ public class LockException extends CacheFrameworkException {
 
   protected void addLockKey(String lockKey) {
     addContextValue("lockKey", lockKey);
-  }
-
-  protected void addWaitTime(Duration waitTime) {
-    addContextValue("waitTime", waitTime);
   }
 }
