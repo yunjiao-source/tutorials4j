@@ -1,4 +1,4 @@
-package tutorials4j.framework.captcha.hutool.web;
+package tutorials4j.framework.captcha.web;
 
 import lombok.Data;
 import tutorials4j.framework.captcha.CaptchaCategory;
@@ -9,7 +9,7 @@ import tutorials4j.framework.captcha.CaptchaCategory;
  * @author Yun Jiao
  */
 @Data
-public class CodeCaptchaRequest {
+public class CaptchaRequest {
   /** 验证码唯一标识，通常是uuid字符 */
   private String key;
 

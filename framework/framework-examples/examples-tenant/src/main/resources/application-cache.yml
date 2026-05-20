@@ -6,11 +6,11 @@ tutorials4j:
         cacheNullValues: false
         enable-statistics: true
         redis:
-          keyPrefix: 'share:'
+          cache-prefix: 'share:'
       caches:
         users:
           timeToLive: 10s
           cacheNullValues: false
           redis:
-            keyPrefix: 'user:'
+            cache-prefix: 'user:'
 

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>旋转验证码 - 天翼智能验证</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+      font-family: 'Segoe UI', 'PingFang SC', Roboto, 'Helvetica Neue', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .captcha-container {
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+      padding: 24px 28px 32px 28px;
+      width: 100%;
+      max-width: 760px;
+      transition: all 0.2s ease;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin: 0 0 6px 0;
+      color: #1e2a3e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 small {
+      font-size: 0.8rem;
+      font-weight: normal;
+      background: #eef2ff;
+      color: #2563eb;
+      padding: 2px 12px;
+      border-radius: 40px;
+    }
+
+    .sub {
+      color: #5b6e8c;
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+      border-left: 3px solid #3b82f6;
+      padding-left: 12px;
+    }
+
+    /* 验证码画板区域 */
+    .captcha-stage {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: inset 0 1px 3px #00000008, 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .image-panel {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #eef2f6;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    .bg-img-wrapper {
+      position: relative;
+      display: inline-block;
+      line-height: 0;
+    }
+
+    #backgroundImage {
+      display: block;
+      border-radius: 12px;
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      background: #eef2f6;
+    }
+
+    .template-layer {
+      position: absolute;
+      top: 0;
+      left: 20px;      /* 固定相对背景左侧偏移，与旋转中心配合，可根据设计调整 */
+      bottom: 0;
+      width: 200px;    /* 模板实际宽度200px, 与接口返回一致 */
+      pointer-events: none;  /* 避免干扰点击，旋转完全由滑块控制 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+      transition: transform 0.02s linear;
+    }
+
+    #templateImage {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      background: rgba(255,255,240,0.6);
+      backdrop-filter: blur(1px);
+    }
+
+    /* 滑块控制区 */
+    .rotate-control {
+      background: #f1f5f9;
+      border-radius: 48px;
+      padding: 12px 20px;
+      margin-top: 18px;
+    }
+
+    .angle-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .angle-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2563eb;
+      background: #ffffffcc;
+      padding: 0 12px;
+      border-radius: 32px;
+      letter-spacing: 1px;
+    }
+
+    input[type=range] {
+      width: 100%;
+      height: 5px;
+      -webkit-appearance: none;
+      background: #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      margin: 15px 0;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      background: #3b82f6;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #3b82f680;
+      border: 2px solid white;
+      transition: 0.1s;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+      background: #2563eb;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      background: #f0f2f5;
+      padding: 12px 20px;
+      border-radius: 44px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      flex: 1;
+      color: #1f2937;
+      font-family: inherit;
+    }
+
+    button.primary {
+      background: #3b82f6;
+      color: white;
+      box-shadow: 0 4px 8px #3b82f640;
+    }
+
+    button.primary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    button.secondary {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+    }
+
+    button.secondary:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    .result-tip {
+      margin-top: 18px;
+      text-align: center;
+      padding: 12px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: #f1f5f9;
+      transition: 0.2s;
+    }
+
+    .success {
+      background: #dff9e6;
+      color: #2b7e3a;
+      border-left: 4px solid #2b7e3a;
+    }
+
+    .error {
+      background: #ffe9e9;
+      color: #c23d3d;
+      border-left: 4px solid #c23d3d;
+    }
+
+    .info {
+      background: #eef2ff;
+      color: #1e40af;
+    }
+
+    footer {
+      font-size: 0.7rem;
+      text-align: center;
+      color: #6c86a3;
+      margin-top: 22px;
+    }
+  </style>
+</head>
+<body>
+<div class="captcha-container" id="app">
+  <h2>
+    🔐 旋转验证 · 天翼验证
+    <small>ROTATE</small>
+  </h2>
+  <div class="sub">👉 拖动下方滑块旋转图案，对齐正确角度后提交验证</div>
+
+  <div class="captcha-stage">
+    <div class="image-panel">
+      <div class="bg-img-wrapper" style="position: relative;">
+        <img id="backgroundImage" alt="背景图" style="max-width:100%; border-radius:12px;">
+        <div id="templateLayer" class="template-layer" style="width:200px;">
+          <img id="templateImage" alt="旋转模板" style="width:100%;">
+        </div>
+      </div>
+    </div>
+
+    <div class="rotate-control">
+      <div class="angle-info">
+        <span>🎚️ 当前旋转角度</span>
+        <span class="angle-value" id="angleDisplay">0°</span>
+      </div>
+      <input type="range" id="rotateSlider" min="0" max="360" value="0" step="1">
+      <div style="display: flex; justify-content: space-between; font-size:12px; color:#5b6e8c; padding:0 8px;">
+        <span>↺ 逆时针</span>
+        <span>顺时针 ↻</span>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button id="refreshBtn" class="secondary">🔄 刷新验证码</button>
+      <button id="submitBtn" class="primary">✓ 提交验证</button>
+    </div>
+    <div id="resultMessage" class="result-tip info">✨ 请旋转图片至合适角度后点击提交</div>
+  </div>
+  <footer>模拟旋转轨迹 | 后端校验角度与滑动轨迹</footer>
+</div>
+
+<script>
+  // ---------- 全局变量 ----------
+  let currentCaptcha = {
+    id: null,
+    backgroundImageBase64: '',
+    templateImageBase64: '',
+    bgWidth: 600,       // 默认600，接口会返回
+    bgHeight: 360,
+    tmplWidth: 200,
+    tmplHeight: 360,
+    category: 'TIANAI_ROTATE'
+  };
+
+  // 旋转相关
+  let currentAngle = 0;           // 当前角度0~360
+  let startTime = null;           // 用户开始旋转的时间戳(毫秒)
+  let stopTime = null;            // 提交时的时间戳
+  let trackList = [];             // 存储旋转轨迹增量 {x, y, t}
+  let lastRecordAngle = 0;        // 上一次记录的绝对角度值
+  let lastRecordTimestamp = 0;     // 上一次轨迹记录的时间戳
+
+  let isVerifying = false;         // 防止重复提交
+
+  // DOM 元素
+  const bgImg = document.getElementById('backgroundImage');
+  const templateImg = document.getElementById('templateImage');
+  const templateLayer = document.getElementById('templateLayer');
+  const rotateSlider = document.getElementById('rotateSlider');
+  const angleDisplay = document.getElementById('angleDisplay');
+  const refreshBtn = document.getElementById('refreshBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const resultDiv = document.getElementById('resultMessage');
+
+  // ---------- 辅助函数 ----------
+  function showMessage(msg, type = 'info') {
+    resultDiv.innerHTML = msg;
+    resultDiv.className = `result-tip ${type}`;
+    setTimeout(() => {
+      if (resultDiv.className.includes('success') || resultDiv.className.includes('error')) {
+        // 保留结果5秒后重置样式但不覆盖重要信息
+        setTimeout(() => {
+          if (resultDiv.innerHTML === msg) {
+            resultDiv.className = 'result-tip info';
+            resultDiv.innerHTML = '✨ 请旋转图片至合适角度后点击提交';
+          }
+        }, 3000);
+      }
+    }, 200);
+  }
+
+  // 重置轨迹相关状态 (保留验证码数据，但重置旋转记录)
+  function resetTrackState(resetAngleToZero = true) {
+    startTime = null;
+    stopTime = null;
+    trackList = [];
+    lastRecordAngle = 0;
+    lastRecordTimestamp = 0;
+    if (resetAngleToZero) {
+      currentAngle = 0;
+      rotateSlider.value = 0;
+      updateAngleDisplayAndRotate(0);
+    } else {
+      // 仅重置轨迹但角度保留当前滑块值（刷新场景不会保留）
+      updateAngleDisplayAndRotate(currentAngle);
+    }
+  }
+
+  // 更新界面旋转 + 显示角度
+  function updateAngleDisplayAndRotate(angle) {
+    currentAngle = angle;
+    angleDisplay.innerText = Math.round(angle) + '°';
+    rotateSlider.value = angle;
+    // 应用旋转样式，transform 绕着模板中心旋转
+    templateLayer.style.transform = `rotate(${angle}deg)`;
+  }
+
+  // 记录轨迹 (每次滑块变化调用)
+  function recordTrackIfNeeded(newAngle) {
+    const now = Date.now();
+    // 如果还未开始验证 (startTime为空) -> 说明用户第一次拖动，开启记录
+    if (startTime === null) {
+      // 开始验证计时
+      startTime = now;
+      lastRecordTimestamp = now;
+      lastRecordAngle = currentAngle;   // 注意currentAngle是旋转前的角度，newAngle是即将更新的角度
+      trackList = [];                  // 全新轨迹
+      // 防止记录起始偏差: 不记录初始点，等待变化增量
+      // 但是需要更新 lastRecordAngle 与 lastRecordTimestamp 以备后面增量
+      // 由于当前 currentAngle 为更新前的值，我们先基于 old angle 更新
+      lastRecordAngle = currentAngle;
+      lastRecordTimestamp = now;
+      // 可选: 不产生 track 初始点，开始拖拉瞬间无增量
+      return;
+    }
+
+    // 已经开始旋转，计算本次旋转的角度变化量 (delta 角度)
+    let deltaAngle = newAngle - lastRecordAngle;
+    let deltaTime = now - lastRecordTimestamp;
+
+    // 只有角度变化不为0 且 时间差合理 (>0) 才记录轨迹
+    if (Math.abs(deltaAngle) > 0.01 && deltaTime > 0) {
+      // 构造轨迹点: x 为角度变化, y固定0 (旋转验证无Y偏移), t 为相对上一次的时间差(毫秒)
+      trackList.push({
+        x: deltaAngle,
+        y: 0,
+        t: deltaTime
+      });
+    }
+    // 更新基准值
+    lastRecordAngle = newAngle;
+    lastRecordTimestamp = now;
+  }
+
+  // 滑块事件处理 (用户交互)
+  function onSliderChange(e) {
+    const newAngle = parseInt(e.target.value, 10);
+    if (isNaN(newAngle)) return;
+
+    // 记录轨迹 (拖动时自动记录轨迹数据)
+    recordTrackIfNeeded(newAngle);
+    // 更新UI和旋转角度
+    updateAngleDisplayAndRotate(newAngle);
+  }
+
+  // 重置所有并刷新验证码
+  async function refreshCaptcha() {
+    if (isVerifying) {
+      showMessage('验证中，请稍后再刷新', 'error');
+      return;
+    }
+    // 重置所有状态（清除轨迹与开始时间）
+    resetTrackState(true);
+    // 清空结果样式
+    resultDiv.className = 'result-tip info';
+    resultDiv.innerHTML = '🔄 正在加载新验证码...';
+
+    try {
+      const response = await fetch('/captcha/create?category=TIANAI_ROTATE');
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+
+      // 校验必要字段
+      if (!data.id || !data.backgroundImage || !data.templateImage) {
+        throw new Error('验证码数据不完整');
+      }
+
+      // 存储验证码信息
+      currentCaptcha.id = data.id;
+      currentCaptcha.backgroundImageBase64 = data.backgroundImage;
+      currentCaptcha.templateImageBase64 = data.templateImage;
+      currentCaptcha.bgWidth = data.backgroundImageWidth || 600;
+      currentCaptcha.bgHeight = data.backgroundImageHeight || 360;
+      currentCaptcha.tmplWidth = data.templateImageWidth || 200;
+      currentCaptcha.tmplHeight = data.templateImageHeight || 360;
+      currentCaptcha.category = data.category || 'TIANAI_ROTATE';
+
+      // 更新界面图像
+      bgImg.src = currentCaptcha.backgroundImageBase64;
+      templateImg.src = currentCaptcha.templateImageBase64;
+
+      // 根据实际尺寸调整模板层宽高
+      templateLayer.style.width = `${currentCaptcha.tmplWidth}px`;
+      templateLayer.style.left = '20px';    // 固定左侧偏移20px, 可根据背景微调（友好）
+      // 保证背景容器适配宽度
+      const bgWrapper = document.querySelector('.bg-img-wrapper');
+      if (bgWrapper) {
+        bgWrapper.style.position = 'relative';
+      }
+      // 重置角度UI
+      updateAngleDisplayAndRotate(0);
+      // 重置轨迹标记
+      resetTrackState(true);
+      showMessage('✅ 新验证码已加载，请旋转图片至正确角度', 'success');
+    } catch (error) {
+      console.error('获取验证码失败:', error);
+      showMessage('❌ 加载验证码失败，请检查后端服务或刷新页面', 'error');
+    }
+  }
+
+  // 提交验证（构造 ImageCaptchaTrack 并调用校验接口）
+  async function submitCaptcha() {
+    if (isVerifying) {
+      showMessage('请勿重复提交，正在验证中...', 'error');
+      return;
+    }
+
+    // 校验是否已获取验证码
+    if (!currentCaptcha.id) {
+      showMessage('请先刷新验证码再进行验证', 'error');
+      return;
+    }
+
+    // 如果从未产生任何旋转轨迹（startTime === null）代表用户没有拖动过滑块
+    if (startTime === null) {
+      showMessage('⚠️ 请先拖动滑块旋转图片后再提交', 'error');
+      return;
+    }
+
+    // 记录结束时间（当前时刻）
+    const submitTimestamp = Date.now();
+    stopTime = submitTimestamp;
+
+    // 最终旋转角度 left = 当前角度, top固定为0 (旋转验证码无纵向偏移)
+    const finalLeftAngle = currentAngle;
+    const finalTop = 0;
+
+    // 构造 trackList: 需要确保轨迹有效，如果轨迹为空但startTime不为空（极短时间内未产生delta，但也算一次拖动）
+    // 为保证数据完整，若trackList长度为0且startTime有值，可加一个初始微小轨迹？但一般拖动肯定会产生角度变化
+    // 若确实没有任何变化角度但startTime有值，可能是点击滑块没移动就提交，仍至少加一个占位轨迹代表开始与结束之间无变化
+    if (trackList.length === 0 && startTime !== null && stopTime > startTime) {
+      // 没有轨迹增量但时间差不为0，补一个零位移轨迹，用于提交结构健壮
+      trackList.push({
+        x: 0,
+        y: 0,
+        t: stopTime - startTime
+      });
+    }
+
+    // 构造完整的验证码轨迹对象 ImageCaptchaTrack
+    const trackData = {
+      bgImageWidth: currentCaptcha.bgWidth,
+      bgImageHeight: currentCaptcha.bgHeight,
+      templateImageWidth: currentCaptcha.tmplWidth,
+      templateImageHeight: currentCaptcha.tmplHeight,
+      startTime: startTime,
+      stopTime: stopTime,
+      left: finalLeftAngle,       // 最终旋转角度（度）
+      top: finalTop,
+      trackList: trackList,
+      data: null                  // 附加数据字段 可置null
+    };
+
+    // 提交参数结构
+    const requestBody = {
+      key: currentCaptcha.id,
+      code: JSON.stringify(trackData),
+      category: currentCaptcha.category    // 使用 TIANAI_ROTATE
+    };
+
+    isVerifying = true;
+    submitBtn.disabled = true;
+    refreshBtn.disabled = true;
+    showMessage('🕐 正在校验旋转轨迹及角度...', 'info');
+
+    try {
+      const response = await fetch('/captcha/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        let errMsg = `请求失败 ${response.status}`;
+        try {
+          const text = await response.text();
+          errMsg = text || errMsg;
+        } catch(e) {}
+        throw new Error(errMsg);
+      }
+
+      const result = await response.json();
+      // 返回布尔值 true/false
+      if (result === true || result === "true" || result === true) {
+        showMessage('🎉 验证通过！ 旋转角度正确，轨迹有效', 'success');
+        // 验证成功后可以重置状态，但建议保留成功信息，同时允许刷新再次验证
+        // 重置部分标记防止反复提交同一个验证码重复验证（但也可以允许多次，后端应幂等）
+        // 为避免重复提交同一个验证码多次，验证成功后可以冻结一次？无所谓
+      } else {
+        showMessage('❌ 验证失败，角度或轨迹不匹配，请重试', 'error');
+        // 失败不重置数据，可让用户重新旋转再次提交
+      }
+    } catch (error) {
+      console.error('提交验证异常:', error);
+      showMessage(`验证请求异常: ${error.message}`, 'error');
+    } finally {
+      isVerifying = false;
+      submitBtn.disabled = false;
+      refreshBtn.disabled = false;
+      // 注意：验证结束后，如果用户继续旋转同一个验证码，不应该沿用旧的startTime？但最好重新开始轨迹
+      // 按照交互体验，每次提交后如果用户继续旋转，我们希望记录新的旋转路径，但是为了避免旧验证码复用混乱，
+      // 建议在用户再次旋转滑块时，重新开始记录轨迹（前提是还未刷新验证码）
+      // 在用户下一次滑块事件时，如果当前startTime不为空且已提交过但未刷新，重置开始时间方式: 在onSliderChange中增加逻辑
+      // 改进 : 增加一个标志，表示上次验证已结束，用户再次滑动时重置轨迹状态但保留相同验证码
+      // 我们设定一个标志: submittedSinceLastRefresh = true, 再次滑动时调用 resetTrackStateWithoutResetAngle?
+      // 简化: 用户再次滑动时, 如果 startTime !== null 并且 isVerifying==false且之前提交过，会导致记录延续。
+      // 更好的实现: 增加一个全局lastSubmitTime, 在submit后设定一个flag: pendingResetTrackOnNextMove = true; 在下一次滑动时重置轨迹开始时间。
+      // 为了体验自然，我们定义: 每次点击提交之后，再次滑动滑块时自动重置开始点，重新记录轨迹。
+      if (!window._resetPending) window._resetPending = false;
+      window._resetPending = true;   // 下一次滑块操作时重置轨迹状态（但不清除验证码数据）
+    }
+  }
+
+  // 特殊处理：当用户再次开始旋转并且需要重置开始时间（用于刚提交后再次尝试旋转）
+  function handleSliderStartReset() {
+    // 如果存在待重置标志（上一次提交刚结束，或手动要求重置轨迹）且当前验证码存在
+    if (window._resetPending && currentCaptcha.id) {
+      // 重置轨迹状态但不清除角度（保留当前角度不清0，但是startTime重新开始）
+      // 注意重置前需要保证 startTime = null， trackList清空，重新记录
+      startTime = null;
+      trackList = [];
+      lastRecordAngle = currentAngle;
+      lastRecordTimestamp = 0;
+      window._resetPending = false;
+      // 可选提示可再次尝试
+      showMessage('✨ 已重置轨迹记录，请重新旋转后提交', 'info');
+    }
+  }
+
+  // 封装滑块的开始拖动(mousedown) 或 input 之前也能配合重置
+  function onSliderInteractionStart() {
+    handleSliderStartReset();
+  }
+
+  // 初始化事件监听
+  function bindEvents() {
+    rotateSlider.addEventListener('input', onSliderChange);
+    rotateSlider.addEventListener('mousedown', onSliderInteractionStart);
+    rotateSlider.addEventListener('touchstart', onSliderInteractionStart);
+    refreshBtn.addEventListener('click', () => {
+      window._resetPending = false;
+      refreshCaptcha();
+    });
+    submitBtn.addEventListener('click', submitCaptcha);
+  }
+
+  // 预置初始加载验证码
+  async function init() {
+    bindEvents();
+    await refreshCaptcha();
+    // 额外确保模板层展现合理比例: 背景图加载后重设模板层中心transform-origin更精准
+    templateLayer.style.transformOrigin = 'center center';
+    // 避免初始偏移影响
+    updateAngleDisplayAndRotate(0);
+  }
+
+  // 调整旋转中心点基于模板图层实际定位 (固定左上偏移20px, 宽200, 高自动根据图片比例但高度360附近)
+  // 确保旋转绕中心点更真实
+  window.addEventListener('load', () => {
+    init();
+    // 当背景图或模板图加载完成后，确保模板层父容器正确
+    bgImg.onload = () => {
+      const bgRect = document.querySelector('.bg-img-wrapper');
+      if (bgRect) {
+        // 不用特殊处理，保持相对定位
+      }
+    };
+    templateImg.onload = () => {
+      // 旋转中心始终是center center
+      templateLayer.style.transformOrigin = 'center center';
+    };
+  });
+</script>
+</body>
+</html>

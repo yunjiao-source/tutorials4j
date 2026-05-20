@@ -1,22 +1,17 @@
 package tutorials4j.framework.captcha;
 
-import tutorials4j.framework.cache.core.template.AbstractMultiLevelCacheTemplate;
+import java.util.Map;
 
 /**
  * 验证码服务接口
  *
  * @author Yun Jiao
  */
-public abstract class CaptchaService {
-  protected final AbstractMultiLevelCacheTemplate<String, String> captchaCacheTemplate;
+public interface CaptchaService {
 
-  protected CaptchaService(AbstractMultiLevelCacheTemplate<String, String> captchaCacheTemplate) {
-    this.captchaCacheTemplate = captchaCacheTemplate;
-  }
+  Map<String, Object> draw();
 
-  public abstract CaptchaData draw();
+  boolean verify(String key, String userCode);
 
-  public abstract boolean verify(String key, String userCode);
-
-  public abstract CaptchaCategory getCategory();
+  CaptchaCategory getCategory();
 }

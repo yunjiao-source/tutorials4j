@@ -63,10 +63,10 @@ public interface RedisUtils {
       configuration = configuration.disableCachingNullValues();
     }
 
-    if (StringUtils.isNotBlank(prop.getRedis().getKeyPrefix())) {
+    if (StringUtils.isNotBlank(prop.getRedis().getCachePrefix())) {
       configuration =
           configuration.computePrefixWith(
-              RedisUtils.tenantCacheKeyPrefix(prop.getRedis().getKeyPrefix()));
+              RedisUtils.tenantCacheKeyPrefix(prop.getRedis().getCachePrefix()));
     }
 
     return configuration;

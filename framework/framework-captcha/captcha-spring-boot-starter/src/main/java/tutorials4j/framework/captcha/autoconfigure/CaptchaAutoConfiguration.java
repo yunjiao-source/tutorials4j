@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.captcha.hutool.autoconfigure.HutoolCaptchaConfiguration;
+import tutorials4j.framework.captcha.tianai.autoconfigure.TianaiCaptchaConfiguration;
 
 /**
  * 验证码自动配置
@@ -13,7 +14,11 @@ import tutorials4j.framework.captcha.hutool.autoconfigure.HutoolCaptchaConfigura
  */
 @Slf4j
 @AutoConfiguration
-@Import({CaptchaConfiguration.class, HutoolCaptchaConfiguration.class})
+@Import({
+  CaptchaConfiguration.class,
+  HutoolCaptchaConfiguration.class,
+  TianaiCaptchaConfiguration.class
+})
 public class CaptchaAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

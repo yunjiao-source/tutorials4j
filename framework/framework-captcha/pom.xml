@@ -17,6 +17,7 @@
     <modules>
         <module>captcha-core</module>
         <module>captcha-hutool</module>
+        <module>captcha-tianai</module>
         <module>captcha-spring-boot-starter</module>
     </modules>
 

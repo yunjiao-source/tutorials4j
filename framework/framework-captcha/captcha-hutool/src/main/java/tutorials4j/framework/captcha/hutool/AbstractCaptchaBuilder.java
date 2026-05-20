@@ -30,7 +30,7 @@ public abstract class AbstractCaptchaBuilder<C extends AbstractCaptcha> {
   private ColorTypeEnum backgroundColor;
 
   /** 文字透明度，取值0~1，1表示不透明 */
-  private Float transparency;
+  private Float textAlpha;
 
   /** 模糊度（0 - 30） */
   private Integer fuzziness;
@@ -60,8 +60,8 @@ public abstract class AbstractCaptchaBuilder<C extends AbstractCaptcha> {
     captcha.setFont(font);
     captcha.setBackground(backgroundColor.getMapping());
 
-    if (transparency != null) {
-      captcha.setTextAlpha(transparency);
+    if (textAlpha != null) {
+      captcha.setTextAlpha(textAlpha);
     }
   }
 

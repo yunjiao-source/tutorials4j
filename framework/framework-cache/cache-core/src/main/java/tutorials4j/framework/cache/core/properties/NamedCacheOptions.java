@@ -33,7 +33,7 @@ public class NamedCacheOptions {
   @Data
   public static class RedisOptions {
     /** Redis 缓存键的前缀，用于区分不同缓存或应用。 若未指定则可能使用默认前缀或无前缀。 */
-    private String keyPrefix;
+    private String cachePrefix;
   }
 
   /** Caffeine 缓存的配置选项。 */
@@ -72,8 +72,8 @@ public class NamedCacheOptions {
       this.enableStatistics = defaults.enableStatistics;
     }
 
-    if (this.redis.keyPrefix == null) {
-      this.redis.keyPrefix = defaults.redis.keyPrefix;
+    if (this.redis.cachePrefix == null) {
+      this.redis.cachePrefix = defaults.redis.cachePrefix;
     }
 
     this.caffeine.initialCapacity = defaults.caffeine.initialCapacity;

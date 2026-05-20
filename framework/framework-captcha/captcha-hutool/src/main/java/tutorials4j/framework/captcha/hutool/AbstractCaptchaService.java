@@ -5,10 +5,10 @@ import cn.hutool.core.util.IdUtil;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
-import tutorials4j.framework.cache.core.template.AbstractMultiLevelCacheTemplate;
-import tutorials4j.framework.captcha.CaptchaData;
+import tutorials4j.framework.captcha.BehaviorCaptchaCacheTemplate;
 import tutorials4j.framework.captcha.CaptchaService;
 import tutorials4j.framework.captcha.exception.CaptchaException;
 import tutorials4j.framework.common.core.util.GaussianBlur;
@@ -19,11 +19,9 @@ import tutorials4j.framework.common.core.util.GaussianBlur;
  * @author Yun Jiao
  */
 @Slf4j
-public abstract class AbstractCaptchaService extends CaptchaService {
-
-  protected AbstractCaptchaService(AbstractMultiLevelCacheTemplate<String, String> cacheTemplate) {
-    super(cacheTemplate);
-  }
+@RequiredArgsConstructor
+public abstract class AbstractCaptchaService implements CaptchaService {
+  protected final BehaviorCaptchaCacheTemplate captchaCacheTemplate;
 
   /**
    * 获取参数
@@ -81,6 +79,7 @@ public abstract class AbstractCaptchaService extends CaptchaService {
     if (!StringUtils.hasText(userCode)) {
       throw new CaptchaException();
     }
+
     String cacheCode = captchaCacheTemplate.get(key);
     if (!StringUtils.hasText(cacheCode)) {
       throw new CaptchaException();

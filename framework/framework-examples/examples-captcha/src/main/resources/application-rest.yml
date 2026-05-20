@@ -3,15 +3,20 @@ tutorials4j:
   cache:
     named:
       defaults:
-        timeToLive: 2m
+        timeToLive: 5m
         cacheNullValues: false
         enable-statistics: false
       caches:
-        captcha:
+        behavior-captcha:
+          timeToLive: 2m
+          cacheNullValues: false
+          redis:
+            cache-prefix: "token:"
+        graphic-captcha:
           timeToLive: 1m
           cacheNullValues: false
           redis:
-            keyPrefix: "token:"
+            cache-prefix: "token:"
 
 
 

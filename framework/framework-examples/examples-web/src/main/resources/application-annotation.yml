@@ -18,12 +18,12 @@ tutorials4j:
           timeToLive: 3s
           cacheNullValues: false
           redis:
-            keyPrefix: 'token:'
+            cache-prefix: 'token:'
         access_limited:
           timeToLive: 5s
           cacheNullValues: true
           redis:
-            keyPrefix: 'token:'
+            cache-prefix: 'token:'
 
   web:
     interceptor:

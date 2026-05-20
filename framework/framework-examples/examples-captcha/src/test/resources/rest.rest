@@ -1,10 +1,10 @@
 
 ###
-GET http://localhost:8080/captcha/hutool/create?category=HUTOOL_LINE
+GET http://localhost:8080/captcha/create?category=HUTOOL_LINE
 Content-Type: application/json
 
 ###
-POST http://localhost:8080/captcha/hutool/check
+POST http://localhost:8080/captcha/check
 Content-Type: application/json
 
 {
@@ -15,10 +15,34 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/captcha/hutool/create?category=HUTOOL_GIF
+GET http://localhost:8080/captcha/create?category=HUTOOL_GIF
 Content-Type: application/json
 
-### 页面
+###
+GET http://localhost:8080/captcha/create?category=TIANAI_ROTATE
+Content-Type: application/json
+
+### hutool验证码页面
 GET http://localhost:8080/page/hutool
+Accept: text/html
+
+### tianai验证码页面
+GET http://localhost:8080/page/tianai-word-image-click
+Accept: text/html
+
+### tianai验证码页面
+GET http://localhost:8080/page/tianai-rotate
+Accept: text/html
+
+### tianai验证码页面-deepseek
+GET http://localhost:8080/page/tianai-slider-dp
+Accept: text/html
+
+### tianai验证码页面-元宝
+GET http://localhost:8080/page/tianai-slider-yb
+Accept: text/html
+
+### tianai官方web sdk
+GET http://localhost:8080/page/tianai-websdk
 Accept: text/html
 

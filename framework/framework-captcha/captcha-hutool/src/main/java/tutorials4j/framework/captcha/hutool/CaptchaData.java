@@ -1,17 +1,22 @@
-package tutorials4j.framework.captcha;
+package tutorials4j.framework.captcha.hutool;
 
 import java.io.Serializable;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
+import tutorials4j.framework.captcha.CaptchaCategory;
 
 /**
  * 验证码数据
  *
  * @author Yun Jiao
  */
+@Slf4j
 @Getter
 @Setter
 @ToString
@@ -41,5 +46,17 @@ public class CaptchaData implements Serializable {
 
     String base64 = Base64.getEncoder().encodeToString(captchaImage);
     return "data:image/" + category.getExt() + ";base64," + base64;
+  }
+
+  public Map<String, Object> toMap() {
+    if (log.isDebugEnabled()) {
+      log.debug("验证码数据：{}", this);
+    }
+    Map<String, Object> map = new HashMap<>();
+    map.put("key", this.key());
+    // map.put("code", this.code());
+    map.put("category", this.category().name());
+    map.put("captchaImage", captchaImageBase64Url());
+    return map;
   }
 }
