@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.captcha.CaptchaCategory;
 
 /**
- * 验证码数据
+ * 验证码数据传输对象，封装了验证码的唯一标识、图片字节数组、文本内容及类别。
+ *
+ * <p>提供将图片字节数组转换为Base64 Data URL的方法，以及转换为Map结构便于接口返回。
  *
  * @author Yun Jiao
  */
@@ -48,6 +50,13 @@ public class CaptchaData implements Serializable {
     return "data:image/" + category.getExt() + ";base64," + base64;
   }
 
+  /**
+   * 将当前对象转换为Map结构，便于序列化为JSON响应。
+   *
+   * <p>Map中包含key、category、captchaImage（Base64 Data URL），不包含code字段。
+   *
+   * @return 包含验证码信息的Map
+   */
   public Map<String, Object> toMap() {
     if (log.isDebugEnabled()) {
       log.debug("验证码数据：{}", this);

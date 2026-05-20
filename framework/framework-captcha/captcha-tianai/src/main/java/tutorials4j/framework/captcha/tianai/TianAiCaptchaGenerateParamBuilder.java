@@ -8,13 +8,16 @@ import org.apache.commons.lang3.StringUtils;
 import tutorials4j.framework.captcha.properties.TianaiOptions;
 
 /**
- * TODO
+ * 天意验证码生成参数构建器。
+ *
+ * <p>将配置选项转换为 {@link GenerateParam} 对象。
  *
  * @author Yun Jiao
  */
 @Data
 @Builder
 public class TianAiCaptchaGenerateParamBuilder {
+
   private String backgroundFormatName;
   private String templateFormatName;
   private Boolean obfuscate;
@@ -26,6 +29,13 @@ public class TianAiCaptchaGenerateParamBuilder {
   private Integer clickInterferenceCount;
   private Integer clickCheckClickCount;
 
+  /**
+   * 根据配置选项和验证码类型创建构建器实例。
+   *
+   * @param options 配置选项
+   * @param type 验证码类型
+   * @return 构建器实例
+   */
   public static TianAiCaptchaGenerateParamBuilder of(TianaiOptions options, CaptchaType type) {
     return TianAiCaptchaGenerateParamBuilder.builder()
         .backgroundFormatName(options.getBackgroundFormatName())
@@ -41,6 +51,11 @@ public class TianAiCaptchaGenerateParamBuilder {
         .build();
   }
 
+  /**
+   * 复制当前构建器。
+   *
+   * @return 新的构建器副本
+   */
   public TianAiCaptchaGenerateParamBuilder copy() {
     return TianAiCaptchaGenerateParamBuilder.builder()
         .backgroundFormatName(this.backgroundFormatName)
@@ -56,6 +71,11 @@ public class TianAiCaptchaGenerateParamBuilder {
         .build();
   }
 
+  /**
+   * 创建 GenerateParam 对象供验证码生成使用。
+   *
+   * @return 生成参数
+   */
   public GenerateParam createGenerateParam() {
     GenerateParam generateParam = new GenerateParam();
     generateParam.setBackgroundFormatName(backgroundFormatName);

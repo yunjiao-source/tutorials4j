@@ -3,7 +3,9 @@ package tutorials4j.framework.captcha;
 import tutorials4j.framework.cache.core.template.AbstractMultiLevelCacheTemplate;
 
 /**
- * TODO
+ * 图形验证码缓存模板，继承自多级缓存模板。
+ *
+ * <p>用于存储验证码相关的临时数据。
  *
  * @author Yun Jiao
  */

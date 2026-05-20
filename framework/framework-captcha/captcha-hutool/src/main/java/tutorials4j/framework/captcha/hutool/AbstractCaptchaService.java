@@ -14,7 +14,10 @@ import tutorials4j.framework.captcha.exception.CaptchaException;
 import tutorials4j.framework.common.core.util.GaussianBlur;
 
 /**
- * 抽象的验证码 服务
+ * 抽象验证码服务，提供验证码生成、模糊处理、缓存存储及验证等公共逻辑。
+ *
+ * <p>子类需实现{@link #getValidIgnoreCase()}和{@link #getFuzziness()}以提供配置， 并实现{@link
+ * CaptchaService#draw()}方法生成具体的验证码数据。
  *
  * @author Yun Jiao
  */

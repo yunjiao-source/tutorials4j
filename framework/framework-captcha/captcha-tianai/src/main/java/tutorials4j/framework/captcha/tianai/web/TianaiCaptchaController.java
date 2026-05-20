@@ -18,7 +18,7 @@ import tutorials4j.framework.captcha.CaptchaService;
 import tutorials4j.framework.captcha.CaptchaServiceFactory;
 
 /**
- * TODO
+ * 天意验证码控制器，提供生成和校验验证码的 REST API。
  *
  * @author Yun Jiao
  */
@@ -29,6 +29,13 @@ public class TianaiCaptchaController {
   private final CaptchaServiceFactory factory;
   private final ImageCaptchaApplication imageCaptchaApplication;
 
+  /**
+   * 生成验证码。
+   *
+   * @param request HTTP 请求
+   * @param type 验证码类型，可选
+   * @return 包含验证码图片及数据的响应
+   */
   @RequestMapping("/gen")
   @ResponseBody
   public ApiResponse<Map<String, Object>> genCaptcha(
@@ -38,6 +45,13 @@ public class TianaiCaptchaController {
     return ApiResponse.ofSuccess(service.draw());
   }
 
+  /**
+   * 校验验证码。
+   *
+   * @param data 请求体，包含验证码 id 和用户轨迹数据
+   * @param request HTTP 请求
+   * @return 校验结果响应
+   */
   @PostMapping("/check")
   @ResponseBody
   public ApiResponse<?> checkCaptcha(@RequestBody Data data, HttpServletRequest request) {
@@ -48,6 +62,7 @@ public class TianaiCaptchaController {
     return response;
   }
 
+  /** 验证码校验请求数据封装。 */
   @lombok.Data
   public static class Data {
     private String id;

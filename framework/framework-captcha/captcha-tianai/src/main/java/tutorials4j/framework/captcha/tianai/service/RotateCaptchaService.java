@@ -5,7 +5,7 @@ import tutorials4j.framework.captcha.CaptchaCategory;
 import tutorials4j.framework.captcha.tianai.TianAiCaptchaGenerateParamBuilder;
 
 /**
- * TODO
+ * 旋转验证码服务。
  *
  * @author Yun Jiao
  */

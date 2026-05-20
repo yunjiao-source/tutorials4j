@@ -20,7 +20,9 @@ import tutorials4j.framework.captcha.hutool.ShearCaptchaService;
 import tutorials4j.framework.captcha.properties.HutoolCaptchaProperties;
 
 /**
- * TODO
+ * Hutool验证码自动配置类。
+ *
+ * <p>根据配置属性创建各种类型的验证码服务Bean（线段、圆圈、扭曲、GIF）。 负责验证配置参数的有效性并构建对应的Builder和服务实例。
  *
  * @author Yun Jiao
  */

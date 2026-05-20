@@ -5,7 +5,7 @@ import cloud.tianai.captcha.resource.common.model.dto.Resource;
 import tutorials4j.framework.captcha.tianai.CaptchaType;
 
 /**
- * TODO
+ * 图片资源定制器，为所有天意验证码类型添加默认的背景图片和模板图片资源。
  *
  * @author Yun Jiao
  */

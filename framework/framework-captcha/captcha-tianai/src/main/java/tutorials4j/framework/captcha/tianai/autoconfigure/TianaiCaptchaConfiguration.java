@@ -25,7 +25,9 @@ import tutorials4j.framework.captcha.tianai.service.WordImageClickCaptchaService
 import tutorials4j.framework.captcha.tianai.web.TianaiCaptchaController;
 
 /**
- * TODO
+ * 天意验证码自动配置类。
+ *
+ * <p>负责初始化旋转、滑动、文字点选、拼图等验证码服务，以及缓存、控制器等组件。
  *
  * @author Yun Jiao
  */

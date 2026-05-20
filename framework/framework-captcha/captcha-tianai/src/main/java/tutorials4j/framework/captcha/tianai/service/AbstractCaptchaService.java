@@ -14,14 +14,23 @@ import tutorials4j.framework.captcha.tianai.TianAiCaptchaGenerateParamBuilder;
 import tutorials4j.framework.common.core.util.GsonUtils;
 
 /**
- * TODO
+ * 天意验证码服务抽象基类，提供生成和校验的公共逻辑。
  *
  * @author Yun Jiao
  */
 public abstract class AbstractCaptchaService implements CaptchaService {
+  /** 图片验证码应用实例 */
   protected final ImageCaptchaApplication imageCaptchaApplication;
+
+  /** 生成参数构建器 */
   protected final TianAiCaptchaGenerateParamBuilder builder;
 
+  /**
+   * 构造抽象验证码服务。
+   *
+   * @param imageCaptchaApplication 图片验证码应用
+   * @param builder 生成参数构建器
+   */
   protected AbstractCaptchaService(
       ImageCaptchaApplication imageCaptchaApplication, TianAiCaptchaGenerateParamBuilder builder) {
     this.imageCaptchaApplication = imageCaptchaApplication;

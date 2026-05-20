@@ -11,7 +11,7 @@ import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 import tutorials4j.framework.common.core.util.GsonUtils;
 
 /**
- * TODO
+ * 基于 Redis 的缓存存储实现，适配天意验证码的缓存接口。
  *
  * @author Yun Jiao
  */
