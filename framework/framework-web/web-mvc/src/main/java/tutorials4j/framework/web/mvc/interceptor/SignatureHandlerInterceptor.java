@@ -55,10 +55,11 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
       return true;
     }
 
-    String appKey = HeaderUtils.getHeader(request, DefaultConsts.HTTP_SIGNATURE_APP_KEY);
-    String timestamp = HeaderUtils.getHeader(request, DefaultConsts.HTTP_SIGNATURE_TIMESTAMP);
-    String nonce = HeaderUtils.getHeader(request, DefaultConsts.HTTP_SIGNATURE_NONCE);
-    String signature = HeaderUtils.getHeader(request, DefaultConsts.HTTP_SIGNATURE);
+    String appKey = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_SIGNATURE_APP_KEY);
+    String timestamp =
+        HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_SIGNATURE_TIMESTAMP);
+    String nonce = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_SIGNATURE_NONCE);
+    String signature = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_SIGNATURE);
 
     // 1. 参数校验
     if (StringUtils.isAnyBlank(appKey, timestamp, nonce, signature)) {

@@ -1,5 +1,8 @@
 
 tutorials4j:
+  captcha:
+    filter:
+      url-patterns: /article
   cache:
     named:
       defaults:

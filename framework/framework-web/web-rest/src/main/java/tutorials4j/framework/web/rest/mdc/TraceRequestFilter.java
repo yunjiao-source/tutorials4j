@@ -28,9 +28,9 @@ public class TraceRequestFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     // 1. 获取或生成追踪ID
-    String traceId = request.getHeader(DefaultConsts.HTTP_TRACE_ID);
-    String spanId = request.getHeader(DefaultConsts.HTTP_TRACE_SPAN_ID);
-    String parentSpanId = request.getHeader(DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID);
+    String traceId = request.getHeader(DefaultConsts.HTTP_HEADER_TRACE_ID);
+    String spanId = request.getHeader(DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID);
+    String parentSpanId = request.getHeader(DefaultConsts.HTTP_HEADER_TRACE_PARENT_SPAN_ID);
 
     if (traceId == null || traceId.isEmpty()) {
       traceId = RestUtils.generateTraceId();
@@ -40,10 +40,10 @@ public class TraceRequestFilter extends OncePerRequestFilter {
     }
 
     // 2. 设置到MDC
-    MDC.put(DefaultConsts.HTTP_TRACE_ID, traceId);
-    MDC.put(DefaultConsts.HTTP_TRACE_SPAN_ID, spanId);
+    MDC.put(DefaultConsts.HTTP_HEADER_TRACE_ID, traceId);
+    MDC.put(DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID, spanId);
     if (parentSpanId != null) {
-      MDC.put(DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID, parentSpanId);
+      MDC.put(DefaultConsts.HTTP_HEADER_TRACE_PARENT_SPAN_ID, parentSpanId);
     }
 
     if (log.isDebugEnabled()) {
@@ -53,8 +53,8 @@ public class TraceRequestFilter extends OncePerRequestFilter {
     try {
       // 3. 添加追踪ID到响应头
       if (response instanceof HttpServletResponse httpResponse) {
-        httpResponse.setHeader(DefaultConsts.HTTP_TRACE_ID, traceId);
-        httpResponse.setHeader(DefaultConsts.HTTP_TRACE_SPAN_ID, spanId);
+        httpResponse.setHeader(DefaultConsts.HTTP_HEADER_TRACE_ID, traceId);
+        httpResponse.setHeader(DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID, spanId);
       }
 
       filterChain.doFilter(request, response);

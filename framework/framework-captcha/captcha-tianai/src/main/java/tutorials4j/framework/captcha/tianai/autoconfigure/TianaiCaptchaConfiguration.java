@@ -99,7 +99,7 @@ public class TianaiCaptchaConfiguration {
     return new RedisCacheStore(captchaCacheTemplate);
   }
 
-  @Bean
+  @Bean(destroyMethod = "close")
   @ConditionalOnMissingBean
   ImageCaptchaApplication imageCaptchaApplication(
       RedisCacheStore redisCacheStore, ObjectProvider<TACBuilderCustomizer> customizers) {

@@ -14,7 +14,7 @@ import tutorials4j.framework.common.core.json.Long2StringSimpleModule;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class JsonConfiguration {
+public class JsonCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[COMMON-CORE] Common Core Json Configuration");

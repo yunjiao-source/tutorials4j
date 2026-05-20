@@ -49,4 +49,9 @@ public class SimpleImageCaptchaApplication extends DefaultImageCaptchaApplicatio
   protected String getKey(String id) {
     return id;
   }
+
+  @Override
+  public void close() {
+    super.close();
+  }
 }

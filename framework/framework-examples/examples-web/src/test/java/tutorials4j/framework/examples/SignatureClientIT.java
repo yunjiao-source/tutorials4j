@@ -35,10 +35,10 @@ public class SignatureClientIT {
 
     // 构建请求头
     HttpHeaders headers = new HttpHeaders();
-    headers.set(DefaultConsts.HTTP_SIGNATURE_APP_KEY, APP_KEY);
-    headers.set(DefaultConsts.HTTP_SIGNATURE_TIMESTAMP, timestamp);
-    headers.set(DefaultConsts.HTTP_SIGNATURE_NONCE, nonce);
-    headers.set(DefaultConsts.HTTP_SIGNATURE, signature);
+    headers.set(DefaultConsts.HTTP_HEADER_SIGNATURE_APP_KEY, APP_KEY);
+    headers.set(DefaultConsts.HTTP_HEADER_SIGNATURE_TIMESTAMP, timestamp);
+    headers.set(DefaultConsts.HTTP_HEADER_SIGNATURE_NONCE, nonce);
+    headers.set(DefaultConsts.HTTP_HEADER_SIGNATURE, signature);
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     // 发送请求

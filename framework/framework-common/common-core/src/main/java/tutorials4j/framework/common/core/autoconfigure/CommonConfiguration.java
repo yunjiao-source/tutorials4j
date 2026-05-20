@@ -21,7 +21,7 @@ import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@Import({SpringUtil.class, JsonConfiguration.class})
+@Import({SpringUtil.class, JsonCommonConfiguration.class})
 public class CommonConfiguration {
   @PostConstruct
   public void postConstruct() {

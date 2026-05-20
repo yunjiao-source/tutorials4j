@@ -46,3 +46,10 @@ Accept: text/html
 GET http://localhost:8080/page/tianai-websdk
 Accept: text/html
 
+### 访问保护资源
+GET http://localhost:8080/article
+Accept: text/plain
+X-Captcha-Key: 03511eb349f24369aebe824e9f41f2c7
+X-Captcha-Category: HUTOOL_LINE
+X-Captcha-Code: BM4zL
+

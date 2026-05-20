@@ -29,17 +29,17 @@ public class TraceRestTemplateInterceptor implements ClientHttpRequestIntercepto
       HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
 
     // 传递追踪信息到下游服务
-    String traceId = MDC.get(DefaultConsts.HTTP_TRACE_ID);
-    String spanId = MDC.get(DefaultConsts.HTTP_TRACE_SPAN_ID);
+    String traceId = MDC.get(DefaultConsts.HTTP_HEADER_TRACE_ID);
+    String spanId = MDC.get(DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID);
 
     if (traceId != null) {
-      request.getHeaders().add(DefaultConsts.HTTP_TRACE_ID, traceId);
+      request.getHeaders().add(DefaultConsts.HTTP_HEADER_TRACE_ID, traceId);
     }
     if (spanId != null) {
       // 生成新的子span
       String childSpanId = RestUtils.generateSpanId();
-      request.getHeaders().add(DefaultConsts.HTTP_TRACE_PARENT_SPAN_ID, spanId);
-      request.getHeaders().add(DefaultConsts.HTTP_TRACE_SPAN_ID, childSpanId);
+      request.getHeaders().add(DefaultConsts.HTTP_HEADER_TRACE_PARENT_SPAN_ID, spanId);
+      request.getHeaders().add(DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID, childSpanId);
     }
 
     if (log.isDebugEnabled()) {

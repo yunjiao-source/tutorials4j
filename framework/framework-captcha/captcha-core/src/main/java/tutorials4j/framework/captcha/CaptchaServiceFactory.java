@@ -1,8 +1,8 @@
 package tutorials4j.framework.captcha;
 
 import java.util.Map;
+import org.apache.commons.lang3.EnumUtils;
 import tutorials4j.framework.captcha.exception.CaptchaException;
-import tutorials4j.framework.common.core.support.EnumCache;
 
 /**
  * 验证码服务工厂
@@ -18,9 +18,9 @@ public record CaptchaServiceFactory(Map<CaptchaCategory, CaptchaService> service
    * @return 实例
    */
   public CaptchaService findService(String categoryName) {
-    CaptchaCategory category = EnumCache.findByName(CaptchaCategory.class, categoryName);
+    CaptchaCategory category = EnumUtils.getEnum(CaptchaCategory.class, categoryName);
     if (category == null) {
-      throw new CaptchaException("验证码分类代码不存在，名称是：" + categoryName);
+      throw new CaptchaException("验证码分类代码不存在:" + categoryName);
     }
     return findService(category);
   }

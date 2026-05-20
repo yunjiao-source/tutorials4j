@@ -11,7 +11,7 @@ import tutorials4j.framework.common.core.support.FontNameEnum;
 import tutorials4j.framework.common.core.support.FontStyleEnum;
 
 /**
- * TODO
+ * Hutool 属性配置
  *
  * @author Yun Jiao
  */

@@ -89,9 +89,9 @@
   }
   function login(token) {
     // 在执行登录时，将验证码token传过去进行二次校验
-    $.get("/check2?id=" + token,  (res) => {
+    //$.get("/check2?id=" + token,  (res) => {
       alert("登录成功")
-    })
+    //})
   }
   $(function () {
     // 创建 TAC 启动验证码服务
