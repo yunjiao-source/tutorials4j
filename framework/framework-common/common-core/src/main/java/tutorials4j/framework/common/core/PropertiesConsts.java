@@ -11,6 +11,10 @@ public interface PropertiesConsts {
   String PROPERTY_PREFIX_TUTORIALS4J = "tutorials4j";
 
   /* ---------- 自定义配置属性 ---------- */
+  /** common */
+  String PROPERTY_PREFIX_COMMON = PROPERTY_PREFIX_TUTORIALS4J + ".common";
+
+  String PROPERTY_PREFIX_COMMON_UID = PROPERTY_PREFIX_COMMON + ".uid";
 
   /** cache */
   String PROPERTY_PREFIX_CACHE = PROPERTY_PREFIX_TUTORIALS4J + ".cache";

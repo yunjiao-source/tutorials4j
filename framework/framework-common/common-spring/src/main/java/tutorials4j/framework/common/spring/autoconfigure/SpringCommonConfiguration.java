@@ -7,12 +7,14 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.framework.common.spring.core.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
+import tutorials4j.framework.common.spring.properties.UidProperties;
 
 /**
  * 公共核心模块的配置类
@@ -22,6 +24,7 @@ import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @Import({SpringUtil.class})
+@EnableConfigurationProperties({UidProperties.class})
 public class SpringCommonConfiguration {
   @PostConstruct
   public void postConstruct() {

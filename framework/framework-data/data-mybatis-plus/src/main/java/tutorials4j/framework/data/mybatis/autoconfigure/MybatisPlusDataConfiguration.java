@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.data.core.properties.MybatisPlusDataProperties;
 import tutorials4j.framework.data.mybatis.AuditMetaObjectHandler;
-import tutorials4j.framework.data.mybatis.SnowflakeIdentifierGenerator;
+import tutorials4j.framework.data.mybatis.UidentifierGenerator;
 import tutorials4j.framework.data.mybatis.customizer.BlockAttackInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.MybatisPlusInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.OptimisticLockerInterceptorCustomizer;
@@ -81,7 +81,9 @@ public class MybatisPlusDataConfiguration {
     log.debug(
         "[DATA-MYBATIS-PLUS] Default Identifier Generator Mybatis Plus Properties Customizer");
     return plusProperties ->
-        plusProperties.getGlobalConfig().setIdentifierGenerator(new SnowflakeIdentifierGenerator());
+        // plusProperties.getGlobalConfig().setIdentifierGenerator(new
+        // SnowflakeIdentifierGenerator());
+        plusProperties.getGlobalConfig().setIdentifierGenerator(new UidentifierGenerator());
   }
 
   @Bean

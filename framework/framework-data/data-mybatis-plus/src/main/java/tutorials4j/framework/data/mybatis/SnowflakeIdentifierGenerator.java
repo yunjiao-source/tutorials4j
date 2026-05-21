@@ -1,7 +1,7 @@
 package tutorials4j.framework.data.mybatis;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
-import tutorials4j.framework.common.core.util.SnowflakeUtils;
+import tutorials4j.framework.common.spring.util.SnowflakeUtils;
 
 /**
  * MyBatis-Plus 默认的标识符生成器实现。

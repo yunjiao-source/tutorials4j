@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate;
+package tutorials4j.framework.data.hibernate.id;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -38,4 +38,4 @@ import org.hibernate.annotations.IdGeneratorType;
 @IdGeneratorType(SnowflakeIdentifierGenerator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
-public @interface SnowflakeIDGenerator {}
+public @interface SnowflakeIdGenerator {}

@@ -4,38 +4,28 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>yunjiao-source.tutorials4j.framework</groupId>
-        <artifactId>framework-data</artifactId>
+        <artifactId>framework-common</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>data-hibernate</artifactId>
+    <artifactId>common-uid</artifactId>
     <packaging>jar</packaging>
-    <name>Data :: Hibernate</name>
-    <description>Data Hibernate模块</description>
+    <name>Common :: Uid</name>
+    <description>通用Uid模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>data-jdbc</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-uid</artifactId>
+            <artifactId>common-spring</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
+            <groupId>cc.siyecao.uid</groupId>
+            <artifactId>uid-core</artifactId>
+            <version>${uid-core.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>

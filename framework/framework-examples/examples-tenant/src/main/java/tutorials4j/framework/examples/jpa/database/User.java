@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
-import tutorials4j.framework.data.hibernate.SnowflakeIDGenerator;
+import tutorials4j.framework.data.hibernate.id.SnowflakeIdGenerator;
 
 /**
  * 用戶
@@ -17,7 +17,7 @@ import tutorials4j.framework.data.hibernate.SnowflakeIDGenerator;
 public class User {
   @Id
   // @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  @SnowflakeIDGenerator
+  @SnowflakeIdGenerator
   private Long id;
 
   private String name;

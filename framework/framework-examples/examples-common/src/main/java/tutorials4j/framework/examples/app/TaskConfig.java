@@ -22,7 +22,7 @@ import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
 @Configuration
 @Profile("task")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.task"})
-public class CompositeTaskDecoratorConfig {
+public class TaskConfig {
   @Bean
   CompositeTaskDecorator CompositeTaskDecorator(
       CompositeTaskDecoratorCreator compositeTaskDecoratorCreator) {

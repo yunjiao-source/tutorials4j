@@ -1,7 +1,12 @@
 package tutorials4j.framework.examples.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -10,7 +15,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import tutorials4j.framework.data.hibernate.SnowflakeIDGenerator;
+import tutorials4j.framework.data.hibernate.id.UidGenerator;
 import tutorials4j.framework.examples.SexEnum;
 
 /**
@@ -25,7 +30,8 @@ import tutorials4j.framework.examples.SexEnum;
 public class User {
   @Id
   // @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @SnowflakeIDGenerator
+  // @SnowflakeIdGenerator
+  @UidGenerator
   private Long id;
 
   @NotBlank(message = "姓名不能为空")

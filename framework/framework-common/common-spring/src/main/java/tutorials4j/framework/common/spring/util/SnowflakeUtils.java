@@ -1,11 +1,10 @@
-package tutorials4j.framework.common.core.util;
+package tutorials4j.framework.common.spring.util;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
+import tutorials4j.framework.common.spring.core.SnowflakeIdProvider;
 
 /**
  * 雪花算法ID生成工具类（基于Hutool实现）。
@@ -25,12 +24,6 @@ import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
  */
 @Slf4j
 public class SnowflakeUtils {
-  /** 系统属性名：Worker ID（工作机器ID）。 可通过 JVM 启动参数设置：-DTUTORIALS4J_SNOWFLAKE_WORKER_ID=xxx */
-  public static final String WORKER_ID = "TUTORIALS4J_SNOWFLAKE_WORKER_ID";
-
-  /** 系统属性名：Datacenter ID（数据中心ID）。 可通过 JVM 启动参数设置：-DTUTORIALS4J_SNOWFLAKE_DATACENTER_ID=xxx */
-  public static final String DATACENTER_ID = "TUTORIALS4J_SNOWFLAKE_DATACENTER_ID";
-
   private Snowflake snowflake;
 
   private static SnowflakeUtils INSTANCE;
@@ -51,27 +44,8 @@ public class SnowflakeUtils {
       return;
     }
 
-    long datacenterId = 1;
-    String datacenterIdStr = System.getProperty(DATACENTER_ID);
-    if (StringUtils.isNotBlank(datacenterIdStr)) {
-      try {
-        datacenterId = Long.parseLong(datacenterIdStr);
-      } catch (NumberFormatException e) {
-        throw new FrameworkRuntimeException(
-            "Environment variable " + DATACENTER_ID + " must be number");
-      }
-    }
-
-    long workerId = 1;
-    String workerIdStr = System.getProperty(WORKER_ID);
-    if (StringUtils.isNotBlank(workerIdStr)) {
-      try {
-        workerId = Long.parseLong(workerIdStr);
-      } catch (NumberFormatException e) {
-        throw new FrameworkRuntimeException(
-            "Environment variable " + WORKER_ID + " must be number");
-      }
-    }
+    long datacenterId = SnowflakeIdProvider.getInstance().provideDataCenterId();
+    long workerId = SnowflakeIdProvider.getInstance().provideWorkerId();
 
     snowflake = IdUtil.getSnowflake(workerId, datacenterId);
     if (log.isDebugEnabled()) {

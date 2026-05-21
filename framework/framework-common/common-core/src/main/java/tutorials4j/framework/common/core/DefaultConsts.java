@@ -9,6 +9,12 @@ import java.nio.charset.StandardCharsets;
  * @author Yun Jiao
  */
 public interface DefaultConsts {
+  /** 系统属性名：Worker ID（工作机器ID）。 可通过 JVM 启动参数设置：-DTUTORIALS4J_SNOWFLAKE_WORKER_ID=xxx */
+  String WORKER_ID = "TUTORIALS4J_SNOWFLAKE_WORKER_ID";
+
+  /** 系统属性名：Datacenter ID（数据中心ID）。 可通过 JVM 启动参数设置：-DTUTORIALS4J_SNOWFLAKE_DATACENTER_ID=xxx */
+  String DATACENTER_ID = "TUTORIALS4J_SNOWFLAKE_DATACENTER_ID";
+
   /** 时间日期格式 */
   String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 

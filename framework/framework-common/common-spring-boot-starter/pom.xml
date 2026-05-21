@@ -20,6 +20,11 @@
             <artifactId>common-json</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>common-uid</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
