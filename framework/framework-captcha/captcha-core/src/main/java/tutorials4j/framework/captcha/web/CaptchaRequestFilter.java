@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import tutorials4j.framework.captcha.CaptchaServiceFactory;
 import tutorials4j.framework.captcha.exception.CaptchaException;
 import tutorials4j.framework.common.core.DefaultConsts;
-import tutorials4j.framework.common.core.web.RemoveHeaderRequestWrapper;
+import tutorials4j.framework.common.spring.web.RemoveHeaderRequestWrapper;
 
 /**
  * 验证码请求过滤器。

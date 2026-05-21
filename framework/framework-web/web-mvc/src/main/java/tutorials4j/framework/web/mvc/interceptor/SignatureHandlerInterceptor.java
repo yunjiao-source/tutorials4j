@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.DefaultConsts;
-import tutorials4j.framework.common.core.util.HeaderUtils;
+import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.web.core.annotation.RequiredSignature;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
 import tutorials4j.framework.web.core.exception.SignatureException;

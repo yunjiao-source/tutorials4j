@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.common.core.JdbcOptions;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
+import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 import tutorials4j.framework.tenant.core.TenantStrategy;
 
 /**

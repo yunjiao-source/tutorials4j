@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
-import tutorials4j.framework.common.core.util.XssUtils;
+import tutorials4j.framework.common.spring.util.XssUtils;
 
 /**
  * Jackson 自定义反序列化器，用于自动对 JSON 字符串类型的字段进行 XSS 清洗。

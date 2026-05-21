@@ -10,8 +10,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tutorials4j.framework.common.core.json.JsonConsts;
-import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
+import tutorials4j.framework.common.core.JacksonConsts;
+import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
@@ -42,7 +42,7 @@ public class InterceptorWebConfiguration implements WebMvcConfigurer {
   }
 
   @Bean
-  @Order(JsonConsts.MODULE_ORDER_XSS)
+  @Order(JacksonConsts.MODULE_ORDER_XSS)
   XssJacksonSimpleModule xssJacksonSimpleModule() {
     log.debug("[WEB-MVC] Xss Jackson Simple Module");
     return new XssJacksonSimpleModule();

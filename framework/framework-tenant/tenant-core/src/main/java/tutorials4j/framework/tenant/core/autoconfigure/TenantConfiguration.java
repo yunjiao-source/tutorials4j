@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
+import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
 import tutorials4j.framework.tenant.core.TenantHandlerInterceptor;

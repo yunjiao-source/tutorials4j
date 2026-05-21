@@ -1,7 +1,7 @@
 package tutorials4j.framework.web.mvc.support;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import tutorials4j.framework.common.core.json.JsonConsts;
+import tutorials4j.framework.common.core.JacksonConsts;
 
 /**
  * Jackson 模块，注册针对 {@code String} 类型的 XSS 清洗反序列化器。
@@ -13,11 +13,11 @@ import tutorials4j.framework.common.core.json.JsonConsts;
  *
  * @author Yun Jiao
  * @see XssJsonDeserializer
- * @see JsonConsts
+ * @see JacksonConsts
  */
 public class XssJacksonSimpleModule extends SimpleModule {
   public XssJacksonSimpleModule() {
-    super(XssJacksonSimpleModule.class.getName(), JsonConsts.JSON_VERSION);
+    super(XssJacksonSimpleModule.class.getName(), JacksonConsts.JSON_VERSION);
     this.addDeserializer(String.class, XssJsonDeserializer.instance);
   }
 }

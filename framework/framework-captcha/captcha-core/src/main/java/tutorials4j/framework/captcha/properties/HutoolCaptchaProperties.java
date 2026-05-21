@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.captcha.CodeGeneratorType;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.common.core.support.ColorTypeEnum;
-import tutorials4j.framework.common.core.support.FontNameEnum;
-import tutorials4j.framework.common.core.support.FontStyleEnum;
+import tutorials4j.framework.common.core.bean.ColorTypeEnum;
+import tutorials4j.framework.common.core.bean.FontNameEnum;
+import tutorials4j.framework.common.core.bean.FontStyleEnum;
 
 /**
  * Hutool 属性配置

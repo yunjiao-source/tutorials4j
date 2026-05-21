@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.common.core.support.ServletFilterOptions;
+import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
  * 验证码属性配置

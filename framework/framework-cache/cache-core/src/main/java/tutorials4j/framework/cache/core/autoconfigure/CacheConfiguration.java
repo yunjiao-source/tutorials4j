@@ -13,7 +13,7 @@ import tutorials4j.framework.cache.core.properties.CacheProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
-import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
+import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * 缓存核心配置类。

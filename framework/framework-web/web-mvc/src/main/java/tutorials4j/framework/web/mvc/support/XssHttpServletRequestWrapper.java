@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import tutorials4j.framework.common.core.util.XssUtils;
+import tutorials4j.framework.common.spring.util.XssUtils;
 
 /**
  * 提供 XSS 防护能力的 HttpServletRequest 包装器。

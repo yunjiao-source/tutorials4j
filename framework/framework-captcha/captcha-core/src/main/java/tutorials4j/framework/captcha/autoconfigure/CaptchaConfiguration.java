@@ -20,7 +20,7 @@ import tutorials4j.framework.captcha.properties.HutoolCaptchaProperties;
 import tutorials4j.framework.captcha.properties.TianaiCaptchaProperties;
 import tutorials4j.framework.captcha.web.CaptchaController;
 import tutorials4j.framework.captcha.web.CaptchaRequestFilter;
-import tutorials4j.framework.common.core.support.ServletFilterOptions;
+import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
  * 缓存核心配置类。

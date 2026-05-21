@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-import tutorials4j.framework.common.core.support.BaseEnum;
+import tutorials4j.framework.common.core.bean.BaseEnum;
 import tutorials4j.framework.data.core.exception.DataFrameworkException;
 
 /**

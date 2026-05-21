@@ -16,6 +16,8 @@
 
     <modules>
         <module>common-core</module>
+        <module>common-json</module>
+        <module>common-spring</module>
         <module>common-spring-boot-starter</module>
     </modules>
 

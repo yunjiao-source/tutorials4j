@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import tutorials4j.framework.common.core.support.ServletFilterOptions;
+import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.core.properties.FilterWebProperties;
 import tutorials4j.framework.web.mvc.filter.CachedBodyRequestFilter;
 import tutorials4j.framework.web.mvc.filter.DefaultCommonsRequestLoggingFilter;

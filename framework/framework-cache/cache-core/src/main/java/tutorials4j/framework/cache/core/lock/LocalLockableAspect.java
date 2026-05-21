@@ -8,7 +8,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
+import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * {@link LocalLockable} 注解的 AOP 切面实现。

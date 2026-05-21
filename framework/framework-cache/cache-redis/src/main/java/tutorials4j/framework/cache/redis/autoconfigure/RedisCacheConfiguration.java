@@ -25,7 +25,7 @@ import tutorials4j.framework.cache.redis.customizer.ValueJsonSerializerRedisCacV
 import tutorials4j.framework.cache.redis.lock.RedisLockService;
 import tutorials4j.framework.cache.redis.lock.RedisLockableAspect;
 import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
-import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
+import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * 命名缓存配置

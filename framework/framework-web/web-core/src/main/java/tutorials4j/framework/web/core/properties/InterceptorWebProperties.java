@@ -6,7 +6,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.common.core.support.HandlerInterceptorOptions;
+import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 
 /**
  * Web Http 属性

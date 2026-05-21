@@ -78,10 +78,17 @@
         <redisson.version>4.2.0</redisson.version>
         <resilience4j-retry.version>2.4.0</resilience4j-retry.version>
         <tianai-captcha.version>1.5.5</tianai-captcha.version>
+        <uid-core.version>2.2</uid-core.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>cc.siyecao.uid</groupId>
+                <artifactId>uid-core</artifactId>
+                <version>${uid-core.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>

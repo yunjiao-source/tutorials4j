@@ -9,7 +9,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.exception.CounterOverflowException;
-import tutorials4j.framework.common.core.util.SessionUtils;
+import tutorials4j.framework.common.spring.util.SessionUtils;
 import tutorials4j.framework.web.core.annotation.AccessLimited;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.exception.AccessLimitedException;

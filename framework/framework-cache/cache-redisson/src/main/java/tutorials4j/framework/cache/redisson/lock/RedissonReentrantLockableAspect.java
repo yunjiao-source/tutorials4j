@@ -9,7 +9,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
+import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * 切面类，用于处理 {@link RedissonReentrantLockable} 注解。

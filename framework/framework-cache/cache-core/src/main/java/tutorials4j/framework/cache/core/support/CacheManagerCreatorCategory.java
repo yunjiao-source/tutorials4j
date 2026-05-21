@@ -1,7 +1,7 @@
 package tutorials4j.framework.cache.core.support;
 
 import lombok.Getter;
-import tutorials4j.framework.common.core.support.BaseEnum;
+import tutorials4j.framework.common.core.bean.BaseEnum;
 
 /**
  * TODO

@@ -6,7 +6,7 @@ import java.awt.Font;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import tutorials4j.framework.common.core.support.ColorTypeEnum;
+import tutorials4j.framework.common.core.bean.ColorTypeEnum;
 
 /**
  * 抽象验证码构建器，用于配置和创建Hutool验证码实例。

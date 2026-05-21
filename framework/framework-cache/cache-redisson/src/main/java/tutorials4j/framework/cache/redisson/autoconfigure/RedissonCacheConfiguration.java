@@ -12,7 +12,7 @@ import tutorials4j.framework.cache.redisson.lock.RedissonBlockLockService;
 import tutorials4j.framework.cache.redisson.lock.RedissonBlockLockableAspect;
 import tutorials4j.framework.cache.redisson.lock.RedissonReentrantLockService;
 import tutorials4j.framework.cache.redisson.lock.RedissonReentrantLockableAspect;
-import tutorials4j.framework.common.core.content.SpelMethodBasedExpressionEvaluator;
+import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
  * Redisson 配置

@@ -3,7 +3,7 @@ package tutorials4j.framework.data.hibernate;
 import jakarta.persistence.AttributeConverter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import tutorials4j.framework.common.core.support.BaseEnum;
+import tutorials4j.framework.common.core.bean.BaseEnum;
 import tutorials4j.framework.data.core.exception.DataFrameworkException;
 
 /**
