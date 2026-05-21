@@ -65,6 +65,7 @@ public class DefaultSwaggerModelResolver extends ModelResolver {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   protected boolean applyBeanValidatorAnnotations(
       Schema property, Annotation[] annotations, Schema parent, boolean applyNotNullAnnotations) {
     boolean result =

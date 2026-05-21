@@ -43,6 +43,7 @@ public class BaseEnumJsonSerializer extends JsonSerializer<BaseEnum<?>> {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public Class<BaseEnum<?>> handledType() {
     return (Class<BaseEnum<?>>) (Class<?>) BaseEnum.class;
   }

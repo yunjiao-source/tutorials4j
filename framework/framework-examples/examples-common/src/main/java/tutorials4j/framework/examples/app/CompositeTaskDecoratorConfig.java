@@ -9,8 +9,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.core.task.support.CompositeTaskDecorator;
 import org.springframework.scheduling.annotation.EnableAsync;
-import tutorials4j.framework.common.core.task.CompositeTaskDecoratorCreator;
-import tutorials4j.framework.common.core.task.TaskDecoratorCreator;
+import tutorials4j.framework.common.spring.core.CompositeTaskDecoratorCreator;
+import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
 
 /**
  * 组合任务装饰器配置

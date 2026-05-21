@@ -11,7 +11,7 @@
 
     <artifactId>tenant-cache</artifactId>
     <packaging>jar</packaging>
-    <name>Tenant :: cache</name>
+    <name>Tenant :: Cache</name>
     <description>租户缓存模块</description>
 
     <dependencies>
@@ -20,6 +20,7 @@
             <artifactId>cache-multi-level</artifactId>
             <version>${revision}</version>
         </dependency>
+
     </dependencies>
 
 </project>

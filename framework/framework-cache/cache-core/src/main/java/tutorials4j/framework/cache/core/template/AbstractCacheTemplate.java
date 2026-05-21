@@ -33,6 +33,7 @@ public abstract class AbstractCacheTemplate<K, V>
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public V putIfAbsent(K key, V value) {
     return (V) cache.putIfAbsent(key, value);
   }

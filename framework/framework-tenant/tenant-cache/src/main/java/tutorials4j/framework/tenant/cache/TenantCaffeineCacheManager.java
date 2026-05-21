@@ -2,11 +2,10 @@ package tutorials4j.framework.tenant.cache;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.common.core.TenantContextHolder;
-import tutorials4j.framework.common.core.support.AbstractRoutingCacheManager;
+import tutorials4j.framework.common.spring.cache.AbstractRoutingCacheManager;
 
 /**
  * 租户隔离的 Caffeine 缓存管理器。
@@ -28,7 +27,6 @@ public class TenantCaffeineCacheManager extends AbstractRoutingCacheManager<Caff
    *
    * @return 租户 ID（可能为 {@code null}，此时外层会抛出异常）
    */
-  @NotNull
   @Override
   protected Object determineCurrentLookupKey() {
     return TenantContextHolder.get();
@@ -42,7 +40,6 @@ public class TenantCaffeineCacheManager extends AbstractRoutingCacheManager<Caff
    * @param name 租户标识（查找键）
    * @return 新创建的 Caffeine 缓存管理器
    */
-  @NotNull
   @Override
   protected CaffeineCacheManager createCacheManager(Object name) {
     if (log.isDebugEnabled()) {

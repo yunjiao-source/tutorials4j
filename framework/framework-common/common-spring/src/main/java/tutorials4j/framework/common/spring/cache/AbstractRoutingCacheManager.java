@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.lang.NonNull;
 
 /**
  * 抽象路由缓存管理器，根据动态查找键路由到不同的目标 {@link CacheManager} 实例。
@@ -57,7 +56,6 @@ public abstract class AbstractRoutingCacheManager<T extends CacheManager> implem
    *
    * @return 查找键
    */
-  @NonNull
   protected abstract Object determineCurrentLookupKey();
 
   /**
@@ -66,6 +64,5 @@ public abstract class AbstractRoutingCacheManager<T extends CacheManager> implem
    * @param name 查找键（用于标识新管理器的来源或配置）
    * @return 新创建的目标缓存管理器
    */
-  @NonNull
   protected abstract T createCacheManager(Object name);
 }
