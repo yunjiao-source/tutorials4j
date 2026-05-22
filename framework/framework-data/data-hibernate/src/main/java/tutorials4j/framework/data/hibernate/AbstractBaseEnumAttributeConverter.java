@@ -1,9 +1,9 @@
 package tutorials4j.framework.data.hibernate;
 
 import jakarta.persistence.AttributeConverter;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import tutorials4j.framework.common.core.bean.BaseEnum;
+import tutorials4j.framework.common.core.support.EnumCache;
 import tutorials4j.framework.data.core.exception.DataFrameworkException;
 
 /**
@@ -41,8 +41,6 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
 
   private final Class<E> enumClass;
 
-  private final Map<T, E> codeToEnumCache = new ConcurrentHashMap<>();
-
   protected AbstractBaseEnumAttributeConverter(Class<E> enumClass) {
     this.enumClass = enumClass;
     initCache();
@@ -53,10 +51,7 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
     if (enumConstants == null) {
       throw new DataFrameworkException(enumClass.getSimpleName() + " 不是枚举类型");
     }
-    for (E e : enumConstants) {
-      T code = e.getCode();
-      codeToEnumCache.put(code, e);
-    }
+    EnumCache.registerByValue(enumClass, enumConstants, BaseEnum::getCode);
   }
 
   @Override
@@ -69,7 +64,7 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
     if (dbData == null) {
       return null;
     }
-    E enumValue = codeToEnumCache.get(dbData);
+    E enumValue = EnumCache.findByValue(enumClass, dbData);
     if (enumValue == null) {
       throw new DataFrameworkException("无法识别的数据库值: " + dbData + " ，枚举类: " + enumClass);
     }

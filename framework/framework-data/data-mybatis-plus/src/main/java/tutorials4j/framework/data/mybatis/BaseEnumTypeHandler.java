@@ -4,11 +4,10 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import tutorials4j.framework.common.core.bean.BaseEnum;
+import tutorials4j.framework.common.core.support.EnumCache;
 import tutorials4j.framework.data.core.exception.DataFrameworkException;
 
 /**
@@ -32,7 +31,6 @@ import tutorials4j.framework.data.core.exception.DataFrameworkException;
 public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTypeHandler<E> {
 
   private final Class<E> type;
-  private final Map<Object, E> codeToEnumCache = new ConcurrentHashMap<>();
 
   public BaseEnumTypeHandler(Class<E> type) {
     if (type == null) {
@@ -47,10 +45,7 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
     if (enumConstants == null) {
       throw new DataFrameworkException(type.getSimpleName() + " 不是枚举类型");
     }
-    for (E e : enumConstants) {
-      Object code = e.getCode();
-      codeToEnumCache.put(code, e);
-    }
+    EnumCache.registerByValue(type, enumConstants, BaseEnum::getCode);
   }
 
   @Override
@@ -84,7 +79,7 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
   }
 
   private E codeToEnum(Object code) {
-    E value = codeToEnumCache.get(code);
+    E value = EnumCache.findByValue(type, code);
     if (value == null) {
       throw new DataFrameworkException("Unknown code: " + code + " for enum " + type.getName());
     }
