@@ -44,8 +44,8 @@ public class SnowflakeUtils {
       return;
     }
 
-    long datacenterId = SnowflakeIdProvider.getInstance().provideDataCenterId();
-    long workerId = SnowflakeIdProvider.getInstance().provideWorkerId();
+    long datacenterId = SnowflakeIdProvider.instance.provideDataCenterId();
+    long workerId = SnowflakeIdProvider.instance.provideWorkerId();
 
     snowflake = IdUtil.getSnowflake(workerId, datacenterId);
     if (log.isDebugEnabled()) {

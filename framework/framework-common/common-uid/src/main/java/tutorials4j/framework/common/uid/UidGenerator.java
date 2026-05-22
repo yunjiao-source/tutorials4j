@@ -35,7 +35,6 @@ public interface UidGenerator {
     defaultUidGenerator.setSeqBits(properties.getSeqBits());
     defaultUidGenerator.setTimeBits(properties.getTimeBits());
     defaultUidGenerator.setWorkerBits(properties.getWorkerBits());
-    defaultUidGenerator.setWorkerIdAssigner(
-        () -> SnowflakeIdProvider.getInstance().provideWorkerId());
+    defaultUidGenerator.setWorkerIdAssigner(SnowflakeIdProvider.instance::provideWorkerId);
   }
 }
