@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.jdbc;
+package tutorials4j.framework.data.jdbc.routing;
 
 import jakarta.annotation.PreDestroy;
 import javax.sql.DataSource;

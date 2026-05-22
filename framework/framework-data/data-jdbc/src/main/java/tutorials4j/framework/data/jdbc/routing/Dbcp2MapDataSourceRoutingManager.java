@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.jdbc;
+package tutorials4j.framework.data.jdbc.routing;
 
 import java.sql.SQLException;
 import javax.sql.DataSource;

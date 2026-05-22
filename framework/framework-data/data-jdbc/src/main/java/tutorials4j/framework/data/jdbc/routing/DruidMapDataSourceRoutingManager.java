@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.jdbc;
+package tutorials4j.framework.data.jdbc.routing;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import java.sql.SQLException;

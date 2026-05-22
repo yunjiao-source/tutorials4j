@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.jdbc;
+package tutorials4j.framework.data.jdbc.routing;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

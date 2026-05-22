@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.support.DataSourceRoutingManager;
-import tutorials4j.framework.data.jdbc.DataSourceRoutingManagerCreator;
+import tutorials4j.framework.data.jdbc.routing.DataSourceRoutingManagerCreator;
 import tutorials4j.framework.tenant.core.properties.TenantProperties;
 import tutorials4j.framework.tenant.hibernate.DefaultCurrentTenantIdentifierResolver;
 import tutorials4j.framework.tenant.hibernate.TenantDataSourceBasedMultiTenantConnectionProvider;

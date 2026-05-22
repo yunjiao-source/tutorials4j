@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.data.jdbc.DataSourceRoutingManagerCreator;
+import tutorials4j.framework.data.jdbc.routing.DataSourceRoutingManagerCreator;
 
 /**
  * Jdbc配置
