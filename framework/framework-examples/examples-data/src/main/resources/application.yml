@@ -1,8 +1,8 @@
 spring:
   profiles:
 #    active: p6spy
-#    active: mybatis
-    active: jpa
+    active: mybatis
+#    active: jpa
 
   datasource:
     url: jdbc:postgresql://localhost:5432/demo

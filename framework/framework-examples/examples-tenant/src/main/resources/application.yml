@@ -1,8 +1,9 @@
 spring:
   profiles:
+    active: mybatis-database
 #    active: mybatis-table
 #    active: jpa-table
-    active: jpa-database
+#    active: jpa-database
 #    active: cache
 
   datasource:

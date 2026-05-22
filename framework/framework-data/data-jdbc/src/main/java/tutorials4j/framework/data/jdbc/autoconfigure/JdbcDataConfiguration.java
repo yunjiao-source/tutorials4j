@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.data.jdbc.routing.DataSourceRoutingManagerCreator;
+import tutorials4j.framework.data.jdbc.routing.MultipleRoutingDataSource;
 
 /**
  * Jdbc配置
@@ -28,5 +29,12 @@ public class JdbcDataConfiguration {
   DataSourceRoutingManagerCreator dataSourceRoutingManagerCreator(DataSource dataSource) {
     log.debug("[DATA-JDBC] Data Source Routing Manager Creator");
     return new DataSourceRoutingManagerCreator(dataSource);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  MultipleRoutingDataSource MultipleRoutingDataSource(DataSourceRoutingManagerCreator creator) {
+    log.debug("[DATA-JDBC] Multiple Routing DataSource");
+    return new MultipleRoutingDataSource(creator.getInstance(), creator.getDefaultDataSource());
   }
 }

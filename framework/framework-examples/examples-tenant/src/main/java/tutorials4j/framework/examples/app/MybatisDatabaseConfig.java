@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @EnableAsync
 @Configuration
-@Profile("mybatis-table")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.mybatis.table"})
-@MapperScan({"tutorials4j.framework.examples.mybatis.table"})
-public class MybatisTableConfig {}
+@Profile("mybatis-database")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.mybatis.database"})
+@MapperScan({"tutorials4j.framework.examples.mybatis.database"})
+public class MybatisDatabaseConfig {}

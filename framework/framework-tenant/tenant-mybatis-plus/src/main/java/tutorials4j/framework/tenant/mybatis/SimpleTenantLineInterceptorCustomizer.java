@@ -20,7 +20,7 @@ import tutorials4j.framework.tenant.core.properties.TenantProperties;
  * @see DefaultTenantLineHandler
  */
 @RequiredArgsConstructor
-public class DefaultTenantLineInterceptorCustomizer implements MybatisPlusInterceptorCustomizer {
+public class SimpleTenantLineInterceptorCustomizer implements MybatisPlusInterceptorCustomizer {
   private final TenantProperties properties;
 
   @Override
