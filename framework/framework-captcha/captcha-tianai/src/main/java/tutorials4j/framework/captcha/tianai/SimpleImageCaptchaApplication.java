@@ -7,12 +7,15 @@ import cloud.tianai.captcha.cache.CacheStore;
 import cloud.tianai.captcha.generator.ImageCaptchaGenerator;
 import cloud.tianai.captcha.interceptor.CaptchaInterceptor;
 import cloud.tianai.captcha.validator.ImageCaptchaValidator;
+import jakarta.annotation.PreDestroy;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 简化版图片验证码应用，重写缓存 key 的生成逻辑。
  *
  * @author Yun Jiao
  */
+@Slf4j
 public class SimpleImageCaptchaApplication extends DefaultImageCaptchaApplication {
 
   /**
@@ -51,7 +54,11 @@ public class SimpleImageCaptchaApplication extends DefaultImageCaptchaApplicatio
   }
 
   @Override
+  @PreDestroy
   public void close() {
     super.close();
+    if (log.isDebugEnabled()) {
+      log.debug("[CAPTCHA-TIANAI] DefaultImageCaptchaApplication 销毁成功");
+    }
   }
 }

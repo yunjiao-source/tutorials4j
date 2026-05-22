@@ -2,7 +2,6 @@ package tutorials4j.framework.common.uid;
 
 import cc.siyecao.uid.core.impl.DefaultUidGenerator;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.spring.core.SnowflakeIdProvider;
 import tutorials4j.framework.common.spring.properties.UidProperties;
@@ -20,55 +19,18 @@ import tutorials4j.framework.common.spring.properties.UidProperties;
  * @see UidGenerator
  */
 @Slf4j
-@RequiredArgsConstructor
-public class UidDefaultedGenerator implements UidGenerator {
-  private DefaultUidGenerator generator;
-  private final UidProperties properties;
-  private final List<DefaultUidGeneratorCustomizer> customizers;
+public class UidDefaultedGenerator extends AbstractUidGenerator {
 
-  @Override
-  public long nextUid() {
-    return getInstance().getUID();
+  public UidDefaultedGenerator(
+      UidProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
+    super(properties, customizers);
   }
 
   @Override
-  public String nextUidStr() {
-    return String.valueOf(nextUid());
-  }
-
-  @Override
-  public String parseUid(long uid) {
-    return getInstance().parseUID(uid);
+  protected DefaultUidGenerator createUidGenerator() {
+    return new DefaultUidGenerator();
   }
 
   @Override
   public void destroy() {}
-
-  /**
-   * 懒加载初始化底层 {@link DefaultUidGenerator}，应用所有定制器后调用 {@code afterPropertiesSet()}。
-   *
-   * @return 已就绪的生成器实例
-   * @throws IllegalStateException 初始化失败
-   */
-  private DefaultUidGenerator getInstance() {
-    if (generator != null) {
-      return generator;
-    }
-    synchronized (UidDefaultedGenerator.class) {
-      if (generator != null) {
-        return generator;
-      }
-      DefaultUidGenerator gen = new DefaultUidGenerator();
-      fill(properties, gen);
-      customizers.forEach(customizer -> customizer.customize(gen));
-      generator = gen;
-
-      try {
-        generator.afterPropertiesSet();
-      } catch (Exception e) {
-        throw new IllegalStateException("初始化DefaultUidGenerator异常", e);
-      }
-      return generator;
-    }
-  }
 }

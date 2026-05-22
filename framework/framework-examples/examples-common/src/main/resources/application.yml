@@ -6,4 +6,4 @@ spring:
 logging:
   level:
     tutorials4j: DEBUG
-    org.springframework: info
+#    org.springframework: DEBUG

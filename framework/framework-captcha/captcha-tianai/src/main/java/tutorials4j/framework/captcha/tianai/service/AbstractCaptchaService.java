@@ -10,7 +10,7 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 import tutorials4j.framework.captcha.CaptchaService;
 import tutorials4j.framework.captcha.exception.CaptchaException;
-import tutorials4j.framework.captcha.tianai.TianAiCaptchaGenerateParamBuilder;
+import tutorials4j.framework.captcha.tianai.CaptchaGenerateParamBuilder;
 import tutorials4j.framework.common.core.util.GsonUtils;
 
 /**
@@ -23,7 +23,7 @@ public abstract class AbstractCaptchaService implements CaptchaService {
   protected final ImageCaptchaApplication imageCaptchaApplication;
 
   /** 生成参数构建器 */
-  protected final TianAiCaptchaGenerateParamBuilder builder;
+  protected final CaptchaGenerateParamBuilder builder;
 
   /**
    * 构造抽象验证码服务。
@@ -32,7 +32,7 @@ public abstract class AbstractCaptchaService implements CaptchaService {
    * @param builder 生成参数构建器
    */
   protected AbstractCaptchaService(
-      ImageCaptchaApplication imageCaptchaApplication, TianAiCaptchaGenerateParamBuilder builder) {
+      ImageCaptchaApplication imageCaptchaApplication, CaptchaGenerateParamBuilder builder) {
     this.imageCaptchaApplication = imageCaptchaApplication;
     this.builder = builder;
   }

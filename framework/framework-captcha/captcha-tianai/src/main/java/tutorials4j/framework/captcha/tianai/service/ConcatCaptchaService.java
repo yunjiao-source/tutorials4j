@@ -2,7 +2,7 @@ package tutorials4j.framework.captcha.tianai.service;
 
 import cloud.tianai.captcha.application.ImageCaptchaApplication;
 import tutorials4j.framework.captcha.CaptchaCategory;
-import tutorials4j.framework.captcha.tianai.TianAiCaptchaGenerateParamBuilder;
+import tutorials4j.framework.captcha.tianai.CaptchaGenerateParamBuilder;
 
 /**
  * 拼图验证码服务。
@@ -12,7 +12,7 @@ import tutorials4j.framework.captcha.tianai.TianAiCaptchaGenerateParamBuilder;
 public class ConcatCaptchaService extends AbstractCaptchaService {
 
   public ConcatCaptchaService(
-      ImageCaptchaApplication imageCaptchaApplication, TianAiCaptchaGenerateParamBuilder builder) {
+      ImageCaptchaApplication imageCaptchaApplication, CaptchaGenerateParamBuilder builder) {
     super(imageCaptchaApplication, builder);
   }
 

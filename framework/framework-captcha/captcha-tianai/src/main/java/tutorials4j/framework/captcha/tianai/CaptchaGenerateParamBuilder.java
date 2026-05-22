@@ -16,7 +16,7 @@ import tutorials4j.framework.captcha.properties.TianaiOptions;
  */
 @Data
 @Builder
-public class TianAiCaptchaGenerateParamBuilder {
+public class CaptchaGenerateParamBuilder {
 
   private String backgroundFormatName;
   private String templateFormatName;
@@ -36,8 +36,8 @@ public class TianAiCaptchaGenerateParamBuilder {
    * @param type 验证码类型
    * @return 构建器实例
    */
-  public static TianAiCaptchaGenerateParamBuilder of(TianaiOptions options, CaptchaType type) {
-    return TianAiCaptchaGenerateParamBuilder.builder()
+  public static CaptchaGenerateParamBuilder of(TianaiOptions options, CaptchaType type) {
+    return CaptchaGenerateParamBuilder.builder()
         .backgroundFormatName(options.getBackgroundFormatName())
         .templateFormatName(options.getTemplateFormatName())
         .obfuscate(options.getObfuscate())
@@ -56,8 +56,8 @@ public class TianAiCaptchaGenerateParamBuilder {
    *
    * @return 新的构建器副本
    */
-  public TianAiCaptchaGenerateParamBuilder copy() {
-    return TianAiCaptchaGenerateParamBuilder.builder()
+  public CaptchaGenerateParamBuilder copy() {
+    return CaptchaGenerateParamBuilder.builder()
         .backgroundFormatName(this.backgroundFormatName)
         .templateFormatName(this.templateFormatName)
         .obfuscate(this.obfuscate)

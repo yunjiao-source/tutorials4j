@@ -1,6 +1,7 @@
 package tutorials4j.framework.data.mybatis;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import tutorials4j.framework.common.uid.UidGenerator;
 import tutorials4j.framework.common.uid.UidUtils;
 
 /**
@@ -11,7 +12,7 @@ import tutorials4j.framework.common.uid.UidUtils;
  *
  * @author Yun Jiao
  * @see IdentifierGenerator
- * @see UidUtils
+ * @see UidGenerator
  */
 public class UidentifierGenerator implements IdentifierGenerator {
 

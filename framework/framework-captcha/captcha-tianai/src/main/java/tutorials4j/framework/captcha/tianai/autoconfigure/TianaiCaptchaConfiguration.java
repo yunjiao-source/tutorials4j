@@ -12,10 +12,10 @@ import tutorials4j.framework.captcha.CaptchaServiceFactory;
 import tutorials4j.framework.captcha.GraphicCaptchaCacheTemplate;
 import tutorials4j.framework.captcha.properties.TianaiCaptchaProperties;
 import tutorials4j.framework.captcha.properties.TianaiOptions;
+import tutorials4j.framework.captcha.tianai.CaptchaGenerateParamBuilder;
 import tutorials4j.framework.captcha.tianai.CaptchaType;
 import tutorials4j.framework.captcha.tianai.RedisCacheStore;
 import tutorials4j.framework.captcha.tianai.SimpleImageCaptchaApplication;
-import tutorials4j.framework.captcha.tianai.TianAiCaptchaGenerateParamBuilder;
 import tutorials4j.framework.captcha.tianai.customizer.ImageResourceTACBuilderCustomizer;
 import tutorials4j.framework.captcha.tianai.customizer.TACBuilderCustomizer;
 import tutorials4j.framework.captcha.tianai.service.ConcatCaptchaService;
@@ -47,7 +47,7 @@ public class TianaiCaptchaConfiguration {
     TianaiOptions options = properties.getRotate();
     options.merge(properties.getCommon());
     return new RotateCaptchaService(
-        imageCaptchaApplication, TianAiCaptchaGenerateParamBuilder.of(options, CaptchaType.ROTATE));
+        imageCaptchaApplication, CaptchaGenerateParamBuilder.of(options, CaptchaType.ROTATE));
   }
 
   @Bean
@@ -58,7 +58,7 @@ public class TianaiCaptchaConfiguration {
     TianaiOptions options = properties.getSlider();
     options.merge(properties.getCommon());
     return new SliderCaptchaService(
-        imageCaptchaApplication, TianAiCaptchaGenerateParamBuilder.of(options, CaptchaType.SLIDER));
+        imageCaptchaApplication, CaptchaGenerateParamBuilder.of(options, CaptchaType.SLIDER));
   }
 
   @Bean
@@ -70,7 +70,7 @@ public class TianaiCaptchaConfiguration {
     options.merge(properties.getCommon());
     return new WordImageClickCaptchaService(
         imageCaptchaApplication,
-        TianAiCaptchaGenerateParamBuilder.of(options, CaptchaType.WORD_IMAGE_CLICK));
+        CaptchaGenerateParamBuilder.of(options, CaptchaType.WORD_IMAGE_CLICK));
   }
 
   @Bean
@@ -82,7 +82,7 @@ public class TianaiCaptchaConfiguration {
     options.merge(properties.getCommon());
     return new ConcatCaptchaService(
         imageCaptchaApplication,
-        TianAiCaptchaGenerateParamBuilder.of(options, CaptchaType.WORD_IMAGE_CLICK));
+        CaptchaGenerateParamBuilder.of(options, CaptchaType.WORD_IMAGE_CLICK));
   }
 
   @Bean
@@ -99,7 +99,7 @@ public class TianaiCaptchaConfiguration {
     return new RedisCacheStore(captchaCacheTemplate);
   }
 
-  @Bean(destroyMethod = "close")
+  @Bean
   @ConditionalOnMissingBean
   ImageCaptchaApplication imageCaptchaApplication(
       RedisCacheStore redisCacheStore, ObjectProvider<TACBuilderCustomizer> customizers) {

@@ -1,9 +1,9 @@
 package tutorials4j.framework.common.uid;
 
 import cc.siyecao.uid.core.impl.CachedUidGenerator;
+import cc.siyecao.uid.core.impl.DefaultUidGenerator;
 import jakarta.annotation.PreDestroy;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.spring.core.SnowflakeIdProvider;
 import tutorials4j.framework.common.spring.properties.UidProperties;
@@ -20,25 +20,11 @@ import tutorials4j.framework.common.spring.properties.UidProperties;
  * @see UidGenerator
  */
 @Slf4j
-@RequiredArgsConstructor
-public class UidCachedGenerator implements UidGenerator {
-  private CachedUidGenerator generator;
-  private final UidProperties properties;
-  private final List<DefaultUidGeneratorCustomizer> customizers;
+public class UidCachedGenerator extends AbstractUidGenerator {
 
-  @Override
-  public long nextUid() {
-    return getInstance().getUID();
-  }
-
-  @Override
-  public String nextUidStr() {
-    return String.valueOf(nextUid());
-  }
-
-  @Override
-  public String parseUid(long uid) {
-    return getInstance().parseUID(uid);
+  public UidCachedGenerator(
+      UidProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
+    super(properties, customizers);
   }
 
   @Override
@@ -47,10 +33,12 @@ public class UidCachedGenerator implements UidGenerator {
     if (generator == null) {
       return;
     }
-    try {
-      generator.destroy();
-    } catch (Exception e) {
-      log.error("销毁CachedUidGenerator异常", e);
+    if (generator instanceof CachedUidGenerator cachedUidGenerator) {
+      try {
+        cachedUidGenerator.destroy();
+      } catch (Exception e) {
+        log.error("销毁CachedUidGenerator异常", e);
+      }
     }
 
     if (log.isDebugEnabled()) {
@@ -58,31 +46,8 @@ public class UidCachedGenerator implements UidGenerator {
     }
   }
 
-  /**
-   * 懒加载初始化底层 {@link CachedUidGenerator}，应用所有定制器后调用 {@code afterPropertiesSet()}。
-   *
-   * @return 已就绪的生成器实例
-   * @throws IllegalStateException 初始化失败
-   */
-  private CachedUidGenerator getInstance() {
-    if (generator != null) {
-      return generator;
-    }
-    synchronized (UidCachedGenerator.class) {
-      if (generator != null) {
-        return generator;
-      }
-      CachedUidGenerator gen = new CachedUidGenerator();
-      fill(properties, gen);
-      customizers.forEach(customizer -> customizer.customize(gen));
-      generator = gen;
-
-      try {
-        generator.afterPropertiesSet();
-      } catch (Exception e) {
-        throw new IllegalStateException("初始化CachedUidGenerator异常", e);
-      }
-      return generator;
-    }
+  @Override
+  protected DefaultUidGenerator createUidGenerator() {
+    return new CachedUidGenerator();
   }
 }
