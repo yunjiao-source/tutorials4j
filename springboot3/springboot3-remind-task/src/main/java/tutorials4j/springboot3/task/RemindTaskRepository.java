@@ -1,0 +1,12 @@
+package tutorials4j.springboot3.task;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * 仓库
+ *
+ * @author Yun Jiao
+ */
+@Repository
+public interface RemindTaskRepository extends JpaRepository<RemindTask, Long> {}
