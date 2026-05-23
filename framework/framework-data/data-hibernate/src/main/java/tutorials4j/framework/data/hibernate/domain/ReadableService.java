@@ -40,6 +40,10 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
         .orElseThrow(() -> new EntityNotExistException(id.toString()));
   }
 
+  default E getReferenceById(ID id) {
+    return getRepository().getReferenceById(id);
+  }
+
   /**
    * 检查主键对应的实体是否存在。
    *
