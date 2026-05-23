@@ -10,23 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @author Yun Jiao
  */
 public interface SecurityUtils {
-  static Optional<String> getAccountOpt() {
-    final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication == null) {
-      return Optional.empty();
-    }
-
-    return Optional.ofNullable(authentication.getName());
+  static Optional<String> getAccountOptional() {
+    return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+        .map(Authentication::getName);
   }
 
   static String getAccount() {
-    final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication == null) {
-      return null;
-    }
-
-    return authentication.getName();
+    return getAccountOptional().orElse(null);
   }
 }

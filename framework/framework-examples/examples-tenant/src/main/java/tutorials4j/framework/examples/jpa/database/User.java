@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
-import tutorials4j.framework.data.hibernate.id.SnowflakeIdGenerator;
+import tutorials4j.framework.data.hibernate.generator.SnowflakeIdGenerator;
 
 /**
  * 用戶

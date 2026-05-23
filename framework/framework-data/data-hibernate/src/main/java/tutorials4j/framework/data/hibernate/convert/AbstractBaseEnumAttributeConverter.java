@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate;
+package tutorials4j.framework.data.hibernate.convert;
 
 import jakarta.persistence.AttributeConverter;
 import java.util.concurrent.ConcurrentHashMap;

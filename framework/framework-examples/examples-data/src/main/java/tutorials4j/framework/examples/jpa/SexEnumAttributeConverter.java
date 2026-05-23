@@ -1,6 +1,6 @@
 package tutorials4j.framework.examples.jpa;
 
-import tutorials4j.framework.data.hibernate.AbstractBaseEnumAttributeConverter;
+import tutorials4j.framework.data.hibernate.convert.AbstractBaseEnumAttributeConverter;
 import tutorials4j.framework.examples.SexEnum;
 
 /**

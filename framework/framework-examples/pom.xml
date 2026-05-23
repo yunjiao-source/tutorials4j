@@ -23,4 +23,10 @@
         <module>examples-captcha</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+        </dependency>
+    </dependencies>
 </project>

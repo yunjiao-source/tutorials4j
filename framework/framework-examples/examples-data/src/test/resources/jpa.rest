@@ -1,34 +1,23 @@
-###
-POST http://localhost:8080/jpa/users
+### 基础分页查询
+GET http://localhost:8080/api/users?pageNumber=0&pageSize=5
 Content-Type: application/json
 
-{
- "name": "张三1",
-  "password": "123",
-  "email": "123@qq.com",
-  "age": 18,
-  "sex": "female"
-}
-
-###
-PUT http://localhost:8080/jpa/users/2052387585426329600
+### 查询用户名包含 "user" 的用户
+GET http://localhost:8080/api/users?username=u
 Content-Type: application/json
 
-{
-  "name": "张三1"
-}
-
-###
-DELETE http://localhost:8080/jpa/users/2052387585426329600
+### 查询订单金额大于 110 的用户
+GET http://localhost:8080/api/users?minAmount=110
 Content-Type: application/json
 
-###
-GET http://localhost:8080/jpa/users
+### 查询下单时间在某个范围内的用户（需要 URL 编码）
+GET http://localhost:8080/api/users?orderStartTime=2025-01-01T00:00:00&orderEndTime=2025-12-31T23:59:59
 Content-Type: application/json
 
-###
-GET http://localhost:8080/jpa/users/search?name=三
+### 组合所有条件
+GET http://localhost:8080/api/users?username=user&minAge=25&maxAge=35&minAmount=120&sort=age,asc&page=0&size=3
 Content-Type: application/json
+
 
 
 

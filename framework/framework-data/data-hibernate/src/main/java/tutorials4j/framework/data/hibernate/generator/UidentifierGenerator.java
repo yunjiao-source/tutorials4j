@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate.id;
+package tutorials4j.framework.data.hibernate.generator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;

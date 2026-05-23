@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.hibernate.id;
+package tutorials4j.framework.data.hibernate.generator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
