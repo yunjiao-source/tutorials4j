@@ -16,6 +16,11 @@ public interface PropertiesConsts {
 
   String PROPERTY_PREFIX_COMMON_UID = PROPERTY_PREFIX_COMMON + ".uid";
 
+  /** assembly */
+  String PROPERTY_PREFIX_ASSY = PROPERTY_PREFIX_TUTORIALS4J + ".assy";
+
+  String PROPERTY_PREFIX_ASSY_SCHEDULE = PROPERTY_PREFIX_ASSY + ".schedule";
+
   /** cache */
   String PROPERTY_PREFIX_CACHE = PROPERTY_PREFIX_TUTORIALS4J + ".cache";
 

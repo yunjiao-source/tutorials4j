@@ -16,6 +16,7 @@ import tutorials4j.framework.data.jdbc.routing.MultipleRoutingDataSource;
  * @author Yun Jiao
  */
 @Slf4j
+@ConditionalOnBean(DataSource.class)
 @Configuration(proxyBeanMethods = false)
 public class JdbcDataConfiguration {
   @PostConstruct
@@ -24,7 +25,6 @@ public class JdbcDataConfiguration {
   }
 
   @Bean
-  @ConditionalOnBean(DataSource.class)
   @ConditionalOnMissingBean
   DataSourceRoutingManagerCreator dataSourceRoutingManagerCreator(DataSource dataSource) {
     log.debug("[DATA-JDBC] Data Source Routing Manager Creator");
