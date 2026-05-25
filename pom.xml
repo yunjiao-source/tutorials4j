@@ -79,6 +79,8 @@
         <resilience4j-retry.version>2.4.0</resilience4j-retry.version>
         <tianai-captcha.version>1.5.5</tianai-captcha.version>
         <uid-core.version>2.2</uid-core.version>
+        <googleauth.version>1.5.0</googleauth.version>
+        <qrgen.version>1.4</qrgen.version>
     </properties>
 
     <dependencyManagement>
@@ -225,6 +227,18 @@
                 <groupId>cloud.tianai.captcha</groupId>
                 <artifactId>tianai-captcha</artifactId>
                 <version>${tianai-captcha.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.warrenstrange</groupId>
+                <artifactId>googleauth</artifactId>
+                <version>${googleauth.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.glxn</groupId>
+                <artifactId>qrgen</artifactId>
+                <version>${qrgen.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

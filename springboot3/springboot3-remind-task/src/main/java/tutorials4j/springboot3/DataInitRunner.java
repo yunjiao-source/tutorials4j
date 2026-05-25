@@ -3,8 +3,6 @@ package tutorials4j.springboot3;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import tutorials4j.springboot3.task.RemindTask;
-import tutorials4j.springboot3.task.RemindTaskRepository;
 
 /**
  * 测试数据

@@ -39,6 +39,7 @@
         <module>springboot3-referer</module>
         <module>springboot3-remind-task</module>
         <module>springboot3-scheduling</module>
+        <module>springboot3-security-2fa</module>
     </modules>
 
     <dependencyManagement>

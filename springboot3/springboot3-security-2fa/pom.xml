@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>springboot3-remind-task</artifactId>
+    <artifactId>springboot3-security-2fa</artifactId>
     <packaging>jar</packaging>
-    <name>Spring Boot3 :: Remind Task</name>
-    <description>基于 Spring Boot 3 + JPA 的动态任务调度系统</description>
+    <name>Spring Boot3 :: Security 2FA</name>
+    <description>两步验证（2FA）登录系统</description>
 
     <dependencies>
         <dependency>
@@ -20,14 +20,28 @@
             <artifactId>springboot3-common-jpa</artifactId>
             <version>${revision}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.glxn</groupId>
+            <artifactId>qrgen</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL 驱动 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

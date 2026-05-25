@@ -1,0 +1,47 @@
+spring:
+  task:
+    # 定时任务配置
+    scheduling:
+      # 全局线程池配置
+      pool:
+        size: 3
+      thread-name-prefix: "scheduled-"
+      shutdown:
+        await-termination: true
+        await-termination-period: "PT60S"
+
+
+# 定时任务配置
+scheduled:
+  tasks:
+    properties:
+      # 数据同步任务
+      dataSyncTask:
+        cron: "0 0/5 * * * ?"
+        enabled: true
+        description: "数据同步任务，每5分钟执行一次"
+        metadata:
+          priority: 1
+          retryOnFail: true
+          notifyOnFail: true
+        retry:
+          maxAttempts: 3
+          backoffDelay: "PT5S"
+        alert:
+          email: "admin@example.com"
+          slackChannel: "#alerts"
+
+      # 报表生成任务
+      reportTask:
+        cron: "0 0 2 * * ?"
+        enabled: true
+        description: "每日报表生成，凌晨2点执行"
+        metadata:
+          priority: 2
+          generateFormat: "pdf,excel"
+
+      # 清理任务
+      cleanupTask:
+        cron: "0 0 4 * * ?"
+        enabled: false
+        description: "数据清理任务，凌晨4点执行"

@@ -1,0 +1,14 @@
+###
+POST http://localhost:8080/user/create
+Content-Type: application/json
+
+{
+  "name": "tom",
+  "email": "tom@123.com",
+  "password": "123",
+  "age": 2
+}
+
+###
+GET http://localhost:8080/2fa-setup
+Content-Type: text/html
