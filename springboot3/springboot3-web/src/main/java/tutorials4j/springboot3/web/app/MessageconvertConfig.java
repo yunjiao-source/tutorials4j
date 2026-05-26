@@ -1,6 +1,5 @@
 package tutorials4j.springboot3.web.app;
 
-import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,5 +11,5 @@ import org.springframework.context.annotation.Profile;
  */
 @Profile("messageconvert")
 @Configuration
-@ComponentScan(basePackages = {"tutorials4j.springboot3.integration.messageconvert"})
-public class MessageconvertConfig implements CachingConfigurer {}
+@ComponentScan(basePackages = {"tutorials4j.springboot3.web.messageconvert"})
+public class MessageconvertConfig {}

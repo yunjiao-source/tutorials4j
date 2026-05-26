@@ -2,7 +2,9 @@ spring:
   profiles:
 #    active: captcha
 #    active: annotation
-    active: mailtemplate
+#    active: mailtemplate
+#    active: referer
+    active: restresponse
 #    active: httpexchange
 #    active: hikariscaler
 

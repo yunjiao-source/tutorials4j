@@ -1,6 +1,7 @@
 spring:
   profiles:
-    active: mybatistenant
+#    active: mybatistenant
+    active: routingdatasourcejpa
 
 
 logging:

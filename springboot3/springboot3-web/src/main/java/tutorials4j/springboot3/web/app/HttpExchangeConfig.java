@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Profile("httpexchange")
 @Configuration
-@ComponentScan(basePackages = {"tutorials4j.springboot3.integration.httpexchange"})
+@ComponentScan(basePackages = {"tutorials4j.springboot3.web.httpexchange"})
 public class HttpExchangeConfig {
   @Bean
   public HttpExchangeRepository httpExchangeRepository() {

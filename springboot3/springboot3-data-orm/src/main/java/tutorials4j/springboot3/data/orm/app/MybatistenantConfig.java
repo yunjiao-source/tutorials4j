@@ -1,6 +1,5 @@
 package tutorials4j.springboot3.data.orm.app;
 
-import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,4 +15,4 @@ import tutorials4j.springboot3.common.MybatisCommonConfiguration;
 @Configuration
 @Import(MybatisCommonConfiguration.class)
 @ComponentScan(basePackages = {"tutorials4j.springboot3.data.orm.mybatistenant"})
-public class MybatistenantConfig implements CachingConfigurer {}
+public class MybatistenantConfig {}

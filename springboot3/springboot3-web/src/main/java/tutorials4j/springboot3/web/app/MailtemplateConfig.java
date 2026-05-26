@@ -1,6 +1,5 @@
 package tutorials4j.springboot3.web.app;
 
-import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,5 +11,5 @@ import org.springframework.context.annotation.Profile;
  */
 @Profile("mailtemplate")
 @Configuration
-@ComponentScan(basePackages = {"tutorials4j.springboot3.integration.mailtemplate"})
-public class MailtemplateConfig implements CachingConfigurer {}
+@ComponentScan(basePackages = {"tutorials4j.springboot3.web.mailtemplate"})
+public class MailtemplateConfig {}

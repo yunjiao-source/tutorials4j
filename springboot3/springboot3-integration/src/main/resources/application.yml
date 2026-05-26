@@ -2,7 +2,11 @@ spring:
   profiles:
 #    active: debezium
 #    active: ftp
-    active: micrometerannotation
+#    active: micrometerannotation
+#    active: pay
+#    active: qps
+#    active: restsignature
+    active: googleauth
 
 
 logging:

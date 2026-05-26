@@ -28,17 +28,7 @@
         <module>springboot3-websocket</module>
         <module>springboot3-batch</module>
         <module>springboot3-integration</module>
-
-        <module>springboot3-rest-response</module>
-        <module>springboot3-rest-signature</module>
-        <module>springboot3-routing-dataSource-jpa</module>
-        <module>springboot3-web-distributed-tracing</module>
-        <module>springboot3-pay</module>
-        <module>springboot3-qps</module>
-        <module>springboot3-referer</module>
-        <module>springboot3-remind-task</module>
-        <module>springboot3-scheduling</module>
-        <module>springboot3-security-2fa</module>
+        <module>springboot3-schedule</module>
     </modules>
 
     <dependencyManagement>
