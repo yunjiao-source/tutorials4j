@@ -3,7 +3,7 @@ package tutorials4j.framework.data.mybatis;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import java.util.Date;
 import org.apache.ibatis.reflection.MetaObject;
-import tutorials4j.framework.data.core.util.SecurityUtils;
+import tutorials4j.framework.common.spring.util.SecurityUtils;
 
 /**
  * TODO

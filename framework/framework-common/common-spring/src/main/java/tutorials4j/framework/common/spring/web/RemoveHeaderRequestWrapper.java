@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
 
 /**
  * TODO
@@ -14,8 +15,7 @@ import java.util.Set;
  * @author Yun Jiao
  */
 public class RemoveHeaderRequestWrapper extends HttpServletRequestWrapper {
-
-  private final Set<String> headersToRemove;
+  @Getter private final Set<String> headersToRemove;
 
   public RemoveHeaderRequestWrapper(HttpServletRequest request, String... headersToRemove) {
     super(request);

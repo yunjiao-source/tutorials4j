@@ -1,8 +1,9 @@
 package tutorials4j.framework.web.mvc.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,11 +13,14 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.framework.common.core.JacksonConsts;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
+import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.core.cache.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
+import tutorials4j.framework.web.core.properties.FilterWebProperties;
 import tutorials4j.framework.web.core.properties.InterceptorWebProperties;
 import tutorials4j.framework.web.core.support.SignatureKeyRepository;
+import tutorials4j.framework.web.mvc.filter.XssRequestFilter;
 import tutorials4j.framework.web.mvc.interceptor.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.mvc.interceptor.IdempotentHandlerInterceptor;
 import tutorials4j.framework.web.mvc.interceptor.SignatureHandlerInterceptor;
@@ -29,16 +33,31 @@ import tutorials4j.framework.web.mvc.support.XssJacksonSimpleModule;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-public class InterceptorWebConfiguration implements WebMvcConfigurer {
-  @Autowired private AccessLimitedCacheTemplate accessLimitedCacheTemplate;
-  @Autowired private IdempotentCacheTemplate idempotentCacheTemplate;
-  @Autowired private SignatureCacheTemplate signatureCacheTemplate;
-  @Autowired private SignatureKeyRepository signatureKeyRepository;
-  @Autowired private InterceptorWebProperties properties;
+@RequiredArgsConstructor
+public class SecurityWebConfiguration implements WebMvcConfigurer {
+  private final AccessLimitedCacheTemplate accessLimitedCacheTemplate;
+  private final IdempotentCacheTemplate idempotentCacheTemplate;
+  private final SignatureCacheTemplate signatureCacheTemplate;
+  private final SignatureKeyRepository signatureKeyRepository;
+  private final InterceptorWebProperties properties;
 
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-MVC] Interceptor Web Configuration");
+    log.debug("[WEB-MVC] Security Web Configuration");
+  }
+
+  @Bean
+  FilterRegistrationBean<XssRequestFilter> xssRequestFilterRegistration(
+      FilterWebProperties properties) {
+    ServletFilterOptions options = properties.getXss();
+    FilterRegistrationBean<XssRequestFilter> registration = new FilterRegistrationBean<>();
+    XssRequestFilter filter = new XssRequestFilter();
+    registration.setFilter(filter);
+    options.fill(registration);
+    if (log.isDebugEnabled()) {
+      log.debug("[WEB-MVC] Xss攻击过滤器：{}", options);
+    }
+    return registration;
   }
 
   @Bean

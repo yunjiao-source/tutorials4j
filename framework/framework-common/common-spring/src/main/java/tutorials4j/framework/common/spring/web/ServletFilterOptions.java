@@ -15,22 +15,32 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
  */
 @Data
 public class ServletFilterOptions {
-  /** 过滤器匹配的 URL 模式，默认为 "/*" 表示拦截所有请求。 */
-  private String[] urlPatterns = new String[] {};
-
-  /** 过滤器执行顺序，数值越小优先级越高。 */
-  private Integer order = 1;
-
-  /** 过滤器的名称，用于在注册时标识该过滤器。 */
-  private String name = "defaultServletFilter";
-
-  /** 过滤器适用的 Dispatcher 类型集合，默认包含 ERROR, INCLUDE, REQUEST, FORWARD， 但不包含 ASYNC。 */
-  private EnumSet<DispatcherType> dispatcherTypes =
+  public static final EnumSet<DispatcherType> DEFAULT_DISPATCHER_TYPES =
       EnumSet.of(
           DispatcherType.ERROR,
           DispatcherType.INCLUDE,
           DispatcherType.REQUEST,
           DispatcherType.FORWARD);
+
+  /** 过滤器匹配的 URL 模式，默认为 "/*" 表示拦截所有请求。 */
+  private String[] urlPatterns;
+
+  /** 过滤器执行顺序，数值越小优先级越高。 */
+  private Integer order;
+
+  /** 过滤器的名称，用于在注册时标识该过滤器。 */
+  private String name;
+
+  /** 过滤器适用的 Dispatcher 类型集合 */
+  private EnumSet<DispatcherType> dispatcherTypes;
+
+  public ServletFilterOptions(
+      String[] urlPatterns, Integer order, String name, EnumSet<DispatcherType> dispatcherTypes) {
+    this.urlPatterns = urlPatterns;
+    this.order = order;
+    this.name = name;
+    this.dispatcherTypes = dispatcherTypes;
+  }
 
   public void fill(FilterRegistrationBean<?> registrationBean) {
     if (this.getUrlPatterns().length == 0) {

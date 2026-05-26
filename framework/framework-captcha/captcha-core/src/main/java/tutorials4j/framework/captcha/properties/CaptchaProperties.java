@@ -15,9 +15,11 @@ import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CAPTCHA)
 public class CaptchaProperties {
   /** 验证码过滤器 */
-  @NestedConfigurationProperty private ServletFilterOptions filter = new ServletFilterOptions();
-
-  {
-    filter.setName("captchaRequestFilter");
-  }
+  @NestedConfigurationProperty
+  private ServletFilterOptions filter =
+      new ServletFilterOptions(
+          new String[] {},
+          1,
+          "captchaRequestFilter",
+          ServletFilterOptions.DEFAULT_DISPATCHER_TYPES);
 }

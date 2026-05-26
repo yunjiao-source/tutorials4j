@@ -12,6 +12,7 @@ import tutorials4j.framework.web.core.cache.IdempotentCacheTemplate;
 import tutorials4j.framework.web.core.cache.SignatureCacheTemplate;
 import tutorials4j.framework.web.core.properties.ClientWebProperties;
 import tutorials4j.framework.web.core.properties.FilterWebProperties;
+import tutorials4j.framework.web.core.properties.GoogleAuthWebProperties;
 import tutorials4j.framework.web.core.properties.InterceptorWebProperties;
 import tutorials4j.framework.web.core.support.SignatureKeyRepository;
 import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
@@ -26,7 +27,8 @@ import tutorials4j.framework.web.core.support.SimpleSignatureKeyRepository;
 @EnableConfigurationProperties({
   FilterWebProperties.class,
   ClientWebProperties.class,
-  InterceptorWebProperties.class
+  InterceptorWebProperties.class,
+  GoogleAuthWebProperties.class
 })
 @Import({ValidatorsWebConfiguration.class})
 public class WebConfiguration {

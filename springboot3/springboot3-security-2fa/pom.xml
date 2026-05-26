@@ -29,7 +29,6 @@
         <dependency>
             <groupId>com.warrenstrange</groupId>
             <artifactId>googleauth</artifactId>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>

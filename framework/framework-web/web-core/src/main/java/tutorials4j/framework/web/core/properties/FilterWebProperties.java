@@ -15,13 +15,25 @@ import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_FILTER)
 public class FilterWebProperties {
   /** 缓存请求体配置属性 */
-  @NestedConfigurationProperty private ServletFilterOptions cachedBody = new ServletFilterOptions();
+  @NestedConfigurationProperty
+  private ServletFilterOptions cachedBody =
+      new ServletFilterOptions(
+          new String[] {},
+          1,
+          "cachedBodyRequestFilter",
+          ServletFilterOptions.DEFAULT_DISPATCHER_TYPES);
 
   /** 链路追踪 Servlet 过滤器配置属性。 */
-  @NestedConfigurationProperty private ServletFilterOptions trace = new ServletFilterOptions();
+  @NestedConfigurationProperty
+  private ServletFilterOptions trace =
+      new ServletFilterOptions(
+          new String[] {}, 1, "traceRequestFilter", ServletFilterOptions.DEFAULT_DISPATCHER_TYPES);
 
   /** xss攻击配置 */
-  @NestedConfigurationProperty private ServletFilterOptions xss = new ServletFilterOptions();
+  @NestedConfigurationProperty
+  private ServletFilterOptions xss =
+      new ServletFilterOptions(
+          new String[] {}, 1, "xssRequestFilter", ServletFilterOptions.DEFAULT_DISPATCHER_TYPES);
 
   /** 请求日志配置 */
   private RequestLoggingOptions requestLogging = new RequestLoggingOptions();
@@ -30,7 +42,13 @@ public class FilterWebProperties {
   @Data
   public static class RequestLoggingOptions {
     /** Servlet 过滤器通用配置，如过滤器名称、启用状态、URL 匹配模式等。 */
-    @NestedConfigurationProperty private ServletFilterOptions filter = new ServletFilterOptions();
+    @NestedConfigurationProperty
+    private ServletFilterOptions filter =
+        new ServletFilterOptions(
+            new String[] {},
+            1,
+            "requestLoggingRequestFilter",
+            ServletFilterOptions.DEFAULT_DISPATCHER_TYPES);
 
     /** 是否在日志消息中包含时间戳。 */
     private boolean includeTimestamp = false;
@@ -61,15 +79,5 @@ public class FilterWebProperties {
 
     /** 请求后日志消息的后缀。 */
     private String afterMessageSuffix = "]";
-
-    {
-      filter.setName("requestLoggingRequestFilter");
-    }
-  }
-
-  {
-    cachedBody.setName("cachedBodyRequestFilter");
-    trace.setName("traceRequestFilter");
-    xss.setName("xssRequestFilter");
   }
 }

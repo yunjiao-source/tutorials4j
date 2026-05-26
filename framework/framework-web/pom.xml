@@ -18,6 +18,7 @@
         <module>web-core</module>
         <module>web-mvc</module>
         <module>web-rest</module>
+        <module>web-google-auth</module>
         <module>web-spring-boot-starter</module>
     </modules>
 

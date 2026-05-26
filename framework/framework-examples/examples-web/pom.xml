@@ -11,7 +11,7 @@
 
     <artifactId>examples-web</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Web Client</name>
+    <name>Examples :: Web</name>
 
     <dependencies>
         <dependency>
@@ -24,5 +24,16 @@
             <artifactId>web-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

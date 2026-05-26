@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import tutorials4j.springboot3.model.PayChannel;
@@ -15,13 +16,12 @@ import tutorials4j.springboot3.request.BaseRequest;
  *
  * @author Yun Jiao
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotifyRequest extends BaseRequest implements Serializable {
-
-  private static final long serialVersionUID = 1L;
 
   /** 支付渠道 */
   private PayChannel payChannel;

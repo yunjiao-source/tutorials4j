@@ -57,6 +57,13 @@ public interface DefaultConsts {
         DefaultConsts.HTTP_HEADER_CAPTCHA_CODE
       };
 
+  String HTTP_HEADER_GOOGLE_AUTH_USERNAME = "X-Google-Auth-Username";
+  String HTTP_HEADER_GOOGLE_AUTH_CODE = "X-Google-Auth-Code";
+  String[] HTTP_HEADER_GOOGLE_AUTH =
+      new String[] {
+        DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE
+      };
+
   /** Class 名称定义 */
   String CLASS_HIKARI_DATA_SOURCE = "HikariDataSource";
 

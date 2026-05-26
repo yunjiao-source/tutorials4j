@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import tutorials4j.framework.data.core.util.SecurityUtils;
+import tutorials4j.framework.common.spring.util.SecurityUtils;
 
 /**
  * Hibernate配置

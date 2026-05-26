@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.util;
+package tutorials4j.framework.common.spring.util;
 
 import java.util.Optional;
 import org.springframework.security.core.Authentication;

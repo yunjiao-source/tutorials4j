@@ -9,28 +9,22 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>web-spring-boot-starter</artifactId>
+    <artifactId>web-google-auth</artifactId>
     <packaging>jar</packaging>
-    <name>Web :: Spring Boot Starter</name>
-    <description>Web Http 启动器</description>
+    <name>Web :: Google Auth</name>
+    <description>web Google 认证模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-spring-boot-starter</artifactId>
+            <artifactId>web-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-rest</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-google-auth</artifactId>
-            <version>${revision}</version>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

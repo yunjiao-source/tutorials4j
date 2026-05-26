@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -12,13 +13,12 @@ import lombok.experimental.SuperBuilder;
  *
  * @author Yun Jiao
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RefundRequest extends BaseRequest implements Serializable {
-
-  private static final long serialVersionUID = 1L;
 
   /** 交易订单号 */
   private String orderNo;

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>两步验证 - 安全登录演示</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            margin: 0;
+        }
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+            padding: 2rem 2rem 2.5rem;
+            flex: 1;
+            min-width: 320px;
+            transition: all 0.2s ease;
+        }
+        .card h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+            letter-spacing: -0.01em;
+        }
+        .card p.sub {
+            color: #5b6e8c;
+            margin-bottom: 1.8rem;
+            border-left: 3px solid #3b82f6;
+            padding-left: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            transition: 0.2s;
+            background-color: #fefefe;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        button {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        button.primary {
+            background: #3b82f6;
+        }
+        button.primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        button.secondary {
+            background: #475569;
+        }
+        button.secondary:hover {
+            background: #334155;
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        .qr-container {
+            margin: 1.5rem 0;
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+        .qr-code {
+            display: inline-block;
+            background: white;
+            padding: 12px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .qr-code img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            display: block;
+        }
+        .info-text {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-top: 12px;
+        }
+        .alert {
+            padding: 0.85rem 1rem;
+            border-radius: 20px;
+            margin-top: 1.25rem;
+            font-size: 0.9rem;
+            background-color: #f1f5f9;
+            border-left: 4px solid #64748b;
+        }
+        .alert.success {
+            background-color: #e6f7e6;
+            border-left-color: #2ecc71;
+            color: #14532d;
+        }
+        .alert.error {
+            background-color: #fee2e2;
+            border-left-color: #ef4444;
+            color: #991b1b;
+        }
+        .alert.warning {
+            background-color: #fff3e3;
+            border-left-color: #f59e0b;
+            color: #9b4a03;
+        }
+        .flex-btns {
+            display: flex;
+            gap: 12px;
+            margin-top: 0.5rem;
+        }
+        hr {
+            margin: 1.8rem 0;
+            border: none;
+            border-top: 1px solid #e2e8f0;
+        }
+        @media (max-width: 800px) {
+            body { padding: 1rem; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 二维码设置卡片 -->
+    <div class="card">
+        <h2>🔐 两步验证绑定</h2>
+        <p class="sub">使用 Google Authenticator 或同类应用扫描二维码，获取动态验证码</p>
+
+        <div class="form-group">
+            <label for="qrUsername">用户名</label>
+            <input type="text" id="qrUsername" placeholder="请输入您的用户名" th:placeholder="#{placeholder.username}">
+        </div>
+
+        <button id="generateQrBtn" class="primary">📱 生成二维码</button>
+
+        <div id="qrArea" class="qr-container" style="display: none;">
+            <div class="qr-code">
+                <img id="qrImage" alt="2FA 二维码" style="width:200px;height:200px;">
+            </div>
+            <div class="info-text">
+                ✅ 打开 Google Authenticator → 扫描此二维码<br>
+                或手动输入密钥（密钥已在服务端生成）
+            </div>
+            <div id="qrError" class="alert error" style="display: none;"></div>
+        </div>
+        <div class="info-text" style="margin-top: 16px; background: #f1f5f9; padding: 12px; border-radius: 20px;">
+            💡 提示：生成二维码时会自动为用户创建/更新 2FA 密钥，请确保该用户已存在于系统。
+        </div>
+    </div>
+
+    <!-- 登录卡片 -->
+    <div class="card">
+        <h2>🔑 两步验证登录</h2>
+        <p class="sub">输入用户名、密码和当前的 6 位动态验证码</p>
+
+        <div class="form-group">
+            <label for="loginUsername">用户名</label>
+            <input type="text" id="loginUsername" placeholder="用户名">
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" id="password" placeholder="密码">
+        </div>
+        <div class="form-group">
+            <label for="totpCode">验证码 (6位数字)</label>
+            <input type="text" id="totpCode" placeholder="例如 123456" maxlength="6" autocomplete="off">
+        </div>
+
+        <button id="loginBtn" class="primary">🚀 登录</button>
+
+        <div id="loginResult" class="alert" style="display: none;"></div>
+        <div class="info-text" style="margin-top: 1.2rem;">
+            ⚡ 登录接口会同时校验密码和 TOTP 动态码，双重保障。
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // 获取上下文根 (便于部署在非根路径)
+    const contextPath = /*[[@{/}]]*/ '';
+    // 实际请求URL构建函数
+    function buildUrl(endpoint) {
+        // 去除 contextPath 末尾可能的 '/' 重复处理
+        let base = contextPath;
+        if (base === '/') base = '';
+        return base + endpoint;
+    }
+
+    // 获取DOM元素
+    const generateBtn = document.getElementById('generateQrBtn');
+    const qrArea = document.getElementById('qrArea');
+    const qrImage = document.getElementById('qrImage');
+    const qrErrorDiv = document.getElementById('qrError');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginResultDiv = document.getElementById('loginResult');
+
+    // 生成二维码
+    generateBtn.addEventListener('click', async () => {
+        const username = document.getElementById('qrUsername').value.trim();
+        if (!username) {
+            showQrError('用户名不能为空，请输入有效的用户名');
+            qrArea.style.display = 'none';
+            return;
+        }
+
+        // 隐藏旧的错误信息，显示加载占位
+        qrErrorDiv.style.display = 'none';
+        qrErrorDiv.innerText = '';
+        // 设置临时的loading图标（可选）
+        qrImage.src = '';
+        qrArea.style.display = 'block';
+
+        // 使用 img 直接加载图片，但需要处理错误（用户不存在/服务端异常）
+        const qrUrl = buildUrl(`/t4j/google-auth/generate/qr?username=${encodeURIComponent(username)}&t=${Date.now()}`);
+        qrImage.src = qrUrl;
+
+        // 监听图片加载失败情况（服务器返回错误页面或非图片内容）
+        qrImage.onerror = () => {
+            showQrError('二维码生成失败，请检查用户名是否存在或后端服务是否正常');
+            qrImage.src = '';
+            qrArea.style.display = 'block';  // 保持显示错误区域
+        };
+        qrImage.onload = () => {
+            // 成功加载，清除之前的错误
+            qrErrorDiv.style.display = 'none';
+            qrErrorDiv.innerText = '';
+        };
+    });
+
+    function showQrError(msg) {
+        qrErrorDiv.innerText = msg;
+        qrErrorDiv.style.display = 'block';
+    }
+
+    // 登录逻辑 (AJAX)
+    loginBtn.addEventListener('click', async () => {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('password').value;
+        const code = document.getElementById('totpCode').value.trim();
+
+        if (!username || !password || !code) {
+            showLoginMessage('请完整填写用户名、密码和验证码', 'error');
+            return;
+        }
+        if (!/^\d{6}$/.test(code)) {
+            showLoginMessage('验证码必须是6位数字', 'error');
+            return;
+        }
+
+        // 构建表单数据 (application/x-www-form-urlencoded)
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('password', password);
+        formData.append('code', code);
+
+        try {
+            const response = await fetch(buildUrl('/auth/login'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData.toString()
+            });
+
+            const responseText = await response.text();  // 后端返回纯文本消息
+            if (response.ok) {
+                // 登录成功 (status 2xx)
+                showLoginMessage(responseText || '登录成功，即将跳转...', 'success');
+                // 可在此重定向或刷新token，演示仅停留提示
+                // 例如：setTimeout(() => window.location.href = '/dashboard', 1500);
+            } else if (response.status === 401) {
+                // 未授权：用户名密码错误或2FA失败
+                showLoginMessage(responseText || '用户名/密码错误 或 2FA验证码无效', 'error');
+            } else {
+                showLoginMessage(`登录失败 (${response.status}): ${responseText}`, 'error');
+            }
+        } catch (err) {
+            console.error('登录请求异常:', err);
+            showLoginMessage('网络错误或服务端异常，请稍后重试', 'error');
+        }
+    });
+
+    function showLoginMessage(msg, type) {
+        loginResultDiv.textContent = msg;
+        loginResultDiv.className = `alert ${type === 'success' ? 'success' : 'error'}`;
+        loginResultDiv.style.display = 'block';
+        // 5秒后自动淡出效果 (可选)
+        setTimeout(() => {
+            if (loginResultDiv.style.display === 'block') {
+                // 不自动清除成功信息，也可以保留
+            }
+        }, 5000);
+    }
+
+    // 辅助：清除二维码错误如果用户重新输入用户名
+    document.getElementById('qrUsername').addEventListener('input', () => {
+        if (qrArea.style.display === 'block') {
+            qrArea.style.display = 'none';
+            qrErrorDiv.style.display = 'none';
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

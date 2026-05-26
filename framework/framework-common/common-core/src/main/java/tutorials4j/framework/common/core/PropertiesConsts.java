@@ -43,6 +43,8 @@ public interface PropertiesConsts {
 
   String PROPERTY_PREFIX_WEB_CLIENT = PROPERTY_PREFIX_WEB + ".client";
 
+  String PROPERTY_PREFIX_WEB_GOOGLE_AUTH = PROPERTY_PREFIX_WEB + ".google.auth";
+
   /** data */
   String PROPERTY_PREFIX_DATA = PROPERTY_PREFIX_TUTORIALS4J + ".data";
 
