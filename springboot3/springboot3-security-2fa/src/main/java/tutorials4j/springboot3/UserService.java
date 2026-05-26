@@ -2,6 +2,8 @@ package tutorials4j.springboot3;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tutorials4j.springboot3.common.jpa.User;
+import tutorials4j.springboot3.common.jpa.UserRepository;
 import tutorials4j.springboot3.google.GoogleAuthUtil;
 
 /**

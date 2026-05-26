@@ -17,23 +17,22 @@
 
     <modules>
         <module>springboot3-common-jpa</module>
-        <module>springboot3-custom-annotation</module>
+        <module>springboot3-common-mybatis</module>
+        <module>springboot3-web</module>
+        <module>springboot3-cache</module>
+        <module>springboot3-data-orm</module>
+        <module>springboot3-data-mongodb</module>
+        <module>springboot3-data-redis</module>
+        <module>springboot3-data-amqp</module>
+        <module>springboot3-webflux</module>
+        <module>springboot3-websocket</module>
+        <module>springboot3-batch</module>
+        <module>springboot3-integration</module>
+
         <module>springboot3-rest-response</module>
         <module>springboot3-rest-signature</module>
-        <module>springboot3-batch-simple</module>
-        <module>springboot3-captcha-simple</module>
-        <module>springboot3-composite-cache</module>
-        <module>springboot3-micrometer-annotation</module>
-        <module>springboot3-debezium-simple</module>
         <module>springboot3-routing-dataSource-jpa</module>
-        <module>springboot3-ftp-file</module>
-        <module>springboot3-hikari-scaler</module>
-        <module>springboot3-http-message-convert</module>
-        <module>springboot3-mail-template</module>
         <module>springboot3-web-distributed-tracing</module>
-        <module>springboot3-mongodb-simple</module>
-        <module>springboot3-http-exchange-repository</module>
-        <module>springboot3-mybatis-tenant</module>
         <module>springboot3-pay</module>
         <module>springboot3-qps</module>
         <module>springboot3-referer</module>

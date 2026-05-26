@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: simple
+
+
+# 日志配置
+logging:
+  level:
+    tutorials4j: INFO
+    org.springframework: info
+    root: info
+
+
+

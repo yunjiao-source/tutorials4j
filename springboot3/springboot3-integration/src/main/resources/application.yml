@@ -1,0 +1,11 @@
+spring:
+  profiles:
+#    active: debezium
+#    active: ftp
+    active: micrometerannotation
+
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug

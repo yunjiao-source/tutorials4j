@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
-import tutorials4j.springboot3.RemindTask;
-import tutorials4j.springboot3.RemindTaskService;
+import tutorials4j.springboot3.common.jpa.RemindTask;
+import tutorials4j.springboot3.common.jpa.RemindTaskService;
 
 /**
  * 自定义出发任务

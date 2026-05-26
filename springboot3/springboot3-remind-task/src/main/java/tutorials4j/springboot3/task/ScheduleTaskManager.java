@@ -13,9 +13,9 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.config.TriggerTask;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-import tutorials4j.springboot3.RemindTask;
-import tutorials4j.springboot3.RemindTaskRepository;
-import tutorials4j.springboot3.RemindTaskService;
+import tutorials4j.springboot3.common.jpa.RemindTask;
+import tutorials4j.springboot3.common.jpa.RemindTaskRepository;
+import tutorials4j.springboot3.common.jpa.RemindTaskService;
 
 /**
  * 任务管理

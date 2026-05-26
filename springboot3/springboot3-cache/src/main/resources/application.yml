@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: composite
+
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug

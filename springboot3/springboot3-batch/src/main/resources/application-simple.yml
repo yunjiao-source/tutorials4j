@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+  # 批处理配置
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+      # 表前缀（如果需要可以修改）
+      # table-prefix: BATCH_
+
+  # 调度器配置（如果使用@Scheduled）
+  task:
+    scheduling:
+      pool:
+        size: 3
+
+
+# 批处理自定义配置
+batch.user:
+  job:
+    chunk-size: 100
+    skip-limit: 100
+    retry-limit: 3
+
+  input-path: classpath:sample-users.csv
+  lines-to-skip: 1
+  delimiter: ","
+  email-pattern: "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+  name-min-length: 2
+  name-max-length: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+
+
+
