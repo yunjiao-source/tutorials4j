@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
  *
  * @author Yun Jiao
  */
-@Profile("remindtask")
+@Profile("dynamiccron")
 @Configuration
-@ComponentScan(basePackages = {"tutorials4j.springboot3.schedule.remindtask"})
-public class RemindtaskConfig {}
+@ComponentScan(basePackages = {"tutorials4j.springboot3.schedule.dynamiccron"})
+public class DynamiccronConfig {}

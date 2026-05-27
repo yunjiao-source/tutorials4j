@@ -33,7 +33,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
- * Properties文件配置仓库实现 从 tasks.properties 文件读取配置
+ * Properties文件配置仓库实现 从 simple.properties 文件读取配置
  *
  * @author Yun Jiao
  */
@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PropertiesConfigRepository implements ConfigRepository {
 
-  private static final String TASKS_FILE = "tasks.properties";
+  private static final String TASKS_FILE = "simple.properties";
   private static final String ENABLED_SUFFIX = ".enabled";
   private static final String CRON_SUFFIX = ".cron";
   private static final String DESC_SUFFIX = ".desc";
@@ -88,7 +88,7 @@ public class PropertiesConfigRepository implements ConfigRepository {
 
       log.debug("Loaded {} task configurations from {}", tasks.size(), TASKS_FILE);
     } catch (IOException e) {
-      log.error("Failed to load tasks.properties", e);
+      log.error("Failed to load simple.properties", e);
     }
   }
 
