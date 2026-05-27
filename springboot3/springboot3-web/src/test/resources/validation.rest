@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
   "className": "高一",
-  "user": {
+  "mybatisUser": {
     "age": 2
   }
 }

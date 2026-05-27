@@ -8,11 +8,11 @@
 
 ### `UserClass.java`
 - 包装了一个 `User` 对象，并额外包含 `className` 字段。
-- 在 `user` 字段上标记了 `@Valid`，表示对嵌套对象 `User` 也会进行级联校验。
+- 在 `mybatisUser` 字段上标记了 `@Valid`，表示对嵌套对象 `User` 也会进行级联校验。
 
 ### `ValidList.java`
 - 自定义实现了 `List<E>` 接口的包装类，内部维护一个 `List<E>`。
-- 关键点：内部列表使用了 `@Valid` 注解。这样当在控制器方法中使用 `@RequestBody @Valid ValidList<User> users` 时，可以逐个校验列表中的每个 `User` 对象。
+- 关键点：内部列表使用了 `@Valid` 注解。这样当在控制器方法中使用 `@RequestBody @Valid ValidList<User> cursorUsers` 时，可以逐个校验列表中的每个 `User` 对象。
 - Spring 默认对 `List` 直接使用 `@Valid` 不会进行元素校验（因为泛型擦除），此包装类解决了集合元素校验的问题。
 
 ## 2. 控制器示例

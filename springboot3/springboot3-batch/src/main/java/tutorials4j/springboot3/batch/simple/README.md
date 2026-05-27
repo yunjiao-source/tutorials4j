@@ -5,7 +5,7 @@
 项目实现了一个**基于 Spring Boot 3 + Spring Batch 的用户数据批处理导入功能**。主要功能如下：
 
 ### 1. 数据抽取（Extract）
-- 从 CSV 文件（`sample-users.csv`）中读取用户数据。
+- 从 CSV 文件（`sample-cursorUsers.csv`）中读取用户数据。
 - 支持自定义分隔符（默认逗号）、跳过标题行、文件不存在时容错处理。
 - 映射到中间对象 `UserCsvRecord`（包含 name 和 email）。
 
@@ -29,7 +29,7 @@
 提供了三种启动批处理作业的方式：
 - **应用启动时自动执行**：`CommandLineRunner` 实现。
 - **定时调度**：`@Scheduled` 每 15 秒执行一次。
-- **REST API 手动触发**：`POST /import-users` 启动作业，并提供 `GET /status/{jobExecutionId}` 查询作业状态。
+- **REST API 手动触发**：`POST /import-cursorUsers` 启动作业，并提供 `GET /status/{jobExecutionId}` 查询作业状态。
 
 ### 6. 监控与日志
 - **日志监听器**：在 Step 和 Job 执行前后输出详细日志，包括读写数量、跳过数量等。

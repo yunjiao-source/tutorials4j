@@ -11,7 +11,7 @@
 | `DataSourceContextHolder` | 使用 `ThreadLocal` 存储当前请求的租户ID，提供 `set`、`get`、`clear` 方法，确保线程隔离。 |
 | `TenantInterceptor` | 拦截所有 HTTP 请求，从请求头 `X-Tenant-ID` 中提取租户标识并存入 `DataSourceContextHolder`；若无该头则默认设为 `"tenant_a"`。请求结束后清除上下文。 |
 | `WebConfig` | 注册 `TenantInterceptor` 拦截器，作用于所有路径。 |
-| `DemoController` | 提供 `/users` 接口，调用 `UserRepository` 查询数据。此时 `UserRepository` 会通过路由数据源访问当前租户对应的数据库。 |
+| `DemoController` | 提供 `/cursorUsers` 接口，调用 `UserRepository` 查询数据。此时 `UserRepository` 会通过路由数据源访问当前租户对应的数据库。 |
 
 ### 工作流程
 1. 客户端发起请求，携带请求头 `X-Tenant-ID: tenant-a`（或 `tenant-b`）。

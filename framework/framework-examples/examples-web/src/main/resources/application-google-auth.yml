@@ -6,8 +6,6 @@ tutorials4j:
           url-patterns: /auth/test-filter
         credentials:
           - username: tom
-            password: t123
             security-key: T6LFESCGW4QGYX33Z2ZAFNJLAU5JWKO7
           - username: zhangs
-            password: z123
             security-key: GP2GM5U4WVNXSPD2Y3WSKZQTMW4TZRYL

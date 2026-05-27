@@ -1,9 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/demo
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
   sql:
     init:
       schema-locations: classpath:src/main/db/schema-pg.sql

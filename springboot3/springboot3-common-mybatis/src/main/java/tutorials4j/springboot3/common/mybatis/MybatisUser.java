@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 @TableName("user_mybatis_tenant")
-public class User {
+public class MybatisUser {
 
   @TableId private Long id;
   private String name;

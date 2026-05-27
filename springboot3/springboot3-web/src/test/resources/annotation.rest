@@ -1,5 +1,5 @@
 ###
-GET http://localhost:8080/logger/user?userId=user123
+GET http://localhost:8080/logger/mybatisUser?userId=user123
 Accept: text/plain
 
 ###
@@ -8,11 +8,11 @@ Accept: text/plain
 
 
 ###
-GET http://localhost:8080/need-permission/user/query
+GET http://localhost:8080/need-permission/mybatisUser/query
 Accept: text/plain
 
 ###
-GET http://localhost:8080/need-permission/user/add
+GET http://localhost:8080/need-permission/mybatisUser/add
 Accept: text/plain
 
 ###
@@ -21,7 +21,7 @@ Accept: text/plain
 
 
 ###
-POST http://localhost:8080/check-param/user/save
+POST http://localhost:8080/check-param/mybatisUser/save
 Content-Type: application/json
 
 {

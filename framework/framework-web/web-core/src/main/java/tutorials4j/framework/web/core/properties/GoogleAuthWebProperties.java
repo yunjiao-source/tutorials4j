@@ -64,9 +64,6 @@ public class GoogleAuthWebProperties {
     /** 用户名 */
     private String username;
 
-    /** 密码（明文存储，仅用于示例；生产环境应加密） */
-    private String password;
-
     /** TOTP 秘钥（Base32 编码），若为空则首次使用时生成 */
     private String securityKey;
   }

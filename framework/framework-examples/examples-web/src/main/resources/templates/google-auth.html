@@ -207,10 +207,6 @@
             <input type="text" id="loginUsername" placeholder="用户名">
         </div>
         <div class="form-group">
-            <label for="password">密码</label>
-            <input type="password" id="password" placeholder="密码">
-        </div>
-        <div class="form-group">
             <label for="totpCode">验证码 (6位数字)</label>
             <input type="text" id="totpCode" placeholder="例如 123456" maxlength="6" autocomplete="off">
         </div>
@@ -285,10 +281,9 @@
     // 登录逻辑 (AJAX)
     loginBtn.addEventListener('click', async () => {
         const username = document.getElementById('loginUsername').value.trim();
-        const password = document.getElementById('password').value;
         const code = document.getElementById('totpCode').value.trim();
 
-        if (!username || !password || !code) {
+        if (!username || !code) {
             showLoginMessage('请完整填写用户名、密码和验证码', 'error');
             return;
         }
@@ -300,7 +295,6 @@
         // 构建表单数据 (application/x-www-form-urlencoded)
         const formData = new URLSearchParams();
         formData.append('username', username);
-        formData.append('password', password);
         formData.append('code', code);
 
         try {

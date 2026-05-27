@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.spring.util.QrCodeUtils;
 import tutorials4j.framework.web.google.auth.GoogleAuthService;
-import tutorials4j.framework.web.google.auth.XICredentialRepository;
 
 /**
  * 鉴权接口
@@ -23,31 +22,22 @@ import tutorials4j.framework.web.google.auth.XICredentialRepository;
 @RequiredArgsConstructor
 public class AuthController {
   private final GoogleAuthService googleAuthService;
-  private final XICredentialRepository credentialRepository;
 
   /**
    * 登录并进行两步验证
    *
    * @param username 用户名
-   * @param password 密码
    * @param code 2FA 验证码
    * @return 登录结果
    */
   @PostMapping("/login")
   public ResponseEntity<?> login(
-      @RequestParam("username") String username,
-      @RequestParam("password") String password,
-      @RequestParam("code") int code) {
-    // 验证用户名和密码
-    if (credentialRepository.verifyPassword(username, password)) {
-      // 验证 2FA 代码
-      if (googleAuthService.verifyByUserName(username, code)) {
-        return ResponseEntity.ok("登录成功");
-      } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("2FA 验证失败");
-      }
+      @RequestParam("username") String username, @RequestParam("code") int code) {
+    // 验证 2FA 代码
+    if (googleAuthService.verifyByUserName(username, code)) {
+      return ResponseEntity.ok("登录成功");
     } else {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用户名或密码错误");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("2FA 验证失败");
     }
   }
 

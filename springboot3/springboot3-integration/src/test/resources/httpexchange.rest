@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/users
+POST http://localhost:8080/cursorUsers
 Content-Type: application/json
 
 {
@@ -8,11 +8,11 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/users/1
+GET http://localhost:8080/cursorUsers/1
 Accept: application/json
 
 ###
-GET http://localhost:8080/users/exception
+GET http://localhost:8080/cursorUsers/exception
 Accept: application/json
 
 ###

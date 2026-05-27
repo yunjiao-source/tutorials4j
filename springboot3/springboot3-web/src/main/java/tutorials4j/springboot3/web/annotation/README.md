@@ -37,11 +37,11 @@
 
 ### 1.2 `@NeedPermission` 权限校验
 - **注解定义** (`NeedPermission.java`)  
-  作用于**方法**，属性 `value()` 为字符串数组，表示所需的权限编码（如 `"user:add"`）。
+  作用于**方法**，属性 `value()` 为字符串数组，表示所需的权限编码（如 `"mybatisUser:add"`）。
 
 - **切面实现** (`NeedPermissionAspect.java`)
     - 切入点：`@annotation(needPermission)`，自动匹配所有标注了该注解的方法。
-    - 环绕通知中获取注解的 `value()`，与**模拟的用户权限列表**（`["user:query", "order:query"]`）进行比对。
+    - 环绕通知中获取注解的 `value()`，与**模拟的用户权限列表**（`["mybatisUser:query", "order:query"]`）进行比对。
     - 若当前用户不拥有全部所需权限，则抛出 `RuntimeException`；否则放行。
 
 - **使用示例** (`NeedPermissionController`)  

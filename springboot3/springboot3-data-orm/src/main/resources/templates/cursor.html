@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>游标分页测试</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .info { margin: 10px 0; }
+    button { padding: 6px 12px; font-size: 14px; cursor: pointer; }
+    .loading { color: blue; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+<h1>游标分页测试（keyset pagination）</h1>
+<div class="info">
+  <span>每页大小：</span>
+  <select id="pageSizeSelect">
+    <option value="10">10</option>
+    <option value="30" selected>30</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+  </select>
+  <button id="loadFirstBtn">刷新/加载第一页</button>
+  <button id="nextPageBtn" disabled>下一页</button>
+  <span id="loadingSpan" class="loading" style="display:none;">加载中...</span>
+</div>
+<div class="info">
+  <span>总记录数：</span><span id="totalCount">-</span>
+  <span style="margin-left:20px;">是否有更多：</span><span id="hasMore">-</span>
+  <span style="margin-left:20px;">当前页游标：</span><span id="currentCursor">无</span>
+</div>
+
+<table id="userTable">
+  <thead>
+  <tr><th>ID</th><th>用户名</th><th>创建时间</th></tr>
+  </thead>
+  <tbody id="userTableBody">
+  <tr><td colspan="3">暂无数据</td></tr>
+  </tbody>
+</table>
+
+<script>
+  // 全局状态
+  let currentCursor = null;       // 当前加载的页面对应的 nextCursor（即下一页要用到的游标）
+  let hasMoreFlag = false;
+  let total = 0;
+  let pageSize = 30;              // 与 select 默认值一致
+
+  // DOM 元素
+  const userTableBody = document.getElementById('userTableBody');
+  const totalCountSpan = document.getElementById('totalCount');
+  const hasMoreSpan = document.getElementById('hasMore');
+  const currentCursorSpan = document.getElementById('currentCursor');
+  const loadingSpan = document.getElementById('loadingSpan');
+  const nextPageBtn = document.getElementById('nextPageBtn');
+  const loadFirstBtn = document.getElementById('loadFirstBtn');
+  const pageSizeSelect = document.getElementById('pageSizeSelect');
+
+  // 通用 API 请求函数
+  async function fetchUsers(cursor) {
+    loadingSpan.style.display = 'inline';
+    try {
+      let url = `/api/users?pageSize=${pageSize}`;
+      if (cursor) {
+        url += `&cursor=${encodeURIComponent(cursor)}`;
+      }
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const data = await response.json();
+      // 渲染表格
+      renderTable(data.data);
+      // 更新状态
+      total = data.total;
+      hasMoreFlag = data.hasMore;
+      currentCursor = data.nextCursor;  // 下一页需要使用的游标
+      totalCountSpan.innerText = total;
+      hasMoreSpan.innerText = hasMoreFlag ? '是' : '否';
+      currentCursorSpan.innerText = currentCursor ? currentCursor : '无';
+      // 控制下一页按钮启用/禁用
+      nextPageBtn.disabled = !hasMoreFlag;
+    } catch (err) {
+      console.error(err);
+      userTableBody.innerHTML = `<tr><td colspan="3" class="error">加载失败：${err.message}</td></tr>`;
+      nextPageBtn.disabled = true;
+    } finally {
+      loadingSpan.style.display = 'none';
+    }
+  }
+
+  // 渲染用户表格
+  function renderTable(users) {
+    if (!users || users.length === 0) {
+      userTableBody.innerHTML = '<tr><td colspan="3">暂无数据</td></tr>';
+      return;
+    }
+    let html = '';
+    for (let user of users) {
+      // 格式化时间（ISO 转成本地可读格式）
+      let createdAt = user.createdAt ? user.createdAt.replace('T', ' ') : '';
+      html += `<tr>
+                            <td>${user.id}</td>
+                            <td>${escapeHtml(user.name)}</td>
+                            <td>${createdAt}</td>
+                         </tr>`;
+    }
+    userTableBody.innerHTML = html;
+  }
+
+  // 简单的防XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // 加载第一页（重置游标）
+  function loadFirstPage() {
+    currentCursor = null;
+    fetchUsers(null);
+  }
+
+  // 加载下一页（使用当前保存的 nextCursor）
+  function loadNextPage() {
+    if (!hasMoreFlag) {
+      nextPageBtn.disabled = true;
+      return;
+    }
+    if (!currentCursor) {
+      console.warn('没有可用的下一页游标');
+      return;
+    }
+    fetchUsers(currentCursor);
+  }
+
+  // 每页大小改变时，重新从第一页加载
+  function onPageSizeChange() {
+    pageSize = parseInt(pageSizeSelect.value, 10);
+    loadFirstPage();
+  }
+
+  // 绑定事件
+  loadFirstBtn.addEventListener('click', loadFirstPage);
+  nextPageBtn.addEventListener('click', loadNextPage);
+  pageSizeSelect.addEventListener('change', onPageSizeChange);
+
+  // 页面初始化加载第一页
+  loadFirstPage();
+</script>
+</body>
+</html>

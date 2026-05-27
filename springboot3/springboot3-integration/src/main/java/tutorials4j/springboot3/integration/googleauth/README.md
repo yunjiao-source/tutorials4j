@@ -55,7 +55,7 @@
   使用 `net.glxn.qrgen` 库生成二维码图片，尺寸 250×250，格式 PNG。
 
 - **密码校验**：  
-  当前为**明文比较**（`password.equals(user.getPassword())`），这是严重的安全缺陷。生产环境应使用 BCrypt、Argon2 等哈希算法。
+  当前为**明文比较**（`password.equals(mybatisUser.getPassword())`），这是严重的安全缺陷。生产环境应使用 BCrypt、Argon2 等哈希算法。
 
 ---
 
@@ -66,7 +66,7 @@
 | 密码明文存储与比对 | **高** | 使用 `PasswordEncoder`（如 `BCryptPasswordEncoder`）加密存储密码，验证时调用 `matches()` |
 | 未使用 `ICredentialRepository` 但强行注入 | 低 | 移除 `InMemoryCredentialRepository` 类，并在 `GoogleAuthConfig` 中移除对该 Bean 的依赖（因为 `GoogleAuthenticator` 不需要 repository 也能工作） |
 | 缺少会话/令牌管理 | 中 | 登录成功后应生成 Session 或 JWT，后续请求携带凭证；当前仅返回字符串“登录成功” |
-| 没有处理用户不存在的情况 | 中 | `UserService.verifyPassword` 中当 `user == null` 时返回 `false`，但后续 `verifyCode` 中若 `user == null` 会抛出 `NullPointerException`（`user.getSecretKey()`） |
+| 没有处理用户不存在的情况 | 中 | `UserService.verifyPassword` 中当 `mybatisUser == null` 时返回 `false`，但后续 `verifyCode` 中若 `mybatisUser == null` 会抛出 `NullPointerException`（`mybatisUser.getSecretKey()`） |
 | `createSecretKeyForUser` 未做重复生成保护 | 中 | 如果用户已有密钥，再次调用会覆盖旧密钥，导致原有绑定失效。应增加判断：若密钥已存在则直接返回现有密钥 |
 | 验证码为 `int` 类型，不能处理前导零 | 低 | TOTP 验证码通常为 6 位数字，`int` 会丢失前导零（如 `012345` → `12345`），应使用 `String` 类型 |
 | 日志与异常处理缺失 | 中 | 添加日志记录关键操作（生成密钥、登录失败等），捕获可能异常并返回友好错误信息 |

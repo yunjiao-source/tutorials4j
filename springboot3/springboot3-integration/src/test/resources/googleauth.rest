@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/user/create
+POST http://localhost:8080/mybatisUser/create
 Content-Type: application/json
 
 {

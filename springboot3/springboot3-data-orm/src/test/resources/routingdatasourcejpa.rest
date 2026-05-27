@@ -1,10 +1,10 @@
 ###
-GET http://localhost:8080/users
+GET http://localhost:8080/cursorUsers
 Accept: application/json
 X-Tenant-ID:tenant-a
 
 ###
-GET http://localhost:8080/users
+GET http://localhost:8080/cursorUsers
 Accept: application/json
 X-Tenant-ID:tenant-b
 

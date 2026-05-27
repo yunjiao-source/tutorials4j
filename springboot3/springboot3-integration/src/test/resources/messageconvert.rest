@@ -1,18 +1,18 @@
 ###
-GET http://localhost:8080/user?user=666,中国cn
+GET http://localhost:8080/mybatisUser?mybatisUser=666,中国cn
 Content-Type: application/json
 
 ###
-POST http://localhost:8080/user?user=666,中国cn
+POST http://localhost:8080/mybatisUser?mybatisUser=666,中国cn
 Content-Type: application/x-www-form-urlencoded
 
 ###
-GET http://localhost:8080/user-wrapper?age=16&user=666,中国cn
+GET http://localhost:8080/mybatisUser-wrapper?age=16&mybatisUser=666,中国cn
 Content-Type: application/json
 
 ###
-POST http://localhost:8080/user-wrapper
+POST http://localhost:8080/mybatisUser-wrapper
 Content-Type: application/x-www-form-urlencoded
 
-user=666,中国cn&age=16
+mybatisUser=666,中国cn&age=16
 

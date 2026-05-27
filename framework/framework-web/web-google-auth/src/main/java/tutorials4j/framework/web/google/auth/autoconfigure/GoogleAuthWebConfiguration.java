@@ -2,9 +2,8 @@ package tutorials4j.framework.web.google.auth.autoconfigure;
 
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorConfig;
+import com.warrenstrange.googleauth.ICredentialRepository;
 import jakarta.annotation.PostConstruct;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,10 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.core.properties.GoogleAuthWebProperties;
-import tutorials4j.framework.web.core.properties.GoogleAuthWebProperties.CredentialOptions;
 import tutorials4j.framework.web.google.auth.GoogleAuthService;
 import tutorials4j.framework.web.google.auth.GoogleAuthenticatorConfigCustomizer;
-import tutorials4j.framework.web.google.auth.XICredentialRepository;
 import tutorials4j.framework.web.google.auth.YamlCredentialRepository;
 import tutorials4j.framework.web.google.auth.web.GoogleAuthRequestFilter;
 
@@ -37,7 +34,7 @@ public class GoogleAuthWebConfiguration {
 
   @Bean
   GoogleAuthenticator googleAuthenticator(
-      XICredentialRepository repository,
+      ICredentialRepository repository,
       ObjectProvider<GoogleAuthenticatorConfigCustomizer> customizers) {
     // 创建配置
     GoogleAuthenticatorConfig config =
@@ -54,12 +51,9 @@ public class GoogleAuthWebConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  XICredentialRepository yamlCredentialRepository(GoogleAuthWebProperties properties) {
-    Map<String, CredentialOptions> credentialMap =
-        properties.getCredentials().stream()
-            .collect(Collectors.toMap(CredentialOptions::getUsername, m -> m));
+  ICredentialRepository yamlCredentialRepository(GoogleAuthWebProperties properties) {
     log.debug("[WEB-GOOGLE-AUTH] Yaml Credential Repository");
-    return new YamlCredentialRepository(credentialMap);
+    return new YamlCredentialRepository(properties.getCredentials());
   }
 
   @Bean

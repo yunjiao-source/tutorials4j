@@ -9,4 +9,4 @@ import org.springframework.stereotype.Service;
  * @author Yun Jiao
  */
 @Service
-public class UserService extends ServiceImpl<UserMapper, User> {}
+public class MybatisUserService extends ServiceImpl<UserMapper, MybatisUser> {}

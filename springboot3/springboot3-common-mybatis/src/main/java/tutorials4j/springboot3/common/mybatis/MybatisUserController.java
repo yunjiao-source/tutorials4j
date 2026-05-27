@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class MybatisUserController {
 
-  @Autowired private UserService userService;
+  @Autowired private MybatisUserService mybatisUserService;
 
   @GetMapping
-  public List<User> getUsers() {
-    return userService.list();
+  public List<MybatisUser> getUsers() {
+    return mybatisUserService.list();
   }
 
   @PostMapping
-  public User createUser(@RequestBody CreateUserModel model) {
-    User user = new User();
-    user.setName(model.getName());
-    userService.save(user);
-    return user;
+  public MybatisUser createUser(@RequestBody CreateUserModel model) {
+    MybatisUser mybatisUser = new MybatisUser();
+    mybatisUser.setName(model.getName());
+    mybatisUserService.save(mybatisUser);
+    return mybatisUser;
   }
 }

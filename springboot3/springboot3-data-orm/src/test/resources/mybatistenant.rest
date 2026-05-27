@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/users
+POST http://localhost:8080/cursorUsers
 Content-Type: application/json
 X-Tenant-ID: master
 
@@ -8,7 +8,7 @@ X-Tenant-ID: master
 }
 
 ###
-POST http://localhost:8080/users
+POST http://localhost:8080/cursorUsers
 Content-Type: application/json
 X-Tenant-ID: demo
 
@@ -17,11 +17,11 @@ X-Tenant-ID: demo
 }
 
 ###
-GET http://localhost:8080/users
+GET http://localhost:8080/cursorUsers
 Content-Type: application/json
 X-Tenant-ID: master
 
 ###
-GET http://localhost:8080/users
+GET http://localhost:8080/cursorUsers
 Content-Type: application/json
 X-Tenant-ID: demo

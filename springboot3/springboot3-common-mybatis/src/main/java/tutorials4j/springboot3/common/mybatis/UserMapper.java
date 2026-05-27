@@ -9,4 +9,4 @@ import org.apache.ibatis.annotations.Mapper;
  * @author Yun Jiao
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User> {}
+public interface UserMapper extends BaseMapper<MybatisUser> {}

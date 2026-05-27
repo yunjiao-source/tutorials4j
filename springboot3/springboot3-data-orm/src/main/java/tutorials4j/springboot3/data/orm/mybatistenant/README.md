@@ -12,7 +12,7 @@
     - 请求结束后自动清除租户 ID，避免线程污染。
 
 3. **用户管理 API**
-    - 提供 REST 接口 `/users`：
+    - 提供 REST 接口 `/cursorUsers`：
         - `GET`：查询当前租户下的所有用户。
         - `POST`：创建新用户（需传入 `name`），插入数据时会自动填充当前租户的 ID 到表中。
     - 实体 `User` 映射表 `user_mybatis_tenant`，包含 `id` 和 `name` 字段（表中需额外存在租户列，如 `tenant_id`，由插件自动处理）。

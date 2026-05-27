@@ -10,8 +10,8 @@
 - 运行时保留，作用于方法。
 
 ### `DemoController.java`
-- 示例控制器，映射路径 `/api/users`。
-- 两个 `@GetMapping("/users")` 方法，分别标注 `@ApiVersion(1.0)` 和 `@ApiVersion(2.0)`。
+- 示例控制器，映射路径 `/api/cursorUsers`。
+- 两个 `@GetMapping("/cursorUsers")` 方法，分别标注 `@ApiVersion(1.0)` 和 `@ApiVersion(2.0)`。
 - 依赖自定义的 `RequestMappingHandlerMapping` 来区分两个相同 URL 但不同版本的方法。
 
 ---
@@ -41,11 +41,11 @@
 ### `VersionPathFilter.java`
 - 继承 `OncePerRequestFilter`，优先级最高（`Ordered.HIGHEST_PRECEDENCE`）。
 - 功能：**URL 重写**。
-    - 正则匹配请求 URI 开头的 `/v数字(.数字)?`（如 `/v1.0/api/users`）。
-    - 将版本前缀剥离后，生成新的 URI（如 `/api/users`）。
+    - 正则匹配请求 URI 开头的 `/v数字(.数字)?`（如 `/v1.0/api/cursorUsers`）。
+    - 将版本前缀剥离后，生成新的 URI（如 `/api/cursorUsers`）。
     - 使用 `HttpServletRequestWrapper` 重写 `getRequestURI()` 返回新 URI。
     - 同时将原始 URI 存入 `request` 属性 `originalUri`，供后续条件匹配使用。
-- 作用：让 `@RequestMapping("/api/users")` 仍能正常映射，同时保留原始路径中的版本信息。
+- 作用：让 `@RequestMapping("/api/cursorUsers")` 仍能正常映射，同时保留原始路径中的版本信息。
 
 ### `VersionPathRequestCondition.java`
 - 类似 Header 版本的条件类，但版本信息**从原始 URI** 中提取。
@@ -74,14 +74,14 @@
 ## 5. 整体工作流程
 
 ### Header 模式
-1. 客户端请求：`GET /api/users`，Header 中添加 `X-API-Version: 2.0`。
+1. 客户端请求：`GET /api/cursorUsers`，Header 中添加 `X-API-Version: 2.0`。
 2. Spring 调用 `VersionHeaderRequestMappingHandlerMapping` 匹配请求。
 3. `VersionHeaderRequestCondition` 读取 Header 中的版本号，与每个方法上的版本比较。
 4. 匹配到版本 2.0 的方法，执行 `getUsersV2()`。
 
 ### Path 模式
-1. 客户端请求：`GET /v2.0/api/users`。
-2. `VersionPathFilter` 将 URI 重写为 `/api/users`，并保存原始 URI 到 `originalUri`。
+1. 客户端请求：`GET /v2.0/api/cursorUsers`。
+2. `VersionPathFilter` 将 URI 重写为 `/api/cursorUsers`，并保存原始 URI 到 `originalUri`。
 3. `VersionPathRequestMappingHandlerMapping` 匹配时，`VersionPathRequestCondition` 从 `originalUri` 中提取版本号 `2.0`。
 4. 匹配到版本 2.0 的方法，执行 `getUsersV2()`。
 

@@ -122,7 +122,7 @@
             </attribute>
             <attribute name="whenNoDataType" use="optional">
                 <annotation>
-                    <documentation>Allows users to customize the behavior of the reporting engine when there are now rows in the data source.</documentation>
+                    <documentation>Allows cursorUsers to customize the behavior of the reporting engine when there are now rows in the data source.</documentation>
                 </annotation>
                 <simpleType>
                     <restriction base="string">
@@ -1207,7 +1207,7 @@
             </attribute>
             <attribute name="isForPrompting" use="optional" default="true">
                 <annotation>
-                    <documentation>Optional flag that might be used by the parent application to prompt the user for the parameter value.</documentation>
+                    <documentation>Optional flag that might be used by the parent application to prompt the mybatisUser for the parameter value.</documentation>
                 </annotation>
                 <simpleType>
                     <restriction base="string">
@@ -1240,7 +1240,7 @@
 
     <element name="parameterDescription">
         <annotation>
-            <documentation>Can be used to specify a short text description for the parameter and is useful especially when prompting for the user to supply a value for this parameter at runtime.</documentation>
+            <documentation>Can be used to specify a short text description for the parameter and is useful especially when prompting for the mybatisUser to supply a value for this parameter at runtime.</documentation>
         </annotation>
         <complexType mixed="true">
         </complexType>
