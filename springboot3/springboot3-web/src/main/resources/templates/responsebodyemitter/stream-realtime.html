@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>定向实时日志流</title>
+  <style>
+    .log-panel {
+      margin-bottom: 20px;
+    }
+    .log-container {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      font-family: monospace;
+      padding: 12px;
+      height: 400px;
+      overflow-y: auto;
+      border-radius: 5px;
+    }
+    .log-entry {
+      border-bottom: 1px solid #444;
+      padding: 3px 0;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 6px;
+    }
+  </style>
+</head>
+<body>
+<h2>定向实时日志推送</h2>
+<div class="log-panel">
+  <label>用户ID：</label>
+  <input type="text" id="userId" value="user123" />
+  <label>日志类型：</label>
+  <select id="logType">
+    <option value="app">应用日志</option>
+    <option value="access">访问日志</option>
+    <option value="error">错误日志</option>
+  </select>
+  <button id="connectBtn">连接流</button>
+  <button id="disconnectBtn" disabled>断开</button>
+</div>
+
+<div class="log-container" id="logContainer">
+  <div class="log-entry">等待建立连接...</div>
+</div>
+
+<h3>模拟发送日志</h3>
+<div>
+  <input type="text" id="messageInput" placeholder="输入日志内容" style="width: 60%;" />
+  <button id="sendMsgBtn">推送日志到当前用户</button>
+</div>
+
+<script>
+  let abortController = null;
+  let currentUserId = null, currentLogType = null;
+
+  const userIdInput = document.getElementById('userId');
+  const logTypeSelect = document.getElementById('logType');
+  const connectBtn = document.getElementById('connectBtn');
+  const disconnectBtn = document.getElementById('disconnectBtn');
+  const logContainer = document.getElementById('logContainer');
+  const messageInput = document.getElementById('messageInput');
+  const sendMsgBtn = document.getElementById('sendMsgBtn');
+
+  function addLog(message, isSystem = false) {
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    if (isSystem) {
+      entry.style.color = '#aaa';
+      entry.style.fontStyle = 'italic';
+    }
+    entry.textContent = message;
+    logContainer.appendChild(entry);
+    logContainer.scrollTop = logContainer.scrollHeight;
+  }
+
+  connectBtn.addEventListener('click', async () => {
+    if (abortController) {
+      abortController.abort();
+    }
+    const userId = userIdInput.value.trim();
+    const logType = logTypeSelect.value;
+    if (!userId) {
+      alert('请输入用户ID');
+      return;
+    }
+    currentUserId = userId;
+    currentLogType = logType;
+
+    abortController = new AbortController();
+    connectBtn.disabled = true;
+    disconnectBtn.disabled = false;
+    logContainer.innerHTML = '<div class="log-entry">正在连接流...</div>';
+
+    try {
+      const response = await fetch(`/stream/realtime/${userId}/${logType}`, {
+        signal: abortController.signal
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (let line of lines) {
+          if (line.trim()) {
+            addLog(line);
+          }
+        }
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        addLog(`连接错误: ${err.message}`, true);
+      } else {
+        addLog('连接已主动断开', true);
+      }
+    } finally {
+      connectBtn.disabled = false;
+      disconnectBtn.disabled = true;
+      abortController = null;
+    }
+  });
+
+  disconnectBtn.addEventListener('click', () => {
+    if (abortController) {
+      abortController.abort();
+    }
+  });
+
+  // 模拟通过后端推送消息（调用我们补充的 POST 接口）
+  sendMsgBtn.addEventListener('click', async () => {
+    if (!currentUserId || !currentLogType) {
+      alert('请先建立连接');
+      return;
+    }
+    const message = messageInput.value.trim();
+    if (!message) {
+      alert('请输入日志消息');
+      return;
+    }
+    try {
+      const response = await fetch(`/stream/realtime/${currentUserId}/${currentLogType}?message=${encodeURIComponent(message)}`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        addLog(`[发送] ${message}`, true);
+        messageInput.value = '';
+      } else {
+        addLog(`发送失败: ${response.status}`, true);
+      }
+    } catch (err) {
+      addLog(`发送请求错误: ${err.message}`, true);
+    }
+  });
+</script>
+</body>
+</html>

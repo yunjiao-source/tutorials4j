@@ -1,0 +1,13 @@
+###
+GET http://localhost:8080/stream/logs
+Accept: text/plain;charset=UTF-8
+
+###
+GET http://localhost:8080/stream/progress/1
+Accept: text/plain;text/plain
+
+
+### 页面
+### http://localhost:8080/stream-ui/logs
+### http://localhost:8080/stream-ui/progress
+### http://localhost:8080/stream-ui/realtime

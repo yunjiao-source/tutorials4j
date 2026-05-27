@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>实时日志流</title>
+  <style>
+    .log-container {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: monospace;
+      padding: 15px;
+      height: 500px;
+      overflow-y: auto;
+      border-radius: 5px;
+    }
+    .log-line {
+      border-bottom: 1px solid #333;
+      padding: 4px 0;
+      white-space: pre-wrap;
+    }
+    button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<h2>基础实时日志流</h2>
+<div class="log-container" id="logContainer">
+  <div class="log-line">等待连接...</div>
+</div>
+<button id="connectBtn">开始接收日志</button>
+<button id="disconnectBtn" disabled>断开连接</button>
+
+<script>
+  let controller = null; // AbortController
+
+  const logContainer = document.getElementById('logContainer');
+  const connectBtn = document.getElementById('connectBtn');
+  const disconnectBtn = document.getElementById('disconnectBtn');
+
+  function addLog(message) {
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'log-line';
+    lineDiv.textContent = message;
+    logContainer.appendChild(lineDiv);
+    // 自动滚动到底部
+    logContainer.scrollTop = logContainer.scrollHeight;
+  }
+
+  connectBtn.addEventListener('click', async () => {
+    if (controller) {
+      controller.abort();
+    }
+    controller = new AbortController();
+    connectBtn.disabled = true;
+    disconnectBtn.disabled = false;
+    logContainer.innerHTML = '<div class="log-line">正在连接...</div>';
+
+    try {
+      const response = await fetch('/stream/logs', {
+        signal: controller.signal
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        // 按换行分割消息
+        let lines = buffer.split('\n');
+        buffer = lines.pop(); // 保留不完整的行
+        for (let line of lines) {
+          if (line.trim()) {
+            addLog(line);
+          }
+        }
+      }
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        addLog('连接已主动断开');
+      } else {
+        addLog(`连接错误: ${err.message}`);
+      }
+    } finally {
+      connectBtn.disabled = false;
+      disconnectBtn.disabled = true;
+      controller = null;
+    }
+  });
+
+  disconnectBtn.addEventListener('click', () => {
+    if (controller) {
+      controller.abort();
+      controller = null;
+    }
+  });
+</script>
+</body>
+</html>

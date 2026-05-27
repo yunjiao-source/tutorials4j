@@ -10,7 +10,8 @@ spring:
 #    active: httpexchange
 #    active: hikariscaler
 #    active: validation
-    active: websocket
+#    active: websocket
+    active: responsebodyemitter
 
 
 
