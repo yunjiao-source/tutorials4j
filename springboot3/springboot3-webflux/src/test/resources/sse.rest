@@ -1,0 +1,7 @@
+###
+GET http://localhost:8080/news/live
+Accept: text/event-stream
+
+### page页面
+GET http://localhost:8080
+Accept: text/html

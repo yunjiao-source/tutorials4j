@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的通知</title>
+    <style>
+        #notifications { border: 1px solid #ccc; height: 400px; overflow-y: scroll; padding: 10px; }
+        .notification { margin: 5px 0; padding: 8px; background: #e8f4fd; border-radius: 4px; }
+        .status { font-weight: bold; }
+        .connected { color: green; }
+        .disconnected { color: red; }
+    </style>
+</head>
+<body>
+<h1>实时通知</h1>
+<p>用户ID: <span th:text="${userId}"></span></p>
+<p>连接状态: <span id="status" class="status">初始化...</span></p>
+<button onclick="closeConnection()">手动关闭连接</button>
+<div id="notifications"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // 1. 获取Thymeleaf传递的userId
+    const userId = /*[[${userId}]]*/ 'default';
+
+    // 2. 定义全局变量
+    let eventSource = null;
+
+    // 3. 初始化连接
+    function connect() {
+        if (eventSource) {
+            eventSource.close();
+        }
+
+        // 建立SSE连接（携带Cookie以实现认证，如果需要）
+        eventSource = new EventSource('/notifications/' + userId, { withCredentials: true });
+
+        // 连接打开
+        eventSource.onopen = function(e) {
+            updateStatus('已连接', 'connected');
+        };
+
+        // 监听自定义事件（与后端 .name("private-notification") 对应）
+        eventSource.addEventListener('private-notification', function(e) {
+            addNotification('🔔 私信: ' + e.data);
+        });
+
+        // 也可以监听未命名事件（如果后端发送默认消息）
+        eventSource.onmessage = function(e) {
+            addNotification('普通消息: ' + e.data);
+        };
+
+        // 错误处理：连接断开或出错
+        eventSource.onerror = function(e) {
+            updateStatus('连接断开，正在重试...', 'disconnected');
+            // 浏览器会自动重连，无需额外代码
+            // 如果想要手动重连，可以关闭后重新调用connect()
+            // 但需要注意避免无限循环
+        };
+    }
+
+    // 4. 辅助函数：更新状态
+    function updateStatus(text, className) {
+        const statusEl = document.getElementById('status');
+        statusEl.innerText = text;
+        statusEl.className = 'status ' + (className || '');
+    }
+
+    // 5. 辅助函数：添加通知到列表
+    function addNotification(text) {
+        const container = document.getElementById('notifications');
+        const div = document.createElement('div');
+        div.className = 'notification';
+        div.innerText = text;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight; // 滚动到底部
+    }
+
+    // 6. 手动关闭连接（可选）
+    function closeConnection() {
+        if (eventSource) {
+            eventSource.close();
+            updateStatus('连接已手动关闭', 'disconnected');
+        }
+    }
+
+    // 7. 页面加载自动连接
+    window.addEventListener('load', connect);
+
+    // 8. 页面卸载时关闭连接（避免连接残留）
+    window.addEventListener('beforeunload', function() {
+        if (eventSource) {
+            eventSource.close();
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

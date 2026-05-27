@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE 实时推送示例</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }
+        .message { margin: 5px 0; padding: 5px; background: #f0f0f0; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<h1>SSE 实时新闻</h1>
+<p>连接状态: <span id="status">正在连接...</span></p>
+<div id="messages"></div>
+
+<script th:inline="javascript">
+
+    // 如果需要使用Thymeleaf动态变量，可以这样获取
+    const userId = [[${userId}]];
+    console.log('当前用户:', userId);
+
+    // 创建EventSource连接（后端SSE端点）
+    const eventSource = new EventSource('/news/live', { withCredentials: true });
+
+    // 监听默认消息
+    eventSource.onmessage = function(event) {
+        addMessage('普通消息: ' + event.data);
+    };
+
+    // 监听自定义事件 'news-update'
+    eventSource.addEventListener('news-update', function(event) {
+        addMessage('🔔 新闻更新: ' + event.data);
+    });
+
+    // 监听连接打开
+    eventSource.onopen = function(event) {
+        document.getElementById('status').innerText = '已连接';
+    };
+
+    // 监听错误
+    eventSource.onerror = function(event) {
+        document.getElementById('status').innerText = '连接断开，尝试重连...';
+        console.error('SSE错误', event);
+    };
+
+    // 辅助函数：将消息添加到页面
+    function addMessage(text) {
+        const container = document.getElementById('messages');
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message';
+        msgDiv.innerText = text;
+        container.appendChild(msgDiv);
+        // 自动滚动到底部
+        container.scrollTop = container.scrollHeight;
+    }
+    /*]]>*/
+</script>
+</body>
+</html>
