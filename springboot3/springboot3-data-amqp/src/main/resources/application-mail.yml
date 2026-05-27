@@ -1,0 +1,22 @@
+#rabbitmq
+spring:
+  rabbitmq:
+    publisher-confirm-type: correlated
+      # ??returnedMessage?? Exchange -> Queue
+    publisher-returns: true
+      # ??????(ack) Queue -> C
+    listener.simple.acknowledge-mode: manual
+    listener.simple.prefetch: 100
+
+# mail
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    username: xxxx@qq.com
+    password: ????????
+    from: xxxx@qq.com
+    properties.mail.smtp:
+      auth: true
+      starttls:
+        enable: true
+        required: true

@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: mail
+
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    # 连接超时配置
+    connection-timeout: 5000ms
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug
