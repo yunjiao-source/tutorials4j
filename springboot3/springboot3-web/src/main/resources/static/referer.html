@@ -270,14 +270,14 @@
             })
             .then(blob => {
                 const image = new Image();
-                image.src = URL.createObjectURL(blob);
+                referer.src = URL.createObjectURL(blob);
 
                 // 清除容器中的内容
                 const container = document.getElementById('imageContainer');
                 container.innerHTML = '';
-                container.appendChild(image);
+                container.appendChild(referer);
 
-                return image;
+                return referer;
             })
             .catch(error => {
                 console.error('图片请求出错:', error);

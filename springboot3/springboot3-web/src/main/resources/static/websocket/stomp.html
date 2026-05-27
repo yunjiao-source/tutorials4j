@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <title>WebSocket STOMP 示例</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>-->
+    <script>
+        var stompClient = null;
+
+        function connect(){
+            var socket = new SockJS("/stomp-ws");  // 这里添加了空格
+            stompClient = Stomp.over(socket);
+            stompClient.connect({},function(frame){
+                console.log("Connected: "+ frame);
+                stompClient.subscribe("/topic/greetings",function(greeting){
+                    //showGreeting(JSON.parse(greeting.body).content);
+                    showGreeting(greeting.body);
+                });
+            });
+        }
+
+        function sendName(){
+            if (stompClient && stompClient.connected) {
+                stompClient.send(
+                    "/app/hello",
+                    {},
+                    JSON.stringify({ name: document.getElementById("name").value }),
+                );
+            } else {
+                console.log("尚未连接到服务器");
+                alert("请等待连接建立后再发送消息");
+            }
+        }
+
+        function showGreeting(message){
+            var response = document.getElementById("response");
+            var p = document.createElement("p");
+            p.appendChild(document.createTextNode(message));
+            response.appendChild(p);
+        }
+
+        window.onload = function(){
+            connect();
+        };
+    </script>
+</head>
+<body>
+<input type="text"id="name"placeholder="请输入姓名"/>
+<button onclick="sendName()">发送</button>
+<div id="response"></div>
+</body>
+</html>

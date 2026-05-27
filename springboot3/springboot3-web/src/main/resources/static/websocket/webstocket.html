@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <title>原生 WebSocket 示例</title>
+    <script>
+        var socket;
+
+        window.onload = function () {
+            socket = new WebSocket("ws://localhost:8080/ws");
+
+            socket.onopen = function () {
+                console.log("WebSocket 连接已建立");
+            };
+
+            socket.onmessage = function (event) {
+                var response = document.getElementById("response");
+                var p = document.createElement("p");
+                p.appendChild(document.createTextNode(event.data));
+                response.appendChild(p);
+            };
+
+            socket.onclose = function () {
+                console.log("WebSocket 连接已关闭");
+            };
+        };
+
+        function sendMessage() {
+            var message = document.getElementById("message").value;
+            socket.send(message);
+        }
+    </script>
+</head>
+<body>
+<input type="text" id="message" placeholder="请输入消息" />
+<button onclick="sendMessage()">发送</button>
+<div id="response"></div>
+</body>
+</html>

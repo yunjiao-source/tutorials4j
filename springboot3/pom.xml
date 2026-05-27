@@ -25,7 +25,6 @@
         <module>springboot3-data-redis</module>
         <module>springboot3-data-amqp</module>
         <module>springboot3-webflux</module>
-        <module>springboot3-websocket</module>
         <module>springboot3-batch</module>
         <module>springboot3-integration</module>
         <module>springboot3-schedule</module>

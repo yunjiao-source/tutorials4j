@@ -9,7 +9,8 @@ spring:
 #    active: restversion
 #    active: httpexchange
 #    active: hikariscaler
-    active: validation
+#    active: validation
+    active: websocket
 
 
 
