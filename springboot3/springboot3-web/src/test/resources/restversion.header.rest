@@ -1,0 +1,25 @@
+###
+GET http://localhost:8080/api/users
+Accept: application/json
+X-API-Version: 1.0
+
+###
+GET http://localhost:8080/api/users
+Accept: application/json
+X-API-Version: 2.0
+
+###
+GET http://localhost:8080/api/users
+Accept: application/json
+X-API-Version: 3.0
+
+###
+GET http://localhost:8080/api/users
+Accept: application/json
+
+###
+GET http://localhost:8080/actuator/mappings
+Accept: application/json
+
+
+

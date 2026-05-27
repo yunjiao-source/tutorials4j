@@ -1,0 +1,22 @@
+###
+GET http://localhost:8080/v1.0/api/users
+Accept: application/json
+
+###
+GET http://localhost:8080/v2.0/api/users
+Accept: application/json
+
+###
+GET http://localhost:8080/v3.0/api/users
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users
+Accept: application/json
+
+###
+GET http://localhost:8080/actuator/mappings
+Accept: application/json
+
+
+

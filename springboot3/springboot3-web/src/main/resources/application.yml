@@ -5,7 +5,8 @@ spring:
 #    active: mailtemplate
 #    active: referer
 #    active: restresponse
-    active: resourceload
+#    active: resourceload
+    active: restversion
 #    active: httpexchange
 #    active: hikariscaler
 
