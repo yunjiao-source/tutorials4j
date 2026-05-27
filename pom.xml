@@ -81,6 +81,7 @@
         <uid-core.version>2.2</uid-core.version>
         <googleauth.version>1.5.0</googleauth.version>
         <qrgen.version>1.4</qrgen.version>
+        <jasperreports.version>6.21.5</jasperreports.version>
     </properties>
 
     <dependencyManagement>
@@ -241,6 +242,11 @@
                 <version>${qrgen.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <version>${jasperreports.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -98,5 +98,17 @@
             <groupId>net.glxn</groupId>
             <artifactId>qrgen</artifactId>
         </dependency>
+
+        <!-- JasperReports 核心依赖 -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>
