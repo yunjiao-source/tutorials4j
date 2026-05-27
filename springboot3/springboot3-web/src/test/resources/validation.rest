@@ -1,0 +1,52 @@
+###
+POST http://localhost:8080/valid/check
+Content-Type: application/json
+
+{
+  "age": 2
+}
+
+###
+POST http://localhost:8080/valid/check-multilevel
+Content-Type: application/json
+
+{
+  "className": "高一",
+  "user": {
+    "age": 2
+  }
+}
+
+###
+POST http://localhost:8080/validated/check-list
+Content-Type: application/json
+
+[
+  {
+    "age": 1
+  },
+  {
+    "age": 20
+  }
+]
+
+###
+POST http://localhost:8080/validated/check-valid-list
+Content-Type: application/json
+
+[
+  {
+    "age": 1
+  },
+  {
+    "age": 20
+  }
+]
+
+###
+GET http://localhost:8080/validated/check-param?age=200
+Content-Type: application/json
+
+###
+GET http://localhost:8080/validated/check-path/12ABC
+Content-Type: application/json

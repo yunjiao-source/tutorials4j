@@ -6,9 +6,10 @@ spring:
 #    active: referer
 #    active: restresponse
 #    active: resourceload
-    active: restversion
+#    active: restversion
 #    active: httpexchange
 #    active: hikariscaler
+    active: validation
 
 
 
