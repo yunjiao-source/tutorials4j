@@ -9,10 +9,7 @@ import org.springframework.context.annotation.Profile;
  *
  * @author Yun Jiao
  */
-@Profile("hikariscaler")
+@Profile("resourceload")
 @Configuration
-@ComponentScan(
-    basePackages = {
-      "tutorials4j.springboot3.web.hikariscaler",
-    })
-public class HikariscalerConfig {}
+@ComponentScan(basePackages = {"tutorials4j.springboot3.web.resourceload"})
+public class ResourceLoadConfig {}

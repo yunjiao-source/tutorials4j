@@ -4,10 +4,26 @@ spring:
 #    active: annotation
 #    active: mailtemplate
 #    active: referer
-    active: restresponse
+#    active: restresponse
+    active: resourceload
 #    active: httpexchange
 #    active: hikariscaler
 
+
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # 初始配置
+      minimum-idle: 5
+      maximum-pool-size: 20
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
 
 logging:
   level:

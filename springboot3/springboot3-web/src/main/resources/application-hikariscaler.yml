@@ -1,19 +1,4 @@
 
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/demo
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      # 初始配置
-      minimum-idle: 5
-      maximum-pool-size: 20
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: update
-
 # 动态连接池配置
 dynamic:
   pool:
