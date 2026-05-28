@@ -1,0 +1,5 @@
+# 加解密配置
+crypto:
+  enabled: true # 是否开启加解密功能，true=开启，false=关闭
+  algorithm: aes # 加密算法类型，当前仅支持aes
+  aes-key: "MTIzNDU2Nzg5MDEyMzQ1Ng==" # BASE64格式的AES密钥（16字节=128位，示例密钥仅用于测试，生产需替换为安全密钥）

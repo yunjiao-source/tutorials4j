@@ -1,7 +1,8 @@
-package tutorials4j.springboot3.web.restresponse;
+package tutorials4j.springboot3.web;
 
 import java.io.Serializable;
 import lombok.Data;
+import tutorials4j.springboot3.web.restresponse.ResultCode;
 
 /**
  * 统一返回封装类

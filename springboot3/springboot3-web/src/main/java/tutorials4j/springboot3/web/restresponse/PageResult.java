@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import tutorials4j.springboot3.web.Result;
 
 /**
  * 扩展分页响应封装
