@@ -24,6 +24,7 @@
         <module>framework-payment</module>
         <module>framework-captcha</module>
         <module>framework-assy</module>
+        <module>framework-crypto</module>
 
         <module>framework-examples</module>
     </modules>

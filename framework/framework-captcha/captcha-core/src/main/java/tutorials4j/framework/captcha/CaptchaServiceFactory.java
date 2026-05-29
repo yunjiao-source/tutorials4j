@@ -1,5 +1,7 @@
 package tutorials4j.framework.captcha;
 
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.Map;
 import org.apache.commons.lang3.EnumUtils;
 import tutorials4j.framework.captcha.exception.CaptchaException;
@@ -9,7 +11,11 @@ import tutorials4j.framework.captcha.exception.CaptchaException;
  *
  * @author Yun Jiao
  */
-public record CaptchaServiceFactory(Map<CaptchaCategory, CaptchaService> services) {
+public class CaptchaServiceFactory {
+  public static final CaptchaServiceFactory instance = new CaptchaServiceFactory();
+
+  protected EnumMap<CaptchaCategory, CaptchaService> services =
+      new EnumMap<>(CaptchaCategory.class);
 
   /**
    * 根据分类代码，查找验证码服务
@@ -38,5 +44,13 @@ public record CaptchaServiceFactory(Map<CaptchaCategory, CaptchaService> service
     }
 
     return service;
+  }
+
+  public Map<CaptchaCategory, CaptchaService> getServices() {
+    return Collections.unmodifiableMap(services);
+  }
+
+  public void setServices(Map<CaptchaCategory, CaptchaService> services) {
+    this.services.putAll(services);
   }
 }

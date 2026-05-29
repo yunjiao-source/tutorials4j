@@ -82,10 +82,17 @@
         <googleauth.version>1.5.0</googleauth.version>
         <qrgen.version>1.4</qrgen.version>
         <jasperreports.version>6.21.5</jasperreports.version>
+        <bcpkix-jdk18on.version>1.84</bcpkix-jdk18on.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk18on</artifactId>
+                <version>${bcpkix-jdk18on.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>cc.siyecao.uid</groupId>
                 <artifactId>uid-core</artifactId>

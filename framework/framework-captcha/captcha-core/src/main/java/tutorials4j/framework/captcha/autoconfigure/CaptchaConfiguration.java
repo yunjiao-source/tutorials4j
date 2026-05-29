@@ -63,11 +63,12 @@ public class CaptchaConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  CaptchaServiceFactory captchaServiceFactory(ObjectProvider<CaptchaService> captchaServices) {
+  CaptchaServiceFactory captchaServiceFactory(ObjectProvider<CaptchaService> providers) {
     Map<CaptchaCategory, CaptchaService> services =
-        captchaServices.stream().collect(Collectors.toMap(CaptchaService::getCategory, m -> m));
+        providers.stream().collect(Collectors.toMap(CaptchaService::getCategory, m -> m));
     log.debug("[CAPTCHA-CORE] 工厂'CaptchaServiceFactory'注入实例：{}", services);
-    return new CaptchaServiceFactory(services);
+    CaptchaServiceFactory.instance.setServices(services);
+    return CaptchaServiceFactory.instance;
   }
 
   @Bean

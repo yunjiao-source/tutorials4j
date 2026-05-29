@@ -2,6 +2,8 @@ package tutorials4j.framework.cache.core.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +14,7 @@ import tutorials4j.framework.cache.core.lock.LocalLockableAspect;
 import tutorials4j.framework.cache.core.properties.CacheProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
+import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
@@ -33,14 +36,14 @@ public class CacheConfiguration {
   }
 
   @Bean
-  CacheManagerCreatorFactory cacheManagerCreatorFactory(
-      List<CacheManagerCreator<?>> cacheManagerCreators) {
-    log.debug("[CACHE-CORE] Cache Manager Creator Factory");
-    CacheManagerCreatorFactory factory = new CacheManagerCreatorFactory();
-    factory.setCacheManagerCreators(cacheManagerCreators);
+  @ConditionalOnMissingBean
+  CacheManagerCreatorFactory cacheManagerCreatorFactory(List<CacheManagerCreator<?>> providers) {
+    Map<CacheManagerCreatorCategory, CacheManagerCreator<?>> creators =
+        providers.stream().collect(Collectors.toMap(CacheManagerCreator::getCategory, m -> m));
+    CacheManagerCreatorFactory.instance.setCreatorMap(creators);
 
-    log.debug("[CACHE-CORE] 工厂'CacheManagerCreatorFactory'注入实例：{}", cacheManagerCreators);
-    return factory;
+    log.debug("[CACHE-CORE] 工厂'CacheManagerCreatorFactory'注入实例：{}", creators);
+    return CacheManagerCreatorFactory.instance;
   }
 
   @Bean

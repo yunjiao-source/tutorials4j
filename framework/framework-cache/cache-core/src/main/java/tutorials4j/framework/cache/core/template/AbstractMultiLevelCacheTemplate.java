@@ -19,6 +19,6 @@ public abstract class AbstractMultiLevelCacheTemplate<K, V> extends AbstractCach
 
   @Override
   protected void initCache() {
-    cache = CacheManagerCreatorFactory.findMultiLevelCache(cacheName);
+    cache = CacheManagerCreatorFactory.instance.findMultiLevelCache(cacheName);
   }
 }

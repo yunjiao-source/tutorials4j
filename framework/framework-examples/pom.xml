@@ -21,6 +21,7 @@
         <module>examples-web</module>
         <module>examples-tenant</module>
         <module>examples-captcha</module>
+        <module>examples-crypto</module>
     </modules>
 
     <dependencies>
