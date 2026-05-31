@@ -273,7 +273,7 @@
       setStatus("⏳ 加载验证码中...", "waiting");
       refreshBtn.disabled = true;
       // 调用获取验证码接口 (category = TIANAI_SLIDER)
-      const response = await fetch('/captcha/create?category=TIANAI_SLIDER');
+      const response = await fetch('/api/captcha/uniform/create?category=TIANAI_SLIDER');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
 
@@ -445,7 +445,7 @@
     };
 
     try {
-      const response = await fetch('/captcha/check', {
+      const response = await fetch('/api/captcha/uniform/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)

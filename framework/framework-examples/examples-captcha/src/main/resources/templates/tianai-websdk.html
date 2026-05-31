@@ -63,9 +63,9 @@
   let globalTAC;
   const config = {
     // 生成接口
-    requestCaptchaDataUrl: "/captcha/tianai/gen?type=TIANAI_SLIDER",
+    requestCaptchaDataUrl: "/api/captcha/tianai/gen?type=TIANAI_SLIDER",
     // 验证接口
-    validCaptchaUrl: "/captcha/tianai/check",
+    validCaptchaUrl: "/api/captcha/tianai/check",
     // 验证码绑定的div块
     bindEl: "#captcha-box",
     // 验证成功回调函数
@@ -101,7 +101,7 @@
     if (globalTAC) {
       globalTAC.destroyWindow();
     }
-    config.requestCaptchaDataUrl = "/captcha/tianai/gen?type="+type
+    config.requestCaptchaDataUrl = "/api/captcha/tianai/gen?type="+type
     globalTAC = new TAC(config, style).init();
   }
 </script>

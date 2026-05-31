@@ -1,44 +1,36 @@
 
-###
-GET http://localhost:8080/t4j/captcha/create?category=HUTOOL_LINE
+### 分类值请参考CaptchaCategory枚举类
+GET http://localhost:8080/api/captcha/uniform/create?category=HUTOOL_LINE
 Content-Type: application/json
 
 ###
-POST http://localhost:8080/t4j/captcha/check
+POST http://localhost:8080/api/captcha/uniform/check
 Content-Type: application/json
 
 {
-  "key": "f5ff336a1d004c4da2e659e5177ac702",
-  "code": "4XzDr",
+  "key": "6f1d3171106143d0bb52bcaeab54e106",
+  "code": "E6tvC",
   "category": "HUTOOL_LINE"
 }
 
 
-###
-GET http://localhost:8080/t4j/captcha/create?category=HUTOOL_GIF
-Content-Type: application/json
-
-###
-GET http://localhost:8080/t4j/captcha/create?category=TIANAI_ROTATE
-Content-Type: application/json
-
-### hutool验证码页面
+### 统一验证码页面
 GET http://localhost:8080/page/hutool
 Accept: text/html
 
-### tianai验证码页面
+### 统一验证码页面
 GET http://localhost:8080/page/tianai-word-image-click
 Accept: text/html
 
-### tianai验证码页面
+### 统一验证码页面
 GET http://localhost:8080/page/tianai-rotate
 Accept: text/html
 
-### tianai验证码页面-deepseek
+### 统一验证码页面-deepseek
 GET http://localhost:8080/page/tianai-slider-dp
 Accept: text/html
 
-### tianai验证码页面-元宝
+### 统一验证码页面-元宝
 GET http://localhost:8080/page/tianai-slider-yb
 Accept: text/html
 

@@ -1,4 +1,4 @@
-package tutorials4j.framework.captcha.tianai.web;
+package tutorials4j.framework.captcha.web;
 
 import cloud.tianai.captcha.application.ImageCaptchaApplication;
 import cloud.tianai.captcha.common.response.ApiResponse;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Collections;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +27,7 @@ import tutorials4j.framework.captcha.CaptchaServiceFactory;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("t4j/captcha/tianai")
+@RequestMapping("/api/captcha/tianai")
 @RequiredArgsConstructor
 @Tag(name = "天意验证码接口", description = "生成滑块、旋转等行为验证码，并校验用户轨迹")
 public class TianaiCaptchaController {
@@ -41,7 +40,7 @@ public class TianaiCaptchaController {
    * @param type 验证码类型，可选
    * @return 包含验证码图片及数据的响应
    */
-  @GetMapping("gen")
+  @PostMapping("gen")
   @Operation(summary = "生成验证码", description = "根据验证码类型生成对应的行为验证码，返回验证码ID及图片Base64数据")
   @Parameter(
       name = "type",
@@ -57,8 +56,7 @@ public class TianaiCaptchaController {
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class)))
   })
-  public ApiResponse<Map<String, Object>> gen(
-      @RequestParam(value = "type", required = false) CaptchaCategory type) {
+  public ApiResponse<Map<String, Object>> gen(@RequestParam(value = "type") CaptchaCategory type) {
     CaptchaService service = factory.findService(type);
     return ApiResponse.ofSuccess(service.draw());
   }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.captcha.CaptchaServiceFactory;
 import tutorials4j.framework.captcha.GraphicCaptchaCacheTemplate;
 import tutorials4j.framework.captcha.properties.TianaiCaptchaProperties;
 import tutorials4j.framework.captcha.properties.TianaiOptions;
@@ -22,7 +21,6 @@ import tutorials4j.framework.captcha.tianai.service.ConcatCaptchaService;
 import tutorials4j.framework.captcha.tianai.service.RotateCaptchaService;
 import tutorials4j.framework.captcha.tianai.service.SliderCaptchaService;
 import tutorials4j.framework.captcha.tianai.service.WordImageClickCaptchaService;
-import tutorials4j.framework.captcha.tianai.web.TianaiCaptchaController;
 
 /**
  * 天意验证码自动配置类。
@@ -81,8 +79,7 @@ public class TianaiCaptchaConfiguration {
     TianaiOptions options = properties.getConcat();
     options.merge(properties.getCommon());
     return new ConcatCaptchaService(
-        imageCaptchaApplication,
-        CaptchaGenerateParamBuilder.of(options, CaptchaType.WORD_IMAGE_CLICK));
+        imageCaptchaApplication, CaptchaGenerateParamBuilder.of(options, CaptchaType.CONCAT));
   }
 
   @Bean
@@ -108,13 +105,5 @@ public class TianaiCaptchaConfiguration {
     customizers.orderedStream().forEach(customizer -> customizer.customiz(builder));
 
     return SimpleImageCaptchaApplication.of(builder.build());
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  TianaiCaptchaController tianaiCaptchaController(
-      CaptchaServiceFactory factory, ImageCaptchaApplication imageCaptchaApplication) {
-    log.debug("[CAPTCHA-TIANAI] Tianai Captcha Controller");
-    return new TianaiCaptchaController(factory, imageCaptchaApplication);
   }
 }

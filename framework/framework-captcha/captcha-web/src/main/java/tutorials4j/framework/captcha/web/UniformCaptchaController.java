@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +27,9 @@ import tutorials4j.framework.captcha.CaptchaServiceFactory;
  */
 @Tag(name = "验证码接口", description = "统一验证码生成与校验入口")
 @RestController
-@RequestMapping("t4j/captcha")
+@RequestMapping("/api/captcha/uniform")
 @RequiredArgsConstructor
-public class CaptchaController {
+public class UniformCaptchaController {
 
   private final CaptchaServiceFactory factory;
 
@@ -53,8 +54,13 @@ public class CaptchaController {
   @Operation(summary = "校验验证码", description = "校验用户输入的验证码是否正确")
   @ApiResponse(responseCode = "200", description = "校验结果（true/false）")
   @PostMapping("check")
-  public Boolean check(@RequestBody CaptchaRequest validate) {
+  public ResponseEntity<Boolean> check(@RequestBody CaptchaRequest validate) {
     CaptchaService service = factory.findService(validate.getCategory());
-    return service.verify(validate.getKey(), validate.getCode());
+    boolean isOk = service.verify(validate.getKey(), validate.getCode());
+    if (isOk) {
+      return ResponseEntity.ok().body(true);
+    } else {
+      return ResponseEntity.badRequest().body(false);
+    }
   }
 }

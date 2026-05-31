@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.captcha.BehaviorCaptchaCacheTemplate;
@@ -18,9 +17,6 @@ import tutorials4j.framework.captcha.GraphicCaptchaCacheTemplate;
 import tutorials4j.framework.captcha.properties.CaptchaProperties;
 import tutorials4j.framework.captcha.properties.HutoolCaptchaProperties;
 import tutorials4j.framework.captcha.properties.TianaiCaptchaProperties;
-import tutorials4j.framework.captcha.web.CaptchaController;
-import tutorials4j.framework.captcha.web.CaptchaRequestFilter;
-import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
  * 缓存核心配置类。
@@ -38,13 +34,6 @@ public class CaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[CAPTCHA-CORE] Captcha Configuration");
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  CaptchaController CaptchaController(CaptchaServiceFactory factory) {
-    log.debug("[CAPTCHA-CORE] Captcha Controller");
-    return new CaptchaController(factory);
   }
 
   @Bean
@@ -69,20 +58,5 @@ public class CaptchaConfiguration {
     log.debug("[CAPTCHA-CORE] 工厂'CaptchaServiceFactory'注入实例：{}", services);
     CaptchaServiceFactory.instance.setServices(services);
     return CaptchaServiceFactory.instance;
-  }
-
-  @Bean
-  FilterRegistrationBean<CaptchaRequestFilter> traceRequestFilterRegistration(
-      CaptchaServiceFactory captchaServiceFactory, CaptchaProperties properties) {
-    ServletFilterOptions options = properties.getFilter();
-    FilterRegistrationBean<CaptchaRequestFilter> registration = new FilterRegistrationBean<>();
-    CaptchaRequestFilter filter = new CaptchaRequestFilter(captchaServiceFactory);
-    registration.setFilter(filter);
-    options.fill(registration);
-
-    if (log.isDebugEnabled()) {
-      log.debug("[CAPTCHA-CORE] 验证码校验过滤器：{}", options);
-    }
-    return registration;
   }
 }

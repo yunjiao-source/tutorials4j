@@ -260,8 +260,8 @@
 
   <div class="api-info">
     <h3>📡 API接口信息</h3>
-    <p><strong>GET /captcha/create?category=TIANAI_SLIDER</strong> - 获取验证码</p>
-    <p><strong>POST /captcha/check</strong> - 提交验证</p>
+    <p><strong>GET /api/captcha/uniform/create?category=TIANAI_SLIDER</strong> - 获取验证码</p>
+    <p><strong>POST /api/captcha/uniform/check</strong> - 提交验证</p>
   </div>
 
   <div class="captcha-container">
@@ -443,7 +443,7 @@
   function refreshCaptcha() {
     showLoading(true);
 
-    fetch('/captcha/create?category=TIANAI_SLIDER', {
+    fetch('/api/captcha/uniform/create?category=TIANAI_SLIDER', {
       method: 'GET',
       headers: {
         'Accept': 'application/json'
@@ -535,7 +535,7 @@
     document.getElementById('submittedData').textContent =
         JSON.stringify(payload, null, 2);
 
-    fetch('/captcha/check', {
+    fetch('/api/captcha/uniform/check', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

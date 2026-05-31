@@ -429,7 +429,7 @@
     resultDiv.innerHTML = '🔄 正在加载新验证码...';
 
     try {
-      const response = await fetch('/captcha/create?category=TIANAI_ROTATE');
+      const response = await fetch('/api/captcha/uniform/create?category=TIANAI_ROTATE');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
 
@@ -454,7 +454,7 @@
 
       // 根据实际尺寸调整模板层宽高
       templateLayer.style.width = `${currentCaptcha.tmplWidth}px`;
-      templateLayer.style.left = '20px';    // 固定左侧偏移20px, 可根据背景微调（友好）
+      templateLayer.style.left = '200px';    // 固定左侧偏移20px, 可根据背景微调（友好）
       // 保证背景容器适配宽度
       const bgWrapper = document.querySelector('.bg-img-wrapper');
       if (bgWrapper) {
@@ -537,7 +537,7 @@
     showMessage('🕐 正在校验旋转轨迹及角度...', 'info');
 
     try {
-      const response = await fetch('/captcha/check', {
+      const response = await fetch('/api/captcha/uniform/check', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -545,14 +545,6 @@
         body: JSON.stringify(requestBody)
       });
 
-      if (!response.ok) {
-        let errMsg = `请求失败 ${response.status}`;
-        try {
-          const text = await response.text();
-          errMsg = text || errMsg;
-        } catch(e) {}
-        throw new Error(errMsg);
-      }
 
       const result = await response.json();
       // 返回布尔值 true/false

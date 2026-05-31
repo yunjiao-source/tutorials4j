@@ -362,7 +362,7 @@
     </div>
   </div>
   <div class="footer-note">
-    ⚡ 接口: GET /captcha/hutool/create?category=xxx | POST /captcha/hutool/check | 支持四种 Hutool 验证码类型
+    ⚡ 接口: GET /api/captcha/uniform/create?category=xxx | POST /api/captcha/uniform/check | 支持四种 Hutool 验证码类型
   </div>
 </div>
 
@@ -430,7 +430,7 @@
 
     // 添加时间戳避免缓存
     const timestamp = Date.now();
-    const url = `/captcha/hutool/create?category=${encodeURIComponent(currentCategory)}&_t=${timestamp}`;
+    const url = `/api/captcha/uniform/create?category=${encodeURIComponent(currentCategory)}&_t=${timestamp}`;
 
     try {
       const response = await fetch(url, {
@@ -513,7 +513,7 @@
 
     setLoadingState(true);
     try {
-      const response = await fetch('/captcha/hutool/check', {
+      const response = await fetch('/api/captcha/uniform/check', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

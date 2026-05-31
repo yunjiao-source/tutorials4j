@@ -9,23 +9,24 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>captcha-spring-boot-starter</artifactId>
+    <artifactId>captcha-web</artifactId>
     <packaging>jar</packaging>
-    <name>Captcha :: Captcha Spring Boot Starter</name>
-    <description>验证码 启动器</description>
+    <name>Captcha :: Web</name>
+    <description>验证码Web模块</description>
 
     <dependencies>
+
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-spring-boot-starter</artifactId>
+            <artifactId>captcha-hutool</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>captcha-web</artifactId>
+            <artifactId>captcha-tianai</artifactId>
             <version>${revision}</version>
         </dependency>
-
     </dependencies>
+
 </project>

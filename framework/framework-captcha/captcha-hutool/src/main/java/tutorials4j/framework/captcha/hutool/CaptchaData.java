@@ -41,7 +41,7 @@ public class CaptchaData implements Serializable {
    *
    * @return 可能空
    */
-  public String captchaImageBase64Url() {
+  public String captchaImageBase64() {
     if (captchaImage == null) {
       return null;
     }
@@ -65,7 +65,7 @@ public class CaptchaData implements Serializable {
     map.put("key", this.key());
     // map.put("code", this.code());
     map.put("category", this.category().name());
-    map.put("captchaImage", captchaImageBase64Url());
+    map.put("captchaImageBase64", captchaImageBase64());
     return map;
   }
 }

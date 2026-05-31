@@ -451,7 +451,7 @@
 
     try {
       // 1. 调用获取验证码接口 (点选文字验证码 category=TIANAI_WORD_IMAGE_CLICK)
-      const createUrl = 'http://localhost:8080/captcha/create?category=TIANAI_WORD_IMAGE_CLICK';
+      const createUrl = '/api/captcha/uniform/create?category=TIANAI_WORD_IMAGE_CLICK';
       const response = await fetch(createUrl);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
@@ -611,7 +611,7 @@
     try {
       resultArea.innerHTML = '🔄 正在校验点选轨迹及顺序...';
       resultArea.style.color = '#cbd5e1';
-      const checkResponse = await fetch('http://localhost:8080/captcha/check', {
+      const checkResponse = await fetch('/api/captcha/uniform/check', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -619,10 +619,10 @@
         body: JSON.stringify(requestBody)
       });
 
-      if (!checkResponse.ok) {
-        const errorText = await checkResponse.text();
-        throw new Error(`HTTP ${checkResponse.status}: ${errorText}`);
-      }
+      // if (!checkResponse.ok) {
+      //   const errorText = await checkResponse.text();
+      //   throw new Error(`HTTP ${checkResponse.status}: ${errorText}`);
+      // }
 
       const result = await checkResponse.json();   // 后端返回布尔值 (或者可能是对象，题目说返回布尔值)
       let isValid = false;
