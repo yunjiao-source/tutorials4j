@@ -9,16 +9,26 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>web-rest</artifactId>
+    <artifactId>web-logging</artifactId>
     <packaging>jar</packaging>
-    <name>Web :: Rest</name>
-    <description>web Rest 模块</description>
+    <name>Web :: Logging</name>
+    <description>web 日志 模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-core</artifactId>
+            <artifactId>web-validation</artifactId>
             <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
     </dependencies>
