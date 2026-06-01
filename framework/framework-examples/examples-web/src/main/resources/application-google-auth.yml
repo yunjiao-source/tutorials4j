@@ -1,7 +1,7 @@
 tutorials4j:
   web:
-    google:
-      auth:
+    security:
+      google:
         filter:
           url-patterns: /auth/test-filter
         credentials:

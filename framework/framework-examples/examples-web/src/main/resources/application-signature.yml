@@ -22,10 +22,10 @@ tutorials4j:
 
 
   web:
-    filter:
+    rest:
       cached-body:
         url-patterns: /signature/*
-    interceptor:
+    security:
       signature:
         interceptor:
           include-path-patterns: /signature/**

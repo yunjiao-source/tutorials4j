@@ -1,5 +1,5 @@
 tutorials4j:
   web:
-    filter:
+    security:
       xss:
         url-patterns: /xss/*

@@ -1,7 +1,7 @@
 tutorials4j:
   web:
-    filter:
-      request-logging:
+    logging:
+      request:
         include-timestamp: true
         include-query-string: true
         include-client-info: true

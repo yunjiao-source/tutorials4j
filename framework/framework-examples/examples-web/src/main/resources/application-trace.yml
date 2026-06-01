@@ -1,6 +1,6 @@
 logging:
   config: classpath:logback-spring-trace.xml
 
-tutorials4j.web.filter:
+tutorials4j.web.logging:
   trace:
     url-patterns: /trace/common/*,/trace/mono/*

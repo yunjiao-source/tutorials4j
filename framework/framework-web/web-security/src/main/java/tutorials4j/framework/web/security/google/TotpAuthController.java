@@ -45,7 +45,7 @@ public class TotpAuthController {
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "校验成功或失败（返回文本信息）",
+            description = "校验成功（返回文本信息）",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -63,7 +63,7 @@ public class TotpAuthController {
     if (sucess) {
       return ResponseEntity.ok("Google Auth 校验成功");
     } else {
-      return ResponseEntity.ok("Google Auth 校验失败");
+      return ResponseEntity.badRequest().body("Google Auth 校验失败");
     }
   }
 
