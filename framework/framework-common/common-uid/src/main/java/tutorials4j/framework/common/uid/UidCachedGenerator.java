@@ -33,16 +33,17 @@ public class UidCachedGenerator extends AbstractUidGenerator {
     if (generator == null) {
       return;
     }
+
+    if (log.isDebugEnabled()) {
+      log.debug("[COMMON-UID] Uid Generator Cached 销毁成功");
+    }
+
     if (generator instanceof CachedUidGenerator cachedUidGenerator) {
       try {
         cachedUidGenerator.destroy();
       } catch (Exception e) {
         log.error("销毁CachedUidGenerator异常", e);
       }
-    }
-
-    if (log.isDebugEnabled()) {
-      log.debug("[COMMON-UID] Uid Generator Cached 销毁成功");
     }
   }
 

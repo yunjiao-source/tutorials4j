@@ -10,7 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import tutorials4j.framework.common.core.DefaultConsts;
-import tutorials4j.framework.web.core.util.SignatureUtils;
+import tutorials4j.framework.web.security.signature.SignatureUtils;
 
 /**
  * 示例客户端

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.spring.util.QrCodeUtils;
-import tutorials4j.framework.web.google.auth.GoogleAuthService;
+import tutorials4j.framework.web.security.google.TotpAuthService;
 
 /**
  * 鉴权接口
@@ -21,7 +21,7 @@ import tutorials4j.framework.web.google.auth.GoogleAuthService;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-  private final GoogleAuthService googleAuthService;
+  private final TotpAuthService totpAuthService;
 
   /**
    * 登录并进行两步验证
@@ -34,7 +34,7 @@ public class AuthController {
   public ResponseEntity<?> login(
       @RequestParam("username") String username, @RequestParam("code") int code) {
     // 验证 2FA 代码
-    if (googleAuthService.verifyByUserName(username, code)) {
+    if (totpAuthService.verifyByUserName(username, code)) {
       return ResponseEntity.ok("登录成功");
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("2FA 验证失败");
@@ -49,8 +49,8 @@ public class AuthController {
    */
   @GetMapping("/generate-qr")
   public ResponseEntity<byte[]> generateQRCode(@RequestParam("username") String username) {
-    String secretKey = googleAuthService.generateSecretKey(username);
-    String barcodeURL = googleAuthService.getQRBarcodeURL(username, secretKey);
+    String secretKey = totpAuthService.generateSecretKey(username);
+    String barcodeURL = totpAuthService.getQRBarcodeURL(username, secretKey);
     byte[] qrCode = QrCodeUtils.defaultGeneratePng(barcodeURL);
     return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
   }

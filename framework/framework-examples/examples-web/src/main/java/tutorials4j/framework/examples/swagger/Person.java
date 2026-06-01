@@ -1,14 +1,19 @@
 package tutorials4j.framework.examples.swagger;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.jetbrains.annotations.NotNull;
-import tutorials4j.framework.web.core.validation.DateTimeType;
-import tutorials4j.framework.web.core.validation.LocalDateTimeFormat;
+import tutorials4j.framework.web.validation.DateTimeType;
+import tutorials4j.framework.web.validation.LocalDateTimeFormat;
 
 /**
  * 人员

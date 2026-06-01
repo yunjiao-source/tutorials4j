@@ -33,7 +33,7 @@ class SM2CryptoProcessorTest {
     assertThat(processor).isNotNull();
     assertThat(processor.getSecretKey()).isSameAs(secretKey);
     // 注意：当前实现 getCategory() 返回 CryptoCategory.RSA（可能是个 bug）
-    assertThat(processor.getCategory()).isEqualTo(CryptoCategory.RSA);
+    assertThat(processor.getCategory()).isEqualTo(CryptoCategory.SM2);
   }
 
   @Test
@@ -111,6 +111,6 @@ class SM2CryptoProcessorTest {
     SecretKey secretKey = generateRandomSm2SecretKey();
     SM2CryptoProcessor processor = SM2CryptoProcessor.create(secretKey);
     // 根据当前实现返回 RSA（可能与预期不符，但测试反映真实行为）
-    assertThat(processor.getCategory()).isEqualTo(CryptoCategory.RSA);
+    assertThat(processor.getCategory()).isEqualTo(CryptoCategory.SM2);
   }
 }

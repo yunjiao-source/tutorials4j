@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.web.google.auth.GoogleAuthService;
+import tutorials4j.framework.web.security.google.TotpAuthService;
 
 /**
  * 生成 Secret Key
@@ -15,11 +15,11 @@ import tutorials4j.framework.web.google.auth.GoogleAuthService;
 @Component
 @RequiredArgsConstructor
 public class GenerateSecretKeyRunner implements CommandLineRunner {
-  private final GoogleAuthService googleAuthService;
+  private final TotpAuthService totpAuthService;
 
   @Override
   public void run(String... args) throws Exception {
-    log.info("key1: {}", googleAuthService.generateSecretKey());
-    log.info("key2: {}", googleAuthService.generateSecretKey());
+    log.info("key1: {}", totpAuthService.generateSecretKey());
+    log.info("key2: {}", totpAuthService.generateSecretKey());
   }
 }

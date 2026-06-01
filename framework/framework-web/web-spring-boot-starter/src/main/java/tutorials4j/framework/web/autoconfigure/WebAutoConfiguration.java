@@ -4,10 +4,13 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.web.core.autoconfigure.WebConfiguration;
-import tutorials4j.framework.web.google.auth.autoconfigure.GoogleAuthWebConfiguration;
-import tutorials4j.framework.web.mvc.autoconfigure.MvcWebConfiguration;
+import tutorials4j.framework.web.client.autoconfigure.ClientWebConfiguration;
+import tutorials4j.framework.web.logging.autoconfigure.LoggingWebConfiguration;
+import tutorials4j.framework.web.logging.autoconfigure.SpringdocWebConfiguration;
 import tutorials4j.framework.web.rest.autoconfigure.RestWebConfiguration;
+import tutorials4j.framework.web.security.autoconfigure.GoogleWebConfiguration;
+import tutorials4j.framework.web.security.autoconfigure.SecurityWebConfiguration;
+import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfiguration;
 
 /**
  * 缓存请求体自动配置
@@ -17,10 +20,13 @@ import tutorials4j.framework.web.rest.autoconfigure.RestWebConfiguration;
 @Slf4j
 @AutoConfiguration
 @Import({
-  WebConfiguration.class,
-  GoogleAuthWebConfiguration.class,
+  ClientWebConfiguration.class,
+  LoggingWebConfiguration.class,
+  SpringdocWebConfiguration.class,
   RestWebConfiguration.class,
-  MvcWebConfiguration.class
+  SecurityWebConfiguration.class,
+  GoogleWebConfiguration.class,
+  ValidatorsWebConfiguration.class
 })
 public class WebAutoConfiguration {
   @PostConstruct

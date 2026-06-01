@@ -29,7 +29,19 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-google-auth</artifactId>
+            <artifactId>web-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>web-logging</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>web-client</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

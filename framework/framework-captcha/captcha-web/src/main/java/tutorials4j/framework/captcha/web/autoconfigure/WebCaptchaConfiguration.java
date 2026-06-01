@@ -4,6 +4,7 @@ import cloud.tianai.captcha.application.ImageCaptchaApplication;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +16,12 @@ import tutorials4j.framework.captcha.web.UniformCaptchaController;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
- * TODO
+ * Web配置
  *
  * @author Yun Jiao
  */
 @Slf4j
+@ConditionalOnWebApplication
 @Configuration(proxyBeanMethods = false)
 public class WebCaptchaConfiguration {
   @PostConstruct
