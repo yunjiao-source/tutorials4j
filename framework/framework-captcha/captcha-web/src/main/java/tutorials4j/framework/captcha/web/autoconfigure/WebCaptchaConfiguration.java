@@ -37,7 +37,7 @@ public class WebCaptchaConfiguration {
   }
 
   @Bean
-  FilterRegistrationBean<CaptchaRequestFilter> traceRequestFilterRegistration(
+  FilterRegistrationBean<CaptchaRequestFilter> captchaRequestFilterRegistration(
       CaptchaServiceFactory captchaServiceFactory, CaptchaProperties properties) {
     ServletFilterOptions options = properties.getFilter();
     FilterRegistrationBean<CaptchaRequestFilter> registration = new FilterRegistrationBean<>();
