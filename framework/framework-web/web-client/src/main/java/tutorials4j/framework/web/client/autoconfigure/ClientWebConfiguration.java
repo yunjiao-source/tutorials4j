@@ -10,9 +10,9 @@ import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequest;
+import tutorials4j.framework.web.client.ClientUtils;
 import tutorials4j.framework.web.client.ClientWebProperties;
-import tutorials4j.framework.web.client.interceptor.LogClientHttpRequestInterceptor;
-import tutorials4j.framework.web.client.util.ClientUtils;
+import tutorials4j.framework.web.client.LoggingClientHttpRequestInterceptor;
 
 /**
  * TODO
@@ -32,7 +32,7 @@ public class ClientWebConfiguration {
   RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
     log.debug("[WEB-CLIENT] Log Headers Rest Template Builder Customizer");
     return restTemplate -> {
-      restTemplate.getInterceptors().add(new LogClientHttpRequestInterceptor());
+      restTemplate.getInterceptors().add(new LoggingClientHttpRequestInterceptor());
     };
   }
 
@@ -40,7 +40,7 @@ public class ClientWebConfiguration {
   RestClientCustomizer logHeadersRestClientCustomizer() {
     log.debug("[WEB-CLIENT] Log Headers Rest Client Customizer");
     return restClientBuilder -> {
-      restClientBuilder.requestInterceptor(new LogClientHttpRequestInterceptor());
+      restClientBuilder.requestInterceptor(new LoggingClientHttpRequestInterceptor());
     };
   }
 

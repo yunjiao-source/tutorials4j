@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.client.interceptor;
+package tutorials4j.framework.web.client;
 
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import tutorials4j.framework.common.spring.util.HttpRequestUtils;
  * @see HttpRequestUtils
  */
 @Slf4j
-public class LogClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
+public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
   @Override
   public ClientHttpResponse intercept(
       HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {

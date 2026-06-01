@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.logging.filter;
+package tutorials4j.framework.web.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.rest.filter;
+package tutorials4j.framework.web.rest.cachedbody;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.web.rest.cachedbody.CachedBodyHttpServletRequest;
 
 /**
  * 缓存请求体内容的过滤器。

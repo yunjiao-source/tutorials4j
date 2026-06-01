@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.filter;
+package tutorials4j.framework.web.security.xss;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tutorials4j.framework.web.security.xss.XssHttpServletRequestWrapper;
 
 /**
  * XSS 攻击防护过滤器。

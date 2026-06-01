@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.logging.filter;
+package tutorials4j.framework.web.logging.mdc;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

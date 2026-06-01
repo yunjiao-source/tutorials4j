@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.client.util;
+package tutorials4j.framework.web.client;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

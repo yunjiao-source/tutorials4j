@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.interceptor;
+package tutorials4j.framework.web.security.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,8 +11,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.exception.CounterOverflowException;
 import tutorials4j.framework.common.spring.util.SessionUtils;
 import tutorials4j.framework.web.core.exception.IdempotentException;
-import tutorials4j.framework.web.security.annotation.Idempotent;
-import tutorials4j.framework.web.security.cache.IdempotentCacheTemplate;
 
 /**
  * 幂等性校验的处理器拦截器。

@@ -20,9 +20,9 @@ import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.logging.LoggingWebProperties;
 import tutorials4j.framework.web.logging.LoggingWebProperties.RequestOptions;
-import tutorials4j.framework.web.logging.filter.SimpleRequestLoggingFilter;
-import tutorials4j.framework.web.logging.filter.TraceRequestFilter;
+import tutorials4j.framework.web.logging.SimpleRequestLoggingFilter;
 import tutorials4j.framework.web.logging.mdc.TraceExchangeFilterFunction;
+import tutorials4j.framework.web.logging.mdc.TraceRequestFilter;
 import tutorials4j.framework.web.logging.mdc.TraceRestTemplateInterceptor;
 import tutorials4j.framework.web.logging.mdc.TraceTaskDecorator;
 

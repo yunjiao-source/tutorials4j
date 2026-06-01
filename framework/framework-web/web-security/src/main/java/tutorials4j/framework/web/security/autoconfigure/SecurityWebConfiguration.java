@@ -16,18 +16,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.framework.common.core.JacksonConsts;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
-import tutorials4j.framework.web.security.cache.AccessLimitedCacheTemplate;
-import tutorials4j.framework.web.security.cache.IdempotentCacheTemplate;
-import tutorials4j.framework.web.security.cache.SignatureCacheTemplate;
-import tutorials4j.framework.web.security.filter.XssRequestFilter;
-import tutorials4j.framework.web.security.interceptor.AccessLimitedHandlerInterceptor;
-import tutorials4j.framework.web.security.interceptor.IdempotentHandlerInterceptor;
-import tutorials4j.framework.web.security.interceptor.SignatureHandlerInterceptor;
 import tutorials4j.framework.web.security.properties.GoogleWebProperties;
 import tutorials4j.framework.web.security.properties.SecurityWebProperties;
+import tutorials4j.framework.web.security.rest.AccessLimitedCacheTemplate;
+import tutorials4j.framework.web.security.rest.AccessLimitedHandlerInterceptor;
+import tutorials4j.framework.web.security.rest.IdempotentCacheTemplate;
+import tutorials4j.framework.web.security.rest.IdempotentHandlerInterceptor;
+import tutorials4j.framework.web.security.signature.SignatureCacheTemplate;
+import tutorials4j.framework.web.security.signature.SignatureHandlerInterceptor;
 import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
 import tutorials4j.framework.web.security.signature.SimpleSignatureKeyRepository;
 import tutorials4j.framework.web.security.xss.XssJacksonSimpleModule;
+import tutorials4j.framework.web.security.xss.XssRequestFilter;
 
 /**
  * TODO

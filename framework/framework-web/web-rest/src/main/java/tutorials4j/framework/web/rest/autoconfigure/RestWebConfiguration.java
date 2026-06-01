@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.rest.RestWebProperties;
-import tutorials4j.framework.web.rest.filter.CachedBodyRequestFilter;
+import tutorials4j.framework.web.rest.cachedbody.CachedBodyRequestFilter;
 
 /**
  * TODO

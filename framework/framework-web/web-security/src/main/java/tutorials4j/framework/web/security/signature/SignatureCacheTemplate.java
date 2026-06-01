@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.cache;
+package tutorials4j.framework.web.security.signature;
 
 import cn.hutool.core.util.IdUtil;
 import tutorials4j.framework.cache.core.template.AbstractRedisCacheTemplate;

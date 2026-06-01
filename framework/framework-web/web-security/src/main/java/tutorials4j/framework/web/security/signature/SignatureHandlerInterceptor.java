@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.interceptor;
+package tutorials4j.framework.web.security.signature;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,10 +14,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.web.core.exception.SignatureException;
-import tutorials4j.framework.web.security.annotation.RequiredSignature;
-import tutorials4j.framework.web.security.cache.SignatureCacheTemplate;
-import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
-import tutorials4j.framework.web.security.signature.SignatureUtils;
 
 /**
  * 签名校验拦截器。
