@@ -14,7 +14,11 @@ public interface DigestProcessor {
 
   SecretKey getSecretKey();
 
-  String digest(String data);
+  DigestProcessor newInstance();
 
-  String digest(String data, Charset charset);
+  DigestProcessor newInstance(SecretKey secretKey);
+
+  String digest(String content);
+
+  String digest(String content, Charset charset);
 }

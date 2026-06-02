@@ -34,10 +34,15 @@ public record SecretKey(
   }
 
   public SecretKey(String symmetricKeyHex) {
-    this(null, symmetricKeyHex, null, null, null);
+    this(null, symmetricKeyHex, null, null, Instant.now());
   }
 
   public SecretKey(String publicKeyHex, String privateKeyHex) {
-    this(null, null, publicKeyHex, privateKeyHex, null);
+    this(null, null, publicKeyHex, privateKeyHex, Instant.now());
+  }
+
+  public SecretKey(
+      String identity, String symmetricKeyHex, String publicKeyHex, String privateKeyHex) {
+    this(identity, symmetricKeyHex, publicKeyHex, privateKeyHex, Instant.now());
   }
 }

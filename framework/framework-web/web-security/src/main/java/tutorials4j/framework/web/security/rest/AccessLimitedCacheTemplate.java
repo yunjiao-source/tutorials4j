@@ -1,6 +1,7 @@
 package tutorials4j.framework.web.security.rest;
 
 import tutorials4j.framework.cache.core.template.AbstractCounterCacheTemplate;
+import tutorials4j.framework.web.core.annotation.AccessLimited;
 
 /**
  * 访问频率限制的缓存模板实现。

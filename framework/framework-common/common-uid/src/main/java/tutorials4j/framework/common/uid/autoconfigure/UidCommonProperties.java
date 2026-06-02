@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.spring.properties;
+package tutorials4j.framework.common.uid.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,7 +11,7 @@ import tutorials4j.framework.common.core.PropertiesConsts;
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_COMMON_UID)
-public class UidProperties {
+public class UidCommonProperties {
   private Integer timeBits = 28;
 
   private Integer workerBits = 22;

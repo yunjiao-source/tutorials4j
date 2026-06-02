@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.MutablePropertySources;
-import tutorials4j.framework.common.spring.autoconfigure.condition.ConditionalOnMapProperty;
 
 /**
  * 集成测试 {@link ConditionalOnMapProperty} 与 {@link OnMapPropertyCondition} 使用

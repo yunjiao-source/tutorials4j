@@ -3,7 +3,7 @@ package tutorials4j.framework.common.uid;
 import cc.siyecao.uid.core.impl.DefaultUidGenerator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.common.spring.properties.UidProperties;
+import tutorials4j.framework.common.uid.autoconfigure.UidCommonProperties;
 
 /**
  * @author Yun Jiao
@@ -11,11 +11,11 @@ import tutorials4j.framework.common.spring.properties.UidProperties;
 @Slf4j
 public abstract class AbstractUidGenerator implements UidGenerator {
   protected DefaultUidGenerator generator;
-  protected final UidProperties properties;
+  protected final UidCommonProperties properties;
   protected final List<DefaultUidGeneratorCustomizer> customizers;
 
   protected AbstractUidGenerator(
-      UidProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
+      UidCommonProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
     this.properties = properties;
     this.customizers = customizers;
   }
@@ -49,7 +49,7 @@ public abstract class AbstractUidGenerator implements UidGenerator {
       if (generator != null) {
         return generator;
       }
-      DefaultUidGenerator gen = new DefaultUidGenerator();
+      DefaultUidGenerator gen = createUidGenerator();
       fill(properties, gen);
       customizers.forEach(customizer -> customizer.customize(gen));
       generator = gen;

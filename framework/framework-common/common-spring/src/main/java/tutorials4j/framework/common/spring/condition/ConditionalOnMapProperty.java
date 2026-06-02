@@ -1,35 +1,35 @@
-package tutorials4j.framework.common.spring.autoconfigure.condition;
+package tutorials4j.framework.common.spring.condition;
 
 import java.lang.annotation.*;
 import org.springframework.context.annotation.Conditional;
 
 /**
- * 条件注解：当指定的配置属性存在且对应的 List（列表）满足空/非空条件时，才创建 Bean。
+ * 条件注解：当指定的配置属性存在且对应的 Map（映射）满足空/非空条件时，才创建 Bean。
  *
- * <p>该注解基于 Spring Boot 的 {@link Conditional} 机制，通过 {@link OnCollectionListCondition} 实现具体匹配逻辑。
+ * <p>该注解基于 Spring Boot 的 {@link Conditional} 机制，通过 {@link OnCollectionMapCondition} 实现具体匹配逻辑。
  *
  * <p><b>使用示例：</b>
  *
  * <pre>{@code
- * // 当配置 my.list.items 存在且非空时，创建 Bean
- * @ConditionalOnListProperty(prefix = "my.list", name = "items", isEmpty = false)
- * // 当配置 my.list.items 缺失或为空列表时，创建 Bean
- * @ConditionalOnListProperty(prefix = "my.list", name = "items", matchIfMissing = true, isEmpty = true)
+ * // 当配置 my.map.settings 存在且非空时，创建 Bean
+ * @ConditionalOnMapProperty(prefix = "my.map", name = "settings", isEmpty = false)
+ * // 当配置 my.map.settings 缺失或为空 Map 时，创建 Bean
+ * @ConditionalOnMapProperty(prefix = "my.map", name = "settings", matchIfMissing = true, isEmpty = true)
  * }</pre>
  *
  * @author Yun Jiao
- * @see OnCollectionListCondition
+ * @see OnCollectionMapCondition
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Conditional(OnCollectionListCondition.class)
-public @interface ConditionalOnListProperty {
+@Conditional(OnCollectionMapCondition.class)
+public @interface ConditionalOnMapProperty {
 
   /**
-   * 配置前缀，例如 "my.list"。
+   * 配置前缀，例如 "my.map"。
    *
-   * <p>与 {@link #name()} 拼接形成完整的配置键，如 "my.list.items"。
+   * <p>与 {@link #name()} 拼接形成完整的配置键，如 "my.map.settings"。
    *
    * @return 配置前缀，默认为空字符串
    */
@@ -54,14 +54,14 @@ public @interface ConditionalOnListProperty {
   String value() default "";
 
   /**
-   * 是否要求 List 为空。
+   * 是否要求 Map 为空。
    *
    * <ul>
-   *   <li>{@code true}：List 为空时条件匹配
-   *   <li>{@code false}：List 非空时条件匹配
+   *   <li>{@code true}：Map 为空时条件匹配
+   *   <li>{@code false}：Map 非空时条件匹配
    * </ul>
    *
-   * @return 是否要求空列表，默认为 false
+   * @return 是否要求空 Map，默认为 false
    */
   boolean isEmpty() default false;
 

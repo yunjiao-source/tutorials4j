@@ -13,6 +13,10 @@ public interface CryptoProcessor {
 
   SecretKey getSecretKey();
 
+  CryptoProcessor newInstance();
+
+  CryptoProcessor newInstance(SecretKey secretKey);
+
   String decrypt(String content);
 
   String encrypt(String content);

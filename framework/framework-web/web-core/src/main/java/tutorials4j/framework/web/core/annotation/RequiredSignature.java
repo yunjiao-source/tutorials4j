@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.signature;
+package tutorials4j.framework.web.core.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

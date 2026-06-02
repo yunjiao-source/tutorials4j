@@ -6,7 +6,7 @@ import jakarta.annotation.PreDestroy;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.spring.core.SnowflakeIdProvider;
-import tutorials4j.framework.common.spring.properties.UidProperties;
+import tutorials4j.framework.common.uid.autoconfigure.UidCommonProperties;
 
 /**
  * 缓存模式 UID 生成器实现，包装 {@link CachedUidGenerator}。
@@ -23,7 +23,7 @@ import tutorials4j.framework.common.spring.properties.UidProperties;
 public class UidCachedGenerator extends AbstractUidGenerator {
 
   public UidCachedGenerator(
-      UidProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
+      UidCommonProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
     super(properties, customizers);
   }
 

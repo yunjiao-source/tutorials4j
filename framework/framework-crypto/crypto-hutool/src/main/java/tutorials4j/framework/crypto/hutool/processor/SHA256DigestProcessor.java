@@ -45,12 +45,22 @@ public class SHA256DigestProcessor implements DigestProcessor {
   }
 
   @Override
-  public String digest(String data) {
-    return digest(data, StandardCharsets.UTF_8);
+  public DigestProcessor newInstance() {
+    return create();
   }
 
   @Override
-  public String digest(String data, Charset charset) {
-    return sha256.digestHex(data, charset);
+  public DigestProcessor newInstance(SecretKey secretKey) {
+    throw new FrameworkRuntimeException("方法不支持");
+  }
+
+  @Override
+  public String digest(String content) {
+    return digest(content, StandardCharsets.UTF_8);
+  }
+
+  @Override
+  public String digest(String content, Charset charset) {
+    return sha256.digestHex(content, charset);
   }
 }

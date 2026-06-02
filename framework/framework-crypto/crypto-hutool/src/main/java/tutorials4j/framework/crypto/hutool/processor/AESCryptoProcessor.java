@@ -41,6 +41,16 @@ public class AESCryptoProcessor implements CryptoProcessor {
   }
 
   @Override
+  public CryptoProcessor newInstance() {
+    return create();
+  }
+
+  @Override
+  public CryptoProcessor newInstance(SecretKey secretKey) {
+    return create(secretKey);
+  }
+
+  @Override
   public String decrypt(String data) {
     return aes.decryptStr(data);
   }

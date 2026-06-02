@@ -2,7 +2,7 @@ package tutorials4j.framework.common.uid;
 
 import cc.siyecao.uid.core.impl.DefaultUidGenerator;
 import tutorials4j.framework.common.spring.core.SnowflakeIdProvider;
-import tutorials4j.framework.common.spring.properties.UidProperties;
+import tutorials4j.framework.common.uid.autoconfigure.UidCommonProperties;
 
 /**
  * 框架统一的 UID 生成器接口。
@@ -30,7 +30,7 @@ public interface UidGenerator {
   /** 释放生成器占用的资源（应用关闭时调用）。 */
   void destroy();
 
-  default void fill(UidProperties properties, DefaultUidGenerator defaultUidGenerator) {
+  default void fill(UidCommonProperties properties, DefaultUidGenerator defaultUidGenerator) {
     defaultUidGenerator.setEpochStr(properties.getEpochStr());
     defaultUidGenerator.setSeqBits(properties.getSeqBits());
     defaultUidGenerator.setTimeBits(properties.getTimeBits());

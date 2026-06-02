@@ -43,12 +43,22 @@ public class HmacSHA256DigestProcessor implements DigestProcessor {
   }
 
   @Override
-  public String digest(String data) {
-    return digest(data, StandardCharsets.UTF_8);
+  public DigestProcessor newInstance() {
+    return create();
   }
 
   @Override
-  public String digest(String data, Charset charset) {
-    return mac.digestHex(data, charset);
+  public DigestProcessor newInstance(SecretKey secretKey) {
+    return create(secretKey);
+  }
+
+  @Override
+  public String digest(String content) {
+    return digest(content, StandardCharsets.UTF_8);
+  }
+
+  @Override
+  public String digest(String content, Charset charset) {
+    return mac.digestHex(content, charset);
   }
 }

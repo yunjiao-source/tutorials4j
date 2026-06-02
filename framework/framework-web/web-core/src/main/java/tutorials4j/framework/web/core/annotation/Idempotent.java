@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.rest;
+package tutorials4j.framework.web.core.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -7,13 +7,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 访问频率限制
+ * 幂等性
  *
  * @author Yun Jiao
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Documented
-public @interface AccessLimited {
-  int maxTimes() default 3;
-}
+public @interface Idempotent {}

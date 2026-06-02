@@ -10,6 +10,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.exception.CounterOverflowException;
 import tutorials4j.framework.common.spring.util.SessionUtils;
+import tutorials4j.framework.web.core.annotation.Idempotent;
 import tutorials4j.framework.web.core.exception.IdempotentException;
 
 /**

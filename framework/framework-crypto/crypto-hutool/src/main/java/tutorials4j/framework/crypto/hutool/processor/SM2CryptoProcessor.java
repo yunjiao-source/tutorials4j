@@ -42,6 +42,16 @@ public class SM2CryptoProcessor implements CryptoProcessor {
   }
 
   @Override
+  public CryptoProcessor newInstance() {
+    return create();
+  }
+
+  @Override
+  public CryptoProcessor newInstance(SecretKey secretKey) {
+    return create(secretKey);
+  }
+
+  @Override
   public String decrypt(String content) {
     return sm2.decryptStr(content, KeyType.PrivateKey);
   }

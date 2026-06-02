@@ -4,9 +4,9 @@ import jakarta.annotation.PostConstruct;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.common.spring.properties.UidProperties;
 import tutorials4j.framework.common.uid.DefaultUidGeneratorCustomizer;
 import tutorials4j.framework.common.uid.UidCachedGenerator;
 import tutorials4j.framework.common.uid.UidDefaultedGenerator;
@@ -18,6 +18,7 @@ import tutorials4j.framework.common.uid.UidDefaultedGenerator;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties({UidCommonProperties.class})
 public class UidCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
@@ -26,7 +27,7 @@ public class UidCommonConfiguration {
 
   @Bean
   UidDefaultedGenerator uidDefaultedGenerator(
-      UidProperties properties, ObjectProvider<DefaultUidGeneratorCustomizer> customizers) {
+      UidCommonProperties properties, ObjectProvider<DefaultUidGeneratorCustomizer> customizers) {
     log.debug("[COMMON-UID] Uid Defaulted Generator");
     return new UidDefaultedGenerator(
         properties, customizers.orderedStream().collect(Collectors.toList()));
@@ -34,7 +35,7 @@ public class UidCommonConfiguration {
 
   @Bean
   UidCachedGenerator uidCachedGenerator(
-      UidProperties properties, ObjectProvider<DefaultUidGeneratorCustomizer> customizers) {
+      UidCommonProperties properties, ObjectProvider<DefaultUidGeneratorCustomizer> customizers) {
     log.debug("[COMMON-UID] Uid Cached Generator");
     return new UidCachedGenerator(
         properties, customizers.orderedStream().collect(Collectors.toList()));

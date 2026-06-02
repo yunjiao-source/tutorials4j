@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
-import tutorials4j.framework.common.spring.autoconfigure.condition.ConditionalOnListProperty;
 
 /**
  * {@link ConditionalOnListProperty} 单元测试

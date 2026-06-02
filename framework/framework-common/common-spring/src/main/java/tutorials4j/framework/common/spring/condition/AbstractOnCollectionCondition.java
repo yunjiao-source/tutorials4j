@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.spring.autoconfigure.condition;
+package tutorials4j.framework.common.spring.condition;
 
 import lombok.Builder;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;

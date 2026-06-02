@@ -4,7 +4,7 @@ import cc.siyecao.uid.core.impl.DefaultUidGenerator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.spring.core.SnowflakeIdProvider;
-import tutorials4j.framework.common.spring.properties.UidProperties;
+import tutorials4j.framework.common.uid.autoconfigure.UidCommonProperties;
 
 /**
  * 默认（实时计算）模式 UID 生成器实现，包装 {@link DefaultUidGenerator}。
@@ -22,7 +22,7 @@ import tutorials4j.framework.common.spring.properties.UidProperties;
 public class UidDefaultedGenerator extends AbstractUidGenerator {
 
   public UidDefaultedGenerator(
-      UidProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
+      UidCommonProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
     super(properties, customizers);
   }
 

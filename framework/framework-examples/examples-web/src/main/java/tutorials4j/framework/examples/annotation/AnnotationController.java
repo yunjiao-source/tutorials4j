@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.web.security.rest.AccessLimited;
-import tutorials4j.framework.web.security.rest.Idempotent;
+import tutorials4j.framework.web.core.annotation.AccessLimited;
+import tutorials4j.framework.web.core.annotation.Idempotent;
 
 /**
  * 示例接口
