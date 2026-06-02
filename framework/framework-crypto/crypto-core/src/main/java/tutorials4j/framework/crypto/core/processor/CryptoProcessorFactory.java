@@ -1,5 +1,6 @@
 package tutorials4j.framework.crypto.core.processor;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import org.apache.commons.lang3.EnumUtils;
@@ -34,12 +35,8 @@ public class CryptoProcessorFactory {
     return processor;
   }
 
-  public CryptoProcessor findRSA() {
-    return findProcessor(CryptoCategory.RSA);
-  }
-
-  public CryptoProcessor findAES() {
-    return findProcessor(CryptoCategory.AES);
+  public Map<CryptoCategory, CryptoProcessor> getProcessors() {
+    return Collections.unmodifiableMap(processors);
   }
 
   public void setProcessors(Map<CryptoCategory, CryptoProcessor> processors) {

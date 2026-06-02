@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.captcha.CaptchaServiceFactory;
 import tutorials4j.framework.captcha.properties.CaptchaProperties;
 import tutorials4j.framework.captcha.web.CaptchaRequestFilter;
-import tutorials4j.framework.captcha.web.TianaiCaptchaController;
-import tutorials4j.framework.captcha.web.UniformCaptchaController;
+import tutorials4j.framework.captcha.web.TianaiCaptchaEndpoint;
+import tutorials4j.framework.captcha.web.UniformCaptchaEndpoint;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
@@ -31,9 +31,9 @@ public class WebCaptchaConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  UniformCaptchaController CaptchaController(CaptchaServiceFactory factory) {
-    log.debug("[CAPTCHA-WEB] Captcha Controller");
-    return new UniformCaptchaController(factory);
+  UniformCaptchaEndpoint uniformCaptchaEndpoint(CaptchaServiceFactory factory) {
+    log.debug("[CAPTCHA-WEB] Uniform Captcha Endpoint");
+    return new UniformCaptchaEndpoint(factory);
   }
 
   @Bean
@@ -53,9 +53,9 @@ public class WebCaptchaConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  TianaiCaptchaController tianaiCaptchaController(
+  TianaiCaptchaEndpoint tianaiCaptchaEndpoint(
       CaptchaServiceFactory factory, ImageCaptchaApplication imageCaptchaApplication) {
-    log.debug("[CAPTCHA-WEB] Tianai Captcha Controller");
-    return new TianaiCaptchaController(factory, imageCaptchaApplication);
+    log.debug("[CAPTCHA-WEB] Tianai Captcha Endpoint");
+    return new TianaiCaptchaEndpoint(factory, imageCaptchaApplication);
   }
 }

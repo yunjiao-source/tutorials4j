@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.security.google.GoogleAuthRequestFilter;
 import tutorials4j.framework.web.security.google.GoogleAuthenticatorConfigCustomizer;
-import tutorials4j.framework.web.security.google.TotpAuthController;
+import tutorials4j.framework.web.security.google.TotpAuthEndpoint;
 import tutorials4j.framework.web.security.google.TotpAuthService;
 import tutorials4j.framework.web.security.google.YamlCredentialRepository;
 import tutorials4j.framework.web.security.properties.GoogleWebProperties;
@@ -59,9 +59,9 @@ public class GoogleWebConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  TotpAuthController TotpAuthController(TotpAuthService totpAuthService) {
-    log.debug("[WEB-SECURITY] Totp Auth Controller");
-    return new TotpAuthController(totpAuthService);
+  TotpAuthEndpoint totpAuthEndpoint(TotpAuthService totpAuthService) {
+    log.debug("[WEB-SECURITY] Totp Auth Endpoint");
+    return new TotpAuthEndpoint(totpAuthService);
   }
 
   @Bean

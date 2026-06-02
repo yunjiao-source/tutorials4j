@@ -28,7 +28,7 @@ import tutorials4j.framework.common.spring.util.QrCodeUtils;
 @RequestMapping("api/google-auth")
 @RequiredArgsConstructor
 @Tag(name = "Google Authenticator", description = "TOTP 双因素认证接口")
-public class TotpAuthController {
+public class TotpAuthEndpoint {
 
   private final TotpAuthService totpAuthService;
 

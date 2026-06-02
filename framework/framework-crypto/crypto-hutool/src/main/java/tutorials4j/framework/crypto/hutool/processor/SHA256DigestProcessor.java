@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import tutorials4j.framework.common.core.bean.SecretKey;
-import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 import tutorials4j.framework.crypto.core.DigestCategory;
 import tutorials4j.framework.crypto.core.processor.DigestProcessor;
 
@@ -41,7 +40,8 @@ public class SHA256DigestProcessor implements DigestProcessor {
 
   @Override
   public SecretKey getSecretKey() {
-    throw new FrameworkRuntimeException("方法不支持");
+    // 不支持的方法
+    return null;
   }
 
   @Override
@@ -51,7 +51,8 @@ public class SHA256DigestProcessor implements DigestProcessor {
 
   @Override
   public DigestProcessor newInstance(SecretKey secretKey) {
-    throw new FrameworkRuntimeException("方法不支持");
+    // 不支持的方法
+    return null;
   }
 
   @Override

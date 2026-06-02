@@ -29,7 +29,7 @@ import tutorials4j.framework.captcha.CaptchaServiceFactory;
 @RestController
 @RequestMapping("/api/captcha/uniform")
 @RequiredArgsConstructor
-public class UniformCaptchaController {
+public class UniformCaptchaEndpoint {
 
   private final CaptchaServiceFactory factory;
 

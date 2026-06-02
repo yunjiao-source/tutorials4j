@@ -2,6 +2,7 @@ package tutorials4j.framework.crypto.hutool.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,52 +35,93 @@ public class HutoolCryptoConfiguration {
   @ConditionalOnMissingBean
   AESCryptoProcessor aesCryptoProcessor(CryptoProperties properties) {
     log.debug("[CRYPTO-HUTOOL] AES Crypto Processor");
-    return AESCryptoProcessor.create(new SecretKey(properties.getSecretKeyHex()));
+    String secretKeyHex = properties.getSecretKeyHex();
+    if (StringUtils.isBlank(secretKeyHex)) {
+      log.debug("[CRYPTO-HUTOOL] 未配置secretKeyHex值，AESCryptoProcessor工具将自动生成密钥");
+      return AESCryptoProcessor.create();
+    } else {
+      return AESCryptoProcessor.create(new SecretKey(secretKeyHex));
+    }
   }
 
   @Bean
   @ConditionalOnMissingBean
   DESCryptoProcessor DESCryptoProcessor(CryptoProperties properties) {
     log.debug("[CRYPTO-HUTOOL] DES Crypto Processor");
-    return DESCryptoProcessor.create(new SecretKey(properties.getSecretKeyHex()));
+    String secretKeyHex = properties.getSecretKeyHex();
+    if (StringUtils.isBlank(secretKeyHex)) {
+      log.debug("[CRYPTO-HUTOOL] 未配置secretKeyHex值，DESCryptoProcessor工具将自动生成密钥");
+      return DESCryptoProcessor.create();
+    } else {
+      return DESCryptoProcessor.create(new SecretKey(secretKeyHex));
+    }
   }
 
   @Bean
   @ConditionalOnMissingBean
   SM2CryptoProcessor sm2CryptoProcessor(CryptoProperties properties) {
     log.debug("[CRYPTO-HUTOOL] SM2 Crypto Processor");
-    return SM2CryptoProcessor.create(
-        new SecretKey(properties.getPublicKeyHex(), properties.getPrivateKeyHex()));
+    String publicKeyHex = properties.getPublicKeyHex();
+    String privateKeyHex = properties.getPrivateKeyHex();
+    if (StringUtils.isAnyBlank(publicKeyHex, privateKeyHex)) {
+      log.debug("[CRYPTO-HUTOOL] 未配置publicKeyHex和privateKeyHex值，SM2CryptoProcessor工具将自动生成密钥");
+      return SM2CryptoProcessor.create();
+    } else {
+      return SM2CryptoProcessor.create(new SecretKey(publicKeyHex, privateKeyHex));
+    }
   }
 
   @Bean
   @ConditionalOnMissingBean
   SM4CryptoProcessor sm4CryptoProcessor(CryptoProperties properties) {
     log.debug("[CRYPTO-HUTOOL] SM4 Crypto Processor");
-    return SM4CryptoProcessor.create(
-        new SecretKey(properties.getPublicKeyHex(), properties.getPrivateKeyHex()));
+    String secretKeyHex = properties.getSecretKeyHex();
+    if (StringUtils.isBlank(secretKeyHex)) {
+      log.debug("[CRYPTO-HUTOOL] 未配置secretKeyHex值，SM4CryptoProcessor工具将自动生成密钥");
+      return SM4CryptoProcessor.create();
+    } else {
+      return SM4CryptoProcessor.create(new SecretKey(secretKeyHex));
+    }
   }
 
   @Bean
   @ConditionalOnMissingBean
   HmacSHA256DigestProcessor hmacSHA256CryptoProcessor(CryptoProperties properties) {
     log.debug("[CRYPTO-HUTOOL] HmacSHA256 Digest Processor");
-    return HmacSHA256DigestProcessor.create(new SecretKey(properties.getSecretKeyHex()));
+    String secretKeyHex = properties.getSecretKeyHex();
+    if (StringUtils.isBlank(secretKeyHex)) {
+      log.debug("[CRYPTO-HUTOOL] 未配置secretKeyHex值，HmacSHA256DigestProcessor工具将自动生成密钥");
+      return HmacSHA256DigestProcessor.create();
+    } else {
+      return HmacSHA256DigestProcessor.create(new SecretKey(secretKeyHex));
+    }
   }
 
   @Bean
   @ConditionalOnMissingBean
   HmacSHA512DigestProcessor hmacSHA512CryptoProcessor(CryptoProperties properties) {
     log.debug("[CRYPTO-HUTOOL] HmacSHA512 Digest Processor");
-    return HmacSHA512DigestProcessor.create(new SecretKey(properties.getSecretKeyHex()));
+    String secretKeyHex = properties.getSecretKeyHex();
+    if (StringUtils.isBlank(secretKeyHex)) {
+      log.debug("[CRYPTO-HUTOOL] 未配置secretKeyHex值，HmacSHA512DigestProcessor工具将自动生成密钥");
+      return HmacSHA512DigestProcessor.create();
+    } else {
+      return HmacSHA512DigestProcessor.create(new SecretKey(secretKeyHex));
+    }
   }
 
   @Bean
   @ConditionalOnMissingBean
   RSACryptoProcessor rsaCryptoProcessor(CryptoProperties properties) {
     log.debug("[CRYPTO-HUTOOL] AES Digest Processor");
-    return RSACryptoProcessor.create(
-        new SecretKey(properties.getPublicKeyHex(), properties.getPrivateKeyHex()));
+    String publicKeyHex = properties.getPublicKeyHex();
+    String privateKeyHex = properties.getPrivateKeyHex();
+    if (StringUtils.isAnyBlank(publicKeyHex, privateKeyHex)) {
+      log.debug("[CRYPTO-HUTOOL] 未配置publicKeyHex和privateKeyHex值，RSACryptoProcessor工具将自动生成密钥");
+      return RSACryptoProcessor.create();
+    } else {
+      return RSACryptoProcessor.create(new SecretKey(publicKeyHex, privateKeyHex));
+    }
   }
 
   @Bean

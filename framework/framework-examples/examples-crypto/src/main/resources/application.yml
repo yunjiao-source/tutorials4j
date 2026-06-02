@@ -1,11 +1,7 @@
-#spring:
-#  profiles:
-#    active: rest
-
-
-tutorials4j:
-  crypto:
-    secret-key-hex: 8661e5488a0076dd8fecffcf13031f74485e19a5b753d90864f91745dd31f55c448758e53f463dcb7850e9b562b7f25d1a006c15dfa71f0ffdb091ba409e1bcb
+spring:
+  profiles:
+#    active: simple
+    active: apicrypto
 
 logging:
   level:
