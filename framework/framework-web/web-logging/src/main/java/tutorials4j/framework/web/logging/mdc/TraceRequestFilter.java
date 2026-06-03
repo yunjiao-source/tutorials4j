@@ -50,7 +50,7 @@ public class TraceRequestFilter extends OncePerRequestFilter {
     }
 
     if (log.isDebugEnabled()) {
-      log.debug("[WEB-REST] 跟踪信息过滤器：{}", request.getRequestURI());
+      log.debug("[WEB-LOGGING] 跟踪信息过滤器：{}", request.getRequestURI());
     }
 
     try {

@@ -37,7 +37,7 @@ public class AccessLimitedHandlerInterceptor implements HandlerInterceptor {
       throws Exception {
 
     if (log.isDebugEnabled()) {
-      log.debug("[WEB-MVC] 访问限制拦截器：{}", request.getRequestURI());
+      log.debug("[WEB-SECURITY] 访问限制拦截器：{}", request.getRequestURI());
     }
 
     Method method = null;

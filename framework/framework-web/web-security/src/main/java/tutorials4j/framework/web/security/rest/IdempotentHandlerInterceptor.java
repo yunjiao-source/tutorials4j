@@ -37,7 +37,7 @@ public class IdempotentHandlerInterceptor implements HandlerInterceptor {
       throws Exception {
 
     if (log.isDebugEnabled()) {
-      log.debug("[WEB-MVC] 幂等拦截器：{}", request.getRequestURI());
+      log.debug("[WEB-SECURITY] 幂等拦截器：{}", request.getRequestURI());
     }
 
     Method method = null;

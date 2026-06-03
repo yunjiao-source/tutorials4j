@@ -43,20 +43,20 @@ public class LoggingWebConfiguration {
   @Bean
   @ConditionalOnMissingBean
   CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
-    log.debug("[WEB-REST] Composite Task Decorator");
+    log.debug("[WEB-LOGGING] Composite Task Decorator");
     return creator.getInstance();
   }
 
   @Bean
   @ConditionalOnMissingBean
   TaskDecoratorCreator traceTaskDecoratorCreator() {
-    log.debug("[WEB-REST] Trace Task Decorator Creator");
+    log.debug("[WEB-LOGGING] Trace Task Decorator Creator");
     return TraceTaskDecorator::new;
   }
 
   @Bean
   RestTemplateCustomizer traceRestTemplateCustomizer() {
-    log.debug("[WEB-REST] Trace Rest Template Customizer");
+    log.debug("[WEB-LOGGING] Trace Rest Template Customizer");
     return restTemplate -> {
       restTemplate.getInterceptors().add(new TraceRestTemplateInterceptor());
     };
@@ -64,7 +64,7 @@ public class LoggingWebConfiguration {
 
   @Bean
   RestClientCustomizer traceRestClientCustomizer() {
-    log.debug("[WEB-REST] Trace Rest Client Customizer");
+    log.debug("[WEB-LOGGING] Trace Rest Client Customizer");
     return restClientBuilder -> {
       restClientBuilder.requestInterceptor(new TraceRestTemplateInterceptor());
     };
@@ -72,7 +72,7 @@ public class LoggingWebConfiguration {
 
   @Bean
   WebClientCustomizer traceWebClientCustomizer() {
-    log.debug("[WEB-REST] Trace Web Client Customizer");
+    log.debug("[WEB-LOGGING] Trace Web Client Customizer");
     return webClientBuilder -> {
       webClientBuilder.filter(new TraceExchangeFilterFunction());
     };
