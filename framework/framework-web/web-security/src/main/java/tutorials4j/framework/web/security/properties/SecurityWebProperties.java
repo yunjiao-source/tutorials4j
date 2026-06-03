@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
-import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
  * TODO
@@ -26,12 +25,6 @@ public class SecurityWebProperties {
   private HandlerInterceptorOptions accessLimited = new HandlerInterceptorOptions();
 
   private SignatureOptions signature = new SignatureOptions();
-
-  /** xss攻击配置 */
-  @NestedConfigurationProperty
-  private ServletFilterOptions xss =
-      new ServletFilterOptions(
-          new String[] {}, 1, "xssRequestFilter", ServletFilterOptions.DEFAULT_DISPATCHER_TYPES);
 
   @Data
   public static class SignatureOptions {

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XSS 防护演示 - 后端清洗效果测试</title>
+  <!-- Bootstrap 5 CSS + jQuery + Bootstrap JS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    .card { margin-top: 20px; }
+    .pre-scrollable { max-height: 200px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 6px; }
+    .badge-big { font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <div class="alert alert-primary">
+    <h4>🛡️ XSS 防护演示 (AntiSamy清洗)</h4>
+    <p>后端已启用 <code>XssRequestFilter</code> (包装请求) 和 <code>XssJsonDeserializer</code> (JSON反序列化)。<br>
+      所有用户输入的 <strong>表单参数 / JSON字段</strong> 都会被自动清洗，移除或转义恶意脚本。</p>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+      <strong>✏️ 输入恶意代码测试</strong>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="payloadInput" class="form-label">输入潜在 XSS 载荷（例如 <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>）</label>
+        <textarea class="form-control" id="payloadInput" rows="3" placeholder='<script>alert("XSS")</script>'></textarea>
+        <div class="form-text">提示：可以尝试 &lt;img src=x onerror=alert(1)&gt;、&lt;svg/onload=alert(2)&gt; 等。</div>
+      </div>
+      <div class="d-flex gap-2">
+        <button id="submitFormBtn" class="btn btn-primary">📝 表单参数提交 (POST Form)</button>
+        <button id="submitJsonBtn" class="btn btn-success">📦 JSON 请求体提交 (POST JSON)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          📋 原始输入 (前端记录)
+        </div>
+        <div class="card-body">
+          <div id="originalValue" class="pre-scrollable text-muted">尚未提交</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          ✨ 后端清洗结果 (安全输出)
+        </div>
+        <div class="card-body">
+          <div id="cleanedResult" class="pre-scrollable">等待提交...</div>
+          <small class="text-muted">⚠️ 页面仅以文本形式展示清洗后内容，不会执行任何脚本。</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-secondary mt-3">
+    <strong>🧪 验证说明：</strong><br>
+    - <strong>表单参数</strong> 请求会被 <code>XssHttpServletRequestWrapper</code> 拦截，调用 <code>XssUtils.cleaning()</code> 清洗。<br>
+    - <strong>JSON请求</strong> 中字符串字段使用 <code>@JsonDeserialize(using = XssJsonDeserializer.class)</code>，反序列化时自动清洗。<br>
+    - 两者清洗结果应当一致，任何恶意脚本标签都将被移除或转义，从而避免存储型/反射型 XSS。
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // 辅助函数：显示原始内容和清洗结果
+    function showResult(original, cleaned, sourceType) {
+      $('#originalValue').html(`
+                <strong>${sourceType}</strong><br>
+                <span class="font-monospace">${escapeHtml(original)}</span>
+            `);
+      $('#cleanedResult').html(`
+                <strong>清洗后 (${sourceType})</strong><br>
+                <span class="font-monospace text-success">${cleaned}</span>
+            `);
+    }
+
+    // 简单的转义，防止页面展示时意外执行（虽然后端已清洗，但展示原始内容时需转义）
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        return c;
+      });
+    }
+
+    // 表单提交 (application/x-www-form-urlencoded)
+    $('#submitFormBtn').click(function() {
+      var rawInput = $('#payloadInput').val();
+      if (!rawInput.trim()) {
+        alert('请输入测试载荷');
+        return;
+      }
+      // 发起 POST 表单请求，参数会被 XssRequestFilter 清洗
+      $.ajax({
+        url: '/xss-demo/form',
+        type: 'POST',
+        data: { inputText: rawInput },
+        dataType: 'json',
+        success: function(res) {
+          if (res && typeof res.cleaned !== 'undefined') {
+            showResult(rawInput, res.cleaned, '表单参数提交');
+          } else {
+            showResult(rawInput, '（未获取到清洗结果）', '表单参数提交');
+          }
+        },
+        error: function(xhr) {
+          showResult(rawInput, '请求失败: ' + xhr.status, '表单参数提交');
+        }
+      });
+    });
+
+    // JSON 提交 (application/json)
+    $('#submitJsonBtn').click(function() {
+      var rawInput = $('#payloadInput').val();
+      if (!rawInput.trim()) {
+        alert('请输入测试载荷');
+        return;
+      }
+      $.ajax({
+        url: '/xss-demo/json',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ content: rawInput }),
+        dataType: 'json',
+        success: function(res) {
+          if (res && typeof res.cleaned !== 'undefined') {
+            showResult(rawInput, res.cleaned, 'JSON请求体提交');
+          } else {
+            showResult(rawInput, '（无清洗结果）', 'JSON请求体提交');
+          }
+        },
+        error: function(xhr) {
+          showResult(rawInput, '请求失败: ' + xhr.status, 'JSON请求体提交');
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

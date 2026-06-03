@@ -5,17 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tutorials4j.framework.common.core.JacksonConsts;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
-import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.security.properties.GoogleWebProperties;
 import tutorials4j.framework.web.security.properties.SecurityWebProperties;
 import tutorials4j.framework.web.security.rest.AccessLimitedCacheTemplate;
@@ -26,8 +22,6 @@ import tutorials4j.framework.web.security.signature.SignatureCacheTemplate;
 import tutorials4j.framework.web.security.signature.SignatureHandlerInterceptor;
 import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
 import tutorials4j.framework.web.security.signature.SimpleSignatureKeyRepository;
-import tutorials4j.framework.web.security.xss.XssJacksonSimpleModule;
-import tutorials4j.framework.web.security.xss.XssRequestFilter;
 
 /**
  * TODO
@@ -69,27 +63,6 @@ public class SecurityWebConfiguration {
   SignatureKeyRepository simpleSignatureKeyRepository(SecurityWebProperties properties) {
     log.debug("[WEB-SECURITY] Simple Signature Key Repository");
     return new SimpleSignatureKeyRepository(properties.getSignature().getKeys());
-  }
-
-  @Bean
-  @Order(JacksonConsts.MODULE_ORDER_XSS)
-  XssJacksonSimpleModule xssJacksonSimpleModule() {
-    log.debug("[WEB-SECURITY] Xss Jackson Simple Module");
-    return new XssJacksonSimpleModule();
-  }
-
-  @Bean
-  FilterRegistrationBean<XssRequestFilter> xssRequestFilterRegistration(
-      SecurityWebProperties properties) {
-    ServletFilterOptions options = properties.getXss();
-    FilterRegistrationBean<XssRequestFilter> registration = new FilterRegistrationBean<>();
-    XssRequestFilter filter = new XssRequestFilter();
-    registration.setFilter(filter);
-    options.fill(registration);
-    if (log.isDebugEnabled()) {
-      log.debug("[WEB-SECURITY] Xss攻击过滤器：{}", options);
-    }
-    return registration;
   }
 
   @Slf4j

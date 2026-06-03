@@ -10,6 +10,7 @@ import tutorials4j.framework.web.logging.autoconfigure.SpringdocWebConfiguration
 import tutorials4j.framework.web.rest.autoconfigure.RestWebConfiguration;
 import tutorials4j.framework.web.security.autoconfigure.GoogleWebConfiguration;
 import tutorials4j.framework.web.security.autoconfigure.SecurityWebConfiguration;
+import tutorials4j.framework.web.security.autoconfigure.XssWebConfiguration;
 import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfiguration;
 
 /**
@@ -26,7 +27,8 @@ import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfigura
   RestWebConfiguration.class,
   SecurityWebConfiguration.class,
   GoogleWebConfiguration.class,
-  ValidatorsWebConfiguration.class
+  ValidatorsWebConfiguration.class,
+  XssWebConfiguration.class
 })
 public class WebAutoConfiguration {
   @PostConstruct

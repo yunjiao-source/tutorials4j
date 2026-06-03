@@ -1,53 +1,44 @@
+// XssDemoController.java
 package tutorials4j.framework.examples.xss;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import tutorials4j.framework.web.security.xss.XssRequestFilter;
 
-/**
- * XSS 防护示例接口。
- *
- * @author Yun Jiao
- */
-@Slf4j
-@RestController
-@RequestMapping("/xss")
+@Controller
+@RequestMapping("/xss-demo")
 public class XssDemoController {
 
-  /**
-   * GET 请求示例：通过查询参数传递可能含有 XSS 的内容。
-   *
-   * <p>由于 {@link XssRequestFilter} 会包装 HttpServletRequest， 因此 {@code @RequestParam} 获取到的值已经被
-   * AntiSamy 清洗过。
-   *
-   * @param content 用户输入的文本（自动清洗）
-   * @return 清洗后的内容
-   */
-  @GetMapping("/param")
-  public String handleParam(@RequestParam("content") String content) {
-    log.info("Received param (after XSS filter): {}", content);
-    return "Cleaned content: " + content;
+  private static final Logger log = LoggerFactory.getLogger(XssDemoController.class);
+
+  /** 展示测试页面 */
+  @GetMapping
+  public String demoPage() {
+    return "xss-demo";
   }
 
-  /**
-   * POST 请求示例：接收 JSON 对象，其中的字符串字段会被 {@link
-   * tutorials4j.framework.web.security.xss.XssJacksonSimpleModule} 注册的 {@link
-   * tutorials4j.framework.web.security.xss.XssJsonDeserializer} 自动清洗。
-   *
-   * @param request JSON 请求体
-   * @return 清洗后的对象
-   */
+  /** 演示表单参数清洗（由 XssHttpServletRequestWrapper 自动完成） 返回清洗后的结果 */
+  @PostMapping("/form")
+  @ResponseBody
+  public Map<String, String> testFormParam(@RequestParam("inputText") String inputText) {
+    // 注意：这里的 inputText 已经被 XssHttpServletRequestWrapper 清洗过
+    log.debug("表单参数清洗后: {}", inputText);
+    Map<String, String> result = new HashMap<>();
+    result.put("cleaned", inputText);
+    return result;
+  }
+
+  /** 演示 JSON 请求体清洗（由 XssJsonDeserializer 自动完成） */
   @PostMapping("/json")
-  public CommentDto handleJson(@RequestBody CommentDto request) {
-    log.info("Received JSON (after XSS cleaning): {}", request);
-    return request;
+  @ResponseBody
+  public Map<String, String> testJsonBody(@RequestBody XssRequestDto dto) {
+    // dto.getContent() 已在反序列化时被 XssJsonDeserializer 清洗
+    log.debug("JSON 请求体清洗后: {}", dto.getContent());
+    Map<String, String> result = new HashMap<>();
+    result.put("cleaned", dto.getContent());
+    return result;
   }
-}
-
-/** 示例 DTO，包含可能携带 XSS 的字符串字段。 */
-@Data
-class CommentDto {
-  private String username;
-  private String comment;
 }

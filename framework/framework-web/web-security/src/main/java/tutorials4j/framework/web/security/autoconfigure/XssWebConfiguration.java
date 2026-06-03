@@ -1,0 +1,56 @@
+package tutorials4j.framework.web.security.autoconfigure;
+
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import tutorials4j.framework.common.core.JacksonConsts;
+import tutorials4j.framework.common.core.PropertiesConsts;
+import tutorials4j.framework.common.spring.web.ServletFilterOptions;
+import tutorials4j.framework.web.security.properties.XssWebProperties;
+import tutorials4j.framework.web.security.xss.XssJacksonSimpleModule;
+import tutorials4j.framework.web.security.xss.XssRequestFilter;
+
+/**
+ * TODO
+ *
+ * @author Yun Jiao
+ */
+@Slf4j
+@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties({XssWebProperties.class})
+@ConditionalOnProperty(
+    prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_SECURITY_XSS,
+    name = PropertiesConsts.PROPERTY_ENABLED,
+    havingValue = "true")
+public class XssWebConfiguration {
+  @PostConstruct
+  public void postConstruct() {
+    log.debug("[WEB-SECURITY] Web Xss Configuration");
+  }
+
+  @Bean
+  @Order(JacksonConsts.MODULE_ORDER_XSS)
+  XssJacksonSimpleModule xssJacksonSimpleModule() {
+    log.debug("[WEB-SECURITY] Xss Jackson Simple Module");
+    return new XssJacksonSimpleModule();
+  }
+
+  @Bean
+  FilterRegistrationBean<XssRequestFilter> xssRequestFilterRegistration(
+      XssWebProperties properties) {
+    ServletFilterOptions options = properties.getFilter();
+    FilterRegistrationBean<XssRequestFilter> registration = new FilterRegistrationBean<>();
+    XssRequestFilter filter = new XssRequestFilter();
+    registration.setFilter(filter);
+    options.fill(registration);
+    if (log.isDebugEnabled()) {
+      log.debug("[WEB-SECURITY] Xss攻击过滤器：{}", options);
+    }
+    return registration;
+  }
+}

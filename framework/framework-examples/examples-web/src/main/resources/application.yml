@@ -1,14 +1,14 @@
 spring:
   profiles:
 #    active: request-logging
-#    active: xss
+    active: xss
 #    active: annotation
 #    active: signature
 #    active: swagger
 #    active: google-auth
 #    active: cached-body
 #    active: trace
-    active: client
+#    active: client
 
 logging:
   level:

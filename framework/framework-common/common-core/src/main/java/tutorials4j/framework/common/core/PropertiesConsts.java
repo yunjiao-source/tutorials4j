@@ -6,7 +6,7 @@ package tutorials4j.framework.common.core;
  * @author Yun Jiao
  */
 public interface PropertiesConsts {
-  String PROPERTY_ENABLED = ".enabled";
+  String PROPERTY_ENABLED = "enabled";
   String PROPERTY_PREFIX_SPRING = "spring";
   String PROPERTY_PREFIX_TUTORIALS4J = "tutorials4j";
 
@@ -45,6 +45,8 @@ public interface PropertiesConsts {
   String PROPERTY_PREFIX_WEB_CLIENT = PROPERTY_PREFIX_WEB + ".client";
 
   String PROPERTY_PREFIX_WEB_SECURITY = PROPERTY_PREFIX_WEB + ".security";
+
+  String PROPERTY_PREFIX_WEB_SECURITY_XSS = PROPERTY_PREFIX_WEB_SECURITY + ".xss";
 
   String PROPERTY_PREFIX_WEB_GOOGLE = PROPERTY_PREFIX_WEB_SECURITY + ".google";
 

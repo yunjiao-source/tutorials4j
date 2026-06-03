@@ -2,4 +2,4 @@ tutorials4j:
   web:
     security:
       xss:
-        url-patterns: /xss/*
+        enabled: true
