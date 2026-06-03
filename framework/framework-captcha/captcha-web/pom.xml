@@ -15,6 +15,11 @@
     <description>验证码Web模块</description>
 
     <dependencies>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>web-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>

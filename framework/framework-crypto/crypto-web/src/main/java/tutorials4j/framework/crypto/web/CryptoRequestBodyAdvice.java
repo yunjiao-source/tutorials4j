@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +15,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
+import tutorials4j.framework.common.core.DefaultConsts;
+import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.crypto.core.annotation.Crypto;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 
@@ -25,10 +26,13 @@ import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
  * @author Yun Jiao
  */
 @Slf4j
-@RequiredArgsConstructor
 @RestControllerAdvice
 public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
-  private final CryptoProcessor cryptoProcessor;
+  private final CryptoRequestCacheTemplate cryptoRequestCacheTemplate;
+
+  public CryptoRequestBodyAdvice(CryptoRequestCacheTemplate cryptoRequestCacheTemplate) {
+    this.cryptoRequestCacheTemplate = cryptoRequestCacheTemplate;
+  }
 
   @Override
   public boolean supports(
@@ -36,14 +40,14 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
       Type targetType,
       Class<? extends HttpMessageConverter<?>> converterType) {
     Crypto crypto = methodParameter.getMethodAnnotation(Crypto.class);
-    boolean isSupports = ObjectUtils.isNotEmpty(crypto) && crypto.request();
+    boolean supported = ObjectUtils.isNotEmpty(crypto) && crypto.request();
 
     if (log.isDebugEnabled()) {
       String methodName = methodParameter.getMethod().getName();
       String className = methodParameter.getDeclaringClass().getName();
-      log.debug("[CRYPTO-WEB] 类 {} 的方法 {} 支持解密？ {}", className, methodName, isSupports);
+      log.debug("[CRYPTO-WEB] 类 {} 的方法 {} 支持解密？ {}", className, methodName, supported);
     }
-    return isSupports;
+    return supported;
   }
 
   @Override
@@ -54,22 +58,35 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
       Class<? extends HttpMessageConverter<?>> converterType)
       throws IOException {
     // 读取原始加密请求体
-    String encrypted = StreamUtils.copyToString(inputMessage.getBody(), StandardCharsets.UTF_8);
-    if (StringUtils.isBlank(encrypted)) {
+    String encryptedBody = StreamUtils.copyToString(inputMessage.getBody(), StandardCharsets.UTF_8);
+    if (StringUtils.isBlank(encryptedBody)) {
       return inputMessage;
     }
+
+    // 获取加密的私钥
+    String encryptedSecretKey =
+        HeaderUtils.getHeader(
+            inputMessage.getHeaders(), DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY_HEX);
+    if (StringUtils.isBlank(encryptedSecretKey)) {
+      log.warn(
+          "[CRYPTO-WEB] 在请求头中未获取到加密密钥: headerName={}",
+          DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY_HEX);
+      return inputMessage;
+    }
+    CryptoProcessor cryptoProcessor = cryptoRequestCacheTemplate.createIfAbsent(encryptedSecretKey);
     // 移除可能的首尾引号（前端传参可能带引号）
-    encrypted = encrypted.replaceAll("^\"|\"$", "");
+    encryptedBody = encryptedBody.replaceAll("^\"|\"$", "");
     // 解密请求体
-    String decrypted = cryptoProcessor.decrypt(encrypted);
+    String decryptedBody = cryptoProcessor.decrypt(encryptedBody);
     if (log.isDebugEnabled()) {
       String methodName = parameter.getMethod().getName();
       String className = parameter.getDeclaringClass().getName();
-      log.debug("[CRYPTO-WEB] 类 {} 的方法 {} 执行解密完成", className, methodName);
+      log.debug("[CRYPTO-WEB] 类的方法执行解密完成: className={}, methodName={}", className, methodName);
     }
 
     // 返回解密后的请求体
-    return new DecryptHttpInputMessage(inputMessage, decrypted.getBytes(StandardCharsets.UTF_8));
+    return new DecryptHttpInputMessage(
+        inputMessage, decryptedBody.getBytes(StandardCharsets.UTF_8));
   }
 
   @Override

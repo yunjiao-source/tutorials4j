@@ -1,398 +1,453 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>加密通信示例 - 安全表单提交</title>
-  <!-- Bootstrap 5 CSS (稳定版) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>加密API测试 | 安全数据传输演示</title>
+  <!-- Bootstrap 5 CSS (轻量现代) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- jQuery 3.7 精简版 -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <!-- JSEncrypt RSA 加密库 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js"></script>
-  <!-- 可选FontAwesome 图标库 (提升视觉体验) -->
+  <!-- Font Awesome 6 (图标库) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- jQuery 3.6 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- CryptoJS (对称加密核心) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <!-- JSEncrypt (RSA非对称加密) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js"></script>
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
       background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-      min-height: 100vh;
-      padding: 2rem 0;
       font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     }
-    .crypto-card {
-      border-radius: 1.25rem;
-      border: none;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      transition: all 0.2s ease;
-      overflow: hidden;
-    }
     .card-header {
-      background: #2c3e66;
-      color: white;
       font-weight: 600;
-      padding: 1.2rem 1.8rem;
+      background: linear-gradient(45deg, #1e2a3a, #0f1724);
+      color: white;
       border-bottom: none;
-      font-size: 1.3rem;
     }
-    .card-header i {
-      margin-right: 10px;
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+      border: none;
+      overflow: hidden;
+      margin-bottom: 30px;
     }
-    .card-body {
-      padding: 2rem;
+    .info-badge {
+      background: #f0f4f9;
+      padding: 15px;
+      border-radius: 16px;
+      font-size: 0.9rem;
     }
-    .form-label {
-      font-weight: 500;
-      color: #1f2b48;
+    .key-box {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      background: #f8f9fc;
+      border-left: 4px solid #0d6efd;
+      word-break: break-all;
     }
     .btn-submit {
-      background: #1e466e;
+      background: linear-gradient(90deg, #0b5ed7, #0a58ca);
       border: none;
-      padding: 0.7rem 1.8rem;
+      padding: 12px 30px;
       font-weight: 600;
-      transition: 0.2s;
-      border-radius: 2rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: all 0.2s;
     }
     .btn-submit:hover {
-      background: #0f2e4a;
       transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px #0d6efd80;
     }
-    .publicKey-status {
-      background: #eef2f9;
-      border-radius: 1rem;
-      padding: 0.8rem 1.2rem;
-      font-size: 0.85rem;
-      border-left: 5px solid #2c7da0;
-      margin-bottom: 1.8rem;
-    }
-    .result-area {
-      background-color: #f8fafc;
-      border-radius: 1rem;
-      padding: 1.2rem;
-      margin-top: 1.5rem;
-      border: 1px solid #dee2e6;
-      font-family: 'Courier New', monospace;
-    }
-    .toast-message {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1100;
-      min-width: 260px;
-    }
-    .badge-crypto {
-      background-color: #355c7e;
-      font-size: 0.75rem;
+    .response-area {
+      background: #1e1f2c;
+      color: #e2e8f0;
+      border-radius: 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
     }
     footer {
-      text-align: center;
-      margin-top: 2rem;
-      color: #6c757d;
       font-size: 0.8rem;
+      color: #4b5563;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10">
-      <div class="card crypto-card">
+<div class="container py-5">
+  <!-- 标题区域 -->
+  <div class="text-center mb-5">
+    <h1 class="display-6 fw-bold"><i class="fas fa-lock me-2 text-primary"></i>加密 API 联调控制台</h1>
+    <p class="text-secondary">基于非对称(RSA) + 对称(AES)混合加密 | 动态密钥 · 安全传输</p>
+    <div class="d-flex justify-content-center">
+      <span class="badge bg-primary me-2"><i class="fas fa-arrow-right"></i> 请求体对称加密</span>
+      <span class="badge bg-warning text-dark"><i class="fas fa-key"></i> 对称密钥由RSA公钥加密传输</span>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- 左侧配置区 -->
+    <div class="col-lg-5">
+      <!-- 加密配置卡片 -->
+      <div class="card">
         <div class="card-header">
-          <i class="fas fa-lock"></i> 安全加密通信 · RSA 非对称加密
+          <i class="fas fa-cogs me-2"></i> 服务端加密策略
         </div>
         <div class="card-body">
-          <!-- 公钥状态区域 -->
-          <div class="publicKey-status" id="publicKeyStatus">
-            <i class="fas fa-key me-2"></i> <strong>公钥状态</strong> :
-            <span id="keyStatusText" class="ms-2">🔄 正在从服务器获取公钥...</span>
-            <br>
-            <small class="text-muted" id="pubKeyPreview" style="word-break: break-all;"></small>
+          <div id="cryptoConfigArea" class="info-badge">
+            <div class="d-flex justify-content-between mb-2">
+              <span><i class="fas fa-shield-alt text-primary"></i> 非对称算法：</span>
+              <strong id="asymType" class="text-dark">—</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span><i class="fas fa-lock text-success"></i> 对称算法：</span>
+              <strong id="symType" class="text-dark">—</strong>
+            </div>
+            <div class="mt-2">
+              <span><i class="fas fa-key text-warning"></i> RSA公钥(Hex):</span>
+              <div class="key-box p-2 mt-1 rounded small" id="publicKeyHex" style="max-height: 100px; overflow-y: auto;">—</div>
+            </div>
+            <div class="mt-3 text-end">
+              <button id="refreshConfigBtn" class="btn btn-sm btn-outline-secondary"><i class="fas fa-sync-alt"></i> 刷新配置</button>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <!-- 表单: 实际需要加密传输的数据 -->
+      <!-- 加密工具状态卡片 -->
+      <div class="card mt-4">
+        <div class="card-header bg-dark text-white">
+          <i class="fas fa-dice-d6 me-2"></i> 本次会话加密材料
+        </div>
+        <div class="card-body">
+          <div class="mb-2">
+            <label class="form-label fw-semibold"><i class="fas fa-seedling text-info"></i> 动态对称密钥 (随机生成)</label>
+            <div class="input-group">
+              <input type="text" id="sessionSymmetricKey" class="form-control form-control-sm bg-light" readonly placeholder="点击生成对称密钥">
+              <button class="btn btn-outline-primary btn-sm" type="button" id="generateNewKeyBtn"><i class="fas fa-arrows-rotate"></i> 重新生成</button>
+            </div>
+            <div class="form-text">每次提交将自动生成新密钥 (保障前向安全)</div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label fw-semibold"><i class="fas fa-envelope-open-text"></i> RSA加密后的对称密钥 (X-Crypto-Secret-Key-Hex)</label>
+            <textarea id="encryptedSymmetricKey" rows="2" class="form-control form-control-sm font-monospace" readonly placeholder="待加密生成..."></textarea>
+            <div class="form-text">Hex格式，将携带在请求头中</div>
+          </div>
+          <hr>
+          <div>
+            <button id="genAndEncryptKeyBtn" class="btn btn-sm btn-secondary w-100"><i class="fas fa-magic"></i> 生成对称密钥 & 用RSA公钥加密</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧提交区 -->
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-paper-plane me-2"></i> 加密数据提交 (自动混合加密)
+        </div>
+        <div class="card-body">
           <form id="secureForm">
-            <div class="mb-3">
-              <label for="username" class="form-label"><i class="far fa-user"></i> 用户名</label>
-              <input type="text" class="form-control" id="username" placeholder="请输入用户名" required>
-              <div class="form-text">此字段将被加密传输，后端自动解密处理</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">用户名 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="username" value="crypto_user_01" placeholder="请输入用户名">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">邮箱 <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="email" value="secure@example.com" placeholder="secure@example.com">
+              </div>
+              <div class="col-12">
+                <label class="form-label">消息内容</label>
+                <textarea class="form-control" id="message" rows="2" placeholder="输入加密传输的消息...">混合加密测试数据，后端将自动解密</textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">时间戳 (Date)</label>
+                <input type="datetime-local" class="form-control" id="timestampLocal" value="2025-04-01T12:00">
+                <div class="form-text">将转换为后端兼容的Date对象</div>
+              </div>
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label"><i class="far fa-envelope"></i> 邮箱</label>
-              <input type="email" class="form-control" id="email" placeholder="your@example.com" required>
-            </div>
-            <div class="mb-4">
-              <label for="message" class="form-label"><i class="far fa-comment-dots"></i> 备注信息</label>
-              <textarea class="form-control" id="message" rows="3" placeholder="任何需要安全提交的信息..."></textarea>
-            </div>
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-              <button type="submit" id="submitBtn" class="btn btn-submit text-white" disabled>
-                <i class="fas fa-paper-plane"></i> 加密提交
-              </button>
-              <button type="button" id="refreshKeyBtn" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-sync-alt"></i> 重新获取公钥
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <button type="button" id="submitEncryptedBtn" class="btn btn-submit text-white">
+                <i class="fas fa-shield-alt"></i> 加密提交 & 验证解密
               </button>
             </div>
           </form>
-
-          <!-- 服务器响应展示区域 -->
-          <div class="result-area" id="resultArea" style="display: none;">
-            <div class="d-flex align-items-center mb-2">
-              <i class="fas fa-exchange-alt me-2 text-info"></i>
-              <strong>后端解密响应</strong>
-              <span class="badge badge-crypto ms-2 rounded-pill">RSA解密+业务处理</span>
-            </div>
-            <div id="responseContent" class="small"></div>
-          </div>
-          <div class="alert alert-warning mt-3 mb-0 small" role="alert">
-            <i class="fas fa-info-circle"></i> 说明：前端使用 RSA 公钥加密整个请求体 (JSON字符串)，后端通过 <code>@Crypto(request=true)</code> 自动解密，本示例演示完整加密通信闭环。
-          </div>
         </div>
       </div>
-      <footer>
-        <i class="fas fa-shield-alt"></i> 基于 Thymeleaf + Bootstrap + jQuery + JSEncrypt | 后端提供公钥端点 /api/crypto/publicKey 并自动解密请求体
-      </footer>
-    </div>
-  </div>
-</div>
 
-<!-- 固定提示小toast (非阻塞) -->
-<div class="toast-message" id="dynamicToast" style="display: none;">
-  <div class="toast align-items-center text-white bg-dark border-0 show" role="alert">
-    <div class="d-flex">
-      <div class="toast-body" id="toastMsgBody">
-        提示信息
+      <!-- 响应结果展示区 -->
+      <div class="card mt-4">
+        <div class="card-header bg-success text-white">
+          <i class="fas fa-terminal me-2"></i> 服务器响应 (解密成功展示)
+        </div>
+        <div class="card-body response-area p-0">
+          <div id="apiResponse" class="p-3" style="min-height: 180px;">
+            <span class="text-secondary-emphasis"><i class="fas fa-hourglass-half"></i> 等待提交...</span>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent small text-muted">
+          <i class="fas fa-info-circle"></i> 后端收到密文后将用对称密钥解密，并返回业务数据
+        </div>
       </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
+  <footer class="text-center mt-5 pt-3 border-top">
+    <i class="fas fa-code-branch"></i> 加密流程: 获取服务器RSA公钥 → 随机生成AES对称密钥 → RSA公钥加密对称密钥放入请求头 → AES加密请求体 → 后端统一解密
+  </footer>
 </div>
 
 <script th:inline="javascript">
   /*<![CDATA[*/
-  // 获取上下文根 (保证在不同部署路径下API路径正确)
-  var contextPath = /*[[@{/}]]*/ '';
-  // 公钥获取端点
-  const PUBLIC_KEY_URL = contextPath + 'api/crypto/publicKey';
-  // 加密提交的目标接口 (后端需存在对应Controller, 且方法标注@Crypto(request=true))
-  // 示例假设接口为: POST /api/secure/submit 接收text/plain密文，自动解密后返回JSON
-  const SUBMIT_URL = contextPath + 'api/secure/submit';
+  // ---------- 全局状态 ----------
+  let cryptoContext = {
+    publicKeyPem: null,          // RSA PEM 格式公钥 (用于jsencrypt)
+    asymmetricType: null,        // 例如 "RSA"
+    symmetricType: null,         // 例如 "AES"
+    rsaHexPublicKey: null,
+    // 当前有效动态对称密钥 (原始base64格式, 用于AES加解密, 兼容后端SecretKey字符串)
+    currentSymmetricKeyBase64: null,
+    // RSA加密后的对称密钥 (Base64, 用于请求头)
+    currentEncryptedSecretKey: null
+  };
 
-  // 全局存储公钥PEM格式及状态
-  let publicKeyPEM = null;
-  let isKeyReady = false;
-
-  // 辅助函数: 将十六进制字符串转换为Uint8Array
-  function hexToBytes(hex) {
-    let len = hex.length;
-    if (len % 2 !== 0) throw new Error("无效的十六进制字符串长度");
-    let bytes = new Uint8Array(len / 2);
-    for (let i = 0; i < len; i += 2) {
-      bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-    }
-    return bytes;
-  }
-
-  // 核心: 将后端返回的十六进制公钥(DER格式, SubjectPublicKeyInfo)转换为PEM格式
-  // 注意: 后端通过 CryptoProcessor.getSecretKey().publicKeyHex() 返回X.509规范的十六进制串。
-  // 前端需要构建完整PEM: "-----BEGIN PUBLIC KEY-----\n" + base64DER + "\n-----END PUBLIC KEY-----"
-  function hexToPublicKeyPem(hexKey) {
+  // 辅助函数: Hex 转 PEM (适用于RSA PKCS#1 或 PKCS#8 公钥, 兼容jsencrypt)
+  // 后端返回hex格式公钥 (标准RSA公钥 一般为 X.509 SubjectPublicKeyInfo 的hex, 但这里按通用方式: 尝试构建pem)
+  // 如果公钥是裸RSA公钥模数+指数格式? 从后端实现看为 publicKeyHex，并且通过对称处理器获取，通常是标准X.509格式DER的hex。
+  // 我们使用JSEncrypt直接支持 PEM 字符串，需要 "-----BEGIN PUBLIC KEY-----" 形式。因此转换函数
+  function hexToRsaPublicKeyPem(hex) {
     try {
-      // 十六进制字符串转二进制数据
-      const derBytes = hexToBytes(hexKey);
-      // 二进制转Base64 (浏览器兼容处理)
-      let binaryStr = '';
-      for (let i = 0; i < derBytes.length; i++) {
-        binaryStr += String.fromCharCode(derBytes[i]);
+      // 标准公钥hex应为 DER 编码的 SubjectPublicKeyInfo 结构, 直接base64包装
+      const derBase64 = btoa(hex.match(/\w{2}/g).map(byte => String.fromCharCode(parseInt(byte, 16))).join(''));
+      return `-----BEGIN PUBLIC KEY-----\n${derBase64.match(/.{1,64}/g).join('\n')}\n-----END PUBLIC KEY-----`;
+    } catch (e) {
+      console.error("Hex转PEM失败, 尝试容错: ", e);
+      // 应急容错: 直接尝试对前端友好的公钥 (某些实现可能直接是PKCS#1格式，报错时再尝试)
+      return `-----BEGIN RSA PUBLIC KEY-----\n${btoa(hex)}\n-----END RSA PUBLIC KEY-----`;
+    }
+  }
+
+  // 从后端获取加密配置
+  function fetchCryptoConfig() {
+    return $.ajax({
+      url: '/api/crypto/publicKey',
+      method: 'GET',
+      contentType: 'application/json',
+      timeout: 10000
+    }).then(res => {
+      // 后端返回 CryptoInfo: { asymmetricCryptoStrategy, symmetricCryptoStrategy, publicKeyHex }
+      if (res && res.publicKeyHex) {
+        // 获取算法类别 (策略对象中可能有category字段或者根据类型推断)
+        let asymCategory = (res.asymmetricCryptoStrategy && (res.asymmetricCryptoStrategy.category || res.asymmetricCryptoStrategy.strategyType)) || 'RSA';
+        let symCategory = (res.symmetricCryptoStrategy && (res.symmetricCryptoStrategy.category || res.symmetricCryptoStrategy.strategyType)) || 'AES';
+        cryptoContext.asymmetricType = asymCategory;
+        cryptoContext.symmetricType = symCategory;
+        cryptoContext.rsaHexPublicKey = res.publicKeyHex;
+        // 转换为PEM格式以便jsencrypt使用
+        cryptoContext.publicKeyPem = hexToRsaPublicKeyPem(res.publicKeyHex);
+        // 更新UI
+        $('#asymType').text(asymCategory);
+        $('#symType').text(symCategory);
+        $('#publicKeyHex').text(res.publicKeyHex.substring(0, 180) + (res.publicKeyHex.length > 180 ? '......' : ''));
+        $('#publicKeyHex').attr('title', res.publicKeyHex);
+        // 成功获取后自动生成对称密钥和加密头
+        generateAndEncryptSymmetricKey();
+        return res;
+      } else {
+        throw new Error("后端公钥数据异常");
       }
-      // 标准Base64编码
-      const base64Der = btoa(binaryStr);
-      // 格式化PEM: 每64字符换行
-      const pemBody = base64Der.match(/.{1,64}/g).join('\n');
-      const pem = "-----BEGIN PUBLIC KEY-----\n" + pemBody + "\n-----END PUBLIC KEY-----";
-      return pem;
-    } catch (err) {
-      console.error("公钥转换PEM失败", err);
-      throw new Error("公钥格式转换错误: " + err.message);
-    }
+    }).fail(err => {
+      console.error("获取加密配置失败: ", err);
+      $('#asymType').text('获取失败');
+      $('#symType').text('请检查后端');
+      $('#publicKeyHex').text('请确认 /api/crypto/publicKey 可访问');
+      showToast("无法加载加密策略，请确认后端服务是否运行", "danger");
+    });
   }
 
-  // 显示短暂提示浮窗 (简易)
-  function showMessage(message, isError = false) {
-    const toastDiv = $('#dynamicToast');
-    const msgBody = $('#toastMsgBody');
-    msgBody.text(message);
-    toastDiv.removeClass('bg-dark bg-danger').addClass(isError ? 'bg-danger' : 'bg-dark');
-    toastDiv.fadeIn(200);
-    setTimeout(() => {
-      toastDiv.fadeOut(500);
-    }, 3000);
+  // 随机生成对称密钥 (根据对称算法类型: 默认AES-128/256, 后端SecretKey字符串规范使用Base64编码的16/24/32字节)
+  // 为了兼容大多数对称加密(Java AES)，生成16字节(128位) 或 32字节(256位)，稳妥选用16字节(128位)且Hex编码
+  function generateRandomSymmetricKeyHex() {
+    // 生成16字节（128位）AES密钥，以Hex字符串形式返回
+    const randomWordArray = CryptoJS.lib.WordArray.random(16);
+    return randomWordArray.toString(CryptoJS.enc.Hex);  // 例如: "a1b2c3..."
   }
 
-  // 更新公钥状态UI
-  function updateKeyStatus(ready, preview = '', errorMsg = null) {
-    const statusSpan = $('#keyStatusText');
-    const previewSpan = $('#pubKeyPreview');
-    if (errorMsg) {
-      statusSpan.html('<i class="fas fa-times-circle text-danger"></i> 公钥加载失败');
-      previewSpan.text(errorMsg);
-      isKeyReady = false;
-      $('#submitBtn').prop('disabled', true);
-      return;
+  // 辅助函数：Base64 转 Hex
+  function base64ToHex(base64) {
+    const binary = atob(base64);               // 解码为二进制字符串
+    let hex = '';
+    for (let i = 0; i < binary.length; i++) {
+      let byte = binary.charCodeAt(i).toString(16);
+      if (byte.length === 1) byte = '0' + byte;
+      hex += byte;
     }
-    if (ready && publicKeyPEM) {
-      statusSpan.html('<i class="fas fa-check-circle text-success"></i> 公钥已就绪，可加密提交');
-      let shortPreview = preview.length > 80 ? preview.substring(0, 77) + '...' : preview;
-      previewSpan.html(`<i class="fas fa-fingerprint"></i> 公钥指纹(PEM前缀): ${shortPreview}`);
-      $('#submitBtn').prop('disabled', false);
-      isKeyReady = true;
-    } else {
-      statusSpan.html('<i class="fas fa-spinner fa-pulse"></i> 加载公钥中...');
-      previewSpan.text('');
-      $('#submitBtn').prop('disabled', true);
-      isKeyReady = false;
-    }
+    return hex;
   }
 
-  // 从服务器获取公钥(hex格式) 并转为PEM存储
-  async function fetchPublicKey() {
-    updateKeyStatus(false);
+  // 使用 RSA 公钥加密对称密钥，返回 Base64 格式密文
+  function encryptSymmetricKeyWithRSA(symmetricKeyBase64, publicKeyPem) {
+    if (!publicKeyPem) {
+      throw new Error("RSA公钥无效，无法加密对称密钥");
+    }
+    const encryptor = new JSEncrypt();
+    encryptor.setPublicKey(publicKeyPem);
+    const encryptedBase64 = encryptor.encrypt(symmetricKeyBase64);
+    if (!encryptedBase64) {
+      throw new Error("RSA公钥加密对称密钥失败，请检查公钥格式或算法匹配");
+    }
+    // 将 Base64 密文转换为 Hex 字符串后返回
+    return encryptedBase64;
+  }
+
+  // 生成对称密钥+ 使用公钥加密 -> 更新全局变量
+  function generateAndEncryptSymmetricKey() {
+    if (!cryptoContext.publicKeyPem) {
+      console.warn("公钥尚未加载，稍后重试");
+      return Promise.reject("公钥未就绪");
+    }
     try {
-      showMessage("正在获取服务器公钥...");
-      const response = await fetch(PUBLIC_KEY_URL, {
-        method: 'GET',
-        headers: { 'Accept': 'text/plain' }
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      const hexKey = await response.text();
-      if (!hexKey || hexKey.trim().length === 0) {
-        throw new Error("服务器返回公钥为空");
-      }
-      const cleanedHex = hexKey.trim();
-      // 简单校验是否全十六进制 (允许出现字母和数字)
-      if (!/^[0-9A-Fa-f]+$/.test(cleanedHex)) {
-        throw new Error("公钥格式非十六进制，请检查后端接口");
-      }
-      // 转换PEM
-      const pem = hexToPublicKeyPem(cleanedHex);
-      publicKeyPEM = pem;
-      // 预览前35字符
-      const previewPart = pem.substring(0, 45) + '...';
-      updateKeyStatus(true, previewPart);
-      console.log("RSA 公钥PEM已加载:", pem.substring(0, 60) + "......");
-      showMessage("✓ 公钥加载成功，可进行加密提交", false);
-      return true;
-    } catch (err) {
-      console.error("获取公钥失败:", err);
-      updateKeyStatus(false, '', err.message);
-      showMessage("公钥获取失败: " + err.message, true);
-      return false;
+      const newSymmetricKey = generateRandomSymmetricKeyHex();
+      const encryptedKey = encryptSymmetricKeyWithRSA(newSymmetricKey, cryptoContext.publicKeyPem);
+      cryptoContext.currentSymmetricKeyBase64 = newSymmetricKey;
+      cryptoContext.currentEncryptedSecretKey = encryptedKey;
+
+      // UI 展示
+      $('#sessionSymmetricKey').val(newSymmetricKey);
+      $('#encryptedSymmetricKey').val(encryptedKey);
+      return { key: newSymmetricKey, encrypted: encryptedKey };
+    } catch (error) {
+      console.error("生成加密对称密钥失败: ", error);
+      showToast("密钥生成失败: " + error.message, "warning");
+      return null;
     }
   }
 
-  // 使用JSEncrypt加密文本
-  function encryptWithPublicKey(plainText) {
-    if (!publicKeyPEM) {
-      throw new Error("公钥未加载，无法加密");
-    }
-    const crypt = new JSEncrypt();
-    crypt.setPublicKey(publicKeyPEM);
-    const encrypted = crypt.encrypt(plainText);
-    if (!encrypted) {
-      throw new Error("RSA加密失败，请检查公钥格式或明文字符串长度超出限制");
-    }
-    return encrypted;   // 返回Base64密文
+  // ========== 核心: AES 对称加密请求体 (采用AES-ECB模式 + 随机IV，并按照 "IV(16字节)+密文" 格式Base64编码 ==========
+  // 这样后端可以实现通用解密 (后端需要解析前缀IV)。由于示例后端框架使用相同模式(猜测)；
+  // 为了安全且跨平台，加密数据格式: 前16字节为IV, 后续为密文，整体Base64编码。
+  // 对称算法: AES/CBC/PKCS7Padding (CryptoJS默认padding Pkcs7)
+  function encryptPayloadWithAes(plainJsonString, symmetricKeyHex) {
+    if (!symmetricKeyHex) throw new Error("对称密钥未设置");
+    // 将Hex格式的密钥转换为CryptoJS WordArray
+    const keyWordArray = CryptoJS.enc.Hex.parse(symmetricKeyHex);
+    // 执行AES加密（ECB模式，PKCS5Padding由CryptoJS的Pkcs7兼容实现）
+    const encrypted = CryptoJS.AES.encrypt(plainJsonString, keyWordArray, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7      // PKCS5Padding 与 Pkcs7 在 AES 中相同
+    });
+    // 获取密文字节（WordArray），直接转为Base64字符串返回
+    const ciphertextBase64 = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+    return ciphertextBase64;
   }
-
-  // 组装请求数据(表单->json) 并加密后提交
-  async function submitEncryptedData(event) {
-    event.preventDefault();
-    if (!isKeyReady || !publicKeyPEM) {
-      showMessage("公钥尚未准备好，请稍后或点击刷新公钥", true);
-      return;
+  // 构建提交的User对象并加密
+  async function submitEncryptedData() {
+    // 0. 校验必要参数
+    if (!cryptoContext.publicKeyPem || !cryptoContext.currentSymmetricKeyBase64 || !cryptoContext.currentEncryptedSecretKey) {
+      showToast("请等待加密配置加载完成，或点击「生成对称密钥」重试", "warning");
+      // 尝试重新生成
+      if (cryptoContext.publicKeyPem) {
+        generateAndEncryptSymmetricKey();
+        if (!cryptoContext.currentSymmetricKeyBase64) {
+          showToast("密钥初始化失败, 请刷新配置", "danger");
+          return;
+        }
+      } else {
+        await fetchCryptoConfig();
+        if (!cryptoContext.publicKeyPem) return;
+        generateAndEncryptSymmetricKey();
+      }
     }
 
     // 获取表单数据
     const username = $('#username').val().trim();
     const email = $('#email').val().trim();
     const message = $('#message').val().trim();
-    if (!username || !email) {
-      showMessage("请填写用户名和邮箱", true);
-      return;
+    let timestampRaw = $('#timestampLocal').val();
+    let timestampDate = null;
+    if (timestampRaw) {
+      // 转换为Date对象 (ISO格式补全时区)
+      timestampDate = new Date(timestampRaw);
+      if (isNaN(timestampDate.getTime())) {
+        timestampDate = new Date();
+      }
+    } else {
+      timestampDate = new Date();
     }
-    // 构建业务数据对象 (后端Controller期望的DTO结构或者直接Map)
-    const requestData = {
-      username: username,
+
+    const userPayload = {
+      user: username,
       email: email,
       message: message,
-      timestamp: new Date().toISOString()
+      timestamp: timestampDate.toISOString()   // 发送ISO字符串，后端可以解析Date类型 (Spring兼容)
     };
-    // 转为json字符串 (加密传输的内容)
-    const plainJson = JSON.stringify(requestData);
-
-    // 简单校验长度: RSA 2048位最多245字节, 一般JSON不会太大, 但做预警
-    if (plainJson.length > 240) {
-      showMessage("注意: 加密数据较长，RSA加密可能存在长度限制, 建议简化数据", false);
+    const plainText = JSON.stringify(userPayload);
+    // 对称加密请求体
+    let encryptedRequestBody;
+    try {
+      encryptedRequestBody = encryptPayloadWithAes(plainText, cryptoContext.currentSymmetricKeyBase64);
+    } catch (encErr) {
+      showToast("数据对称加密失败: " + encErr.message, "danger");
+      return;
     }
 
-    // 禁用提交按钮，显示loading
-    const submitBtn = $('#submitBtn');
-    const originalBtnHtml = submitBtn.html();
-    submitBtn.html('<i class="fas fa-spinner fa-pulse"></i> 加密提交中...').prop('disabled', true);
+    // 构建请求头: X-Crypto-Secret-Key-Hex 携带 RSA 加密后的对称密钥
+    const headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'X-Crypto-Secret-Key-Hex': cryptoContext.currentEncryptedSecretKey
+    };
 
+    // 显示加载状态
+    $('#apiResponse').html('<div class="spinner-border spinner-border-sm text-info me-2" role="status"></div> 正在加密传输并等待后端解密...');
     try {
-      // 执行RSA加密
-      const encryptedBase64 = encryptWithPublicKey(plainJson);
-      console.log("加密后的密文(前50字符):", encryptedBase64.substring(0,50)+"......");
-
-      // 发送加密请求体 (POST, Content-Type: text/plain)
-      const submitResponse = await fetch(SUBMIT_URL, {
+      const response = await $.ajax({
+        url: '/api/secure/submit',
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: encryptedBase64
+        headers: headers,
+        data: encryptedRequestBody,     // 直接发送加密后的请求体 (纯文本密文)
+        processData: false,
+        timeout: 15000
       });
-
-      if (!submitResponse.ok) {
-        let errorText = `请求失败 ${submitResponse.status}`;
-        try {
-          const errorBody = await submitResponse.text();
-          errorText += ` : ${errorBody.substring(0, 100)}`;
-        } catch(e) {}
-        throw new Error(errorText);
-      }
-
-      // 尝试解析后端返回的JSON (后端返回解密处理后的结果)
-      const responseJson = await submitResponse.json();
-      // 显示结果区域
-      $('#resultArea').fadeIn(300);
-      const prettyJson = JSON.stringify(responseJson, null, 2);
-      $('#responseContent').html(`
-                <div class="mb-1"><i class="fas fa-check-circle text-success"></i> 后端已成功解密请求并处理：</div>
-                <pre class="small bg-white p-2 rounded border" style="max-height: 250px; overflow: auto;">${escapeHtml(prettyJson)}</pre>
+      // 显示后端响应（后端已经处理解密并返回业务数据）
+      const prettyResponse = JSON.stringify(response, null, 2);
+      $('#apiResponse').html(`
+                <div class="alert alert-success mb-0 p-2" style="background:#0f1724; border-color:#2c3e66;">
+                    <i class="fas fa-check-circle text-success me-2"></i><strong>解密响应成功</strong>
+                    <pre class="mt-2 mb-0 text-light" style="font-size:0.75rem; white-space: pre-wrap;">${escapeHtml(prettyResponse)}</pre>
+                </div>
             `);
-      showMessage("提交成功！后端已解密并返回数据", false);
-      // 可选: 清空表单或保持
-      // $('#secureForm')[0].reset();  看需求注释
-    } catch (err) {
-      console.error("提交或加密异常", err);
-      $('#resultArea').hide();
-      showMessage("加密提交失败: " + err.message, true);
-    } finally {
-      // 恢复按钮状态, 若公钥仍有效则启用
-      submitBtn.html(originalBtnHtml);
-      if (isKeyReady && publicKeyPEM) {
-        submitBtn.prop('disabled', false);
+      showToast("数据加密提交成功，后端正确解密并返回结果", "success");
+      // 为了提高安全性，每次提交成功以后重新生成对称密钥（禁止复用）
+      setTimeout(() => {
+        if (cryptoContext.publicKeyPem) {
+          //generateAndEncryptSymmetricKey();
+          showToast("已自动轮换对称密钥，保证下次请求安全性", "info");
+        }
+      }, 300);
+    } catch (xhrError) {
+      let errorMsg = "请求失败: ";
+      if (xhrError.responseText) {
+        try {
+          const errJson = JSON.parse(xhrError.responseText);
+          errorMsg += errJson.message || errJson.error || xhrError.statusText;
+        } catch (e) {
+          errorMsg += xhrError.responseText.substring(0, 200);
+        }
       } else {
-        submitBtn.prop('disabled', true);
+        errorMsg += xhrError.statusText || "网络错误";
       }
+      $('#apiResponse').html(`
+                <div class="alert alert-danger mb-0 p-2">
+                    <i class="fas fa-exclamation-triangle me-2"></i><strong>后端解密或处理异常</strong><br>
+                    <small>${escapeHtml(errorMsg)}</small><br>
+                    <span class="text-warning-emphasis small">请确保后端请求头X-Crypto-Secret-Key-Hex正确，且对称加密格式(IV+密文)与后端约定一致</span>
+                </div>
+            `);
+      showToast(errorMsg, "danger");
     }
   }
 
-  // 简单防XSS辅助
+  // 简单的HTML转义
   function escapeHtml(str) {
     if (!str) return '';
     return str.replace(/[&<>]/g, function(m) {
@@ -405,40 +460,75 @@
     });
   }
 
-  // 刷新公钥 (重置状态)
-  async function refreshPublicKey() {
-    publicKeyPEM = null;
-    isKeyReady = false;
-    await fetchPublicKey();
-    // 如果之前有显示的结果区域, 最好保留但不清除; 但刷新公钥并不影响提交历史
-    $('#submitBtn').prop('disabled', !isKeyReady);
+  function showToast(msg, type = 'info') {
+    // 简单toast实现（无额外组件，使用浮动提示）
+    const toastContainer = $('#toastPlaceholder');
+    if (toastContainer.length === 0) {
+      $('body').append('<div id="toastPlaceholder" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"></div>');
+    }
+    const bgColor = type === 'danger' ? 'bg-danger' : (type === 'success' ? 'bg-success' : 'bg-primary');
+    const toastId = 'liveToast_' + Date.now();
+    const toastHtml = `
+            <div id="${toastId}" class="toast align-items-center text-white ${bgColor} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
+                <div class="d-flex">
+                    <div class="toast-body">${escapeHtml(msg)}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+    $('#toastPlaceholder').append(toastHtml);
+    const toastEl = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+    toast.show();
+    toastEl.addEventListener('hidden.bs.toast', function() { $(this).remove(); });
   }
 
-  // 初始化页面事件
-  $(document).ready(async function() {
-    // 加载公钥
-    await fetchPublicKey();
-
-    // 绑定表单提交事件
-    $('#secureForm').on('submit', submitEncryptedData);
-
-    // 刷新公钥按钮
-    $('#refreshKeyBtn').on('click', function() {
-      refreshPublicKey();
+  // 刷新整体配置，并重置加密key
+  function refreshFullConfig() {
+    $('#apiResponse').html('<span><i class="fas fa-sync-alt"></i> 正在刷新加密配置...</span>');
+    fetchCryptoConfig().then(() => {
+      if (cryptoContext.publicKeyPem) {
+        generateAndEncryptSymmetricKey();
+        $('#apiResponse').html('<span class="text-success"><i class="fas fa-check-circle"></i> 加密策略已更新，对称密钥已生成</span>');
+      }
+    }).catch(() => {
+      $('#apiResponse').html('<span class="text-danger"><i class="fas fa-times-circle"></i> 刷新配置失败，请检查后端接口</span>');
     });
+  }
 
-    // 测试性提醒: 若后端没有实现 /api/secure/submit 接口，可提示配置
-    console.log("提示: 确保后端存在 POST " + SUBMIT_URL + " 且方法使用 @Crypto(request=true) 以及 @RequestBody String 或 对象接收解密后的数据");
-    // 友好警告（仅控制台）
-  });
+  // 手动重新生成对称密钥 + RSA加密 (不改变公钥)
+  function manualRegenerateKey() {
+    if (!cryptoContext.publicKeyPem) {
+      showToast("请先获取加密配置，再生成密钥", "warning");
+      fetchCryptoConfig().then(() => manualRegenerateKey());
+      return;
+    }
+    const result = generateAndEncryptSymmetricKey();
+    if (result) {
+      showToast("已重新生成对称密钥并使用RSA公钥加密", "success");
+    } else {
+      showToast("密钥生成失败，请确认公钥格式", "danger");
+    }
+  }
 
-  // 可选: 增加Bootstrap Toast初始化 不使用额外依赖，使用简单模拟toast
-  // 解决关闭按钮 (手动关闭简易toast)
-  $(document).on('click', '.toast-message .btn-close', function() {
-    $('#dynamicToast').fadeOut(300);
+  // 页面初始化逻辑
+  $(document).ready(function() {
+    // 加载配置
+    fetchCryptoConfig();
+    // 绑定提交按钮
+    $('#submitEncryptedBtn').on('click', submitEncryptedData);
+    $('#refreshConfigBtn').on('click', refreshFullConfig);
+    $('#generateNewKeyBtn').on('click', manualRegenerateKey);
+    // 附加: 如果对称密钥空白时点击提交，提示生成
+    $('#genAndEncryptKeyBtn').on('click', manualRegenerateKey);
+    // 预置示例时间默认当前时间
+    const now = new Date();
+    const localDateTime = now.toISOString().slice(0, 16);
+    $('#timestampLocal').val(localDateTime);
+    // 添加关于IV拼接加密的提示
+    console.log("前端加密协议: AES-128-CBC, IV随机16字节, 密文格式 IV(16)+密文整体Base64");
   });
   /*]]>*/
 </script>
-
 </body>
 </html>

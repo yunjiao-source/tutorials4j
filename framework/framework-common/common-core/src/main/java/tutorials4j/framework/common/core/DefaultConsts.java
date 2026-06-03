@@ -64,6 +64,8 @@ public interface DefaultConsts {
         DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE
       };
 
+  String HTTP_HEADER_CRYPTO_SECRET_KEY_HEX = "X-Crypto-Secret-Key-Hex";
+
   /** Class 名称定义 */
   String CLASS_HIKARI_DATA_SOURCE = "HikariDataSource";
 

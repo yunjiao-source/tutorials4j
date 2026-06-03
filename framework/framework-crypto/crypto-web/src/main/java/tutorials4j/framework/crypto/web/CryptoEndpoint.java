@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.framework.crypto.core.AsymmetricCryptoStrategy;
+import tutorials4j.framework.crypto.core.SymmetricCryptoStrategy;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
-import tutorials4j.framework.crypto.core.properties.CryptoProperties;
 
 /**
  * TODO
@@ -17,13 +18,14 @@ import tutorials4j.framework.crypto.core.properties.CryptoProperties;
 @RequestMapping("/api/crypto")
 @RequiredArgsConstructor
 public class CryptoEndpoint {
-  private final CryptoProperties properties;
+  private final AsymmetricCryptoStrategy asymmetricCryptoStrategy;
+  private final SymmetricCryptoStrategy symmetricCryptoStrategy;
 
   @GetMapping("publicKey")
-  public String getPublicKey() {
+  public CryptoInfo getPublicKey() {
     CryptoProcessor cryptoProcessor =
-        CryptoProcessorFactory.instance.findProcessor(
-            properties.getAsymmetricCryptoStrategy().getCategory());
-    return cryptoProcessor.getSecretKey().publicKeyHex();
+        CryptoProcessorFactory.instance.findProcessor(asymmetricCryptoStrategy.getCategory());
+    String publicKeyHex = cryptoProcessor.getSecretKey().publicKeyHex();
+    return new CryptoInfo(asymmetricCryptoStrategy, symmetricCryptoStrategy, publicKeyHex);
   }
 }

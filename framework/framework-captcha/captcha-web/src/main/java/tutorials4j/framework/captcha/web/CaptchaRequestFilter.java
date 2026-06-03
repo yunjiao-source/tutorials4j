@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import tutorials4j.framework.captcha.CaptchaServiceFactory;
 import tutorials4j.framework.captcha.exception.CaptchaException;
 import tutorials4j.framework.common.core.DefaultConsts;
+import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.common.spring.web.RemoveHeaderRequestWrapper;
 
 /**
@@ -32,9 +33,9 @@ public class CaptchaRequestFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String key = request.getHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_KEY);
-    String category = request.getHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_CATEGORY);
-    String code = request.getHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_CODE);
+    String key = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_CAPTCHA_KEY);
+    String category = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_CAPTCHA_CATEGORY);
+    String code = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_CAPTCHA_CODE);
 
     // 1. 参数校验
     if (StringUtils.isAnyBlank(key, category, code)) {

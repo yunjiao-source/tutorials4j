@@ -38,6 +38,13 @@ public interface CacheTemplate<K, V> {
    */
   V putIfAbsent(K key, V value);
 
+  default V createIfAbsent(K key) {
+    if (!exists(key)) {
+      create(key);
+    }
+    return get(key);
+  }
+
   /**
    * 根据 key 生成值的逻辑。子类需实现具体生成规则。
    *

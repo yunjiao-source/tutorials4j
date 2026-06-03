@@ -1,6 +1,7 @@
 package tutorials4j.framework.web.security.signature;
 
 import cn.hutool.core.util.IdUtil;
+import tutorials4j.framework.cache.core.CacheNameConsts;
 import tutorials4j.framework.cache.core.template.AbstractRedisCacheTemplate;
 
 /**
@@ -12,7 +13,7 @@ import tutorials4j.framework.cache.core.template.AbstractRedisCacheTemplate;
  */
 public class SignatureCacheTemplate extends AbstractRedisCacheTemplate<String, String> {
   public SignatureCacheTemplate() {
-    super("signature");
+    super(CacheNameConsts.WEB_SECURITY_SIGNATURE);
   }
 
   @Override

@@ -14,7 +14,7 @@ tutorials4j:
         cacheNullValues: false
         enable-statistics: true
       caches:
-        signature:
+        web-security-signature:
           timeToLive: 1m
           cacheNullValues: true
           redis:

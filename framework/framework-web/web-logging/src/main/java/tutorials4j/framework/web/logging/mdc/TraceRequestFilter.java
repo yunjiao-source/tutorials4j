@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tutorials4j.framework.common.core.DefaultConsts;
+import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.web.core.util.WebUtils;
 
 /**
@@ -29,9 +30,10 @@ public class TraceRequestFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     // 1. 获取或生成追踪ID
-    String traceId = request.getHeader(DefaultConsts.HTTP_HEADER_TRACE_ID);
-    String spanId = request.getHeader(DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID);
-    String parentSpanId = request.getHeader(DefaultConsts.HTTP_HEADER_TRACE_PARENT_SPAN_ID);
+    String traceId = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_TRACE_ID);
+    String spanId = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID);
+    String parentSpanId =
+        HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_TRACE_PARENT_SPAN_ID);
 
     if (traceId == null || traceId.isEmpty()) {
       traceId = WebUtils.generateTraceId();

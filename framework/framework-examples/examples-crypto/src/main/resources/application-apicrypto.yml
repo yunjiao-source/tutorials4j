@@ -1,3 +1,15 @@
 tutorials4j:
-  crypto:
-    asymmetric-crypto-strategy: standard
+  cache:
+    named:
+      defaults:
+        timeToLive: 2m
+        cacheNullValues: false
+        enable-statistics: true
+      caches:
+        crypto-request:
+          timeToLive: 1m
+          cacheNullValues: false
+          caffeine:
+            expire-after-access: 10s
+            initial-capacity: 5
+            maximum-size: 10

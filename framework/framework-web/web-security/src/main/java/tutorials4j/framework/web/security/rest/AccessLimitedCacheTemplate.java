@@ -1,5 +1,6 @@
 package tutorials4j.framework.web.security.rest;
 
+import tutorials4j.framework.cache.core.CacheNameConsts;
 import tutorials4j.framework.cache.core.template.AbstractCounterCacheTemplate;
 import tutorials4j.framework.web.core.annotation.AccessLimited;
 
@@ -16,6 +17,6 @@ import tutorials4j.framework.web.core.annotation.AccessLimited;
 public class AccessLimitedCacheTemplate extends AbstractCounterCacheTemplate {
   /** 构造访问限制缓存模板，指定缓存名称为 "access_limited"。 最大次数由调用方通过 {@link #counting(String, int)} 动态传入。 */
   public AccessLimitedCacheTemplate() {
-    super("access_limited");
+    super(CacheNameConsts.WEB_SECURITY_ACCESS_LIMITED);
   }
 }

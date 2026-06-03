@@ -74,6 +74,8 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
         }
         return caffeine.build();
       }
+    } else {
+      log.warn("[CACHE-CAFFEINE] 未配置缓存，将使用默认配置： {}", name);
     }
 
     return super.createNativeCaffeineCache(name);

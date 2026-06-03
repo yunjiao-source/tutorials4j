@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tutorials4j.framework.common.core.DefaultConsts;
+import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.common.spring.util.SecurityUtils;
 import tutorials4j.framework.common.spring.web.RemoveHeaderRequestWrapper;
 import tutorials4j.framework.web.core.exception.WebFrameworkException;
@@ -42,11 +43,12 @@ public class GoogleAuthRequestFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String userName = request.getHeader(DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME);
+    String userName =
+        HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME);
     if (StringUtils.isBlank(userName)) {
       userName = SecurityUtils.getAccount();
     }
-    String code = request.getHeader(DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE);
+    String code = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE);
 
     // 1. 参数校验
     if (StringUtils.isAnyBlank(userName, code)) {

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.captcha.CaptchaCategory;
 import tutorials4j.framework.captcha.CaptchaService;
 import tutorials4j.framework.captcha.CaptchaServiceFactory;
+import tutorials4j.framework.web.core.annotation.AccessLimited;
 
 /**
  * 验证码接口
@@ -46,6 +47,7 @@ public class UniformCaptchaEndpoint {
       content =
           @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
   @GetMapping("create")
+  @AccessLimited(maxTimes = 2)
   public Map<String, Object> create(@RequestParam("category") CaptchaCategory category) {
     CaptchaService service = factory.findService(category);
     return service.draw();

@@ -1,5 +1,6 @@
 package tutorials4j.framework.web.security.rest;
 
+import tutorials4j.framework.cache.core.CacheNameConsts;
 import tutorials4j.framework.cache.core.template.AbstractCounterCacheTemplate;
 
 /**
@@ -14,7 +15,7 @@ import tutorials4j.framework.cache.core.template.AbstractCounterCacheTemplate;
 public class IdempotentCacheTemplate extends AbstractCounterCacheTemplate {
   /** 构造幂等性缓存模板，指定缓存名称为 "idempotent"，并设置最大计数次数为 1。 */
   public IdempotentCacheTemplate() {
-    super("idempotent");
+    super(CacheNameConsts.WEB_SECURITY_IDEMPOTENT);
     setMaxTimes(1);
   }
 }

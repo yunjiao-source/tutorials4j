@@ -3,18 +3,18 @@ package tutorials4j.framework.crypto.core;
 import lombok.Getter;
 
 /**
- * 非对称加解密策略
+ * 对称加解密策略
  *
  * @author Yun Jiao
  */
 @Getter
-public enum AsymmetricCryptoStrategy {
-  RSA(CryptoCategory.RSA),
-  SM(CryptoCategory.SM2);
+public enum SymmetricCryptoStrategy {
+  AES(CryptoCategory.AES),
+  SM4(CryptoCategory.SM4);
 
   private final CryptoCategory category;
 
-  AsymmetricCryptoStrategy(CryptoCategory category) {
+  SymmetricCryptoStrategy(CryptoCategory category) {
     this.category = category;
   }
 }

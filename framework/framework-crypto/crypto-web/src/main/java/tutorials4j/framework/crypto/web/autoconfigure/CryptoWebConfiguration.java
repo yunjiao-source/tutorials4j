@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
-import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
 import tutorials4j.framework.crypto.core.properties.CryptoProperties;
 import tutorials4j.framework.crypto.web.CryptoEndpoint;
 import tutorials4j.framework.crypto.web.CryptoRequestBodyAdvice;
+import tutorials4j.framework.crypto.web.CryptoRequestCacheTemplate;
 
 /**
  * TODO
@@ -26,18 +25,25 @@ public class CryptoWebConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  CryptoRequestBodyAdvice cryptoRequestBodyAdvice(CryptoProperties properties) {
-    CryptoProcessor processor =
-        CryptoProcessorFactory.instance.findProcessor(
-            properties.getAsymmetricCryptoStrategy().getCategory());
+  CryptoRequestCacheTemplate cryptoRequestCacheTemplate(CryptoProperties properties) {
+    log.debug("[CRYPTO-WEB] Crypto Request Cache Template");
+    return new CryptoRequestCacheTemplate(
+        properties.getAsymmetricCryptoStrategy(), properties.getSymmetricCryptoStrategy());
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  CryptoRequestBodyAdvice cryptoRequestBodyAdvice(
+      CryptoRequestCacheTemplate cryptoRequestCacheTemplate) {
     log.debug("[CRYPTO-WEB] Crypto Request Body Advice");
-    return new CryptoRequestBodyAdvice(processor);
+    return new CryptoRequestBodyAdvice(cryptoRequestCacheTemplate);
   }
 
   @Bean
   @ConditionalOnMissingBean
   CryptoEndpoint cryptoEndpoint(CryptoProperties properties) {
     log.debug("[CRYPTO-WEB] Crypto Endpoint");
-    return new CryptoEndpoint(properties);
+    return new CryptoEndpoint(
+        properties.getAsymmetricCryptoStrategy(), properties.getSymmetricCryptoStrategy());
   }
 }
