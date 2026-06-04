@@ -21,13 +21,14 @@ public class CryptoRequestCacheTemplate
   private final CryptoProcessor symmetricProcessor;
 
   public CryptoRequestCacheTemplate(
+      CryptoProcessorFactory cryptoProcessorFactory,
       AsymmetricCryptoStrategy asymmetricCryptoStrategy,
       SymmetricCryptoStrategy symmetricCryptoStrategy) {
     super(CacheNameConsts.CRYPTO_REQUEST);
     this.asymmetricProcessor =
-        CryptoProcessorFactory.instance.findProcessor(asymmetricCryptoStrategy.getCategory());
+        cryptoProcessorFactory.findProcessor(asymmetricCryptoStrategy.getCategory());
     this.symmetricProcessor =
-        CryptoProcessorFactory.instance.findProcessor(symmetricCryptoStrategy.getCategory());
+        cryptoProcessorFactory.findProcessor(symmetricCryptoStrategy.getCategory());
   }
 
   @Override
@@ -38,7 +39,7 @@ public class CryptoRequestCacheTemplate
   @Override
   public CryptoProcessor valueGenerator(String key) {
     if (log.isDebugEnabled()) {
-      log.debug("[CRYPTO-WEB] 创建新的对称加密处理器，key={}", key);
+      log.debug("[CRYPTO-WEB] 创建新的对称加密处理器，key=......{}", key.lastIndexOf(10));
     }
     // 用非对称解密私钥
     String secretKey = asymmetricProcessor.decrypt(key);

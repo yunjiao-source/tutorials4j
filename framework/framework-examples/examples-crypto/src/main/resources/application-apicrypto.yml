@@ -10,6 +10,6 @@ tutorials4j:
           timeToLive: 1m
           cacheNullValues: false
           caffeine:
-            expire-after-access: 10s
-            initial-capacity: 5
-            maximum-size: 10
+            expire-after-access: 30s
+            initial-capacity: 2
+            maximum-size: 5

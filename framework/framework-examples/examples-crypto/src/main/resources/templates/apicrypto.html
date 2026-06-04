@@ -206,7 +206,7 @@
     symmetricType: null,         // 例如 "AES"
     rsaHexPublicKey: null,
     // 当前有效动态对称密钥 (原始base64格式, 用于AES加解密, 兼容后端SecretKey字符串)
-    currentSymmetricKeyBase64: null,
+    currentSymmetricKeyHex: null,
     // RSA加密后的对称密钥 (Base64, 用于请求头)
     currentEncryptedSecretKey: null
   };
@@ -309,7 +309,7 @@
     try {
       const newSymmetricKey = generateRandomSymmetricKeyHex();
       const encryptedKey = encryptSymmetricKeyWithRSA(newSymmetricKey, cryptoContext.publicKeyPem);
-      cryptoContext.currentSymmetricKeyBase64 = newSymmetricKey;
+      cryptoContext.currentSymmetricKeyHex = newSymmetricKey;
       cryptoContext.currentEncryptedSecretKey = encryptedKey;
 
       // UI 展示
@@ -340,15 +340,36 @@
     const ciphertextBase64 = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
     return ciphertextBase64;
   }
+
+  function decryptPayloadWithAes(ciphertextHex, symmetricKeyHex) {
+    if (!symmetricKeyHex) throw new Error("对称密钥未设置");
+    // 将Hex格式的密钥转换为CryptoJS WordArray
+    const keyWordArray = CryptoJS.enc.Hex.parse(symmetricKeyHex);
+    // 将Base64密文转换为CryptoJS WordArray
+    const ciphertextWordArray = CryptoJS.enc.Hex.parse(ciphertextHex);
+    // 执行AES解密（ECB模式，PKCS7 padding）
+    const decrypted = CryptoJS.AES.decrypt(
+        { ciphertext: ciphertextWordArray },   // 仅传入密文部分
+        keyWordArray,
+        {
+          mode: CryptoJS.mode.ECB,
+          padding: CryptoJS.pad.Pkcs7
+        }
+    );
+    // 将解密结果转为UTF-8字符串
+    const plainJsonString = decrypted.toString(CryptoJS.enc.Utf8);
+    if (!plainJsonString) throw new Error("解密失败，可能是密钥错误或数据损坏");
+    return plainJsonString;
+  }
   // 构建提交的User对象并加密
   async function submitEncryptedData() {
     // 0. 校验必要参数
-    if (!cryptoContext.publicKeyPem || !cryptoContext.currentSymmetricKeyBase64 || !cryptoContext.currentEncryptedSecretKey) {
+    if (!cryptoContext.publicKeyPem || !cryptoContext.currentSymmetricKeyHex || !cryptoContext.currentEncryptedSecretKey) {
       showToast("请等待加密配置加载完成，或点击「生成对称密钥」重试", "warning");
       // 尝试重新生成
       if (cryptoContext.publicKeyPem) {
         generateAndEncryptSymmetricKey();
-        if (!cryptoContext.currentSymmetricKeyBase64) {
+        if (!cryptoContext.currentSymmetricKeyHex) {
           showToast("密钥初始化失败, 请刷新配置", "danger");
           return;
         }
@@ -385,7 +406,7 @@
     // 对称加密请求体
     let encryptedRequestBody;
     try {
-      encryptedRequestBody = encryptPayloadWithAes(plainText, cryptoContext.currentSymmetricKeyBase64);
+      encryptedRequestBody = encryptPayloadWithAes(plainText, cryptoContext.currentSymmetricKeyHex);
     } catch (encErr) {
       showToast("数据对称加密失败: " + encErr.message, "danger");
       return;
@@ -409,7 +430,7 @@
         timeout: 15000
       });
       // 显示后端响应（后端已经处理解密并返回业务数据）
-      const prettyResponse = JSON.stringify(response, null, 2);
+      const prettyResponse = decryptPayloadWithAes(response, cryptoContext.currentSymmetricKeyHex);
       $('#apiResponse').html(`
                 <div class="alert alert-success mb-0 p-2" style="background:#0f1724; border-color:#2c3e66;">
                     <i class="fas fa-check-circle text-success me-2"></i><strong>解密响应成功</strong>

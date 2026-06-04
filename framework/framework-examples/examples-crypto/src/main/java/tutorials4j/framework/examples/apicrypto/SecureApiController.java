@@ -20,7 +20,7 @@ import tutorials4j.framework.crypto.core.annotation.Crypto;
 @RequestMapping("/api/secure")
 public class SecureApiController {
   @PostMapping("/submit")
-  @Crypto(request = true) // 关键注解：自动解密请求体
+  @Crypto
   public ResponseEntity<Map<String, Object>> handleEncrypted(@RequestBody User user) {
     // 业务处理...
     Map<String, Object> result = new HashMap<>();

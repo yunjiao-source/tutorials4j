@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
-import tutorials4j.framework.crypto.core.annotation.Crypto;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 
 /**
@@ -27,21 +26,16 @@ import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
  */
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
   private final CryptoRequestCacheTemplate cryptoRequestCacheTemplate;
-
-  public CryptoRequestBodyAdvice(CryptoRequestCacheTemplate cryptoRequestCacheTemplate) {
-    this.cryptoRequestCacheTemplate = cryptoRequestCacheTemplate;
-  }
 
   @Override
   public boolean supports(
       MethodParameter methodParameter,
       Type targetType,
       Class<? extends HttpMessageConverter<?>> converterType) {
-    Crypto crypto = methodParameter.getMethodAnnotation(Crypto.class);
-    boolean supported = ObjectUtils.isNotEmpty(crypto) && crypto.request();
-
+    boolean supported = CryptoUtils.supported(methodParameter);
     if (log.isDebugEnabled()) {
       String methodName = methodParameter.getMethod().getName();
       String className = methodParameter.getDeclaringClass().getName();

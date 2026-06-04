@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD) // 注解仅作用于方法
 @Retention(RetentionPolicy.RUNTIME) // 运行时保留，便于AOP拦截获取
 public @interface Crypto {
-  boolean response() default false;
+  boolean response() default true;
 
   boolean request() default true;
 }

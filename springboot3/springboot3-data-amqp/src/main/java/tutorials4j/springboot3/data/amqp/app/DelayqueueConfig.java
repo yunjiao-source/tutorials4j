@@ -1,6 +1,5 @@
 package tutorials4j.springboot3.data.amqp.app;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,6 +11,5 @@ import org.springframework.context.annotation.Profile;
  */
 @Profile("delayqueue")
 @Configuration
-@ComponentScan(basePackages = {"tutorials4j.springboot3.data.amqp.order"})
-@RequiredArgsConstructor
+@ComponentScan(basePackages = {"tutorials4j.springboot3.data.amqp.delayqueue"})
 public class DelayqueueConfig {}

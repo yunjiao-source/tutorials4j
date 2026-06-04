@@ -76,7 +76,14 @@ public class NamedCacheOptions {
       this.redis.cachePrefix = defaults.redis.cachePrefix;
     }
 
-    this.caffeine.initialCapacity = defaults.caffeine.initialCapacity;
-    this.caffeine.expireAfterAccess = defaults.caffeine.expireAfterAccess;
+    if (this.caffeine.initialCapacity == null) {
+      this.caffeine.initialCapacity = defaults.caffeine.initialCapacity;
+    }
+    if (this.caffeine.maximumSize == null) {
+      this.caffeine.maximumSize = defaults.caffeine.maximumSize;
+    }
+    if (this.caffeine.expireAfterAccess == null) {
+      this.caffeine.expireAfterAccess = defaults.caffeine.expireAfterAccess;
+    }
   }
 }
