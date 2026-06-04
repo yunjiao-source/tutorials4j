@@ -1,7 +1,8 @@
 spring:
   profiles:
 #    active: mail
-    active: delayqueue
+#    active: delayqueue
+    active: orderedmessage
 
 
   rabbitmq:

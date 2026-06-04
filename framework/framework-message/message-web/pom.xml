@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>yunjiao-source.tutorials4j.framework</groupId>
+        <artifactId>framework-message</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>message-web</artifactId>
+    <packaging>jar</packaging>
+    <name>Message :: Web</name>
+    <description>消息Web模块</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-amqp</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-mqtt</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-websocket</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Profile;
  *
  * @author Yun Jiao
  */
-@Profile("delayqueue")
+@Profile("orderedmessage")
 @Configuration
-@ComponentScan(basePackages = {"tutorials4j.springboot3.data.amqp.order"})
+@ComponentScan(basePackages = {"tutorials4j.springboot3.data.amqp.orderedmessage"})
 @RequiredArgsConstructor
-public class DelayqueueConfig {}
+public class OrderedMessageConfig {}
