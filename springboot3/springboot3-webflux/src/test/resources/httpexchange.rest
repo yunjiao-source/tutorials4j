@@ -1,0 +1,4 @@
+
+### page页面
+GET http://localhost:8080/httpexchange
+Accept: text/html

@@ -1,7 +1,8 @@
 spring:
   profiles:
 #    active: tracing
-    active: sse
+#    active: sse
+    active: httpexchange
 
 
 logging:

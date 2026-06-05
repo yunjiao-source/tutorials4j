@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户管理系统 - WebFlux + HttpExchange</title>
+  <!-- Bootstrap 5 CSS (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 (可选，用于图标) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- jQuery (CDN) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    body { padding-top: 20px; background-color: #f8f9fa; }
+    .card { margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .btn-action { margin: 0 3px; }
+    .table-actions { width: 120px; text-align: center; }
+    .loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background: rgba(0,0,0,0.6); color: white; padding: 10px 20px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="mb-4 text-center"><i class="fas fa-users"></i> 用户管理系统</h1>
+
+  <!-- 用户列表卡片 -->
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <i class="fas fa-list"></i> 用户列表
+      <button class="btn btn-sm btn-light float-end" id="refreshBtn"><i class="fas fa-sync-alt"></i> 刷新</button>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+          <tr>
+            <th>ID</th><th>姓名</th><th>邮箱</th><th>操作</th>
+          </tr>
+          </thead>
+          <tbody id="userTableBody">
+          <tr><td colspan="4" class="text-center text-muted">加载中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加/编辑用户卡片 -->
+  <div class="card">
+    <div class="card-header bg-success text-white">
+      <i class="fas fa-user-plus"></i> <span id="formTitle">添加新用户</span>
+    </div>
+    <div class="card-body">
+      <form id="userForm">
+        <input type="hidden" id="userId" name="id">
+        <div class="mb-3">
+          <label for="name" class="form-label">姓名 <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">邮箱 <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <button type="submit" class="btn btn-success" id="submitBtn"><i class="fas fa-save"></i> 保存</button>
+        <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display:none;"><i class="fas fa-times"></i> 取消</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- 加载提示 -->
+<div class="loading" id="loadingIndicator">
+  <i class="fas fa-spinner fa-spin"></i> 处理中...
+</div>
+
+<script>
+  // 基础 API 路径
+  const API_BASE = "/api/users";
+
+  // 显示/隐藏加载提示
+  function showLoading() { $("#loadingIndicator").fadeIn(100); }
+  function hideLoading() { $("#loadingIndicator").fadeOut(100); }
+
+  // 加载所有用户并渲染表格
+  function loadUsers() {
+    showLoading();
+    $.ajax({
+      url: API_BASE,
+      type: "GET",
+      dataType: "json",
+      success: function(users) {
+        let html = "";
+        if (users && users.length > 0) {
+          $.each(users, function(index, user) {
+            html += `<tr>
+                            <td>${user.id}</td>
+                            <td>${escapeHtml(user.name)}</td>
+                            <td>${escapeHtml(user.email)}</td>
+                            <td class="table-actions">
+                                <button class="btn btn-sm btn-info editBtn" data-id="${user.id}" data-name="${escapeHtml(user.name)}" data-email="${escapeHtml(user.email)}"><i class="fas fa-edit"></i> 编辑</button>
+                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${user.id}"><i class="fas fa-trash"></i> 删除</button>
+                            </td>
+                        </tr>`;
+          });
+        } else {
+          html = `<tr><td colspan="4" class="text-center">暂无数据</td></tr>`;
+        }
+        $("#userTableBody").html(html);
+        hideLoading();
+      },
+      error: function(xhr, status, error) {
+        console.error("加载用户失败:", error);
+        $("#userTableBody").html(`<tr><td colspan="4" class="text-center text-danger">加载失败，请刷新重试</td></tr>`);
+        hideLoading();
+      }
+    });
+  }
+
+  // 简单的防XSS转义
+  function escapeHtml(str) {
+    if(!str) return "";
+    return str.replace(/[&<>]/g, function(m) {
+      if(m === '&') return '&amp;';
+      if(m === '<') return '&lt;';
+      if(m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // 添加用户 (POST)
+  function createUser(userData) {
+    showLoading();
+    $.ajax({
+      url: API_BASE,
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(userData),
+      success: function(newUser) {
+        hideLoading();
+        showToast("添加成功", "success");
+        resetForm();
+        loadUsers();  // 重新加载列表
+      },
+      error: function(xhr) {
+        hideLoading();
+        let errMsg = xhr.responseJSON?.message || "添加失败";
+        showToast(errMsg, "danger");
+      }
+    });
+  }
+
+  // 更新用户 (PUT)
+  function updateUser(id, userData) {
+    showLoading();
+    $.ajax({
+      url: `${API_BASE}/${id}`,
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify(userData),
+      success: function(updatedUser) {
+        hideLoading();
+        showToast("更新成功", "success");
+        resetForm();
+        loadUsers();
+      },
+      error: function(xhr) {
+        hideLoading();
+        let errMsg = xhr.responseJSON?.message || "更新失败";
+        showToast(errMsg, "danger");
+      }
+    });
+  }
+
+  // 删除用户
+  function deleteUser(id) {
+    if (!confirm("确定要删除该用户吗？")) return;
+    showLoading();
+    $.ajax({
+      url: `${API_BASE}/${id}`,
+      type: "DELETE",
+      success: function() {
+        hideLoading();
+        showToast("删除成功", "success");
+        // 如果当前编辑的用户刚好被删除，重置表单
+        if ($("#userId").val() == id) resetForm();
+        loadUsers();
+      },
+      error: function(xhr) {
+        hideLoading();
+        let errMsg = xhr.responseJSON?.message || "删除失败";
+        showToast(errMsg, "danger");
+      }
+    });
+  }
+
+  // 重置表单为添加模式
+  function resetForm() {
+    $("#userId").val("");
+    $("#name").val("");
+    $("#email").val("");
+    $("#formTitle").text("添加新用户");
+    $("#submitBtn").html('<i class="fas fa-save"></i> 保存');
+    $("#cancelEditBtn").hide();
+    // 移除必填字段的高亮等
+    $("#name").removeClass("is-invalid");
+    $("#email").removeClass("is-invalid");
+  }
+
+  // 填充编辑表单
+  function fillEditForm(id, name, email) {
+    $("#userId").val(id);
+    $("#name").val(name);
+    $("#email").val(email);
+    $("#formTitle").text("编辑用户");
+    $("#submitBtn").html('<i class="fas fa-pen"></i> 更新');
+    $("#cancelEditBtn").show();
+    // 滚动到表单处
+    $('html, body').animate({ scrollTop: $("#userForm").offset().top - 80 }, 300);
+  }
+
+  // 简单 toast 提示 (Bootstrap 5 需要 Toast 组件)
+  function showToast(message, type = "success") {
+    // 动态创建 toast 元素（如果没有的话）
+    let toastContainer = $("#toastContainer");
+    if (toastContainer.length === 0) {
+      $("body").append('<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>');
+      toastContainer = $("#toastContainer");
+    }
+    const toastId = "toast_" + Date.now();
+    const bgClass = type === "success" ? "bg-success" : (type === "danger" ? "bg-danger" : "bg-warning");
+    const icon = type === "success" ? "check-circle" : (type === "danger" ? "exclamation-circle" : "info-circle");
+    const toastHtml = `
+            <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+                <div class="d-flex">
+                    <div class="toast-body"><i class="fas fa-${icon}"></i> ${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+    toastContainer.append(toastHtml);
+    const toastElement = new bootstrap.Toast($(`#${toastId}`)[0], { autohide: true, delay: 3000 });
+    toastElement.show();
+    $(`#${toastId}`).on('hidden.bs.toast', function() { $(this).remove(); });
+  }
+
+  // 提交表单事件
+  $("#userForm").on("submit", function(e) {
+    e.preventDefault();
+    const id = $("#userId").val();
+    const name = $("#name").val().trim();
+    const email = $("#email").val().trim();
+    if (!name || !email) {
+      showToast("请填写完整信息", "warning");
+      return;
+    }
+    const userData = { name: name, email: email };
+    if (id === "") {
+      createUser(userData);
+    } else {
+      updateUser(parseInt(id), userData);
+    }
+  });
+
+  // 取消编辑按钮
+  $("#cancelEditBtn").on("click", function() {
+    resetForm();
+  });
+
+  // 刷新按钮
+  $("#refreshBtn").on("click", function() {
+    resetForm();
+    loadUsers();
+  });
+
+  // 事件委托：编辑和删除按钮（表格动态生成）
+  $(document).on("click", ".editBtn", function() {
+    const id = $(this).data("id");
+    const name = $(this).data("name");
+    const email = $(this).data("email");
+    fillEditForm(id, name, email);
+  });
+
+  $(document).on("click", ".deleteBtn", function() {
+    const id = $(this).data("id");
+    deleteUser(id);
+  });
+
+  // 页面加载时初始化并加载用户数据
+  $(document).ready(function() {
+    // 由于使用了 Bootstrap JS，需要全局引入 bootstrap 的 JS 库
+    // 确保已加载 bootstrap.bundle.min.js (包含 Toast)
+    if (typeof bootstrap === 'undefined') {
+      // 动态加载 Bootstrap JS （如果尚未加载）
+      var script = document.createElement('script');
+      script.src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js";
+      document.head.appendChild(script);
+      script.onload = function() { loadUsers(); };
+    } else {
+      loadUsers();
+    }
+    resetForm();
+  });
+</script>
+
+<!-- 保证 Bootstrap JS 可用，此处提前加载（备用） -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
