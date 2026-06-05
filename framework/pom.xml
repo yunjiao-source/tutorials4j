@@ -23,7 +23,6 @@
         <module>framework-tenant</module>
         <module>framework-payment</module>
         <module>framework-captcha</module>
-        <module>framework-assy</module>
         <module>framework-crypto</module>
         <module>framework-message</module>
 

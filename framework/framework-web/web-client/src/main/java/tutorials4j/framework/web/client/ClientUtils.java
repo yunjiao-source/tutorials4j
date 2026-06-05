@@ -1,12 +1,18 @@
 package tutorials4j.framework.web.client;
 
+import java.time.Duration;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+import reactor.util.retry.RetryBackoffSpec;
 import tutorials4j.framework.web.core.exception.WebFrameworkException;
 
 /**
@@ -16,6 +22,68 @@ import tutorials4j.framework.web.core.exception.WebFrameworkException;
  */
 @Slf4j
 public class ClientUtils {
+  public static ExchangeFilterFunction ofAuth() {
+    return (clientRequest, next) -> {
+      return ReactiveSecurityContextHolder.getContext()
+          .map(SecurityContext::getAuthentication)
+          .flatMap(
+              authentication -> {
+                if (authentication != null && authentication.isAuthenticated()) {
+                  Object credentials = authentication.getCredentials();
+                  String token = null;
+                  if (credentials instanceof String tokenStr) {
+                    token = tokenStr;
+                  } else if (credentials != null) {
+                    token = credentials.toString();
+                  }
+                  if (StringUtils.isNotBlank(token)) {
+                    if (log.isDebugEnabled()) {
+                      log.debug(
+                          "为请求添加 Authorization Token: Bearer {}...",
+                          token.substring(0, Math.min(8, token.length())));
+                    }
+                    ClientRequest authenticatedRequest =
+                        ClientRequest.from(clientRequest)
+                            .header("Authorization", "Bearer " + token)
+                            .build();
+                    return next.exchange(authenticatedRequest);
+                  }
+                }
+                log.warn("无法从 SecurityContext 获取有效 Token，继续原请求");
+                return next.exchange(clientRequest);
+              })
+          .switchIfEmpty(
+              Mono.defer(
+                  () -> {
+                    log.warn("SecurityContext 为空，无法获取 Token");
+                    return next.exchange(clientRequest);
+                  }));
+    };
+  }
+
+  public static ExchangeFilterFunction ofRetry(
+      long maxAttempts, Duration minBackoff, Duration maxBackoff) {
+    return (clientRequest, next) -> {
+      final String method = clientRequest.method().name();
+      final String url = clientRequest.url().toString();
+
+      RetryBackoffSpec spec =
+          Retry.backoff(maxAttempts, minBackoff)
+              .maxBackoff(maxBackoff)
+              .doAfterRetry(
+                  rs ->
+                      log.info(
+                          "[Retry] Request {} {} Exception, maxAttempts={}, totalRetries={}, totalRetriesInARow={}, failure={}",
+                          method,
+                          url,
+                          maxAttempts,
+                          rs.totalRetries(),
+                          rs.totalRetriesInARow(),
+                          rs.failure() == null ? "" : rs.failure().toString()));
+      return next.exchange(clientRequest).retryWhen(spec);
+    };
+  }
+
   /**
    * 创建一个用于捕获异常并转换为框架自定义异常的 {@link ExchangeFilterFunction}。
    *

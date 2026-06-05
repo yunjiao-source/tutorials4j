@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequest;
 import tutorials4j.framework.web.client.ClientUtils;
 import tutorials4j.framework.web.client.ClientWebProperties;
+import tutorials4j.framework.web.client.ClientWebProperties.RetryOptions;
 import tutorials4j.framework.web.client.LoggingClientHttpRequestInterceptor;
 
 /**
@@ -37,23 +38,6 @@ public class ClientWebConfiguration {
   }
 
   @Bean
-  RestClientCustomizer logHeadersRestClientCustomizer() {
-    log.debug("[WEB-CLIENT] Log Headers Rest Client Customizer");
-    return restClientBuilder -> {
-      restClientBuilder.requestInterceptor(new LoggingClientHttpRequestInterceptor());
-    };
-  }
-
-  @Bean
-  WebClientCustomizer logHeadersWebClientCustomizer() {
-    log.debug("[WEB-CLIENT] Log Headers Web Client Customizer");
-    return webClientBuilder -> {
-      webClientBuilder.filter(ClientUtils.ofClientRequestLogger());
-      webClientBuilder.filter(ClientUtils.ofClientResponseLogger());
-    };
-  }
-
-  @Bean
   RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(
       ClientWebProperties properties) {
     log.debug("[WEB-CLIENT] Default Headers Rest Template Request Customizer");
@@ -62,29 +46,72 @@ public class ClientWebConfiguration {
     };
   }
 
-  @Bean
-  RestClientCustomizer defaultHeadersRestClientCustomizer(ClientWebProperties properties) {
-    log.debug("[WEB-CLIENT] Default Headers Rest Client Customizer");
-    return restClientBuilder -> {
-      restClientBuilder.defaultHeaders(
-          header -> properties.getDefaultHeaders().forEach(header::set));
-    };
+  @Configuration(proxyBeanMethods = false)
+  public static class RestClientConfiguration {
+    @PostConstruct
+    public void postConstruct() {
+      log.debug("[WEB-CLIENT] Rest Client Configuration");
+    }
+
+    @Bean
+    RestClientCustomizer logHeadersRestClientCustomizer() {
+      log.debug("[WEB-CLIENT] Log Headers Rest Client Customizer");
+      return restClientBuilder -> {
+        restClientBuilder.requestInterceptor(new LoggingClientHttpRequestInterceptor());
+      };
+    }
+
+    @Bean
+    RestClientCustomizer defaultHeadersRestClientCustomizer(ClientWebProperties properties) {
+      log.debug("[WEB-CLIENT] Default Headers Rest Client Customizer");
+      return restClientBuilder -> {
+        restClientBuilder.defaultHeaders(
+            header -> properties.getDefaultHeaders().forEach(header::set));
+      };
+    }
   }
 
-  @Bean
-  WebClientCustomizer defaultHeadersWebClientCustomizer(ClientWebProperties properties) {
-    log.debug("[WEB-CLIENT] Default Headers Web Client Customizer");
-    return webClientBuilder -> {
-      webClientBuilder.defaultHeaders(
-          header -> properties.getDefaultHeaders().forEach(header::set));
-    };
-  }
+  @Configuration(proxyBeanMethods = false)
+  public static class WebClientConfiguration {
+    @PostConstruct
+    public void postConstruct() {
+      log.debug("[WEB-CLIENT] Web Client Configuration");
+    }
 
-  @Bean
-  WebClientCustomizer defaultWebClientCustomizer() {
-    log.debug("[WEB-CLIENT] Default Web Client Customizer");
-    return restClientBuilder -> {
-      restClientBuilder.filter(ClientUtils.ofCatchExcepitonLogger());
-    };
+    @Bean
+    WebClientCustomizer defaultHeadersWebClientCustomizer(ClientWebProperties properties) {
+      log.debug("[WEB-CLIENT] Default Headers Web Client Customizer");
+      return webClientBuilder -> {
+        webClientBuilder.defaultHeaders(
+            header -> properties.getDefaultHeaders().forEach(header::set));
+      };
+    }
+
+    @Bean
+    WebClientCustomizer defaultWebClientCustomizer() {
+      log.debug("[WEB-CLIENT] Default Web Client Customizer");
+      return restClientBuilder -> {
+        restClientBuilder.filter(ClientUtils.ofCatchExcepitonLogger());
+      };
+    }
+
+    @Bean
+    WebClientCustomizer logHeadersWebClientCustomizer() {
+      log.debug("[WEB-CLIENT] Log Headers Web Client Customizer");
+      return webClientBuilder -> {
+        webClientBuilder.filter(ClientUtils.ofClientRequestLogger());
+        webClientBuilder.filter(ClientUtils.ofClientResponseLogger());
+      };
+    }
+
+    @Bean
+    WebClientCustomizer retryWebClientCustomizer(ClientWebProperties properties) {
+      log.debug("[WEB-CLIENT] Retry Web Client Customizer");
+      RetryOptions options = properties.getRetry();
+      return webClientBuilder ->
+          webClientBuilder.filter(
+              ClientUtils.ofRetry(
+                  options.getMaxAttempts(), options.getMinBackoff(), options.getMaxBackoff()));
+    }
   }
 }

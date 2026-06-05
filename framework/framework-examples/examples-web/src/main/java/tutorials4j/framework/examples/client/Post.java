@@ -2,15 +2,10 @@ package tutorials4j.framework.examples.client;
 
 import lombok.Data;
 
-/**
- * 响应实体
- *
- * @author Yun Jiao
- */
 @Data
-public class PostResponse {
+public class Post {
+  private Integer userId;
   private Integer id;
   private String title;
   private String body;
-  private Integer userId;
 }

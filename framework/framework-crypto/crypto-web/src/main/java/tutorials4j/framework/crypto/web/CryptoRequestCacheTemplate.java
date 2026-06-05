@@ -39,7 +39,7 @@ public class CryptoRequestCacheTemplate
   @Override
   public CryptoProcessor valueGenerator(String key) {
     if (log.isDebugEnabled()) {
-      log.debug("[CRYPTO-WEB] 创建新的对称加密处理器，key=......{}", key.lastIndexOf(10));
+      log.debug("[CRYPTO-WEB] 创建新的对称加密处理器，key={}...", key.substring(0, Math.min(8, key.length())));
     }
     // 用非对称解密私钥
     String secretKey = asymmetricProcessor.decrypt(key);

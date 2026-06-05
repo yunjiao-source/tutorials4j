@@ -20,6 +20,10 @@ import tutorials4j.framework.common.core.DefaultConsts;
 public class HttpRequestUtils {
 
   public static void requestLogger(HttpRequest request, byte[] body) {
+    if (!log.isDebugEnabled()) {
+      return;
+    }
+
     StringBuilder sb = new StringBuilder("\n");
     sb.append("[HttpRequest]请求: ")
         .append(request.getMethod())
@@ -33,18 +37,22 @@ public class HttpRequestUtils {
     if (body.length > 0) {
       sb.append(new String(body, getCharset(request.getHeaders()))).append("\n");
     }
-    log.info(sb.toString());
+    log.debug(sb.toString());
   }
 
   public static void responseLogger(ClientHttpResponse response) {
+    if (!log.isDebugEnabled()) {
+      return;
+    }
+
     try {
       StringBuilder sb = new StringBuilder("\n");
       sb.append("[ClientHttpResponse]响应: ").append(response.getStatusCode()).append("\n");
       sb.append("响应头列表: \n");
       response.getHeaders().forEach((k, v) -> headerLogger(sb, k, v));
-      log.info(sb.toString());
+      log.debug(sb.toString());
     } catch (IOException e) {
-      log.error("获取响应状态异常", e);
+      log.error("获取响应异常", e);
     }
   }
 

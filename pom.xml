@@ -29,6 +29,7 @@
 
     <modules>
         <module>framework</module>
+        <module>assembly</module>
         <module>java21</module>
         <module>springboot3</module>
         <module>springboot4</module>

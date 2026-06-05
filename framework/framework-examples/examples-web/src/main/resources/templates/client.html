@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>三种HTTP客户端对比示例</title>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    .card { margin-bottom: 30px; }
+    .table-container { max-height: 400px; overflow-y: auto; }
+    pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body class="container mt-4">
+<h1 class="text-center mb-4">RestTemplate vs RestClient vs WebClient</h1>
+<p class="text-center text-muted">三个客户端均通过 Config 配置了认证请求头（随机Bearer Token）</p>
+
+<!-- RestTemplate 卡片 -->
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <h3>RestTemplate</h3>
+  </div>
+  <div class="card-body">
+    <button id="loadRestTemplateBtn" class="btn btn-primary mb-3">加载 RestTemplate 数据</button>
+    <div class="table-container">
+      <table class="table table-bordered table-striped" id="restTemplateTable">
+        <thead>
+        <tr><th>ID</th><th>User ID</th><th>Title</th><th>Body</th></tr>
+        </thead>
+        <tbody id="restTemplateBody">
+        <tr><td colspan="4" class="text-center">尚未加载</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- RestClient 卡片 -->
+<div class="card">
+  <div class="card-header bg-success text-white">
+    <h3>RestClient</h3>
+  </div>
+  <div class="card-body">
+    <button id="loadRestClientBtn" class="btn btn-success mb-3">加载 RestClient 数据</button>
+    <div class="table-container">
+      <table class="table table-bordered table-striped" id="restClientTable">
+        <thead>
+        <tr><th>ID</th><th>User ID</th><th>Title</th><th>Body</th></tr>
+        </thead>
+        <tbody id="restClientBody">
+        <tr><td colspan="4" class="text-center">尚未加载</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- WebClient 卡片 -->
+<div class="card">
+  <div class="card-header bg-info text-white">
+    <h3>WebClient (响应式)</h3>
+  </div>
+  <div class="card-body">
+    <button id="loadWebClientBtn" class="btn btn-info mb-3">加载 WebClient 数据</button>
+    <div class="table-container">
+      <table class="table table-bordered table-striped" id="webClientTable">
+        <thead>
+        <tr><th>ID</th><th>User ID</th><th>Title</th><th>Body</th></tr>
+        </thead>
+        <tbody id="webClientBody">
+        <tr><td colspan="4" class="text-center">尚未加载</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 通用渲染表格函数
+  function renderTable(data, tbodyId) {
+    let rows = "";
+    if (data && data.length > 0) {
+      $.each(data, function(i, post) {
+        rows += `<tr>
+                                <td>${post.id}</td>
+                                <td>${post.userId}</td>
+                                <td>${post.title}</td>
+                                <td>${post.body}</td>
+                            </tr>`;
+      });
+    } else {
+      rows = `<tr><td colspan="4" class="text-center text-danger">无数据或加载失败</td></tr>`;
+    }
+    $(tbodyId).html(rows);
+  }
+
+  // 加载 RestTemplate 数据
+  $("#loadRestTemplateBtn").click(function() {
+    $.ajax({
+      url: "/api/posts/rest-template",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        renderTable(data, "#restTemplateBody");
+      },
+      error: function() {
+        $("#restTemplateBody").html('<tr><td colspan="4" class="text-center text-danger">请求失败，请检查后端接口</td></tr>');
+      }
+    });
+  });
+
+  // 加载 RestClient 数据
+  $("#loadRestClientBtn").click(function() {
+    $.ajax({
+      url: "/api/posts/rest-client",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        renderTable(data, "#restClientBody");
+      },
+      error: function() {
+        $("#restClientBody").html('<tr><td colspan="4" class="text-center text-danger">请求失败，请检查后端接口</td></tr>');
+      }
+    });
+  });
+
+  // 加载 WebClient 数据
+  $("#loadWebClientBtn").click(function() {
+    $.ajax({
+      url: "/api/posts/web-client",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        renderTable(data, "#webClientBody");
+      },
+      error: function() {
+        $("#webClientBody").html('<tr><td colspan="4" class="text-center text-danger">请求失败，请检查后端接口</td></tr>');
+      }
+    });
+  });
+</script>
+</body>
+</html>
