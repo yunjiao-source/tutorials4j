@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.google;
+package tutorials4j.framework.feature.rest.google;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.spring.util.QrCodeUtils;
+import tutorials4j.framework.web.security.google.TotpAuthService;
 
 /**
  * Google Authenticator 管理接口，提供 TOTP 校验、二维码生成等 REST API。
@@ -92,8 +93,7 @@ public class TotpAuthEndpoint {
   public ResponseEntity<byte[]> generateQRCode(
       @Parameter(description = "用户名", required = true, example = "admin") @RequestParam("username")
           String username) {
-    String secretKey = totpAuthService.generateSecretKey(username);
-    String barcodeURL = totpAuthService.getQRBarcodeURL(username, secretKey);
+    String barcodeURL = totpAuthService.getQRBarcodeURL(username);
     byte[] qrCode = QrCodeUtils.defaultGeneratePng(barcodeURL);
     return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
   }

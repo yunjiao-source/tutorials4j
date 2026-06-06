@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
 import tutorials4j.framework.crypto.core.properties.CryptoProperties;
-import tutorials4j.framework.crypto.web.CryptoEndpoint;
 import tutorials4j.framework.crypto.web.CryptoRequestBodyAdvice;
 import tutorials4j.framework.crypto.web.CryptoRequestCacheTemplate;
 import tutorials4j.framework.crypto.web.CryptoResponseBodyAdvice;
@@ -50,13 +49,5 @@ public class CryptoWebConfiguration {
       CryptoRequestCacheTemplate cryptoRequestCacheTemplate) {
     log.debug("[CRYPTO-WEB] Crypto Response Body Advice");
     return new CryptoResponseBodyAdvice(cryptoRequestCacheTemplate);
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  CryptoEndpoint cryptoEndpoint(CryptoProperties properties) {
-    log.debug("[CRYPTO-WEB] Crypto Endpoint");
-    return new CryptoEndpoint(
-        properties.getAsymmetricCryptoStrategy(), properties.getSymmetricCryptoStrategy());
   }
 }

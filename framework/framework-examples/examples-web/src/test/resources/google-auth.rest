@@ -1,9 +1,0 @@
-### 在游览其中输入下面地址。出现页面，在‘两步验证绑定’区域，输入用户名‘zhangs’，点击‘生成二维码’按钮，出现二维码，在手机上使用Google Authenticator应用扫描二维码。然后在‘两步验证登录’区域 用户名输入: zhangs，密码输入：z123, 密码数据Google Authenticator应用中生成的6数字即可登录
-GET http://localhost:8080/page/google-auth
-Content-Type: text/html
-
-### 测试filter功能
-GET http://localhost:8080/auth/test-filter
-X-Google-Auth-Username: zhangs
-X-Google-Auth-Code: 275626
-Content-Type: application/json

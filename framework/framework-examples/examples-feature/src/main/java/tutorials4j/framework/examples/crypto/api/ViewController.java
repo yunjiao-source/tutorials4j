@@ -1,8 +1,7 @@
-package tutorials4j.framework.examples.apicrypto;
+package tutorials4j.framework.examples.crypto.api;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 页面
@@ -10,10 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Yun Jiao
  */
 @Controller
-@RequestMapping("view")
 public class ViewController {
-  @GetMapping("apicrypto")
+  @GetMapping("cryptoapi")
   public String apicrypto() {
-    return "apicrypto";
+    return "crypto/api";
   }
 }

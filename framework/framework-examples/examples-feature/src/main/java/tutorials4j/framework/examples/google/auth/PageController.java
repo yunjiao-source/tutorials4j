@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.googleauth;
+package tutorials4j.framework.examples.google.auth;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class PageController {
-  @GetMapping("/page/google-auth")
+  @GetMapping("auth")
   public String googleAuthPage() {
-    return "google-auth";
+    return "google/auth";
+  }
+
+  @GetMapping("blog")
+  public String blog() {
+    return "google/blog";
   }
 }

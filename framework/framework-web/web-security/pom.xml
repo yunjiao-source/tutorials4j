@@ -29,7 +29,6 @@
         <dependency>
             <groupId>com.warrenstrange</groupId>
             <artifactId>googleauth</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 

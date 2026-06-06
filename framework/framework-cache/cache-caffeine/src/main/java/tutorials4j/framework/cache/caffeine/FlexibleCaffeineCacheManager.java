@@ -5,7 +5,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
@@ -60,24 +59,24 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
   @Override
   protected Cache<Object, Object> createNativeCaffeineCache(String name) {
     Map<String, NamedCacheOptions> optionsMap = properties.getCaches();
-    if (MapUtils.isNotEmpty(optionsMap)) {
-      if (optionsMap.containsKey(name)) {
-        NamedCacheOptions options = optionsMap.get(name);
-        // 使用默认配置
-        options.applyDefaults(properties.getDefaults());
 
-        Caffeine<Object, Object> caffeine = Caffeine.newBuilder();
-        CaffeineUtils.copyOption(caffeine, options);
-
-        if (log.isDebugEnabled()) {
-          log.debug("[CACHE-CAFFEINE] Caffeine缓存管理器初始化缓存: name={}, options={}", name, options);
-        }
-        return caffeine.build();
-      }
-    } else {
+    // 获取独立配置
+    NamedCacheOptions options = optionsMap.get(name);
+    if (options == null) {
+      // 使用默认配置
       log.warn("[CACHE-CAFFEINE] 未配置缓存，将使用默认配置： name={}", name);
+      options = properties.getDefaults();
     }
 
-    return super.createNativeCaffeineCache(name);
+    // 合并默认配置
+    options.applyDefaults(properties.getDefaults());
+
+    Caffeine<Object, Object> caffeine = Caffeine.newBuilder();
+    CaffeineUtils.copyOption(caffeine, options);
+
+    if (log.isDebugEnabled()) {
+      log.debug("[CACHE-CAFFEINE] Caffeine缓存管理器初始化缓存: name={}, options={}", name, options);
+    }
+    return caffeine.build();
   }
 }

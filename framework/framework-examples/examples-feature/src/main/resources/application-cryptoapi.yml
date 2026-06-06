@@ -6,8 +6,8 @@ tutorials4j:
         cacheNullValues: false
         enable-statistics: true
       caches:
-        crypto-request:
-          timeToLive: 1m
+        crypto-processor:
+          timeToLive: 30s
           cacheNullValues: false
           caffeine:
             expire-after-access: 30s

@@ -2,7 +2,9 @@ spring:
   profiles:
 #    active: captchaendpoint
 #    active: tianaicaptchaendpoint
-    active: captchafilter
+#    active: captchafilter
+#    active: cryptoapi
+    active: google-auth
 
 
   data:

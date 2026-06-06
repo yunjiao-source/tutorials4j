@@ -5,7 +5,6 @@ spring:
 #    active: annotation
 #    active: signature
 #    active: swagger
-#    active: google-auth
 #    active: cached-body
 #    active: trace
     active: client

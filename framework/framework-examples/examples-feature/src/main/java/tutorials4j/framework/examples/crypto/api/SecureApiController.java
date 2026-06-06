@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.apicrypto;
+package tutorials4j.framework.examples.crypto.api;
 
 import java.time.LocalDateTime;
 import java.util.Date;

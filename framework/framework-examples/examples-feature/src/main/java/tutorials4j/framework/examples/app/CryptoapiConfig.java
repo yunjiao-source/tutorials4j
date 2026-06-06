@@ -1,6 +1,5 @@
 package tutorials4j.framework.examples.app;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -10,8 +9,7 @@ import org.springframework.context.annotation.Profile;
  *
  * @author Yun Jiao
  */
-@Slf4j
 @Configuration
-@Profile("google-auth")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.googleauth"})
-public class GoogleAuthConfig {}
+@Profile("cryptoapi")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.crypto.api"})
+public class CryptoapiConfig {}

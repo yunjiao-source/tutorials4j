@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>博客发布 · Google Authenticator 双因素认证</title>
+  <!-- Bootstrap 5 + Icons + jQuery (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      background: linear-gradient(145deg, #f4f7fc 0%, #e9eef4 100%);
+      min-height: 100vh;
+      padding: 2rem 0;
+      font-family: 'Segoe UI', system-ui, 'Roboto', sans-serif;
+    }
+    .card-blog {
+      border: none;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(0px);
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+    .card-blog:hover {
+      transform: translateY(-2px);
+    }
+    .card-header-custom {
+      background: transparent;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 1.5rem 2rem 0.75rem 2rem;
+      font-weight: 600;
+      font-size: 1.6rem;
+    }
+    .card-body-custom {
+      padding: 2rem;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+    .blog-textarea {
+      border-radius: 20px;
+      border: 1.5px solid #e2e8f0;
+      padding: 0.9rem 1.2rem;
+      font-size: 1rem;
+      transition: 0.2s;
+      resize: vertical;
+    }
+    .blog-textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.2);
+    }
+    /* Google Auth 输入区域样式 */
+    .google-auth-wrapper {
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid #eef2f6;
+    }
+    .auth-input {
+      border-radius: 16px;
+      border: 1.5px solid #e2e8f0;
+      padding: 0.65rem 1rem;
+      transition: 0.2s;
+      background: white;
+    }
+    .auth-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.2);
+    }
+    .btn-submit {
+      background: #0f172a;
+      border: none;
+      border-radius: 60px;
+      padding: 0.7rem 1.8rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .btn-submit:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+    }
+    .btn-submit:disabled {
+      background: #94a3b8;
+      transform: none;
+    }
+    .alert-custom {
+      border-radius: 60px;
+      font-size: 0.9rem;
+      padding: 0.7rem 1.2rem;
+    }
+    footer {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .badge-ga {
+      background: #eef2ff;
+      color: #1e40af;
+      font-weight: 500;
+    }
+    .help-text-icon {
+      font-size: 0.75rem;
+    }
+    @media (max-width: 576px) {
+      .card-body-custom {
+        padding: 1.5rem;
+      }
+      .google-auth-wrapper {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-12">
+      <div class="card card-blog">
+        <div class="card-header-custom">
+          ✍️ 发布新动态
+          <span class="badge bg-light text-dark ms-2 rounded-pill" style="font-size: 0.7rem;">Google Authenticator 双因素认证</span>
+        </div>
+        <div class="card-body-custom">
+          <!-- 博客内容输入区 -->
+          <div class="mb-4">
+            <label class="form-label"><i class="bi bi-journal-text me-1"></i> 博客内容</label>
+            <textarea id="blogContent" class="form-control blog-textarea" rows="6"
+                      placeholder="写下此刻的想法、故事或技术分享…… (支持文本、表情，字数不限)"></textarea>
+            <div class="form-text mt-2 text-muted small">尽情创作，一键发布 ✨</div>
+          </div>
+
+          <!-- Google Authenticator 认证区域 (替代原图片验证码) -->
+          <div class="google-auth-wrapper mb-4">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-6">
+                <label class="form-label"><i class="bi bi-person-circle me-1"></i> 用户名</label>
+                <input type="text" id="googleUsername" class="form-control auth-input"
+                       placeholder="请输入账号用户名" autocomplete="username">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label"><i class="bi bi-shield-lock-fill me-1"></i> 动态验证码 (Google Authenticator)</label>
+                <input type="text" id="googleAuthCode" class="form-control auth-input"
+                       placeholder="6位动态码" maxlength="6" inputmode="numeric" autocomplete="off">
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 mt-2 flex-wrap">
+              <i class="bi bi-google text-primary"></i>
+              <small class="text-muted help-text-icon">
+                使用 Google Authenticator 或同类 TOTP 应用获取 6 位动态验证码。如果尚未绑定，请联系管理员完成绑定。
+              </small>
+            </div>
+            <div class="form-text mt-1 text-info">
+              <i class="bi bi-info-circle-fill"></i> 动态码每30秒变化一次，请确保输入最新的验证码。
+            </div>
+          </div>
+
+          <!-- 提交按钮 + 提示区域 -->
+          <div class="d-grid gap-2 mt-4">
+            <button id="submitBtn" class="btn btn-primary btn-submit">
+              <i class="bi bi-cloud-upload me-1"></i> 立即发布 (Google Auth 验证)
+            </button>
+          </div>
+
+          <!-- 全局消息反馈 -->
+          <div id="messageArea" class="mt-3"></div>
+        </div>
+      </div>
+      <footer>
+        🔐 安全验证 · Google Authenticator 双因素认证 | 请求头: X-Google-Auth-Username / X-Google-Auth-Code | 接口: POST /post
+      </footer>
+    </div>
+  </div>
+</div>
+
+<!-- 依赖脚本: jQuery, Bootstrap JS (用于交互组件可选) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // ---------- 全局变量 ----------
+  let isSubmitting = false;              // 防止重复提交
+
+  // ---------- DOM 元素 ----------
+  const $submitBtn = $('#submitBtn');
+  const $blogContent = $('#blogContent');
+  const $messageArea = $('#messageArea');
+  const $googleUsername = $('#googleUsername');
+  const $googleAuthCode = $('#googleAuthCode');
+
+  // ---------- 辅助函数：展示消息 (成功/错误/警告) 沿用原有优雅样式 ----------
+  function showMessage(message, type = 'danger') {
+    // type: success, danger, warning, info
+    const iconMap = {
+      success: '<i class="bi bi-check-circle-fill me-1"></i>',
+      danger: '<i class="bi bi-exclamation-triangle-fill me-1"></i>',
+      warning: '<i class="bi bi-exclamation-circle-fill me-1"></i>',
+      info: '<i class="bi bi-info-circle-fill me-1"></i>'
+    };
+    const icon = iconMap[type] || iconMap.info;
+    const alertDiv = $(`
+            <div class="alert alert-${type} alert-dismissible fade show alert-custom" role="alert">
+                ${icon} ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+    $messageArea.html(alertDiv);
+    // 自动消失处理 (成功、info短暂消失，错误保留稍长)
+    if (type === 'success') {
+      setTimeout(() => {
+        alertDiv.alert && alertDiv.alert('close');
+        $messageArea.empty();
+      }, 2800);
+    } else if (type === 'info') {
+      setTimeout(() => {
+        alertDiv.fadeOut(400, function() { $(this).alert('close'); });
+      }, 3000);
+    } else {
+      // 错误/警告 5 秒后自动淡出清除
+      setTimeout(() => {
+        if ($messageArea.children().length) {
+          $messageArea.fadeOut(200, function() { $(this).empty().show(); });
+        }
+      }, 5000);
+    }
+  }
+
+  // 清除旧消息
+  function clearMessages() {
+    $messageArea.empty();
+  }
+
+  // ---------- 前端简单校验 Google 验证参数 ----------
+  function validateGoogleAuth() {
+    const username = $googleUsername.val().trim();
+    if (!username) {
+      showMessage('👤 请输入用户名', 'warning');
+      $googleUsername.focus();
+      return false;
+    }
+    const authCode = $googleAuthCode.val().trim();
+    if (!authCode) {
+      showMessage('🔐 请输入 Google Authenticator 动态验证码', 'warning');
+      $googleAuthCode.focus();
+      return false;
+    }
+    // 验证码必须是6位数字
+    const codeRegex = /^\d{6}$/;
+    if (!codeRegex.test(authCode)) {
+      showMessage('⚠️ 动态验证码必须为6位数字，请检查输入的验证码', 'warning');
+      $googleAuthCode.val('');
+      $googleAuthCode.focus();
+      return false;
+    }
+    return true;
+  }
+
+  // ---------- 提交博客内容到 /post (携带 Google Auth 请求头) ----------
+  function submitPost() {
+    // 1. 获取博客内容并校验
+    const content = $blogContent.val().trim();
+    if (!content) {
+      showMessage('✏️ 请填写博客内容', 'warning');
+      $blogContent.focus();
+      return;
+    }
+
+    // 2. 验证 Google Authenticator 用户名 + 动态码
+    if (!validateGoogleAuth()) {
+      return;
+    }
+
+    const username = $googleUsername.val().trim();
+    const authCode = $googleAuthCode.val().trim();
+
+    // 防止重复提交
+    if (isSubmitting) {
+      showMessage('提交中，请稍后...', 'info');
+      return;
+    }
+
+    // 禁用按钮，显示loading状态
+    isSubmitting = true;
+    const originalBtnText = $submitBtn.html();
+    $submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>验证并发布中...');
+
+    // 发送请求, 遵循接口规范: POST /post, Content-Type: text/plain, 请求体为博客原始内容
+    // 添加自定义请求头: X-Google-Auth-Username, X-Google-Auth-Code
+    $.ajax({
+      url: '/post',
+      method: 'POST',
+      contentType: 'text/plain; charset=utf-8',
+      data: content,                     // 博客内容纯文本
+      headers: {
+        'X-Google-Auth-Username': username,
+        'X-Google-Auth-Code': authCode
+      },
+      timeout: 15000,
+      success: function(response) {
+        // 后端成功返回 (预期字符串 "发布成功" 或任意成功标识)
+        if (response && typeof response === 'string') {
+          showMessage(`✨ ${response} ✨ 博客已同步`, 'success');
+        } else {
+          showMessage('🎉 发布成功！博客已发布。', 'success');
+        }
+        // 发布成功后的UI反馈: 清空博客内容 (可选，让用户快速写下一篇)，清空动态验证码（避免过期验证码二次提交）
+        // 用户名保留，方便同一用户连续发布
+        $blogContent.val('');
+        $googleAuthCode.val('');    // 清空动态码，下次需重新输入最新的TOTP
+        // 额外焦点可移至博客内容或验证码，提升体验
+        $blogContent.focus();
+        // 同时清除任何残留的错误消息区域（在showMessage里已清，但为了保险不需要额外动作）
+      },
+      error: function(xhr, status, error) {
+        let errorMsg = '发布失败，请稍后重试。';
+        // 根据状态码和返回文本尽量提取有效信息
+        if (xhr.status === 400) {
+          errorMsg = '请求参数错误，请检查用户名格式或后端约束。';
+        } else if (xhr.status === 401 || xhr.status === 403) {
+          errorMsg = 'Google Authenticator 验证失败，请确认用户名和动态码是否正确 (或动态码已过期)。';
+        } else if (xhr.status === 500) {
+          errorMsg = '服务器内部错误，发布失败。';
+        } else if (xhr.status === 0) {
+          errorMsg = '网络连接失败，请检查后端服务是否可用。';
+        } else if (xhr.responseText) {
+          // 提取后端返回的错误文本（限制长度）
+          let respText = xhr.responseText.substring(0, 120);
+          errorMsg = `验证未通过: ${respText}`;
+        }
+        showMessage(`❌ ${errorMsg}`, 'danger');
+        // 当验证码错误/过期时，提示用户重新输入新验证码，但不自动清空用户名，仅清空code并聚焦
+        if (xhr.status === 401 || xhr.status === 403 || (xhr.responseText && (xhr.responseText.includes('验证码') || xhr.responseText.includes('Google') || xhr.responseText.includes('totp')))) {
+          $googleAuthCode.val('');
+          $googleAuthCode.focus();
+          // 额外提示用户获取最新动态码
+          showMessage('请刷新 Google Authenticator 获取最新6位动态码后重试', 'info');
+        }
+      },
+      complete: function() {
+        isSubmitting = false;
+        $submitBtn.prop('disabled', false).html(originalBtnText);
+      }
+    });
+  }
+
+  // ---------- 便捷辅助：限制验证码输入框只能输入数字 ----------
+  function initInputRestrictions() {
+    // 仅允许数字输入 (并对粘贴进行过滤)
+    $googleAuthCode.on('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+    });
+    // 额外处理键盘事件，确保只能输入数字 (强化)
+    $googleAuthCode.on('keypress', function(e) {
+      const charCode = e.which ? e.which : e.keyCode;
+      if (charCode < 48 || charCode > 57) {
+        e.preventDefault();
+      }
+    });
+    // 粘贴时过滤非数字
+    $googleAuthCode.on('paste', function(e) {
+      e.preventDefault();
+      let pastedText = (e.originalEvent.clipboardData || window.clipboardData).getData('text');
+      if (pastedText) {
+        let digits = pastedText.replace(/[^0-9]/g, '').slice(0, 6);
+        $(this).val(digits);
+      }
+    });
+  }
+
+  // ---------- 页面初始化 & 事件绑定 ----------
+  $(document).ready(function() {
+    // 1. 给输入框加上输入限制
+    initInputRestrictions();
+
+    // 2. 提交按钮事件
+    $submitBtn.on('click', function(e) {
+      e.preventDefault();
+      submitPost();
+    });
+
+    // 3. 便捷回车提交：在用户名输入框或验证码输入框按下回车时触发提交
+    $googleUsername.on('keypress', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        submitPost();
+      }
+    });
+    $googleAuthCode.on('keypress', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        submitPost();
+      }
+    });
+
+    // 4. 博客内容框支持 Ctrl+Enter 提交 (符合写作习惯)
+    $blogContent.on('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        submitPost();
+      }
+    });
+
+    // 5. 可选: 页面加载完成后给与简单聚焦体验, 并不发送任何验证码请求 (与原图片验证码完全不同)
+    $blogContent.focus();
+
+    // 增加一个可选提醒: 若用户还未输入用户名，轻提示友好 （不强制，只做演示）
+    setTimeout(() => {
+      if ($googleUsername.val().trim() === '') {
+        // 轻提醒但不干扰, 可加淡出小提示
+        console.log('请使用已绑定 Google Authenticator 的账号进行发布');
+      }
+    }, 800);
+  });
+</script>
+</body>
+</html>

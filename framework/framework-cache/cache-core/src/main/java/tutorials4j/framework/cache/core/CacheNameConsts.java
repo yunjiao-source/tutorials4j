@@ -16,5 +16,5 @@ public interface CacheNameConsts {
 
   String WEB_SECURITY_ACCESS_LIMITED = "web-security-access-limited";
 
-  String CRYPTO_REQUEST = "crypto-request";
+  String CRYPTO_PROCESSOR = "crypto-processor";
 }

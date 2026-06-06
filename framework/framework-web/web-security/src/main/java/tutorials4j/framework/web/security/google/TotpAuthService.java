@@ -24,9 +24,8 @@ public class TotpAuthService {
    *
    * @return 生成的秘钥字符串
    */
-  public String generateSecretKey() {
-    GoogleAuthenticatorKey key = googleAuthenticator.createCredentials();
-    return key.getKey();
+  public GoogleAuthenticatorKey generateSecretKey() {
+    return googleAuthenticator.createCredentials();
   }
 
   /**
@@ -35,9 +34,8 @@ public class TotpAuthService {
    * @param userName 用户名
    * @return 生成的秘钥字符串
    */
-  public String generateSecretKey(String userName) {
-    GoogleAuthenticatorKey key = googleAuthenticator.createCredentials(userName);
-    return key.getKey();
+  public GoogleAuthenticatorKey generateSecretKey(String userName) {
+    return googleAuthenticator.createCredentials(userName);
   }
 
   /**
@@ -66,11 +64,10 @@ public class TotpAuthService {
    * 生成用于绑定 Google Authenticator 应用的 OTP Auth URI（通常用于生成二维码）。
    *
    * @param user 用户名（通常作为 issuer 中的账号标识）
-   * @param secretKey 秘钥
    * @return OTP Auth URI，例如 {@code otpauth://totp/tutorials4j:user?secret=xxx&issuer=tutorials4j}
    */
-  public String getQRBarcodeURL(String user, String secretKey) {
-    GoogleAuthenticatorKey key = new GoogleAuthenticatorKey.Builder(secretKey).build();
+  public String getQRBarcodeURL(String user) {
+    GoogleAuthenticatorKey key = generateSecretKey(user);
     return GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL(otpAuthTotpURL, user, key);
   }
 }

@@ -24,7 +24,7 @@ public class CryptoRequestCacheTemplate
       CryptoProcessorFactory cryptoProcessorFactory,
       AsymmetricCryptoStrategy asymmetricCryptoStrategy,
       SymmetricCryptoStrategy symmetricCryptoStrategy) {
-    super(CacheNameConsts.CRYPTO_REQUEST);
+    super(CacheNameConsts.CRYPTO_PROCESSOR);
     this.asymmetricProcessor =
         cryptoProcessorFactory.findProcessor(asymmetricCryptoStrategy.getCategory());
     this.symmetricProcessor =

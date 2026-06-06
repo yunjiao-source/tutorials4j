@@ -6,7 +6,6 @@ import com.warrenstrange.googleauth.ICredentialRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 import tutorials4j.framework.web.security.google.GoogleAuthRequestFilter;
 import tutorials4j.framework.web.security.google.GoogleAuthenticatorConfigCustomizer;
-import tutorials4j.framework.web.security.google.TotpAuthEndpoint;
 import tutorials4j.framework.web.security.google.TotpAuthService;
 import tutorials4j.framework.web.security.google.YamlCredentialRepository;
 import tutorials4j.framework.web.security.properties.GoogleWebProperties;
+import tutorials4j.framework.web.security.properties.GoogleWebProperties.AuthenticatorOptions;
 
 /**
  * Google Authenticator 自动配置类。
@@ -25,7 +24,6 @@ import tutorials4j.framework.web.security.properties.GoogleWebProperties;
  * @author Yun Jiao
  */
 @Slf4j
-@ConditionalOnClass(GoogleAuthenticator.class)
 @Configuration(proxyBeanMethods = false)
 public class GoogleWebConfiguration {
   @PostConstruct
@@ -35,11 +33,21 @@ public class GoogleWebConfiguration {
 
   @Bean
   GoogleAuthenticator googleAuthenticator(
+      GoogleWebProperties properties,
       ICredentialRepository repository,
       ObjectProvider<GoogleAuthenticatorConfigCustomizer> customizers) {
+    AuthenticatorOptions options = properties.getAuthenticator();
     // 创建配置
     GoogleAuthenticatorConfig config =
-        new GoogleAuthenticatorConfig.GoogleAuthenticatorConfigBuilder().build();
+        new GoogleAuthenticatorConfig.GoogleAuthenticatorConfigBuilder()
+            .setTimeStepSizeInMillis(options.getTimeStepSizeInMillis())
+            .setWindowSize(options.getWindowSize())
+            .setCodeDigits(options.getCodeDigits())
+            .setNumberOfScratchCodes(options.getNumberOfScratchCodes())
+            .setHmacHashFunction(options.getHmacHashFunction())
+            .setKeyRepresentation(options.getKeyRepresentation())
+            .setSecretBits(options.getSecretBits())
+            .build();
     customizers.orderedStream().forEach(customizer -> customizer.customize(config));
 
     GoogleAuthenticator authenticator = new GoogleAuthenticator(config);
@@ -55,13 +63,6 @@ public class GoogleWebConfiguration {
   ICredentialRepository yamlCredentialRepository(GoogleWebProperties properties) {
     log.debug("[WEB-SECURITY] Yaml Credential Repository");
     return new YamlCredentialRepository(properties.getCredentials());
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  TotpAuthEndpoint totpAuthEndpoint(TotpAuthService totpAuthService) {
-    log.debug("[WEB-SECURITY] Totp Auth Endpoint");
-    return new TotpAuthEndpoint(totpAuthService);
   }
 
   @Bean
