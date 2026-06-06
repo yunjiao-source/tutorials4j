@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.captcha.web;
+package tutorials4j.framework.feature.rest.captcha;
 
 import cloud.tianai.captcha.application.ImageCaptchaApplication;
 import cloud.tianai.captcha.common.response.ApiResponse;
@@ -40,7 +40,6 @@ public class TianaiCaptchaEndpoint {
    * @param type 验证码类型，可选
    * @return 包含验证码图片及数据的响应
    */
-  @PostMapping("gen")
   @Operation(summary = "生成验证码", description = "根据验证码类型生成对应的行为验证码，返回验证码ID及图片Base64数据")
   @Parameter(
       name = "type",
@@ -56,6 +55,7 @@ public class TianaiCaptchaEndpoint {
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class)))
   })
+  @PostMapping("gen")
   public ApiResponse<Map<String, Object>> gen(@RequestParam(value = "type") CaptchaCategory type) {
     CaptchaService service = factory.findService(type);
     return ApiResponse.ofSuccess(service.draw());
@@ -67,7 +67,6 @@ public class TianaiCaptchaEndpoint {
    * @param data 请求体，包含验证码 id 和用户轨迹数据
    * @return 校验结果响应
    */
-  @PostMapping("check")
   @Operation(summary = "校验验证码", description = "提交验证码ID及用户行为轨迹，校验是否通过")
   @ApiResponses({
     @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -81,6 +80,7 @@ public class TianaiCaptchaEndpoint {
         responseCode = "400",
         description = "校验失败或参数异常")
   })
+  @PostMapping("check")
   public ApiResponse<?> check(@RequestBody Data data) {
     ApiResponse<?> response = imageCaptchaApplication.matching(data.getId(), data.getData());
     if (response.isSuccess()) {

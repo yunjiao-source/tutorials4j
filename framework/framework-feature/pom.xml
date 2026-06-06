@@ -16,8 +16,7 @@
 
     <modules>
         <module>feature-core</module>
-        <module>feature-redis</module>
-        <module>feature-captcha</module>
+        <module>feature-rest</module>
         <module>feature-spring-boot-starter</module>
     </modules>
 

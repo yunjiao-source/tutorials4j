@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>feature-captcha</artifactId>
+    <artifactId>feature-rest</artifactId>
     <packaging>jar</packaging>
-    <name>Feature :: Captcha</name>
-    <description>功能验证码模块</description>
+    <name>Feature :: Rest</name>
+    <description>功能Rest模块</description>
 
     <dependencies>
         <dependency>
