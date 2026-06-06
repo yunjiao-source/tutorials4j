@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>博客发布 · 安全验证</title>
+  <!-- Bootstrap 5 + Icons + jQuery (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      background: linear-gradient(145deg, #f4f7fc 0%, #e9eef4 100%);
+      min-height: 100vh;
+      padding: 2rem 0;
+      font-family: 'Segoe UI', system-ui, 'Roboto', sans-serif;
+    }
+    .card-blog {
+      border: none;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(0px);
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+    .card-blog:hover {
+      transform: translateY(-2px);
+    }
+    .card-header-custom {
+      background: transparent;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 1.5rem 2rem 0.75rem 2rem;
+      font-weight: 600;
+      font-size: 1.6rem;
+    }
+    .card-body-custom {
+      padding: 2rem;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+    .blog-textarea {
+      border-radius: 20px;
+      border: 1.5px solid #e2e8f0;
+      padding: 0.9rem 1.2rem;
+      font-size: 1rem;
+      transition: 0.2s;
+      resize: vertical;
+    }
+    .blog-textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.2);
+    }
+    .captcha-wrapper {
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 1rem 1.2rem;
+      border: 1px solid #eef2f6;
+    }
+    .captcha-img {
+      border-radius: 16px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+    }
+    .refresh-icon {
+      background: white;
+      border-radius: 60px;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #cbd5e1;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+    .refresh-icon:hover {
+      background: #f1f5f9;
+      border-color: #3b82f6;
+      color: #2563eb;
+    }
+    .btn-submit {
+      background: #0f172a;
+      border: none;
+      border-radius: 60px;
+      padding: 0.7rem 1.8rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .btn-submit:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+    }
+    .btn-submit:disabled {
+      background: #94a3b8;
+      transform: none;
+    }
+    .alert-custom {
+      border-radius: 60px;
+      font-size: 0.9rem;
+      padding: 0.7rem 1.2rem;
+    }
+    .code-input {
+      border-radius: 60px;
+      border: 1.5px solid #e2e8f0;
+      padding: 0.6rem 1rem;
+      letter-spacing: 0.5px;
+    }
+    .code-input:focus {
+      border-color: #3b82f6;
+      box-shadow: none;
+    }
+    footer {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    @media (max-width: 576px) {
+      .card-body-custom {
+        padding: 1.5rem;
+      }
+      .captcha-img {
+        height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-12">
+      <div class="card card-blog">
+        <div class="card-header-custom">
+          ✍️ 发布新动态
+          <span class="badge bg-light text-dark ms-2 rounded-pill" style="font-size: 0.7rem;">Thymeleaf + Bootstrap</span>
+        </div>
+        <div class="card-body-custom">
+          <!-- 博客内容输入区 -->
+          <div class="mb-4">
+            <label class="form-label"><i class="bi bi-journal-text me-1"></i> 博客内容</label>
+            <textarea id="blogContent" class="form-control blog-textarea" rows="6"
+                      placeholder="写下此刻的想法、故事或技术分享…… (支持文本、表情，字数不限)"></textarea>
+            <div class="form-text mt-2 text-muted small">尽情创作，一键发布 ✨</div>
+          </div>
+
+          <!-- 验证码区域：图片 + 输入 + 刷新 -->
+          <div class="captcha-wrapper mb-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div class="d-flex align-items-center gap-3 flex-grow-1">
+                <!-- 验证码图片展示区域 -->
+                <img id="captchaImg" class="captcha-img" alt="验证码" style="height: 56px; width: auto; min-width: 130px; background: #f1f5f9;">
+                <div class="refresh-icon" id="refreshCaptchaBtn">
+                  <i class="bi bi-arrow-repeat"></i> 换一张
+                </div>
+              </div>
+              <div class="flex-grow-1 mt-2 mt-sm-0">
+                <input type="text" id="captchaCode" class="form-control code-input"
+                       placeholder="输入图片中的验证码" autocomplete="off">
+              </div>
+            </div>
+            <div class="form-text mt-2">
+              <i class="bi bi-info-circle-fill text-info small"></i> 点击图片或「换一张」可刷新验证码
+            </div>
+          </div>
+
+          <!-- 提交按钮 + 提示区域 -->
+          <div class="d-grid gap-2 mt-4">
+            <button id="submitBtn" class="btn btn-primary btn-submit">
+              <i class="bi bi-cloud-upload me-1"></i> 立即发布
+            </button>
+          </div>
+
+          <!-- 全局消息反馈 -->
+          <div id="messageArea" class="mt-3"></div>
+        </div>
+      </div>
+      <footer>
+        🔐 安全验证 · 合法请求携带验证码头信息 | 后端接口 /post 及 /api/captcha/create
+      </footer>
+    </div>
+  </div>
+</div>
+
+<!-- 依赖脚本: jQuery, Bootstrap JS (用于交互组件可选) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // ---------- 全局变量 ----------
+  let currentCaptchaKey = null;          // 当前验证码唯一标识 key
+  let currentCaptchaCategory = null;     // 类别 (固定 HUTOOL_LINE 但从接口拿)
+  let isSubmitting = false;              // 防止重复提交
+
+  // ---------- DOM 元素 ----------
+  const $captchaImg = $('#captchaImg');
+  const $captchaCodeInput = $('#captchaCode');
+  const $refreshBtn = $('#refreshCaptchaBtn');
+  const $submitBtn = $('#submitBtn');
+  const $blogContent = $('#blogContent');
+  const $messageArea = $('#messageArea');
+
+  // ---------- 辅助函数：展示消息 (成功/错误/警告) ----------
+  function showMessage(message, type = 'danger') {
+    // type: success, danger, warning, info
+    const iconMap = {
+      success: '<i class="bi bi-check-circle-fill me-1"></i>',
+      danger: '<i class="bi bi-exclamation-triangle-fill me-1"></i>',
+      warning: '<i class="bi bi-exclamation-circle-fill me-1"></i>',
+      info: '<i class="bi bi-info-circle-fill me-1"></i>'
+    };
+    const icon = iconMap[type] || iconMap.info;
+    const alertDiv = $(`
+            <div class="alert alert-${type} alert-dismissible fade show alert-custom" role="alert">
+                ${icon} ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+    $messageArea.html(alertDiv);
+    // 自动3秒后淡出消失（成功和普通提醒自动消失，错误保留但也可以自动消失)
+    if (type === 'success') {
+      setTimeout(() => {
+        alertDiv.alert && alertDiv.alert('close');
+        $messageArea.empty();
+      }, 2800);
+    } else if (type === 'info') {
+      setTimeout(() => {
+        alertDiv.fadeOut(400, function() { $(this).alert('close'); });
+      }, 3000);
+    } else {
+      // 错误消息 5 秒后自动消失防止堆积，但保留较长
+      setTimeout(() => {
+        if ($messageArea.children().length) {
+          $messageArea.fadeOut(200, function() { $(this).empty().show(); });
+        }
+      }, 5000);
+    }
+  }
+
+  // 清除旧消息区 (便于立刻覆盖)
+  function clearMessages() {
+    $messageArea.empty();
+  }
+
+  // ---------- 获取验证码 (核心方法) ----------
+  // category 固定为 HUTOOL_LINE，接口形式 /api/captcha/create?category=HUTOOL_LINE
+  // 为防止浏览器缓存，添加时间戳随机参数
+  function loadCaptcha() {
+    // 加载中占位效果（可选）
+    $captchaImg.attr('src', 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="40" viewBox="0 0 100 40"%3E%3Crect width="100" height="40" fill="%23e2e8f0"/%3E%3Ctext x="10" y="25" fill="%2364748b"%3E加载中...%3C/text%3E%3C/svg%3E');
+
+    const apiUrl = '/api/captcha/create?category=HUTOOL_LINE&_t=' + new Date().getTime();
+    $.ajax({
+      url: apiUrl,
+      method: 'GET',
+      dataType: 'json',
+      timeout: 10000,
+      success: function(resp) {
+        // 期望结构: { captchaImageBase64, category, key }
+        if (resp && resp.captchaImageBase64 && resp.key) {
+          // 设置验证码图片
+          $captchaImg.attr('src', resp.captchaImageBase64);
+          // 存储key与category
+          currentCaptchaKey = resp.key;
+          currentCaptchaCategory = resp.category || 'HUTOOL_LINE';
+          // 可选：每次刷新验证码后清空输入框，避免旧值干扰
+          $captchaCodeInput.val('');
+          // 可以显示简短提示：验证码已更新
+          // 不干扰用户体验，静默成功即可
+          console.log('[验证码] 获取成功, key:', currentCaptchaKey);
+        } else {
+          console.error('验证码接口返回数据异常', resp);
+          // 显示默认占位错误图
+          $captchaImg.attr('src', 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="120" height="50" viewBox="0 0 120 50"%3E%3Crect width="120" height="50" fill="%23fee2e2"/%3E%3Ctext x="10" y="30" fill="%23b91c1c"%3E加载失败%3C/text%3E%3C/svg%3E');
+          showMessage('验证码加载失败，请刷新重试', 'warning');
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('获取验证码失败:', status, error);
+        let errMsg = '验证码服务异常，无法获取验证码。请检查后端接口是否正常。';
+        if (xhr.status === 404) errMsg = '验证码接口不存在(404)，请确认 /api/captcha/create 已配置';
+        else if (xhr.status === 500) errMsg = '服务器内部错误，获取验证码失败';
+        showMessage(errMsg, 'danger');
+        $captchaImg.attr('src', 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="120" height="50" viewBox="0 0 120 50"%3E%3Crect width="120" height="50" fill="%23f8d7da"/%3E%3Ctext x="15" y="30" fill="%239b2c2c"%3E网络错误%3C/text%3E%3C/svg%3E');
+        // 清空 key 使提交无法进行
+        currentCaptchaKey = null;
+        currentCaptchaCategory = null;
+      }
+    });
+  }
+
+  // ---------- 刷新验证码（对外调用 + 点击图片刷新）----------
+  function refreshCaptcha() {
+    clearMessages();       // 刷新时清除旧消息，避免混淆
+    loadCaptcha();
+  }
+
+  // ---------- 提交博客内容到 /post ----------
+  function submitPost() {
+    // 1. 获取博客内容并校验
+    const content = $blogContent.val().trim();
+    if (!content) {
+      showMessage('✏️ 请填写博客内容', 'warning');
+      $blogContent.focus();
+      return;
+    }
+    // 2. 获取验证码输入值
+    const userCode = $captchaCodeInput.val().trim();
+    if (!userCode) {
+      showMessage('🔐 请输入图片中的验证码', 'warning');
+      $captchaCodeInput.focus();
+      return;
+    }
+    // 3. 检查验证码key是否存在（验证码是否已经加载）
+    if (!currentCaptchaKey) {
+      showMessage('⚠️ 验证码尚未加载或已失效，请点击刷新验证码', 'danger');
+      refreshCaptcha();
+      return;
+    }
+    if (!currentCaptchaCategory) {
+      currentCaptchaCategory = 'HUTOOL_LINE';   // 保险兜底
+    }
+
+    // 防止重复提交
+    if (isSubmitting) {
+      showMessage('提交中，请稍后...', 'info');
+      return;
+    }
+
+    // 禁用按钮，显示loading状态
+    isSubmitting = true;
+    const originalBtnText = $submitBtn.html();
+    $submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>发布中...');
+
+    // 请求头设置: X-Captcha-Key, X-Captcha-Category, X-Captcha-Code
+    // 请求体: 博客原始字符串 (text/plain)
+    // 注意后端接收 @RequestBody String content，所以直接发送纯文本
+    $.ajax({
+      url: '/post',
+      method: 'POST',
+      contentType: 'text/plain; charset=utf-8',
+      data: content,                     // 博客内容纯文本
+      headers: {
+        'X-Captcha-Key': currentCaptchaKey,
+        'X-Captcha-Category': currentCaptchaCategory,
+        'X-Captcha-Code': userCode
+      },
+      timeout: 15000,
+      success: function(response) {
+        // 后端 BlogController 返回 "发布成功"
+        if (response && typeof response === 'string') {
+          showMessage(`✨ ${response} ✨ 博客已同步`, 'success');
+        } else {
+          showMessage('发布成功！', 'success');
+        }
+        // 发布成功后可选清空表单（或者保留内容，便于继续发布第二篇，根据需求）
+        // 一般不清内容，但可以清空验证码输入框并刷新验证码，增强安全
+        $blogContent.val('');      // 可选：留空便于下一篇，用户可自己决定，这里清空更符合“成功发布后重置”习惯
+        // 刷新验证码 (防止同一个验证码重复使用)
+        refreshCaptcha();
+        // 同时也清空验证码输入框 (refreshCaptcha内已清空，但再次确保)
+        $captchaCodeInput.val('');
+      },
+      error: function(xhr, status, error) {
+        let errorMsg = '发布失败，请稍后重试。';
+        if (xhr.status === 400) {
+          errorMsg = '请求参数错误，请检查验证码格式或后端约束。';
+        } else if (xhr.status === 403) {
+          errorMsg = '验证码验证失败，请确认验证码是否正确。';
+        } else if (xhr.status === 500) {
+          errorMsg = '服务器繁忙，发布失败。';
+        } else if (xhr.status === 0) {
+          errorMsg = '网络连接失败，请检查后端服务是否启动。';
+        } else if (xhr.responseText) {
+          // 尽量尝试提取后端返回的消息 (后端可能返回文本)
+          errorMsg = `发布异常: ${xhr.responseText.substring(0, 100)}`;
+        }
+        showMessage(`❌ ${errorMsg}`, 'danger');
+        // 当验证码失效时建议提示用户刷新验证码重新尝试
+        if (xhr.status === 403 || (xhr.responseText && xhr.responseText.includes('验证码'))) {
+          refreshCaptcha();
+        }
+      },
+      complete: function() {
+        isSubmitting = false;
+        $submitBtn.prop('disabled', false).html(originalBtnText);
+      }
+    });
+  }
+
+  // ---------- 页面初始化 & 事件绑定 ----------
+  $(document).ready(function() {
+    // 1. 首次加载验证码
+    loadCaptcha();
+
+    // 2. 刷新按钮点击事件
+    $refreshBtn.on('click', function(e) {
+      e.preventDefault();
+      refreshCaptcha();
+    });
+
+    // 3. 点击验证码图片同样可以刷新 (用户体验)
+    $captchaImg.on('click', function() {
+      refreshCaptcha();
+    });
+
+    // 4. 提交按钮事件
+    $submitBtn.on('click', function(e) {
+      e.preventDefault();
+      submitPost();
+    });
+
+    // 5. 可选：回车快速提交 (只在验证码输入框或文本域按Ctrl+Enter触发更合理)
+    //   增加便捷提交：在验证码输入框按回车提交，同时文本域ctrl+enter也可以
+    $captchaCodeInput.on('keypress', function(e) {
+      if (e.which === 13) {  // Enter
+        e.preventDefault();
+        submitPost();
+      }
+    });
+    // 博客内容框支持 Ctrl+Enter 提交 (更符合写作习惯)
+    $blogContent.on('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        submitPost();
+      }
+    });
+
+    // 附加：当文档获得焦点时如果验证码key丢失（比如未加载），自动尝试加载一次？
+    // 但要避免频繁请求，简单处理: 若页面加载后5s没有key，再尝试一次保护
+    setTimeout(function() {
+      if (!currentCaptchaKey) {
+        console.log('首次尝试后验证码未就绪，重新拉取一次');
+        loadCaptcha();
+      }
+    }, 1500);
+  });
+</script>
+</body>
+</html>

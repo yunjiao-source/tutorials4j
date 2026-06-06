@@ -11,7 +11,6 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-@Schema(description = "验证码类型")
 public enum CaptchaCategory {
   @Schema(description = "滑动还原验证码（PNG）")
   TIANAI_CONCAT("png", "滑动还原验证码"),

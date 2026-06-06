@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>滑块验证码 - Thymeleaf 演示</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none; /* 避免拖动时选中文字/图片 */
+    }
+    body {
+      background: linear-gradient(145deg, #f0f2f5 0%, #e0e5ec 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .captcha-card {
+      background: rgba(255,255,255,0.96);
+      border-radius: 32px;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.02);
+      padding: 28px 24px 32px 24px;
+      width: 100%;
+      max-width: 700px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(0px);
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: #1e2a3a;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 small {
+      font-size: 0.8rem;
+      font-weight: normal;
+      background: #eef2ff;
+      padding: 4px 10px;
+      border-radius: 40px;
+      color: #2563eb;
+    }
+    .sub {
+      color: #5b6e8c;
+      margin-bottom: 28px;
+      border-left: 3px solid #3b82f6;
+      padding-left: 14px;
+      font-size: 0.9rem;
+    }
+    /* 验证码主区域 */
+    .captcha-stage {
+      background: #fefefe;
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: inset 0 1px 3px #0001, 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+    }
+    /* 拼图容器 (背景 + 滑块) */
+    .slider-container {
+      position: relative;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px -8px rgba(0,0,0,0.3);
+      cursor: grab;
+      transition: box-shadow 0.1s;
+    }
+    .slider-container:active {
+      cursor: grabbing;
+    }
+    /* 背景图片区域 */
+    .bg-img {
+      position: relative;
+      background-size: 100% 100% !important;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;  /* 让背景不干扰滑块事件 */
+    }
+    /* 滑块图片 (可拖动) */
+    .drag-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: grab;
+      z-index: 20;
+      image-rendering: crisp-edges;
+      pointer-events: auto;
+      transition: left 0.02s linear; /* 平滑跟随，但不影响轨迹记录 */
+      will-change: left;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    }
+    .drag-slider:active {
+      cursor: grabbing;
+    }
+    /* 操作栏 */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .refresh-btn {
+      background: #f1f5f9;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #1e293b;
+      font-size: 0.9rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .refresh-btn:hover {
+      background: #e2e8f0;
+      transform: translateY(-1px);
+    }
+    .status {
+      background: #f8fafc;
+      padding: 8px 18px;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #0f172a;
+      box-shadow: inset 0 0 0 1px #e2e8f0;
+    }
+    .status.success {
+      background: #e0f2e9;
+      color: #15803d;
+      border-left: 4px solid #22c55e;
+    }
+    .status.error {
+      background: #fee9e6;
+      color: #b91c1c;
+      border-left: 4px solid #ef4444;
+    }
+    .status.waiting {
+      background: #fffbeb;
+      color: #b45309;
+    }
+    .info-tip {
+      font-size: 0.75rem;
+      color: #6c86a3;
+      text-align: center;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .loading-txt {
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+<div class="captcha-card" id="captchaRoot">
+  <h2>🔐 安全验证 <small>TIANAI_SLIDER</small></h2>
+  <div class="sub">请拖动滑块至缺口处完成拼图验证</div>
+
+  <div class="captcha-stage">
+    <!-- 滑块容器 -->
+    <div id="sliderWrapper" class="slider-container" style="position: relative;">
+      <!-- 背景图片层 (用来展示底图) -->
+      <div id="backgroundImageDiv" class="bg-img" style="width: 100%; height: auto;"></div>
+      <!-- 拖动滑块图片元素 -->
+      <img id="sliderImage" class="drag-slider" alt="滑块" draggable="false" style="position: absolute; top: 0; left: 0; cursor: grab;">
+    </div>
+
+    <div class="action-bar">
+      <button id="refreshCaptchaBtn" class="refresh-btn">⟳ 刷新验证码</button>
+      <div id="verifyStatus" class="status waiting">⚡ 拖动滑块进行验证</div>
+    </div>
+    <div class="info-tip">
+      <span>🎯 按住滑块拖动到正确位置</span>
+      <span>📊 轨迹加密校验</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- 全局变量 ----------
+  let currentCaptchaId = null;            // 验证码id (提交时的key)
+  let bgWidth = 0, bgHeight = 0;          // 背景图宽高
+  let tplWidth = 0, tplHeight = 0;        // 滑块图宽高
+  let maxLeft = 0;                        // 最大可滑动距离 = bgWidth - tplWidth
+  let currentLeft = 0;                   // 当前滑块left偏移量(px)
+
+  // 轨迹相关
+  let trackList = [];                     // 存储轨迹点 {x, y, t}
+  let dragStartTime = 0;                 // 开始拖动时间戳(ms)
+  let dragStopTime = 0;                  // 结束拖动时间戳
+  let isDragging = false;                // 是否拖动中
+  let startMouseX = 0;                   // 鼠标按下时全局X
+  let startLeftOffset = 0;               // 开始拖动时滑块left值
+
+  // 防重复提交/验证锁
+  let isVerifying = false;
+
+  // DOM 元素
+  const bgDiv = document.getElementById('backgroundImageDiv');
+  const sliderImg = document.getElementById('sliderImage');
+  const refreshBtn = document.getElementById('refreshCaptchaBtn');
+  const statusDiv = document.getElementById('verifyStatus');
+  const wrapper = document.getElementById('sliderWrapper');
+
+  // ---------- 辅助函数 ----------
+  function setStatus(text, type = 'waiting') {
+    statusDiv.innerText = text;
+    statusDiv.className = `status ${type}`;
+  }
+
+  // 重置UI滑块位置 & 清理轨迹
+  function resetSliderPosition() {
+    if (!isDragging) {
+      currentLeft = 0;
+      if (sliderImg) sliderImg.style.left = '0px';
+    } else {
+      // 如果正在拖动，强制结束拖动重置标志避免状态混乱
+      endDragAndCleanup();
+      currentLeft = 0;
+      if (sliderImg) sliderImg.style.left = '0px';
+    }
+  }
+
+  // 强行结束拖动并清理事件 (重置状态)
+  function endDragAndCleanup() {
+    if (isDragging) {
+      isDragging = false;
+      // 移除全局事件
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      // 样式还原
+      if (sliderImg) sliderImg.style.cursor = 'grab';
+    }
+  }
+
+  // 清除轨迹和历史
+  function clearTrackData() {
+    trackList = [];
+    dragStartTime = 0;
+    dragStopTime = 0;
+  }
+
+  // 加载验证码 (从后端获取)
+  async function loadCaptcha() {
+    try {
+      setStatus("⏳ 加载验证码中...", "waiting");
+      refreshBtn.disabled = true;
+      // 调用获取验证码接口 (category = TIANAI_SLIDER)
+      const response = await fetch('/api/captcha/create?category=TIANAI_SLIDER');
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+
+      // 校验必要字段
+      if (!data.id || !data.backgroundImage || !data.templateImage) {
+        throw new Error("验证码数据格式错误");
+      }
+
+      // 保存必要信息
+      currentCaptchaId = data.id;
+      bgWidth = data.backgroundImageWidth;
+      bgHeight = data.backgroundImageHeight;
+      tplWidth = data.templateImageWidth;
+      tplHeight = data.templateImageHeight;
+
+      // 计算最大可滑动偏移 (滑块右边缘不超过背景右边缘)
+      maxLeft = bgWidth - tplWidth;
+      if (maxLeft < 0) maxLeft = 0; // 安全保护
+
+      // 设置背景容器宽高 (与图片原始比例一致)
+      wrapper.style.width = `${bgWidth}px`;
+      wrapper.style.height = `${bgHeight}px`;
+      // 背景div 宽高撑满
+      bgDiv.style.width = `${bgWidth}px`;
+      bgDiv.style.height = `${bgHeight}px`;
+      bgDiv.style.backgroundImage = `url(${data.backgroundImage})`;
+      bgDiv.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
+
+      // 设置滑块图片属性
+      sliderImg.src = data.templateImage;
+      sliderImg.style.width = `${tplWidth}px`;
+      sliderImg.style.height = `${tplHeight}px`;
+      sliderImg.style.left = '0px';
+      sliderImg.style.top = '0px';    // 高度一致，top=0
+
+      // 重置偏移变量及轨迹
+      currentLeft = 0;
+      clearTrackData();
+
+      // 确保拖动事件绑定正常
+      setStatus("✅ 拖动滑块完成验证", "waiting");
+      refreshBtn.disabled = false;
+    } catch (error) {
+      console.error("获取验证码失败:", error);
+      setStatus("❌ 加载失败，点击刷新重试", "error");
+      refreshBtn.disabled = false;
+    }
+  }
+
+  // ---------- 轨迹记录 ----------
+  function addTrackPoint(currentX) {
+    if (!dragStartTime) return;
+    const now = Date.now();
+    const elapsedTime = now - dragStartTime;
+    // 轨迹点: x为当前滑块left偏移量, y固定0 (水平滑动), t为相对起始时间(ms)
+    trackList.push({
+      x: currentX,
+      y: 0,
+      t: elapsedTime
+    });
+  }
+
+  // 开始拖动 (鼠标/触摸)
+  function onDragStart(clientX) {
+    if (isVerifying) {
+      setStatus("⏳ 验证中，请稍后再试", "waiting");
+      return false;
+    }
+    if (!currentCaptchaId) {
+      setStatus("⚠️ 请先刷新验证码", "error");
+      return false;
+    }
+    // 阻止重复开始
+    if (isDragging) return false;
+
+    isDragging = true;
+    // 清除之前的轨迹数据，全新轨迹
+    trackList = [];
+    dragStartTime = Date.now();
+    startMouseX = clientX;
+    startLeftOffset = currentLeft;
+
+    // 记录初始点（起点位置 0偏移时也记录一个轨迹点，起始点）
+    addTrackPoint(currentLeft);
+
+    // 设置全局捕获样式
+    if (sliderImg) sliderImg.style.cursor = 'grabbing';
+    setStatus("🎯 拖动中... 请对准缺口", "waiting");
+    return true;
+  }
+
+  // 拖动移动逻辑
+  function onDragMove(clientX) {
+    if (!isDragging) return;
+    // 计算新的偏移量 (基于起始偏移 + 鼠标移动差值)
+    let deltaX = clientX - startMouseX;
+    let newLeft = startLeftOffset + deltaX;
+    // 边界限制 [0, maxLeft]
+    newLeft = Math.min(Math.max(0, newLeft), maxLeft);
+    if (Math.abs(newLeft - currentLeft) > 0.1) {
+      currentLeft = newLeft;
+      sliderImg.style.left = `${currentLeft}px`;
+      // 实时记录轨迹点 (每次移动都记录，足够密集)
+      addTrackPoint(currentLeft);
+    }
+  }
+
+  // 结束拖动 并提交验证
+  function onDragEnd() {
+    if (!isDragging) return;
+    // 记录结束时间
+    dragStopTime = Date.now();
+    isDragging = false;
+    sliderImg.style.cursor = 'grab';
+
+    // 移除全局监听
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+    window.removeEventListener('touchmove', onTouchMove);
+    window.removeEventListener('touchend', onTouchEnd);
+
+    // 未移动过或者轨迹只有起点且没有移动时，提示无效
+    if (trackList.length <= 1 && currentLeft === 0) {
+      setStatus("⚠️ 请拖动滑块到正确位置", "error");
+      clearTrackData();
+      return;
+    }
+
+    // 最后再记录一次最终位置，确保终点准确
+    addTrackPoint(currentLeft);
+
+    // 开始提交验证
+    submitVerification();
+  }
+
+  // 提交后端验证
+  async function submitVerification() {
+    if (isVerifying) return;
+    if (!currentCaptchaId) {
+      setStatus("无效验证码，请刷新", "error");
+      return;
+    }
+    if (trackList.length === 0) {
+      setStatus("请先拖动滑块完成验证", "error");
+      return;
+    }
+
+    isVerifying = true;
+    setStatus("🔍 正在验证轨迹...", "waiting");
+
+    // 构建 ImageCaptchaTrack 对象
+    const trackPayload = {
+      bgImageWidth: bgWidth,
+      bgImageHeight: bgHeight,
+      templateImageWidth: tplWidth,
+      templateImageHeight: tplHeight,
+      startTime: dragStartTime,
+      stopTime: dragStopTime,
+      left: Math.round(currentLeft),       // 最终滑动距离(整数)
+      top: 0,                              // 垂直偏移为0 (滑块与背景同高)
+      trackList: trackList.map(p => ({ x: Math.round(p.x), y: 0, t: p.t })), // 确保整数兼容
+      data: null                           // 可选扩展字段
+    };
+
+    const requestBody = {
+      key: currentCaptchaId,
+      code: JSON.stringify(trackPayload),
+      category: "TIANAI_SLIDER"
+    };
+
+    try {
+      const response = await fetch('/api/captcha/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        throw new Error(`服务器响应错误 ${response.status}`);
+      }
+
+      const result = await response.json(); // 预期返回布尔值 true/false
+
+      if (result === true || result === "true" || result === true) {
+        setStatus("✅ 验证通过！", "success");
+        // 验证成功后禁用拖动，避免重复提交；可刷新重置时启用
+        sliderImg.style.pointerEvents = 'none';
+        refreshBtn.disabled = false;
+        setStatus("✅ 验证成功", "success");
+      } else {
+        setStatus("❌ 验证失败，请重试", "error");
+        // 验证失败后重置滑块位置，但不清id，提供刷新或重新拖动重置轨迹（此时重置位置到0，清空轨迹但不清除验证码）
+        resetAfterFail();
+      }
+    } catch (error) {
+      console.error("验证请求异常:", error);
+      setStatus("⚠️ 网络错误，请刷新重试", "error");
+      resetAfterFail();
+    } finally {
+      isVerifying = false;
+    }
+  }
+
+  // 验证失败 重置滑块位置，清轨迹，但不重新获取验证码（用户可以再次拖动）
+  function resetAfterFail() {
+    // 重置滑块位置到起点
+    currentLeft = 0;
+    if (sliderImg) sliderImg.style.left = '0px';
+    clearTrackData();
+    // 重新使滑块可拖动 (若之前验证成功禁用pointer-events则恢复)
+    sliderImg.style.pointerEvents = 'auto';
+    setStatus("🔄 拖动滑块重新验证", "waiting");
+    // 不清空captchaId, 允许同一验证码多次尝试 (后端一般允许有限次数)
+  }
+
+  // 刷新验证码 (重新获取，重置全部状态)
+  async function refreshCaptcha() {
+    if (isVerifying) {
+      setStatus("验证中，请稍后刷新", "waiting");
+      return;
+    }
+    // 移除拖动事件避免残留
+    endDragAndCleanup();
+    // 重置内部状态
+    currentLeft = 0;
+    if (sliderImg) sliderImg.style.left = '0px';
+    clearTrackData();
+    isDragging = false;
+    sliderImg.style.pointerEvents = 'auto';
+    // 重新加载验证码
+    await loadCaptcha();
+    setStatus("✨ 新验证码已加载，拖动滑块", "waiting");
+  }
+
+  // ---------- 鼠标/触摸 事件绑定 ----------
+  function onMouseDown(e) {
+    e.preventDefault();
+    const clientX = e.clientX;
+    if (onDragStart(clientX)) {
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    }
+  }
+
+  function onMouseMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    onDragMove(e.clientX);
+  }
+
+  function onMouseUp(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    onDragEnd();
+  }
+
+  // 触摸事件移动端
+  function onTouchStart(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    if (touch && onDragStart(touch.clientX)) {
+      window.addEventListener('touchmove', onTouchMove);
+      window.addEventListener('touchend', onTouchEnd);
+      window.addEventListener('touchcancel', onTouchEnd);
+    }
+  }
+
+  function onTouchMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    if (touch) onDragMove(touch.clientX);
+  }
+
+  function onTouchEnd(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    onDragEnd();
+  }
+
+  // 绑定滑块拖动事件
+  function bindDragEvents() {
+    sliderImg.addEventListener('mousedown', onMouseDown);
+    sliderImg.addEventListener('touchstart', onTouchStart, { passive: false });
+    // 防止拖拽时浏览器默认拖拽图片行为
+    sliderImg.addEventListener('dragstart', (e) => e.preventDefault());
+  }
+
+  // 当背景/容器大小发生任何调整时，确保滑块最大偏移值正确 (重新计算)
+  function recalcMaxLeft() {
+    if (bgWidth && tplWidth) {
+      maxLeft = bgWidth - tplWidth;
+      // 如果当前left超出新范围，修正
+      if (currentLeft > maxLeft) {
+        currentLeft = maxLeft;
+        if (sliderImg) sliderImg.style.left = `${currentLeft}px`;
+      }
+    }
+  }
+
+  // 监听窗口大小变化重新校准（背景基于实际设定宽高已经固定，无需额外，但保留以防万一）
+  window.addEventListener('resize', () => {
+    // 由于容器宽高是绝对px值，不受缩放影响，但以防css变化修正
+    recalcMaxLeft();
+  });
+
+  // 初始化页面加载验证码
+  async function init() {
+    bindDragEvents();
+    refreshBtn.addEventListener('click', refreshCaptcha);
+    await loadCaptcha();
+    // 额外保证背景宽高加载后滑块范围准确性
+    recalcMaxLeft();
+  }
+
+  // 增加辅助: 图片加载后验证尺寸 (确保滑块宽高设置无偏差)
+  sliderImg.addEventListener('load', () => {
+    if (tplWidth && tplHeight) {
+      sliderImg.style.width = `${tplWidth}px`;
+      sliderImg.style.height = `${tplHeight}px`;
+      recalcMaxLeft();
+    }
+  });
+
+  // 开始运行
+  init();
+</script>
+</body>
+</html>

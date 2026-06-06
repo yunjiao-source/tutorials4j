@@ -4,20 +4,20 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>yunjiao-source.tutorials4j.framework</groupId>
-        <artifactId>framework-web</artifactId>
+        <artifactId>framework-feature</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>web-core</artifactId>
+    <artifactId>feature-core</artifactId>
     <packaging>jar</packaging>
-    <name>Web :: Core</name>
-    <description>web核心模块</description>
+    <name>Feature :: Core</name>
+    <description>功能核心模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-multi-level</artifactId>
+            <artifactId>web-core</artifactId>
             <version>${revision}</version>
         </dependency>
 

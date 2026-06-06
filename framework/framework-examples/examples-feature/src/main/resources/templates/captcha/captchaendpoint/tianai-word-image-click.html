@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>点选文字验证码 - 智能轨迹验证</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(145deg, #f0f2f5 0%, #e6e9f0 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 24px;
+    }
+
+    /* 验证码卡片 */
+    .captcha-container {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 48px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      backdrop-filter: blur(0px);
+      transition: all 0.2s ease;
+    }
+
+    .captcha-header {
+      background: #1a2a3f;
+      padding: 20px 32px;
+      color: white;
+    }
+
+    .captcha-header h1 {
+      margin: 0;
+      font-size: 1.7rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .captcha-header p {
+      margin: 6px 0 0;
+      opacity: 0.75;
+      font-size: 0.9rem;
+    }
+
+    .captcha-main {
+      padding: 28px 32px 32px;
+    }
+
+    /* 双栏布局 */
+    .verification-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+
+    .bg-canvas-area {
+      flex: 2;
+      min-width: 280px;
+      background: #f9fafc;
+      border-radius: 28px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      padding: 16px;
+      transition: all 0.2s;
+    }
+
+    .bg-canvas-area label {
+      display: block;
+      font-weight: 600;
+      color: #1e2f3e;
+      margin-bottom: 12px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .canvas-wrapper {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      border-radius: 20px;
+      cursor: crosshair;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      height: auto;
+      background: #fef9e8;
+    }
+
+    .template-area {
+      flex: 1;
+      min-width: 220px;
+      background: #ffffffdd;
+      background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+      border-radius: 28px;
+      padding: 18px 20px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .template-title {
+      font-weight: 600;
+      color: #2c3e4e;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+
+    .template-img-box {
+      background: #f1f5f9;
+      border-radius: 24px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .template-img-box img {
+      max-width: 100%;
+      border-radius: 14px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+
+    .click-info {
+      background: #f0f4f9;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-top: 16px;
+    }
+
+    .click-info p {
+      margin: 6px 0;
+      font-size: 0.85rem;
+      color: #2d3e4f;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .badge {
+      background: #2c5f8a;
+      color: white;
+      border-radius: 30px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 28px;
+      justify-content: center;
+    }
+
+    .btn {
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      background: #eef2f6;
+      color: #1f3a4b;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #2c7da0;
+      color: white;
+      box-shadow: 0 4px 8px rgba(44, 125, 160, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #1f5e7a;
+      transform: translateY(-1px);
+    }
+
+    .btn-warning {
+      background: #e9b35f;
+      color: #2c2a24;
+    }
+
+    .btn-warning:hover {
+      background: #e0a23b;
+    }
+
+    .btn-danger {
+      background: #c44536;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #aa3628;
+    }
+
+    .btn:hover {
+      filter: brightness(0.96);
+      transform: translateY(-1px);
+    }
+
+    .result-area {
+      background: #1e2a32;
+      border-radius: 40px;
+      padding: 16px 24px;
+      margin-top: 24px;
+      text-align: center;
+      font-weight: 500;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+    }
+
+    .coord-list {
+      max-height: 130px;
+      overflow-y: auto;
+      font-size: 0.75rem;
+      background: #eef2f6;
+      border-radius: 18px;
+      padding: 8px 12px;
+      margin-top: 12px;
+      font-family: monospace;
+    }
+
+    .coord-list span {
+      display: inline-block;
+      background: #ffffffaa;
+      margin: 4px 6px 4px 0;
+      padding: 4px 10px;
+      border-radius: 26px;
+      font-size: 0.7rem;
+    }
+
+    footer {
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 12px;
+      color: #6c7a89;
+      border-top: 1px solid #e9edf2;
+    }
+
+    @media (max-width: 760px) {
+      .captcha-main {
+        padding: 20px;
+      }
+
+      .btn {
+        padding: 8px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="captcha-container" th:fragment="captcha">
+  <div class="captcha-header">
+    <h1>🔐 点选文字验证码 · 轨迹验证</h1>
+    <p>根据右侧模板图片提示，在左侧背景图片中依次点击对应文字位置</p>
+  </div>
+  <div class="captcha-main">
+    <div class="verification-panel">
+      <!-- 画板区域: 背景图 + 点击标记 -->
+      <div class="bg-canvas-area">
+        <label>📷 点击背景图片 (按提示顺序点选)
+          <span class="badge" id="pointCountBadge">已选 0 点</span>
+        </label>
+        <div class="canvas-wrapper">
+          <canvas id="captchaCanvas" width="600" height="360" style="width:100%; height:auto; max-width:600px; cursor:crosshair"></canvas>
+        </div>
+        <div class="click-info">
+          <p>✨ 操作说明：根据右侧模板图的文字/图案，在背景图上<strong>依次点击</strong>对应位置，可随时撤销。</p>
+          <div class="coord-list" id="clickCoordList">
+            <span style="color:#8696a8;">暂无点击记录</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧模板区 -->
+      <div class="template-area">
+        <div class="template-title">
+          🧩 验证提示模板
+        </div>
+        <div class="template-img-box">
+          <img id="templateImg" alt="模板图片" style="max-width:100%;">
+        </div>
+        <div style="font-size:0.75rem; color:#4a5b6e; background:#f1f5f9; border-radius:20px; padding:10px; text-align:center;">
+          ⚡ 请按模板内文字/图案顺序点击左侧背景图中对应位置<br>
+          <span style="font-size:0.7rem;">（后台会校验点击坐标与轨迹合法性）</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn" id="refreshBtn">🔄 刷新验证码</button>
+      <button class="btn btn-warning" id="undoBtn">↩️ 撤销上一点</button>
+      <button class="btn btn-primary" id="submitBtn">✅ 提交验证</button>
+    </div>
+
+    <div class="result-area" id="resultArea">
+      💡 等待验证操作，点击提交后将展示验证结果
+    </div>
+  </div>
+  <footer>
+    🔍 智能点选验证 | 轨迹记录 (x, y, 时间偏移) + 完整点选坐标提交
+  </footer>
+</div>
+
+<script>
+  // ---------- 全局变量 ----------
+  let currentCaptcha = {
+    id: null,               // key
+    category: null,        // 验证码类型
+    bgImageBase64: null,
+    bgWidth: 600,          // 原始宽度
+    bgHeight: 360,
+    templateImageBase64: null,
+    templateWidth: 286,
+    templateHeight: 76
+  };
+
+  let trackPoints = [];            // 存储点击点 { x, y, timeOffset }
+  let startTimestamp = null;       // 验证码加载完成/重置后的起始时间(毫秒)
+  let canvasCtx = null;
+  let backgroundImageObj = new Image();  // 背景图对象
+
+  // DOM 元素
+  const canvas = document.getElementById('captchaCanvas');
+  const templateImgEl = document.getElementById('templateImg');
+  const refreshBtn = document.getElementById('refreshBtn');
+  const undoBtn = document.getElementById('undoBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const resultArea = document.getElementById('resultArea');
+  const pointCountBadge = document.getElementById('pointCountBadge');
+  const clickCoordList = document.getElementById('clickCoordList');
+
+  // 初始化画布上下文
+  if (canvas) {
+    canvasCtx = canvas.getContext('2d');
+    // 设置画布尺寸固定为600x360 (与接口背景图尺寸一致)
+    canvas.width = currentCaptcha.bgWidth;
+    canvas.height = currentCaptcha.bgHeight;
+  }
+
+  // ---------- 辅助函数 ----------
+  function updateUIByPoints() {
+    // 更新计数徽章
+    pointCountBadge.innerText = `已选 ${trackPoints.length} 点`;
+    // 更新坐标列表显示
+    if (trackPoints.length === 0) {
+      clickCoordList.innerHTML = '<span style="color:#8696a8;">暂无点击记录，请按模板顺序点击背景图</span>';
+    } else {
+      let html = '';
+      trackPoints.forEach((point, idx) => {
+        html += `<span>📍${idx+1} (${point.x}, ${point.y}) ${point.timeOffset}ms</span>`;
+      });
+      clickCoordList.innerHTML = html;
+    }
+    // 重绘画板（包含所有标记）
+    redrawCanvasWithMarks();
+  }
+
+  // 重绘背景 + 所有标记点
+  function redrawCanvasWithMarks() {
+    if (!canvasCtx || !backgroundImageObj.complete || backgroundImageObj.naturalWidth === 0) {
+      // 图片未加载完成则暂不绘制
+      if (backgroundImageObj.src) {
+        canvasCtx.fillStyle = '#eef2f5';
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+        canvasCtx.fillStyle = '#5c6f87';
+        canvasCtx.font = '14px "Segoe UI"';
+        canvasCtx.fillText('加载背景图中...', canvas.width/2-60, canvas.height/2);
+      }
+      return;
+    }
+    // 绘制背景图片
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    canvasCtx.drawImage(backgroundImageObj, 0, 0, canvas.width, canvas.height);
+
+    // 绘制标记点 (圆圈 + 序号)
+    if (trackPoints.length > 0) {
+      trackPoints.forEach((point, idx) => {
+        const x = point.x;
+        const y = point.y;
+        // 外发光效果
+        canvasCtx.shadowBlur = 0;
+        canvasCtx.beginPath();
+        canvasCtx.arc(x, y, 16, 0, 2 * Math.PI);
+        canvasCtx.fillStyle = 'rgba(255, 80, 40, 0.65)';
+        canvasCtx.fill();
+        canvasCtx.beginPath();
+        canvasCtx.arc(x, y, 12, 0, 2 * Math.PI);
+        canvasCtx.fillStyle = '#ff4d2e';
+        canvasCtx.fill();
+        canvasCtx.beginPath();
+        canvasCtx.arc(x, y, 8, 0, 2 * Math.PI);
+        canvasCtx.fillStyle = '#ffffff';
+        canvasCtx.fill();
+        canvasCtx.font = 'bold 14px "Segoe UI", "PingFang SC"';
+        canvasCtx.fillStyle = '#2d2f36';
+        canvasCtx.shadowBlur = 2;
+        canvasCtx.fillText((idx+1).toString(), x-5, y+5);
+        canvasCtx.shadowBlur = 0;
+        // 辅助十字线
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(x-20, y);
+        canvasCtx.lineTo(x-8, y);
+        canvasCtx.moveTo(x+8, y);
+        canvasCtx.lineTo(x+20, y);
+        canvasCtx.moveTo(x, y-20);
+        canvasCtx.lineTo(x, y-8);
+        canvasCtx.moveTo(x, y+8);
+        canvasCtx.lineTo(x, y+20);
+        canvasCtx.strokeStyle = 'rgba(255,255,200,0.9)';
+        canvasCtx.lineWidth = 2;
+        canvasCtx.stroke();
+      });
+    }
+  }
+
+  // 重置验证码状态 (重新加载)
+  async function refreshCaptcha() {
+    // 清理现有数据
+    trackPoints = [];
+    startTimestamp = null;
+    resultArea.innerHTML = '⏳ 正在加载验证码，请稍后...';
+    resultArea.style.color = '#cbd5e1';
+
+    try {
+      // 1. 调用获取验证码接口 (点选文字验证码 category=TIANAI_WORD_IMAGE_CLICK)
+      const createUrl = '/api/captcha/create?category=TIANAI_WORD_IMAGE_CLICK';
+      const response = await fetch(createUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+
+      // 存储验证码会话信息
+      currentCaptcha.id = data.id;                // 作为后续key
+      currentCaptcha.category = data.category;    // 例如 TIANAI_WORD_IMAGE_CLICK
+      currentCaptcha.bgImageBase64 = data.backgroundImage;
+      currentCaptcha.bgWidth = data.backgroundImageWidth;
+      currentCaptcha.bgHeight = data.backgroundImageHeight;
+      currentCaptcha.templateImageBase64 = data.templateImage;
+      currentCaptcha.templateWidth = data.templateImageWidth;
+      currentCaptcha.templateHeight = data.templateImageHeight;
+
+      // 设置画布尺寸（按照接口返回的真实宽高）
+      canvas.width = currentCaptcha.bgWidth;
+      canvas.height = currentCaptcha.bgHeight;
+      // 更新模板图片
+      if (data.templateImage) {
+        templateImgEl.src = data.templateImage;
+      } else {
+        templateImgEl.src = '';
+        templateImgEl.alt = '无模板图';
+      }
+
+      // 加载背景图片
+      await loadBackgroundImage(currentCaptcha.bgImageBase64);
+
+      // 重置记录时间起点：验证码成功加载后，用户可开始交互的时刻
+      startTimestamp = Date.now();
+      trackPoints = [];
+      updateUIByPoints();
+      resultArea.innerHTML = '✅ 验证码加载成功 | 请根据右侧模板图，在背景图上依次点选正确位置';
+      resultArea.style.color = '#a5f0c0';
+    } catch (error) {
+      console.error('获取验证码失败:', error);
+      resultArea.innerHTML = `❌ 加载验证码失败: ${error.message}，请确认后端服务已启动`;
+      resultArea.style.color = '#ffad9a';
+      // 清空画板占位
+      canvasCtx.fillStyle = '#eeddcc';
+      canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+      canvasCtx.fillStyle = '#a00';
+      canvasCtx.fillText('接口连接失败', 20, 50);
+    }
+  }
+
+  // 加载背景图Promise
+  function loadBackgroundImage(base64Data) {
+    return new Promise((resolve, reject) => {
+      if (!base64Data) reject(new Error('背景图数据为空'));
+      const img = new Image();
+      img.onload = () => {
+        backgroundImageObj = img;
+        redrawCanvasWithMarks();
+        resolve();
+      };
+      img.onerror = (e) => reject(new Error('背景图解析失败'));
+      img.src = base64Data;
+    });
+  }
+
+  // 获取点击坐标 (基于canvas原始尺寸)
+  function getCanvasCoordsFromEvent(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;   // canvas实际像素宽度(600) / 显示宽度
+    const scaleY = canvas.height / rect.height;
+    const mouseX = (e.clientX - rect.left) * scaleX;
+    const mouseY = (e.clientY - rect.top) * scaleY;
+    let x = Math.min(Math.max(0, mouseX), canvas.width);
+    let y = Math.min(Math.max(0, mouseY), canvas.height);
+    return { x: Math.round(x), y: Math.round(y) };
+  }
+
+  // 记录一个点击点
+  function addClickPoint(x, y) {
+    if (startTimestamp === null) {
+      // 如果尚未初始化开始时间，但理论上已经加载好了才有点击，防御:重新初始化起点
+      startTimestamp = Date.now();
+    }
+    const now = Date.now();
+    const timeOffset = now - startTimestamp;
+    trackPoints.push({
+      x: x,
+      y: y,
+      timeOffset: timeOffset
+    });
+    updateUIByPoints();
+  }
+
+  // 撤销最后一个点
+  function undoLastPoint() {
+    if (trackPoints.length > 0) {
+      trackPoints.pop();
+      updateUIByPoints();
+      resultArea.innerHTML = '↩️ 已撤销最后一个点击，可继续点选或重新提交';
+      resultArea.style.color = '#ffde9e';
+    } else {
+      resultArea.innerHTML = '⚠️ 没有可撤销的点，请先点击背景图';
+      resultArea.style.color = '#ffbc6e';
+      setTimeout(() => {
+        if (trackPoints.length === 0 && currentCaptcha.id)
+          resultArea.innerHTML = '✅ 验证码已就绪，请开始点选';
+        else if(currentCaptcha.id) updateUIByPoints();
+      }, 1200);
+    }
+  }
+
+  // 构造 ImageCaptchaTrack 对象并提交
+  async function submitVerification() {
+    if (!currentCaptcha.id) {
+      resultArea.innerHTML = '❌ 验证码未初始化，请先刷新验证码';
+      resultArea.style.color = '#ffad9a';
+      return;
+    }
+    if (trackPoints.length === 0) {
+      resultArea.innerHTML = '⚠️ 尚未点击任何坐标，请根据模板图在背景图上点选';
+      resultArea.style.color = '#ffbc6e';
+      return;
+    }
+
+    // 计算最终 stopTime
+    const stopTime = Date.now();
+    // 准备 trackList : 按照接口约定每个Track包含 x, y, timestamp (时间偏移)
+    const trackList = trackPoints.map(point => ({
+      x: point.x,
+      y: point.y,
+      type:"CLICK",
+      t: point.timeOffset   // 毫秒偏移量
+    }));
+
+    // 最后一个点击的坐标作为 left, top (也可以使用第一个，但规范常用最后坐标)
+    const lastPoint = trackPoints[trackPoints.length - 1];
+    const left = lastPoint.x;
+    const top = lastPoint.y;
+
+    // 构造 ImageCaptchaTrack 对象
+    const imageCaptchaTrack = {
+      bgImageWidth: currentCaptcha.bgWidth,
+      bgImageHeight: currentCaptcha.bgHeight,
+      templateImageWidth: currentCaptcha.templateWidth,
+      templateImageHeight: currentCaptcha.templateHeight,
+      startTime: startTimestamp,      // 验证码准备就绪时间戳
+      stopTime: stopTime,
+      left: left,
+      top: top,
+      trackList: trackList,
+      data: { clickCount: trackPoints.length, verifyType: "WORD_CLICK" }  // 附加信息
+    };
+
+    // 构建提交body
+    const requestBody = {
+      key: currentCaptcha.id,
+      code: JSON.stringify(imageCaptchaTrack),
+      category: currentCaptcha.category   // 使用create返回的category字段
+    };
+
+    try {
+      resultArea.innerHTML = '🔄 正在校验点选轨迹及顺序...';
+      resultArea.style.color = '#cbd5e1';
+      const checkResponse = await fetch('/api/captcha/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      // if (!checkResponse.ok) {
+      //   const errorText = await checkResponse.text();
+      //   throw new Error(`HTTP ${checkResponse.status}: ${errorText}`);
+      // }
+
+      const result = await checkResponse.json();   // 后端返回布尔值 (或者可能是对象，题目说返回布尔值)
+      let isValid = false;
+      if (typeof result === 'boolean') {
+        isValid = result;
+      } else if (result && typeof result === 'object') {
+        // 兼容某些封装 {success: true} 但文档明确布尔值；稳妥判断
+        isValid = result.success === true || result.data === true || result === true;
+        if (result.code === 200) isValid = true;
+      } else {
+        isValid = !!result;
+      }
+
+      if (isValid) {
+        resultArea.innerHTML = '🎉 验证通过！ 点选位置与轨迹符合预期，校验成功！';
+        resultArea.style.color = '#b9fbc0';
+        // 可选: 验证成功后可以自动刷新或给予重置提示
+        setTimeout(() => {
+          if(confirm('验证通过！是否刷新加载新验证码？')) {
+            refreshCaptcha();
+          }
+        }, 500);
+      } else {
+        resultArea.innerHTML = '❌ 验证失败：点选内容或轨迹不匹配，请刷新后重试。';
+        resultArea.style.color = '#ffaa99';
+      }
+    } catch (error) {
+      console.error('提交验证失败:', error);
+      resultArea.innerHTML = `⚠️ 提交失败: ${error.message}，请检查后端接口`;
+      resultArea.style.color = '#ff8a7a';
+    }
+  }
+
+  // ----- canvas 点击事件监听 -----
+  function onCanvasClick(e) {
+    if (!currentCaptcha.id || !backgroundImageObj.complete) {
+      resultArea.innerHTML = '⏳ 验证码尚未加载完成，请稍后点击';
+      return;
+    }
+    const { x, y } = getCanvasCoordsFromEvent(e);
+    // 简单限制点击范围有效性
+    if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
+      addClickPoint(x, y);
+      // 轻微提示
+      resultArea.innerHTML = `✨ 已记录点选坐标 (${x}, ${y})，可继续添加或提交`;
+      resultArea.style.color = '#c7e9ff';
+    } else {
+      resultArea.innerHTML = `点击超出有效区域 (${x},${y}) 忽略`;
+    }
+  }
+
+  // 重置/刷新页面逻辑
+  function initEventListeners() {
+    canvas.addEventListener('click', onCanvasClick);
+    refreshBtn.addEventListener('click', () => {
+      refreshCaptcha();
+    });
+    undoBtn.addEventListener('click', () => {
+      if (currentCaptcha.id) undoLastPoint();
+      else resultArea.innerHTML = '请先刷新验证码';
+    });
+    submitBtn.addEventListener('click', () => {
+      if (currentCaptcha.id) submitVerification();
+      else resultArea.innerHTML = '请先刷新获取验证码';
+    });
+  }
+
+  // 首屏加载
+  async function init() {
+    initEventListeners();
+    await refreshCaptcha();
+  }
+
+  // 页面启动
+  init();
+</script>
+</body>
+</html>

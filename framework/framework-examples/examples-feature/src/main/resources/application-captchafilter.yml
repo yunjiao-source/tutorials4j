@@ -1,0 +1,16 @@
+tutorials4j:
+  captcha:
+    filter:
+      url-patterns: /post
+  cache:
+    named:
+      defaults:
+        timeToLive: 5m
+        cacheNullValues: false
+        enable-statistics: false
+      caches:
+        captcha-behavior:
+          timeToLive: 1m
+          cacheNullValues: false
+          redis:
+            cache-prefix: "token:"

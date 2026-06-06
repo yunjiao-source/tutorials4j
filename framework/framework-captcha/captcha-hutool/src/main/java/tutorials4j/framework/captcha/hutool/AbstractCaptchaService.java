@@ -88,6 +88,9 @@ public abstract class AbstractCaptchaService implements CaptchaService {
       throw new CaptchaException();
     }
 
+    // 删除缓存: 验证码key只使用一次
+    captchaCacheTemplate.delete(key);
+
     boolean success = false;
     Boolean ignoreCase = getValidIgnoreCase();
     if (Boolean.TRUE.equals(ignoreCase)) {
@@ -96,10 +99,6 @@ public abstract class AbstractCaptchaService implements CaptchaService {
       success = cacheCode.equals(userCode);
     }
 
-    if (success) {
-      // 删除缓存
-      captchaCacheTemplate.delete(key);
-    }
     return success;
   }
 }

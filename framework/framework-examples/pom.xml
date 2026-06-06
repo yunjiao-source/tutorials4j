@@ -22,6 +22,7 @@
         <module>examples-tenant</module>
         <module>examples-captcha</module>
         <module>examples-crypto</module>
+        <module>examples-feature</module>
     </modules>
 
     <dependencies>

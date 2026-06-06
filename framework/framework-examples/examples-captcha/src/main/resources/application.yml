@@ -8,8 +8,29 @@ spring:
     redis:
       host: localhost # Redis服务器地址
       port: 6379 # Redis端口
+      database: 2
 
-
+tutorials4j:
+  cache:
+    named:
+      defaults:
+        timeToLive: 5m
+        cacheNullValues: false
+        enable-statistics: false
+      caches:
+        captcha-behavior:
+          timeToLive: 2m
+          cacheNullValues: false
+          redis:
+            cache-prefix: "token:"
+        captcha-graphic:
+          timeToLive: 1m
+          cacheNullValues: false
+          redis:
+            cache-prefix: "token:"
+        web-security-access-limited:
+          timeToLive: 1s
+          cacheNullValues: false
 
 logging:
   level:
