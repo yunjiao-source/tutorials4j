@@ -30,13 +30,13 @@ import tutorials4j.framework.web.core.exception.WebFrameworkException;
  * </ol>
  *
  * @author Yun Jiao
- * @see TotpAuthService
+ * @see GoogleAuthService
  */
 @Slf4j
 @RequiredArgsConstructor
 public class GoogleAuthRequestFilter extends OncePerRequestFilter {
 
-  private final TotpAuthService totpAuthService;
+  private final GoogleAuthService googleAuthService;
 
   @Override
   protected void doFilterInternal(
@@ -55,7 +55,7 @@ public class GoogleAuthRequestFilter extends OncePerRequestFilter {
       throw new WebFrameworkException("Google Auth 参数不完整");
     }
 
-    if (!totpAuthService.verifyByUserName(userName, Integer.parseInt(code))) {
+    if (!googleAuthService.verifyByUserName(userName, Integer.parseInt(code))) {
       throw new WebFrameworkException("Google Auth 校验失败");
     }
 

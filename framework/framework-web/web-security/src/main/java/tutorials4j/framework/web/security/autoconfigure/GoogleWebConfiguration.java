@@ -11,10 +11,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
+import tutorials4j.framework.web.security.google.GoogleAuthEndpoint;
 import tutorials4j.framework.web.security.google.GoogleAuthRequestFilter;
+import tutorials4j.framework.web.security.google.GoogleAuthService;
 import tutorials4j.framework.web.security.google.GoogleAuthenticatorConfigCustomizer;
-import tutorials4j.framework.web.security.google.TotpAuthService;
-import tutorials4j.framework.web.security.google.YamlCredentialRepository;
+import tutorials4j.framework.web.security.google.GoogleYamlCredentialRepository;
 import tutorials4j.framework.web.security.properties.GoogleWebProperties;
 import tutorials4j.framework.web.security.properties.GoogleWebProperties.AuthenticatorOptions;
 
@@ -62,23 +63,23 @@ public class GoogleWebConfiguration {
   @ConditionalOnMissingBean
   ICredentialRepository yamlCredentialRepository(GoogleWebProperties properties) {
     log.debug("[WEB-SECURITY] Yaml Credential Repository");
-    return new YamlCredentialRepository(properties.getCredentials());
+    return new GoogleYamlCredentialRepository(properties.getCredentials());
   }
 
   @Bean
   @ConditionalOnMissingBean
-  TotpAuthService googleAuthService(
+  GoogleAuthService googleAuthService(
       GoogleAuthenticator authenticator, GoogleWebProperties properties) {
     log.debug("[WEB-SECURITY] Google Auth Service");
-    return new TotpAuthService(authenticator, properties.getOtpAuthTotpURL());
+    return new GoogleAuthService(authenticator, properties.getOtpAuthTotpURL());
   }
 
   @Bean
   FilterRegistrationBean<GoogleAuthRequestFilter> googleAuthRequestFilterRegistration(
-      TotpAuthService totpAuthService, GoogleWebProperties properties) {
+      GoogleAuthService googleAuthService, GoogleWebProperties properties) {
     ServletFilterOptions options = properties.getFilter();
     FilterRegistrationBean<GoogleAuthRequestFilter> registration = new FilterRegistrationBean<>();
-    GoogleAuthRequestFilter filter = new GoogleAuthRequestFilter(totpAuthService);
+    GoogleAuthRequestFilter filter = new GoogleAuthRequestFilter(googleAuthService);
     registration.setFilter(filter);
     options.fill(registration);
 
@@ -86,5 +87,12 @@ public class GoogleWebConfiguration {
       log.debug("[WEB-SECURITY] Google Auth 校验过滤器：{}", options);
     }
     return registration;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  GoogleAuthEndpoint totpAuthEndpoint(GoogleAuthService googleAuthService) {
+    log.debug("[FEATURE-REST] Totp Auth Endpoint");
+    return new GoogleAuthEndpoint(googleAuthService);
   }
 }

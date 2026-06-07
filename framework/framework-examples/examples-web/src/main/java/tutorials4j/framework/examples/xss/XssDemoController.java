@@ -17,7 +17,7 @@ public class XssDemoController {
   /** 展示测试页面 */
   @GetMapping
   public String demoPage() {
-    return "xss-demo";
+    return "xss";
   }
 
   /** 演示表单参数清洗（由 XssHttpServletRequestWrapper 自动完成） 返回清洗后的结果 */

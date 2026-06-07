@@ -13,5 +13,5 @@ public interface JacksonConsts {
 
   int MODULE_ORDER_DEFAULT = 100;
 
-  int MODULE_ORDER_XSS = MODULE_ORDER_DEFAULT + 1;
+  int MODULE_ORDER_XSS = MODULE_ORDER_DEFAULT + 10;
 }

@@ -7,9 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
 import tutorials4j.framework.crypto.core.properties.CryptoProperties;
-import tutorials4j.framework.crypto.web.CryptoRequestBodyAdvice;
-import tutorials4j.framework.crypto.web.CryptoRequestCacheTemplate;
-import tutorials4j.framework.crypto.web.CryptoResponseBodyAdvice;
+import tutorials4j.framework.crypto.web.CryptoEndpoint;
+import tutorials4j.framework.crypto.web.body.CryptoRequestBodyAdvice;
+import tutorials4j.framework.crypto.web.body.CryptoRequestCacheTemplate;
+import tutorials4j.framework.crypto.web.body.CryptoResponseBodyAdvice;
 
 /**
  * TODO
@@ -22,6 +23,14 @@ public class CryptoWebConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[CRYPTO-WEB] Crypto Web Configuration");
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  CryptoEndpoint cryptoEndpoint(CryptoProperties properties) {
+    log.debug("[CRYPTO-WEB] Crypto Endpoint");
+    return new CryptoEndpoint(
+        properties.getAsymmetricCryptoStrategy(), properties.getSymmetricCryptoStrategy());
   }
 
   @Bean

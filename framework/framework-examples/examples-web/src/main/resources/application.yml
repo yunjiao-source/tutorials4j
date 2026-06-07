@@ -7,7 +7,8 @@ spring:
 #    active: swagger
 #    active: cached-body
 #    active: trace
-    active: client
+#    active: client
+    active: googleauth
 
 logging:
   level:
