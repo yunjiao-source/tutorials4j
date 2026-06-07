@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
-import tutorials4j.framework.common.core.entity.BaseDTO;
+import tutorials4j.framework.common.core.entity.BaseVO;
 import tutorials4j.framework.examples.SexEnum;
 
 /**
@@ -17,7 +17,7 @@ import tutorials4j.framework.examples.SexEnum;
  */
 @Getter
 @Setter
-public class OrderDTO extends BaseDTO {
+public class OrderVO extends BaseVO {
   private String orderNumber;
   private BigDecimal amount;
   private LocalDateTime orderTime;
@@ -26,8 +26,8 @@ public class OrderDTO extends BaseDTO {
   private String email;
   private SexEnum sex;
 
-  public static OrderDTO of(Order order) {
-    OrderDTO dto = new OrderDTO();
+  public static OrderVO of(Order order) {
+    OrderVO dto = new OrderVO();
 
     User user = order.getUser();
     if (user != null) {
@@ -39,8 +39,8 @@ public class OrderDTO extends BaseDTO {
     return dto;
   }
 
-  public static List<OrderDTO> of(List<Order> orders) {
-    List<OrderDTO> dtoList = new ArrayList<>();
+  public static List<OrderVO> of(List<Order> orders) {
+    List<OrderVO> dtoList = new ArrayList<>();
     for (Order order : orders) {
       dtoList.add(of(order));
     }

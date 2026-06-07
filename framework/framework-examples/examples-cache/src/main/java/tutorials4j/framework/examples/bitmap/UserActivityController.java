@@ -26,7 +26,7 @@ public class UserActivityController {
       @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
     String key = SIGN_PREFIX + userId + ":" + date.format(DateTimeFormatter.ofPattern("yyyyMM"));
     int offset = date.getDayOfMonth() - 1; // 偏移量从0开始
-    Boolean oldValue = RedisBitmapUtils.setBit(key, (long) offset, true);
+    Boolean oldValue = RedisBitmapUtils.instance.setBit(key, (long) offset, true);
     return Result.success(oldValue);
   }
 
@@ -37,7 +37,7 @@ public class UserActivityController {
       @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
     String key = SIGN_PREFIX + userId + ":" + date.format(DateTimeFormatter.ofPattern("yyyyMM"));
     int offset = date.getDayOfMonth() - 1;
-    boolean signed = RedisBitmapUtils.getBit(key, offset);
+    boolean signed = RedisBitmapUtils.instance.getBit(key, offset);
     return Result.success(signed);
   }
 
@@ -47,7 +47,7 @@ public class UserActivityController {
       @RequestParam("userId") Long userId,
       @RequestParam("yearMonth") String yearMonth) { // 格式 yyyyMM
     String key = SIGN_PREFIX + userId + ":" + yearMonth;
-    Long count = RedisBitmapUtils.bitCount(key);
+    Long count = RedisBitmapUtils.instance.bitCount(key);
     return Result.success(count == null ? 0L : count);
   }
 
@@ -55,7 +55,7 @@ public class UserActivityController {
   @PostMapping("/active/record")
   public Result<Boolean> recordActive(@RequestParam("userId") Long userId) {
     String todayKey = DAU_PREFIX + LocalDate.now().toString();
-    Boolean oldValue = RedisBitmapUtils.setBit(todayKey, userId, true);
+    Boolean oldValue = RedisBitmapUtils.instance.setBit(todayKey, userId, true);
     return Result.success(oldValue);
   }
 
@@ -64,7 +64,7 @@ public class UserActivityController {
   public Result<Long> getDailyActiveUsers(
       @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
     String key = DAU_PREFIX + date.toString();
-    Long count = RedisBitmapUtils.bitCount(key);
+    Long count = RedisBitmapUtils.instance.bitCount(key);
     return Result.success(count == null ? 0L : count);
   }
 
@@ -80,7 +80,8 @@ public class UserActivityController {
       keys[i] = DAU_PREFIX + startDate.plusDays(i).toString();
     }
     // 执行 AND 操作并直接获取结果中 1 的个数（bitOpResult 内部会自动 bitCount）
-    Long count = RedisBitmapUtils.bitOpResult(RedisStringCommands.BitOperation.AND, tempKey, keys);
+    Long count =
+        RedisBitmapUtils.instance.bitOpResult(RedisStringCommands.BitOperation.AND, tempKey, keys);
     // 清理临时键（可选）
     // RedisBitmapUtils.stringRedisTemplate.delete(tempKey);
     return Result.success(count == null ? 0L : count);
@@ -96,7 +97,8 @@ public class UserActivityController {
     for (int i = 0; i < 7; i++) {
       keys[i] = DAU_PREFIX + monday.plusDays(i).toString();
     }
-    Long count = RedisBitmapUtils.bitOpResult(RedisStringCommands.BitOperation.OR, tempKey, keys);
+    Long count =
+        RedisBitmapUtils.instance.bitOpResult(RedisStringCommands.BitOperation.OR, tempKey, keys);
     // RedisBitmapUtils.stringRedisTemplate.delete(tempKey);
     return Result.success(count == null ? 0L : count);
   }

@@ -32,4 +32,9 @@ public enum CacheManagerCreatorCategory implements BaseEnum<Integer> {
   public String getName() {
     return name();
   }
+
+  @Override
+  public String getLabel() {
+    return note;
+  }
 }

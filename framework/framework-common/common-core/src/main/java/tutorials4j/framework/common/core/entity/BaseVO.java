@@ -10,13 +10,15 @@ import java.time.LocalDateTime;
  *
  * @author Yun Jiao
  */
-public class BaseDTO implements IdEntity<Long>, VersionEntity, AuditingEntity {
+public class BaseVO implements IdEntity<Long>, VersionEntity, AuditingEntity, StatusEntity {
   private Long id;
   private Integer version;
   private LocalDateTime createDate = LocalDateTime.now();
   private LocalDateTime lastModifiedDate = LocalDateTime.now();
   private String createBy;
   private String lastModifiedBy;
+
+  private DataStatusEnum dataStatus;
 
   @Override
   public String getCreatedBy() {
@@ -86,12 +88,22 @@ public class BaseDTO implements IdEntity<Long>, VersionEntity, AuditingEntity {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BaseDTO that = (BaseDTO) o;
+    BaseVO that = (BaseVO) o;
     return Objects.equal(id, that.id);
   }
 
   @Override
   public int hashCode() {
     return Objects.hashCode(id);
+  }
+
+  @Override
+  public DataStatusEnum getDataStatus() {
+    return dataStatus;
+  }
+
+  @Override
+  public void setDataStatus(DataStatusEnum dataStatus) {
+    this.dataStatus = dataStatus;
   }
 }

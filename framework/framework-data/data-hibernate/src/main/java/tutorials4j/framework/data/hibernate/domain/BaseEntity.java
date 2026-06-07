@@ -1,9 +1,7 @@
 package tutorials4j.framework.data.hibernate.domain;
 
-import com.google.common.base.Objects;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
@@ -13,9 +11,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import tutorials4j.framework.common.core.entity.AuditingEntity;
-import tutorials4j.framework.common.core.entity.IdEntity;
 import tutorials4j.framework.common.core.entity.VersionEntity;
-import tutorials4j.framework.data.hibernate.generator.SnowflakeIdGenerator;
 
 /**
  * JPA 基础实体类，提供通用字段（id、version、创建/修改信息）和自动审计功能。
@@ -26,9 +22,7 @@ import tutorials4j.framework.data.hibernate.generator.SnowflakeIdGenerator;
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity implements IdEntity<Long>, VersionEntity, AuditingEntity {
-  @Id @SnowflakeIdGenerator private Long id;
-
+public class BaseEntity extends BaseIdEntity implements VersionEntity, AuditingEntity {
   @Version private Integer version;
 
   @Column(updatable = false)
@@ -86,16 +80,6 @@ public class BaseEntity implements IdEntity<Long>, VersionEntity, AuditingEntity
   }
 
   @Override
-  public Long getId() {
-    return id;
-  }
-
-  @Override
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  @Override
   public Integer getVersion() {
     return version;
   }
@@ -103,22 +87,5 @@ public class BaseEntity implements IdEntity<Long>, VersionEntity, AuditingEntity
   @Override
   public void setVersion(Integer version) {
     this.version = version;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    BaseEntity that = (BaseEntity) o;
-    return Objects.equal(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(id);
   }
 }

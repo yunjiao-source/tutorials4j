@@ -11,66 +11,66 @@ public interface StatusEntity extends Entity {
    *
    * @return 数据状态
    */
-  DataStatus getDataStatus();
+  DataStatusEnum getDataStatus();
 
   /**
    * 设置数据状态。
    *
-   * @param status 数据状态
+   * @param dataStatus 数据状态
    */
-  void setDataStatus(DataStatus status);
+  void setDataStatus(DataStatusEnum dataStatus);
 
   /**
-   * 判断状态是否为 {@link DataStatus#NORMAL}。
+   * 判断状态是否为 {@link DataStatusEnum#NORMAL}。
    *
    * @return true 如果是正常状态
    */
   default boolean isNormal() {
-    return DataStatus.NORMAL.equals(getDataStatus());
+    return DataStatusEnum.NORMAL.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatus#RESERVED}。
+   * 判断状态是否为 {@link DataStatusEnum#RESERVED}。
    *
    * @return true 如果是保留状态
    */
   default boolean isReserved() {
-    return DataStatus.RESERVED.equals(getDataStatus());
+    return DataStatusEnum.RESERVED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatus#DISABLED}。
+   * 判断状态是否为 {@link DataStatusEnum#DISABLED}。
    *
    * @return true 如果是禁用状态
    */
   default boolean isDisabled() {
-    return DataStatus.DISABLED.equals(getDataStatus());
+    return DataStatusEnum.DISABLED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatus#LOCKED}。
+   * 判断状态是否为 {@link DataStatusEnum#LOCKED}。
    *
    * @return true 如果是锁定状态
    */
   default boolean isLocked() {
-    return DataStatus.LOCKED.equals(getDataStatus());
+    return DataStatusEnum.LOCKED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatus#EXPIRED}。
+   * 判断状态是否为 {@link DataStatusEnum#EXPIRED}。
    *
    * @return true 如果是过期状态
    */
   default boolean isExpired() {
-    return DataStatus.EXPIRED.equals(getDataStatus());
+    return DataStatusEnum.EXPIRED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatus#DELETED}。
+   * 判断状态是否为 {@link DataStatusEnum#DELETED}。
    *
    * @return true 如果是已删除状态
    */
   default boolean isDeleted() {
-    return DataStatus.DELETED.equals(getDataStatus());
+    return DataStatusEnum.DELETED.equals(getDataStatus());
   }
 }

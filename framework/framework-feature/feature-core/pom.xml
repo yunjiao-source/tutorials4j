@@ -17,10 +17,9 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-core</artifactId>
+            <artifactId>cache-redis</artifactId>
             <version>${revision}</version>
         </dependency>
-
     </dependencies>
 
 </project>

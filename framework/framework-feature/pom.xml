@@ -16,7 +16,8 @@
 
     <modules>
         <module>feature-core</module>
-        <module>feature-rest</module>
+        <module>feature-domain</module>
+        <module>feature-controller</module>
         <module>feature-spring-boot-starter</module>
     </modules>
 

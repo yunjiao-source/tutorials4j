@@ -61,11 +61,11 @@ public class GoogleAuthRequestFilter extends OncePerRequestFilter {
 
     // 删除验证码请求头
     if (request instanceof RemoveHeaderRequestWrapper wrapper) {
-      wrapper.getHeadersToRemove().addAll(Arrays.asList(DefaultConsts.HTTP_HEADER_GOOGLE_AUTH));
+      wrapper.getHeadersToRemove().addAll(Arrays.asList(DefaultConsts.HTTP_GOOGLE_AUTH));
       filterChain.doFilter(wrapper, response);
     } else {
       RemoveHeaderRequestWrapper wrapper =
-          new RemoveHeaderRequestWrapper(request, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH);
+          new RemoveHeaderRequestWrapper(request, DefaultConsts.HTTP_GOOGLE_AUTH);
       filterChain.doFilter(wrapper, response);
     }
   }

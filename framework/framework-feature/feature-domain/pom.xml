@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>feature-rest</artifactId>
+    <artifactId>feature-domain</artifactId>
     <packaging>jar</packaging>
-    <name>Feature :: Rest</name>
-    <description>功能Rest模块</description>
+    <name>Feature :: Domain</name>
+    <description>领域功能模块</description>
 
     <dependencies>
         <dependency>
@@ -23,19 +23,7 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>captcha-web</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>crypto-web</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-security</artifactId>
+            <artifactId>data-hibernate</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

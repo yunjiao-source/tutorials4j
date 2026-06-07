@@ -22,7 +22,7 @@ public class OrderController {
   private final OrderService orderService;
 
   @GetMapping
-  public PagedModel<OrderDTO> searchUsers(
+  public PagedModel<OrderVO> searchUsers(
       @RequestParam(required = false) String username,
       @RequestParam(required = false) String email,
       @RequestParam(required = false) Integer minAge,
@@ -38,6 +38,6 @@ public class OrderController {
     Page<Order> orders =
         orderService.searchOrders(
             username, email, minAge, maxAge, minAmount, orderStartTime, orderEndTime, pageable);
-    return new PagedModel<>(orders.map(OrderDTO::of));
+    return new PagedModel<>(orders.map(OrderVO::of));
   }
 }

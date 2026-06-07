@@ -21,3 +21,12 @@ Java 教程
 ![杨运交](qrcode_for_gh_31209a11b93e_258.jpg)
 
 
+## 示例图
+
+### 功能模块示例（framework/framework-examples/examples-feature）
+
+![签到示例](docs/images/sign-in-input.jpg)
+
+![签到记录查询示例](docs/images/sign-in-list.jpg)
+
+

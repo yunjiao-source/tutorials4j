@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.feature.rest.autoconfigure.RestFeatureConfiguration;
+import tutorials4j.framework.feature.domain.autoconfigure.DomainFeatureConfiguration;
 
 /**
  * 功能模块自动配置
@@ -13,7 +13,11 @@ import tutorials4j.framework.feature.rest.autoconfigure.RestFeatureConfiguration
  */
 @Slf4j
 @AutoConfiguration
-@Import({RestFeatureConfiguration.class})
+@Import({
+  DomainFeatureConfiguration.class,
+  ControllerFeatureConfiguration.class,
+  SignInFeatureConfiguration.class
+})
 public class FeatureAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

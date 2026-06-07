@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>签到系统 - 多功能仪表板</title>
+  <!-- Bootstrap 5 CSS + Icons + jQuery -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background: #f4f7fc;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+    .card {
+      border-radius: 20px;
+      border: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      margin-bottom: 1.8rem;
+      transition: all 0.2s;
+    }
+    .card-header {
+      background: white;
+      border-bottom: 1px solid #eef2f6;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 1rem 1.25rem;
+      border-radius: 20px 20px 0 0 !important;
+    }
+    .btn-primary {
+      background: #2c7da0;
+      border-color: #2c7da0;
+      border-radius: 40px;
+      padding: 0.4rem 1.2rem;
+      font-weight: 500;
+    }
+    .btn-primary:hover {
+      background: #1f5e7e;
+      border-color: #1f5e7e;
+    }
+    .btn-outline-secondary {
+      border-radius: 40px;
+    }
+    .result-area {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      border-left: 4px solid #2c7da0;
+      word-break: break-word;
+    }
+    .calendar-wrapper {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 0.5rem;
+    }
+    .calendar-table {
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .calendar-table th {
+      padding: 10px 0;
+      color: #4a6a85;
+      font-weight: 500;
+    }
+    .calendar-table td {
+      padding: 10px 0;
+      cursor: pointer;
+      border-radius: 40px;
+      transition: 0.1s;
+    }
+    .calendar-table td:hover {
+      background: #e6f0f5;
+    }
+    .signed-day {
+      background: #2c7da0;
+      color: white;
+      font-weight: bold;
+      border-radius: 40px;
+    }
+    .today-cell {
+      outline: 2px solid #ffb347;
+      outline-offset: 0px;
+    }
+    .calendar-stats {
+      font-size: 0.85rem;
+      background: #f0f4f8;
+      padding: 8px 12px;
+      border-radius: 20px;
+    }
+    .badge-stats {
+      background: #e9ecef;
+      color: #1e4663;
+    }
+    footer {
+      font-size: 0.8rem;
+      text-align: center;
+      color: #6c86a3;
+      margin-top: 2rem;
+    }
+    .input-group-text {
+      background: #f1f5f9;
+      border-radius: 30px 0 0 30px;
+    }
+    .form-control, .form-select {
+      border-radius: 30px;
+    }
+    h6 i {
+      margin-right: 6px;
+      color: #2c7da0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-md-5">
+  <!-- 头部账户与来源配置 -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1f4e6e;"><i class="bi bi-calendar-check-fill"></i> 签到工作台</h3>
+    <div class="mt-2 mt-sm-0">
+      <div class="row g-2">
+        <div class="col-auto">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+            <input type="text" id="accountInput" class="form-control" placeholder="账号 (X-Sign-In-Account)" value="demo_user" style="width: 200px;">
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-tag"></i></span>
+            <input type="text" id="sourceInput" class="form-control" placeholder="来源 source" value="web_app" style="width: 150px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- 左侧功能区 (签到+状态+每日详情) -->
+    <div class="col-lg-6">
+      <!-- 签到卡片 -->
+      <div class="card">
+        <div class="card-header"><i class="bi bi-check2-square"></i> 今日签到</div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div><strong>签到日期：</strong> <span id="todayDateDisplay" class="badge bg-secondary bg-opacity-25 text-dark p-2"></span></div>
+            <button id="doSignBtn" class="btn btn-primary"><i class="bi bi-pen"></i> 立即签到</button>
+          </div>
+          <div id="signResultArea" class="result-area mt-3">
+            点击签到，结果将显示在这里～
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态查询 + 每日详情 并排 -->
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header"><i class="bi bi-question-circle"></i> 签到状态查询</div>
+            <div class="card-body">
+              <label class="form-label fw-semibold">选择日期</label>
+              <input type="date" id="statusDate" class="form-control mb-2">
+              <button id="checkStatusBtn" class="btn btn-outline-primary btn-sm w-100">查询是否签到</button>
+              <div id="statusResult" class="result-area mt-2 text-center">等待查询</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header"><i class="bi bi-calendar-day"></i> 每日签到详情</div>
+            <div class="card-body">
+              <label class="form-label fw-semibold">选择日期</label>
+              <input type="date" id="dailyDate" class="form-control mb-2">
+              <button id="getDailyBtn" class="btn btn-outline-primary btn-sm w-100">获取详情</button>
+              <div id="dailyResult" class="result-area mt-2">详细签到数据展示</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧日历视图 (带月份切换) -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+          <span><i class="bi bi-calendar3"></i> 签到日历</span>
+          <div class="btn-group btn-group-sm" role="group">
+            <button id="prevMonthBtn" class="btn btn-outline-secondary"><i class="bi bi-chevron-left"></i> 上月</button>
+            <button id="nextMonthBtn" class="btn btn-outline-secondary">下月 <i class="bi bi-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <div class="calendar-stats">
+              <span><i class="bi bi-calendar-month"></i> <strong id="calendarMonthTitle">----年--月</strong></span>
+              <span class="mx-2">|</span>
+              <span><i class="bi bi-check-circle-fill text-success"></i> 本月已签: <span id="monthlySignedCount">0</span> 天</span>
+              <span class="mx-2">|</span>
+              <span><i class="bi bi-fire"></i> 连续: <span id="continuousDays">0</span> 天</span>
+              <span class="mx-2">|</span>
+              <span><i class="bi bi-star-fill text-warning"></i> 今日状态: <span id="todaySignedBadge">—</span></span>
+            </div>
+            <div class="d-flex gap-2">
+              <input type="month" id="monthPicker" class="form-control form-control-sm" style="width: 140px;">
+              <button id="goMonthBtn" class="btn btn-sm btn-secondary">跳转</button>
+            </div>
+          </div>
+          <div class="calendar-wrapper mt-2">
+            <table class="calendar-table">
+              <thead>
+              <tr><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th>
+              </tr>
+              </thead>
+              <tbody id="calendarBody">
+              <tr><td colspan="7" class="text-muted">加载中...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-muted small mt-2"><i class="bi bi-info-circle"></i> 点击日期可快速查询该日签到状态</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 统计卡片区: 日活/月活 -->
+  <div class="row mt-3 g-3">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header"><i class="bi bi-graph-up"></i> 每日活跃用户 (DAU)</div>
+        <div class="card-body">
+          <label class="form-label">日期</label>
+          <input type="date" id="dailyActiveDate" class="form-control form-control-sm mb-2">
+          <button id="countDailyActiveBtn" class="btn btn-sm btn-success w-100">统计日活</button>
+          <div id="dailyActiveResult" class="result-area mt-2 text-center">未查询</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header"><i class="bi bi-calendar-month"></i> 每月活跃用户 (MAU)</div>
+        <div class="card-body">
+          <label class="form-label">月份 (YYYY-MM)</label>
+          <input type="date" id="monthActivePicker" class="form-control form-control-sm mb-2">
+          <button id="countMonthActiveBtn" class="btn btn-sm btn-success w-100">统计月活</button>
+          <div id="monthActiveResult" class="result-area mt-2 text-center">未查询</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="mt-4">签到系统 · 请求头 X-Sign-In-Account 动态设置 | 统计接口无需账号头</footer>
+</div>
+
+<script>
+  $(function(){
+    // ---------- DOM 元素绑定 ----------
+    const $account = $('#accountInput');
+    const $source = $('#sourceInput');
+    const $todayDateSpan = $('#todayDateDisplay');
+    const $doSignBtn = $('#doSignBtn');
+    const $signResult = $('#signResultArea');
+    // 状态查询
+    const $statusDate = $('#statusDate');
+    const $checkStatusBtn = $('#checkStatusBtn');
+    const $statusResult = $('#statusResult');
+    // 每日详情
+    const $dailyDate = $('#dailyDate');
+    const $getDailyBtn = $('#getDailyBtn');
+    const $dailyResult = $('#dailyResult');
+    // 日历相关
+    const $calendarBody = $('#calendarBody');
+    const $calendarMonthTitle = $('#calendarMonthTitle');
+    const $monthlySignedCountSpan = $('#monthlySignedCount');
+    const $continuousDaysSpan = $('#continuousDays');
+    const $todaySignedBadge = $('#todaySignedBadge');
+    const $prevMonthBtn = $('#prevMonthBtn');
+    const $nextMonthBtn = $('#nextMonthBtn');
+    const $monthPicker = $('#monthPicker');
+    const $goMonthBtn = $('#goMonthBtn');
+    // 统计
+    const $dailyActiveDate = $('#dailyActiveDate');
+    const $countDailyActiveBtn = $('#countDailyActiveBtn');
+    const $dailyActiveResult = $('#dailyActiveResult');
+    const $monthActivePicker = $('#monthActivePicker');
+    const $countMonthActiveBtn = $('#countMonthActiveBtn');
+    const $monthActiveResult = $('#monthActiveResult');
+
+    // 全局当前日历展示的目标日期 (基准日期 yyyy-MM-dd, 用于请求日历API)
+    let currentCalendarDate = '';  // 存储当前日历对应月份中的任意一天
+
+    // 辅助函数: 获取今日 yyyy-MM-dd
+    function getTodayStr() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2,'0');
+      const dd = String(today.getDate()).padStart(2,'0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // 设置页面今日显示
+    const todayStr = getTodayStr();
+    $todayDateSpan.text(todayStr);
+    // 默认让日期输入框也填充今日
+    if($statusDate.val() === '') $statusDate.val(todayStr);
+    if($dailyDate.val() === '') $dailyDate.val(todayStr);
+    if($dailyActiveDate.val() === '') $dailyActiveDate.val(todayStr);
+    if($monthActivePicker.val() === '') $monthActivePicker.val(todayStr);
+
+    // ----- 通用请求封装 -----
+    // 需要携带 account header 的接口列表: 签到,状态,每日详情,日历
+    function needAccountHeader(urlPath) {
+      const needHeadersApis = ['/do', '/status', '/daily', '/calendar'];
+      return needHeadersApis.some(api => urlPath.includes(api));
+    }
+    // 发起ajax请求通用方法 (展示错误)
+    function apiRequest(method, endpoint, params, customHeader = true, bodyData = null) {
+      return new Promise((resolve, reject) => {
+        let url = endpoint;
+        let headers = {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        };
+        // 判断是否添加account头
+        if (customHeader && needAccountHeader(endpoint)) {
+          const account = $account.val().trim();
+          if (!account) {
+            reject(new Error('请填写账号 (X-Sign-In-Account)'));
+            return;
+          }
+          headers['X-Sign-In-Account'] = account;
+        }
+        let options = {
+          method: method,
+          headers: headers,
+        };
+        if (method === 'POST' && bodyData) {
+          options.body = bodyData;
+        } else if (method === 'GET' && params && Object.keys(params).length) {
+          const query = new URLSearchParams(params).toString();
+          url += '?' + query;
+        } else if (method === 'POST' && params) {
+          // 处理常规POST表单数据
+          options.body = new URLSearchParams(params).toString();
+        }
+        $.ajax({
+          url: url,
+          type: method,
+          data: (method === 'POST' && !bodyData ? params : undefined),
+          contentType: (method === 'POST' && !bodyData) ? 'application/x-www-form-urlencoded; charset=UTF-8' : undefined,
+          headers: headers,
+          success: (data) => resolve(data),
+          error: (xhr) => {
+            let errMsg = `请求失败: ${xhr.status} ${xhr.statusText}`;
+            if (xhr.responseJSON && xhr.responseJSON.message) errMsg += `, ${xhr.responseJSON.message}`;
+            reject(new Error(errMsg));
+          }
+        });
+      });
+    }
+
+    // 签到操作
+    async function doSignIn() {
+      const source = $source.val().trim();
+      if (!source) { $signResult.html('<span class="text-danger">⚠️ 请填写来源(source)</span>'); return; }
+      const account = $account.val().trim();
+      if (!account) { $signResult.html('<span class="text-danger">⚠️ 请填写账号</span>'); return; }
+      $signResult.html('<i class="bi bi-hourglass-split"></i> 签到中...');
+      try {
+        const result = await apiRequest('POST', '/api/sign-in/do', { source: source }, true, null);
+        // result 是 SignInResult
+        let msg = '';
+        if (result) {
+          msg = `<i class="bi bi-info-circle"></i> <strong>签到结果</strong><br>
+                           账号: ${result.account || account}<br>
+                           签到日期: ${result.signDate || todayStr}<br>
+                           是否签到成功: ${result.signedIn === true ? '✅ 成功' : '❌ 失败'}<br>
+                           重复签到: ${result.repeatedSignIn === true ? '⚠️ 今日已签过' : '否'}<br>
+                           连续签到天数: ${result.continuousDays ?? '-'}<br>
+                           本月累计签到: ${result.monthlySignedDays ?? '-'} 天`;
+        } else {
+          msg = '签到响应异常';
+        }
+        $signResult.html(msg);
+        // 签到成功后，刷新日历(如果当前日历显示月份与签到月份相同)
+        if (currentCalendarDate) {
+          const targetMonth = currentCalendarDate.substring(0,7);
+          const signMonth = todayStr.substring(0,7);
+          if (targetMonth === signMonth) {
+            loadCalendarByDate(currentCalendarDate);
+          } else {
+            // 也可以提示刷新
+          }
+        }
+        // 额外自动刷新一下今日签到状态区域(状态卡片可手动刷新)
+        $('#checkStatusBtn').trigger('click');
+      } catch (err) {
+        $signResult.html(`<span class="text-danger">签到错误: ${err.message}</span>`);
+      }
+    }
+
+    // 状态查询 (boolean)
+    async function checkStatus() {
+      const date = $statusDate.val();
+      if (!date) { $statusResult.html('请选择日期'); return; }
+      const source = $source.val().trim();
+      if (!source) { $statusResult.html('请填写source'); return; }
+      try {
+        const isSigned = await apiRequest('GET', '/api/sign-in/status', { source: source, date: date }, true);
+        $statusResult.html(isSigned === true ?
+            `<i class="bi bi-check-circle-fill text-success"></i> 已签到` :
+            `<i class="bi bi-x-circle-fill text-danger"></i> 未签到`);
+      } catch(e) { $statusResult.html(`<span class="text-danger">查询失败: ${e.message}</span>`); }
+    }
+
+    // 每日详情
+    async function getDailyInfo() {
+      const date = $dailyDate.val();
+      if (!date) { $dailyResult.html('请选择日期'); return; }
+      const source = $source.val().trim();
+      if (!source) { $dailyResult.html('请填写source'); return; }
+      try {
+        const detail = await apiRequest('GET', '/api/sign-in/daily', { source: source, date: date }, true);
+        if (detail) {
+          let html = `<strong>📅 ${detail.signDate || date}</strong><br>
+                                签到状态: ${detail.signedIn === true ? '✅ 已签到' : '❌ 未签到'}<br>
+                                连续天数: ${detail.continuousDays ?? 0}<br>
+                                本月累计: ${detail.monthlySignedDays ?? 0} 天`;
+          $dailyResult.html(html);
+        } else { $dailyResult.html('无数据'); }
+      } catch(e) { $dailyResult.html(`<span class="text-danger">${e.message}</span>`); }
+    }
+
+    // 加载日历 (根据某一天 yyyy-MM-dd)
+    async function loadCalendarByDate(basedate) {
+      const source = $source.val().trim();
+      if (!source) { alert('请填写来源(source)后再查看日历'); return; }
+      const account = $account.val().trim();
+      if (!account) { alert('请填写账号'); return; }
+      try {
+        const calendarData = await apiRequest('GET', '/api/sign-in/calendar', { source: source, date: basedate }, true);
+        if (calendarData) {
+          currentCalendarDate = basedate;
+          // 更新标题月
+          const monthStr = calendarData.month || basedate.substring(0,7);
+          $calendarMonthTitle.text(monthStr.replace('-', '年') + '月');
+          $monthlySignedCountSpan.text(calendarData.monthlySignedCount ?? 0);
+          $continuousDaysSpan.text(calendarData.continuousDays ?? 0);
+          const todaySignedVal = calendarData.todaySigned === true ? '已签' : (calendarData.todaySigned === false ? '未签' : '未知');
+          $todaySignedBadge.html(calendarData.todaySigned === true ? '<span class="badge bg-success">已签</span>' : '<span class="badge bg-secondary">未签</span>');
+          // 渲染日历表格
+          const yearMonth = monthStr; // yyyy-MM
+          const [year, month] = yearMonth.split('-').map(Number);
+          const signedDays = calendarData.signedDays || []; // 数字列表 [1,5,10]
+          renderCalendar(year, month, signedDays, basedate);
+        } else {
+          $calendarBody.html('<tr><td colspan="7">获取日历失败</td></tr>');
+        }
+      } catch(e) {
+        $calendarBody.html(`<tr><td colspan="7" class="text-danger">加载失败: ${e.message}</td></tr>`);
+      }
+    }
+
+    // 渲染日历核心函数 (高亮签到日期, 今日标注)
+    function renderCalendar(year, month, signedDaysArray, currentQueryBaseDate) {
+      // month 是 1-12
+      const firstDayOfMonth = new Date(year, month-1, 1);
+      const startWeekday = firstDayOfMonth.getDay(); // 0周日 ~ 6周六，转换周一为一周开头
+      let startOffset = startWeekday === 0 ? 6 : startWeekday - 1; // 周一索引0
+      const daysInMonth = new Date(year, month, 0).getDate();
+      const today = new Date();
+      const todayYear = today.getFullYear();
+      const todayMonth = today.getMonth()+1;
+      const todayDate = today.getDate();
+
+      let rows = [];
+      let dayCounter = 1;
+      let weeks = [];
+      // 生成6行空白填充
+      for (let i = 0; i < 42; i++) {
+        if (i < startOffset || dayCounter > daysInMonth) {
+          weeks.push('');
+        } else {
+          weeks.push(dayCounter++);
+        }
+        if (weeks.length === 7) {
+          rows.push([...weeks]);
+          weeks = [];
+        }
+      }
+      // 构建html
+      let html = '';
+      for (let row of rows) {
+        let tr = '<tr>';
+        for (let cell of row) {
+          if (cell === '') {
+            tr += '<td></td>';
+          } else {
+            let isSigned = signedDaysArray.includes(Number(cell));
+            let isToday = (year === todayYear && month === todayMonth && cell === todayDate);
+            let additionalClass = '';
+            if (isSigned) additionalClass = 'signed-day';
+            let titleAttr = isSigned ? '已签到' : '未签到';
+            // 添加点击日期快速查询签到状态
+            let clickDate = `${year}-${String(month).padStart(2,'0')}-${String(cell).padStart(2,'0')}`;
+            tr += `<td class="${additionalClass} ${isToday ? 'today-cell' : ''}" style="cursor:pointer;" title="${titleAttr}" data-date="${clickDate}">${cell}</td>`;
+          }
+        }
+        tr += '</tr>';
+        html += tr;
+      }
+      $calendarBody.html(html);
+      // 绑定日期点击事件 (快速查看签到状态)
+      $('.calendar-table td[data-date]').off('click').on('click', function() {
+        const dateStr = $(this).attr('data-date');
+        if (dateStr) {
+          $statusDate.val(dateStr);
+          checkStatus();
+          // 可选也显示每日详情
+          $dailyDate.val(dateStr);
+          getDailyInfo();
+        }
+      });
+    }
+
+    // 切换月份: 根据当前显示的月份 (basedate 增减月)
+    function shiftMonth(delta) {
+      if (!currentCalendarDate) {
+        currentCalendarDate = getTodayStr();
+      }
+      let [year, month, day] = currentCalendarDate.split('-').map(Number);
+      let newMonth = month + delta;
+      let newYear = year;
+      if (newMonth > 12) {
+        newMonth = 1;
+        newYear++;
+      } else if (newMonth < 1) {
+        newMonth = 12;
+        newYear--;
+      }
+      // 取新月份的第一天(任意一天, 但为了安全取15号避免2月30之类)
+      let newDay = Math.min(day, new Date(newYear, newMonth, 0).getDate());
+      newDay = newDay || 15;
+      const newBaseDate = `${newYear}-${String(newMonth).padStart(2,'0')}-${String(newDay).padStart(2,'0')}`;
+      loadCalendarByDate(newBaseDate);
+      // 同步monthPicker
+      $monthPicker.val(`${newYear}-${String(newMonth).padStart(2,'0')}`);
+    }
+
+    // 根据month picker跳转
+    function goToMonthByPicker() {
+      let monthVal = $monthPicker.val();
+      if (!monthVal) return;
+      // 使用15号作为基准
+      let newBase = `${monthVal}-15`;
+      loadCalendarByDate(newBase);
+    }
+
+    // ---------- 统计接口 ----------
+    async function countDailyActive() {
+      const date = $dailyActiveDate.val();
+      const source = $source.val().trim();
+      if (!source) { $dailyActiveResult.html('需要source'); return; }
+      if (!date) return;
+      try {
+        const res = await apiRequest('GET', '/api/sign-in/count-daily-active', { source: source, date: date }, false);
+        $dailyActiveResult.html(`<strong>📊 ${date}</strong><br>活跃用户数: <span class="fw-bold fs-5">${res ?? 0}</span> 人`);
+      } catch(e) { $dailyActiveResult.html(`错误: ${e.message}`); }
+    }
+
+    async function countMonthActive() {
+      const date = $monthActivePicker.val();
+      const source = $source.val().trim();
+      if (!source) { $monthActiveResult.html('需要source'); return; }
+      if (!date) return;
+      try {
+        const res = await apiRequest('GET', '/api/sign-in/count-month-active', { source: source, date: date }, false);
+        $monthActiveResult.html(`<strong>🗓️ ${date.substring(0, 7)}</strong><br>月活跃用户: <span class="fw-bold fs-5">${res ?? 0}</span> 人`);
+      } catch(e) { $monthActiveResult.html(`错误: ${e.message}`); }
+    }
+
+    // ---- 绑定事件 ----
+    $doSignBtn.on('click', doSignIn);
+    $checkStatusBtn.on('click', checkStatus);
+    $getDailyBtn.on('click', getDailyInfo);
+    $prevMonthBtn.on('click', () => shiftMonth(-1));
+    $nextMonthBtn.on('click', () => shiftMonth(1));
+    $goMonthBtn.on('click', goToMonthByPicker);
+    $countDailyActiveBtn.on('click', countDailyActive);
+    $countMonthActiveBtn.on('click', countMonthActive);
+
+    // 初始加载：默认签到日历基于今日
+    const initDate = getTodayStr();
+    loadCalendarByDate(initDate).catch(e => console.warn(e));
+    $monthPicker.val(initDate.substring(0,7));
+    // 可选预填充状态查询默认显示
+    setTimeout(() => { checkStatus(); getDailyInfo(); }, 300);
+  });
+</script>
+</body>
+</html>

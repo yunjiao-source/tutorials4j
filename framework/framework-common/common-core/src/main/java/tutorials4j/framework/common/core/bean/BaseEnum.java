@@ -7,7 +7,6 @@ package tutorials4j.framework.common.core.bean;
  *
  * @param <T> 编码的数据类型，如 Integer、String 等
  * @author Yun Jiao
- * @see tutorials4j.framework.common.core.json.BaseEnumJsonSerializer
  */
 public interface BaseEnum<T> {
   /**
@@ -23,4 +22,6 @@ public interface BaseEnum<T> {
    * @return 名称字符串
    */
   String getName();
+
+  String getLabel();
 }

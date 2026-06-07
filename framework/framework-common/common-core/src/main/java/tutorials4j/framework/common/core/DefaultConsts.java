@@ -38,6 +38,8 @@ public interface DefaultConsts {
   String HTTP_HEADER_SESSION_ID = "X-Session-Id";
   String HTTP_HEADER_OPEN_ID = "X-Open-Id";
 
+  String HTTP_HEADER_SIGN_IN_ACCOUNT = "X-Sign-In-Account";
+
   String HTTP_HEADER_TRACE_ID = "X-Trace-Id";
   String HTTP_HEADER_TRACE_SPAN_ID = "X-Trace-Span-Id";
   String HTTP_HEADER_TRACE_PARENT_SPAN_ID = "X-Trace-Parent-Span-Id";
@@ -50,19 +52,9 @@ public interface DefaultConsts {
   String HTTP_HEADER_CAPTCHA_KEY = "X-Captcha-Key";
   String HTTP_HEADER_CAPTCHA_CATEGORY = "X-Captcha-Category";
   String HTTP_HEADER_CAPTCHA_CODE = "X-Captcha-Code";
-  String[] HTTP_HEADER_CAPTCHA =
-      new String[] {
-        DefaultConsts.HTTP_HEADER_CAPTCHA_KEY,
-        DefaultConsts.HTTP_HEADER_CAPTCHA_CATEGORY,
-        DefaultConsts.HTTP_HEADER_CAPTCHA_CODE
-      };
 
   String HTTP_HEADER_GOOGLE_AUTH_USERNAME = "X-Google-Auth-Username";
   String HTTP_HEADER_GOOGLE_AUTH_CODE = "X-Google-Auth-Code";
-  String[] HTTP_HEADER_GOOGLE_AUTH =
-      new String[] {
-        DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE
-      };
 
   String HTTP_HEADER_CRYPTO_SECRET_KEY_HEX = "X-Crypto-Secret-Key-Hex";
 
@@ -74,10 +66,22 @@ public interface DefaultConsts {
   String CLASS_DRUID_DATA_SOURCE_WRAPPER = "DruidDataSourceWrapper";
 
   /** 其他定义 */
+  String[] HTTP_HEADER_CAPTCHA =
+      new String[] {
+        DefaultConsts.HTTP_HEADER_CAPTCHA_KEY,
+        DefaultConsts.HTTP_HEADER_CAPTCHA_CATEGORY,
+        DefaultConsts.HTTP_HEADER_CAPTCHA_CODE
+      };
+
   String[] HTTP_MDC_KEYS =
       new String[] {
         DefaultConsts.HTTP_HEADER_TRACE_ID,
         DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID,
         DefaultConsts.HTTP_HEADER_TRACE_PARENT_SPAN_ID
+      };
+
+  String[] HTTP_GOOGLE_AUTH =
+      new String[] {
+        DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE
       };
 }

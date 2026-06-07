@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>签到记录管理 - 支持排序</title>
+  <!-- Bootstrap 5 CSS + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      background-color: #f8f9fc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: 600;
+    }
+    .table-responsive {
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+    .table th {
+      background-color: #f1f5f9;
+      border-bottom: 2px solid #e2e8f0;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+    .table th:hover {
+      background-color: #e2e8f0;
+    }
+    .sort-icon {
+      margin-left: 5px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .sort-icon.active {
+      opacity: 1;
+      color: #667eea;
+    }
+    .badge-status {
+      font-size: 0.85rem;
+      padding: 0.35em 0.65em;
+    }
+    .pagination {
+      margin-bottom: 0;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .page-item.active .page-link {
+      background-color: #667eea;
+      border-color: #667eea;
+    }
+    .page-link {
+      color: #4a5568;
+    }
+    .page-link:hover {
+      background-color: #e2e8f0;
+      color: #2d3748;
+    }
+    .filter-card {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: none;
+      border-radius: 16px;
+    }
+    .btn-primary-custom {
+      background: #667eea;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary-custom:hover {
+      background: #5a67d8;
+      transform: translateY(-1px);
+    }
+    footer {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+    .loading-spinner-text {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container my-4 py-2">
+  <!-- 标题区域 -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <div>
+      <h2 class="fw-bold" style="color: #2d3748;">
+        <i class="bi bi-calendar-check"></i> 签到结果查询
+      </h2>
+      <p class="text-muted">多维度筛选 · 排序 · 分页展示</p>
+    </div>
+    <div class="mt-2 mt-sm-0">
+            <span class="badge bg-light text-dark px-3 py-2 shadow-sm">
+                <i class="bi bi-database"></i> 签到记录中心
+            </span>
+    </div>
+  </div>
+
+  <!-- 查询表单卡片 -->
+  <div class="card filter-card mb-4">
+    <div class="card-header bg-white border-bottom-0 pt-3 pb-0 px-4">
+      <ul class="nav nav-tabs card-header-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#filterTab" role="tab">
+            🔍 高级筛选
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body px-4 pb-4 pt-3">
+      <form id="searchForm">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3 col-sm-6">
+            <label class="form-label fw-semibold small">账号</label>
+            <input type="text" class="form-control" id="account" name="account" placeholder="精确匹配账号" autocomplete="off">
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label class="form-label fw-semibold small">来源渠道</label>
+            <input type="text" class="form-control" id="source" name="source" placeholder="例如：APP / H5">
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label class="form-label fw-semibold small">签到开始日期</label>
+            <input type="date" class="form-control" id="startSignDate" name="startSignDate">
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <label class="form-label fw-semibold small">签到结束日期</label>
+            <input type="date" class="form-control" id="endSignDate" name="endSignDate">
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-12 d-flex gap-2 justify-content-end">
+            <button type="button" id="resetBtn" class="btn btn-outline-secondary px-4">
+              <i class="bi bi-arrow-repeat"></i> 重置
+            </button>
+            <button type="button" id="searchBtn" class="btn btn-primary-custom px-5 shadow-sm">
+              <i class="bi bi-search"></i> 查询
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 数据表格卡片 -->
+  <div class="card filter-card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+          <tr>
+            <th scope="col" class="ps-3" style="cursor: default;">#</th>
+            <th scope="col" data-sort-field="account">账号 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+            <th scope="col" data-sort-field="signDate">签到日期 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+            <th scope="col" data-sort-field="source">来源 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+            <th scope="col" data-sort-field="signedIn">是否签到 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+            <th scope="col" data-sort-field="repeatedSignIn">重复签到 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+            <th scope="col" data-sort-field="continuousDays">连续天数 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+            <th scope="col" data-sort-field="monthlySignedDays">当月签到天数 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+            <th scope="col" data-sort-field="createDate">创建时间 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+          </tr>
+          </thead>
+          <tbody id="resultTableBody">
+          <tr class="text-center">
+            <td colspan="9" class="py-5 text-muted">
+              <i class="bi bi-inbox" style="font-size: 1.5rem;"></i><br>暂无数据，请点击查询
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 分页信息栏 + 分页组件 -->
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-3 bg-light border-top">
+        <div class="d-flex align-items-center gap-3 mb-2 mb-md-0">
+          <div class="d-flex align-items-center gap-2">
+            <span class="small text-secondary">每页显示</span>
+            <select id="pageSizeSelect" class="form-select form-select-sm w-auto" style="width: 75px;">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <div class="small text-secondary" id="recordInfo">
+            共 0 条记录
+          </div>
+        </div>
+        <nav aria-label="Page navigation" id="paginationNav">
+          <ul class="pagination pagination-sm mb-0" id="paginationUl">
+            <!-- 动态分页按钮 -->
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer class="text-center mt-4">
+    <span>点击表头可排序 | 支持升序/降序切换 | 查询/重置后排序自动清空</span>
+  </footer>
+</div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  // 获取项目contextPath
+  var contextPath = /*[[@{/}]]*/ '';
+  if (contextPath === '/') contextPath = '';
+  var API_URL = contextPath + '/api/sign-in-result';
+
+  // 全局状态
+  var currentPage = 0;           // 后端 page 从0开始
+  var currentSize = 20;          // 默认每页20条
+  var currentFilters = {};        // 当前查询条件
+  var currentSortField = null;    // 当前排序字段，如 'signDate'
+  var currentSortDir = null;      // 排序方向 'asc' 或 'desc'
+
+  // 构建请求参数（包括分页、筛选、排序）
+  function buildRequestParams(page, size, filterObj, sortField, sortDir) {
+    var params = {
+      page: page,
+      size: size
+    };
+    // 添加筛选条件
+    if (filterObj.account && filterObj.account.trim() !== '') {
+      params.account = filterObj.account.trim();
+    }
+    if (filterObj.source && filterObj.source.trim() !== '') {
+      params.source = filterObj.source.trim();
+    }
+    if (filterObj.startSignDate && filterObj.startSignDate !== '') {
+      params.startSignDate = filterObj.startSignDate;
+    }
+    if (filterObj.endSignDate && filterObj.endSignDate !== '') {
+      params.endSignDate = filterObj.endSignDate;
+    }
+    // 添加排序参数 (Spring Data 格式: sort=field,direction)
+    if (sortField && sortDir) {
+      params.sort = sortField + ',' + sortDir;
+    }
+    return params;
+  }
+
+  // 更新表头上的排序图标样式
+  function updateSortIcons(field, dir) {
+    $('.table th[data-sort-field]').each(function() {
+      var $icon = $(this).find('.sort-icon');
+      var thisField = $(this).data('sort-field');
+      // 重置所有图标为默认的双向箭头
+      $icon.removeClass('bi-arrow-up bi-arrow-down').addClass('bi-arrow-down-up').removeClass('active');
+      if (thisField === field && dir) {
+        $icon.removeClass('bi-arrow-down-up');
+        if (dir === 'asc') {
+          $icon.addClass('bi-arrow-up active');
+        } else if (dir === 'desc') {
+          $icon.addClass('bi-arrow-down active');
+        }
+      }
+    });
+  }
+
+  // 渲染表格内容
+  function renderTable(content) {
+    var tbody = $('#resultTableBody');
+    if (!content || content.length === 0) {
+      tbody.html('<tr class="text-center"><td colspan="9" class="py-5 text-muted"><i class="bi bi-inbox" style="font-size: 1.5rem;"></i><br>暂无签到记录，请调整筛选条件</td></tr>');
+      return;
+    }
+    var htmlRows = '';
+    $.each(content, function(idx, record) {
+      var signedInBadge = record.signedIn ? '<span class="badge bg-success badge-status">✅ 已签到</span>' : '<span class="badge bg-secondary badge-status">❌ 未签到</span>';
+      var repeatedBadge = record.repeatedSignIn ? '<span class="badge bg-warning text-dark badge-status">⚠️ 重复</span>' : '<span class="badge bg-info badge-status">正常</span>';
+      var createDateStr = '—';
+      if (record.createDate) {
+        try {
+          var dateObj = new Date(record.createDate);
+          if (!isNaN(dateObj.getTime())) {
+            createDateStr = dateObj.toLocaleString('zh-CN', {hour12: false});
+          } else {
+            createDateStr = record.createDate;
+          }
+        } catch(e) {
+          createDateStr = record.createDate;
+        }
+      }
+      var continuousDays = (record.continuousDays !== null && record.continuousDays !== undefined) ? record.continuousDays : '—';
+      var monthlySignedDays = (record.monthlySignedDays !== null && record.monthlySignedDays !== undefined) ? record.monthlySignedDays : '—';
+
+      htmlRows += '<tr>';
+      htmlRows += '<td class="ps-3">' + (idx + 1 + currentPage * currentSize) + '</td>';
+      htmlRows += '<td class="fw-medium">' + escapeHtml(record.account || '—') + '</td>';
+      htmlRows += '<td>' + (record.signDate || '—') + '</td>';
+      htmlRows += '<td>' + escapeHtml(record.source || '—') + '</td>';
+      htmlRows += '<td>' + signedInBadge + '</td>';
+      htmlRows += '<td>' + repeatedBadge + '</td>';
+      htmlRows += '<td><span class="fw-semibold">' + continuousDays + '</span> 天</td>';
+      htmlRows += '<td><span class="fw-semibold">' + monthlySignedDays + '</span> 天</td>';
+      htmlRows += '<td class="small text-secondary">' + createDateStr + '</td>';
+      htmlRows += '</tr>';
+    });
+    tbody.html(htmlRows);
+  }
+
+  // 简单防XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // 渲染分页组件
+  function renderPagination(totalPages, currentPageNum, totalElements) {
+    var $paginationUl = $('#paginationUl');
+    if (totalPages <= 1 && totalElements === 0) {
+      $paginationUl.html('<li class="page-item disabled"><span class="page-link">首页</span></li><li class="page-item disabled"><span class="page-link">上一页</span></li><li class="page-item disabled"><span class="page-link">下一页</span></li><li class="page-item disabled"><span class="page-link">尾页</span></li>');
+      return;
+    }
+    var paginationHtml = '';
+    paginationHtml += '<li class="page-item ' + (currentPageNum === 0 ? 'disabled' : '') + '"><a class="page-link" href="javascript:void(0)" data-page="0">首页</a></li>';
+    var prevPage = currentPageNum - 1;
+    paginationHtml += '<li class="page-item ' + (currentPageNum === 0 ? 'disabled' : '') + '"><a class="page-link" href="javascript:void(0)" data-page="' + prevPage + '">上一页</a></li>';
+
+    var startPage = Math.max(0, currentPageNum - 2);
+    var endPage = Math.min(totalPages - 1, currentPageNum + 2);
+    if (endPage - startPage < 4) {
+      if (startPage === 0) endPage = Math.min(totalPages - 1, 4);
+      else if (endPage === totalPages - 1) startPage = Math.max(0, totalPages - 5);
+    }
+    if (startPage > 0) {
+      paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+    }
+    for (var i = startPage; i <= endPage; i++) {
+      paginationHtml += '<li class="page-item ' + (i === currentPageNum ? 'active' : '') + '"><a class="page-link" href="javascript:void(0)" data-page="' + i + '">' + (i+1) + '</a></li>';
+    }
+    if (endPage < totalPages - 1) {
+      paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+    }
+
+    var nextPage = currentPageNum + 1;
+    paginationHtml += '<li class="page-item ' + (currentPageNum >= totalPages-1 ? 'disabled' : '') + '"><a class="page-link" href="javascript:void(0)" data-page="' + nextPage + '">下一页</a></li>';
+    var lastPage = totalPages - 1;
+    paginationHtml += '<li class="page-item ' + (currentPageNum >= totalPages-1 ? 'disabled' : '') + '"><a class="page-link" href="javascript:void(0)" data-page="' + lastPage + '">尾页</a></li>';
+
+    $paginationUl.html(paginationHtml);
+
+    $('#paginationUl .page-link[data-page]').off('click').on('click', function(e) {
+      e.preventDefault();
+      var targetPage = parseInt($(this).attr('data-page'));
+      if (!isNaN(targetPage) && targetPage >= 0 && targetPage < totalPages) {
+        // 翻页时保留当前排序
+        fetchData(targetPage, currentSize, currentFilters, currentSortField, currentSortDir);
+      }
+    });
+    $('#recordInfo').html('共 <strong>' + totalElements + '</strong> 条记录');
+  }
+
+  // 核心数据请求函数 (支持排序)
+  function fetchData(page, size, filterObj, sortField, sortDir, showLoading = true) {
+    // 更新全局状态
+    currentPage = page;
+    currentSize = size;
+    currentFilters = $.extend({}, filterObj);
+    currentSortField = sortField;
+    currentSortDir = sortDir;
+
+    var params = buildRequestParams(page, size, currentFilters, currentSortField, currentSortDir);
+    if (showLoading) {
+      $('#resultTableBody').html('<tr><td colspan="9" class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">加载中...</span></div><p class="mt-2 mb-0">加载签到数据中...</p></td></tr>');
+    }
+    $.ajax({
+      url: API_URL,
+      type: 'GET',
+      data: params,
+      dataType: 'json',
+      timeout: 15000,
+      success: function(response) {
+        var content = response.content || response._embedded?.signInResultVOList || [];
+        var pageMeta = response.page || {};
+        var totalPages = pageMeta.totalPages || 0;
+        var totalElements = pageMeta.totalElements || 0;
+        var currentPageNumber = (pageMeta.number !== undefined) ? pageMeta.number : page;
+        currentPage = currentPageNumber;
+        renderTable(content);
+        if (totalPages > 0 || totalElements > 0) {
+          renderPagination(totalPages, currentPageNumber, totalElements);
+        } else {
+          $('#paginationUl').html('<li class="page-item disabled"><span class="page-link">无分页数据</span></li>');
+          $('#recordInfo').html('共 0 条记录');
+        }
+        // 更新排序图标
+        updateSortIcons(currentSortField, currentSortDir);
+      },
+      error: function(xhr, status, error) {
+        console.error('接口请求失败: ', status, error);
+        var errorMsg = '请求失败，请检查网络或联系管理员';
+        if (xhr.status === 400) errorMsg = '参数错误，请检查日期范围或输入格式';
+        else if (xhr.status === 500) errorMsg = '服务器内部错误，请稍后重试';
+        $('#resultTableBody').html('<tr><td colspan="9" class="text-center py-5 text-danger"><i class="bi bi-exclamation-triangle"></i> ' + errorMsg + '</td></tr>');
+        $('#paginationUl').html('');
+        $('#recordInfo').html('加载失败');
+      }
+    });
+  }
+
+  // 获取表单筛选条件
+  function getFiltersFromForm() {
+    return {
+      account: $('#account').val() ? $('#account').val().trim() : '',
+      source: $('#source').val() ? $('#source').val().trim() : '',
+      startSignDate: $('#startSignDate').val() || '',
+      endSignDate: $('#endSignDate').val() || ''
+    };
+  }
+
+  // 重置筛选和排序，重新加载
+  function resetAndRefresh() {
+    $('#account').val('');
+    $('#source').val('');
+    $('#startSignDate').val('');
+    $('#endSignDate').val('');
+    var emptyFilters = { account: '', source: '', startSignDate: '', endSignDate: '' };
+    // 重置排序
+    fetchData(0, currentSize, emptyFilters, null, null, true);
+  }
+
+  // 查询（清空排序，重置页码）
+  function searchWithFilters() {
+    var filters = getFiltersFromForm();
+    if (filters.startSignDate && filters.endSignDate && filters.startSignDate > filters.endSignDate) {
+      alert('开始日期不能大于结束日期，请调整日期范围');
+      return;
+    }
+    // 新查询时清除排序状态
+    fetchData(0, currentSize, filters, null, null, true);
+  }
+
+  // 处理表头点击排序
+  function handleSort(field) {
+    // 确定新的排序方向：如果当前无排序或不同字段，则默认升序；如果同字段则切换方向
+    var newDir = 'asc';
+    if (currentSortField === field && currentSortDir === 'asc') {
+      newDir = 'desc';
+    } else if (currentSortField === field && currentSortDir === 'desc') {
+      newDir = 'asc';   // 也可以再点变成无排序，根据需求可做“取消排序”，但一般业务保留双向切换，这里保留双向
+    }
+    // 如果点击相同字段且当前已经是降序，再点变为升序（符合直觉）
+    // 注意：不实现“无排序”状态，因为通常排序有助于浏览。
+    // 重新请求数据，页码归0，保持筛选条件不变
+    fetchData(0, currentSize, currentFilters, field, newDir, true);
+  }
+
+  // 绑定事件
+  function bindEvents() {
+    $('#searchBtn').on('click', function(e) {
+      e.preventDefault();
+      searchWithFilters();
+    });
+    $('#resetBtn').on('click', function(e) {
+      e.preventDefault();
+      resetAndRefresh();
+    });
+    $('#pageSizeSelect').on('change', function() {
+      var newSize = parseInt($(this).val());
+      if (!isNaN(newSize) && newSize > 0) {
+        // 更改每页条数，重置页码为0，保留当前筛选和排序
+        fetchData(0, newSize, currentFilters, currentSortField, currentSortDir, true);
+      }
+    });
+    // 回车提交查询
+    $('#searchForm input').on('keypress', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        searchWithFilters();
+      }
+    });
+    // 表头排序点击委托
+    $('.table th[data-sort-field]').off('click').on('click', function() {
+      var field = $(this).data('sort-field');
+      handleSort(field);
+    });
+  }
+
+  // 初始化
+  $(document).ready(function() {
+    $('#pageSizeSelect').val(currentSize);
+    bindEvents();
+    // 初始加载（无筛选，无排序）
+    var initFilters = { account: '', source: '', startSignDate: '', endSignDate: '' };
+    fetchData(0, currentSize, initFilters, null, null, true);
+  });
+  /*]]>*/
+</script>
+</body>
+</html>

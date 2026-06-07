@@ -83,9 +83,8 @@ public class RedisCacheConfiguration {
   RedisBitmapUtils redisBitmapUtils(
       @Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
     log.debug("[CACHE-REDIS] Redis Bitmap Utils");
-    RedisBitmapUtils utils = new RedisBitmapUtils();
-    utils.setStringRedisTemplate(stringRedisTemplate);
-    return utils;
+    RedisBitmapUtils.instance.setStringRedisTemplate(stringRedisTemplate);
+    return RedisBitmapUtils.instance;
   }
 
   @Bean
@@ -107,7 +106,7 @@ public class RedisCacheConfiguration {
 
   @ConditionalOnBean({StringRedisTemplate.class, RedisTemplate.class})
   @Configuration(proxyBeanMethods = false)
-  public static class InnerConfiguration {
+  public static class ConstructRedisCacheConfiguration {
     @Autowired private StringRedisTemplate stringRedisTemplate;
     @Autowired private RedisTemplate<Object, Object> redisTemplate;
 

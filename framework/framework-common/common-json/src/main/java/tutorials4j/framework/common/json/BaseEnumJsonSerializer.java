@@ -38,6 +38,7 @@ public class BaseEnumJsonSerializer extends JsonSerializer<BaseEnum<?>> {
     // 输出 code
     gen.writeObjectField("code", value.getCode());
     gen.writeObjectField("name", value.getName());
+    gen.writeObjectField("label", value.getLabel());
 
     gen.writeEndObject();
   }

@@ -14,7 +14,18 @@ spring:
       port: 6379 # Redis端口
       database: 2
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/t4j
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
 
+  thymeleaf:
+    cache: false
 
 logging:
   level:

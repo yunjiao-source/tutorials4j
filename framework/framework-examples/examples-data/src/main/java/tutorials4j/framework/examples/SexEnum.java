@@ -10,13 +10,15 @@ import tutorials4j.framework.common.core.bean.BaseEnum;
  */
 @Getter
 public enum SexEnum implements BaseEnum<String> {
-  male("nan"),
-  female("nv");
+  male("nan", "男"),
+  female("nv", "女");
 
   private final String code;
+  private final String label;
 
-  SexEnum(String code) {
+  SexEnum(String code, String label) {
     this.code = code;
+    this.label = label;
   }
 
   @Override
@@ -27,5 +29,10 @@ public enum SexEnum implements BaseEnum<String> {
   @Override
   public String getName() {
     return name();
+  }
+
+  @Override
+  public String getLabel() {
+    return label;
   }
 }
