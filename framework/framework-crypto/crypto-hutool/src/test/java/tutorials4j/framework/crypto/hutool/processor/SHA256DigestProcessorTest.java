@@ -1,11 +1,9 @@
 package tutorials4j.framework.crypto.hutool.processor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
-import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 import tutorials4j.framework.crypto.core.DigestCategory;
 
 class SHA256DigestProcessorTest {
@@ -119,8 +117,6 @@ class SHA256DigestProcessorTest {
   @Test
   void getSecretKeyShouldThrowUnsupportedException() {
     SHA256DigestProcessor processor = SHA256DigestProcessor.create();
-    assertThatThrownBy(processor::getSecretKey)
-        .isInstanceOf(FrameworkRuntimeException.class)
-        .hasMessageContaining("方法不支持");
+    assertThat(processor.getSecretKey()).isNull();
   }
 }

@@ -51,6 +51,7 @@ public class SpringCommonConfiguration {
   @Bean
   @ConditionalOnMissingBean
   SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator() {
+    log.debug("[COMMON-SPRING] Spel Method Based Expression Evaluator");
     return new SpelMethodBasedExpressionEvaluator();
   }
 }

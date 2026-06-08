@@ -11,11 +11,11 @@ tutorials4j:
           timeToLive: 10s
           cacheNullValues: false
           redis:
-            cache-prefix: user
+            cache-prefix: 'cacheable:'
         orders:
           timeToLive: 20s
           cacheNullValues: true
           redis:
-            cache-prefix: 'order:'
+            cache-prefix: 'cacheable:'
 
 

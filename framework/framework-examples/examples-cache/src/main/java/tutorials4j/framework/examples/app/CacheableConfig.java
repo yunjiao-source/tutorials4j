@@ -1,14 +1,13 @@
 package tutorials4j.framework.examples.app;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import tutorials4j.framework.cache.caffeine.CaffeineCacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 
@@ -21,8 +20,7 @@ import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 @Configuration
 @Profile("cacheable")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.cacheable"})
-public class CacheableConfig implements CachingConfigurer {
-  @Autowired private RedisCacheManagerCreator redisCacheManagerCreator;
+public class CacheableConfig {
 
   @Bean
   CaffeineCacheManager caffeineCacheManager(
@@ -31,8 +29,8 @@ public class CacheableConfig implements CachingConfigurer {
   }
 
   @Bean
-  @Override
-  public CacheManager cacheManager() {
+  @Primary
+  RedisCacheManager redisCacheManager(RedisCacheManagerCreator redisCacheManagerCreator) {
     return redisCacheManagerCreator.getInstance();
   }
 }

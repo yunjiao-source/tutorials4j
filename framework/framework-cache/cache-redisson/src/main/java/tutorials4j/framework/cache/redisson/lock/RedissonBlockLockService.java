@@ -2,7 +2,6 @@ package tutorials4j.framework.cache.redisson.lock;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -126,11 +125,11 @@ public class RedissonBlockLockService {
      * @return 任务执行结果
      * @throws LockException 解锁异常
      */
-    public <T> T doInLock(String lockKey, Supplier<T> task) {
+    public <T> T doInLock(String lockKey, ThrowingCallable<T> task) throws Throwable {
       RLock lock = null;
       try {
         lock = lock(lockKey);
-        return task.get();
+        return task.call();
       } finally {
         unlock(lock);
       }

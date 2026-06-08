@@ -17,35 +17,47 @@ import org.springframework.cache.Cache;
  * @param <V> 缓存值类型
  * @author Yun Jiao
  */
-public abstract class AbstractCacheTemplate<K, V>
-    implements CacheTemplate<K, V>, SmartInitializingSingleton {
-  protected Cache cache;
+public abstract class AbstractCacheTemplate<K, V> implements CacheTemplate<K, V> {
+  private Cache cache;
 
-  @Getter protected final String cacheName;
+  @Getter private final String cacheName;
+
+  protected abstract Cache doGetCache(String cacheName);
 
   protected AbstractCacheTemplate(String cacheName) {
     this.cacheName = cacheName;
   }
 
+  protected Cache getCache() {
+    if (cache == null) {
+      synchronized (this) {
+        if (cache != null) {
+          cache = doGetCache(cacheName);
+        }
+      }
+    }
+    return cache;
+  }
+
   @Override
   public void put(K key, V value) {
-    cache.put(key, value);
+    getCache().put(key, value);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public V putIfAbsent(K key, V value) {
-    return (V) cache.putIfAbsent(key, value);
+    return (V) getCache().putIfAbsent(key, value);
   }
 
   @Override
   public V get(K key) {
-    return cache.get(key, getValueClass());
+    return getCache().get(key, getValueClass());
   }
 
   @Override
   public V get(K key, Callable<V> valueLoader) {
-    return cache.get(key, valueLoader);
+    return getCache().get(key, valueLoader);
   }
 
   @Override
@@ -55,23 +67,16 @@ public abstract class AbstractCacheTemplate<K, V>
 
   @Override
   public void delete(K key) {
-    cache.evict(key);
+    getCache().evict(key);
   }
 
   @Override
   public CompletableFuture<?> retrieve(K key) {
-    return cache.retrieve(key);
+    return getCache().retrieve(key);
   }
 
   @Override
   public CompletableFuture<V> retrieve(K key, Supplier<CompletableFuture<V>> valueLoader) {
-    return cache.retrieve(key, valueLoader);
+    return getCache().retrieve(key, valueLoader);
   }
-
-  @Override
-  public void afterSingletonsInstantiated() {
-    initCache();
-  }
-
-  protected abstract void initCache();
 }

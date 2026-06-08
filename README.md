@@ -25,8 +25,21 @@ Java 教程
 
 ### 功能模块示例（framework/framework-examples/examples-feature）
 
-![签到示例](docs/images/sign-in-input.jpg)
+> 签到示例
+![签到示例](docs/images/sign-in-input.jpg )
 
+> 签到记录查询示例
 ![签到记录查询示例](docs/images/sign-in-list.jpg)
 
 
+### 功能模块示例（framework/framework-examples/examples-cache）
+
+### profile:cacheable
+
+> @Cacheable 示例
+![@Cacheable 示例](docs/images/cache-cacheable.jpg)
+
+### profile:lock
+
+> Redisson 锁示例
+![Redisson 锁示例](docs/images/lokc-redisson.jpg)

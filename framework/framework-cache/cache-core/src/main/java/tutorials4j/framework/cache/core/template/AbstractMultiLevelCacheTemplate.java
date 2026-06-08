@@ -1,5 +1,6 @@
 package tutorials4j.framework.cache.core.template;
 
+import org.springframework.cache.Cache;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 
 /**
@@ -18,7 +19,7 @@ public abstract class AbstractMultiLevelCacheTemplate<K, V> extends AbstractCach
   }
 
   @Override
-  protected void initCache() {
-    cache = CacheManagerCreatorFactory.instance.findMultiLevelCache(cacheName);
+  protected Cache doGetCache(String cacheName) {
+    return CacheManagerCreatorFactory.instance.findMultiLevelCache(cacheName);
   }
 }

@@ -37,6 +37,8 @@ public class RedisCacheableController {
   @GetMapping("tenant-users")
   public String getTenantUser(@RequestParam("id") Long id) {
     TenantContextHolder.set("DEMO");
-    return redisCacheableService.getUser(id);
+    String user = redisCacheableService.getUser(id);
+    TenantContextHolder.clear();
+    return user;
   }
 }

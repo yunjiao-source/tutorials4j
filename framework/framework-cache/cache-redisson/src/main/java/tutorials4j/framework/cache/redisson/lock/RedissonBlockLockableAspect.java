@@ -56,17 +56,7 @@ public class RedissonBlockLockableAspect {
               Duration.of(expireTime, redissonBlockLockable.timeUnit().toChronoUnit()),
               () -> joinPoint.proceed());
     } else {
-      return redissonBlockLockService
-          .autoRenewal()
-          .doInLock(
-              key,
-              () -> {
-                try {
-                  return joinPoint.proceed();
-                } catch (Throwable e) {
-                  throw new RuntimeException(e);
-                }
-              });
+      return redissonBlockLockService.autoRenewal().doInLock(key, () -> joinPoint.proceed());
     }
   }
 

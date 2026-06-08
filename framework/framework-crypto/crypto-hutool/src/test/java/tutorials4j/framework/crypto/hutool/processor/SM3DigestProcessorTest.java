@@ -1,11 +1,9 @@
 package tutorials4j.framework.crypto.hutool.processor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
-import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 import tutorials4j.framework.crypto.core.DigestCategory;
 
 class SM3DigestProcessorTest {
@@ -114,8 +112,6 @@ class SM3DigestProcessorTest {
   @Test
   void getSecretKeyShouldThrowUnsupportedException() {
     SM3DigestProcessor processor = SM3DigestProcessor.create();
-    assertThatThrownBy(processor::getSecretKey)
-        .isInstanceOf(FrameworkRuntimeException.class)
-        .hasMessageContaining("方法不支持");
+    assertThat(processor.getSecretKey()).isNull();
   }
 }

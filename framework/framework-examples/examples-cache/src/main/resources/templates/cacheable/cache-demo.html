@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>缓存示例演示 - Redis vs Caffeine</title>
+  <!-- Bootstrap 5 CSS (稳定版) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery 3.6.0 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap JS Bundle (包含Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding-bottom: 2rem;
+    }
+    .card-header {
+      font-weight: bold;
+      background-color: #e9ecef;
+    }
+    .result-area {
+      background-color: #f1f3f5;
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+    .badge-cache {
+      font-size: 0.75rem;
+      vertical-align: middle;
+    }
+    .btn-sm-custom {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .tenant-note {
+      font-size: 0.85rem;
+      color: #0c63e4;
+      background-color: #e2e3f5;
+      border-left: 4px solid #0d6efd;
+    }
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-4">
+  <div class="text-center mb-4">
+    <h1 class="display-6">📦 缓存实战演示</h1>
+    <p class="lead">基于 Spring Cache | Redis (分布式) + Caffeine (本地) | 多租户隔离示例</p>
+    <hr class="my-3">
+    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+      💡 <strong>缓存验证说明：</strong> 对同一ID重复请求，若第二次及之后返回的数据与第一次<strong>完全一致</strong>（随机字符串/日期不变），则证明缓存生效。<br>
+      后端控制台会打印首次“数据库中获取数据...”日志，后续请求不再输出。切换不同ID则会重新获取。
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- 左侧：Redis 缓存测试模块 -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
+          🚀 Redis 缓存 (分布式) &nbsp;<span class="badge bg-light text-dark">@Cacheable + RedisCacheManager</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="redisId" class="form-label fw-semibold">🔑 业务ID (Long)</label>
+            <input type="number" class="form-control" id="redisId" placeholder="例如: 1001" value="1001">
+            <div class="form-text">支持用户、订单、汽车共用此ID，缓存相互独立</div>
+          </div>
+          <div class="d-flex flex-wrap mb-3">
+            <button class="btn btn-outline-primary btn-sm-custom" id="redisUserBtn">👤 获取用户</button>
+            <button class="btn btn-outline-success btn-sm-custom" id="redisOrderBtn">📦 获取订单</button>
+            <button class="btn btn-outline-warning btn-sm-custom" id="redisCarBtn">🚗 获取汽车</button>
+          </div>
+          <div class="mt-2">
+            <strong>📋 响应结果：</strong>
+            <div id="redisResult" class="result-area mt-1">等待调用...</div>
+          </div>
+          <div class="mt-3 small text-muted">
+            <i class="bi bi-info-circle"></i> API端点：/redis/cacheable/{users,orders,cars}?id=xxx
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：Caffeine 本地缓存测试模块 -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-success text-white">
+          ☕ Caffeine 缓存 (本地) &nbsp;<span class="badge bg-light text-dark">@Cacheable + caffeineCacheManager</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="caffeineId" class="form-label fw-semibold">🔑 业务ID (Long)</label>
+            <input type="number" class="form-control" id="caffeineId" placeholder="例如: 2001" value="2001">
+            <div class="form-text">基于内存，不同进程/实例缓存独立，但响应更快</div>
+          </div>
+          <div class="d-flex flex-wrap mb-3">
+            <button class="btn btn-outline-secondary btn-sm-custom" id="caffeineUserBtn">👤 获取用户</button>
+            <button class="btn btn-outline-secondary btn-sm-custom" id="caffeineOrderBtn">📦 获取订单</button>
+            <button class="btn btn-outline-secondary btn-sm-custom" id="caffeineCarBtn">🚗 获取汽车</button>
+          </div>
+          <div class="mt-2">
+            <strong>📋 响应结果：</strong>
+            <div id="caffeineResult" class="result-area mt-1">等待调用...</div>
+          </div>
+          <div class="mt-3 small text-muted">
+            <i class="bi bi-info-circle"></i> API端点：/caffeine/cacheable/{users,orders,cars}?id=xxx
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三行：租户隔离演示 (Redis) + 对比说明 -->
+  <div class="row mt-2">
+    <div class="col-12">
+      <div class="card shadow-sm border-info">
+        <div class="card-header bg-info text-white">
+          🧩 多租户隔离演示 (Redis Tenant) &nbsp;<span class="badge bg-dark">DEMO租户上下文</span>
+        </div>
+        <div class="card-body">
+          <div class="row align-items-end">
+            <div class="col-md-4">
+              <label for="tenantId" class="form-label fw-semibold">🏢 租户用户ID</label>
+              <input type="number" class="form-control" id="tenantId" placeholder="输入ID" value="1001">
+              <div class="form-text">调用 /redis/cacheable/tenant-users 接口</div>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-info w-100" id="tenantUserBtn">🔐 获取租户用户 (DEMO)</button>
+            </div>
+            <div class="col-md-5">
+              <div class="alert tenant-note p-2 mb-0">
+                📌 租户隔离机制：<br>
+                接口内部设置 <code>TenantContextHolder.set("DEMO")</code>，缓存Key通常结合租户ID生成。<br>
+                对比<strong>普通Redis users</strong>（默认租户），相同业务ID可能返回<strong>不同缓存数据</strong> → 租户隔离演示。
+              </div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <strong>🏷️ 租户缓存结果：</strong>
+            <div id="tenantResult" class="result-area mt-1">未调用...</div>
+          </div>
+          <hr class="my-3">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card bg-light">
+                <div class="card-body p-2">
+                  <strong>🧪 对比测试建议：</strong>
+                  <ol class="small mb-0 mt-2">
+                    <li>先使用普通Redis模块获取用户ID=1001 → 记录结果A</li>
+                    <li>再使用租户模块获取相同ID=1001 → 得到结果B</li>
+                    <li>若A ≠ B，说明租户隔离生效（缓存Key包含租户信息）</li>
+                    <li>同一租户内再次请求ID=1001，结果应保持不变（租户缓存命中）</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card bg-light">
+                <div class="card-body p-2">
+                  <strong>💡 缓存命中观察点：</strong>
+                  <ul class="small mb-0 mt-2">
+                    <li>Redis/Caffeine模块重复相同ID，响应内容不变</li>
+                    <li>修改ID为新值，内容会刷新（数据库取数）</li>
+                    <li>汽车对象中的Date字段也会被缓存，多次调用时间相同</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <small>© 缓存演示 | Spring Boot + Redis + Caffeine | 基于 @Cacheable 注解实现</small>
+  </footer>
+</div>
+
+<script>
+  $(document).ready(function() {
+
+    // ---------- 通用 AJAX 调用函数（处理不同返回类型：users/orders为string，cars为json）----------
+    function callApi(url, id, resultContainer, isCarEndpoint = false) {
+      if (!id && id !== 0) {
+        $(resultContainer).html('<span class="text-danger">❌ 请输入有效的ID (数字)</span>');
+        return;
+      }
+      $(resultContainer).html('<div class="spinner-border spinner-border-sm text-secondary" role="status"><span class="visually-hidden">加载中...</span></div> 请求中...');
+      $.ajax({
+        url: url,
+        type: 'GET',
+        data: { id: id },
+        success: function(data, textStatus, jqXHR) {
+          // 对cars接口特殊处理，自动格式化JSON；普通文本直接显示
+          if (isCarEndpoint) {
+            try {
+              // 如果后端返回的是对象，直接格式化为美观的JSON；若返回字符串则尝试解析
+              let formatted;
+              if (typeof data === 'object') {
+                formatted = JSON.stringify(data, null, 2);
+              } else {
+                // 兼容某些情况下返回json字符串
+                let parsed = JSON.parse(data);
+                formatted = JSON.stringify(parsed, null, 2);
+              }
+              $(resultContainer).html(`<pre class="mb-0" style="background:transparent; color:#0a3622;">${escapeHtml(formatted)}</pre>`);
+            } catch (e) {
+              $(resultContainer).html(`<span class="text-info">${escapeHtml(String(data))}</span>`);
+            }
+          } else {
+            // 普通文本结果
+            $(resultContainer).html(`<span class="text-success">✅ 响应: </span> ${escapeHtml(String(data))}`);
+          }
+        },
+        error: function(xhr, status, error) {
+          let errMsg = `调用失败: ${xhr.status} ${xhr.statusText}`;
+          if (xhr.responseText) {
+            errMsg += ` - ${xhr.responseText.substring(0, 150)}`;
+          }
+          $(resultContainer).html(`<span class="text-danger">❌ ${escapeHtml(errMsg)}</span>`);
+          console.error("API Error:", url, error, xhr);
+        }
+      });
+    }
+
+    // 辅助函数：防XSS
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        return c;
+      });
+    }
+
+    // -------------------- Redis 模块按钮 --------------------
+    $('#redisUserBtn').click(function() {
+      let id = $('#redisId').val();
+      if (id === null || id === '') id = 0;
+      callApi('/redis/cacheable/users', id, '#redisResult', false);
+    });
+    $('#redisOrderBtn').click(function() {
+      let id = $('#redisId').val();
+      if (id === null || id === '') id = 0;
+      callApi('/redis/cacheable/orders', id, '#redisResult', false);
+    });
+    $('#redisCarBtn').click(function() {
+      let id = $('#redisId').val();
+      if (id === null || id === '') id = 0;
+      callApi('/redis/cacheable/cars', id, '#redisResult', true);
+    });
+
+    // -------------------- Caffeine 模块按钮 --------------------
+    $('#caffeineUserBtn').click(function() {
+      let id = $('#caffeineId').val();
+      if (id === null || id === '') id = 0;
+      callApi('/caffeine/cacheable/users', id, '#caffeineResult', false);
+    });
+    $('#caffeineOrderBtn').click(function() {
+      let id = $('#caffeineId').val();
+      if (id === null || id === '') id = 0;
+      callApi('/caffeine/cacheable/orders', id, '#caffeineResult', false);
+    });
+    $('#caffeineCarBtn').click(function() {
+      let id = $('#caffeineId').val();
+      if (id === null || id === '') id = 0;
+      callApi('/caffeine/cacheable/cars', id, '#caffeineResult', true);
+    });
+
+    // -------------------- 租户专用 (Redis Tenant) 只提供获取用户，因为是演示租户上下文 --------------------
+    $('#tenantUserBtn').click(function() {
+      let id = $('#tenantId').val();
+      if (id === null || id === '') id = 0;
+      // tenant-users 接口，返回 String，非Car
+      const tenantUrl = '/redis/cacheable/tenant-users';
+      $('#tenantResult').html('<div class="spinner-border spinner-border-sm text-secondary" role="status"></div> 请求租户数据...');
+      $.ajax({
+        url: tenantUrl,
+        type: 'GET',
+        data: { id: id },
+        success: function(data) {
+          $('#tenantResult').html(`<span class="text-success">🔐 租户[DEFAULT]? 实际后端设置DEMO -> 缓存数据: </span> ${escapeHtml(String(data))}`);
+        },
+        error: function(xhr) {
+          let err = `租户接口错误: ${xhr.status}`;
+          if (xhr.responseText) err += ` - ${xhr.responseText.substring(0, 100)}`;
+          $('#tenantResult').html(`<span class="text-danger">❌ ${escapeHtml(err)}</span>`);
+        }
+      });
+    });
+
+    // 额外的用户体验：按回车快捷触发Redis默认User查询
+    $('#redisId').keypress(function(e) {
+      if (e.which === 13) {
+        $('#redisUserBtn').click();
+      }
+    });
+    $('#caffeineId').keypress(function(e) {
+      if (e.which === 13) {
+        $('#caffeineUserBtn').click();
+      }
+    });
+    $('#tenantId').keypress(function(e) {
+      if (e.which === 13) {
+        $('#tenantUserBtn').click();
+      }
+    });
+
+    // 提示: 控制台输出友好的cache说明
+    console.log("页面加载完成 - 使用 Bootstrap + jQuery 调用后端缓存API");
+  });
+</script>
+</body>
+</html>

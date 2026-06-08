@@ -23,12 +23,19 @@
         <module>examples-captcha</module>
         <module>examples-crypto</module>
         <module>examples-feature</module>
+        <module>examples-test</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

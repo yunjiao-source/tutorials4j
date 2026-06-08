@@ -1,5 +1,6 @@
 package tutorials4j.framework.cache.core.template;
 
+import org.springframework.cache.Cache;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 
 /**
@@ -13,12 +14,12 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
  * @author Yun Jiao
  */
 public abstract class AbstractCaffeineCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
-  public AbstractCaffeineCacheTemplate(String cacheName) {
+  protected AbstractCaffeineCacheTemplate(String cacheName) {
     super(cacheName);
   }
 
   @Override
-  protected void initCache() {
-    cache = CacheManagerCreatorFactory.instance.findCaffeineCache(cacheName);
+  protected Cache doGetCache(String cacheName) {
+    return CacheManagerCreatorFactory.instance.findCaffeineCache(cacheName);
   }
 }

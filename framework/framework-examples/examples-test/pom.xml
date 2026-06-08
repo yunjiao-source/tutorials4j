@@ -9,9 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>examples-cache</artifactId>
+    <artifactId>examples-test</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Cache</name>
+    <name>Examples :: Test</name>
 
     <dependencies>
         <dependency>

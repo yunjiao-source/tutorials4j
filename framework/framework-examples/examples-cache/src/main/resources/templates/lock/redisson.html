@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Redisson 分布式锁深度演示 | 阻塞锁 vs 可重入锁</title>
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background: #f0f2f5;
+      font-family: 'Segoe UI', system-ui, -apple-system;
+    }
+    .card-header {
+      font-weight: 600;
+      background: rgba(0,0,0,0.02);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .log-area {
+      background: #1e2a3a;
+      color: #e4f1fe;
+      font-family: 'JetBrains Mono', 'SF Mono', monospace;
+      font-size: 0.8rem;
+      border-radius: 16px;
+      padding: 1rem;
+      height: 460px;
+      overflow-y: auto;
+    }
+    .log-entry {
+      border-bottom: 1px solid #2d3e4e;
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      font-family: monospace;
+    }
+    .log-time {
+      color: #7aa2f7;
+      font-weight: 500;
+      margin-right: 12px;
+    }
+    .log-info { color: #9ece6a; }
+    .log-error { color: #f7768e; }
+    .log-success { color: #bb9af7; }
+    .log-warn { color: #e0af68; }
+    .btn-lock {
+      min-width: 150px;
+      margin: 5px 3px;
+      transition: all 0.2s;
+      white-space: normal;
+    }
+    .param-badge {
+      font-size: 0.7rem;
+      background: #f8f9fa;
+      border-left: 3px solid #0d6efd;
+    }
+    .legend-icon {
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      border-radius: 2px;
+      margin-right: 6px;
+    }
+    footer {
+      font-size: 0.75rem;
+      color: #6c757d;
+      border-top: 1px solid #dee2e6;
+    }
+    .lock-comparison td {
+      padding: 8px 4px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4">
+  <!-- 头部信息 -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="display-6 fw-semibold">
+        <i class="bi bi-lock-fill text-primary me-2"></i>Redisson 分布式锁工坊
+      </h1>
+      <p class="text-muted">基于注解 <code>@RedissonBlockLockable</code> · <code>@RedissonReentrantLockable</code> | 演示自动续期 & 固定租约</p>
+    </div>
+    <div class="mt-2 mt-sm-0">
+      <span class="badge bg-dark p-2"><i class="bi bi-key"></i> 锁粒度: 订单ID</span>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- 左侧：控制面板 -->
+    <div class="col-lg-5">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <i class="bi bi-sliders2 me-2"></i> 测试参数 & 锁策略
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <label class="form-label fw-semibold"><i class="bi bi-upc-scan"></i> 订单ID (锁Key)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light">order:</span>
+              <input type="text" class="form-control" id="orderId" value="ORD-10086" placeholder="例如: ORD-10086">
+              <button class="btn btn-outline-secondary" type="button" id="randomOrderBtn" title="随机生成订单ID"><i class="bi bi-shuffle"></i></button>
+            </div>
+            <div class="form-text mt-1">相同订单ID → 锁互斥；不同订单ID → 完全并发。</div>
+          </div>
+
+          <hr class="my-3">
+          <div class="fw-semibold mb-2"><i class="bi bi-grid-3x3-gap-fill"></i> 锁调用接口</div>
+
+          <!-- 阻塞锁区块 -->
+          <div class="small text-secondary mb-1"><i class="bi bi-hourglass-bottom"></i> 阻塞锁 (Block Lock) — 一直等待直到获取锁，无等待超时</div>
+          <div class="d-flex flex-wrap mb-3">
+            <button class="btn btn-outline-primary btn-lock" data-url="block-non-expire-time" data-name="🔒 阻塞锁 · 无过期" data-expire="自动续期" data-wait="无限等待">
+              <i class="bi bi-infinity"></i> 阻塞锁 (自动续期)
+            </button>
+            <button class="btn btn-outline-danger btn-lock" data-url="block-expire-time" data-name="⏱️ 阻塞锁 · 固定租约(3s)" data-expire="3000ms" data-wait="无限等待">
+              <i class="bi bi-stopwatch"></i> 阻塞锁 · expire=3s
+            </button>
+          </div>
+
+          <!-- 可重入锁区块 -->
+          <div class="small text-secondary mb-1 mt-2"><i class="bi bi-arrow-repeat"></i> 可重入锁 (Reentrant Lock) — 支持重入，可设置获取锁等待超时</div>
+          <div class="d-flex flex-wrap">
+            <button class="btn btn-outline-success btn-lock" data-url="reentrant-non-expire-time" data-name="🔄 可重入锁 · 无过期" data-expire="自动续期" data-wait="3000ms(默认)">
+              <i class="bi bi-arrow-repeat"></i> 可重入锁 (自动续期)
+            </button>
+            <button class="btn btn-outline-warning btn-lock" data-url="reentrant-expire-time" data-name="⚡ 可重入锁 · 固定租约(4s)" data-expire="4000ms" data-wait="3000ms(默认)">
+              <i class="bi bi-alarm"></i> 可重入锁 · expire=4s
+            </button>
+          </div>
+
+          <!-- 参数解释卡片 -->
+          <div class="param-badge p-2 mt-3 rounded-2 small">
+            <i class="bi bi-info-circle-fill text-primary me-1"></i> <strong>注解参数说明</strong><br>
+            • <code>expireTime ≤ 0</code> → 看门狗自动续期 (默认每10秒续期至30秒)<br>
+            • <code>expireTime > 0</code> → 固定租约，到期自动释放锁，业务未完成则失去保护<br>
+            • <code>waitTime</code> (仅可重入锁) → 尝试获取锁的最大等待时间，超时抛出异常<br>
+            • 本演示业务随机休眠 0~9 秒，用于模拟耗时操作。
+          </div>
+          <button id="clearLogBtn" class="btn btn-sm btn-light w-100 mt-3"><i class="bi bi-trash3"></i> 清空控制台日志</button>
+        </div>
+      </div>
+
+      <!-- 锁行为对比表 -->
+      <div class="card shadow-sm">
+        <div class="card-body p-3">
+          <h6 class="card-title mb-2"><i class="bi bi-table"></i> 两种锁行为对比</h6>
+          <table class="table table-sm table-borderless small lock-comparison">
+            <tr><td class="ps-0"><span class="legend-icon bg-primary"></span> 阻塞锁</td><td>获取失败则<span class="fw-semibold">无限阻塞</span>，直到获得锁</td></tr>
+            <tr><td class="ps-0"><span class="legend-icon bg-success"></span> 可重入锁</td><td>支持重入 + <span class="fw-semibold">等待超时</span>(waitTime)，超时快速失败</td></tr>
+            <tr><td colspan="2"><hr class="my-1"></td></tr>
+            <tr><td class="ps-0">⏱️ 自动续期</td><td>业务未完成时锁自动续期，避免误释放</td></tr>
+            <tr><td class="ps-0">⏲️ 固定租约</td><td>严格限制锁持有时间，适合短任务</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：实时日志区 -->
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-terminal-fill me-2"></i>执行日志 & 性能追踪</span>
+          <span class="badge bg-secondary" id="logCounter">0 条记录</span>
+        </div>
+        <div class="card-body p-2">
+          <div id="logContainer" class="log-area">
+            <div class="log-entry text-muted fst-italic">
+              <i class="bi bi-chat-dots"></i> 点击任意锁按钮，观察分布式锁互斥效果...
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-muted small d-flex justify-content-between">
+          <span><i class="bi bi-hdd-stack"></i> 后端地址: /redisson/{block-non-expire-time,...}</span>
+          <span><i class="bi bi-graph-up"></i> 耗时含锁等待+业务sleep</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="text-center mt-4 pt-3">
+    Redisson 分布式锁实践 | 阻塞锁(无等待超时) vs 可重入锁(waitTime=3s) | 固定租约 vs 自动续期
+  </footer>
+</div>
+
+<script>
+  $(function() {
+    let logCount = 0;
+    const $logContainer = $('#logContainer');
+    const $logCounter = $('#logCounter');
+    const baseUrl = '/redisson/';
+
+    function getOrderId() {
+      let val = $('#orderId').val().trim();
+      if (val === '') val = 'ORD-10086';
+      return encodeURIComponent(val);
+    }
+
+    function addLog(message, type = 'info') {
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}.${now.getMilliseconds().toString().padStart(3,'0')}`;
+      let icon = '📘';
+      let cls = 'log-info';
+      if (type === 'success') { icon = '✅'; cls = 'log-success'; }
+      else if (type === 'error') { icon = '❌'; cls = 'log-error'; }
+      else if (type === 'warn') { icon = '⚠️'; cls = 'log-warn'; }
+      else if (type === 'start') { icon = '🚀'; cls = 'log-info'; }
+      const logHtml = `<div class="log-entry"><span class="log-time">[${timeStr}]</span><span class="${cls}">${icon} ${escapeHtml(message)}</span></div>`;
+      if ($logContainer.children().length === 1 && $logContainer.children().first().hasClass('text-muted')) {
+        $logContainer.empty();
+      }
+      $logContainer.append(logHtml);
+      $logContainer.scrollTop($logContainer[0].scrollHeight);
+      logCount++;
+      $logCounter.text(logCount + ' 条记录');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    $('#clearLogBtn').on('click', function() {
+      $logContainer.empty();
+      $logContainer.html('<div class="log-entry text-muted fst-italic"><i class="bi bi-chat-dots"></i> 日志已清空，可继续发起测试</div>');
+      logCount = 0;
+      $logCounter.text('0 条记录');
+    });
+
+    $('#randomOrderBtn').on('click', function() {
+      const randomNum = Math.floor(Math.random() * 9000) + 1000;
+      const newOrderId = `ORD-${randomNum}`;
+      $('#orderId').val(newOrderId);
+      addLog(`🎲 订单ID已切换至: ${newOrderId} (新锁独立)`, 'info');
+    });
+
+    // 发起锁请求
+    function invokeLock(urlSuffix, displayName, expireDesc, waitDesc, orderId) {
+      const fullUrl = baseUrl + urlSuffix;
+      const startTime = performance.now();
+      addLog(`[发起] ${displayName} | 订单:${orderId} | 租约:${expireDesc} | 等待策略:${waitDesc}`, 'start');
+      $.ajax({
+        url: fullUrl,
+        method: 'GET',
+        data: { orderId: orderId },
+        timeout: 65000,
+        success: function(data, textStatus) {
+          const elapsed = (performance.now() - startTime).toFixed(2);
+          addLog(`✔️ [成功] ${displayName} | 订单 ${orderId} | 总耗时 ${elapsed} ms`, 'success');
+        },
+        error: function(xhr, status, error) {
+          const elapsed = (performance.now() - startTime).toFixed(2);
+          let errMsg = `${status} / ${error}`;
+          if (xhr.status === 500 && xhr.responseText) {
+            try {
+              let json = JSON.parse(xhr.responseText);
+              errMsg = json.message || json.error || errMsg;
+            } catch(e) {}
+          }
+          addLog(`❌ [失败] ${displayName} | 订单 ${orderId} | 耗时 ${elapsed} ms | 原因: ${errMsg}`, 'error');
+        }
+      });
+    }
+
+    // 绑定所有锁按钮，携带额外参数用于日志展示
+    $('.btn-lock').on('click', function() {
+      const $btn = $(this);
+      const urlSuffix = $btn.data('url');
+      let displayName = $btn.data('name') || urlSuffix;
+      const expireDesc = $btn.data('expire') || '无';
+      const waitDesc = $btn.data('wait') || '-';
+      const orderId = getOrderId();
+      invokeLock(urlSuffix, displayName, expireDesc, waitDesc, orderId);
+    });
+
+    addLog('✨ 页面已加载 | 使用相同订单ID可观察锁互斥排队效果', 'info');
+    addLog('📖 可重入锁若等待超时(默认3s)将快速失败，显示错误日志', 'warn');
+  });
+</script>
+</body>
+</html>

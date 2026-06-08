@@ -1,5 +1,6 @@
 package tutorials4j.framework.cache.core.template;
 
+import org.springframework.cache.Cache;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 
 /**
@@ -18,7 +19,7 @@ public abstract class AbstractRedisCacheTemplate<K, V> extends AbstractCacheTemp
   }
 
   @Override
-  protected void initCache() {
-    cache = CacheManagerCreatorFactory.instance.findRedisCache(cacheName);
+  protected Cache doGetCache(String cacheName) {
+    return CacheManagerCreatorFactory.instance.findRedisCache(cacheName);
   }
 }
