@@ -22,6 +22,8 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
 @RequiredArgsConstructor
 public class RedissonBlockLockService {
   private final RedissonClient redissonClient;
+  private volatile FixedLease fixedLease;
+  private volatile AutoRenewal autoRenewal;
 
   /**
    * 返回固定租约模式的操作入口。
@@ -29,7 +31,15 @@ public class RedissonBlockLockService {
    * @return 固定租约模式的实例
    */
   public FixedLease fixedLease() {
-    return new FixedLease(redissonClient);
+    if (fixedLease == null) {
+      synchronized (this) {
+        if (fixedLease == null) {
+          fixedLease = new FixedLease(redissonClient);
+        }
+      }
+    }
+
+    return fixedLease;
   }
 
   /**
@@ -38,12 +48,20 @@ public class RedissonBlockLockService {
    * @return 自动续期模式的实例
    */
   public AutoRenewal autoRenewal() {
-    return new AutoRenewal(redissonClient);
+    if (autoRenewal == null) {
+      synchronized (this) {
+        if (autoRenewal == null) {
+          autoRenewal = new AutoRenewal(redissonClient);
+        }
+      }
+    }
+
+    return autoRenewal;
   }
 
   /** 固定租约模式的阻塞锁操作类。 */
   @RequiredArgsConstructor
-  public class FixedLease {
+  public static class FixedLease {
     private final RedissonClient redissonClient;
 
     /**
@@ -97,11 +115,28 @@ public class RedissonBlockLockService {
         unlock(lock);
       }
     }
+
+    /**
+     * 安全释放锁。仅当当前线程持有该锁且锁仍处于锁定状态时才执行解锁。
+     *
+     * @param lock Redisson 锁对象，可为 null
+     * @throws LockException 解锁失败时抛出
+     */
+    private void unlock(RLock lock) {
+      if (lock == null) return;
+      try {
+        if (lock.isHeldByCurrentThread() && lock.isLocked()) {
+          lock.unlock();
+        }
+      } catch (Exception e) {
+        throw new LockException(lock.getName(), e);
+      }
+    }
   }
 
   /** 自动续期模式的阻塞锁操作类。 */
   @RequiredArgsConstructor
-  public class AutoRenewal {
+  public static class AutoRenewal {
     private final RedissonClient redissonClient;
 
     /**
@@ -151,22 +186,22 @@ public class RedissonBlockLockService {
         unlock(lock);
       }
     }
-  }
 
-  /**
-   * 安全释放锁。仅当当前线程持有该锁且锁仍处于锁定状态时才执行解锁。
-   *
-   * @param lock Redisson 锁对象，可为 null
-   * @throws LockException 解锁失败时抛出
-   */
-  private void unlock(RLock lock) {
-    if (lock == null) return;
-    try {
-      if (lock.isHeldByCurrentThread() && lock.isLocked()) {
-        lock.unlock();
+    /**
+     * 安全释放锁。仅当当前线程持有该锁且锁仍处于锁定状态时才执行解锁。
+     *
+     * @param lock Redisson 锁对象，可为 null
+     * @throws LockException 解锁失败时抛出
+     */
+    private void unlock(RLock lock) {
+      if (lock == null) return;
+      try {
+        if (lock.isHeldByCurrentThread() && lock.isLocked()) {
+          lock.unlock();
+        }
+      } catch (Exception e) {
+        throw new LockException(lock.getName(), e);
       }
-    } catch (Exception e) {
-      throw new LockException(lock.getName(), e);
     }
   }
 }

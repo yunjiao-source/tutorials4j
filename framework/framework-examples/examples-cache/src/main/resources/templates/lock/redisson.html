@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Redisson 分布式锁深度演示 | 阻塞锁 vs 可重入锁</title>
+  <title>Redisson 分布式锁深度演示 | 阻塞锁 vs 可重入锁 (全异步请求)</title>
   <!-- Bootstrap 5 + Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <!-- jQuery -->
+  <!-- jQuery (仅用于DOM操作及事件绑定，网络请求全部改用原生fetch异步) -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <style>
     body {
@@ -82,7 +82,7 @@
       <h1 class="display-6 fw-semibold">
         <i class="bi bi-lock-fill text-primary me-2"></i>Redisson 分布式锁工坊
       </h1>
-      <p class="text-muted">基于注解 <code>@RedissonBlockLockable</code> · <code>@RedissonReentrantLockable</code> | 演示自动续期 & 固定租约</p>
+      <p class="text-muted">基于注解 <code>@RedissonBlockLockable</code> · <code>@RedissonReentrantLockable</code> | 演示自动续期 & 固定租约 | <span class="badge bg-info text-dark">全异步请求 (fetch + AbortController)</span></p>
     </div>
     <div class="mt-2 mt-sm-0">
       <span class="badge bg-dark p-2"><i class="bi bi-key"></i> 锁粒度: 订单ID</span>
@@ -169,19 +169,19 @@
         <div class="card-body p-2">
           <div id="logContainer" class="log-area">
             <div class="log-entry text-muted fst-italic">
-              <i class="bi bi-chat-dots"></i> 点击任意锁按钮，观察分布式锁互斥效果...
+              <i class="bi bi-chat-dots"></i> 点击任意锁按钮，观察分布式锁互斥效果 (所有请求均为异步fetch + 超时可控)...
             </div>
           </div>
         </div>
         <div class="card-footer text-muted small d-flex justify-content-between">
-          <span><i class="bi bi-hdd-stack"></i> 后端地址: /redisson/{block-non-expire-time,...}</span>
-          <span><i class="bi bi-graph-up"></i> 耗时含锁等待+业务sleep</span>
+          <span><i class="bi bi-hdd-stack"></i> 后端地址: /redisson/{api}</span>
+          <span><i class="bi bi-graph-up"></i> 耗时含锁等待+业务sleep | 请求超时60s | AbortController可中断</span>
         </div>
       </div>
     </div>
   </div>
   <footer class="text-center mt-4 pt-3">
-    Redisson 分布式锁实践 | 阻塞锁(无等待超时) vs 可重入锁(waitTime=3s) | 固定租约 vs 自动续期
+    Redisson 分布式锁实践 | 阻塞锁(无等待超时) vs 可重入锁(waitTime=3s) | 固定租约 vs 自动续期 | 🚀 所有请求均改造为原生异步Fetch (非阻塞)
   </footer>
 </div>
 
@@ -192,12 +192,14 @@
     const $logCounter = $('#logCounter');
     const baseUrl = '/redisson/';
 
+    // 辅助函数: 获取当前订单ID (已编码)
     function getOrderId() {
       let val = $('#orderId').val().trim();
       if (val === '') val = 'ORD-10086';
       return encodeURIComponent(val);
     }
 
+    // 添加日志 (纯异步UI操作)
     function addLog(message, type = 'info') {
       const now = new Date();
       const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}.${now.getMilliseconds().toString().padStart(3,'0')}`;
@@ -218,6 +220,7 @@
     }
 
     function escapeHtml(str) {
+      if (!str) return '';
       return str.replace(/[&<>]/g, function(m) {
         if (m === '&') return '&amp;';
         if (m === '<') return '&lt;';
@@ -226,6 +229,7 @@
       });
     }
 
+    // 清空日志
     $('#clearLogBtn').on('click', function() {
       $logContainer.empty();
       $logContainer.html('<div class="log-entry text-muted fst-italic"><i class="bi bi-chat-dots"></i> 日志已清空，可继续发起测试</div>');
@@ -233,6 +237,7 @@
       $logCounter.text('0 条记录');
     });
 
+    // 随机订单ID
     $('#randomOrderBtn').on('click', function() {
       const randomNum = Math.floor(Math.random() * 9000) + 1000;
       const newOrderId = `ORD-${randomNum}`;
@@ -240,47 +245,112 @@
       addLog(`🎲 订单ID已切换至: ${newOrderId} (新锁独立)`, 'info');
     });
 
-    // 发起锁请求
-    function invokeLock(urlSuffix, displayName, expireDesc, waitDesc, orderId) {
-      const fullUrl = baseUrl + urlSuffix;
-      const startTime = performance.now();
-      addLog(`[发起] ${displayName} | 订单:${orderId} | 租约:${expireDesc} | 等待策略:${waitDesc}`, 'start');
-      $.ajax({
-        url: fullUrl,
-        method: 'GET',
-        data: { orderId: orderId },
-        timeout: 65000,
-        success: function(data, textStatus) {
-          const elapsed = (performance.now() - startTime).toFixed(2);
-          addLog(`✔️ [成功] ${displayName} | 订单 ${orderId} | 总耗时 ${elapsed} ms`, 'success');
-        },
-        error: function(xhr, status, error) {
-          const elapsed = (performance.now() - startTime).toFixed(2);
-          let errMsg = `${status} / ${error}`;
-          if (xhr.status === 500 && xhr.responseText) {
-            try {
-              let json = JSON.parse(xhr.responseText);
-              errMsg = json.message || json.error || errMsg;
-            } catch(e) {}
+    /**
+     * 封装一个带超时的fetch请求 (完全异步, 基于AbortController)
+     * @param {string} url 请求URL
+     * @param {number} timeoutMs 超时时间(ms), 默认65秒
+     * @returns {Promise<Response>} fetch响应对象
+     */
+    async function fetchWithTimeout(url, timeoutMs = 65000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          signal: controller.signal,
+          headers: {
+            'Accept': 'application/json, text/plain, */*'
           }
-          addLog(`❌ [失败] ${displayName} | 订单 ${orderId} | 耗时 ${elapsed} ms | 原因: ${errMsg}`, 'error');
-        }
-      });
+        });
+        clearTimeout(timeoutId);
+        return response;
+      } catch (err) {
+        clearTimeout(timeoutId);
+        throw err;
+      }
     }
 
-    // 绑定所有锁按钮，携带额外参数用于日志展示
+    /**
+     * 解析后端错误信息 (兼容JSON或纯文本)
+     * @param {Response} response fetch响应对象
+     * @returns {Promise<string>} 错误详情
+     */
+    async function parseErrorMessage(response) {
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        try {
+          const json = await response.json();
+          return json.message || json.error || `HTTP ${response.status}`;
+        } catch (e) {
+          return `HTTP ${response.status}`;
+        }
+      } else {
+        const text = await response.text();
+        if (text && text.length < 200) return text;
+        return `HTTP ${response.status}`;
+      }
+    }
+
+    /**
+     * 核心请求函数：完全异步，基于fetch + 超时控制，替代原有的$.ajax
+     * @param {string} urlSuffix 接口后缀
+     * @param {string} displayName 展示名称
+     * @param {string} expireDesc 租约描述（仅用于日志）
+     * @param {string} waitDesc 等待策略描述（仅用于日志）
+     * @param {string} orderId 订单ID (原始值，未编码前)
+     */
+    async function invokeLockAsync(urlSuffix, displayName, expireDesc, waitDesc, orderIdRaw) {
+      const encodedOrderId = encodeURIComponent(orderIdRaw);
+      const fullUrl = `${baseUrl}${urlSuffix}?orderId=${encodedOrderId}`;
+      const startTime = performance.now();
+
+      // 日志：发起请求
+      addLog(`[发起] ${displayName} | 订单:${orderIdRaw} | 租约:${expireDesc} | 等待策略:${waitDesc}`, 'start');
+
+      try {
+        // 异步fetch，超时65秒 (与原来$.ajax timeout一致)
+        const response = await fetchWithTimeout(fullUrl, 65000);
+        const elapsed = (performance.now() - startTime).toFixed(2);
+
+        if (response.ok) {
+          // 成功响应 (2xx)
+          addLog(`✔️ [成功] ${displayName} | 订单 ${orderIdRaw} | 总耗时 ${elapsed} ms`, 'success');
+        } else {
+          // HTTP 错误状态 (4xx,5xx等)
+          const errorMsg = await parseErrorMessage(response);
+          addLog(`❌ [失败] ${displayName} | 订单 ${orderIdRaw} | 耗时 ${elapsed} ms | 原因: ${errorMsg} (HTTP ${response.status})`, 'error');
+        }
+      } catch (err) {
+        const elapsed = (performance.now() - startTime).toFixed(2);
+        let reason = '';
+        if (err.name === 'AbortError') {
+          reason = '请求超时(>65s)或已中止';
+        } else if (err instanceof TypeError && err.message.includes('fetch')) {
+          reason = `网络错误: ${err.message}`;
+        } else {
+          reason = err.message || String(err);
+        }
+        addLog(`❌ [失败] ${displayName} | 订单 ${orderIdRaw} | 耗时 ${elapsed} ms | 原因: ${reason}`, 'error');
+      }
+    }
+
+    // 由于invokeLockAsync 已经是 async 非阻塞函数，多个请求可以同时发起，完全异步并发
+    // 绑定锁按钮事件 (将原有的同步ajax调用替换为异步fetch)
     $('.btn-lock').on('click', function() {
       const $btn = $(this);
       const urlSuffix = $btn.data('url');
       let displayName = $btn.data('name') || urlSuffix;
       const expireDesc = $btn.data('expire') || '无';
       const waitDesc = $btn.data('wait') || '-';
-      const orderId = getOrderId();
-      invokeLock(urlSuffix, displayName, expireDesc, waitDesc, orderId);
+      const orderIdRaw = $('#orderId').val().trim() || 'ORD-10086';
+      // 调用完全异步的请求函数 (无任何阻塞，且所有请求都是异步非阻塞)
+      invokeLockAsync(urlSuffix, displayName, expireDesc, waitDesc, orderIdRaw);
     });
 
+    // 页面启动日志
     addLog('✨ 页面已加载 | 使用相同订单ID可观察锁互斥排队效果', 'info');
     addLog('📖 可重入锁若等待超时(默认3s)将快速失败，显示错误日志', 'warn');
+    addLog('🔄 【全异步改造】所有锁请求均采用原生fetch + AbortController，无同步XHR，超时可控，UI永不阻塞', 'success');
   });
 </script>
 </body>

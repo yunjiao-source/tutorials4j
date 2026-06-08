@@ -79,6 +79,8 @@ public class RedisLockService {
   private static final String LOCK_SUCCESS = "OK";
 
   private final StringRedisTemplate stringRedisTemplate;
+  private volatile FixedLease fixedLease;
+  private volatile AutoRenewal autoRenewal;
 
   /**
    * 获取固定租期模式的锁操作器。
@@ -86,7 +88,15 @@ public class RedisLockService {
    * @return {@link FixedLease} 实例
    */
   public FixedLease fixedLease() {
-    return new FixedLease(stringRedisTemplate);
+    if (fixedLease == null) {
+      synchronized (this) {
+        if (fixedLease == null) {
+          fixedLease = new FixedLease(stringRedisTemplate);
+        }
+      }
+    }
+
+    return fixedLease;
   }
 
   /**
@@ -95,7 +105,15 @@ public class RedisLockService {
    * @return {@link AutoRenewal} 实例
    */
   public AutoRenewal autoRenewal() {
-    return new AutoRenewal(stringRedisTemplate);
+    if (autoRenewal == null) {
+      synchronized (this) {
+        if (autoRenewal == null) {
+          autoRenewal = new AutoRenewal(stringRedisTemplate);
+        }
+      }
+    }
+
+    return autoRenewal;
   }
 
   /**

@@ -36,6 +36,8 @@ public class RedissonReentrantLockService {
   private static final Duration WAIT_TIME = Duration.ofSeconds(WAIT_SECONDS);
 
   private final RedissonClient redissonClient;
+  private volatile FixedLease fixedLease;
+  private volatile AutoRenewal autoRenewal;
 
   /**
    * 返回固定租约模式的操作入口。
@@ -43,7 +45,15 @@ public class RedissonReentrantLockService {
    * @return 固定租约模式的实例
    */
   public FixedLease fixedLease() {
-    return new FixedLease(redissonClient);
+    if (fixedLease == null) {
+      synchronized (this) {
+        if (fixedLease == null) {
+          fixedLease = new FixedLease(redissonClient);
+        }
+      }
+    }
+
+    return fixedLease;
   }
 
   /**
@@ -52,7 +62,15 @@ public class RedissonReentrantLockService {
    * @return 自动续期模式的实例
    */
   public AutoRenewal autoRenewal() {
-    return new AutoRenewal(redissonClient);
+    if (autoRenewal == null) {
+      synchronized (this) {
+        if (autoRenewal == null) {
+          autoRenewal = new AutoRenewal(redissonClient);
+        }
+      }
+    }
+
+    return autoRenewal;
   }
 
   /**
