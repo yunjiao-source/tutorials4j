@@ -1,6 +1,9 @@
 package tutorials4j.framework.cache.multi;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 
@@ -21,8 +24,10 @@ import org.springframework.cache.Cache;
  */
 @RequiredArgsConstructor
 public class MultiLevelCache implements Cache {
-  private final Cache local;
-  private final Cache remote;
+  protected final ConcurrentMap<Object, ReentrantLock> locks = new ConcurrentHashMap<>();
+
+  protected final Cache local;
+  protected final Cache remote;
 
   /**
    * 返回缓存名称，委托给本地缓存。
@@ -105,15 +110,43 @@ public class MultiLevelCache implements Cache {
    */
   @Override
   public <T> T get(Object key, Callable<T> valueLoader) {
-    T value = local.get(key, valueLoader);
-    if (value != null) {
-      return value;
+    // 1. 查本地
+    Cache.ValueWrapper localWrapper = local.get(key);
+    if (localWrapper != null) {
+      return (T) localWrapper.get();
     }
-    value = remote.get(key, valueLoader);
-    if (value != null) {
+
+    // 2. 查远程
+    Cache.ValueWrapper remoteWrapper = remote.get(key);
+    if (remoteWrapper != null) {
+      Object value = remoteWrapper.get();
       local.put(key, value);
+      return (T) value;
     }
-    return value;
+
+    ReentrantLock lock = locks.computeIfAbsent(key, k -> new ReentrantLock());
+    lock.lock();
+    try {
+      // 双重检查
+      localWrapper = local.get(key);
+      if (localWrapper != null) {
+        return (T) localWrapper.get();
+      }
+      remoteWrapper = remote.get(key);
+      if (remoteWrapper != null) {
+        Object value = remoteWrapper.get();
+        local.put(key, value);
+        return (T) value;
+      }
+
+      // 真正加载
+      T value = remote.get(key, valueLoader);
+      local.put(key, value);
+      return value;
+    } finally {
+      lock.unlock();
+      locks.remove(key);
+    }
   }
 
   /**
