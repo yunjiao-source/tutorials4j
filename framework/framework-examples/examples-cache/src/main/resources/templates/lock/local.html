@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>本地锁演示 - 无限阻塞 vs 超时等待（基于 Striped）</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    body { background-color: #f8f9fc; font-family: 'Segoe UI', Roboto; }
+    .header { background: linear-gradient(135deg, #1e2a3e, #0f1a24); color: white; padding: 1.5rem 0; margin-bottom: 2rem; }
+    .card { border: none; border-radius: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+    .card-header { background-color: rgba(0,0,0,0.02); font-weight: 600; font-size: 1.2rem; padding: 1rem 1.5rem; }
+    .log-area { background-color: #1e2a36; color: #eef4ff; font-family: monospace; border-radius: 0.75rem; padding: 1rem; max-height: 380px; overflow-y: auto; font-size: 0.8rem; }
+    .log-item { border-bottom: 1px solid #2d3e4e; padding: 0.5rem 0.2rem; }
+    .log-time { color: #7aa2f7; margin-right: 12px; }
+    .log-success { color: #9ece6a; }
+    .log-error { color: #f7768e; }
+    .btn-demo { padding: 0.6rem 1.5rem; border-radius: 2rem; font-weight: 500; }
+    .btn-danger { background-color: #dc3545; border-color: #dc3545; }
+    .btn-danger:hover { background-color: #bb2d3b; }
+    .order-input { max-width: 120px; display: inline-block; margin-left: 8px; }
+    .badge-lock { font-size: 0.8rem; }
+    footer { text-align: center; margin-top: 2.5rem; color: #6c757d; padding: 1rem; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <h1><i class="bi bi-lock-fill"></i> 本地锁演示 · 真实行为还原</h1>
+    <p class="lead">基于 <code>@LocalLockable</code> + <code>Striped</code> 锁池 | <strong>无限阻塞</strong> vs <strong>超时等待</strong></p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row g-4">
+    <!-- 左侧：waitTime = -1 → 无限阻塞（lock.lock()） -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between">
+          <span>🔒 无限阻塞模式</span>
+          <span class="badge bg-danger badge-lock">waitTime = -1 (lock.lock)</span>
+        </div>
+        <div class="card-body">
+          <p><code>@LocalLockable(prefix = "order:", key = "#root.args[0]", waitTime = -1)</code></p>
+          <div class="alert alert-danger">
+            ⚠️ <strong>真实行为警告</strong>：<code>waitTime ≤ 0</code> 时，切面调用 <code>localLockService.doInLock(key, () -> joinPoint.proceed())</code><br>
+            底层使用 <code>lock.lock()</code> → <strong>线程会无限阻塞直到获得锁</strong>，不会超时，不会快速失败。<br>
+            如果第一个请求耗时较长（如睡眠9秒），后续请求将一直排队等待，可能导致请求堆积。
+          </div>
+          <p><strong>当前后端固定订单号 "1"</strong>，所有请求竞争同一把锁 <code>order:1</code>。</p>
+          <div class="d-flex align-items-center gap-3 flex-wrap mt-3">
+            <input type="text" id="nonWaitOrderId" class="form-control order-input" value="1" placeholder="订单号(仅示意)" disabled>
+            <button id="btnNonWait" class="btn btn-danger btn-demo">⚠️ 触发无限阻塞请求</button>
+            <button id="clearNonWaitLog" class="btn btn-outline-secondary btn-sm">清空日志</button>
+          </div>
+          <h6 class="fw-bold mt-4">调用记录</h6>
+          <div id="nonWaitLogContainer" class="log-area">
+            <div class="log-item text-muted">✨ 暂无请求</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧：waitTime = 3000 → 超时等待（tryLock） -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between">
+          <span>⏳ 超时等待模式</span>
+          <span class="badge bg-primary badge-lock">waitTime = 3000 ms (tryLock)</span>
+        </div>
+        <div class="card-body">
+          <p><code>@LocalLockable(prefix = "order:", key = "#root.args[0]", waitTime = 3000)</code></p>
+          <div class="alert alert-info">
+            ✅ <strong>真实行为</strong>：切面调用 <code>localLockService.doInLock(key, Duration.of(3000, MILLIS), () -> joinPoint.proceed())</code><br>
+            底层使用 <code>lock.tryLock(3000, MILLISECONDS)</code> → 最多等待3秒，超时抛出 <code>LockCreateException</code>。
+          </div>
+          <p><strong>支持动态订单号</strong>，不同订单号锁隔离，相同订单号竞争锁并等待超时。</p>
+          <div class="d-flex align-items-center gap-3 flex-wrap mt-3">
+            <input type="text" id="waitOrderId" class="form-control order-input" value="2" placeholder="订单号">
+            <button id="btnWaitTime" class="btn btn-primary btn-demo">🕒 触发超时等待请求</button>
+            <button id="clearWaitLog" class="btn btn-outline-secondary btn-sm">清空日志</button>
+          </div>
+          <h6 class="fw-bold mt-4">调用记录</h6>
+          <div id="waitLogContainer" class="log-area">
+            <div class="log-item text-muted">✨ 暂无请求</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card bg-light">
+        <div class="card-body">
+          <h6><i class="bi bi-info-circle-fill"></i> 测试指南（根据真实锁行为）</h6>
+          <ul class="small mb-0">
+            <li><strong>无限阻塞模式（左）</strong>：快速连续点击按钮，第一个请求会获得锁并随机睡眠 0~9 秒，后续请求会<strong>无限阻塞排队</strong>，直到前一个释放锁。您会看到请求耗时逐次累加（比如第一个耗时3秒，第二个耗时3+5秒...），<strong>不会超时失败</strong>。刷新页面可以中断请求（演示风险）。</li>
+            <li><strong>超时等待模式（右）</strong>：对<strong>相同订单号</strong>连续点击，第一个请求睡眠 0~9 秒，后续请求最多等待3秒。若3秒内锁未释放则请求失败（HTTP 500，日志显示锁创建异常）。不同订单号之间锁不互斥，可并行执行。</li>
+            <li>业务方法内部 <code>ThreadLocalRandom.current().nextInt(10)</code> 随机睡眠秒数，模拟耗时操作。</li>
+            <li>日志显示每个请求的端到端耗时（包含锁等待+业务睡眠+网络）。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>基于 Guava Striped + AOP | 切面根据 waitTime 正负决定使用 tryLock(超时) 或 lock(无限阻塞)</footer>
+
+<script th:inline="javascript">
+  var contextPath = /*[[@{/}]]*/ '';
+  var baseUrl = contextPath.endsWith('/') ? contextPath.slice(0, -1) : contextPath;
+  var urlNonWait = baseUrl + '/local/non-wait-time';
+  var urlWait = baseUrl + '/local/wait-time';
+
+  function addLog(containerId, message, isError, durationMs) {
+    var $container = $('#' + containerId);
+    if ($container.children().length === 1 && $container.find('.text-muted').length) $container.empty();
+    var now = new Date();
+    var timeStr = now.toLocaleTimeString('zh-CN', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3,'0');
+    var icon = isError ? '❌' : '✅';
+    var statusClass = isError ? 'log-error' : 'log-success';
+    var durationHtml = durationMs !== undefined ? `<span class="badge bg-dark ms-2">⏱️ ${durationMs}ms</span>` : '';
+    var logItem = $(`<div class="log-item"><span class="log-time">[${timeStr}]</span> <span class="${statusClass}">${icon} ${message}</span>${durationHtml}</div>`);
+    $container.prepend(logItem);
+    if ($container.children().length > 50) $container.children().last().remove();
+  }
+
+  function clearLog(containerId) {
+    $('#' + containerId).empty().html('<div class="log-item text-muted">✨ 日志已清空</div>');
+  }
+
+  function performRequest(url, orderId, logContainerId, modeName, extra) {
+    if (!orderId.trim()) {
+      addLog(logContainerId, modeName + ' 订单号不能为空', true);
+      return;
+    }
+    var start = performance.now();
+    var tempId = 'temp_' + Date.now() + '_' + Math.random();
+    var $cont = $('#' + logContainerId);
+    if ($cont.children().length === 1 && $cont.find('.text-muted').length) $cont.empty();
+    var now = new Date();
+    var prefix = now.toLocaleTimeString('zh-CN', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3,'0');
+    $cont.prepend(`<div class="log-item text-info" id="${tempId}"><span class="log-time">[${prefix}]</span> ⏳ 请求中... ${modeName} ${extra}</div>`);
+
+    $.ajax({
+      url: url,
+      method: 'GET',
+      data: { orderId: orderId },
+      timeout: 60000,  // 60秒超时，避免无限阻塞导致页面长时间等待
+      success: function(data, status, xhr) {
+        var elapsed = (performance.now() - start).toFixed(0);
+        $('#' + tempId).remove();
+        addLog(logContainerId, `${modeName} 成功 → ${extra} (HTTP ${xhr.status})`, false, elapsed);
+      },
+      error: function(xhr, status, error) {
+        var elapsed = (performance.now() - start).toFixed(0);
+        $('#' + tempId).remove();
+        var errMsg = '';
+        if (xhr.responseText && xhr.responseText.includes('LockCreateException')) {
+          errMsg = '锁获取超时 (等待3秒未获得锁)';
+        } else if (xhr.responseText) {
+          errMsg = '失败: ' + (xhr.responseText.length > 100 ? xhr.responseText.substring(0,100)+'…' : xhr.responseText);
+        } else if (status === 'timeout') {
+          errMsg = '请求超时 (可能无限阻塞)';
+        } else {
+          errMsg = `HTTP ${xhr.status} ${error}`;
+        }
+        addLog(logContainerId, `${modeName} 失败 → ${errMsg}`, true, elapsed);
+      }
+    });
+  }
+
+  $(function() {
+    $('#btnNonWait').click(function() {
+      var orderId = $('#nonWaitOrderId').val() || '1';
+      performRequest(urlNonWait, orderId, 'nonWaitLogContainer', '🔒无限阻塞[锁Key:order:1]', `订单号=${orderId} (后端固定为1) | 排队等待直到获得锁`);
+    });
+    $('#clearNonWaitLog').click(function() { clearLog('nonWaitLogContainer'); });
+
+    $('#btnWaitTime').click(function() {
+      var orderId = $('#waitOrderId').val().trim();
+      if (!orderId) { addLog('waitLogContainer', '⏳等待锁 请输入订单号', true); return; }
+      performRequest(urlWait, orderId, 'waitLogContainer', '⏳超时等待锁', `订单号=${orderId} | 锁Key=order:${orderId} | 最多等待3秒`);
+    });
+    $('#clearWaitLog').click(function() { clearLog('waitLogContainer'); });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
