@@ -64,7 +64,7 @@ public class RedisLockableAspect {
 
     long expireTime = redisLockable.expireTime();
 
-    if (expireTime > 0) {
+    if (expireTime >= 0) {
       return redisLockService
           .fixedLease()
           .doInLock(

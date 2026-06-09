@@ -55,10 +55,6 @@ public @interface LocalLockable {
   /**
    * 尝试获取锁的最大等待时间（数值部分）。
    *
-   * <p>如果等待时间大于 0，则使用 {@link java.util.concurrent.locks.Lock#tryLock(long, TimeUnit)} 尝试获取锁；
-   * 如果在等待时间内未能获取到锁，则会抛出 {@link tutorials4j.framework.cache.core.exception.LockCreateException}。
-   * 如果等待时间小于等于 0，则使用无超时的阻塞式 {@link java.util.concurrent.locks.Lock#lock()} 获取锁。
-   *
    * @return 等待时间数值，默认 3000 毫秒
    * @see #timeUnit()
    */

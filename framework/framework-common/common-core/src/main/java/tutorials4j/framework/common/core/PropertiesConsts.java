@@ -24,6 +24,8 @@ public interface PropertiesConsts {
   /** cache */
   String PROPERTY_PREFIX_CACHE = PROPERTY_PREFIX_TUTORIALS4J + ".cache";
 
+  String PROPERTY_PREFIX_CACHE_LOCK = PROPERTY_PREFIX_TUTORIALS4J + ".lock";
+
   String PROPERTY_PREFIX_CACHE_NAMED = PROPERTY_PREFIX_CACHE + ".named";
 
   /** crypto */

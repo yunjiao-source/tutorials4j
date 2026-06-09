@@ -20,4 +20,9 @@ public class PageController {
   public String redis() {
     return "lock/redis";
   }
+
+  @GetMapping("/local")
+  public String local() {
+    return "lock/local";
+  }
 }

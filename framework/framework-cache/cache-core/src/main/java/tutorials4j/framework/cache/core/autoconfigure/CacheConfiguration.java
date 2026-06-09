@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.cache.core.lock.LocalLockService;
 import tutorials4j.framework.cache.core.lock.LocalLockableAspect;
 import tutorials4j.framework.cache.core.properties.CacheProperties;
+import tutorials4j.framework.cache.core.properties.LockCacheProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.core.support.CacheManagerCreator;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory;
@@ -28,6 +29,7 @@ import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEval
 @EnableConfigurationProperties({
   CacheProperties.class,
   NamedCacheProperties.class,
+  LockCacheProperties.class
 })
 public class CacheConfiguration {
   @PostConstruct
@@ -48,9 +50,9 @@ public class CacheConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  LocalLockService localLockService() {
+  LocalLockService localLockService(LockCacheProperties properties) {
     log.debug("[CACHE-CORE] Local Lock Service");
-    return new LocalLockService();
+    return new LocalLockService(properties.getLocal());
   }
 
   @Bean

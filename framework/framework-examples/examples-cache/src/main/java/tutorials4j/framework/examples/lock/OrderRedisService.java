@@ -32,7 +32,7 @@ public class OrderRedisService {
 
   private int sleep() {
     try {
-      int seconds = ThreadLocalRandom.current().nextInt(20);
+      int seconds = ThreadLocalRandom.current().nextInt(10);
       TimeUnit.SECONDS.sleep(seconds);
       return seconds;
     } catch (InterruptedException e) {

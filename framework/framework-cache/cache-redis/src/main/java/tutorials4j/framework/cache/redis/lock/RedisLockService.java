@@ -1,19 +1,26 @@
 package tutorials4j.framework.cache.redis.lock;
 
 import cn.hutool.core.util.IdUtil;
+import jakarta.annotation.PreDestroy;
 import java.time.Duration;
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.util.Assert;
 import tutorials4j.framework.cache.core.exception.LockCreateException;
+import tutorials4j.framework.cache.core.properties.RedisLockOptions;
 import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
+import tutorials4j.framework.common.core.ExecutionOption;
+import tutorials4j.framework.common.core.NamedThreadFactory;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
+import tutorials4j.framework.common.core.util.CloseUtils;
 
 /**
  * Redis 分布式锁核心服务类。
@@ -45,7 +52,7 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class RedisLockService implements SmartInitializingSingleton {
+public class RedisLockService {
   /** 加锁 Lua 脚本：SET key value NX PX milliseconds */
   private static final RedisScript<String> SCRIPT_LOCK =
       new DefaultRedisScript<>(
@@ -81,6 +88,7 @@ public class RedisLockService implements SmartInitializingSingleton {
   private static final String LOCK_SUCCESS = "OK";
 
   private final RedisTemplateDecorator redisTemplateDecorator;
+  private final RedisLockOptions redisLockOptions;
   private volatile FixedLease fixedLease;
   private volatile AutoRenewal autoRenewal;
 
@@ -90,6 +98,13 @@ public class RedisLockService implements SmartInitializingSingleton {
    * @return {@link FixedLease} 实例
    */
   public FixedLease fixedLease() {
+    if (fixedLease == null) {
+      synchronized (this) {
+        if (fixedLease == null) {
+          fixedLease = new FixedLease(redisTemplateDecorator);
+        }
+      }
+    }
     return fixedLease;
   }
 
@@ -99,6 +114,14 @@ public class RedisLockService implements SmartInitializingSingleton {
    * @return {@link AutoRenewal} 实例
    */
   public AutoRenewal autoRenewal() {
+    if (autoRenewal == null) {
+      synchronized (this) {
+        if (autoRenewal == null) {
+          autoRenewal = new AutoRenewal(redisTemplateDecorator, redisLockOptions);
+          autoRenewal.initScheduler();
+        }
+      }
+    }
     return autoRenewal;
   }
 
@@ -122,13 +145,12 @@ public class RedisLockService implements SmartInitializingSingleton {
     private String lock(String lockKey, Duration expireTime) {
       String lockId = IdUtil.fastSimpleUUID();
 
-      String newKey = redisTemplateDecorator.wrapKey(lockKey);
       String value =
           redisTemplateDecorator
               .getStringRedisTemplate()
               .execute(
                   SCRIPT_LOCK,
-                  Collections.singletonList(newKey),
+                  Collections.singletonList(lockKey),
                   lockId,
                   String.valueOf(expireTime.toMillis()));
 
@@ -197,7 +219,12 @@ public class RedisLockService implements SmartInitializingSingleton {
   @RequiredArgsConstructor
   public class AutoRenewal {
     private static final Duration DEFAULT_EXPIRE_TIME = Duration.ofSeconds(30);
+
     private final RedisTemplateDecorator redisTemplateDecorator;
+    private final RedisLockOptions redisLockOptions;
+
+    private ScheduledExecutorService scheduler;
+    private Map<String, ScheduledFuture<?>> renewalTasks;
 
     /**
      * 尝试获取锁（自动续期模式）。
@@ -208,18 +235,17 @@ public class RedisLockService implements SmartInitializingSingleton {
     private String lock(String lockKey) {
       String lockId = IdUtil.fastSimpleUUID();
 
-      String newKey = redisTemplateDecorator.wrapKey(lockKey);
       String value =
           redisTemplateDecorator
               .getStringRedisTemplate()
               .execute(
                   SCRIPT_LOCK,
-                  Collections.singletonList(newKey),
+                  Collections.singletonList(lockKey),
                   lockId,
                   String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
 
       if (LOCK_SUCCESS.equals(value)) {
-        renewalLock(newKey, lockId);
+        renewalLockTask(lockKey, lockId);
         return lockId;
       }
 
@@ -232,26 +258,45 @@ public class RedisLockService implements SmartInitializingSingleton {
      * @param lockKey 锁的 key
      * @param lockId 锁的唯一标识
      */
-    private void renewalLock(String lockKey, String lockId) {
-      new Timer()
-          .schedule(
-              new TimerTask() {
-                @Override
-                public void run() {
-                  String newKey = redisTemplateDecorator.wrapKey(lockKey);
-                  if (Boolean.TRUE.equals(
-                      redisTemplateDecorator
-                          .getStringRedisTemplate()
-                          .execute(
-                              SCRIPT_RENEWAL,
-                              Collections.singletonList(newKey),
-                              lockId,
-                              String.valueOf(DEFAULT_EXPIRE_TIME.toMillis())))) {
-                    renewalLock(newKey, lockId);
-                  }
+    private void renewalLockTask(String lockKey, String lockId) {
+      ScheduledFuture<?> future =
+          scheduler.scheduleAtFixedRate(
+              () -> {
+                Boolean renewed =
+                    redisTemplateDecorator
+                        .getStringRedisTemplate()
+                        .execute(
+                            SCRIPT_RENEWAL,
+                            Collections.singletonList(lockKey),
+                            lockId,
+                            String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
+                if (!Boolean.TRUE.equals(renewed)) {
+                  // 续期失败（锁已丢失），取消任务
+                  cancelLockTask(lockKey);
                 }
               },
-              DEFAULT_EXPIRE_TIME.toMillis() / 3);
+              DEFAULT_EXPIRE_TIME.toMillis() / 3,
+              DEFAULT_EXPIRE_TIME.toMillis() / 3,
+              TimeUnit.MILLISECONDS);
+      renewalTasks.put(lockKey, future);
+    }
+
+    public void initScheduler() {
+      ExecutionOption option = redisLockOptions.getAutoRenewal();
+      NamedThreadFactory threadFactory =
+          new NamedThreadFactory("redis-auto-renew-", option.isDaemon());
+
+      ScheduledThreadPoolExecutor executor =
+          new ScheduledThreadPoolExecutor(
+              option.getCorePoolSize(), threadFactory, option.getRejectedExecutionHandler());
+
+      if (option.isAllowCoreThreadTimeOut()) {
+        executor.setKeepAliveTime(option.getKeepAliveSeconds(), TimeUnit.SECONDS);
+        executor.allowCoreThreadTimeOut(true);
+      }
+
+      renewalTasks = new ConcurrentHashMap<>();
+      scheduler = executor;
     }
 
     /**
@@ -271,6 +316,7 @@ public class RedisLockService implements SmartInitializingSingleton {
         // 执行业务逻辑
         task.run();
       } finally {
+        cancelLockTask(lockKey);
         unlock(lockKey, lockId);
       }
     }
@@ -295,8 +341,19 @@ public class RedisLockService implements SmartInitializingSingleton {
         // 执行业务逻辑
         return task.call();
       } finally {
+        cancelLockTask(lockKey);
         unlock(lockKey, lockId);
       }
+    }
+
+    public void destory() {
+      log.debug("Redis分布式锁自动续期定时任务执行器关闭");
+      CloseUtils.close(scheduler, redisLockOptions.getAutoRenewal());
+    }
+
+    private void cancelLockTask(String lockKey) {
+      ScheduledFuture<?> task = renewalTasks.remove(lockKey);
+      if (task != null) task.cancel(true);
     }
   }
 
@@ -311,35 +368,19 @@ public class RedisLockService implements SmartInitializingSingleton {
       return;
     }
 
-    String newKey = redisTemplateDecorator.wrapKey(lockKey);
     String value =
         redisTemplateDecorator
             .getStringRedisTemplate()
-            .execute(SCRIPT_UNLOCK, Collections.singletonList(newKey), lockId);
+            .execute(SCRIPT_UNLOCK, Collections.singletonList(lockKey), lockId);
     if (!Boolean.parseBoolean(value)) {
-      log.warn("[CACHE-REDIS] 释放分布式锁失败，可能因为已过期，locKey={}", lockKey);
+      log.debug("[CACHE-REDIS] 释放分布式锁不存在，可能因为已过期，locKey={}", lockKey);
     }
   }
 
-  @Override
-  public void afterSingletonsInstantiated() {
-    if (fixedLease == null) {
-      synchronized (this) {
-        if (fixedLease == null) {
-          fixedLease = new FixedLease(redisTemplateDecorator);
-        }
-      }
+  @PreDestroy
+  public void preDestory() {
+    if (autoRenewal != null) {
+      autoRenewal.destory();
     }
-
-    if (autoRenewal == null) {
-      synchronized (this) {
-        if (autoRenewal == null) {
-          autoRenewal = new AutoRenewal(redisTemplateDecorator);
-        }
-      }
-    }
-
-    Assert.notNull(fixedLease, "fixedLease initialization failed");
-    Assert.notNull(autoRenewal, "autoRenewal initialization failed");
   }
 }

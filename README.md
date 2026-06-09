@@ -46,3 +46,6 @@ Java 教程
 
 > Redis 锁示例
 ![Redis 锁示例](docs/images/lock-redis.jpg)
+
+> 本地（JVM） 锁
+![本地（JVM） 锁](docs/images/lock-local.jpg)

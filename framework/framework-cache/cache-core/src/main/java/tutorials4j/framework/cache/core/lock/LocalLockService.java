@@ -5,8 +5,12 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 import tutorials4j.framework.cache.core.exception.LockCreateException;
 import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.cache.core.properties.LocalLockOptions;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
 
 /**
@@ -28,8 +32,10 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
  * @see Striped
  * @see LocalLockableAspect
  */
-public class LocalLockService {
-  private final Striped<Lock> stripedLock = Striped.lazyWeakLock(1024);
+@RequiredArgsConstructor
+public class LocalLockService implements InitializingBean {
+  private final LocalLockOptions options;
+  private volatile Striped<Lock> stripedLock;
 
   /**
    * 根据锁 key 获取对应的 {@link Lock} 实例。
@@ -37,7 +43,7 @@ public class LocalLockService {
    * @param lockKey 锁标识 key
    * @return 与该 key 关联的锁实例
    */
-  private Lock lock(String lockKey) {
+  private Lock acquireLock(String lockKey) {
     return stripedLock.get(lockKey);
   }
 
@@ -51,7 +57,7 @@ public class LocalLockService {
    * @throws LockException 如果当前线程在等待时被中断
    */
   public void doInLock(String lockKey, Duration waitTime, Runnable task) {
-    Lock lock = lock(lockKey);
+    Lock lock = acquireLock(lockKey);
     try {
       if (lock.tryLock(waitTime.toMillis(), TimeUnit.MILLISECONDS)) {
         try {
@@ -75,7 +81,7 @@ public class LocalLockService {
    * @param task 需要同步执行的任务
    */
   public void doInLock(String lockKey, Runnable task) {
-    Lock lock = lock(lockKey);
+    Lock lock = acquireLock(lockKey);
 
     lock.lock();
     try {
@@ -99,7 +105,7 @@ public class LocalLockService {
    */
   public <T> T doInLock(String lockKey, Duration waitTime, ThrowingCallable<T> task)
       throws Throwable {
-    Lock lock = lock(lockKey);
+    Lock lock = acquireLock(lockKey);
     try {
       if (lock.tryLock(waitTime.toMillis(), TimeUnit.MILLISECONDS)) {
         try {
@@ -124,14 +130,26 @@ public class LocalLockService {
    * @param <T> 返回值类型
    * @return 任务的执行结果
    */
-  public <T> T doInLock(String lockKey, Supplier<T> task) {
-    Lock lock = lock(lockKey);
-
+  public <T> T doInLock(String lockKey, ThrowingCallable<T> task) throws Throwable {
+    Lock lock = acquireLock(lockKey);
     lock.lock();
     try {
-      return task.get();
+      return task.call();
     } finally {
       lock.unlock();
     }
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    if (stripedLock == null) {
+      synchronized (this) {
+        if (stripedLock == null) {
+          stripedLock = Striped.lazyWeakLock(options.getStripes());
+        }
+      }
+    }
+
+    Assert.notNull(stripedLock, "stripedLock initialization failed");
   }
 }

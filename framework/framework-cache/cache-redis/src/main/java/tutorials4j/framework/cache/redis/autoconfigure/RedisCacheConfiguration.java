@@ -4,10 +4,8 @@ import jakarta.annotation.PostConstruct;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +13,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import tutorials4j.framework.cache.core.properties.LockCacheProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
@@ -98,9 +97,10 @@ public class RedisCacheConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  RedisLockService redisLockService(RedisTemplateDecorator redisTemplateDecorator) {
+  RedisLockService redisLockService(
+      RedisTemplateDecorator redisTemplateDecorator, LockCacheProperties properties) {
     log.debug("[CACHE-REDIS] Redis Lock Service");
-    return new RedisLockService(redisTemplateDecorator);
+    return new RedisLockService(redisTemplateDecorator, properties.getReids());
   }
 
   @Bean
@@ -110,24 +110,5 @@ public class RedisCacheConfiguration {
       RedisLockService redisLockService) {
     log.debug("[CACHE-REDIS] Redis Lockable Aspect");
     return new RedisLockableAspect(spelMethodBasedExpressionEvaluator, redisLockService);
-  }
-
-  @ConditionalOnBean({StringRedisTemplate.class, RedisTemplate.class})
-  @Configuration(proxyBeanMethods = false)
-  public static class ConstructRedisCacheConfiguration {
-    @Autowired private StringRedisTemplate stringRedisTemplate;
-    @Autowired private RedisTemplate<Object, Object> redisTemplate;
-
-    @PostConstruct
-    public void postConstruct() {
-      log.debug("[CACHE-REDIS] String Redis Template");
-      TenantStringRedisSerializer serializer = new TenantStringRedisSerializer();
-      stringRedisTemplate.setKeySerializer(serializer);
-      stringRedisTemplate.setHashKeySerializer(serializer);
-
-      log.debug("[CACHE-REDIS] Redis Template");
-      redisTemplate.setKeySerializer(serializer);
-      redisTemplate.setHashKeySerializer(serializer);
-    }
   }
 }

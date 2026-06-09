@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -57,21 +58,13 @@ public class LocalLockableAspect {
 
     long waitTime = localLockable.waitTime();
 
-    if (waitTime > 0) {
+    if (waitTime >= 0) {
       return localLockService.doInLock(
           key,
           Duration.of(waitTime, localLockable.timeUnit().toChronoUnit()),
           () -> joinPoint.proceed());
     } else {
-      return localLockService.doInLock(
-          key,
-          () -> {
-            try {
-              return joinPoint.proceed();
-            } catch (Throwable e) {
-              throw new RuntimeException(e);
-            }
-          });
+      return localLockService.doInLock(key, () -> joinPoint.proceed());
     }
   }
 
@@ -83,6 +76,10 @@ public class LocalLockableAspect {
    * @return 完整的锁 key
    */
   private String generateKey(LocalLockable redissonBlockLockable, String argValues) {
-    return redissonBlockLockable.prefix() + argValues;
+    String key = redissonBlockLockable.prefix() + argValues;
+    if (StringUtils.isBlank(key)) {
+      throw new IllegalStateException("锁键是空的");
+    }
+    return key;
   }
 }
