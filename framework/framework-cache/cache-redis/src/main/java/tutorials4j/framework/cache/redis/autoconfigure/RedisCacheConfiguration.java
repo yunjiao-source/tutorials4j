@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -17,14 +16,14 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
-import tutorials4j.framework.cache.redis.PrefixKeyStringRedisSerializer;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
+import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
+import tutorials4j.framework.cache.redis.TenantStringRedisSerializer;
 import tutorials4j.framework.cache.redis.customizer.NamedCacheManagerCustomizer;
 import tutorials4j.framework.cache.redis.customizer.NamedRedisCacheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.customizer.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.lock.RedisLockService;
 import tutorials4j.framework.cache.redis.lock.RedisLockableAspect;
-import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
 import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
@@ -80,19 +79,28 @@ public class RedisCacheConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  RedisBitmapUtils redisBitmapUtils(
-      @Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
-    log.debug("[CACHE-REDIS] Redis Bitmap Utils");
-    RedisBitmapUtils.instance.setStringRedisTemplate(stringRedisTemplate);
-    return RedisBitmapUtils.instance;
+  RedisTemplateDecorator redisTemplateDecorator(
+      StringRedisTemplate stringRedisTemplate, RedisTemplate<Object, Object> redisTemplate) {
+    log.debug("[CACHE-REDIS] Redis Template Decorator");
+
+    // 基于租户key的序列化器
+    TenantStringRedisSerializer serializer = new TenantStringRedisSerializer();
+    stringRedisTemplate.setKeySerializer(serializer);
+    stringRedisTemplate.setHashKeySerializer(serializer);
+
+    redisTemplate.setKeySerializer(serializer);
+    redisTemplate.setHashKeySerializer(serializer);
+
+    RedisTemplateDecorator.instance.setRedisTemplate(redisTemplate);
+    RedisTemplateDecorator.instance.setStringRedisTemplate(stringRedisTemplate);
+    return RedisTemplateDecorator.instance;
   }
 
   @Bean
   @ConditionalOnMissingBean
-  RedisLockService redisLockService(
-      @Qualifier(value = "stringRedisTemplate") StringRedisTemplate stringRedisTemplate) {
+  RedisLockService redisLockService(RedisTemplateDecorator redisTemplateDecorator) {
     log.debug("[CACHE-REDIS] Redis Lock Service");
-    return new RedisLockService(stringRedisTemplate);
+    return new RedisLockService(redisTemplateDecorator);
   }
 
   @Bean
@@ -113,7 +121,7 @@ public class RedisCacheConfiguration {
     @PostConstruct
     public void postConstruct() {
       log.debug("[CACHE-REDIS] String Redis Template");
-      PrefixKeyStringRedisSerializer serializer = new PrefixKeyStringRedisSerializer();
+      TenantStringRedisSerializer serializer = new TenantStringRedisSerializer();
       stringRedisTemplate.setKeySerializer(serializer);
       stringRedisTemplate.setHashKeySerializer(serializer);
 

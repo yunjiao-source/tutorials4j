@@ -9,16 +9,13 @@ import lombok.Setter;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 
 /**
  * Redis Bitmap 操作工具类。
  *
  * <p>提供基于 Redis 的 bitmap 常用操作，包括设置/获取位值、统计位数为1的个数、以及位运算（AND/OR/XOR/NOT）。 支持通过字符串参数自动计算哈希偏移量（使用
  * Murmur3_128 哈希算法，结果取绝对值），也支持直接指定偏移量。
- *
- * <p><b>注意：</b>该类中的 {@link #stringRedisTemplate} 通过 Spring 的 {@literal @Autowired} 注入静态字段， 使用时需确保
- * Spring 容器正确管理该 Bean，否则会引发空指针异常。
  *
  * @author Yun Jiao
  * @see StringRedisTemplate
@@ -28,12 +25,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Getter
 public class RedisBitmapUtils {
   public static final RedisBitmapUtils instance = new RedisBitmapUtils();
-
-  /**
-   * Redis StringRedisTemplate 实例，用于执行 bitmap 操作。 该字段由 Spring 自动注入，使用
-   * {@code @Qualifier("stringRedisTemplate")} 指定注入的 Bean。
-   */
-  private StringRedisTemplate stringRedisTemplate;
 
   /**
    * 对给定字符串进行 Murmur3_128 哈希计算，并返回其绝对值的整型值（作为 bitmap 偏移量）。
@@ -57,7 +48,9 @@ public class RedisBitmapUtils {
    * @return 该偏移量位置原来的位值（true 表示原为 1，false 表示原为 0）；若操作失败返回 null
    */
   public Boolean setBit(String key, String param, boolean value) {
-    return stringRedisTemplate.opsForValue().setBit(key, hash(param), value);
+    return RedisTemplateDecorator.stringRedisTemplate()
+        .opsForValue()
+        .setBit(key, hash(param), value);
   }
 
   /**
@@ -68,7 +61,8 @@ public class RedisBitmapUtils {
    * @return 该偏移量的位值，true 表示 1，false 表示 0；如果键不存在，也返回 false
    */
   public boolean getBit(String key, String param) {
-    return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(key, hash(param)));
+    return Boolean.TRUE.equals(
+        RedisTemplateDecorator.stringRedisTemplate().opsForValue().getBit(key, hash(param)));
   }
 
   /**
@@ -80,7 +74,7 @@ public class RedisBitmapUtils {
    * @return 该偏移量位置原来的位值（true 表示原为 1，false 表示原为 0）；若操作失败返回 null
    */
   public Boolean setBit(String key, long offset, boolean value) {
-    return stringRedisTemplate.opsForValue().setBit(key, offset, value);
+    return RedisTemplateDecorator.stringRedisTemplate().opsForValue().setBit(key, offset, value);
   }
 
   /**
@@ -91,7 +85,7 @@ public class RedisBitmapUtils {
    * @return 该偏移量的位值，true 表示 1，false 表示 0；如果键不存在，也返回 false
    */
   public Boolean getBit(String key, long offset) {
-    return stringRedisTemplate.opsForValue().getBit(key, offset);
+    return RedisTemplateDecorator.stringRedisTemplate().opsForValue().getBit(key, offset);
   }
 
   /**
@@ -101,9 +95,9 @@ public class RedisBitmapUtils {
    * @return 位值为 1 的数量
    */
   public Long bitCount(String key) {
-    return stringRedisTemplate.execute(
-        (RedisCallback<Long>)
-            connection -> connection.stringCommands().bitCount(serializeKey(key)));
+    byte[] newKey = RedisTemplateDecorator.instance.serializeKey(key);
+    return RedisTemplateDecorator.stringRedisTemplate()
+        .execute((RedisCallback<Long>) connection -> connection.stringCommands().bitCount(newKey));
   }
 
   /**
@@ -117,9 +111,11 @@ public class RedisBitmapUtils {
    * @return 指定字节范围内位值为 1 的数量
    */
   public Long bitCount(String key, int start, int end) {
-    return stringRedisTemplate.execute(
-        (RedisCallback<Long>)
-            connection -> connection.stringCommands().bitCount(serializeKey(key), start, end));
+    byte[] newKey = RedisTemplateDecorator.instance.serializeKey(key);
+    return RedisTemplateDecorator.stringRedisTemplate()
+        .execute(
+            (RedisCallback<Long>)
+                connection -> connection.stringCommands().bitCount(newKey, start, end));
   }
 
   /**
@@ -137,11 +133,14 @@ public class RedisBitmapUtils {
   public Long bitOp(RedisStringCommands.BitOperation op, String saveKey, String... destKey) {
     byte[][] bytes = new byte[destKey.length][];
     for (int i = 0; i < destKey.length; i++) {
-      bytes[i] = serializeKey(destKey[i]);
+      bytes[i] = RedisTemplateDecorator.instance.serializeKey(destKey[i]);
     }
-    return stringRedisTemplate.execute(
-        (RedisCallback<Long>)
-            connection -> connection.stringCommands().bitOp(op, serializeKey(saveKey), bytes));
+
+    byte[] newSaveKey = RedisTemplateDecorator.instance.serializeKey(saveKey);
+    return RedisTemplateDecorator.stringRedisTemplate()
+        .execute(
+            (RedisCallback<Long>)
+                connection -> connection.stringCommands().bitOp(op, newSaveKey, bytes));
   }
 
   /**
@@ -161,15 +160,6 @@ public class RedisBitmapUtils {
   }
 
   public void setExpireTime(String key, Duration expireTime) {
-    stringRedisTemplate.expire(key, expireTime);
-  }
-
-  private byte[] serializeKey(String key) {
-    if (stringRedisTemplate.getKeySerializer()
-        instanceof StringRedisSerializer stringRedisSerializer) {
-      return stringRedisSerializer.serialize(key);
-    }
-
-    throw new IllegalStateException("配置错误");
+    RedisTemplateDecorator.stringRedisTemplate().expire(key, expireTime);
   }
 }

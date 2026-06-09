@@ -2,7 +2,7 @@ package tutorials4j.framework.cache.redis;
 
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import tutorials4j.framework.cache.core.support.RedisKeyPrefix;
+import tutorials4j.framework.cache.core.RedisKeyPrefix;
 import tutorials4j.framework.cache.redis.util.RedisUtils;
 
 /**
@@ -15,15 +15,9 @@ import tutorials4j.framework.cache.redis.util.RedisUtils;
  * @see StringRedisSerializer
  * @see RedisUtils#tenantCacheKeyPrefix()
  */
-public class PrefixKeyStringRedisSerializer extends StringRedisSerializer {
+public class TenantStringRedisSerializer extends StringRedisSerializer {
   @Override
   public byte[] serialize(String value) throws SerializationException {
     return super.serialize(RedisKeyPrefix.tenant().compute(value));
-  }
-
-  @Override
-  public String deserialize(byte[] bytes) {
-    String key = super.deserialize(bytes);
-    return RedisKeyPrefix.uncompute(key);
   }
 }

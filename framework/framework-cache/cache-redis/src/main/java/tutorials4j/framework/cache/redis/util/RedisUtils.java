@@ -4,8 +4,8 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import tutorials4j.framework.cache.core.RedisKeyPrefix;
 import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
-import tutorials4j.framework.cache.core.support.RedisKeyPrefix;
 import tutorials4j.framework.common.core.TenantContextHolder;
 
 /**

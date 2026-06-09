@@ -7,10 +7,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.util.Assert;
 import tutorials4j.framework.cache.core.exception.LockCreateException;
+import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
 
 /**
@@ -43,7 +45,7 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class RedisLockService {
+public class RedisLockService implements SmartInitializingSingleton {
   /** 加锁 Lua 脚本：SET key value NX PX milliseconds */
   private static final RedisScript<String> SCRIPT_LOCK =
       new DefaultRedisScript<>(
@@ -78,7 +80,7 @@ public class RedisLockService {
 
   private static final String LOCK_SUCCESS = "OK";
 
-  private final StringRedisTemplate stringRedisTemplate;
+  private final RedisTemplateDecorator redisTemplateDecorator;
   private volatile FixedLease fixedLease;
   private volatile AutoRenewal autoRenewal;
 
@@ -88,14 +90,6 @@ public class RedisLockService {
    * @return {@link FixedLease} 实例
    */
   public FixedLease fixedLease() {
-    if (fixedLease == null) {
-      synchronized (this) {
-        if (fixedLease == null) {
-          fixedLease = new FixedLease(stringRedisTemplate);
-        }
-      }
-    }
-
     return fixedLease;
   }
 
@@ -105,14 +99,6 @@ public class RedisLockService {
    * @return {@link AutoRenewal} 实例
    */
   public AutoRenewal autoRenewal() {
-    if (autoRenewal == null) {
-      synchronized (this) {
-        if (autoRenewal == null) {
-          autoRenewal = new AutoRenewal(stringRedisTemplate);
-        }
-      }
-    }
-
     return autoRenewal;
   }
 
@@ -124,7 +110,7 @@ public class RedisLockService {
   @RequiredArgsConstructor
   public class FixedLease {
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final RedisTemplateDecorator redisTemplateDecorator;
 
     /**
      * 尝试获取锁，内部使用 Lua 脚本保证原子性。
@@ -136,12 +122,15 @@ public class RedisLockService {
     private String lock(String lockKey, Duration expireTime) {
       String lockId = IdUtil.fastSimpleUUID();
 
+      String newKey = redisTemplateDecorator.wrapKey(lockKey);
       String value =
-          stringRedisTemplate.execute(
-              SCRIPT_LOCK,
-              Collections.singletonList(lockKey),
-              lockId,
-              String.valueOf(expireTime.toMillis()));
+          redisTemplateDecorator
+              .getStringRedisTemplate()
+              .execute(
+                  SCRIPT_LOCK,
+                  Collections.singletonList(newKey),
+                  lockId,
+                  String.valueOf(expireTime.toMillis()));
 
       if (LOCK_SUCCESS.equals(value)) {
         return lockId;
@@ -208,7 +197,7 @@ public class RedisLockService {
   @RequiredArgsConstructor
   public class AutoRenewal {
     private static final Duration DEFAULT_EXPIRE_TIME = Duration.ofSeconds(30);
-    private final StringRedisTemplate stringRedisTemplate;
+    private final RedisTemplateDecorator redisTemplateDecorator;
 
     /**
      * 尝试获取锁（自动续期模式）。
@@ -219,15 +208,18 @@ public class RedisLockService {
     private String lock(String lockKey) {
       String lockId = IdUtil.fastSimpleUUID();
 
+      String newKey = redisTemplateDecorator.wrapKey(lockKey);
       String value =
-          stringRedisTemplate.execute(
-              SCRIPT_LOCK,
-              Collections.singletonList(lockKey),
-              lockId,
-              String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
+          redisTemplateDecorator
+              .getStringRedisTemplate()
+              .execute(
+                  SCRIPT_LOCK,
+                  Collections.singletonList(newKey),
+                  lockId,
+                  String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
 
       if (LOCK_SUCCESS.equals(value)) {
-        renewalLock(lockKey, lockId);
+        renewalLock(newKey, lockId);
         return lockId;
       }
 
@@ -246,17 +238,20 @@ public class RedisLockService {
               new TimerTask() {
                 @Override
                 public void run() {
+                  String newKey = redisTemplateDecorator.wrapKey(lockKey);
                   if (Boolean.TRUE.equals(
-                      stringRedisTemplate.execute(
-                          SCRIPT_RENEWAL,
-                          Collections.singletonList(lockKey),
-                          lockId,
-                          String.valueOf(DEFAULT_EXPIRE_TIME.toMillis())))) {
-                    renewalLock(lockKey, lockId);
+                      redisTemplateDecorator
+                          .getStringRedisTemplate()
+                          .execute(
+                              SCRIPT_RENEWAL,
+                              Collections.singletonList(newKey),
+                              lockId,
+                              String.valueOf(DEFAULT_EXPIRE_TIME.toMillis())))) {
+                    renewalLock(newKey, lockId);
                   }
                 }
               },
-              DEFAULT_EXPIRE_TIME.toMillis() / 2);
+              DEFAULT_EXPIRE_TIME.toMillis() / 3);
     }
 
     /**
@@ -316,10 +311,35 @@ public class RedisLockService {
       return;
     }
 
+    String newKey = redisTemplateDecorator.wrapKey(lockKey);
     String value =
-        stringRedisTemplate.execute(SCRIPT_UNLOCK, Collections.singletonList(lockKey), lockId);
+        redisTemplateDecorator
+            .getStringRedisTemplate()
+            .execute(SCRIPT_UNLOCK, Collections.singletonList(newKey), lockId);
     if (!Boolean.parseBoolean(value)) {
-      log.warn("[CACHE-REDIS] 释放分布式锁失败，locKey={}", lockKey);
+      log.warn("[CACHE-REDIS] 释放分布式锁失败，可能因为已过期，locKey={}", lockKey);
     }
+  }
+
+  @Override
+  public void afterSingletonsInstantiated() {
+    if (fixedLease == null) {
+      synchronized (this) {
+        if (fixedLease == null) {
+          fixedLease = new FixedLease(redisTemplateDecorator);
+        }
+      }
+    }
+
+    if (autoRenewal == null) {
+      synchronized (this) {
+        if (autoRenewal == null) {
+          autoRenewal = new AutoRenewal(redisTemplateDecorator);
+        }
+      }
+    }
+
+    Assert.notNull(fixedLease, "fixedLease initialization failed");
+    Assert.notNull(autoRenewal, "autoRenewal initialization failed");
   }
 }

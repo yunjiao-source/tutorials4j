@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PageController {
 
   @GetMapping("/redisson")
-  public String cacheDemoPage() {
-    // 返回 templates 目录下的 cache-demo.html
+  public String redisson() {
     return "lock/redisson";
+  }
+
+  @GetMapping("/redis")
+  public String redis() {
+    return "lock/redis";
   }
 }

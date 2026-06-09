@@ -1,4 +1,4 @@
-package tutorials4j.framework.cache.core.support;
+package tutorials4j.framework.cache.core;
 
 import org.apache.commons.lang3.StringUtils;
 import tutorials4j.framework.common.core.SymbolConsts;
@@ -12,7 +12,7 @@ import tutorials4j.framework.common.core.TenantContextHolder;
  * @author Yun Jiao
  * @see #tenant()
  * @see #tenantPrefixed(String)
- * @see #uncompute(String)
+ * @see #substringAfterFirstColon(String)
  */
 @FunctionalInterface
 public interface RedisKeyPrefix {
@@ -39,15 +39,15 @@ public interface RedisKeyPrefix {
    * <p>示例：
    *
    * <pre>
-   * RedisKeyPrefix.uncompute("tenant1:user:123")  → "user:123"
-   * RedisKeyPrefix.uncompute("no-colon-key")      → "no-colon-key"
-   * RedisKeyPrefix.uncompute(null)                → null
+   * RedisKeyPrefix.substringAfterFirstColon("tenant1:user:123")  → "user:123"
+   * RedisKeyPrefix.substringAfterFirstColon("no-colon-key")      → "no-colon-key"
+   * RedisKeyPrefix.substringAfterFirstColon(null)                → null
    * </pre>
    *
    * @param key 完整的 Redis Key（可能包含前缀）
    * @return 移除第一个前缀部分后的原始 Key
    */
-  static String uncompute(String key) {
+  static String substringAfterFirstColon(String key) {
     if (StringUtils.isBlank(key)) {
       return key;
     }

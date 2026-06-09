@@ -34,12 +34,15 @@ Java 教程
 
 ### 功能模块示例（framework/framework-examples/examples-cache）
 
-### profile:cacheable
+#### profile:cacheable
 
 > @Cacheable 示例
 ![@Cacheable 示例](docs/images/cache-cacheable.jpg)
 
-### profile:lock
+#### profile:lock
 
 > Redisson 锁示例
-![Redisson 锁示例](docs/images/lokc-redisson.jpg)
+![Redisson 锁示例](docs/images/lock-redisson.jpg)
+
+> Redis 锁示例
+![Redis 锁示例](docs/images/lock-redis.jpg)

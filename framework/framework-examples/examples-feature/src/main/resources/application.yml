@@ -1,11 +1,4 @@
 spring:
-  profiles:
-#    active: captchaendpoint
-#    active: tianaicaptchaendpoint
-#    active: captchafilter
-#    active: cryptoapi
-    active: google-auth
-
 
   data:
     # Redis 配置

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Redis 分布式锁测试平台</title>
+  <!-- Bootstrap 5 CSS (清爽现代风格) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- jQuery 3.6 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      background: #f4f7fc;
+      font-family: 'Segoe UI', Roboto, system-ui;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #2c3e66 0%, #1a2a44 100%);
+      color: white;
+      font-weight: 600;
+    }
+    .badge-mode {
+      font-size: 0.85rem;
+      padding: 0.35rem 0.65rem;
+    }
+    .log-container {
+      max-height: 450px;
+      overflow-y: auto;
+      background: #1e2a3a;
+      border-radius: 16px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    }
+    .log-item {
+      font-family: 'JetBrains Mono', monospace, 'Courier New';
+      font-size: 0.85rem;
+      border-left: 4px solid transparent;
+      transition: all 0.1s ease;
+    }
+    .log-item.success {
+      border-left-color: #2ecc71;
+      background: rgba(46, 204, 113, 0.1);
+    }
+    .log-item.error {
+      border-left-color: #e74c3c;
+      background: rgba(231, 76, 60, 0.1);
+    }
+    .log-item.warning {
+      border-left-color: #f39c12;
+      background: rgba(243, 156, 18, 0.08);
+    }
+    .log-time {
+      color: #95a5a6;
+      font-size: 0.7rem;
+    }
+    .btn-lock {
+      border-radius: 40px;
+      padding: 8px 24px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-lock:active {
+      transform: scale(0.96);
+    }
+    pre {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.8rem;
+    }
+    footer {
+      font-size: 0.8rem;
+      color: #6c757d;
+      border-top: 1px dashed #dee2e6;
+    }
+    .spinner-border-sm {
+      vertical-align: middle;
+    }
+    .feature-icon {
+      font-size: 1.2rem;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-md-5">
+  <!-- 标题区 -->
+  <div class="text-center mb-4">
+    <h1 class="display-5 fw-bold" style="color: #1f2b48;">
+      <i class="fas fa-lock me-2" style="color: #e67e22;"></i>
+      Redis 分布式锁·实战演示
+    </h1>
+    <p class="lead text-muted">基于注解 <code>@RedisLockable</code> | 自动续期模式 vs 固定租期模式</p>
+    <div class="d-flex justify-content-center flex-wrap gap-3 mt-2">
+      <span class="badge bg-primary rounded-pill px-3 py-2"><i class="fas fa-infinity"></i> 自动续期 (看门狗)</span>
+      <span class="badge bg-warning text-dark rounded-pill px-3 py-2"><i class="fas fa-hourglass-half"></i> 固定租期 3000ms</span>
+      <span class="badge bg-secondary rounded-pill px-3 py-2"><i class="fas fa-code-branch"></i> SpEL 动态Key</span>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- 左侧: 操作面板 -->
+    <div class="col-lg-5">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header rounded-top-4 border-0 px-4 py-3">
+          <i class="fas fa-cogs me-2"></i> 锁测试控制器
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-4">
+            <label class="form-label fw-semibold"><i class="fas fa-tag"></i> 订单ID (锁Key动态部分)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="fas fa-receipt"></i></span>
+              <input type="text" id="orderIdInput" class="form-control form-control-lg" placeholder="例如: ORD-10086, 2024001" value="TEST-001">
+            </div>
+            <div class="form-text mt-1">最终锁Key = <code>prefix + key</code> , 示例中 prefix="order:" , key="#orderId"</div>
+          </div>
+
+          <div class="d-grid gap-3 mt-4">
+            <!-- 自动续期模式按钮 (expireTime <= 0) -->
+            <button id="btnNonExpire" class="btn btn-success btn-lock btn-lg" type="button">
+              <i class="fas fa-sync-alt me-2"></i> 🔁 自动续期模式 (看门狗)
+            </button>
+            <div class="small text-secondary mt-0 mb-1 text-center">
+              <i class="fas fa-hourglass-start"></i> expireTime = -1 (默认) | 锁持有期自动续约，业务完成才释放
+            </div>
+
+            <!-- 固定租期模式按钮 (expireTime=3000ms) -->
+            <button id="BtnExpireTime" class="btn btn-warning btn-lock btn-lg" type="button">
+              <i class="fas fa-hourglass-end me-2"></i> ⏱️ 固定过期模式 (3000ms)
+            </button>
+            <div class="small text-secondary mt-0 mb-1 text-center">
+              <i class="fas fa-skull-crosswalk"></i> expireTime = 3000ms | 业务若超3秒，锁自动失效 → 可能并发风险
+            </div>
+          </div>
+
+          <hr class="my-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="fas fa-info-circle text-primary"></i> 测试建议</h6>
+            <button id="clearLogBtn" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-trash-alt"></i> 清空日志
+            </button>
+          </div>
+          <div class="mt-3 small bg-light p-3 rounded-3">
+            <i class="fas fa-lightbulb text-warning"></i> <strong>快速验证锁互斥效果</strong><br>
+            • 同一订单ID <strong>快速连续点击</strong> 同一种模式 → 第二次请求会因锁冲突返回失败。<br>
+            • <span class="text-success">自动续期模式</span>：业务随机sleep 0~9秒，锁会一直保持，其他请求直到锁释放才能获取。<br>
+            • <span class="text-warning">固定租期(3秒)</span>：若业务sleep超过3秒，锁提前释放，可能导致并发入侵（后端日志会体现）。<br>
+            • 观察下方<strong>实时日志</strong>，看到响应状态码和错误信息即可验证锁行为。
+          </div>
+        </div>
+      </div>
+
+      <!-- 后端说明卡片 -->
+      <div class="card mt-4 border-0 shadow-sm rounded-4">
+        <div class="card-body bg-white rounded-4">
+          <h6 class="card-title"><i class="fas fa-microchip"></i> 后端接口信息</h6>
+          <hr>
+          <ul class="list-unstyled small mb-0">
+            <li><span class="badge bg-success me-2">GET</span> <code>/redis/non-expire-time?orderId={id}</code> → 自动续期锁</li>
+            <li><span class="badge bg-warning me-2">GET</span> <code>/redis/expire-time?orderId={id}</code> → 固定过期锁(3s)</li>
+            <li class="mt-2 text-muted"><i class="far fa-clock"></i> 业务随机睡眠0~9秒，模拟处理耗时。锁竞争失败返回5xx错误。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧: 实时调用日志面板 -->
+    <div class="col-lg-7">
+      <div class="card shadow-lg border-0 rounded-4 h-100">
+        <div class="card-header rounded-top-4 border-0 px-4 py-3 d-flex align-items-center">
+          <i class="fas fa-terminal me-2"></i> 调用监控日志
+          <span class="ms-3 badge bg-light text-dark" id="logCountBadge">0</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="log-container p-3" id="logList">
+            <div class="text-center text-muted py-5" id="logPlaceholder">
+              <i class="fas fa-cloud-moon fa-2x mb-2"></i><br>
+              暂无调用记录，点击上方按钮测试分布式锁
+            </div>
+            <!-- 动态日志会追加到这里 -->
+          </div>
+        </div>
+        <div class="card-footer bg-white border-0 small text-muted text-center">
+          <i class="fas fa-database"></i> 锁状态依据后端响应判断 | 请求耗时单位: ms
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center mt-5 pt-3">
+    <p><i class="fas fa-shield-alt"></i> 基于 Spring AOP + Redis 实现分布式锁 | 支持 SpEL 动态Key + 看门狗自动续期</p>
+  </footer>
+</div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  // Thymeleaf 动态生成上下文基础路径 (自动适配 部署路径)
+  var contextPath = /*[[@{/}]]*/ '/';
+  // 获得完整接口路径（不需要拼接 contextPath, @{} 自带上下文）
+  var nonExpireUrl = /*[[@{/redis/non-expire-time}]]*/ '/redis/non-expire-time';
+  var expireTimeUrl = /*[[@{/redis/expire-time}]]*/ '/redis/expire-time';
+
+  // 辅助函数: 确保URL末尾不带多余斜杠? 无参数
+  function buildUrl(baseUrl, orderId) {
+    // 简单处理: 拼接参数，编码orderId
+    var separator = baseUrl.indexOf('?') === -1 ? '?' : '&';
+    return baseUrl + separator + 'orderId=' + encodeURIComponent(orderId);
+  }
+
+  // 全局计数器用于展示序号
+  var logSeq = 0;
+  var requestInFlight = false;   // 简单防止极端双击时重复禁用逻辑，但没有完全锁UI，只是提示友好（不禁用功能保证测试锁竞争）
+  // 但为了体验，不强制锁屏，真正锁竞争由后端控制；但避免用户疯狂点击导致日志爆炸，可用防抖？不用，正好模拟并发场景
+
+  // 添加日志条目 (mode: 模式, orderId, statusType: success/error/warning, message, duration, httpStatus)
+  function addLog(mode, orderId, statusType, message, duration, httpStatus) {
+    var now = new Date();
+    var timeStr = now.toLocaleTimeString('zh-CN', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
+    logSeq++;
+    var logHtml = `
+            <div class="log-item p-2 mb-2 rounded-2 ${statusType}">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <span class="badge bg-dark me-2">#${logSeq}</span>
+                        <span class="badge ${mode === '自动续期模式' ? 'bg-success' : 'bg-warning text-dark'} me-2">${mode}</span>
+                        <strong class="text-light">订单: ${escapeHtml(orderId)}</strong>
+                    </div>
+                    <span class="log-time"><i class="far fa-clock"></i> ${timeStr}</span>
+                </div>
+                <div class="mt-1 d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="text-white-50 small">${escapeHtml(message)}</div>
+                    <div class="small">
+                        ${duration ? `<span class="badge bg-secondary me-1"><i class="fas fa-stopwatch"></i> ${duration}ms</span>` : ''}
+                        ${httpStatus ? `<span class="badge ${httpStatus >= 200 && httpStatus < 300 ? 'bg-info' : 'bg-danger'}">HTTP ${httpStatus}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    // 移除占位符提示
+    var $logContainer = $('#logList');
+    if ($logContainer.find('#logPlaceholder').length) {
+      $logContainer.empty();
+    }
+    $logContainer.append(logHtml);
+    // 自动滚动到底部
+    $logContainer.scrollTop($logContainer[0].scrollHeight);
+    // 更新日志条数 badge
+    $('#logCountBadge').text(logSeq);
+  }
+
+  // 简单防XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // 通用请求函数
+  function invokeLockApi(apiUrl, modeLabel, orderId) {
+    if (!orderId || orderId.trim() === '') {
+      addLog(modeLabel, '(空)', 'warning', '❌ 订单ID不能为空，请输入有效ID', null, null);
+      return false;
+    }
+    var trimmedOrderId = orderId.trim();
+    var startTime = performance.now();
+    // 显示loading状态感: 临时修改按钮文案(可选)
+    var $activeBtn = modeLabel === '自动续期模式' ? $('#btnNonExpire') : $('#BtnExpireTime');
+    var originalText = $activeBtn.html();
+    $activeBtn.html('<i class="fas fa-spinner fa-spin"></i> 请求中...').prop('disabled', false); // 不禁用，保证并发测试，但样式提示
+    // 发起Ajax GET请求
+    var requestUrl = buildUrl(apiUrl, trimmedOrderId);
+    $.ajax({
+      url: requestUrl,
+      type: 'GET',
+      dataType: 'text',   // 因为接口返回void 但可能返回错误消息文本，接收text便于错误显示
+      timeout: 60000,      // 60秒超时（因为业务可能sleep 9秒+网络）
+      success: function(data, textStatus, jqXHR) {
+        var duration = Math.round(performance.now() - startTime);
+        var statusCode = jqXHR.status;
+        // 注意: 后端接口正常逻辑返回200，且没有响应体，但可能有欢迎信息? 无伤大雅。
+        var successMsg = `调用成功 ✓ 锁获取/执行完成 (业务执行耗时约随机sleep)。后端日志可见订单处理。`;
+        addLog(modeLabel, trimmedOrderId, 'success', successMsg, duration, statusCode);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        var duration = Math.round(performance.now() - startTime);
+        var statusCode = jqXHR.status || 0;
+        var errorMsg = '';
+        // 尝试解析后端返回的错误信息（文本或JSON）
+        var responseText = jqXHR.responseText;
+        if (responseText) {
+          // 尝试提取关键错误信息: 常见锁失败异常文本
+          if (responseText.indexOf('Lock') !== -1 || responseText.indexOf('锁') !== -1 || responseText.indexOf('timeout') !== -1) {
+            errorMsg = `❌ 锁竞争失败: ${responseText.substring(0, 150)}`;
+          } else {
+            errorMsg = `❌ 请求失败: ${responseText.substring(0, 150)}`;
+          }
+        } else {
+          errorMsg = `❌ 调用失败 | ${textStatus} ${errorThrown || ''}`;
+        }
+        // 如果是获取锁超时/锁已经被占用，属于预期的分布式锁错误
+        if (statusCode === 500 || statusCode === 409 || statusCode === 423) {
+          addLog(modeLabel, trimmedOrderId, 'error', errorMsg + ' [锁冲突/获取锁超时]', duration, statusCode);
+        } else {
+          addLog(modeLabel, trimmedOrderId, 'error', errorMsg, duration, statusCode);
+        }
+      },
+      complete: function() {
+        // 恢复按钮文本（延迟一点恢复防止闪烁）
+        setTimeout(function() {
+          $activeBtn.html(originalText);
+        }, 200);
+      }
+    });
+    return true;
+  }
+
+  // 清空日志
+  function clearLogs() {
+    $('#logList').empty();
+    logSeq = 0;
+    $('#logList').html(`<div class="text-center text-muted py-5" id="logPlaceholder">
+                                <i class="fas fa-cloud-moon fa-2x mb-2"></i><br>
+                                日志已清空，点击上方按钮开始测试
+                            </div>`);
+    $('#logCountBadge').text('0');
+  }
+
+  // 页面加载完成后绑定事件
+  $(document).ready(function() {
+    // 自动续期按钮
+    $('#btnNonExpire').on('click', function() {
+      var orderId = $('#orderIdInput').val();
+      invokeLockApi(nonExpireUrl, '自动续期模式', orderId);
+    });
+    // 固定过期模式按钮
+    $('#BtnExpireTime').on('click', function() {
+      var orderId = $('#orderIdInput').val();
+      invokeLockApi(expireTimeUrl, '固定过期模式(3s)', orderId);
+    });
+    // 清空日志
+    $('#clearLogBtn').on('click', function() {
+      clearLogs();
+    });
+
+    // 回车快捷测试: 在订单输入框按回车默认触发自动续期 (可选)
+    $('#orderIdInput').on('keypress', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        var orderId = $('#orderIdInput').val();
+        invokeLockApi(nonExpireUrl, '自动续期模式', orderId);
+      }
+    });
+
+    // 样式加强: 日志容器自定义滚动条
+    $('.log-container').css({
+      'scrollbar-width': 'thin',
+      'scrollbar-color': '#cbd5e1 #1e2a3a'
+    });
+  });
+  /*]]>*/
+</script>
+
+<!-- 可选样式加强 -->
+<style>
+  .log-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  .log-container::-webkit-scrollbar-track {
+    background: #1e2a3a;
+    border-radius: 10px;
+  }
+  .log-container::-webkit-scrollbar-thumb {
+    background: #4a627a;
+    border-radius: 10px;
+  }
+  .btn-lock:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
+  code {
+    background: #eef2f7;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+  }
+  .card {
+    transition: transform 0.1s ease;
+  }
+  .card:hover {
+    box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,.1) !important;
+  }
+  .log-item {
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+</style>
+
+<!-- 额外说明: 后端接口路由存在性提示 (无需配置额外映射，如果还没有页面视图映射，可自行添加Controller)
+     本页面作为 Thymeleaf 模板，需要对应的视图解析，例如添加一个简单的 Controller:
+
+     @GetMapping("/lock-ui")
+     public String lockDemoPage() { return "redis-lock-demo"; }
+
+     文件名需匹配 redis-lock-demo.html，且确保项目已启用Thymeleaf。
+     此处提供完整的前端展示及调用逻辑，完全满足测试分布式锁要求。
+-->
+</body>
+</html>

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
 
 /**
@@ -169,8 +170,7 @@ public class SignInTemplate {
     int day = date.getDayOfMonth();
 
     List<Long> result =
-        RedisBitmapUtils.instance
-            .getStringRedisTemplate()
+        RedisTemplateDecorator.stringRedisTemplate()
             .opsForValue()
             .bitField(
                 key,

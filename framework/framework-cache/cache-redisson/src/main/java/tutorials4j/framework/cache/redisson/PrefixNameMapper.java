@@ -1,7 +1,7 @@
 package tutorials4j.framework.cache.redisson;
 
 import org.redisson.config.NameMapper;
-import tutorials4j.framework.cache.core.support.RedisKeyPrefix;
+import tutorials4j.framework.cache.core.RedisKeyPrefix;
 
 /**
  * Redisson Key 名称映射器的实现，用于统一为所有 Redis Key 添加租户前缀。
@@ -23,6 +23,6 @@ public class PrefixNameMapper implements NameMapper {
 
   @Override
   public String unmap(String s) {
-    return RedisKeyPrefix.uncompute(s);
+    return RedisKeyPrefix.substringAfterFirstColon(s);
   }
 }
