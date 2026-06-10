@@ -14,5 +14,5 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE_LOCK)
 public class LockCacheProperties {
   @NestedConfigurationProperty private LocalLockOptions local = new LocalLockOptions();
-  @NestedConfigurationProperty private RedisLockOptions reids = new RedisLockOptions();
+  @NestedConfigurationProperty private RedisLockOptions redis = new RedisLockOptions();
 }

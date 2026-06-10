@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -18,9 +17,8 @@ import tutorials4j.framework.cache.core.exception.LockCreateException;
 import tutorials4j.framework.cache.core.properties.RedisLockOptions;
 import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.common.core.ExecutionOption;
-import tutorials4j.framework.common.core.NamedThreadFactory;
+import tutorials4j.framework.common.core.ExecutorServiceHolder;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
-import tutorials4j.framework.common.core.util.CloseUtils;
 
 /**
  * Redis 分布式锁核心服务类。
@@ -213,24 +211,24 @@ public class RedisLockService {
   /**
    * 自动续期模式的分布式锁实现。
    *
-   * <p>锁的默认过期时间为 30 秒，并在每 10 秒（过期时间/3）自动续期一次。 只要持有锁的业务逻辑仍在运行，锁就会一直被续期，直到业务执行完毕并主动释放。
-   * 适用于执行时间不确定的长任务。
+   * <p>锁的默认过期时间为 30 秒，并在每 5 秒自动续期一次。 只要持有锁的业务逻辑仍在运行，锁就会一直被续期，直到业务执行完毕并主动释放。 适用于执行时间不确定的长任务。
    */
   @RequiredArgsConstructor
   public class AutoRenewal {
     private static final Duration DEFAULT_EXPIRE_TIME = Duration.ofSeconds(30);
+    private static final Duration DEFAULT_RENEWAL_PERIOD_TIME = Duration.ofSeconds(5);
 
     private final RedisTemplateDecorator redisTemplateDecorator;
     private final RedisLockOptions redisLockOptions;
 
-    private ScheduledExecutorService scheduler;
-    private Map<String, ScheduledFuture<?>> renewalTasks;
+    private ExecutorServiceHolder<ScheduledThreadPoolExecutor> executorServiceHolder;
+    private final Map<String, ScheduledFuture<?>> renewalTasks = new ConcurrentHashMap<>();
+    ;
 
     /**
      * 尝试获取锁（自动续期模式）。
      *
-     * @param lockKey 锁的 key
-     * @return 成功返回唯一锁标识（lockId），失败返回 null
+     * @param lockKey 锁的 key * @return 成功返回唯一锁标识（lockId），失败返回 null
      */
     private String lock(String lockKey) {
       String lockId = IdUtil.fastSimpleUUID();
@@ -260,43 +258,32 @@ public class RedisLockService {
      */
     private void renewalLockTask(String lockKey, String lockId) {
       ScheduledFuture<?> future =
-          scheduler.scheduleAtFixedRate(
-              () -> {
-                Boolean renewed =
-                    redisTemplateDecorator
-                        .getStringRedisTemplate()
-                        .execute(
-                            SCRIPT_RENEWAL,
-                            Collections.singletonList(lockKey),
-                            lockId,
-                            String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
-                if (!Boolean.TRUE.equals(renewed)) {
-                  // 续期失败（锁已丢失），取消任务
-                  cancelLockTask(lockKey);
-                }
-              },
-              DEFAULT_EXPIRE_TIME.toMillis() / 3,
-              DEFAULT_EXPIRE_TIME.toMillis() / 3,
-              TimeUnit.MILLISECONDS);
+          executorServiceHolder
+              .instance()
+              .scheduleAtFixedRate(
+                  () -> {
+                    Boolean renewed =
+                        redisTemplateDecorator
+                            .getStringRedisTemplate()
+                            .execute(
+                                SCRIPT_RENEWAL,
+                                Collections.singletonList(lockKey),
+                                lockId,
+                                String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
+                    if (!Boolean.TRUE.equals(renewed)) {
+                      // 续期失败（锁已丢失），取消任务
+                      cancelLockTask(lockKey);
+                    }
+                  },
+                  DEFAULT_RENEWAL_PERIOD_TIME.toMillis(),
+                  DEFAULT_RENEWAL_PERIOD_TIME.toMillis(),
+                  TimeUnit.MILLISECONDS);
       renewalTasks.put(lockKey, future);
     }
 
     public void initScheduler() {
       ExecutionOption option = redisLockOptions.getAutoRenewal();
-      NamedThreadFactory threadFactory =
-          new NamedThreadFactory("redis-auto-renew-", option.isDaemon());
-
-      ScheduledThreadPoolExecutor executor =
-          new ScheduledThreadPoolExecutor(
-              option.getCorePoolSize(), threadFactory, option.getRejectedExecutionHandler());
-
-      if (option.isAllowCoreThreadTimeOut()) {
-        executor.setKeepAliveTime(option.getKeepAliveSeconds(), TimeUnit.SECONDS);
-        executor.allowCoreThreadTimeOut(true);
-      }
-
-      renewalTasks = new ConcurrentHashMap<>();
-      scheduler = executor;
+      executorServiceHolder = ExecutorServiceHolder.buildScheduler(option);
     }
 
     /**
@@ -348,7 +335,7 @@ public class RedisLockService {
 
     public void destory() {
       log.debug("Redis分布式锁自动续期定时任务执行器关闭");
-      CloseUtils.close(scheduler, redisLockOptions.getAutoRenewal());
+      executorServiceHolder.shutdown();
     }
 
     private void cancelLockTask(String lockKey) {

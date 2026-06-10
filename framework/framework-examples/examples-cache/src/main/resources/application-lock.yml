@@ -1,3 +1,10 @@
 spring:
   redisson:
     file: classpath:redisson.yaml
+
+
+tutorials4j:
+  lock:
+    redis:
+      auto-renewal:
+        thread-name-prefix: redis-auto-renewal-

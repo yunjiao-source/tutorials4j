@@ -15,22 +15,27 @@ public class ExecutionOption {
   /** 核心线程数，默认 1 */
   private int corePoolSize = 1;
 
-  /** 是否守护线程，默认 false */
-  private boolean daemon = false;
+  private int maximumPoolSize = 3;
+
+  private String threadNamePrefix = "t4j-thread-pool-";
+
+  private boolean daemon;
 
   /** 是否允许核心线程超时，默认 false 若设为 true，核心线程空闲超过 keepAliveTime 会被回收 */
   private boolean allowCoreThreadTimeOut = false;
 
   /** 线程空闲存活时间（秒），默认 60 当 allowCoreThreadTimeOut = true 时生效 */
-  private long keepAliveSeconds = 60;
+  private Duration keepAlive = Duration.ofSeconds(60);
+
+  private int queueCapacity = 100;
 
   /**
    * 拒绝策略名称，可选： - AbortPolicy（默认）：抛出 RejectedExecutionException - CallerRunsPolicy：由调用线程执行任务 -
    * DiscardPolicy：直接丢弃任务 - DiscardOldestPolicy：丢弃队列头部任务，重试提交当前任务
    */
-  private String rejectedPolicy = "AbortPolicy";
+  private RejectedPolicy rejectedPolicy = RejectedPolicy.ABORT;
 
-  private boolean awaitTermination = false;
+  private boolean awaitTermination = true;
 
   /** Maximum time the executor should wait for remaining tasks to complete. */
   private Duration awaitTerminationPeriod = Duration.ofSeconds(30);
@@ -38,10 +43,17 @@ public class ExecutionOption {
   /** 根据配置名称获取拒绝策略实例 */
   public RejectedExecutionHandler getRejectedExecutionHandler() {
     return switch (rejectedPolicy) {
-      case "CallerRunsPolicy" -> new ThreadPoolExecutor.CallerRunsPolicy();
-      case "DiscardPolicy" -> new ThreadPoolExecutor.DiscardPolicy();
-      case "DiscardOldestPolicy" -> new ThreadPoolExecutor.DiscardOldestPolicy();
+      case CALLER_RUNS -> new ThreadPoolExecutor.CallerRunsPolicy();
+      case DISCARD -> new ThreadPoolExecutor.DiscardPolicy();
+      case DISCARD_OLDEST -> new ThreadPoolExecutor.DiscardOldestPolicy();
       default -> new ThreadPoolExecutor.AbortPolicy();
     };
+  }
+
+  public enum RejectedPolicy {
+    ABORT,
+    CALLER_RUNS,
+    DISCARD,
+    DISCARD_OLDEST;
   }
 }

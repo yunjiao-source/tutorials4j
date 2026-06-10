@@ -100,7 +100,7 @@ public class RedisCacheConfiguration {
   RedisLockService redisLockService(
       RedisTemplateDecorator redisTemplateDecorator, LockCacheProperties properties) {
     log.debug("[CACHE-REDIS] Redis Lock Service");
-    return new RedisLockService(redisTemplateDecorator, properties.getReids());
+    return new RedisLockService(redisTemplateDecorator, properties.getRedis());
   }
 
   @Bean
