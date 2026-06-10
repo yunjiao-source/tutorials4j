@@ -2,6 +2,7 @@ package tutorials4j.framework.cache.core.properties;
 
 import java.time.Duration;
 import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * 命名缓存的配置选项。
@@ -24,10 +25,10 @@ public class NamedCacheOptions {
   private Boolean enableStatistics;
 
   /** Redis 缓存的专属配置，例如键前缀。 */
-  private RedisOptions redis = new RedisOptions();
+  @NestedConfigurationProperty private RedisOptions redis = new RedisOptions();
 
   /** Caffeine 缓存的专属配置，例如初始容量、最大大小等。 */
-  private CaffeineOptions caffeine = new CaffeineOptions();
+  @NestedConfigurationProperty private CaffeineOptions caffeine = new CaffeineOptions();
 
   /** Redis 缓存的配置选项。 */
   @Data

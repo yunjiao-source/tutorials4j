@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>验证码与计数器演示</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #f5f7fa;
+      padding-top: 2rem;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+      border: none;
+      margin-bottom: 2rem;
+    }
+    .card-header {
+      background-color: #fff;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 1rem 1.5rem;
+      border-radius: 1rem 1rem 0 0 !important;
+    }
+    .captcha-text {
+      font-family: 'Courier New', monospace;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 0.5rem;
+      background-color: #e9ecef;
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 0.5rem;
+      color: #2c3e50;
+    }
+    .key-badge {
+      font-family: monospace;
+      font-size: 0.8rem;
+      background-color: #f8f9fa;
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.4rem;
+      word-break: break-all;
+    }
+    .result-area {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      background-color: #f8f9fa;
+      font-size: 0.9rem;
+    }
+    .btn-refresh {
+      background-color: #6c5ce7;
+      color: white;
+    }
+    .btn-refresh:hover {
+      background-color: #5a4bcf;
+      color: white;
+    }
+    hr {
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold">缓存模板功能演示</h2>
+        <p class="text-muted">验证码多级缓存 · 计数器上限控制</p>
+      </div>
+
+      <div class="row">
+        <!-- 左侧：验证码卡片 -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              📧 验证码服务
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">当前验证码</label>
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                  <span id="captchaDisplay" class="captcha-text">----</span>
+                  <button id="refreshCaptchaBtn" class="btn btn-sm btn-refresh">
+                    🔄 刷新验证码
+                  </button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">关联 Key</label>
+                <div id="keyDisplay" class="key-badge small text-break">-</div>
+                <input type="hidden" id="currentKey" value="">
+                <div class="form-text text-muted small">验证时需要提交此 Key（已自动记录）</div>
+              </div>
+
+              <hr>
+
+              <div class="mb-3">
+                <label for="captchaInput" class="form-label fw-semibold">输入验证码</label>
+                <input type="text" id="captchaInput" class="form-control" placeholder="请输入上方显示的验证码" maxlength="4" autocomplete="off">
+              </div>
+
+              <button id="checkCaptchaBtn" class="btn btn-primary w-100 mb-3">
+                ✅ 验证验证码
+              </button>
+
+              <div id="captchaResult" class="result-area">
+                <span class="text-muted">等待验证...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：计数器卡片 -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              🔢 计数器服务 (上限5次)
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="counterKey" class="form-label fw-semibold">计数器 Key</label>
+                <div class="input-group">
+                  <input type="text" id="counterKey" class="form-control" placeholder="例如: user_login_001" value="demo_counter_01">
+                  <button id="randomCounterKeyBtn" class="btn btn-outline-secondary" type="button">随机生成</button>
+                </div>
+                <div class="form-text">每个 Key 独立计数，达到5次后将拒绝继续计数</div>
+              </div>
+
+              <button id="countingBtn" class="btn btn-success w-100 mb-3">
+                🧮 执行计数 (+1)
+              </button>
+
+              <div id="counterResult" class="result-area">
+                <span class="text-muted">尚未计数，点击按钮开始</span>
+              </div>
+
+              <div class="alert alert-info small mt-3 mb-0">
+                <strong>说明：</strong> 第1次计数返回1，第2次返回2……第5次返回5，第6次起会抛出异常（上限已到）。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // 页面加载时自动获取一个验证码
+    refreshCaptcha();
+
+    // 刷新验证码
+    $('#refreshCaptchaBtn').on('click', function() {
+      refreshCaptcha();
+    });
+
+    // 验证验证码
+    $('#checkCaptchaBtn').on('click', function() {
+      const key = $('#currentKey').val();
+      const inputValue = $('#captchaInput').val().trim();
+
+      if (!key) {
+        showCaptchaResult('请先刷新获取验证码', 'warning');
+        return;
+      }
+      if (!inputValue) {
+        showCaptchaResult('请输入验证码', 'warning');
+        return;
+      }
+
+      // 发送验证请求
+      $.ajax({
+        url: '/template/check',
+        method: 'GET',
+        data: {
+          key: key,
+          input: inputValue
+        },
+        success: function(result) {
+          if (result === true) {
+            showCaptchaResult('✅ 验证成功！验证码正确', 'success');
+            // 可选：验证成功后自动刷新验证码，防止重复使用（注释掉以保持简单，需要可取消注释）
+            // refreshCaptcha();
+          } else {
+            showCaptchaResult('❌ 验证失败，验证码不匹配', 'danger');
+          }
+        },
+        error: function(xhr) {
+          console.error(xhr);
+          showCaptchaResult('验证请求失败，请稍后重试', 'danger');
+        }
+      });
+    });
+
+    // 计数器按钮事件
+    $('#countingBtn').on('click', function() {
+      let key = $('#counterKey').val().trim();
+      if (!key) {
+        showCounterResult('❌ 计数器 Key 不能为空', 'danger');
+        return;
+      }
+
+      // 发送计数请求
+      $.ajax({
+        url: '/template/counter',
+        method: 'GET',
+        data: {
+          key: key
+        },
+        success: function(count) {
+          // count 是计数后的当前次数 (1,2,3,4,5)
+          let remaining = 5 - count;
+          let message = `计数成功！当前次数：${count}，剩余可用次数：${remaining}`;
+          if (remaining === 0) {
+            message += ` （已达上限，下次将触发异常）`;
+          }
+          showCounterResult(`✅ ${message}`, 'success');
+        },
+        error: function(xhr) {
+          let errorMsg = '';
+          if (xhr.status === 500) {
+            // 尝试从响应中提取异常信息（默认 CounterOverflowException）
+            errorMsg = '已达上限 (5次)，无法继续计数，请更换 Key 重试';
+          } else {
+            errorMsg = `请求失败 (${xhr.status})，请检查网络或服务状态`;
+          }
+          showCounterResult(`❌ ${errorMsg}`, 'danger');
+        }
+      });
+    });
+
+    // 随机生成计数器Key（方便测试新计数器）
+    $('#randomCounterKeyBtn').on('click', function() {
+      const randomKey = 'key_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now();
+      $('#counterKey').val(randomKey);
+      showCounterResult(`已更换新 Key：${randomKey}，从 1 开始计数`, 'info');
+    });
+
+    // 辅助函数：刷新验证码（调用 /template/get）
+    function refreshCaptcha() {
+      $.ajax({
+        url: '/template/get',
+        method: 'GET',
+        success: function(data) {
+          // 后端返回 Pair 结构: {first: key, second: captcha}
+          const key = data.first;
+          const captcha = data.second;
+          $('#currentKey').val(key);
+          $('#keyDisplay').text(key);
+          $('#captchaDisplay').text(captcha);
+          $('#captchaInput').val('');    // 清空输入框
+          showCaptchaResult('已获取新验证码，请在下方输入', 'info');
+        },
+        error: function() {
+          showCaptchaResult('获取验证码失败，请检查后端服务', 'danger');
+        }
+      });
+    }
+
+    // 显示验证码结果区域消息
+    function showCaptchaResult(msg, type) {
+      const $resultDiv = $('#captchaResult');
+      let alertClass = 'alert alert-' + type + ' mb-0';
+      if (type === 'warning') alertClass = 'alert alert-warning mb-0';
+      if (type === 'info') alertClass = 'alert alert-info mb-0';
+      $resultDiv.html(`<div class="${alertClass}">${msg}</div>`);
+      // 5秒后恢复提示（可选）
+      setTimeout(function() {
+        if ($resultDiv.find('.alert').length && $resultDiv.find('.alert').text().indexOf('等待验证') === -1) {
+          // 如果当前不是默认提示且5秒后自动重置为普通状态，为了体验不自动覆盖错误/成功? 保留最后状态也可
+          // 简单处理：不自动恢复，以免用户丢失信息
+        }
+      }, 5000);
+    }
+
+    // 显示计数器结果区域消息
+    function showCounterResult(msg, type) {
+      const $resultDiv = $('#counterResult');
+      let alertClass = 'alert alert-' + type + ' mb-0';
+      if (type === 'warning') alertClass = 'alert alert-warning mb-0';
+      if (type === 'info') alertClass = 'alert alert-info mb-0';
+      $resultDiv.html(`<div class="${alertClass}">${msg}</div>`);
+    }
+  });
+</script>
+</body>
+</html>

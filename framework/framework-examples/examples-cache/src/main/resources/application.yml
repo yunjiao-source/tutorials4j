@@ -1,10 +1,10 @@
 spring:
   profiles:
-    active: lock
-#    active: bitmap
-#    active: template
-#    active: multi-level
 #    active: cacheable
+#    active: lock
+#    active: template
+    active: multi-level
+
 
   data:
     # Redis 配置

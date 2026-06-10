@@ -1,5 +1,6 @@
 package tutorials4j.framework.cache.redisson;
 
+import lombok.RequiredArgsConstructor;
 import org.redisson.config.NameMapper;
 import tutorials4j.framework.cache.core.RedisKeyPrefix;
 
@@ -15,10 +16,13 @@ import tutorials4j.framework.cache.core.RedisKeyPrefix;
  * @see RedisKeyPrefix#tenant()
  * @see org.redisson.config.Config#setNameMapper(NameMapper)
  */
+@RequiredArgsConstructor
 public class PrefixNameMapper implements NameMapper {
+  private final String cacheName;
+
   @Override
   public String map(String s) {
-    return RedisKeyPrefix.tenant().compute(s);
+    return RedisKeyPrefix.tenant().compute(cacheName) + s;
   }
 
   @Override

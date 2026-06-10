@@ -49,6 +49,8 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
     redisOption.forEach(
         (key, redisProp) -> {
           // 独立配置覆盖默认配置
+          redisProp.applyDefaults(properties.getDefaults());
+
           RedisCacheConfiguration namedCacheConfiguration =
               RedisUtils.fillConfiguration(defaultConfig, redisProp);
           configMap.put(key, namedCacheConfiguration);

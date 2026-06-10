@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多级缓存演示 - Caffeine + Redis</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2b4b8c 100%);
+      color: white;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .card {
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      margin-bottom: 30px;
+      border: none;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+    }
+    .card-header {
+      background-color: #ffffff;
+      border-bottom: 3px solid;
+      border-radius: 16px 16px 0 0 !important;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 1rem 1.25rem;
+    }
+    .card-header.users { border-bottom-color: #0d6efd; color: #0d6efd; }
+    .card-header.orders { border-bottom-color: #198754; color: #198754; }
+    .card-header.cars { border-bottom-color: #fd7e14; color: #fd7e14; }
+    .result-area {
+      background-color: #f1f3f5;
+      border-radius: 12px;
+      padding: 12px 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      word-break: break-all;
+      min-height: 80px;
+    }
+    .btn-demo {
+      border-radius: 40px;
+      padding: 6px 20px;
+      font-weight: 500;
+    }
+    .badge-cache {
+      background-color: #e9ecef;
+      color: #495057;
+      font-size: 0.75rem;
+      margin-left: 10px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 1.5rem;
+      color: #6c757d;
+      border-top: 1px solid #dee2e6;
+    }
+    .cache-explanation {
+      background-color: #e7f3ff;
+      border-left: 5px solid #0d6efd;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <h1 class="display-6 fw-bold">⚡ 多级缓存演示平台</h1>
+    <p class="lead mb-0">Caffeine（一级本地缓存） + Redis（二级分布式缓存）</p>
+    <p class="mt-2 small">🔄 相同ID重复请求将直接从缓存中获取，不再调用数据库（观察后端日志确认）</p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 多级缓存说明 -->
+  <div class="cache-explanation">
+    <h5><span class="badge bg-primary me-2">💡 工作原理</span> 多级缓存机制</h5>
+    <p class="mb-1">✅ <strong>L1 本地缓存 (Caffeine)</strong>：进程内缓存，极快访问速度。<br>
+      ✅ <strong>L2 分布式缓存 (Redis)</strong>：多实例共享，保证数据一致性。<br>
+      ✅ 查询顺序：L1 → L2 → 数据库，数据库查询结果会同步写入L1和L2。<br>
+      ✅ 演示效果：第一次请求某个ID会打印“数据库中获取数据”，第二次及以后请求相同ID不再打印，证明缓存生效。
+    </p>
+  </div>
+
+  <div class="row">
+    <!-- User 卡片 -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header users">
+          👤 User 数据
+          <span class="badge-cache badge rounded-pill">缓存名: users</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">用户ID</label>
+            <input type="number" id="userId" class="form-control" placeholder="例如: 1" value="101">
+          </div>
+          <button id="getUserBtn" class="btn btn-primary btn-demo w-100">🔍 查询用户</button>
+          <hr>
+          <label class="form-label fw-semibold">📦 返回结果</label>
+          <div id="userResult" class="result-area">
+            <span class="text-muted">等待查询...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order 卡片 -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header orders">
+          📦 Order 数据
+          <span class="badge-cache badge rounded-pill">缓存名: orders</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">订单ID</label>
+            <input type="number" id="orderId" class="form-control" placeholder="例如: 2024001" value="2024001">
+          </div>
+          <button id="getOrderBtn" class="btn btn-success btn-demo w-100">🔍 查询订单</button>
+          <hr>
+          <label class="form-label fw-semibold">📦 返回结果</label>
+          <div id="orderResult" class="result-area">
+            <span class="text-muted">等待查询...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Car 卡片 -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header cars">
+          🚗 Car 数据
+          <span class="badge-cache badge rounded-pill">缓存名: cars</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">车辆ID</label>
+            <input type="number" id="carId" class="form-control" placeholder="例如: 5001" value="5001">
+          </div>
+          <button id="getCarBtn" class="btn btn-warning btn-demo w-100">🔍 查询车辆</button>
+          <hr>
+          <label class="form-label fw-semibold">📦 返回结果 (Car对象)</label>
+          <div id="carResult" class="result-area">
+            <span class="text-muted">等待查询...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-secondary mt-4" role="alert">
+    <strong>🧪 测试建议：</strong><br>
+    1️⃣ 打开后端控制台，观察日志输出。<br>
+    2️⃣ 分别点击上面三个按钮，第一次请求会看到 <code>数据库中获取数据</code> 日志。<br>
+    3️⃣ <strong>再次点击相同ID的查询按钮</strong>，后端不会再次打印数据库获取日志，说明数据来自多级缓存（Caffeine/Redis）。<br>
+    4️⃣ 修改ID后重新请求，数据库日志会再次出现，新数据被缓存。<br>
+    💡 提示：确保应用使用 <code>--spring.profiles.active=multi-level</code> 启动。
+  </div>
+  <footer>
+    <span>多级缓存实现 | Caffeine + Redis | @Cacheable 注解演示</span>
+  </footer>
+</div>
+
+<script>
+  $(document).ready(function() {
+
+    // 通用请求函数
+    function requestApi(url, id, resultElement, formatResponse) {
+      if (!id) {
+        $(resultElement).html('<span class="text-danger">❌ 请输入ID</span>');
+        return;
+      }
+      $(resultElement).html('<span class="text-info">⏳ 请求中...</span>');
+      $.ajax({
+        url: url,
+        type: 'GET',
+        data: { id: id },
+        dataType: 'json',  // 统一期望json，但users/orders返回的是字符串会被转为json? 实际响应的content-type可能是text/plain, 但jQuery会按智能转换, 一般能处理
+        success: function(data) {
+          let displayText = '';
+          if (formatResponse) {
+            displayText = formatResponse(data);
+          } else {
+            if (typeof data === 'object') {
+              displayText = JSON.stringify(data, null, 2);
+            } else {
+              displayText = data;
+            }
+          }
+          $(resultElement).html(`<span class="text-dark">${displayText}</span><br><small class="text-muted">🕒 获取时间: ${new Date().toLocaleTimeString()}</small>`);
+        },
+        error: function(xhr) {
+          let errMsg = xhr.responseText || xhr.statusText;
+          $(resultElement).html(`<span class="text-danger">❌ 请求失败: ${xhr.status} ${errMsg}</span>`);
+        }
+      });
+    }
+
+    // 格式化User/Order字符串 (直接展示)
+    function plainFormat(data) {
+      return data;
+    }
+
+    // 专门格式化Car对象
+    function formatCar(car) {
+      if (!car) return '无数据';
+      let dateStr = car.date ? new Date(car.date).toLocaleString() : '未知时间';
+      return `🚘 Car ID: ${car.carId}<br>🏷️ 名称: ${car.name}<br>📅 日期: ${dateStr}`;
+    }
+
+    // 绑定按钮事件
+    $("#getUserBtn").click(function() {
+      let id = $("#userId").val();
+      requestApi("/multi-level/cacheable/users", id, "#userResult", plainFormat);
+    });
+
+    $("#getOrderBtn").click(function() {
+      let id = $("#orderId").val();
+      requestApi("/multi-level/cacheable/orders", id, "#orderResult", plainFormat);
+    });
+
+    $("#getCarBtn").click(function() {
+      let id = $("#carId").val();
+      requestApi("/multi-level/cacheable/cars", id, "#carResult", formatCar);
+    });
+
+    // 支持回车键快速查询（可选体验）
+    $("#userId").on("keypress", function(e) { if(e.which === 13) $("#getUserBtn").click(); });
+    $("#orderId").on("keypress", function(e) { if(e.which === 13) $("#getOrderBtn").click(); });
+    $("#carId").on("keypress", function(e) { if(e.which === 13) $("#getCarBtn").click(); });
+  });
+</script>
+</body>
+</html>

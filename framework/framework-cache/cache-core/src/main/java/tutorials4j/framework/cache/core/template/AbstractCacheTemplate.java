@@ -31,7 +31,7 @@ public abstract class AbstractCacheTemplate<K, V> implements CacheTemplate<K, V>
   protected Cache getCache() {
     if (cache == null) {
       synchronized (this) {
-        if (cache != null) {
+        if (cache == null) {
           cache = doGetCache(cacheName);
         }
       }

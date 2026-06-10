@@ -1,13 +1,10 @@
 
-logging:
-  level:
-    org.springframework.cache: debug
 
 tutorials4j:
   cache:
     named:
       defaults:
-        timeToLive: 10s
+        timeToLive: 40s
         cacheNullValues: false
         enable-statistics: true
         redis:

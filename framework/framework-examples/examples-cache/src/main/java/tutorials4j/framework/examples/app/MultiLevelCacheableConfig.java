@@ -2,7 +2,6 @@ package tutorials4j.framework.examples.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,12 +18,11 @@ import tutorials4j.framework.cache.multi.MultiLevelCacheManagerCreator;
 @Configuration
 @Profile("multi-level")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.multi"})
-public class MultiLevelCacheableConfig implements CachingConfigurer {
+public class MultiLevelCacheableConfig {
   @Autowired private MultiLevelCacheManagerCreator cacheManagerCreator;
 
   @Bean
-  @Override
-  public CacheManager cacheManager() {
+  public CacheManager cacheManager(MultiLevelCacheManagerCreator cacheManagerCreator) {
     return cacheManagerCreator.getInstance();
   }
 }

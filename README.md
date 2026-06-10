@@ -26,10 +26,10 @@ Java 教程
 ### 功能模块示例（framework/framework-examples/examples-feature）
 
 > 签到示例
-![签到示例](docs/images/sign-in-input.jpg )
+![签到示例](docs/images/examples-feature-01.jpg )
 
 > 签到记录查询示例
-![签到记录查询示例](docs/images/sign-in-list.jpg)
+![签到记录查询示例](docs/images/examples-feature-02.jpg)
 
 
 ### 功能模块示例（framework/framework-examples/examples-cache）
@@ -37,15 +37,30 @@ Java 教程
 #### profile:cacheable
 
 > @Cacheable 示例
-![@Cacheable 示例](docs/images/cache-cacheable.jpg)
+![@Cacheable 示例](docs/images/examples-cache-01.jpg)
 
 #### profile:lock
 
 > Redisson 锁示例
-![Redisson 锁示例](docs/images/lock-redisson.jpg)
+![Redisson 锁示例](docs/images/examples-cache-02.jpg)
 
 > Redis 锁示例
-![Redis 锁示例](docs/images/lock-redis.jpg)
+![Redis 锁示例](docs/images/examples-cache-03.jpg)
 
 > 本地（JVM） 锁
-![本地（JVM） 锁](docs/images/lock-local.jpg)
+![本地（JVM） 锁](docs/images/examples-cache-04.jpg)
+
+#### profile:template
+
+> 缓存模版
+![本地（JVM） 锁](docs/images/examples-cache-05.jpg)
+
+#### profile:multi-level
+
+> 缓存模版
+![本地（JVM） 锁](docs/images/examples-cache-06.jpg)
+
+
+
+
+

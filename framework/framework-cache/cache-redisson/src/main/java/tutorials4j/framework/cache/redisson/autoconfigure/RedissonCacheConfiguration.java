@@ -7,6 +7,7 @@ import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tutorials4j.framework.cache.core.properties.CacheProperties;
 import tutorials4j.framework.cache.redisson.PrefixNameMapper;
 import tutorials4j.framework.cache.redisson.lock.RedissonBlockLockService;
 import tutorials4j.framework.cache.redisson.lock.RedissonBlockLockableAspect;
@@ -29,9 +30,9 @@ public class RedissonCacheConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  PrefixNameMapper prefixNameMapper() {
+  PrefixNameMapper prefixNameMapper(CacheProperties properties) {
     log.debug("[CACHE-REDISSON] Prefix Name Mapper");
-    return new PrefixNameMapper();
+    return new PrefixNameMapper(properties.getRedissonCacheName());
   }
 
   @Bean

@@ -11,4 +11,6 @@ import tutorials4j.framework.common.core.PropertiesConsts;
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE)
-public class CacheProperties {}
+public class CacheProperties {
+  private String redissonCacheName = "redisson:cache";
+}
