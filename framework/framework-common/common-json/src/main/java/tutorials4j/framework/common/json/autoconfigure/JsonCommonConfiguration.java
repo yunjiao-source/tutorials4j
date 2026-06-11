@@ -6,8 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.common.json.BaseEnumSimpleModule;
-import tutorials4j.framework.common.json.Long2StringSimpleModule;
+import tutorials4j.framework.common.json.CommonSimpleModule;
 import tutorials4j.framework.common.json.util.Jackson2Utils;
 
 /**
@@ -33,15 +32,8 @@ public class JsonCommonConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  BaseEnumSimpleModule baseEnumSimpleModule() {
-    log.debug("[COMMON-JSON] Base Enum Simple Module");
-    return new BaseEnumSimpleModule();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  Long2StringSimpleModule longJsSimpleModule() {
-    log.debug("[COMMON-JSON] Long Js Simple Module");
-    return new Long2StringSimpleModule();
+  CommonSimpleModule commonSimpleModule() {
+    log.debug("[COMMON-JSON] Common Simple Module");
+    return new CommonSimpleModule();
   }
 }

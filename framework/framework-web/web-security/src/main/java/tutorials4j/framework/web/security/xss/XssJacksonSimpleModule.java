@@ -1,6 +1,9 @@
 package tutorials4j.framework.web.security.xss;
 
+import static tutorials4j.framework.common.core.JacksonConsts.MODULE_ORDER_XSS;
+
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.springframework.core.Ordered;
 import tutorials4j.framework.common.core.JacksonConsts;
 
 /**
@@ -15,9 +18,14 @@ import tutorials4j.framework.common.core.JacksonConsts;
  * @see XssJsonDeserializer
  * @see JacksonConsts
  */
-public class XssJacksonSimpleModule extends SimpleModule {
+public class XssJacksonSimpleModule extends SimpleModule implements Ordered {
   public XssJacksonSimpleModule() {
     super(XssJacksonSimpleModule.class.getName(), JacksonConsts.JSON_VERSION);
     this.addDeserializer(String.class, XssJsonDeserializer.instance);
+  }
+
+  @Override
+  public int getOrder() {
+    return MODULE_ORDER_XSS;
   }
 }

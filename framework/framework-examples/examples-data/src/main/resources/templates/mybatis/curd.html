@@ -181,8 +181,8 @@
             <label for="sex" class="form-label fw-semibold">性别</label>
             <select class="form-select" id="sex" name="sex">
               <option value="">未选择</option>
-              <option value="nan">男</option>
-              <option value="nv">女</option>
+              <option value="male">男</option>
+              <option value="female">女</option>
             </select>
             <div class="form-text">选填，默认为空</div>
           </div>
@@ -222,8 +222,8 @@
 
   // 枚举映射（后端SexEnum code -> label）
   const sexMap = {
-    'nan': { label: '男', code: 'nan' },
-    'nv': { label: '女', code: 'nv' }
+    'male': { label: '男', code: 'male' },
+    'female': { label: '女', code: 'female' }
   };
 
   // 初始化组件

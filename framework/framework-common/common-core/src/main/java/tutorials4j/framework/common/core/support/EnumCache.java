@@ -2,6 +2,7 @@ package tutorials4j.framework.common.core.support;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 枚举缓存工具类。
@@ -18,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see #findByName(Class, String)
  * @see #findByValue(Class, Object)
  */
+@Slf4j
 public class EnumCache {
   /** 以枚举任意值构建的缓存结构，键为用户定义的值（如 code），值为枚举实例 */
   static final Map<Class<? extends Enum<?>>, Map<Object, Enum<?>>> CACHE_BY_VALUE =
@@ -63,8 +65,8 @@ public class EnumCache {
   public static <E extends Enum<?>> void registerByValue(
       Class<E> clazz, E[] es, EnumMapping<E> enumMapping) {
     if (CACHE_BY_VALUE.containsKey(clazz)) {
-      throw new IllegalStateException(
-          String.format("枚举%s已经构建过value缓存,不允许重复构建", clazz.getSimpleName()));
+      log.warn("枚举{}已经构建过value缓存,不允许重复构建", clazz.getSimpleName());
+      return;
     }
     Map<Object, Enum<?>> map = new ConcurrentHashMap<>();
     for (E e : es) {

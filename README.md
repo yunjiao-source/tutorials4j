@@ -91,7 +91,7 @@ Java 教程
 ![博客文章提交](docs/images/examples-captcha-12.jpg)
 
 
-### 验证码模块示例（framework/framework-examples/examples-crypto）
+### 加解密模块示例（framework/framework-examples/examples-crypto）
 
 #### profile:api
 
@@ -102,6 +102,12 @@ Java 教程
 
 #### profile:jpa
 
-> 基于jpa的curd
+> 基于jpa的查询
 ![api请求，响应加解密](docs/images/examples-data-01.jpg)
+
+
+#### profile:mybatis
+
+> 基mybatis的curd
+![基mybatis的curd](docs/images/examples-data-02.jpg)
 
