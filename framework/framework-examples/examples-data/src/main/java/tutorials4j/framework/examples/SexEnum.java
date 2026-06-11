@@ -2,6 +2,7 @@ package tutorials4j.framework.examples;
 
 import lombok.Getter;
 import tutorials4j.framework.common.core.bean.BaseEnum;
+import tutorials4j.framework.common.core.support.EnumCache;
 
 /**
  * 性别
@@ -34,5 +35,10 @@ public enum SexEnum implements BaseEnum<String> {
   @Override
   public String getLabel() {
     return label;
+  }
+
+  static {
+    EnumCache.registerByName(SexEnum.class, SexEnum.values());
+    EnumCache.registerByValue(SexEnum.class, SexEnum.values(), SexEnum::getCode);
   }
 }

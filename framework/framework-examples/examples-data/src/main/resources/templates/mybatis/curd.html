@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>用户管理系统 - MyBatis Plus 示例</title>
+  <!-- Bootstrap 5 CSS + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- jQuery 3.6 -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <!-- Bootstrap 5 JS Bundle (含 Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #2c3e66 0%, #1a2a44 100%);
+      color: white;
+      font-weight: 600;
+    }
+    .table-hover tbody tr:hover {
+      background-color: #eef2ff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .badge-sex {
+      background-color: #e9ecef;
+      color: #2c3e50;
+      padding: 0.35rem 0.65rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+    }
+    .search-box {
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .pagination .page-link {
+      color: #1a2a44;
+    }
+    .pagination .active .page-link {
+      background-color: #1a2a44;
+      border-color: #1a2a44;
+      color: white;
+    }
+    .modal-header {
+      background-color: #f8fafc;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .btn-primary {
+      background-color: #2c3e66;
+      border-color: #2c3e66;
+    }
+    .btn-primary:hover {
+      background-color: #1e2c4a;
+      border-color: #1e2c4a;
+    }
+    .btn-outline-secondary {
+      border-color: #cbd5e1;
+    }
+    footer {
+      font-size: 0.85rem;
+      color: #6c757d;
+      border-top: 1px solid #e2e8f0;
+    }
+    @media (max-width: 768px) {
+      .table-responsive {
+        font-size: 0.85rem;
+      }
+      .btn-sm {
+        padding: 0.2rem 0.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container-fluid px-4 py-4">
+  <!-- 页面标题 -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1"><i class="bi bi-people-fill me-2" style="color:#2c3e66;"></i>用户管理</h2>
+      <p class="text-muted">基于 MyBatis Plus + REST API 的完整 CRUD 示例</p>
+    </div>
+    <button type="button" class="btn btn-primary shadow-sm" id="openCreateModalBtn">
+      <i class="bi bi-plus-circle me-1"></i> 新增用户
+    </button>
+  </div>
+
+  <!-- 主卡片：搜索 + 列表 -->
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header rounded-top-4 py-3">
+      <div class="row align-items-center g-2">
+        <div class="col-md-6">
+          <i class="bi bi-search me-1"></i> <strong>用户列表</strong>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group search-box">
+            <input type="text" class="form-control" id="searchNameInput" placeholder="按姓名模糊搜索..." aria-label="搜索姓名">
+            <button class="btn btn-outline-secondary" type="button" id="searchBtn">
+              <i class="bi bi-search"></i> 搜索
+            </button>
+            <button class="btn btn-outline-secondary" type="button" id="resetSearchBtn">
+              <i class="bi bi-arrow-repeat"></i> 重置
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>邮箱</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th style="width: 130px;">操作</th>
+          </tr>
+          </thead>
+          <tbody id="userTableBody">
+          <tr>
+            <td colspan="8" class="text-center text-muted py-5">
+              <i class="bi bi-hourglass-split me-1"></i> 加载中...
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 分页组件 -->
+      <div class="d-flex justify-content-between align-items-center p-3 bg-light border-top">
+        <div class="text-muted small" id="pageInfoText">共 0 条记录</div>
+        <nav aria-label="User pagination">
+          <ul class="pagination pagination-sm mb-0" id="paginationUl"></ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 新增/编辑 通用模态框 -->
+<div class="modal fade" id="userModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel"><i class="bi bi-person-badge me-2"></i>用户信息</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="userForm">
+          <input type="hidden" id="userId" name="id">
+          <div class="mb-3">
+            <label for="name" class="form-label fw-semibold">姓名 <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名" required>
+            <div class="invalid-feedback">姓名不能为空</div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label fw-semibold">
+              密码 <span id="passwordRequiredStar" class="text-danger">*</span>
+              <small class="text-muted" id="passwordHint" style="font-weight: normal;">(编辑时留空则不修改)</small>
+            </label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
+            <div class="form-text" id="passwordHelpText">创建用户时密码必填，编辑时可留空保留原密码</div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">邮箱 <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" required>
+            <div class="invalid-feedback">请输入有效的邮箱地址</div>
+          </div>
+          <div class="mb-3">
+            <label for="age" class="form-label fw-semibold">年龄 <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" id="age" name="age" placeholder="正整数" min="1" step="1" required>
+            <div class="invalid-feedback">年龄必须为正整数</div>
+          </div>
+          <div class="mb-4">
+            <label for="sex" class="form-label fw-semibold">性别</label>
+            <select class="form-select" id="sex" name="sex">
+              <option value="">未选择</option>
+              <option value="nan">男</option>
+              <option value="nv">女</option>
+            </select>
+            <div class="form-text">选填，默认为空</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="submitUserBtn">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 轻提示（用于操作反馈） -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+  <div id="liveToast" class="toast align-items-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMessage">
+        操作成功
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- 全局变量 ----------
+  let currentPage = 1;
+  const pageSize = 10;
+  let currentKeyword = '';
+  let totalPages = 0;
+  let totalRecords = 0;
+
+  // 模态框实例
+  let userModalInstance;
+  let toastInstance;
+
+  // 枚举映射（后端SexEnum code -> label）
+  const sexMap = {
+    'nan': { label: '男', code: 'nan' },
+    'nv': { label: '女', code: 'nv' }
+  };
+
+  // 初始化组件
+  $(document).ready(function() {
+    // 初始化 Bootstrap 模态框和 Toast
+    userModalInstance = new bootstrap.Modal(document.getElementById('userModal'));
+    const toastEl = document.getElementById('liveToast');
+    toastInstance = new bootstrap.Toast(toastEl, { autohide: true, delay: 2500 });
+
+    // 加载第一页数据
+    loadUsers();
+
+    // 搜索按钮事件
+    $('#searchBtn').on('click', function() {
+      currentKeyword = $('#searchNameInput').val().trim();
+      currentPage = 1;
+      loadUsers();
+    });
+
+    // 重置搜索
+    $('#resetSearchBtn').on('click', function() {
+      $('#searchNameInput').val('');
+      currentKeyword = '';
+      currentPage = 1;
+      loadUsers();
+    });
+
+    // 打开新增模态框
+    $('#openCreateModalBtn').on('click', function() {
+      resetFormAndModal('create');
+      userModalInstance.show();
+    });
+
+    // 提交表单（新增或编辑）
+    $('#submitUserBtn').on('click', function() {
+      const isEdit = $('#userId').val() && $('#userId').val() !== '';
+      if (validateForm()) {
+        if (isEdit) {
+          updateUserRequest();
+        } else {
+          createUserRequest();
+        }
+      }
+    });
+
+    // 监听回车搜索
+    $('#searchNameInput').on('keypress', function(e) {
+      if (e.which === 13) {
+        $('#searchBtn').click();
+      }
+    });
+  });
+
+  // ---------- 校验表单 (简单前端校验 + 密码必填逻辑) ----------
+  function validateForm() {
+    const name = $('#name').val().trim();
+    const email = $('#email').val().trim();
+    const age = $('#age').val();
+    const password = $('#password').val();
+    const isEditMode = ($('#userId').val() && $('#userId').val() !== '');
+
+    // 姓名非空
+    if (!name) {
+      showToast('请输入姓名', 'warning');
+      $('#name').addClass('is-invalid').focus();
+      return false;
+    } else {
+      $('#name').removeClass('is-invalid');
+    }
+
+    // 邮箱非空 + 简单正则
+    if (!email) {
+      showToast('邮箱不能为空', 'warning');
+      $('#email').addClass('is-invalid').focus();
+      return false;
+    } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      showToast('邮箱格式不正确', 'warning');
+      $('#email').addClass('is-invalid').focus();
+      return false;
+    } else {
+      $('#email').removeClass('is-invalid');
+    }
+
+    // 年龄正整数校验
+    if (!age || parseInt(age) <= 0 || !/^[1-9]\d*$/.test(age)) {
+      showToast('年龄必须为正整数', 'warning');
+      $('#age').addClass('is-invalid').focus();
+      return false;
+    } else {
+      $('#age').removeClass('is-invalid');
+    }
+
+    // 密码校验: 创建模式必须填写；编辑模式选填
+    if (!isEditMode && (!password || password.trim() === '')) {
+      showToast('创建用户时密码不能为空', 'warning');
+      $('#password').addClass('is-invalid').focus();
+      return false;
+    } else {
+      $('#password').removeClass('is-invalid');
+    }
+
+    return true;
+  }
+
+  // ---------- 重置模态框状态 (新增模式 / 编辑模式填充后重置样式) ----------
+  function resetFormAndModal(mode, userData = null) {
+    $('#userForm')[0].reset();
+    $('#userId').val('');
+    $('.is-invalid').removeClass('is-invalid');
+
+    if (mode === 'create') {
+      $('#userModalLabel').html('<i class="bi bi-plus-circle me-2"></i>新增用户');
+      $('#passwordRequiredStar').show();
+      $('#passwordHint').hide();
+      $('#passwordHelpText').text('创建用户时密码必填');
+      $('#password').prop('required', false);  // HTML5 required由自定义校验处理
+      $('#password').attr('placeholder', '请输入密码（必填）');
+      // 清空select默认选中
+      $('#sex').val('');
+    } else if (mode === 'edit' && userData) {
+      $('#userModalLabel').html('<i class="bi bi-pencil-square me-2"></i>编辑用户');
+      $('#passwordRequiredStar').hide();
+      $('#passwordHint').show();
+      $('#passwordHelpText').text('编辑用户时，若留空密码则保持不变');
+      $('#password').attr('placeholder', '留空则不修改密码');
+      $('#userId').val(userData.id);
+      $('#name').val(userData.name || '');
+      $('#email').val(userData.email || '');
+      $('#age').val(userData.age || '');
+      // 设置性别: userData.sex 可能是对象 {code, label...} 或字符串code, 我们适配
+      let sexCode = '';
+      if (userData.sex) {
+        if (typeof userData.sex === 'object') {
+          sexCode = userData.sex.code || '';
+        } else if (typeof userData.sex === 'string') {
+          sexCode = userData.sex;
+        }
+      }
+      $('#sex').val(sexCode);
+      // 清空密码框
+      $('#password').val('');
+    }
+  }
+
+  // 显示toast消息
+  function showToast(msg, type = 'success') {
+    const toastEl = $('#liveToast');
+    toastEl.removeClass('bg-success bg-danger bg-warning bg-dark');
+    if (type === 'success') toastEl.addClass('bg-success');
+    else if (type === 'error') toastEl.addClass('bg-danger');
+    else if (type === 'warning') toastEl.addClass('bg-warning');
+    else toastEl.addClass('bg-dark');
+    $('#toastMessage').text(msg);
+    toastInstance.show();
+  }
+
+  // ---------- 加载用户列表 (分页+模糊搜索) ----------
+  function loadUsers() {
+    const url = `/mybatis/users?current=${currentPage}&size=${pageSize}${currentKeyword ? '&name=' + encodeURIComponent(currentKeyword) : ''}`;
+    $.ajax({
+      url: url,
+      type: 'GET',
+      dataType: 'json',
+      success: function(resp) {
+        // resp 格式: Page对象 {records: [], total, size, current, pages}
+        if (resp && resp.records) {
+          const records = resp.records || [];
+          totalRecords = resp.total || 0;
+          totalPages = resp.pages || 0;
+          currentPage = resp.current || 1;
+          renderTable(records);
+          renderPagination();
+          $('#pageInfoText').html(`共 ${totalRecords} 条记录，第 ${currentPage} / ${totalPages || 1} 页`);
+        } else {
+          renderTable([]);
+          $('#pageInfoText').html(`共 0 条记录`);
+          renderPagination();
+        }
+      },
+      error: function(xhr) {
+        console.error('加载失败', xhr);
+        $('#userTableBody').html(`<tr><td colspan="8" class="text-center text-danger"><i class="bi bi-exclamation-triangle"></i> 加载失败: ${xhr.statusText}</td></tr>`);
+        showToast('加载用户列表失败', 'error');
+      }
+    });
+  }
+
+  // 渲染表格
+  function renderTable(users) {
+    const tbody = $('#userTableBody');
+    if (!users || users.length === 0) {
+      tbody.html(`<tr><td colspan="8" class="text-center text-muted py-4"><i class="bi bi-inbox"></i> 暂无用户数据</td></tr>`);
+      return;
+    }
+    let html = '';
+    users.forEach(user => {
+      // 安全处理 sex 显示
+      let sexLabel = '';
+      if (user.sex) {
+        if (typeof user.sex === 'object' && user.sex.label) {
+          sexLabel = user.sex.label;
+        } else if (typeof user.sex === 'string') {
+          sexLabel = sexMap[user.sex]?.label || user.sex;
+        } else if (user.sex.code) {
+          sexLabel = user.sex.label || user.sex.code;
+        }
+      } else {
+        sexLabel = '<span class="text-secondary">未设置</span>';
+      }
+      const createdAt = formatDateTime(user.createdDate);
+      const updatedAt = formatDateTime(user.lastModifiedDate);
+      html += `
+                <tr data-user-id="${user.id}">
+                    <td class="text-truncate" style="max-width: 180px;" title="${user.id}">${user.id}</td>
+                    <td class="fw-semibold">${escapeHtml(user.name) || '-'}</td>
+                    <td>${escapeHtml(user.email) || '-'}</td>
+                    <td>${user.age != null ? user.age : '-'}</td>
+                    <td><span class="badge-sex">${sexLabel}</span></td>
+                    <td>${createdAt}</td>
+                    <td>${updatedAt}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary edit-user-btn me-1" data-id="${user.id}" title="编辑"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger delete-user-btn" data-id="${user.id}" data-name="${escapeHtml(user.name)}" title="删除"><i class="bi bi-trash3"></i></button>
+                    </td>
+                </tr>
+            `;
+    });
+    tbody.html(html);
+
+    // 绑定编辑按钮事件 (由于动态生成，使用委托)
+    $('.edit-user-btn').off('click').on('click', function() {
+      const userId = $(this).data('id');
+      fetchUserDetailAndEdit(userId);
+    });
+
+    // 绑定删除按钮
+    $('.delete-user-btn').off('click').on('click', function() {
+      const userId = $(this).data('id');
+      const userName = $(this).data('name');
+      confirmDeleteUser(userId, userName);
+    });
+  }
+
+  // 获取单个用户详情（用于编辑弹窗填充最新数据）
+  function fetchUserDetailAndEdit(userId) {
+    $.ajax({
+      url: `/mybatis/users/${userId}`,
+      type: 'GET',
+      dataType: 'json',
+      success: function(user) {
+        if (user && user.id) {
+          resetFormAndModal('edit', user);
+          userModalInstance.show();
+        } else {
+          showToast('获取用户信息失败', 'error');
+        }
+      },
+      error: function() {
+        showToast('无法获取用户详情，请稍后重试', 'error');
+      }
+    });
+  }
+
+  // 创建用户请求
+  function createUserRequest() {
+    const createDTO = {
+      name: $('#name').val().trim(),
+      password: $('#password').val(),
+      email: $('#email').val().trim(),
+      age: parseInt($('#age').val()),
+      sex: $('#sex').val() || null
+    };
+    // 如果性别为空字符串，设为null
+    if (!createDTO.sex) createDTO.sex = null;
+
+    $.ajax({
+      url: '/mybatis/users',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(createDTO),
+      success: function(respUser) {
+        showToast('用户创建成功', 'success');
+        userModalInstance.hide();
+        // 刷新当前页（如果当前在第一页且搜索条件不变）
+        loadUsers();
+      },
+      error: function(xhr) {
+        let errMsg = '创建失败';
+        if (xhr.responseJSON && xhr.responseJSON.message) errMsg = xhr.responseJSON.message;
+        else if (xhr.responseText) errMsg = xhr.responseText;
+        showToast(errMsg, 'error');
+      }
+    });
+  }
+
+  // 更新用户请求 (注意：仅当密码非空时才会发送password字段，为空则删除该字段避免覆盖)
+  function updateUserRequest() {
+    const userId = $('#userId').val();
+    const updateData = {
+      name: $('#name').val().trim(),
+      email: $('#email').val().trim(),
+      age: parseInt($('#age').val()),
+      sex: $('#sex').val() || null
+    };
+    const passwordVal = $('#password').val();
+    if (passwordVal && passwordVal.trim() !== '') {
+      updateData.password = passwordVal.trim();
+    }
+    if (!updateData.sex) updateData.sex = null;
+
+    $.ajax({
+      url: `/mybatis/users/${userId}`,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(updateData),
+      success: function(updatedUser) {
+        showToast('用户信息更新成功', 'success');
+        userModalInstance.hide();
+        loadUsers();  // 刷新当前页
+      },
+      error: function(xhr) {
+        let errMsg = '更新失败';
+        if (xhr.responseJSON && xhr.responseJSON.message) errMsg = xhr.responseJSON.message;
+        else if (xhr.responseText) errMsg = xhr.responseText;
+        showToast(errMsg, 'error');
+      }
+    });
+  }
+
+  // 删除确认
+  function confirmDeleteUser(id, name) {
+    if (confirm(`确定要删除用户 “${name}” 吗？\n删除后数据不可恢复（逻辑删除）。`)) {
+      $.ajax({
+        url: `/mybatis/users/${id}`,
+        type: 'DELETE',
+        success: function() {
+          showToast(`用户 ${name} 已删除`, 'success');
+          // 如果当前页只有一条数据且不是第一页，则跳转到上一页
+          const $rows = $('#userTableBody tr:not(.text-center)').filter(function() { return $(this).data('user-id'); });
+          if ($rows.length === 1 && currentPage > 1) {
+            currentPage--;
+          }
+          loadUsers();
+        },
+        error: function(xhr) {
+          let errMsg = '删除失败';
+          if (xhr.status === 404) errMsg = '用户不存在或已被删除';
+          showToast(errMsg, 'error');
+        }
+      });
+    }
+  }
+
+  // 渲染分页组件 (Bootstrap风格)
+  function renderPagination() {
+    const totalPg = totalPages;
+    const current = currentPage;
+    const $pagination = $('#paginationUl');
+    if (totalPg <= 1 && totalRecords === 0) {
+      $pagination.html('<li class="page-item disabled"><span class="page-link">1</span></li>');
+      return;
+    }
+    let paginationHtml = '';
+    // 上一页
+    if (current === 1) {
+      paginationHtml += '<li class="page-item disabled"><span class="page-link">&laquo;</span></li>';
+    } else {
+      paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${current-1}">&laquo;</a></li>`;
+    }
+
+    // 页码计算: 最多显示5页，当前页居中
+    let startPage = Math.max(1, current - 2);
+    let endPage = Math.min(totalPg, startPage + 4);
+    if (endPage - startPage < 4) {
+      startPage = Math.max(1, endPage - 4);
+    }
+    for (let i = startPage; i <= endPage; i++) {
+      if (i === current) {
+        paginationHtml += `<li class="page-item active"><span class="page-link">${i}</span></li>`;
+      } else {
+        paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+      }
+    }
+
+    // 下一页
+    if (current === totalPg || totalPg === 0) {
+      paginationHtml += '<li class="page-item disabled"><span class="page-link">&raquo;</span></li>';
+    } else {
+      paginationHtml += `<li class="page-item"><a class="page-link" href="#" data-page="${current+1}">&raquo;</a></li>`;
+    }
+
+    $pagination.html(paginationHtml);
+    // 绑定页码点击事件
+    $pagination.find('a.page-link').on('click', function(e) {
+      e.preventDefault();
+      const page = $(this).data('page');
+      if (page && page !== currentPage) {
+        currentPage = page;
+        loadUsers();
+      }
+    });
+  }
+
+  // 格式化日期 (ISO 8601 转 YYYY-MM-DD HH:MM:SS)
+  function formatDateTime(isoString) {
+    if (!isoString) return '-';
+    try {
+      const date = new Date(isoString);
+      if (isNaN(date.getTime())) return isoString;
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    } catch(e) {
+      return isoString;
+    }
+  }
+
+  // 简单防XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+</script>
+</body>
+</html>

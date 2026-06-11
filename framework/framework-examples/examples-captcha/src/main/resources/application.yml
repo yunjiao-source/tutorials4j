@@ -1,8 +1,8 @@
 spring:
   profiles:
-      active: captchaendpoint
-  #    active: tianaicaptchaendpoint
-  #    active: captchafilter
+#      active: captchaendpoint
+#      active: tianaicaptchaendpoint
+      active: captchafilter
 
 
   data:

@@ -1,3 +1,0 @@
-### 页面
-GET http://localhost:8080/view/apicrypto
-Accept: text/html

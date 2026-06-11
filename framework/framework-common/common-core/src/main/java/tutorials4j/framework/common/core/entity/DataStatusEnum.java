@@ -1,6 +1,7 @@
 package tutorials4j.framework.common.core.entity;
 
 import tutorials4j.framework.common.core.bean.BaseEnum;
+import tutorials4j.framework.common.core.support.EnumCache;
 
 /**
  * 数据状态枚举，定义了实体的常见生命周期状态。
@@ -47,5 +48,11 @@ public enum DataStatusEnum implements BaseEnum<Integer> {
   @Override
   public String getLabel() {
     return label;
+  }
+
+  static {
+    EnumCache.registerByName(DataStatusEnum.class, DataStatusEnum.values());
+    EnumCache.registerByValue(
+        DataStatusEnum.class, DataStatusEnum.values(), DataStatusEnum::getCode);
   }
 }

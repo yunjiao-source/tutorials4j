@@ -2,6 +2,8 @@ package tutorials4j.framework.cache.core.support;
 
 import lombok.Getter;
 import tutorials4j.framework.common.core.bean.BaseEnum;
+import tutorials4j.framework.common.core.entity.DataStatusEnum;
+import tutorials4j.framework.common.core.support.EnumCache;
 
 /**
  * TODO
@@ -36,5 +38,11 @@ public enum CacheManagerCreatorCategory implements BaseEnum<Integer> {
   @Override
   public String getLabel() {
     return note;
+  }
+
+  static {
+    EnumCache.registerByName(DataStatusEnum.class, DataStatusEnum.values());
+    EnumCache.registerByValue(
+        DataStatusEnum.class, DataStatusEnum.values(), DataStatusEnum::getCode);
   }
 }

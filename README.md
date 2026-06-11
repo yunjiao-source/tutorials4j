@@ -32,7 +32,7 @@ Java 教程
 ![签到记录查询示例](docs/images/examples-feature-02.jpg)
 
 
-### 功能模块示例（framework/framework-examples/examples-cache）
+### 缓存模块示例（framework/framework-examples/examples-cache）
 
 #### profile:cacheable
 
@@ -61,6 +61,47 @@ Java 教程
 ![本地（JVM） 锁](docs/images/examples-cache-06.jpg)
 
 
+### 验证码模块示例（framework/framework-examples/examples-captcha）
+
+#### profile:captchaendpoint
+
+> hutool验证码接口
+![hutool验证码接口](docs/images/examples-captcha-01.jpg)
+![hutool验证码接口](docs/images/examples-captcha-02.jpg)
+![hutool验证码接口](docs/images/examples-captcha-03.jpg)
+![hutool验证码接口](docs/images/examples-captcha-04.jpg)
+
+> tianai验证码接口
+![tianai验证码接口](docs/images/examples-captcha-05.jpg)
+![tianai验证码接口](docs/images/examples-captcha-06.jpg)
+![tianai验证码接口](docs/images/examples-captcha-07.jpg)
 
 
+#### profile:tianaicaptchaendpoint
+
+> tianai验证码官方标准接口
+![hutool验证码接口](docs/images/examples-captcha-08.jpg)
+![hutool验证码接口](docs/images/examples-captcha-09.jpg)
+![hutool验证码接口](docs/images/examples-captcha-10.jpg)
+![hutool验证码接口](docs/images/examples-captcha-11.jpg)
+
+#### profile:tianaicaptchaendpoint
+
+> 基于过滤器的验证码校验
+![博客文章提交](docs/images/examples-captcha-12.jpg)
+
+
+### 验证码模块示例（framework/framework-examples/examples-crypto）
+
+#### profile:api
+
+> api请求，响应加解密
+![api请求，响应加解密](docs/images/examples-crypto-01.jpg)
+
+### 数据模块示例（framework/framework-examples/examples-data）
+
+#### profile:jpa
+
+> 基于jpa的curd
+![api请求，响应加解密](docs/images/examples-data-01.jpg)
 
