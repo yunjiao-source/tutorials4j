@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spring Cache 多租户演示</title>
+  <!-- Bootstrap 5 CSS + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #f5f7fb;
+      font-family: 'Segoe UI', system-ui;
+    }
+    .card-header {
+      font-weight: 600;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .result-area {
+      background-color: #f8f9fa;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+    .badge-tenant {
+      font-size: 0.8rem;
+      background-color: #e9ecef;
+      color: #2c3e50;
+      padding: 6px 12px;
+      border-radius: 30px;
+    }
+    .info-note {
+      background-color: #e7f3ff;
+      border-left: 5px solid #0d6efd;
+    }
+    footer {
+      border-top: 1px solid #dee2e6;
+    }
+    .btn-custom {
+      background-color: #667eea;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-custom:hover {
+      background-color: #5a67d8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4">
+  <!-- 页面头部 -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <h1 class="h3 mb-0"><i class="bi bi-database-fill-gear"></i> Spring Cache 多租户演示</h1>
+    <div class="mt-2 mt-sm-0">
+            <span class="badge-tenant me-2">
+                <i class="bi bi-building"></i> 当前租户：
+            </span>
+      <select id="tenantSelect" class="form-select form-select-sm d-inline-block w-auto">
+        <option value="DEFAULT" selected>🏢 DEFAULT</option>
+        <option value="demo1">🎯 demo1</option>
+      </select>
+      <small class="text-muted ms-2">请求头 X-Tenant-Code</small>
+    </div>
+  </div>
+
+  <!-- 说明卡片 -->
+  <div class="alert alert-info info-note mb-4" role="alert">
+    <i class="bi bi-lightbulb"></i> <strong>缓存机制 & 多租户隔离</strong><br>
+    • 支持多种缓存管理器，如：Caffine, Redis, 两级缓存
+    • 相同租户 + 相同ID → 第一次从“数据库”获取（生成随机字符串），后续请求命中缓存，返回相同结果。<br>
+    • 不同租户相同ID → 缓存完全隔离，各自独立存储。<br>
+    • 接口返回的随机字符串不变即表示缓存生效。
+  </div>
+
+  <div class="row g-4">
+    <!-- 用户卡片 -->
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header">
+          👤 用户服务 /users
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="userId" class="form-label fw-semibold">用户ID</label>
+            <input type="number" id="userId" class="form-control" value="1" placeholder="输入数字ID">
+            <div class="form-text">例如: 1, 2, 100</div>
+          </div>
+          <button class="btn btn-custom btn-primary w-100 mb-3" id="getUserBtn">
+            🔍 调用 /cacheable/users
+          </button>
+          <div class="result-area" id="userResult">
+            <span class="text-secondary">等待调用...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 订单卡片 -->
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header">
+          📦 订单服务 /orders
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="orderId" class="form-label fw-semibold">订单ID</label>
+            <input type="number" id="orderId" class="form-control" value="1" placeholder="输入数字ID">
+            <div class="form-text">例如: 1, 2, 100</div>
+          </div>
+          <button class="btn btn-custom btn-primary w-100 mb-3" id="getOrderBtn">
+            🔍 调用 /cacheable/orders
+          </button>
+          <div class="result-area" id="orderResult">
+            <span class="text-secondary">等待调用...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 汽车卡片 -->
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header">
+          🚗 汽车服务 /cars
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="carId" class="form-label fw-semibold">汽车ID</label>
+            <input type="number" id="carId" class="form-control" value="1" placeholder="输入数字ID">
+            <div class="form-text">例如: 1, 2, 100</div>
+          </div>
+          <button class="btn btn-custom btn-primary w-100 mb-3" id="getCarBtn">
+            🔍 调用 /cacheable/cars
+          </button>
+          <div class="result-area" id="carResult">
+            <span class="text-secondary">等待调用...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 调试提示区 -->
+  <footer class="mt-5 pt-3 text-muted small">
+    <hr>
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <span>✅ 请求携带 <code>X-Tenant-Code</code> 头部，值与上方下拉框同步。</span>
+      <span class="badge bg-light text-dark">✨ 同一租户同一ID重复调用 → 缓存命中，返回相同随机串</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+  $(function() {
+    // 获取当前选中的租户
+    function getCurrentTenant() {
+      return $('#tenantSelect').val();
+    }
+
+    // 通用 AJAX 调用函数
+    function callApi(endpoint, id, resultContainer, apiName) {
+      if (!id || isNaN(id) || id <= 0) {
+        $(resultContainer).html('<span class="text-danger">❌ 请输入有效的数字ID（正整数）</span>');
+        return;
+      }
+
+      const tenant = getCurrentTenant();
+      const url = endpoint + '?id=' + id;
+      const requestTime = new Date().toLocaleTimeString();
+
+      // 显示加载状态
+      $(resultContainer).html('<span class="text-info">⏳ 请求中... 租户: ' + tenant + '</span>');
+
+      $.ajax({
+        url: url,
+        type: 'GET',
+        headers: {
+          'X-Tenant-Code': tenant
+        },
+        success: function(data) {
+          let displayHtml = `
+                        <div class="small text-muted mb-1">📅 ${requestTime} | 租户: <strong>${tenant}</strong></div>
+                        <div class="mt-1">🔹 接口响应: <span class="fw-bold text-dark">${escapeHtml(data)}</span></div>
+                        <div class="mt-2 small text-secondary">📌 说明: 同一租户相同ID再次调用结果不变 → 缓存生效</div>
+                    `;
+          $(resultContainer).html(displayHtml);
+        },
+        error: function(xhr, status, error) {
+          let errorMsg = `❌ 请求失败 (${status})`;
+          if (xhr.responseText) {
+            try {
+              let errJson = JSON.parse(xhr.responseText);
+              errorMsg += `: ${errJson.message || xhr.responseText}`;
+            } catch(e) {
+              errorMsg += `: ${xhr.responseText.substring(0, 100)}`;
+            }
+          } else {
+            errorMsg += `: ${error}`;
+          }
+          $(resultContainer).html(`<span class="text-danger">${escapeHtml(errorMsg)}</span><br><small class="text-muted">请确保后端服务已启动且接口可用。</small>`);
+        }
+      });
+    }
+
+    // 简易防XSS
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        return c;
+      });
+    }
+
+    // 绑定三个按钮事件
+    $('#getUserBtn').on('click', function() {
+      const userId = $('#userId').val();
+      callApi('/cacheable/users', userId, '#userResult', 'users');
+    });
+
+    $('#getOrderBtn').on('click', function() {
+      const orderId = $('#orderId').val();
+      callApi('/cacheable/orders', orderId, '#orderResult', 'orders');
+    });
+
+    $('#getCarBtn').on('click', function() {
+      const carId = $('#carId').val();
+      callApi('/cacheable/cars', carId, '#carResult', 'cars');
+    });
+
+    // 可选：支持回车键快速请求（体验提升）
+    $('#userId, #orderId, #carId').on('keypress', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        if ($(this).attr('id') === 'userId') $('#getUserBtn').click();
+        else if ($(this).attr('id') === 'orderId') $('#getOrderBtn').click();
+        else if ($(this).attr('id') === 'carId') $('#getCarBtn').click();
+      }
+    });
+
+    // 租户切换时，可在控制台输出提醒，方便观察
+    $('#tenantSelect').on('change', function() {
+      console.log('[租户切换] 当前租户: ' + $(this).val() + '，后续请求会使用新的请求头 X-Tenant-Code');
+    });
+  });
+</script>
+<!-- Bootstrap JS 可选 (用于部分交互) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -27,7 +27,8 @@ public class UserService {
   @Async
   @SneakyThrows
   public void findAsynById(Long id) {
-    log.info("多线程租户: {}", TenantContextHolder.get());
+    List<User> users = getAllUsers();
+    log.info("多线程租户: {}, 用户数：{}", TenantContextHolder.get(), users.size());
     TimeUnit.SECONDS.sleep(3);
   }
 }

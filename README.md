@@ -111,3 +111,19 @@ Java 教程
 > 基mybatis的curd
 ![基mybatis的curd](docs/images/examples-data-02.jpg)
 
+
+### 多租户模块示例（framework/framework-examples/examples-tenant）
+
+#### profile:cache
+
+> Spring Cache 多租户演示
+![Spring Cache 多租户演示](docs/images/examples-tenant-01.jpg)
+
+#### profile:jpa-database
+
+> 多租户用户管理系统(JPA+数据库隔离)
+![多租户用户管理系统(JPA+数据库隔离)](docs/images/examples-tenant-02.jpg)
+
+> 多租户用户管理系统(JPA+表隔离)
+![多租户用户管理系统(JPA+表隔离)](docs/images/examples-tenant-03.jpg)
+

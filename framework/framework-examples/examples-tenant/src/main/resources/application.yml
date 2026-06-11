@@ -1,8 +1,8 @@
 spring:
   profiles:
-    active: mybatis-database
+#    active: mybatis-database
 #    active: mybatis-table
-#    active: jpa-table
+    active: jpa-table
 #    active: jpa-database
 #    active: cache
 
@@ -56,6 +56,16 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
+
+  thymeleaf:
+    cache: false
+
+  data:
+    # Redis 配置
+    redis:
+      host: localhost # Redis服务器地址
+      port: 6379 # Redis端口
+      database: 2
 
 
 tutorials4j:

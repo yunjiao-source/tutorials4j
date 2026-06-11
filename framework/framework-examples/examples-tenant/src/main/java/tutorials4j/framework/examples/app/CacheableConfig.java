@@ -1,8 +1,6 @@
 package tutorials4j.framework.examples.app;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,7 +12,7 @@ import tutorials4j.framework.tenant.cache.TenantCaffeineCacheManagerCreator;
 import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
 
 /**
- * 两级缓存配置
+ * 缓存配置
  *
  * @author Yun Jiao
  */
@@ -22,18 +20,28 @@ import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
 @Configuration
 @Profile("cache")
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.cache"})
-public class CacheableConfig implements CachingConfigurer {
-  @Autowired private RedisCacheManagerCreator redisCacheManagerCreator;
-  @Autowired private TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator;
-  @Autowired private TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator;
-  @Autowired private CaffeineCacheManagerCreator caffeineCacheManagerCreator; // 这个不支持租户
+public class CacheableConfig {
 
+  /**
+   * 支持多种缓存管理器
+   *
+   * @param redisCacheManagerCreator
+   * @param tenantMultiLevelCacheManagerCreator
+   * @param tenantCaffeineCacheManagerCreator
+   * @param caffeineCacheManagerCreator
+   * @return
+   */
   @Bean
-  @Override
-  public CacheManager cacheManager() {
-    // return redisCacheManagerCreator.getInstance();
-    return tenantMultiLevelCacheManagerCreator.getInstance();
+  public CacheManager cacheManager(
+      RedisCacheManagerCreator redisCacheManagerCreator,
+      TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator,
+      TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator,
+      CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
+    return redisCacheManagerCreator.getInstance();
+    // return tenantMultiLevelCacheManagerCreator.getInstance();
     // return tenantCaffeineCacheManagerCreator.getInstance();
+
+    // 这个不支持租户
     // return caffeineCacheManagerCreator.getInstance();
   }
 }

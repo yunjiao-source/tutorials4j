@@ -54,6 +54,6 @@ public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiL
 
   @Override
   public CacheManagerCreatorCategory getCategory() {
-    return CacheManagerCreatorCategory.TENANT_MULTI_LEVEL;
+    return CacheManagerCreatorCategory.MULTI_LEVEL;
   }
 }
