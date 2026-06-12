@@ -10,8 +10,6 @@ public interface CacheNameConsts {
 
   String CAPTCHA_BEHAVIOR = "captcha-behavior";
 
-  String WEB_SECURITY_SIGNATURE = "web-security-signature";
-
   String WEB_SECURITY_IDEMPOTENT = "web-security-idempotent";
 
   String WEB_SECURITY_ACCESS_LIMITED = "web-security-access-limited";

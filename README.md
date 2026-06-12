@@ -4,13 +4,14 @@ Java 教程
 
 ## 项目列表
 
-| 组件            | 作用                   |
-|---------------|----------------------|
-| `framework`   | 基于Spring Boot的框架     |
-| `assembly`    | 基于f`ramework`框架的集成模块 |
-| `java21`      | 基于Java21示例项目         |
-| `springboot3` | 基于Spring Boot3的示例项目  |
-| `springboot4` | 基于Spring Boot4的示例项目  |
+| 组件            | 作用              |
+|---------------|-----------------|
+| `framework`   | 基于Spring Boot的框架 |
+| `assembly`    | 基于`framework`框架的集成模块 |
+| `java21`      | Java21示例项目      |
+| `springboot3` | Spring Boot3的示例项目 |
+| `springboot4` | Spring Boot4的示例项目 |
+| `springcloud` | Spring Cloud的示例项目 |
 
 
 ## 公众号

@@ -19,7 +19,6 @@ import tutorials4j.framework.web.security.rest.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.security.rest.IdempotentCacheTemplate;
 import tutorials4j.framework.web.security.rest.IdempotentHandlerInterceptor;
 import tutorials4j.framework.web.security.signature.InMemerySignatureKeyRepository;
-import tutorials4j.framework.web.security.signature.SignatureCacheTemplate;
 import tutorials4j.framework.web.security.signature.SignatureHandlerInterceptor;
 import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
 
@@ -53,13 +52,6 @@ public class SecurityWebConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  SignatureCacheTemplate signatureCacheTemplate() {
-    log.debug("[WEB-SECURITY] Signature Cache Template");
-    return new SignatureCacheTemplate();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
   SignatureKeyRepository inMemerySignatureKeyRepository(SecurityWebProperties properties) {
     log.debug("[WEB-SECURITY] In Memery Signature Key Repository");
     return new InMemerySignatureKeyRepository(properties);
@@ -72,7 +64,6 @@ public class SecurityWebConfiguration {
 
     private final AccessLimitedCacheTemplate accessLimitedCacheTemplate;
     private final IdempotentCacheTemplate idempotentCacheTemplate;
-    private final SignatureCacheTemplate signatureCacheTemplate;
     private final SignatureKeyRepository signatureKeyRepository;
     private final SecurityWebProperties properties;
 
@@ -90,7 +81,8 @@ public class SecurityWebConfiguration {
 
       HandlerInterceptorOptions signatureOptions = properties.getSignature().getInterceptor();
       SignatureHandlerInterceptor signatureHandlerInterceptor =
-          new SignatureHandlerInterceptor(signatureCacheTemplate, signatureKeyRepository);
+          new SignatureHandlerInterceptor(
+              properties.getSignature().getNonceRedisKeyPrefix(), signatureKeyRepository);
       doAddInterceptor(registry, signatureHandlerInterceptor, signatureOptions);
     }
 

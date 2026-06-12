@@ -4,29 +4,17 @@ spring:
     redis:
       host: localhost # Redis服务器地址
       port: 6379 # Redis端口
+      database: 2
 
 
 tutorials4j:
-  cache:
-    named:
-      defaults:
-        timeToLive: 2m
-        cacheNullValues: false
-        enable-statistics: true
-      caches:
-        web-security-signature:
-          timeToLive: 1m
-          cacheNullValues: true
-          redis:
-            cache-prefix: 'security:'
-
-
   web:
     rest:
       cached-body:
         url-patterns: /signature/*
     security:
       signature:
+        nonce-redis-key-prefix: 'signature:nonce:'
         interceptor:
           include-path-patterns: /signature/**
         keys:

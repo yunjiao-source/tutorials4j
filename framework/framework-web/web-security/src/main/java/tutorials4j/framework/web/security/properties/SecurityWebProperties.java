@@ -31,6 +31,7 @@ public class SecurityWebProperties {
     @NestedConfigurationProperty
     private HandlerInterceptorOptions interceptor = new HandlerInterceptorOptions();
 
+    private String nonceRedisKeyPrefix = "signature:nonce:";
     private Map<String, String> keys = new HashMap<>();
   }
 }

@@ -3,7 +3,6 @@ package tutorials4j.framework.examples;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +25,8 @@ public class SignatureClientIT {
   public <T> T post(String baseUrl, String path, Object body, Class<T> responseType)
       throws JsonProcessingException {
     String timestamp = String.valueOf(System.currentTimeMillis());
-    String nonce = UUID.randomUUID().toString().replace("-", "");
+    // String nonce = UUID.randomUUID().toString().replace("-", "");
+    String nonce = "21a7d4b5405f473f8cbfb5086e3e712a";
     String bodyJson = objectMapper.writeValueAsString(body);
 
     // 生成签名

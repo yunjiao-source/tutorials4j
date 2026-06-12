@@ -5,12 +5,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.web.core.annotation.RequiredSignature;
@@ -27,7 +30,7 @@ import tutorials4j.framework.web.core.exception.SignatureException;
 @Slf4j
 @RequiredArgsConstructor
 public class SignatureHandlerInterceptor implements HandlerInterceptor {
-  private final SignatureCacheTemplate signatureCacheTemplate;
+  private final String onceRedisKeyPrefix;
   private final SignatureKeyRepository signatureKeyRepository;
 
   @Override
@@ -71,8 +74,15 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
     }
 
     // 3. Nonce 验证（防重放）
-    if (annotation.checkNonce() && !signatureCacheTemplate.putIfAbsent(nonce)) {
-      throw new SignatureException("重复的请求");
+    if (annotation.checkNonce()) {
+      Boolean success =
+          RedisTemplateDecorator.stringRedisTemplate()
+              .opsForValue()
+              .setIfAbsent(
+                  generateNonceKey(nonce),
+                  Instant.now().toString(),
+                  Duration.ofSeconds(annotation.timeWindowSeconds()));
+      if (!success) throw new SignatureException("重复的请求");
     }
 
     String appSecret = signatureKeyRepository.getSecretKey(appKey);
@@ -98,6 +108,10 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
     }
 
     return true;
+  }
+
+  private String generateNonceKey(String nonce) {
+    return onceRedisKeyPrefix + nonce;
   }
 
   /**
