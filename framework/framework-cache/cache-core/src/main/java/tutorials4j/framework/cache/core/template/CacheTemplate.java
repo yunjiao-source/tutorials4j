@@ -40,7 +40,7 @@ public interface CacheTemplate<K, V> {
 
   default V createIfAbsent(K key) {
     if (!exists(key)) {
-      create(key);
+      return create(key);
     }
     return get(key);
   }
@@ -92,7 +92,13 @@ public interface CacheTemplate<K, V> {
    */
   boolean exists(K key);
 
-  default boolean setIfAbsent(K key) {
+  /**
+   * 若果key已存在，返回false；如果不存在，放入直，返回true
+   *
+   * @param key
+   * @return
+   */
+  default boolean putIfAbsent(K key) {
     return putIfAbsent(key, valueGenerator(key)) == null;
   }
 

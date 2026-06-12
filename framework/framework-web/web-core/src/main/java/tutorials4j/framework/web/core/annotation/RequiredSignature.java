@@ -19,7 +19,7 @@ public @interface RequiredSignature {
   boolean required() default true;
 
   /** 时间窗口（秒） */
-  long timeWindow() default 300;
+  long timeWindowSeconds() default 300;
 
   /** 是否验证 nonce */
   boolean checkNonce() default true;

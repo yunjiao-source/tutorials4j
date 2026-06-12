@@ -1,5 +1,6 @@
 package tutorials4j.framework.cache.redis;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import tutorials4j.framework.cache.core.RedisKeyPrefix;
@@ -15,9 +16,12 @@ import tutorials4j.framework.cache.redis.util.RedisUtils;
  * @see StringRedisSerializer
  * @see RedisUtils#tenantCacheKeyPrefix()
  */
-public class TenantStringRedisSerializer extends StringRedisSerializer {
+@RequiredArgsConstructor
+public class TenantKeySerializer extends StringRedisSerializer {
+  private final String cacheName;
+
   @Override
   public byte[] serialize(String value) throws SerializationException {
-    return super.serialize(RedisKeyPrefix.tenant().compute(value));
+    return super.serialize(RedisKeyPrefix.tenant().compute(cacheName) + value);
   }
 }

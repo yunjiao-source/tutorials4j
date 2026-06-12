@@ -13,11 +13,12 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import tutorials4j.framework.cache.core.properties.CacheProperties;
 import tutorials4j.framework.cache.core.properties.LockCacheProperties;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
-import tutorials4j.framework.cache.redis.TenantStringRedisSerializer;
+import tutorials4j.framework.cache.redis.TenantKeySerializer;
 import tutorials4j.framework.cache.redis.customizer.NamedCacheManagerCustomizer;
 import tutorials4j.framework.cache.redis.customizer.NamedRedisCacheManagerBuilderCustomizer;
 import tutorials4j.framework.cache.redis.customizer.ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer;
@@ -79,11 +80,13 @@ public class RedisCacheConfiguration {
   @Bean
   @ConditionalOnMissingBean
   RedisTemplateDecorator redisTemplateDecorator(
-      StringRedisTemplate stringRedisTemplate, RedisTemplate<Object, Object> redisTemplate) {
+      CacheProperties properties,
+      StringRedisTemplate stringRedisTemplate,
+      RedisTemplate<Object, Object> redisTemplate) {
     log.debug("[CACHE-REDIS] Redis Template Decorator");
 
     // 基于租户key的序列化器
-    TenantStringRedisSerializer serializer = new TenantStringRedisSerializer();
+    TenantKeySerializer serializer = new TenantKeySerializer(properties.getTemplageCacheName());
     stringRedisTemplate.setKeySerializer(serializer);
     stringRedisTemplate.setHashKeySerializer(serializer);
 

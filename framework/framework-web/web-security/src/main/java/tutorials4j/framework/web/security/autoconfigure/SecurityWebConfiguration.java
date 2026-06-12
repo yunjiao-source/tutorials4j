@@ -18,10 +18,10 @@ import tutorials4j.framework.web.security.rest.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.security.rest.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.security.rest.IdempotentCacheTemplate;
 import tutorials4j.framework.web.security.rest.IdempotentHandlerInterceptor;
+import tutorials4j.framework.web.security.signature.InMemerySignatureKeyRepository;
 import tutorials4j.framework.web.security.signature.SignatureCacheTemplate;
 import tutorials4j.framework.web.security.signature.SignatureHandlerInterceptor;
 import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
-import tutorials4j.framework.web.security.signature.SimpleSignatureKeyRepository;
 
 /**
  * TODO
@@ -60,9 +60,9 @@ public class SecurityWebConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  SignatureKeyRepository simpleSignatureKeyRepository(SecurityWebProperties properties) {
-    log.debug("[WEB-SECURITY] Simple Signature Key Repository");
-    return new SimpleSignatureKeyRepository(properties.getSignature().getKeys());
+  SignatureKeyRepository inMemerySignatureKeyRepository(SecurityWebProperties properties) {
+    log.debug("[WEB-SECURITY] In Memery Signature Key Repository");
+    return new InMemerySignatureKeyRepository(properties);
   }
 
   @Slf4j

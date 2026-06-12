@@ -19,7 +19,7 @@ import tutorials4j.framework.web.core.annotation.RequiredSignature;
 @RequiredArgsConstructor
 public class SignatureController {
 
-  @RequiredSignature(timeWindow = 60)
+  @RequiredSignature(timeWindowSeconds = 60)
   @PostMapping("/pay")
   public String pay(@RequestBody PayRequest request) {
     // 支付逻辑

@@ -25,6 +25,7 @@
         <module>framework-captcha</module>
         <module>framework-crypto</module>
         <module>framework-message</module>
+        <module>framework-oauth</module>
         <module>framework-feature</module>
 
         <module>framework-examples</module>

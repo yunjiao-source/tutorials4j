@@ -66,12 +66,12 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
     // 2. 时间戳验证
     long requestTime = Long.parseLong(timestamp);
     long currentTime = System.currentTimeMillis();
-    if (Math.abs(currentTime - requestTime) > annotation.timeWindow() * 1000) {
+    if (Math.abs(currentTime - requestTime) > annotation.timeWindowSeconds() * 1000) {
       throw new SignatureException("请求已过期");
     }
 
     // 3. Nonce 验证（防重放）
-    if (annotation.checkNonce() && !signatureCacheTemplate.setIfAbsent(nonce)) {
+    if (annotation.checkNonce() && !signatureCacheTemplate.putIfAbsent(nonce)) {
       throw new SignatureException("重复的请求");
     }
 
