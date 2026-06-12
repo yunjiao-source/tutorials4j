@@ -128,3 +128,10 @@ Java 教程
 > 多租户用户管理系统(JPA+表隔离)
 ![多租户用户管理系统(JPA+表隔离)](docs/images/examples-tenant-03.jpg)
 
+
+> 多租户用户管理系统(MYBATIS+表隔离)
+![多租户用户管理系统(MYBATIS+表隔离)](docs/images/examples-tenant-04.jpg)
+
+> 多租户用户管理系统(MYBATIS+数据库隔离)
+![多租户用户管理系统(MYBATIS+数据库隔离)](docs/images/examples-tenant-05.jpg)
+

@@ -24,4 +24,14 @@ public class PageController {
   public String jpaTable() {
     return "jpa-table";
   }
+
+  @GetMapping("mybatis-table")
+  public String mybatisTable() {
+    return "mybatis-table";
+  }
+
+  @GetMapping("mybatis-database")
+  public String mybatisDatabase() {
+    return "mybatis-database";
+  }
 }
