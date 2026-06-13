@@ -3,3 +3,5 @@ tutorials4j:
     security:
       xss:
         enabled: true
+        filter:
+          url-patterns: /xss-demo/*

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 请求体缓存，支持多次读取
+ * 请求日志输出
  *
  * @author yangyunjiao
  */

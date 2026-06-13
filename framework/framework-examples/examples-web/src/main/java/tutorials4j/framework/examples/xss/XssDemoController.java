@@ -3,22 +3,18 @@ package tutorials4j.framework.examples.xss;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@Slf4j
+@RestController
 @RequestMapping("/xss-demo")
 public class XssDemoController {
-
-  private static final Logger log = LoggerFactory.getLogger(XssDemoController.class);
-
-  /** 展示测试页面 */
-  @GetMapping
-  public String demoPage() {
-    return "xss";
-  }
 
   /** 演示表单参数清洗（由 XssHttpServletRequestWrapper 自动完成） 返回清洗后的结果 */
   @PostMapping("/form")

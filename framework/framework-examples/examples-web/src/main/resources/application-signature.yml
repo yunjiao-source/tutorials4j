@@ -11,12 +11,12 @@ tutorials4j:
   web:
     rest:
       cached-body:
-        url-patterns: /signature/*
+        url-patterns: /signature/pay
     security:
       signature:
         nonce-redis-key-prefix: 'signature:nonce:'
         interceptor:
-          include-path-patterns: /signature/**
+          include-path-patterns: /signature/pay
         keys:
           appkey1: appSecret1
           appkey2: appSecret2

@@ -129,9 +129,55 @@ Java 教程
 ![多租户用户管理系统(JPA+表隔离)](docs/images/examples-tenant-03.jpg)
 
 
+#### profile:mybatis-database
+
 > 多租户用户管理系统(MYBATIS+表隔离)
 ![多租户用户管理系统(MYBATIS+表隔离)](docs/images/examples-tenant-04.jpg)
 
 > 多租户用户管理系统(MYBATIS+数据库隔离)
 ![多租户用户管理系统(MYBATIS+数据库隔离)](docs/images/examples-tenant-05.jpg)
 
+### web模块示例（framework/framework-examples/examples-web）
+
+#### profile:annotation
+
+> 接口防护 示例
+![接口防护 示例](docs/images/examples-web-01.jpg)
+
+#### profile:cached-body
+
+> 请求体缓存演示
+![请求体缓存演示](docs/images/examples-web-02.jpg)
+
+#### profile:client
+
+> 三种HTTP客户端对比
+![三种HTTP客户端对比](docs/images/examples-web-03.jpg)
+
+#### profile:googleauth
+
+> 两步验证
+![两步验证](docs/images/examples-web-04.jpg)
+
+> 博客发布(2fa)
+![博客发布(2fa)](docs/images/examples-web-05.jpg)
+
+#### profile:request-logging
+
+> 请求日志 示例
+![请求日志 示例](docs/images/examples-web-06.jpg)
+
+#### profile:signature
+
+> 签名支付示例 示例
+![签名支付示例 示例](docs/images/examples-web-07.jpg)
+
+#### profile:trace
+
+> Trace API 测试控制台
+![Trace API 测试控制台](docs/images/examples-web-08.jpg)
+
+#### profile:xss
+
+> XSS 防护演示
+![XSS 防护演示](docs/images/examples-web-09.jpg)

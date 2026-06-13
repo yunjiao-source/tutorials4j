@@ -4,6 +4,7 @@ spring:
     redis:
       host: localhost # Redis服务器地址
       port: 6379 # Redis端口
+      database: 2
 
 
 tutorials4j:
@@ -14,12 +15,12 @@ tutorials4j:
         cacheNullValues: false
         enable-statistics: true
       caches:
-        idempotent:
+        web-security-idempotent:
           timeToLive: 3s
           cacheNullValues: false
           redis:
             cache-prefix: 'token:'
-        access_limited:
+        web-security-access-limited:
           timeToLive: 5s
           cacheNullValues: true
           redis:
