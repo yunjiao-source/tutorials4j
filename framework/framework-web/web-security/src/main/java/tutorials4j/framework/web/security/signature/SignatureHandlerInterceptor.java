@@ -3,7 +3,6 @@ package tutorials4j.framework.web.security.signature;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -11,13 +10,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.web.core.annotation.RequiredSignature;
 import tutorials4j.framework.web.core.exception.SignatureException;
+import tutorials4j.framework.web.core.util.WebUtils;
 
 /**
  * 签名校验拦截器。
@@ -40,17 +39,8 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
       log.debug("[WEB-SECURITY] 签名拦截器：{}", request.getRequestURI());
     }
 
-    Method method = null;
-    if (handler instanceof HandlerMethod handlerMethod) {
-      method = handlerMethod.getMethod();
-    }
-
-    if (method == null) {
-      return true;
-    }
-
-    HandlerMethod handlerMethod = (HandlerMethod) handler;
-    RequiredSignature annotation = handlerMethod.getMethodAnnotation(RequiredSignature.class);
+    RequiredSignature annotation =
+        WebUtils.getHandlerMethodAnnotation(handler, RequiredSignature.class);
     if (annotation == null || !annotation.required()) {
       return true;
     }

@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.common.json.autoconfigure.JsonCommonConfiguration;
+import tutorials4j.framework.common.spring.autoconfigure.JsonCommonConfiguration;
 import tutorials4j.framework.common.spring.autoconfigure.SpringCommonConfiguration;
 import tutorials4j.framework.common.uid.autoconfigure.UidCommonConfiguration;
 

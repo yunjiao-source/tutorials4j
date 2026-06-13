@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.json.autoconfigure;
+package tutorials4j.framework.common.spring.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.common.json.CommonSimpleModule;
-import tutorials4j.framework.common.json.util.Jackson2Utils;
+import tutorials4j.framework.common.spring.jackson.CommonSimpleModule;
+import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
 
 /**
  * 公共核心Json模块的配置类
@@ -19,13 +19,13 @@ import tutorials4j.framework.common.json.util.Jackson2Utils;
 public class JsonCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON-JSON] Common Json Configuration");
+    log.debug("[COMMON-SPRING] Json Common Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   Jackson2Utils jackson2Utils(ObjectMapper objectMapper) {
-    log.debug("[COMMON-JSON] Jackson2 Utils");
+    log.debug("[COMMON-SPRING] Jackson2 Utils");
     Jackson2Utils.instance.setObjectMapper(objectMapper);
     return Jackson2Utils.instance;
   }
@@ -33,7 +33,7 @@ public class JsonCommonConfiguration {
   @Bean
   @ConditionalOnMissingBean
   CommonSimpleModule commonSimpleModule() {
-    log.debug("[COMMON-JSON] Common Simple Module");
+    log.debug("[COMMON-SPRING] Common Simple Module");
     return new CommonSimpleModule();
   }
 }

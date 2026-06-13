@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.json;
+package tutorials4j.framework.common.spring.jackson;
 
 import static tutorials4j.framework.common.core.JacksonConsts.MODULE_ORDER_COMMON;
 

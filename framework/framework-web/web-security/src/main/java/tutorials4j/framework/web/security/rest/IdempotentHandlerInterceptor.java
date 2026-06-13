@@ -2,16 +2,15 @@ package tutorials4j.framework.web.security.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.exception.CounterOverflowException;
 import tutorials4j.framework.common.spring.util.SessionUtils;
 import tutorials4j.framework.web.core.annotation.Idempotent;
 import tutorials4j.framework.web.core.exception.IdempotentException;
+import tutorials4j.framework.web.core.util.WebUtils;
 
 /**
  * 幂等性校验的处理器拦截器。
@@ -30,6 +29,7 @@ import tutorials4j.framework.web.core.exception.IdempotentException;
 @Slf4j
 @RequiredArgsConstructor
 public class IdempotentHandlerInterceptor implements HandlerInterceptor {
+  private static final String IDEMPOTENT_ATTRIBUTE = "Idempotent";
   private final IdempotentCacheTemplate idempotentCacheTemplate;
 
   @Override
@@ -40,21 +40,13 @@ public class IdempotentHandlerInterceptor implements HandlerInterceptor {
       log.debug("[WEB-SECURITY] 幂等拦截器：{}", request.getRequestURI());
     }
 
-    Method method = null;
-    if (handler instanceof HandlerMethod handlerMethod) {
-      method = handlerMethod.getMethod();
-    }
-
-    if (method == null) {
-      return true;
-    }
-
-    Idempotent idempotent = method.getAnnotation(Idempotent.class);
+    Idempotent idempotent = WebUtils.getHandlerMethodAnnotation(handler, Idempotent.class);
     if (ObjectUtils.isNotEmpty(idempotent)) {
       String key = SessionUtils.generateRequestKey(request);
 
       try {
         idempotentCacheTemplate.counting(key, true);
+        request.setAttribute(IDEMPOTENT_ATTRIBUTE, key);
       } catch (CounterOverflowException e) {
         throw new IdempotentException(e);
       }

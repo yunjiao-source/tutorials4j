@@ -11,7 +11,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
-import tutorials4j.framework.common.json.util.Jackson2Utils;
+import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 import tutorials4j.framework.crypto.core.util.CryptoUtils;

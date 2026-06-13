@@ -1,8 +1,11 @@
 package tutorials4j.framework.web.core.util;
 
 import cn.hutool.core.util.IdUtil;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.method.HandlerMethod;
 
 /**
  * 响应式客户端工具类
@@ -17,6 +20,20 @@ public class WebUtils {
 
   public static String generateSpanId() {
     return IdUtil.fastSimpleUUID().substring(0, 8);
+  }
+
+  public static <T extends Annotation> T getHandlerMethodAnnotation(
+      Object handler, Class<T> clazz) {
+    Method method = null;
+    if (handler instanceof HandlerMethod handlerMethod) {
+      method = handlerMethod.getMethod();
+    }
+
+    if (method == null) {
+      return null;
+    }
+
+    return method.getAnnotation(clazz);
   }
 
   /**

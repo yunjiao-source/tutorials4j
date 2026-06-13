@@ -17,10 +17,15 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-multi-level</artifactId>
+            <artifactId>tenant-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>cache-multi-level</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
 </project>

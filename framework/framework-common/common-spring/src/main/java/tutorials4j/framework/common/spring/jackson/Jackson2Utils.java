@@ -1,4 +1,4 @@
-package tutorials4j.framework.common.json.util;
+package tutorials4j.framework.common.spring.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

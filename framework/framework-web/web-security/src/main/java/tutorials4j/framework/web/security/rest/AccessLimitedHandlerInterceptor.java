@@ -2,16 +2,15 @@ package tutorials4j.framework.web.security.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import tutorials4j.framework.common.core.exception.CounterOverflowException;
 import tutorials4j.framework.common.spring.util.SessionUtils;
 import tutorials4j.framework.web.core.annotation.AccessLimited;
 import tutorials4j.framework.web.core.exception.AccessLimitedException;
+import tutorials4j.framework.web.core.util.WebUtils;
 
 /**
  * 访问频率限制的处理器拦截器。
@@ -40,16 +39,7 @@ public class AccessLimitedHandlerInterceptor implements HandlerInterceptor {
       log.debug("[WEB-SECURITY] 访问限制拦截器：{}", request.getRequestURI());
     }
 
-    Method method = null;
-    if (handler instanceof HandlerMethod handlerMethod) {
-      method = handlerMethod.getMethod();
-    }
-
-    if (method == null) {
-      return true;
-    }
-
-    AccessLimited accessLimited = method.getAnnotation(AccessLimited.class);
+    AccessLimited accessLimited = WebUtils.getHandlerMethodAnnotation(handler, AccessLimited.class);
     if (ObjectUtils.isNotEmpty(accessLimited)) {
       String key = SessionUtils.generateRequestKey(request);
 
