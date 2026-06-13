@@ -33,6 +33,7 @@
         <module>java21</module>
         <module>springboot3</module>
         <module>springboot4</module>
+        <module>springcloud</module>
     </modules>
 
     <scm>
@@ -59,6 +60,7 @@
         <git-build-hook-maven-plugin.version>3.6.0</git-build-hook-maven-plugin.version>
 
         <springboot3.version>3.5.13</springboot3.version>
+        <springcloud3.version>2025.0.3</springcloud3.version>
         <springboot4.version>4.0.5</springboot4.version>
 
         <javafaker.version>1.0.2</javafaker.version>

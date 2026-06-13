@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>请求日志示例 - 接口调试工具</title>
+  <!-- Bootstrap 5 CSS (仅样式，无依赖 Popper) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery 3.7.1 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 6px 6px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+      border: none;
+      margin-bottom: 1.5rem;
+    }
+    .card-header {
+      background-color: rgba(0, 123, 255, 0.08);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      font-weight: 600;
+      font-size: 1.2rem;
+      border-radius: 1rem 1rem 0 0 !important;
+      padding: 1rem 1.25rem;
+    }
+    .response-area {
+      background-color: #f8f9fc;
+      border-left: 4px solid #0d6efd;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      font-size: 0.9rem;
+      word-break: break-word;
+      white-space: pre-wrap;
+      font-family: 'SF Mono', 'Menlo', monospace;
+    }
+    .log-container {
+      max-height: 320px;
+      overflow-y: auto;
+      background-color: #1e2a3a;
+      color: #eef2f5;
+      border-radius: 0.75rem;
+      padding: 0;
+      font-size: 0.8rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .log-entry {
+      border-bottom: 1px solid #2d3e4f;
+      padding: 0.7rem 1rem;
+      transition: background 0.1s;
+    }
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+    .log-time {
+      color: #88c0ff;
+      font-weight: 500;
+      margin-right: 0.75rem;
+    }
+    .log-method-get {
+      color: #61afef;
+      font-weight: bold;
+    }
+    .log-method-post {
+      color: #98c379;
+      font-weight: bold;
+    }
+    .log-status-ok {
+      color: #9cdc6e;
+    }
+    .log-status-error {
+      color: #e06c75;
+    }
+    .btn-icon {
+      border-radius: 2rem;
+      padding-left: 1.2rem;
+      padding-right: 1.2rem;
+    }
+    .clear-log-btn {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 2rem;
+    }
+    footer {
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-align: center;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    pre {
+      margin: 0;
+      font-family: inherit;
+    }
+    .badge-endpoint {
+      background-color: #e9ecef;
+      color: #2c3e50;
+      font-size: 0.7rem;
+      border-radius: 30px;
+      padding: 0.3rem 0.7rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4">
+  <!-- 页眉 -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="display-6 fw-semibold" style="color: #1a4972;">📡 请求日志调试面板</h1>
+      <p class="text-muted mt-1">测试 <code>/request-logging</code> 接口 · 支持 GET /hello 和 POST /user</p>
+    </div>
+    <div>
+      <span class="badge-endpoint">🎯 后端已就绪</span>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- ================= 左侧：GET 请求卡片 ================= -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <span>🟢 GET 请求 · <code>/request-logging/hello</code></span>
+          <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">查询参数</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <label for="helloName" class="form-label fw-semibold">👤 名字参数 (name)</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="helloName" placeholder="例如: Alice, 留空则为 World" value="">
+              <button class="btn btn-primary" type="button" id="sendGetBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send me-1" viewBox="0 0 16 16">
+                  <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11zM13.636 2.5 2.633 8.022l4.098 1.803 6.905-5.325z"/>
+                </svg>
+                发送 GET 请求
+              </button>
+            </div>
+            <div class="form-text">不填名字默认返回 "Hello World!"</div>
+          </div>
+
+          <div class="mt-3">
+            <label class="form-label fw-semibold">📥 响应结果</label>
+            <div class="response-area" id="getResponseArea">
+              <span class="text-secondary">尚未发起请求</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 右侧：POST 请求卡片 ================= -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <span>📦 POST 请求 · <code>/request-logging/user</code></span>
+          <span class="badge bg-success-subtle text-success-emphasis rounded-pill">JSON Body</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="username" class="form-label fw-semibold">用户名 (username) *</label>
+            <input type="text" class="form-control" id="username" placeholder="例如: 张小明" value="张小明">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">电子邮箱 (email) *</label>
+            <input type="email" class="form-control" id="email" placeholder="example@domain.com" value="xiaoming@example.com">
+          </div>
+          <button class="btn btn-success w-100 mb-3" type="button" id="sendPostBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload me-1" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.392 4.804 16 6.648 16 9c0 2.484-1.663 4.486-3.686 4.97a.5.5 0 0 1-.244-.97C13.576 12.57 15 10.99 15 9c0-2.236-1.685-3.9-3.514-4.052A.5.5 0 0 1 11 4.5c0-2.51-1.936-4-4-4-2.038 0-3.61 1.35-3.93 3.16a.5.5 0 0 1-.588.378A3.99 3.99 0 0 0 2 5c-1.73 0-3 1.548-3 3 0 1.414.78 2.714 2 3.328a.5.5 0 0 1 .5.886C.44 12.842 0 11.485 0 10c0-2.2 1.5-4 3.5-4 .12 0 .242.008.361.022a.5.5 0 0 0 .545-.68z"/>
+              <path d="M8.5 7.5a.5.5 0 0 0-1 0v4.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 12.293z"/>
+            </svg>
+            发送 POST 请求 (创建用户)
+          </button>
+
+          <div class="mt-2">
+            <label class="form-label fw-semibold">📨 服务端返回的 User 对象</label>
+            <div class="response-area" id="postResponseArea">
+              <span class="text-secondary">等待提交用户数据</span>
+            </div>
+            <div class="form-text mt-1">💡 后端会自动生成 <code>id = 100</code> 并返回完整对象</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 请求 / 响应 日志面板 (模拟前端记录，体现请求细节) -->
+  <div class="card mt-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
+      <span><span class="me-2">📋</span> 实时请求日志 <span class="badge bg-secondary ms-2">前端监控 + 接口收发明细</span></span>
+      <button id="clearLogBtn" class="btn btn-outline-secondary btn-sm clear-log-btn">🗑 清空日志</button>
+    </div>
+    <div class="card-body p-0">
+      <div id="logContainer" class="log-container">
+        <div class="log-entry text-secondary" style="background: #1e2a3a; color: #b0bec5;">
+          <span class="log-time">✨</span> 就绪，点击上方按钮发送请求，日志将展示请求/响应详情
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-transparent text-muted small">
+      💡 所有请求通过与后端同源交互，模拟完整调用链；日志区域记录请求参数、响应数据及状态。
+    </div>
+  </div>
+  <footer>
+    ⚡ 基于 Spring Boot + Thymeleaf | 接口定义: RequestLoggingController
+  </footer>
+</div>
+
+<script>
+  // 页面上下文基础路径 (thymeleaf 集成时可动态取，但此处为了直接配合后端，采用绝对路径，符合常见部署)
+  // 注意: 如果应用部署在子路径下，可以动态获取 contextPath，但后端示例没有特殊路径，直接使用根路径。
+  // 通过 th:inline 可替换为动态，但为了清晰且通用，直接用 '/request-logging' 前缀 (标准 REST 风格)
+  const API_BASE = '/request-logging';
+
+  // ---------- 辅助函数：添加日志 (带时间戳、类型、颜色样式) ----------
+  function addLogEntry(method, url, requestInfo, responseStatus, responseData, isError = false) {
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}.${now.getMilliseconds().toString().padStart(3,'0')}`;
+
+    const logContainer = document.getElementById('logContainer');
+    const logDiv = document.createElement('div');
+    logDiv.className = 'log-entry';
+
+    // 构建主要内容
+    let methodClass = (method === 'GET') ? 'log-method-get' : 'log-method-post';
+    let methodHtml = `<span class="${methodClass}">${method}</span>`;
+    let statusHtml = '';
+    if (responseStatus) {
+      let statusClass = (responseStatus >= 200 && responseStatus < 300) ? 'log-status-ok' : 'log-status-error';
+      statusHtml = `<span class="${statusClass}"> [${responseStatus}]</span>`;
+    }
+    let urlHtml = `<span style="color:#d19a66;">${url}</span>`;
+
+    let requestDetail = '';
+    if (requestInfo) {
+      if (typeof requestInfo === 'object') {
+        requestDetail = JSON.stringify(requestInfo, null, 2);
+      } else {
+        requestDetail = requestInfo;
+      }
+    }
+
+    let responseDetail = '';
+    if (responseData !== undefined && responseData !== null) {
+      if (typeof responseData === 'object') {
+        responseDetail = JSON.stringify(responseData, null, 2);
+      } else {
+        responseDetail = responseData;
+      }
+      // 限制太长时截断但保留完整性
+      if (responseDetail.length > 800) {
+        responseDetail = responseDetail.substring(0, 800) + '...... (过长截断)';
+      }
+    }
+
+    let errorMark = isError ? ' ❌' : '';
+    // 构建内部HTML
+    let contentHtml = `
+            <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; margin-bottom: 0.3rem;">
+                <span class="log-time">${timeStr}</span>
+                ${methodHtml}
+                ${urlHtml}
+                ${statusHtml}
+                <span style="font-size:0.7rem; color:#7f8c8d;">${errorMark}</span>
+            </div>
+        `;
+
+    if (requestDetail && requestDetail !== '') {
+      contentHtml += `<div style="margin-left: 1rem; margin-top: 0.3rem; color:#abb2bf;"><span style="color:#56b6c2;">➡️ 请求:</span> <span style="word-break:break-all;">${escapeHtml(requestDetail.length > 200 ? requestDetail.substring(0,200)+'…' : requestDetail)}</span></div>`;
+    }
+    if (responseDetail && responseDetail !== '') {
+      contentHtml += `<div style="margin-left: 1rem; margin-top: 0.2rem; color:#98c379;"><span style="color:#e5c07b;">⬅️ 响应:</span> <span style="word-break:break-all;">${escapeHtml(responseDetail)}</span></div>`;
+    } else if (isError && !responseDetail) {
+      contentHtml += `<div style="margin-left: 1rem; margin-top: 0.2rem; color:#e06c75;">⚠️ 无响应体或网络错误</div>`;
+    }
+
+    logDiv.innerHTML = contentHtml;
+    logContainer.appendChild(logDiv);
+    // 自动滚动到底部
+    logContainer.scrollTop = logContainer.scrollHeight;
+    // 限制日志条目最多保留 50 条 (性能友好)
+    while (logContainer.children.length > 55) {
+      logContainer.removeChild(logContainer.firstChild);
+    }
+  }
+
+  // 简单防XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // 清除日志
+  document.getElementById('clearLogBtn').addEventListener('click', function() {
+    const logContainer = document.getElementById('logContainer');
+    logContainer.innerHTML = '';
+    let emptyDiv = document.createElement('div');
+    emptyDiv.className = 'log-entry';
+    emptyDiv.style.color = '#b0bec5';
+    emptyDiv.innerHTML = '<span class="log-time">🗑️</span> 日志已清空，重新发起请求将显示新记录';
+    logContainer.appendChild(emptyDiv);
+  });
+
+  // ---------- GET 请求 ----------
+  document.getElementById('sendGetBtn').addEventListener('click', function() {
+    const nameInput = document.getElementById('helloName').value.trim();
+    let queryUrl = `${API_BASE}/hello`;
+    let requestParams = {};
+    if (nameInput !== '') {
+      queryUrl += `?name=${encodeURIComponent(nameInput)}`;
+      requestParams = { name: nameInput };
+    } else {
+      requestParams = { name: '(未提供，后端默认为World)' };
+    }
+
+    // 先记录请求日志 (等待响应)
+    addLogEntry('GET', queryUrl, `查询参数: ${JSON.stringify(requestParams)}`, '发送中...', null, false);
+
+    $.ajax({
+      url: queryUrl,
+      type: 'GET',
+      dataType: 'text',   // 接口返回纯文本 "Hello ..."
+      timeout: 10000,
+      success: function(data, textStatus, jqXHR) {
+        const status = jqXHR.status;
+        // 更新右侧 GET 响应区域
+        const responseArea = document.getElementById('getResponseArea');
+        responseArea.innerHTML = `<span style="color:#0a5b2e;">✅ 响应文本：</span><br><strong>${escapeHtml(data)}</strong>`;
+        // 追加最终日志（覆盖之前占位，但为了准确，移除最后一条占位？简单在日志中再追加一条完整记录）
+        // 为了避免记录重复，实际可以修改日志：但简单再记录一条完整最终成功日志，显得清晰（之前占位符“发送中”无伤大雅）
+        addLogEntry('GET', queryUrl, `请求参数: ${JSON.stringify(requestParams)}`, status, data, false);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        const status = jqXHR.status ? jqXHR.status : '网络错误';
+        let errorMsg = `请求失败: ${textStatus}`;
+        if (jqXHR.responseText) errorMsg += ` , 详情: ${jqXHR.responseText}`;
+        document.getElementById('getResponseArea').innerHTML = `<span style="color:#b91c1c;">❌ 错误: ${escapeHtml(errorMsg)}</span>`;
+        addLogEntry('GET', queryUrl, `请求参数: ${JSON.stringify(requestParams)}`, status, errorMsg, true);
+      }
+    });
+  });
+
+  // ---------- POST 请求 ----------
+  document.getElementById('sendPostBtn').addEventListener('click', function() {
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    if (!username) {
+      alert('用户名 (username) 不能为空');
+      return;
+    }
+    if (!email) {
+      alert('邮箱 (email) 不能为空');
+      return;
+    }
+
+    const userObject = {
+      username: username,
+      email: email
+    };
+    const postUrl = `${API_BASE}/user`;
+    const requestBodyJson = JSON.stringify(userObject);
+
+    // 先记录请求日志（等待中）
+    addLogEntry('POST', postUrl, `请求体: ${requestBodyJson}`, '发送中...', null, false);
+
+    $.ajax({
+      url: postUrl,
+      type: 'POST',
+      contentType: 'application/json; charset=utf-8',
+      data: requestBodyJson,
+      dataType: 'json',   // 期望后端返回 User JSON 对象
+      timeout: 10000,
+      success: function(data, textStatus, jqXHR) {
+        const status = jqXHR.status;
+        // 格式化输出到右侧卡片
+        const postResponseDiv = document.getElementById('postResponseArea');
+        let prettyJson = JSON.stringify(data, null, 2);
+        postResponseDiv.innerHTML = `<span style="color:#0a5b2e;">✅ 服务端返回用户信息 (包含生成的ID)</span><pre style="background:transparent; margin-top:8px; color:#0a4b6e;">${escapeHtml(prettyJson)}</pre>`;
+        // 添加最终成功日志
+        addLogEntry('POST', postUrl, `请求体: ${requestBodyJson}`, status, data, false);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        const status = jqXHR.status ? jqXHR.status : 0;
+        let errorDetail = textStatus;
+        let serverMsg = '';
+        try {
+          if (jqXHR.responseText) {
+            const respJson = JSON.parse(jqXHR.responseText);
+            serverMsg = respJson.message || respJson.error || jqXHR.responseText;
+          } else {
+            serverMsg = jqXHR.responseText;
+          }
+        } catch(e) {
+          serverMsg = jqXHR.responseText || errorThrown;
+        }
+        const errorMsg = `请求失败: ${errorDetail} ${serverMsg ? ' - '+serverMsg : ''}`;
+        document.getElementById('postResponseArea').innerHTML = `<span style="color:#b91c1c;">❌ POST 错误: ${escapeHtml(errorMsg)}</span>`;
+        addLogEntry('POST', postUrl, `请求体: ${requestBodyJson}`, status, errorMsg, true);
+      }
+    });
+  });
+
+  // 可选：为输入框添加按回车快捷发送 (提升体验)
+  document.getElementById('helloName').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      document.getElementById('sendGetBtn').click();
+    }
+  });
+  // POST 区域回车快捷发送（但需要防止在不恰当的输入框触发）
+  const postInputs = ['username', 'email'];
+  postInputs.forEach(id => {
+    document.getElementById(id).addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('sendPostBtn').click();
+      }
+    });
+  });
+
+  // 页面加载完后添加一个友好提示日志 (示意就绪)
+  window.addEventListener('load', function() {
+    console.log('页面加载完成，等待接口测试。 后端请求前缀: ' + API_BASE);
+    // 可选，测试连通性静默预检？不自动请求，保持干净。
+  });
+</script>
+</body>
+</html>

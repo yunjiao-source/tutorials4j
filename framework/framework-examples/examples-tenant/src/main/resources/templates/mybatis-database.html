@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>多租户用户管理系统(MYBATIS+数据库隔离)</title>
+  <!-- Bootstrap 5 CSS + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 (free icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      font-family: 'Segoe UI', Roboto, system-ui;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #2c3e50 0%, #1a2a3a 100%);
+      color: white;
+      font-weight: 600;
+    }
+    .tenant-badge {
+      background-color: #e9ecef;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .table-hover tbody tr:hover {
+      background-color: #eef2ff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .action-buttons .btn {
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    .search-area {
+      background: white;
+      border-radius: 48px;
+      padding: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .pagination .page-item.active .page-link {
+      background-color: #2c3e50;
+      border-color: #2c3e50;
+    }
+    .modal-header {
+      background-color: #2c3e50;
+      color: white;
+    }
+    .modal-header .btn-close {
+      filter: brightness(0) invert(1);
+    }
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1100;
+    }
+    footer {
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-align: center;
+      margin-top: 2rem;
+      padding: 1rem;
+      border-top: 1px solid #dee2e6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="toast-container"></div>
+
+<div class="container-xl my-4">
+  <!-- 头部 & 租户切换栏 -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <h2 class="mb-2 mb-sm-0"><i class="fas fa-users me-2 text-primary"></i>租户用户管理(MYBATIS+数据库隔离)</h2>
+    <div class="d-flex align-items-center gap-3">
+      <div class="tenant-badge">
+        <i class="fas fa-building me-1"></i> 当前租户：
+        <strong id="currentTenantLabel">DEFAULT</strong>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="tenantDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-exchange-alt me-1"></i> 切换租户
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="tenantDropdown">
+          <li><a class="dropdown-item tenant-option" data-tenant="DEFAULT" href="#">🏢 DEFAULT</a></li>
+          <li><a class="dropdown-item tenant-option" data-tenant="demo1" href="#">🧪 demo1</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 操作栏: 新增 + 搜索 + 每页条数 -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <button type="button" class="btn btn-primary w-100" id="btnCreateUser">
+            <i class="fas fa-plus-circle me-1"></i> 新增用户
+          </button>
+        </div>
+        <div class="col-md-5">
+          <div class="input-group search-area">
+            <span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control border-0" id="searchNameInput" placeholder="按姓名模糊搜索...">
+            <button class="btn btn-outline-secondary" type="button" id="btnSearch"><i class="fas fa-filter"></i> 搜索</button>
+            <button class="btn btn-outline-danger" type="button" id="btnResetSearch"><i class="fas fa-undo-alt"></i> 重置</button>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <select id="pageSizeSelect" class="form-select">
+            <option value="5">5 条/页</option>
+            <option value="10" selected>10 条/页</option>
+            <option value="20">20 条/页</option>
+            <option value="50">50 条/页</option>
+          </select>
+        </div>
+        <div class="col-md-2 text-md-end">
+          <span class="text-muted small"><i class="fas fa-database"></i> 多租户隔离</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 用户列表表格 -->
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <i class="fas fa-table me-2"></i> 用户列表
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>邮箱</th>
+            <th>年龄</th>
+            <th width="220">操作</th>
+          </tr>
+          </thead>
+          <tbody id="userTableBody">
+          <tr>
+            <td colspan="5" class="text-center text-muted py-4">
+              <i class="fas fa-spinner fa-spin me-2"></i> 加载中...
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <span id="pageInfoText" class="text-muted small">第 1 / 1 页，共 0 条记录</span>
+      </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm mb-0" id="paginationNav">
+          <li class="page-item disabled"><a class="page-link" href="#" id="prevPageBtn">上一页</a></li>
+          <li class="page-item disabled"><a class="page-link" href="#" id="nextPageBtn">下一页</a></li>
+        </ul>
+      </nav>
+      <div class="d-flex gap-2">
+        <input type="number" id="jumpPageInput" class="form-control form-control-sm" style="width: 70px;" placeholder="页码">
+        <button class="btn btn-sm btn-outline-secondary" id="jumpPageBtn">跳转</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <i class="fas fa-shield-alt"></i> 请求自动携带租户头 (X-Tenant-Code) · 异步任务测试
+  </footer>
+</div>
+
+<!-- 新增/编辑 模态框 (共用) -->
+<div class="modal fade" id="userFormModal" tabindex="-1" aria-labelledby="userFormModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userFormModalLabel">新增用户</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+      </div>
+      <div class="modal-body">
+        <form id="userForm">
+          <input type="hidden" id="editUserId" value="">
+          <div class="mb-3">
+            <label for="userName" class="form-label">姓名 <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="userName" required maxlength="50">
+            <div class="invalid-feedback">姓名不能为空</div>
+          </div>
+          <div class="mb-3">
+            <label for="userPassword" class="form-label">密码 <span id="pwdRequiredHint" class="text-danger">*</span></label>
+            <input type="password" class="form-control" id="userPassword" autocomplete="off">
+            <div class="form-text text-muted" id="pwdHintText">新增时必填；编辑时留空表示不修改密码</div>
+          </div>
+          <div class="mb-3">
+            <label for="userEmail" class="form-label">邮箱 <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="userEmail" required>
+            <div class="invalid-feedback">请输入正确的邮箱格式</div>
+          </div>
+          <div class="mb-3">
+            <label for="userAge" class="form-label">年龄</label>
+            <input type="number" class="form-control" id="userAge" min="1" max="150">
+            <div class="form-text">正整数，可选</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="modalSubmitBtn">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 查看详情模态框 -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">用户详情</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>ID：</strong> <span id="detailId">-</span></li>
+          <li class="list-group-item"><strong>姓名：</strong> <span id="detailName">-</span></li>
+          <li class="list-group-item"><strong>邮箱：</strong> <span id="detailEmail">-</span></li>
+          <li class="list-group-item"><strong>年龄：</strong> <span id="detailAge">-</span></li>
+          <li class="list-group-item text-muted"><i class="fas fa-lock"></i> 密码/密钥字段已隐藏</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ---------- 全局状态 ----------
+  let currentTenant = "DEFAULT";       // 当前租户
+  let currentPage = 1;
+  let currentSize = 10;
+  let currentSearchName = "";
+  let totalPages = 0;
+  let totalRecords = 0;
+
+  // 复用模态框实例
+  let userFormModal = null;
+  let detailModal = null;
+
+  // 工具函数：显示toast消息
+  function showToast(message, type = 'success') {
+    const toastContainer = document.querySelector('.toast-container');
+    const toastId = 'toast-' + Date.now();
+    const bgClass = type === 'success' ? 'bg-success' : (type === 'danger' ? 'bg-danger' : 'bg-warning');
+    const icon = type === 'success' ? 'fa-check-circle' : (type === 'danger' ? 'fa-exclamation-triangle' : 'fa-info-circle');
+    const html = `
+            <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas ${icon} me-2"></i> ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+    toastContainer.insertAdjacentHTML('beforeend', html);
+    const toastEl = document.getElementById(toastId);
+    const bsToast = new bootstrap.Toast(toastEl, { autohide: true, delay: 3000 });
+    bsToast.show();
+    toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+  }
+
+  // 通用ajax请求，自动携带租户头 X-Tenant-Code
+  function ajaxRequest(method, url, data = null, contentType = 'application/json') {
+    return new Promise((resolve, reject) => {
+      const options = {
+        url: url,
+        type: method,
+        headers: {
+          'X-Tenant-Code': currentTenant
+        },
+        success: function(resp) {
+          resolve(resp);
+        },
+        error: function(xhr, status, error) {
+          let errMsg = `请求失败: ${xhr.status} ${xhr.statusText}`;
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            errMsg = xhr.responseJSON.message;
+          } else if (xhr.responseText) {
+            try {
+              const json = JSON.parse(xhr.responseText);
+              errMsg = json.message || errMsg;
+            } catch(e) {}
+          }
+          reject({ status: xhr.status, message: errMsg });
+        }
+      };
+      if (data && (method === 'POST' || method === 'PUT')) {
+        options.data = JSON.stringify(data);
+        options.contentType = contentType;
+      }
+      $.ajax(options);
+    });
+  }
+
+  // 刷新页面数据 (加载用户列表)
+  async function loadUsers() {
+    try {
+      const params = {
+        current: currentPage,
+        size: currentSize,
+      };
+      if (currentSearchName && currentSearchName.trim() !== "") {
+        params.name = currentSearchName.trim();
+      }
+      const queryString = $.param(params);
+      const response = await ajaxRequest('GET', `/users?${queryString}`);
+      // 后端返回格式 Page 对象: { records, total, size, current, pages }
+      const records = response.records || [];
+      totalRecords = response.total || 0;
+      totalPages = response.pages || 1;
+      // 校正当前页边界
+      if (currentPage > totalPages && totalPages > 0) {
+        currentPage = totalPages;
+        await loadUsers(); // 重新加载
+        return;
+      }
+      renderTableBody(records);
+      renderPagination();
+      updatePageInfo();
+    } catch (err) {
+      console.error(err);
+      showToast(err.message || "加载用户列表失败", "danger");
+      $('#userTableBody').html(`<tr><td colspan="5" class="text-center text-danger">加载失败: ${err.message || "网络错误"}</td></tr>`);
+    }
+  }
+
+  // 渲染表格
+  function renderTableBody(users) {
+    const tbody = $('#userTableBody');
+    if (!users || users.length === 0) {
+      tbody.html(`<tr><td colspan="5" class="text-center text-muted py-4"><i class="fas fa-inbox"></i> 暂无数据</td></tr>`);
+      return;
+    }
+    let html = '';
+    users.forEach(user => {
+      html += `
+                <tr data-user-id="${user.id}">
+                    <td>${user.id}</td>
+                    <td><strong>${escapeHtml(user.name)}</strong></td>
+                    <td>${escapeHtml(user.email)}</td>
+                    <td>${user.age != null ? user.age : '-'}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-sm btn-outline-info btn-detail" data-id="${user.id}" title="查看详情"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-outline-warning btn-edit" data-id="${user.id}" data-name="${escapeHtml(user.name)}" data-email="${escapeHtml(user.email)}" data-age="${user.age || ''}" title="编辑"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${user.id}" data-name="${escapeHtml(user.name)}" title="删除"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn btn-sm btn-outline-secondary btn-async" data-id="${user.id}" title="异步测试 (Async)"><i class="fas fa-clock"></i></button>
+                    </td>
+                </tr>
+            `;
+    });
+    tbody.html(html);
+  }
+
+  // 简单防XSS
+  function escapeHtml(str) {
+    if(!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if(m === '&') return '&amp;';
+      if(m === '<') return '&lt;';
+      if(m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // 分页渲染（简洁风格，动态显示页码列表）
+  function renderPagination() {
+    const paginationUl = $('#paginationNav');
+    // 清空并重建, 保留“上一页” “下一页”的基础
+    paginationUl.empty();
+    const prevLi = `<li class="page-item ${currentPage <= 1 ? 'disabled' : ''}"><a class="page-link" href="#" id="prevPageBtnNew">上一页</a></li>`;
+    const nextLi = `<li class="page-item ${currentPage >= totalPages ? 'disabled' : ''}"><a class="page-link" href="#" id="nextPageBtnNew">下一页</a></li>`;
+    paginationUl.append(prevLi);
+
+    // 显示最多5个页码
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+    if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+    for (let i = startPage; i <= endPage; i++) {
+      const activeClass = (i === currentPage) ? 'active' : '';
+      paginationUl.append(`<li class="page-item ${activeClass}"><a class="page-link page-num" data-page="${i}" href="#">${i}</a></li>`);
+    }
+    paginationUl.append(nextLi);
+
+    // 重新绑定事件
+    $('#prevPageBtnNew').on('click', function(e) {
+      e.preventDefault();
+      if (currentPage > 1) {
+        currentPage--;
+        loadUsers();
+      }
+    });
+    $('#nextPageBtnNew').on('click', function(e) {
+      e.preventDefault();
+      if (currentPage < totalPages) {
+        currentPage++;
+        loadUsers();
+      }
+    });
+    $('.page-num').on('click', function(e) {
+      e.preventDefault();
+      const page = $(this).data('page');
+      if (page && page !== currentPage) {
+        currentPage = page;
+        loadUsers();
+      }
+    });
+  }
+
+  function updatePageInfo() {
+    $('#pageInfoText').html(`第 ${currentPage} / ${totalPages} 页，共 ${totalRecords} 条记录`);
+  }
+
+  // 重置搜索并刷新
+  function resetAndSearch() {
+    currentSearchName = $('#searchNameInput').val().trim();
+    currentPage = 1;
+    loadUsers();
+  }
+
+  // 删除用户
+  async function deleteUser(id, name) {
+    if (!confirm(`确定要删除用户 "${name}" 吗？此操作不可恢复。`)) return;
+    try {
+      await ajaxRequest('DELETE', `/users/${id}`);
+      showToast(`用户 ${name} 删除成功`, "success");
+      await loadUsers();  // 刷新列表
+    } catch (err) {
+      showToast(err.message || "删除失败", "danger");
+    }
+  }
+
+  // 异步测试接口
+  async function triggerAsync(id) {
+    try {
+      await ajaxRequest('GET', `/users/async/${id}`);
+      showToast(`已触发用户 ID:${id} 的后台异步任务（日志处理中）`, "info");
+    } catch (err) {
+      showToast(err.message || "异步调用失败", "danger");
+    }
+  }
+
+  // 查看详情
+  async function viewDetail(id) {
+    try {
+      const user = await ajaxRequest('GET', `/users/${id}`);
+      $('#detailId').text(user.id || '-');
+      $('#detailName').text(user.name || '-');
+      $('#detailEmail').text(user.email || '-');
+      $('#detailAge').text(user.age != null ? user.age : '-');
+      detailModal.show();
+    } catch (err) {
+      showToast(err.message || "获取详情失败", "danger");
+    }
+  }
+
+  // 打开新增模态框
+  function openCreateModal() {
+    $('#userFormModalLabel').text('新增用户');
+    $('#editUserId').val('');
+    $('#userForm')[0].reset();
+    $('#userPassword').prop('required', true);
+    $('#pwdRequiredHint').text('*');
+    $('#pwdHintText').text('新增时密码必填');
+    $('#userPassword').attr('required', true);
+    userFormModal.show();
+  }
+
+  // 打开编辑模态框，并填充现有数据
+  function openEditModal(userId, name, email, age) {
+    $('#userFormModalLabel').text('编辑用户');
+    $('#editUserId').val(userId);
+    $('#userName').val(name);
+    $('#userEmail').val(email);
+    $('#userAge').val(age !== undefined && age !== null ? age : '');
+    $('#userPassword').val('').removeAttr('required');
+    $('#pwdRequiredHint').text('(留空不修改)');
+    $('#pwdHintText').text('留空则保持原密码不变');
+    userFormModal.show();
+  }
+
+  // 提交新增/编辑
+  async function submitUserForm() {
+    const userId = $('#editUserId').val();
+    const name = $('#userName').val().trim();
+    const email = $('#userEmail').val().trim();
+    const ageRaw = $('#userAge').val();
+    const password = $('#userPassword').val();
+
+    // 前端基本校验
+    if (!name) {
+      showToast("姓名不能为空", "warning");
+      return;
+    }
+    if (!email) {
+      showToast("邮箱不能为空", "warning");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showToast("邮箱格式不正确", "warning");
+      return;
+    }
+    if (ageRaw && (isNaN(ageRaw) || parseInt(ageRaw) <= 0 || parseInt(ageRaw) > 150)) {
+      showToast("年龄必须是1~150之间的正整数", "warning");
+      return;
+    }
+    const age = ageRaw ? parseInt(ageRaw) : null;
+
+    if (!userId) {
+      // 新增: 密码必填
+      if (!password) {
+        showToast("新增用户时密码不能为空", "warning");
+        return;
+      }
+      const createDTO = { name, password, email, age };
+      try {
+        const newUser = await ajaxRequest('POST', '/users', createDTO);
+        showToast(`用户 "${name}" 创建成功`, "success");
+        userFormModal.hide();
+        // 重置到第一页并刷新
+        currentPage = 1;
+        await loadUsers();
+      } catch (err) {
+        showToast(err.message || "创建失败", "danger");
+      }
+    } else {
+      // 编辑: 构建更新DTO，只有password非空时才包含password字段
+      const updateDTO = { name, email, age };
+      if (password && password.trim() !== "") {
+        updateDTO.password = password;
+      }
+      try {
+        await ajaxRequest('PUT', `/users/${userId}`, updateDTO);
+        showToast(`用户 "${name}" 更新成功`, "success");
+        userFormModal.hide();
+        await loadUsers();
+      } catch (err) {
+        showToast(err.message || "更新失败", "danger");
+      }
+    }
+  }
+
+  // 租户切换逻辑
+  function setTenant(tenantCode) {
+    currentTenant = tenantCode;
+    $('#currentTenantLabel').text(tenantCode);
+    // 重置所有分页搜索状态
+    currentPage = 1;
+    currentSearchName = $('#searchNameInput').val('').val();
+    $('#searchNameInput').val('');
+    loadUsers();
+    showToast(`已切换到租户: ${tenantCode}`, "success");
+  }
+
+  // 全局初始化事件绑定 (事件委托)
+  function bindGlobalEvents() {
+    // 租户下拉选项点击
+    $('.tenant-option').on('click', function(e) {
+      e.preventDefault();
+      const tenant = $(this).data('tenant');
+      if (tenant !== currentTenant) {
+        setTenant(tenant);
+      }
+    });
+    // 搜索按钮
+    $('#btnSearch').on('click', function() {
+      currentSearchName = $('#searchNameInput').val().trim();
+      currentPage = 1;
+      loadUsers();
+    });
+    $('#btnResetSearch').on('click', function() {
+      $('#searchNameInput').val('');
+      currentSearchName = '';
+      currentPage = 1;
+      loadUsers();
+    });
+    // 每页条数变更
+    $('#pageSizeSelect').on('change', function() {
+      currentSize = parseInt($(this).val());
+      currentPage = 1;
+      loadUsers();
+    });
+    // 新增按钮
+    $('#btnCreateUser').on('click', function() {
+      openCreateModal();
+    });
+    // 模态框提交
+    $('#modalSubmitBtn').on('click', function() {
+      submitUserForm();
+    });
+    // 跳转页码
+    $('#jumpPageBtn').on('click', function() {
+      let jumpVal = parseInt($('#jumpPageInput').val());
+      if (isNaN(jumpVal)) jumpVal = 1;
+      if (jumpVal >= 1 && jumpVal <= totalPages) {
+        currentPage = jumpVal;
+        loadUsers();
+      } else {
+        showToast(`页码范围 1 - ${totalPages}`, "warning");
+      }
+      $('#jumpPageInput').val('');
+    });
+    // 使用事件委托监听动态按钮（详情，编辑，删除，异步）
+    $(document).on('click', '.btn-detail', function() {
+      const id = $(this).data('id');
+      if (id) viewDetail(id);
+    });
+    $(document).on('click', '.btn-edit', function() {
+      const id = $(this).data('id');
+      const name = $(this).data('name');
+      const email = $(this).data('email');
+      const age = $(this).data('age');
+      openEditModal(id, name, email, age);
+    });
+    $(document).on('click', '.btn-delete', function() {
+      const id = $(this).data('id');
+      const name = $(this).data('name');
+      deleteUser(id, name);
+    });
+    $(document).on('click', '.btn-async', function() {
+      const id = $(this).data('id');
+      if (id) triggerAsync(id);
+    });
+    // 搜索框支持回车
+    $('#searchNameInput').on('keypress', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        $('#btnSearch').click();
+      }
+    });
+  }
+
+  // 启动时初始化模态框和加载数据
+  $(document).ready(function() {
+    userFormModal = new bootstrap.Modal(document.getElementById('userFormModal'));
+    detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+    bindGlobalEvents();
+    // 初始加载
+    currentTenant = "DEFAULT";
+    $('#currentTenantLabel').text("DEFAULT");
+    loadUsers();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+server:
+  port: 9110
+
+spring:
+  profiles:
+    active: simple
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # 授权服务器 JWKS 公钥地址
+          jwk-set-uri: http://localhost:9101/.well-known/jwks.json
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug

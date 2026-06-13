@@ -1,0 +1,32 @@
+server:
+  port: 9101
+
+spring:
+  profiles:
+    active: simple
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/springcloud
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # 初始配置
+      minimum-idle: 2
+      maximum-pool-size: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+  data:
+    # Redis 配置
+    redis:
+      host: localhost # Redis服务器地址
+      port: 6379 # Redis端口
+      database: 4
+
+logging:
+  level:
+    tutorials4j: DEBUG
+    org.springframework: debug

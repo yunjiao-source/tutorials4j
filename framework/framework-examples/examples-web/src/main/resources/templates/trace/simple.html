@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>跟踪接口测试面板 | Trace API Demo</title>
+  <!-- Bootstrap 5 CSS + Icons + 主题（清爽风格） -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 (免费图标库，提升体验) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- jQuery 3.7+ -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background: #f4f7fc;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .header-section {
+      background: linear-gradient(135deg, #1e2b3c 0%, #0f212e 100%);
+      color: white;
+      padding: 2rem 0 1.8rem;
+      margin-bottom: 2rem;
+      border-radius: 0 0 1.5rem 1.5rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .card {
+      border: none;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+      height: 100%;
+      background-color: #ffffff;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(0,0,0,0.1);
+    }
+    .card-header {
+      background: transparent;
+      border-bottom: 1px solid #eef2f6;
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-method {
+      background-color: #2c7da0;
+      color: white;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 30px;
+      letter-spacing: 0.5px;
+    }
+    .url-path {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      background: #f0f4f9;
+      padding: 4px 10px;
+      border-radius: 24px;
+      color: #1e4663;
+      word-break: break-all;
+    }
+    .btn-trace {
+      background: #1e6f5c;
+      border: none;
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: all 0.2s;
+      border-radius: 40px;
+      color: white;
+    }
+    .btn-trace:hover {
+      background: #0f5243;
+      transform: scale(1.02);
+    }
+    .btn-trace:active {
+      transform: scale(0.98);
+    }
+    .result-area {
+      background: #f8fafd;
+      border-radius: 1rem;
+      padding: 12px 15px;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      border-left: 4px solid #2c7da0;
+      font-family: 'Courier New', monospace;
+      word-break: break-word;
+      white-space: pre-wrap;
+      transition: all 0.2s;
+    }
+    .result-success {
+      border-left-color: #2b9348;
+      background: #edf7f0;
+    }
+    .result-error {
+      border-left-color: #e63946;
+      background: #ffe9ec;
+    }
+    .result-loading {
+      border-left-color: #ffb74d;
+      background: #fff6e5;
+    }
+    .footer-note {
+      margin-top: 3rem;
+      text-align: center;
+      color: #5f7d9c;
+      padding: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    i.icon-custom {
+      width: 28px;
+      text-align: center;
+    }
+    .spinner-border-sm {
+      width: 1rem;
+      height: 1rem;
+      border-width: 0.2em;
+    }
+    .status-badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: #e9ecef;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header-section">
+  <div class="container">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+      <div>
+        <h1 class="display-6 fw-semibold"><i class="fas fa-code-branch me-2"></i>Trace API 测试控制台</h1>
+        <p class="lead mb-0 mt-2 opacity-75">验证普通 / WebFlux 响应式接口 · 异常模拟 · 全链路观测</p>
+      </div>
+      <div class="mt-3 mt-md-0">
+        <span class="badge bg-light text-dark px-3 py-2"><i class="fas fa-server me-1"></i> 后端就绪 | 响应式支持</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mb-5">
+  <!-- 说明行: 快捷提示 -->
+  <div class="alert alert-light shadow-sm border-0 rounded-4 mb-4" role="alert">
+    <div class="d-flex">
+      <div class="flex-shrink-0"><i class="fas fa-info-circle fa-lg text-info me-2"></i></div>
+      <div>
+        <strong>测试面板说明</strong> — 点击任意卡片上的「发起请求」按钮，即可调用对应的后端接口。<br>
+        ✅ 正常接口返回字符串；⚠️ 异常接口将触发全局异常处理器，前端展示 HTTP 状态和错误详情。<br>
+        📡 WebFlux 接口 (Mono) 与普通接口使用方式一致，后端采用响应式架构。
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- 卡片1: commonGet -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white">
+          <i class="fas fa-check-circle text-success icon-custom"></i> 普通GET
+          <span class="badge-method ms-auto">GET</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/common/get</span></div>
+          <p class="card-text text-muted small">调用 <code>TraceController.commonGet()</code>，内部会触发 <code>TraceService.logger()</code> 异步日志 + WebClient 调用第三方接口 (模拟外部调用)。</p>
+          <button class="btn btn-trace w-100" data-url="common/get" data-result-id="resultCommonGet" data-loading="loadingCommonGet">
+            <i class="fas fa-paper-plane me-1"></i> 发起请求
+          </button>
+          <div id="resultCommonGet" class="result-area mt-3">
+            <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片2: commonException (普通异常) -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white">
+          <i class="fas fa-exclamation-triangle text-danger icon-custom"></i> 普通异常
+          <span class="badge-method ms-auto">GET</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/common/exception</span></div>
+          <p class="card-text text-muted small">服务端直接抛出 RuntimeException，返回 500 错误。演示异常监控及前端错误捕获。</p>
+          <button class="btn btn-trace w-100" data-url="common/exception" data-result-id="resultCommonException" data-loading="loadingCommonException">
+            <i class="fas fa-bug me-1"></i> 触发异常
+          </button>
+          <div id="resultCommonException" class="result-area mt-3">
+            <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片3: monoGet1 (包含logger+WebClient) -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white">
+          <i class="fas fa-water text-primary icon-custom"></i> Mono GET (含日志)
+          <span class="badge-method ms-auto">GET</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/mono/get1</span></div>
+          <p class="card-text text-muted small">WebFlux 响应式接口，返回 Mono&lt;String&gt;，并调用 <code>traceService.logger()</code>（异步+外部请求）。</p>
+          <button class="btn btn-trace w-100" data-url="mono/get1" data-result-id="resultMonoGet1" data-loading="loadingMonoGet1">
+            <i class="fas fa-dharmachakra me-1"></i> 响应式请求
+          </button>
+          <div id="resultMonoGet1" class="result-area mt-3">
+            <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片4: monoGet2 (无额外logger调用) -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white">
+          <i class="fas fa-tint text-info icon-custom"></i> Mono GET (纯净)
+          <span class="badge-method ms-auto">GET</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/mono/get2</span></div>
+          <p class="card-text text-muted small">仅返回 Mono.just("Hello, WebFlux!")，无日志服务调用，展示最简响应式端点。</p>
+          <button class="btn btn-trace w-100" data-url="mono/get2" data-result-id="resultMonoGet2" data-loading="loadingMonoGet2">
+            <i class="fas fa-bolt me-1"></i> 响应式请求
+          </button>
+          <div id="resultMonoGet2" class="result-area mt-3">
+            <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片5: monoException (响应式异常) -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white">
+          <i class="fas fa-skull-crossbones text-warning icon-custom"></i> Mono 异常
+          <span class="badge-method ms-auto">GET</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/mono/exception</span></div>
+          <p class="card-text text-muted small">在 WebFlux Controller 中直接抛出 RuntimeException，验证响应式异常处理机制。</p>
+          <button class="btn btn-trace w-100" data-url="mono/exception" data-result-id="resultMonoException" data-loading="loadingMonoException">
+            <i class="fas fa-fire me-1"></i> 触发Mono异常
+          </button>
+          <div id="resultMonoException" class="result-area mt-3">
+            <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片6: non-logger (无链路日志) -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white">
+          <i class="fas fa-file-alt text-secondary icon-custom"></i> 非日志接口
+          <span class="badge-method ms-auto">GET</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/non-logger</span></div>
+          <p class="card-text text-muted small">仅记录控制器日志并返回 "ok"，不调用 TraceService，用于对比测试。</p>
+          <button class="btn btn-trace w-100" data-url="non-logger" data-result-id="resultNonLogger" data-loading="loadingNonLogger">
+            <i class="fas fa-arrow-right me-1"></i> 普通调用
+          </button>
+          <div id="resultNonLogger" class="result-area mt-3">
+            <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 调试信息/全局备注 -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card border-0 bg-light rounded-4">
+        <div class="card-body text-center small text-muted">
+          <i class="fas fa-microchip me-1"></i> 后端基于 Spring WebFlux + 异步服务，日志中会打印第三方接口响应 (jsonplaceholder) |
+          <i class="fas fa-chart-line ms-2 me-1"></i> 每个请求均附带完整链路追踪能力 (MDC)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  <i class="far fa-copyright me-1"></i> Trace 示例 | 测试页面 · 覆盖所有端点
+</div>
+
+<script th:inline="javascript">
+  /* <![CDATA[ */
+  // 获取 contextPath 保证部署在非根路径时也能正确请求 (例如 /app)
+  var contextPath = /*[[@{/}]]*/ '';
+  // 处理上下文路径，去除尾斜杠并标准化
+  if (contextPath === '') {
+    contextPath = '';
+  } else if (contextPath.endsWith('/')) {
+    contextPath = contextPath.substring(0, contextPath.length - 1);
+  }
+  // 基础API前缀
+  var API_BASE = contextPath ? contextPath + '/trace/' : '/trace/';
+
+  // 防止重复请求的锁管理
+  var activeRequests = {};
+
+  // 通用请求方法 (每个按钮单独调用)
+  function callApi(endpoint, resultElementId, buttonElement) {
+    // 获取结果展示区域
+    var $resultDiv = $('#' + resultElementId);
+    if (!$resultDiv.length) return;
+
+    // 禁用按钮避免重复点击
+    var $btn = $(buttonElement);
+    if ($btn.prop('disabled')) return;
+    $btn.prop('disabled', true);
+    var originalBtnHtml = $btn.html();
+    $btn.html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>请求中...');
+
+    // 设置loading状态样式
+    $resultDiv.removeClass('result-success result-error').addClass('result-loading');
+    $resultDiv.html('<i class="fas fa-spinner fa-pulse me-1"></i> 发送请求中，请等待...<br><small class="text-muted">后端可能涉及外部调用，请稍等几秒</small>');
+
+    var fullUrl = API_BASE + endpoint;
+    // 发起AJAX请求 (GET)
+    $.ajax({
+      url: fullUrl,
+      type: 'GET',
+      dataType: 'text',       // 所有接口返回纯文本或者错误页面文本
+      timeout: 15000,         // 15秒超时 (考虑到外部调用可能会略慢)
+      success: function(data, textStatus, xhr) {
+        var statusCode = xhr.status;
+        var responseText = (data && data.trim().length > 0) ? data : '(空响应)';
+        // 美化显示
+        var timestamp = new Date().toLocaleTimeString();
+        var html = '<div class="d-flex justify-content-between mb-1"><span class="badge bg-success">HTTP ' + statusCode + ' ✓</span><small class="text-muted">' + timestamp + '</small></div>';
+        html += '<div><i class="fas fa-reply-all me-1 text-success"></i><strong>响应内容：</strong><br><span class="text-break">' + escapeHtml(responseText) + '</span></div>';
+        $resultDiv.removeClass('result-loading result-error').addClass('result-success');
+        $resultDiv.html(html);
+      },
+      error: function(xhr, status, errorThrown) {
+        var statusCode = xhr.status || 0;
+        var statusText = xhr.statusText || '请求失败';
+        var errorDetail = '';
+        // 尝试获取响应文本 (错误页或自定义错误信息)
+        var responseErrorText = '';
+        if (xhr.responseText) {
+          // 限制长度防止超大html错误堆栈，但保留主要信息
+          responseErrorText = xhr.responseText.substring(0, 500);
+          if (responseErrorText.length > 200) {
+            responseErrorText = responseErrorText.substring(0, 200) + '…(截断)';
+          }
+          errorDetail = responseErrorText;
+        } else if (status === 'timeout') {
+          errorDetail = '请求超时，后端处理时间较长或网络问题。';
+        } else if (status === 'parsererror') {
+          errorDetail = '响应解析错误，但状态码可能非200';
+        } else {
+          errorDetail = errorThrown || '未知错误';
+        }
+
+        var timestamp = new Date().toLocaleTimeString();
+        var html = '<div class="d-flex justify-content-between mb-1"><span class="badge bg-danger">HTTP ' + statusCode + ' ✗</span><small class="text-muted">' + timestamp + '</small></div>';
+        html += '<div><i class="fas fa-exclamation-circle me-1 text-danger"></i><strong>错误信息：</strong> ' + escapeHtml(statusText) + '<br>';
+        if (errorDetail) {
+          html += '<span class="small"><i class="fas fa-code me-1"></i>详情：</span> <span class="text-break">' + escapeHtml(errorDetail) + '</span>';
+        } else {
+          html += '<span class="small">未返回具体实体，请查看后端日志</span>';
+        }
+        html += '</div>';
+        $resultDiv.removeClass('result-loading result-success').addClass('result-error');
+        $resultDiv.html(html);
+      },
+      complete: function() {
+        // 恢复按钮
+        $btn.prop('disabled', false);
+        $btn.html(originalBtnHtml);
+        // 释放锁
+        if (activeRequests[resultElementId]) {
+          delete activeRequests[resultElementId];
+        }
+      }
+    });
+  }
+
+  // 简单防XSS工具
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // 页面加载完成后绑定事件
+  $(document).ready(function() {
+    // 绑定所有按钮：采用 data-url 和 data-result-id
+    $('.btn-trace').each(function() {
+      var $btn = $(this);
+      var endpoint = $btn.data('url');
+      var resultId = $btn.data('result-id');
+      if (endpoint && resultId) {
+        $btn.off('click.trace').on('click.trace', function(e) {
+          e.preventDefault();
+          // 防止并发快速连点
+          if (activeRequests[resultId]) return;
+          activeRequests[resultId] = true;
+          callApi(endpoint, resultId, this);
+        });
+      } else {
+        console.warn('按钮缺少 data-url 或 data-result-id 属性', $btn);
+      }
+    });
+
+    // 增加一个全局控制台友好的输出提示
+    console.log('接口测试面板已启动 | API 前缀: ' + API_BASE);
+    console.log('可用端点: common/get, common/exception, mono/get1, mono/get2, mono/exception, non-logger');
+  });
+
+  // 可选: 针对某些特殊超长响应, 保留完整内容再控制台也可输出 但无需额外操作
+  /* ]]> */
+</script>
+
+<!-- 增加额外的稳定性保证：如果后端应用上下文路径动态检测辅助 -->
+<script type="text/javascript">
+  // 二次确保 contextPath 正常（如果是非 thymeleaf 解析环境, 但此处thymeleaf会填充，但仍然保留备用逻辑）
+  (function() {
+    if (typeof contextPath === 'undefined') {
+      // 极端情况未解析，则尝试从当前页面路径获取根路径
+      var path = window.location.pathname;
+      var rootPath = path.substring(0, path.indexOf('/', 1));
+      if (rootPath && rootPath !== '') {
+        window.contextPath = rootPath;
+      } else {
+        window.contextPath = '';
+      }
+      if (typeof API_BASE === 'undefined') {
+        window.API_BASE = (window.contextPath ? window.contextPath + '/trace/' : '/trace/');
+      }
+    } else {
+      if (typeof API_BASE === 'undefined') {
+        window.API_BASE = (contextPath ? contextPath + '/trace/' : '/trace/');
+      }
+    }
+  })();
+</script>
+</body>
+</html>

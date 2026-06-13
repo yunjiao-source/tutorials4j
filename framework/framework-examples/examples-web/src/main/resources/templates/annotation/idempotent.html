@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>接口限流与幂等性演示 - Thymeleaf示例</title>
+  <!-- Bootstrap 5 + jQuery CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #f5f7fb;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    }
+    .container {
+      max-width: 1300px;
+      margin-top: 2rem;
+      margin-bottom: 3rem;
+    }
+    .session-card {
+      background: linear-gradient(135deg, #2c3e50 0%, #1e2a36 100%);
+      color: white;
+      border-radius: 1.25rem;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .session-id-text {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: rgba(255,255,255,0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+    .card-demo {
+      border: none;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      height: 100%;
+    }
+    .card-demo:hover {
+      transform: translateY(-3px);
+    }
+    .badge-max {
+      font-size: 0.8rem;
+      background-color: #e9ecef;
+      color: #2c3e50;
+      padding: 0.35rem 0.75rem;
+      border-radius: 2rem;
+    }
+    .response-area {
+      background: #f8f9fc;
+      border-radius: 1rem;
+      padding: 1rem;
+      border-left: 4px solid #0d6efd;
+      font-size: 0.9rem;
+      font-family: monospace;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .btn-demo {
+      border-radius: 2rem;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+    }
+    .counter-badge {
+      font-size: 1.2rem;
+      font-weight: 700;
+      background: #0d6efd20;
+      padding: 0.25rem 0.9rem;
+      border-radius: 2rem;
+      display: inline-block;
+    }
+    footer {
+      text-align: center;
+      color: #6c757d;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+    }
+    hr {
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 头部标题 -->
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-semibold">🔐 接口防护演示</h1>
+    <p class="lead text-muted">幂等性校验 · 访问频率限制 (基于请求头 <code>X-Session-Id</code>)</p>
+  </div>
+
+  <!-- 全局会话ID卡片 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="session-card p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div>
+            <h5 class="mb-1 fw-semibold"><span>🆔 当前模拟会话标识</span></h5>
+            <p class="mb-0 small opacity-75">请求头 <code>X-Session-Id</code> 的值，后端基于此生成限流/幂等的唯一键。</p>
+          </div>
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div class="session-id-text" id="sessionIdDisplay">-</div>
+            <button class="btn btn-light btn-demo" id="refreshSessionBtn">
+              🔄 刷新并生成新ID
+            </button>
+          </div>
+        </div>
+        <div class="mt-3 small text-light-emphasis bg-light bg-opacity-10 p-2 rounded">
+          💡 说明：刷新ID后，<strong>幂等接口</strong>可重新请求（旧ID的历史记录不影响），<strong>访问频率限制接口</strong>也重置计数（每个新ID独立享有4次调用额度）。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- 卡片1：幂等性接口 -->
+    <div class="col-md-6">
+      <div class="card-demo card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="card-title h5 fw-bold mb-0">🛡️ 幂等性接口</h3>
+            <span class="badge-max">@Idempotent · 同一会话仅一次成功</span>
+          </div>
+          <p class="card-text text-muted small">
+            接口地址：<code>GET /annotation/idempotent</code><br>
+            行为：同一 <code>X-Session-Id</code> 首次请求成功，后续请求抛出幂等异常 (IdempotentException)。
+          </p>
+          <hr>
+          <div class="d-grid gap-2 d-sm-block">
+            <button class="btn btn-primary btn-demo" id="callIdempotentBtn">
+              ✨ 调用幂等接口
+            </button>
+          </div>
+          <div class="mt-4">
+            <div class="fw-semibold mb-2 small text-secondary">📦 响应结果</div>
+            <div class="response-area" id="idempotentResult">
+              <span class="text-muted">尚未调用...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片2：访问频率限制接口 -->
+    <div class="col-md-6">
+      <div class="card-demo card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="card-title h5 fw-bold mb-0">⏱️ 访问频率限制</h3>
+            <span class="badge-max">@AccessLimited(maxTimes = 4)</span>
+          </div>
+          <p class="card-text text-muted small">
+            接口地址：<code>GET /annotation/access-limited</code><br>
+            行为：同一 <code>X-Session-Id</code> 最多请求 <strong>4次</strong>，超出限制抛出 <code>AccessLimitedException</code>。
+          </p>
+          <hr>
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div>
+              <span class="fw-semibold">📊 当前会话调用次数 (前端统计)</span>
+              <span class="counter-badge ms-2" id="accessCounter">0</span>
+              <span class="text-muted"> / 4</span>
+            </div>
+            <small class="text-info">*仅基于成功响应计数，与后端实际计数一致</small>
+          </div>
+          <div class="d-grid gap-2 d-sm-block">
+            <button class="btn btn-warning btn-demo" id="callAccessLimitedBtn" style="background:#ffc107; border-color:#ffc107;">
+              🚀 发送请求 (频率限制)
+            </button>
+          </div>
+          <div class="mt-4">
+            <div class="fw-semibold mb-2 small text-secondary">📦 响应结果</div>
+            <div class="response-area" id="accessLimitedResult">
+              <span class="text-muted">尚未调用...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 附加说明卡片 -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="alert alert-light border shadow-sm" role="alert">
+        <div class="d-flex gap-3 align-items-start">
+          <div>🧪</div>
+          <div>
+            <strong>测试指引</strong><br>
+            ▪ <strong>幂等测试</strong>：相同 Session ID 重复点击“调用幂等接口”，首次成功，之后均返回错误。<br>
+            ▪ <strong>频率限制测试</strong>：相同 Session ID 连续点击，前4次成功，第5次返回限流错误。点击「刷新并生成新ID」重置所有计数。<br>
+            ▪ 所有请求均在请求头中自动添加 <code>X-Session-Id: &lt;当前会话ID&gt;</code>。<br>
+            ▪ 后端基于 <code>X-Session-Id</code> + URI 生成唯一键，切换ID即视为全新客户端。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    ⚡ 后端拦截器：IdempotentHandlerInterceptor & AccessLimitedHandlerInterceptor | 示例仅供技术演示
+  </footer>
+</div>
+
+<script>
+  // ---------- 全局变量 ----------
+  let currentSessionId = null;        // 当前X-Session-Id值
+  let accessSuccessCount = 0;         // 针对当前sessionId 调用access-limited成功的次数（前端统计）
+
+  // 工具：生成随机ID (UUID v4 风格)
+  function generateRandomSessionId() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  // 刷新会话ID (重置前端统计、更新UI)
+  function refreshSessionId() {
+    currentSessionId = generateRandomSessionId();
+    // 重置访问频率计数（因为新ID后后端计数归零）
+    accessSuccessCount = 0;
+    updateSessionDisplay();
+    updateAccessCounterDisplay();
+    // 同时清除两个卡片的结果区（让体验更清爽，不是必须但友好）
+    $("#idempotentResult").html('<span class="text-muted">会话已刷新，幂等状态已重置...</span>');
+    $("#accessLimitedResult").html('<span class="text-muted">会话已刷新，频率限制计数已重置，可重新测试4次。</span>');
+    console.log("[INFO] 新会话ID已生成:", currentSessionId);
+  }
+
+  // 更新页面显示的Session ID
+  function updateSessionDisplay() {
+    $("#sessionIdDisplay").text(currentSessionId);
+  }
+
+  // 更新频率限制卡片上显示的计数器
+  function updateAccessCounterDisplay() {
+    $("#accessCounter").text(accessSuccessCount);
+  }
+
+  // 通用AJAX请求封装，自动带上X-Session-Id头
+  function callApi(url, successMsgPrefix, onSuccess, onErrorMsg) {
+    if (!currentSessionId) {
+      showTemporaryError("会话ID未初始化，请刷新页面", "#idempotentResult");
+      return;
+    }
+    $.ajax({
+      url: url,
+      type: "GET",
+      headers: {
+        "X-Session-Id": currentSessionId
+      },
+      beforeSend: function() {
+        // 可选: 显示加载提示
+      },
+      success: function(data, textStatus, jqXHR) {
+        // data 是后端返回的字符串: "idempotent" 或者 "accessLimited"
+        if (onSuccess) {
+          onSuccess(data, textStatus, jqXHR);
+        } else {
+          // 默认展示成功信息
+          let responseText = typeof data === 'string' ? data : JSON.stringify(data);
+          return responseText;
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        let errorDetail = "";
+        // 尝试从responseText中提取有意义的信息
+        if (jqXHR.responseText) {
+          // 可能返回HTML错误页或者文本; 提取关键消息
+          let rawText = jqXHR.responseText;
+          // 简单的清洗: 如果包含异常消息则截取部分（Spring Boot默认错误格式或全局异常信息）
+          if (rawText.includes("IdempotentException") || rawText.includes("幂等")) {
+            errorDetail = "幂等性校验失败：重复请求或会话已提交过。";
+          } else if (rawText.includes("AccessLimitedException") || rawText.includes("访问频率限制") || rawText.includes("CounterOverflow")) {
+            errorDetail = "访问频率超限：当前会话已超出最大请求次数(4次)，请刷新会话ID后重试。";
+          } else {
+            // 截取前150个字符避免过多html
+            let clean = rawText.replace(/<[^>]*>/g, ' ').substring(0, 150);
+            errorDetail = clean || errorThrown || "请求失败，状态码: " + jqXHR.status;
+          }
+        } else {
+          errorDetail = errorThrown || "请求失败，网络或服务异常";
+        }
+        if (onErrorMsg) {
+          onErrorMsg(errorDetail, jqXHR.status);
+        } else {
+          showTemporaryError(`❌ 请求失败: ${errorDetail}`, "#accessLimitedResult");
+        }
+      }
+    });
+  }
+
+  // 显示临时错误消息到指定区域
+  function showTemporaryError(message, targetId) {
+    const errorHtml = `<div class="text-danger small"><i class="bi bi-exclamation-triangle"></i> ${escapeHtml(message)}</div>`;
+    $(targetId).html(errorHtml);
+    // 5秒后如果用户没有新操作，不清除也可以但是会影响体验，可保留展示
+  }
+
+  // 简单防XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // 展示格式化成功消息（幂等专用）
+  function displayIdempotentSuccess(responseData) {
+    const timeStr = new Date().toLocaleTimeString();
+    const successHtml = `
+            <div class="text-success fw-semibold">✅ 请求成功 (${timeStr})</div>
+            <div class="mt-1">服务端响应：<code>${escapeHtml(responseData)}</code></div>
+            <div class="text-secondary small">幂等令牌生效，本次请求被正常处理</div>
+        `;
+    $("#idempotentResult").html(successHtml);
+  }
+
+  function displayIdempotentError(errorMsg, statusCode) {
+    const timeStr = new Date().toLocaleTimeString();
+    const errorHtml = `
+            <div class="text-danger fw-semibold">⚠️ 幂等拦截 (${statusCode || '异常'})</div>
+            <div class="mt-1">原因：${escapeHtml(errorMsg)}</div>
+            <div class="text-secondary small">提示：同一会话仅允许成功一次，如需再次测试请点击「刷新并生成新ID」。</div>
+        `;
+    $("#idempotentResult").html(errorHtml);
+  }
+
+  // 频率限制接口专用成功回调
+  function handleAccessLimitedSuccess(responseData) {
+    // 成功后增加前端计数
+    accessSuccessCount++;
+    updateAccessCounterDisplay();
+    const timeStr = new Date().toLocaleTimeString();
+    const remainInfo = (accessSuccessCount >= 4) ?
+        '<span class="badge bg-warning text-dark">⚠️ 已达上限(4次)，下一次请求将被拦截</span>' :
+        `<span>✅ 当前会话已成功请求 ${accessSuccessCount} / 4 次</span>`;
+    const successHtml = `
+            <div class="text-success fw-semibold">🎉 请求成功 (${timeStr})</div>
+            <div class="mt-1">服务端响应：<code>${escapeHtml(responseData)}</code></div>
+            <div class="mt-1 small">${remainInfo}</div>
+        `;
+    $("#accessLimitedResult").html(successHtml);
+    // 如果已经达到4次，且再调用将由后端拦截，前端不做额外动作
+    if (accessSuccessCount === 4) {
+      $("#accessLimitedResult").append('<div class="text-warning-emphasis mt-2 small">🔔 提示：已经用完4次调用额度，再点击将会触发限流异常，请刷新Session ID继续测试。</div>');
+    }
+  }
+
+  function handleAccessLimitedError(errorMsg, statusCode) {
+    const timeStr = new Date().toLocaleTimeString();
+    // 如果是超限，明确给与提示并建议刷新
+    const advice = (errorMsg.includes("超限") || errorMsg.includes("CounterOverflow") || errorMsg.includes("AccessLimited")) ?
+        '<div class="mt-2"><button class="btn btn-sm btn-outline-secondary" id="quickRefreshBtn">🔄 立即刷新会话ID</button></div>' : '';
+    const errorHtml = `
+            <div class="text-danger fw-semibold">⛔ 访问受限 (${statusCode || '限制异常'})</div>
+            <div class="mt-1">原因：${escapeHtml(errorMsg)}</div>
+            <div class="text-secondary small">当前会话已达后端限流阈值，请刷新X-Session-Id重置计数。</div>
+            ${advice}
+        `;
+    $("#accessLimitedResult").html(errorHtml);
+    // 绑定快捷刷新按钮事件（如果有动态生成）
+    if ($("#quickRefreshBtn").length) {
+      $("#quickRefreshBtn").off('click').on('click', function() {
+        refreshSessionId();
+      });
+    }
+    // 当访问失败时（限流异常），确保前端计数不要错误增加（实际并没增加，但用户可能会误解，不做额外变更）
+    // 但注意：如果某次由于网络错误导致失败但是后端并没有真正计数，不过前端不会加，所以一致。
+  }
+
+  // ---------- 事件绑定 ----------
+  $(document).ready(function() {
+    // 初始化：生成随机ID
+    refreshSessionId();
+
+    // 刷新按钮
+    $("#refreshSessionBtn").on("click", function() {
+      refreshSessionId();
+    });
+
+    // 幂等接口调用
+    $("#callIdempotentBtn").on("click", function() {
+      if (!currentSessionId) {
+        displayIdempotentError("会话ID无效，请刷新页面", 400);
+        return;
+      }
+      callApi("/annotation/idempotent", "幂等请求",
+          function success(data) {
+            displayIdempotentSuccess(data);
+          },
+          function error(errMsg, status) {
+            displayIdempotentError(errMsg, status);
+          }
+      );
+    });
+
+    // 频率限制接口调用
+    $("#callAccessLimitedBtn").on("click", function() {
+      if (!currentSessionId) {
+        handleAccessLimitedError("无效的会话标识，请刷新页面", 0);
+        return;
+      }
+      // 前端只是友善显示，但后端会真正校验，不会阻止发送，从而完整演示后端限制效果
+      // 如果当前前端计数已经大于等于4，后端必然拒绝，但仍发送请求以展示后端结果（让用户看到限制异常）
+      callApi("/annotation/access-limited", "频率限制请求",
+          function success(data) {
+            handleAccessLimitedSuccess(data);
+          },
+          function error(errMsg, status) {
+            handleAccessLimitedError(errMsg, status);
+          }
+      );
+    });
+  });
+</script>
+</body>
+</html>

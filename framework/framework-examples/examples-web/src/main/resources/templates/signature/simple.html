@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>签名支付示例 | 接口调用演示</title>
+  <!-- Bootstrap 5 CSS (官方CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery (slim 版即可，但需要完整ajax功能) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <!-- Bootstrap JS Bundle (包含 Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background: #f4f7fc;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #2c3e66, #1a2a44);
+      color: white;
+      font-weight: 600;
+    }
+    .card {
+      border: none;
+      border-radius: 1.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+    }
+    .btn-primary {
+      background: #1e3c72;
+      border-color: #1e3c72;
+      font-weight: 500;
+      padding: 0.6rem 1.5rem;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover {
+      background: #0f2a4f;
+      border-color: #0f2a4f;
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .result-area {
+      background: #f8fafc;
+      border-radius: 1rem;
+      border-left: 5px solid #2c7da0;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .badge-step {
+      font-size: 0.85rem;
+      background: #eef2ff;
+      color: #1e3c72;
+      padding: 6px 12px;
+      border-radius: 40px;
+    }
+    .signature-note {
+      background: #e9ecef;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+    footer {
+      font-size: 0.8rem;
+      color: #6c757d;
+      border-top: 1px solid #dee2e6;
+    }
+    .loading-spinner {
+      display: none;
+    }
+    input:invalid {
+      border-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-md-5">
+  <!-- 头部说明 -->
+  <div class="text-center mb-4">
+    <h1 class="display-6 fw-semibold" style="color: #1f3a5f;">
+      🔐 安全签名支付演示
+    </h1>
+    <p class="lead text-secondary">基于 Spring Boot + 签名拦截器 · 前端调用示例</p>
+    <div class="d-flex justify-content-center gap-2 flex-wrap">
+      <span class="badge-step">✅ 客户端无需处理签名</span>
+      <span class="badge-step">⚙️ 后端自动生成签名</span>
+      <span class="badge-step">⏱️ 时间窗口验证 (60s)</span>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <!-- 主要支付卡片 -->
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <div class="d-flex align-items-center gap-2">
+            <span>💳</span> 支付请求
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <form id="payForm">
+            <div class="mb-4">
+              <label for="userId" class="form-label fw-semibold">用户ID</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-person"></i>👤</span>
+                <input type="text" class="form-control" id="userId" name="userId"
+                       placeholder="例如: user_1001" value="demo_zhang" required>
+              </div>
+              <div class="form-text">将作为支付业务参数传递，后端会验签并处理</div>
+            </div>
+
+            <div class="mb-4">
+              <label for="amount" class="form-label fw-semibold">支付金额 (单位: 分 / 整数)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light">💰</span>
+                <input type="number" class="form-control" id="amount" name="amount"
+                       placeholder="整数金额" value="1299" step="1" min="1" required>
+              </div>
+              <div class="form-text">示例: 1299 表示 12.99 元 (仅用于演示)</div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <button type="button" id="submitBtn" class="btn btn-primary px-5 py-2">
+                🚀 发起支付请求
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 调用结果展示区 -->
+      <div class="card">
+        <div class="card-header bg-white border-bottom-0 pt-3 pb-0" style="background: none !important;">
+          <h5 class="mb-0 fw-semibold"><span>📋</span> 调用结果</h5>
+        </div>
+        <div class="card-body">
+          <div id="loadingIndicator" class="loading-spinner text-center py-2">
+            <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+            <span class="ms-2 text-secondary">正在请求后端接口，后端生成签名并调用支付...</span>
+          </div>
+          <div id="resultContainer" class="result-area p-3" style="min-height: 120px;">
+            <div class="text-muted small fst-italic">
+              👆 点击上方按钮，将调用 <code>/signature/test</code> 接口，后端通过 <strong>SignatureClient</strong> 自动完成签名并请求 <code>/signature/pay</code>，支付成功后返回结果。
+            </div>
+          </div>
+          <hr class="my-3">
+          <div class="signature-note p-2 small">
+            <strong>🔍 流程说明：</strong><br>
+            ① 前端 → <code>GET /signature/test?userid=&amp;amount=</code><br>
+            ② 后端 SignatureClient 生成 timestamp, nonce, 计算签名 并附加到请求头<br>
+            ③ 后端向 <code>/signature/pay</code> 发起签名POST请求<br>
+            ④ 服务端 @RequiredSignature 验证签名及时间窗口(60s) → 执行业务逻辑 → 返回结果<br>
+            ⑤ 前端展示最终支付响应
+          </div>
+        </div>
+      </div>
+
+      <!-- 可选：近期调用记录/辅助信息 可以增加一个简单日志区域提升交互 -->
+      <div class="card mt-4">
+        <div class="card-body py-2 px-3 bg-light">
+          <div class="row align-items-center">
+            <div class="col-auto">
+              <span class="badge bg-secondary">⚡ 提示</span>
+            </div>
+            <div class="col">
+              <span class="small text-secondary">如果签名验证失败，请检查服务器时间是否同步，默认 appKey = appkey1 ，服务端已预置该密钥。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="text-center mt-5 pt-3">
+    <p class="mb-0">API 签名示例 · 基于 tutorials4j 安全框架 | 演示页面 Thymeleaf + Bootstrap + jQuery</p>
+  </footer>
+</div>
+
+<script>
+  $(document).ready(function() {
+    const $submitBtn = $('#submitBtn');
+    const $loading = $('#loadingIndicator');
+    const $resultContainer = $('#resultContainer');
+
+    // 清除之前的结果样式, 显示新请求
+    function setResult(content, isError = false) {
+      $resultContainer.html(content);
+      if (isError) {
+        $resultContainer.addClass('border-danger').removeClass('border-success');
+      } else {
+        $resultContainer.addClass('border-success').removeClass('border-danger');
+      }
+    }
+
+    // 显示错误信息格式化
+    function showError(message, detail = '') {
+      const errorHtml = `
+                <div class="d-flex align-items-start gap-2 text-danger">
+                    <div>❌</div>
+                    <div><strong>请求失败</strong><br>${escapeHtml(message)}${detail ? '<br><small class="text-muted">' + escapeHtml(detail) + '</small>' : ''}</div>
+                </div>
+            `;
+      setResult(errorHtml, true);
+    }
+
+    // 显示成功支付信息
+    function showSuccess(payload) {
+      const successHtml = `
+                <div class="d-flex align-items-start gap-2 text-success">
+                    <div>✅</div>
+                    <div><strong>支付成功响应</strong><br><code class="small">${escapeHtml(payload)}</code></div>
+                </div>
+                <div class="mt-2 small text-secondary">✨ 服务端签名验证通过，业务处理完成。</div>
+            `;
+      setResult(successHtml, false);
+    }
+
+    // 简单防XSS辅助
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        return c;
+      });
+    }
+
+    // 提交事件处理
+    $('#submitBtn').on('click', function() {
+      // 获取表单值并进行基础校验
+      const userId = $('#userId').val().trim();
+      const amountRaw = $('#amount').val();
+      if (!userId) {
+        showError('用户ID不能为空，请输入有效的 userId');
+        return;
+      }
+      if (!amountRaw || isNaN(amountRaw) || !Number.isInteger(Number(amountRaw)) || Number(amountRaw) <= 0) {
+        showError('金额必须为正整数（单位：分），例如 1299');
+        return;
+      }
+      const amount = parseInt(amountRaw, 10);
+
+      // 显示加载状态，禁用按钮
+      $submitBtn.prop('disabled', true);
+      $loading.show();
+      // 清空之前结果样式并显示加载提示
+      setResult('<div class="text-info small">⏳ 正在请求后端接口，请稍候...</div>', false);
+
+      // 调用后端 /signature/test 接口 (GET)
+      // 注意后端接口参数名为 userid 和 amount (见SignatureController: @RequestParam("userid") String userId, @RequestParam("amount") Long amount)
+      const requestUrl = `/signature/test?userid=${encodeURIComponent(userId)}&amount=${amount}`;
+
+      $.ajax({
+        url: requestUrl,
+        type: 'GET',
+        dataType: 'text',
+        timeout: 15000,
+        success: function(data, textStatus, xhr) {
+          // 支付成功, data 应是类似 "PAIED, userId=xxx amount=xxx"
+          if (typeof data === 'string' && (data.includes('PAIED') || data.includes('PAID') || data.length > 0)) {
+            showSuccess(data);
+          } else {
+            // 如果返回了其他内容也展示
+            showSuccess(data || '(空响应)');
+          }
+        },
+        error: function(xhr, status, error) {
+          let errorMsg = '';
+          let detailText = '';
+          if (xhr.responseText) {
+            // 尝试解析错误信息（可能是服务端返回的错误，如签名失败、验证异常等）
+            try {
+              // 可能是json或普通文本
+              if (xhr.getResponseHeader('content-type')?.includes('application/json')) {
+                const jsonErr = JSON.parse(xhr.responseText);
+                errorMsg = jsonErr.message || jsonErr.error || '后端签名验证失败或业务错误';
+              } else {
+                errorMsg = xhr.responseText.substring(0, 300);
+              }
+            } catch(e) {
+              errorMsg = xhr.responseText.substring(0, 200);
+            }
+            detailText = `HTTP ${xhr.status} ${xhr.statusText}`;
+          } else {
+            errorMsg = status === 'timeout' ? '请求超时，请检查网络或后端服务' : '网络错误或服务端异常';
+            detailText = `状态: ${status}`;
+          }
+          showError(errorMsg || '调用失败, 请稍后重试', detailText);
+        },
+        complete: function() {
+          $submitBtn.prop('disabled', false);
+          $loading.hide();
+        }
+      });
+    });
+
+    // 增加回车快捷提交 (在输入框按回车)
+    $('#userId, #amount').on('keypress', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        $('#submitBtn').click();
+      }
+    });
+  });
+</script>
+<!-- 这里未使用额外图标库，仅使用emoji与bootstrap风格，也可以添加fontawesome但不影响 -->
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>请求体缓存演示 - 多次读取测试 | Spring Boot + CachedBodyFilter</title>
+  <!-- Bootstrap 5 + Icons + jQuery CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background: #f4f7fc;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .header-gradient {
+      background: linear-gradient(135deg, #1e2a3a 0%, #0f1a24 100%);
+      color: white;
+      border-bottom: 3px solid #ffc107;
+    }
+    .card-hover {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 1rem 2rem rgba(0,0,0,0.1) !important;
+    }
+    .result-pre {
+      background: #1e2a36;
+      color: #e4f0fb;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', 'SF Mono', monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .badge-cached {
+      background-color: #20c997;
+      color: #0a3622;
+    }
+    .badge-non-cached {
+      background-color: #ffc107;
+      color: #664d03;
+    }
+    .icon-bullet {
+      font-size: 1.2rem;
+      vertical-align: middle;
+    }
+    .btn-cached {
+      background: #2c7da0;
+      border-color: #2c7da0;
+      color: white;
+    }
+    .btn-cached:hover {
+      background: #1f5e7a;
+      border-color: #1f5e7a;
+    }
+    .btn-non-cached {
+      background: #e07c3c;
+      border-color: #e07c3c;
+      color: white;
+    }
+    .btn-non-cached:hover {
+      background: #c05c2c;
+    }
+    footer {
+      font-size: 0.85rem;
+      border-top: 1px solid #dee2e6;
+    }
+    textarea {
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+    .copy-btn {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover {
+      background-color: #e9ecef;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container-fluid px-0">
+  <!-- 头部介绍 -->
+  <div class="header-gradient py-4 px-4 mb-5">
+    <div class="container-lg">
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div>
+          <h1 class="display-6 fw-bold">
+            <i class="bi bi-archive-fill me-2"></i>请求体缓存实验
+          </h1>
+          <p class="lead mb-0 mt-2 opacity-75">
+            演示 <code>CachedBodyHttpServletRequest</code> 多次读取请求体能力 VS 原生请求读取限制
+          </p>
+        </div>
+        <div class="mt-3 mt-sm-0">
+          <span class="badge bg-light text-dark fs-6 me-2"><i class="bi bi-check-circle-fill text-success"></i> Thymeleaf</span>
+          <span class="badge bg-light text-dark fs-6"><i class="bi bi-bootstrap-fill text-primary"></i> Bootstrap5 + jQuery</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-lg mb-5">
+    <!-- 技术说明卡片 -->
+    <div class="row mb-4 g-3">
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title"><i class="bi bi-info-circle-fill text-info me-2"></i> 机制说明</h5>
+            <p class="card-text small text-secondary">
+              Spring 中 <code>HttpServletRequest#getReader()</code> 默认只能读取一次，再次调用会抛出 <code>IOException: Stream closed</code>。<br>
+              <strong class="text-success">✔ 缓存请求体方案</strong>：通过 <code>CachedBodyFilter</code> 将原始请求体包装成 <code>CachedBodyHttpServletRequest</code>，将内容缓存到内存，支持无限次重复读取。<br>
+              <strong class="text-warning">✘ 普通请求</strong>：未经过滤器包装时，第二次读取就会失败。
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title"><i class="bi bi-graph-up me-2"></i> 接口端点</h5>
+            <ul class="list-unstyled small mb-0">
+              <li><kbd>POST /cached-body/cached</kbd> <span class="badge bg-success ms-2">已包装</span> → 返回 <code>firstRead, secondRead, equals, isRequestWrapped</code></li>
+              <li class="mt-2"><kbd>POST /cached-body/non-cached</kbd> <span class="badge bg-danger ms-2">原生请求</span> → 第二次读取抛出 <code>Stream closed</code> 异常 (HTTP 500)</li>
+            </ul>
+            <hr class="my-2">
+            <div class="text-muted small"><i class="bi bi-lightbulb"></i> 下方输入任意文本/JSON/XML，体验缓存与非缓存的差异</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 请求体编辑器（统一） -->
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-white fw-semibold">
+        <i class="bi bi-pencil-square me-1"></i> 请求体内容
+        <span class="text-muted small ms-2">(将作为 POST Body 发送，纯文本/JSON均可)</span>
+      </div>
+      <div class="card-body">
+                <textarea id="requestBody" rows="4" class="form-control font-monospace" placeholder='例如: {"userId": 100, "action": "test"} 或普通文本'>{
+  "message": "Hello CachedBody!",
+  "timestamp": "2026-06-13",
+  "repeatReadTest": true
+}</textarea>
+        <div class="d-flex justify-content-between mt-2">
+          <div>
+            <button type="button" id="setSampleJsonBtn" class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-filetype-json"></i> 示例JSON</button>
+            <button type="button" id="setSampleTextBtn" class="btn btn-sm btn-outline-secondary"><i class="bi bi-text-paragraph"></i> 纯文本示例</button>
+          </div>
+          <small class="text-muted align-self-center"><i class="bi bi-info-circle"></i> 支持中文、特殊符号</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- 两个测试区块: 缓存 vs 非缓存 -->
+    <div class="row g-4">
+      <!-- 左侧: 缓存端点测试 -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-lg rounded-4 card-hover h-100">
+          <div class="card-header bg-white rounded-top-4 border-bottom-0 pt-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-success bg-opacity-10 p-2 rounded-circle me-2">
+                <i class="bi bi-database-fill-check text-success fs-5"></i>
+              </div>
+              <h3 class="h5 mb-0 fw-bold">🔁 缓存请求体 <span class="badge-cached badge ms-2">CachedBodyHttpServletRequest</span></h3>
+            </div>
+          </div>
+          <div class="card-body pt-2">
+            <p class="small text-secondary mb-3">
+              <i class="bi bi-check-circle-fill text-success"></i> 经过 <code>CachedBodyFilter</code> 包装 → 支持多次调用 <code>request.getReader()</code><br>
+              后端会返回第一次读取、第二次读取以及两者是否相等。
+            </p>
+            <button id="testCachedBtn" class="btn btn-cached w-100 mb-3 py-2 fw-semibold">
+              <i class="bi bi-play-fill me-1"></i> 发送请求 (缓存端点)
+            </button>
+            <!-- 缓存结果展示区 -->
+            <div id="cachedResultArea" class="mt-2">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-uppercase text-secondary fw-semibold"><i class="bi bi-file-text-fill"></i> 响应结果</small>
+                <span id="cachedStatusBadge" class="badge bg-secondary">未请求</span>
+              </div>
+              <div id="cachedResponseContent" class="result-pre" style="min-height: 200px;">
+                <span class="text-muted fst-italic">点击上方按钮后，结果将显示在此处...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧: 非缓存端点测试 (原生request) -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-lg rounded-4 card-hover h-100">
+          <div class="card-header bg-white rounded-top-4 border-bottom-0 pt-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-warning bg-opacity-10 p-2 rounded-circle me-2">
+                <i class="bi bi-exclamation-triangle-fill text-warning fs-5"></i>
+              </div>
+              <h3 class="h5 mb-0 fw-bold">⚠️ 非缓存请求体 <span class="badge-non-cached badge ms-2">原生 HttpServletRequest</span></h3>
+            </div>
+          </div>
+          <div class="card-body pt-2">
+            <p class="small text-secondary mb-3">
+              <i class="bi bi-x-circle-fill text-danger"></i> 无缓存包装 → 第二次调用 <code>getReader()</code> 会抛出 <code>java.io.IOException: Stream closed</code><br>
+              预期服务端返回 HTTP 500 错误，前端捕获异常并展示失败原因。
+            </p>
+            <button id="testNonCachedBtn" class="btn btn-non-cached w-100 mb-3 py-2 fw-semibold">
+              <i class="bi bi-play-fill me-1"></i> 发送请求 (非缓存端点)
+            </button>
+            <!-- 非缓存结果展示区 -->
+            <div id="nonCachedResultArea" class="mt-2">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-uppercase text-secondary fw-semibold"><i class="bi bi-bug-fill"></i> 响应/异常信息</small>
+                <span id="nonCachedStatusBadge" class="badge bg-secondary">未请求</span>
+              </div>
+              <div id="nonCachedResponseContent" class="result-pre" style="min-height: 200px;">
+                <span class="text-muted fst-italic">验证错误场景：点击后展示流关闭异常...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 额外细节: 对比日志卡片(页面内提示) -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="alert alert-light border shadow-sm d-flex align-items-start" role="alert">
+          <i class="bi bi-journal-code fs-4 me-3 text-primary"></i>
+          <div>
+            <strong>📌 观察重点</strong><br>
+            - <strong>缓存端点</strong> 返回的 <code>isRequestWrapped</code> 应为 <span class="badge bg-success">true</span> ，且 <code>firstRead</code> 与 <code>secondRead</code> 完全一致，<code>equals = true</code>。<br>
+            - <strong>非缓存端点</strong> 由于第二次读取流已关闭，后端直接抛出异常，前端会收到 HTTP 500，<strong>错误消息中包含 “Stream closed”</strong> ，证明原生请求无法重复读取。<br>
+            - 您可以使用浏览器开发者工具（F12）查看网络请求，观察两个端点不同的行为。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center text-muted py-3 mt-4 border-top">
+    <div class="container">
+      <span><i class="bi bi-code-slash"></i> CachedBodyDemo | Spring Boot + Thymeleaf | 演示请求体缓存机制</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+  $(document).ready(function() {
+
+    // 辅助函数：设置请求体内容示例
+    $('#setSampleJsonBtn').on('click', function() {
+      const sampleJson = `{
+  "username": "cache_tester",
+  "action": "repeatRead",
+  "data": {
+    "count": 3,
+    "features": ["cached-body", "multi-read"]
+  }
+}`;
+      $('#requestBody').val(sampleJson);
+    });
+
+    $('#setSampleTextBtn').on('click', function() {
+      const sampleText = `这是一个普通的文本请求体。
+支持多行内容。
+第二次读取时，缓存机制会保证内容一致，而非缓存将报错。`;
+      $('#requestBody').val(sampleText);
+    });
+
+    // 获取当前请求体内容 (不做额外encode, ajax原生发送)
+    function getCurrentRequestBody() {
+      return $('#requestBody').val();
+    }
+
+    // 通用ajax错误处理 (用于非缓存端点等)
+    function handleErrorResponse(xhr, statusText, errorThrown, targetAreaId, badgeId) {
+      let errorDetail = '';
+      let statusCode = xhr.status || 500;
+      try {
+        // 尝试解析spring boot 标准错误响应体
+        if (xhr.responseText) {
+          const jsonErr = JSON.parse(xhr.responseText);
+          errorDetail = jsonErr.message || jsonErr.error || xhr.responseText;
+          if (jsonErr.timestamp && jsonErr.path) {
+            errorDetail = `[${jsonErr.status}] ${jsonErr.error}: ${jsonErr.message}`;
+          } else {
+            errorDetail = jsonErr.message || jsonErr.error || xhr.responseText;
+          }
+        } else {
+          errorDetail = xhr.responseText || statusText || errorThrown;
+        }
+      } catch (e) {
+        errorDetail = xhr.responseText || `请求失败 (HTTP ${statusCode}): ${statusText}`;
+      }
+      // 限制过长显示
+      if (errorDetail && errorDetail.length > 800) {
+        errorDetail = errorDetail.substring(0, 800) + '……(内容过长已截断)';
+      }
+      const errorHtml = `<div class="text-danger-emphasis"><i class="bi bi-x-octagon-fill"></i> <strong>异常触发</strong> (符合预期: 流已关闭)</div>
+                               <hr class="my-2 bg-danger">
+                               <div><span class="badge bg-danger">HTTP ${statusCode}</span> <span class="small">${statusText}</span></div>
+                               <div class="mt-2"><strong>错误详情:</strong><br>${escapeHtml(errorDetail)}</div>
+                               <div class="mt-2 text-warning small"><i class="bi bi-lightbulb"></i> 原生请求体第二次读取时流已经关闭，后端抛出 IOException，证明非缓存下无法多次读取。</div>`;
+      $(`#${targetAreaId}`).html(errorHtml);
+      $(`#${badgeId}`).html(`<i class="bi bi-exclamation-triangle"></i> 失败(500)`).removeClass('bg-secondary bg-success').addClass('bg-danger');
+    }
+
+    // 简单防XSS转义
+    function escapeHtml(str) {
+      if(!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if(m === '&') return '&amp;';
+        if(m === '<') return '&lt;';
+        if(m === '>') return '&gt;';
+        return m;
+      }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        return c;
+      });
+    }
+
+    // 美化 JSON 显示
+    function prettyPrintResponse(data, rawString) {
+      if (typeof data === 'object') {
+        try {
+          return JSON.stringify(data, null, 2);
+        } catch(e) {
+          return rawString || String(data);
+        }
+      }
+      return rawString || String(data);
+    }
+
+    // ------------------- 缓存端点测试 -------------------
+    $('#testCachedBtn').on('click', function() {
+      const requestBodyStr = getCurrentRequestBody();
+      if (requestBodyStr === '') {
+        // 允许空body，但给个友好提醒
+        if(!confirm('请求体为空，是否继续发送？')) return;
+      }
+      // 更新UI状态
+      $('#cachedStatusBadge').html('<i class="bi bi-hourglass-split"></i> 请求中...').removeClass('bg-secondary bg-success bg-danger').addClass('bg-primary');
+      $('#cachedResponseContent').html('<div class="text-info"><i class="bi bi-arrow-repeat spinner-border spinner-border-sm me-2"></i> 发送请求到 /cached-body/cached ...</div>');
+
+      $.ajax({
+        url: '/cached-body/cached',
+        type: 'POST',
+        data: requestBodyStr,
+        contentType: 'text/plain; charset=UTF-8',  // 纯文本体，后端通过reader读取
+        processData: false,        // 不转换data，直接作为字符串发送
+        timeout: 10000,
+        success: function(response, textStatus, xhr) {
+          // 成功返回 - 解析响应对象
+          let displayHtml = '';
+          let prettyJson = '';
+          try {
+            if (typeof response === 'object') {
+              prettyJson = JSON.stringify(response, null, 2);
+              displayHtml = `<div class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> <strong>请求成功 (HTTP ${xhr.status})</strong></div>
+                                           <div class="small text-secondary mb-2">响应内容 (JSON):</div>
+                                           <pre class="mb-0" style="background:transparent; color:inherit; font-family:monospace;">${escapeHtml(prettyJson)}</pre>`;
+              // 额外高亮显示 equals 和 包装状态
+              let extraNote = '';
+              if (response.equals === true && response.isRequestWrapped === true) {
+                extraNote = '<div class="alert alert-success mt-2 py-1 small mb-0"><i class="bi bi-check-lg"></i> 验证通过：请求被缓存包装，两次读取内容完全一致，支持重复读取！</div>';
+              } else if (response.isRequestWrapped === true && response.equals === false) {
+                extraNote = '<div class="alert alert-warning mt-2 py-1 small mb-0"><i class="bi bi-question-lg"></i> 包装状态为true但两次读取不一致？检查后端逻辑</div>';
+              } else if (response.isRequestWrapped === false) {
+                extraNote = '<div class="alert alert-warning mt-2 py-1 small mb-0"><i class="bi bi-eye-slash"></i> 注意：未检测到缓存包装，但此端点理论上会经过Filter，请检查Filter配置</div>';
+              }
+              displayHtml += extraNote;
+            } else {
+              // 如果响应不是json对象, 兜底
+              displayHtml = `<div><strong>原始响应:</strong><br>${escapeHtml(String(response))}</div>`;
+            }
+          } catch (err) {
+            displayHtml = `<div class="text-warning">解析响应出错: ${err.message}<br>原始内容: ${escapeHtml(String(response))}</div>`;
+          }
+          $('#cachedResponseContent').html(displayHtml);
+          $('#cachedStatusBadge').html('<i class="bi bi-check-lg"></i> 成功').removeClass('bg-primary bg-secondary').addClass('bg-success');
+        },
+        error: function(xhr, statusText, errorThrown) {
+          // 对于缓存端点应该正常返回200, 但假如过滤器未生效或者服务器错误也会走到这里，友好提示
+          let errorMsg = '';
+          if (xhr.status === 500) {
+            errorMsg = '服务器内部错误，可能Filter未生效或其它异常。请检查后端配置是否完整。';
+          } else if (xhr.status === 404) {
+            errorMsg = '接口地址不存在，请确认后端上下文路径和端点映射。';
+          } else {
+            errorMsg = `HTTP ${xhr.status}: ${statusText}`;
+          }
+          const errDisplay = `<div class="text-danger"><i class="bi bi-exclamation-diamond-fill"></i> 请求缓存端点失败: ${escapeHtml(errorMsg)}</div>
+                                        <hr class="my-2"><div class="small text-secondary">错误详情: ${escapeHtml(xhr.responseText || errorThrown || '未知错误')}</div>
+                                        <div class="mt-2 small">提示：缓存端点预期应正常返回数据，请确保 CachedBodyFilter 对 /cached-body/cached 路径生效。</div>`;
+          $('#cachedResponseContent').html(errDisplay);
+          $('#cachedStatusBadge').html('<i class="bi bi-x-circle"></i> 失败').removeClass('bg-primary bg-success').addClass('bg-danger');
+        }
+      });
+    });
+
+    // ------------------- 非缓存端点测试 (预期流关闭错误) -------------------
+    $('#testNonCachedBtn').on('click', function() {
+      const requestBodyStr = getCurrentRequestBody();
+      if (requestBodyStr === '') {
+        if(!confirm('请求体为空，是否继续发送？将测试空body时二次读取的错误')) return;
+      }
+      $('#nonCachedStatusBadge').html('<i class="bi bi-hourglass-split"></i> 请求中...').removeClass('bg-secondary bg-success bg-danger').addClass('bg-primary');
+      $('#nonCachedResponseContent').html('<div><i class="bi bi-hurricane"></i> 调用非缓存端点，预期后端抛出 Stream closed 异常...</div>');
+
+      $.ajax({
+        url: '/cached-body/non-cached',
+        type: 'POST',
+        data: requestBodyStr,
+        contentType: 'text/plain; charset=UTF-8',
+        processData: false,
+        timeout: 8000,
+        success: function(data, textStatus, xhr) {
+          // 正常情况下 non-cached 不应该成功 (因为会抛异常), 但若后端意外修改/捕获了异常会走到这里, 做额外提醒
+          let successMsg = '';
+          try {
+            successMsg = JSON.stringify(data, null, 2);
+          } catch(e) { successMsg = String(data); }
+          $('#nonCachedResponseContent').html(`<div class="text-warning"><i class="bi bi-emoji-frown"></i> 意外：非缓存端点请求成功（状态码 ${xhr.status}）。这违背预期，可能后端未抛出异常或做了全局处理。</div>
+                                                         <div class="mt-2">响应内容: <pre class="mt-1 small">${escapeHtml(successMsg)}</pre></div>
+                                                         <div class="alert alert-info mt-2 small">注意：正常情况下非缓存端点第二次读取会抛出IOException，如果看到此消息，请检查后端是否调整了代码或异常被捕获。</div>`);
+          $('#nonCachedStatusBadge').html('意外成功').removeClass('bg-primary').addClass('bg-warning');
+        },
+        error: function(xhr, statusText, errorThrown) {
+          // 预期逻辑：捕获到错误，验证是否包含 Stream closed 信息
+          let errorAnalysis = '';
+          let errorDetailShort = '';
+          try {
+            if (xhr.responseText) {
+              const errJson = JSON.parse(xhr.responseText);
+              errorDetailShort = errJson.message || errJson.error || xhr.responseText;
+            } else {
+              errorDetailShort = xhr.statusText;
+            }
+          } catch(e) {
+            errorDetailShort = xhr.responseText || statusText;
+          }
+          const containsStreamClosed = (errorDetailShort && (errorDetailShort.includes('Stream closed') || errorDetailShort.includes('stream is closed') || errorDetailShort.includes('getReader')));
+          if (containsStreamClosed) {
+            errorAnalysis = '<div class="alert alert-success mt-2 py-1 mb-0"><i class="bi bi-check-circle-fill"></i> ✅ 结果符合预期：非缓存请求体第二次读取抛出“Stream closed”异常，证明原始HttpServletRequest无法多次读取。</div>';
+          } else {
+            errorAnalysis = '<div class="alert alert-secondary mt-2 py-1 mb-0"><i class="bi bi-search"></i> 异常信息未明确包含“Stream closed”，但仍然是请求失败状态，表明原生请求读取存在限制。</div>';
+          }
+          // 构建错误显示
+          let errorHtml = `<div class="text-danger fw-bold"><i class="bi bi-bug"></i> 捕获到服务器错误 (符合非缓存预期)</div>
+                                     <hr class="my-2">
+                                     <div><span class="badge bg-dark">HTTP ${xhr.status || '500'}</span> <span class="small">${statusText}</span></div>
+                                     <div class="mt-2"><strong>异常原因片段:</strong><br><code>${escapeHtml(errorDetailShort.substring(0, 400))}</code></div>
+                                     ${errorAnalysis}`;
+          $('#nonCachedResponseContent').html(errorHtml);
+          $('#nonCachedStatusBadge').html('<i class="bi bi-exclamation-octagon"></i> 已捕获异常(预期)').removeClass('bg-primary').addClass('bg-danger');
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
