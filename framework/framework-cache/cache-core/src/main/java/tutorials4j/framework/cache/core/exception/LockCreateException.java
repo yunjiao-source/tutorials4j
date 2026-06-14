@@ -1,14 +1,13 @@
 package tutorials4j.framework.cache.core.exception;
 
 import java.time.Duration;
-import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class LockCreateException extends FrameworkRuntimeException {
+public class LockCreateException extends LockException {
 
   public LockCreateException() {
     super("创建锁失败");

@@ -3,11 +3,10 @@ package tutorials4j.framework.cache.redisson.lock;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.SmartInitializingSingleton;
-import org.springframework.util.Assert;
 import tutorials4j.framework.cache.core.exception.LockException;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
 
@@ -22,8 +21,10 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class RedissonBlockLockService implements SmartInitializingSingleton {
-  private final RedissonClient redissonClient;
+public class RedissonBlockLockService {
+  public static final RedissonBlockLockService instance = new RedissonBlockLockService();
+
+  @Setter private RedissonClient redissonClient;
   private volatile FixedLease fixedLease;
   private volatile AutoRenewal autoRenewal;
 
@@ -33,6 +34,13 @@ public class RedissonBlockLockService implements SmartInitializingSingleton {
    * @return 固定租约模式的实例
    */
   public FixedLease fixedLease() {
+    if (fixedLease == null) {
+      synchronized (this) {
+        if (fixedLease == null) {
+          fixedLease = new FixedLease(redissonClient);
+        }
+      }
+    }
     return fixedLease;
   }
 
@@ -42,6 +50,13 @@ public class RedissonBlockLockService implements SmartInitializingSingleton {
    * @return 自动续期模式的实例
    */
   public AutoRenewal autoRenewal() {
+    if (autoRenewal == null) {
+      synchronized (this) {
+        if (autoRenewal == null) {
+          autoRenewal = new AutoRenewal(redissonClient);
+        }
+      }
+    }
     return autoRenewal;
   }
 
@@ -189,27 +204,5 @@ public class RedissonBlockLockService implements SmartInitializingSingleton {
         throw new LockException(lock.getName(), e);
       }
     }
-  }
-
-  @Override
-  public void afterSingletonsInstantiated() {
-    if (fixedLease == null) {
-      synchronized (this) {
-        if (fixedLease == null) {
-          fixedLease = new FixedLease(redissonClient);
-        }
-      }
-    }
-
-    if (autoRenewal == null) {
-      synchronized (this) {
-        if (autoRenewal == null) {
-          autoRenewal = new AutoRenewal(redissonClient);
-        }
-      }
-    }
-
-    Assert.notNull(fixedLease, "fixedLease initialization failed");
-    Assert.notNull(autoRenewal, "autoRenewal initialization failed");
   }
 }

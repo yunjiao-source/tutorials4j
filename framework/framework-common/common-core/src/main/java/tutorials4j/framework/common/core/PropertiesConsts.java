@@ -21,6 +21,9 @@ public interface PropertiesConsts {
 
   String PROPERTY_PREFIX_ASSY_SCHEDULE = PROPERTY_PREFIX_ASSY + ".schedule";
 
+  /** schedule */
+  String PROPERTY_PREFIX_SCHEDULE = PROPERTY_PREFIX_TUTORIALS4J + ".schedule";
+
   /** cache */
   String PROPERTY_PREFIX_CACHE = PROPERTY_PREFIX_TUTORIALS4J + ".cache";
 

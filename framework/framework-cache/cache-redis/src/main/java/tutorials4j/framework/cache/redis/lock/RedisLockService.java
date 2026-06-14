@@ -10,6 +10,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -51,6 +52,8 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
 @Slf4j
 @RequiredArgsConstructor
 public class RedisLockService {
+  public static final RedisLockService instance = new RedisLockService();
+
   /** 加锁 Lua 脚本：SET key value NX PX milliseconds */
   private static final RedisScript<String> SCRIPT_LOCK =
       new DefaultRedisScript<>(
@@ -85,8 +88,8 @@ public class RedisLockService {
 
   private static final String LOCK_SUCCESS = "OK";
 
-  private final RedisTemplateDecorator redisTemplateDecorator;
-  private final RedisLockOptions redisLockOptions;
+  @Setter private RedisTemplateDecorator redisTemplateDecorator;
+  @Setter private RedisLockOptions redisLockOptions;
   private volatile FixedLease fixedLease;
   private volatile AutoRenewal autoRenewal;
 

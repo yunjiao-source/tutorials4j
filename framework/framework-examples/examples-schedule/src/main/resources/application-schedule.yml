@@ -1,0 +1,45 @@
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 5  # 设定线程池大小，根据你的任务并发需求调整
+      thread-name-prefix: example-scheduler-  # 可选：自定义线程名前缀，便于日志追踪
+
+tutorials4j:
+  schedule:
+    tasks:
+      demo1Task:
+        enabled: true
+        cron: 0/5 * * * * ?
+        class-simple-name: demo1Task
+        description: 测试任务1
+        metadata:
+          key1: value1
+
+
+      demo1Task_1:
+        enabled: true
+        cron: 0/2 * * * * ?
+        class-simple-name: demo1Task
+        description: 测试任务1
+        metadata:
+          key2: value2
+
+
+      longTimeTask:
+        enabled: true
+        cron: 0/3 * * * * ?
+        class-simple-name: longTimeTask
+        description: 测试任务2
+        execution:
+          initial-delay: 10s
+          max-execution-count: 3
+
+      exceptionTask:
+        enabled: true
+        cron: 0/6 * * * * ?
+        class-simple-name: exceptionTask
+        description: 测试任务2
+        execution:
+          initial-delay: 10s
+          max-failure-count: 3

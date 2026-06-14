@@ -3,11 +3,10 @@ package tutorials4j.framework.cache.redisson.lock;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.SmartInitializingSingleton;
-import org.springframework.util.Assert;
 import tutorials4j.framework.cache.core.exception.LockCreateException;
 import tutorials4j.framework.cache.core.exception.LockException;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
@@ -31,13 +30,15 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class RedissonReentrantLockService implements SmartInitializingSingleton {
+public class RedissonReentrantLockService {
+  public static final RedissonReentrantLockService instance = new RedissonReentrantLockService();
+
   /** 默认等待获取锁的时间（秒）。 */
   public static final int WAIT_SECONDS = 3;
 
   private static final Duration WAIT_TIME = Duration.ofSeconds(WAIT_SECONDS);
 
-  private final RedissonClient redissonClient;
+  @Setter private RedissonClient redissonClient;
   private volatile FixedLease fixedLease;
   private volatile AutoRenewal autoRenewal;
 
@@ -47,6 +48,14 @@ public class RedissonReentrantLockService implements SmartInitializingSingleton 
    * @return 固定租约模式的实例
    */
   public FixedLease fixedLease() {
+    if (fixedLease == null) {
+      synchronized (this) {
+        if (fixedLease == null) {
+          fixedLease = new FixedLease(redissonClient);
+        }
+      }
+    }
+
     return fixedLease;
   }
 
@@ -56,6 +65,13 @@ public class RedissonReentrantLockService implements SmartInitializingSingleton 
    * @return 自动续期模式的实例
    */
   public AutoRenewal autoRenewal() {
+    if (autoRenewal == null) {
+      synchronized (this) {
+        if (autoRenewal == null) {
+          autoRenewal = new AutoRenewal(redissonClient);
+        }
+      }
+    }
     return autoRenewal;
   }
 
@@ -314,27 +330,5 @@ public class RedissonReentrantLockService implements SmartInitializingSingleton 
     public void doInLock(String lockKey, Runnable task) {
       doInLock(lockKey, WAIT_TIME, task);
     }
-  }
-
-  @Override
-  public void afterSingletonsInstantiated() {
-    if (fixedLease == null) {
-      synchronized (this) {
-        if (fixedLease == null) {
-          fixedLease = new FixedLease(redissonClient);
-        }
-      }
-    }
-
-    if (autoRenewal == null) {
-      synchronized (this) {
-        if (autoRenewal == null) {
-          autoRenewal = new AutoRenewal(redissonClient);
-        }
-      }
-    }
-
-    Assert.notNull(fixedLease, "fixedLease initialization failed");
-    Assert.notNull(autoRenewal, "autoRenewal initialization failed");
   }
 }

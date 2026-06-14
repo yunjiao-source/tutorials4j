@@ -47,14 +47,16 @@ public class RedissonCacheConfiguration {
   @ConditionalOnMissingBean
   RedissonBlockLockService blockRedissonLock(RedissonClient redissonClient) {
     log.debug("[CACHE-REDISSON] Redisson Block Lock Service");
-    return new RedissonBlockLockService(redissonClient);
+    RedissonBlockLockService.instance.setRedissonClient(redissonClient);
+    return RedissonBlockLockService.instance;
   }
 
   @Bean
   @ConditionalOnMissingBean
   RedissonReentrantLockService reentrantRedissonLock(RedissonClient redissonClient) {
     log.debug("[CACHE-REDISSON] Reentrant Redisson Lock");
-    return new RedissonReentrantLockService(redissonClient);
+    RedissonReentrantLockService.instance.setRedissonClient(redissonClient);
+    return RedissonReentrantLockService.instance;
   }
 
   @Bean
