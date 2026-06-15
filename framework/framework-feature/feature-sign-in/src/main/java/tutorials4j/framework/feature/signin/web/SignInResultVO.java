@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.domain.signin;
+package tutorials4j.framework.feature.signin.web;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
 import tutorials4j.framework.common.core.entity.BaseVO;
+import tutorials4j.framework.feature.signin.domain.SignInResultEntity;
 
 /**
  * TODO

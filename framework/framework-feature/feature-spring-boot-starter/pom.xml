@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>feature-controller</artifactId>
+            <artifactId>feature-sign-in</artifactId>
             <version>${revision}</version>
         </dependency>
 

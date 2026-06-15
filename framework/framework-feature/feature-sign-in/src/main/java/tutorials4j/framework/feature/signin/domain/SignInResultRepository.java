@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.domain.signin;
+package tutorials4j.framework.feature.signin.domain;
 
 import org.springframework.stereotype.Repository;
 import tutorials4j.framework.data.hibernate.domain.BaseRepository;

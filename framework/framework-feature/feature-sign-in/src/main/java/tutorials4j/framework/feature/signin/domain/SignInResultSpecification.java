@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.domain.signin;
+package tutorials4j.framework.feature.signin.domain;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;

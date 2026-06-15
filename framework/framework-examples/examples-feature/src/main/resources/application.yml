@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: signin
 
   data:
     # Redis 配置

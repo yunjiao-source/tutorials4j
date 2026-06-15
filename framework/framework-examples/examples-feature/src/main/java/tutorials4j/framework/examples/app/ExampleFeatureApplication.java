@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples;
+package tutorials4j.framework.examples.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.domain.signin;
+package tutorials4j.framework.feature.signin.domain;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

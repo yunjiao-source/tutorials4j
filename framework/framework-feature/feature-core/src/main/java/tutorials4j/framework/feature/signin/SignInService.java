@@ -33,7 +33,7 @@ public class SignInService {
     }
     SignInConfig.SignInConfigBuilder builder = SignInConfig.builder().source(config.source());
     if (StringUtils.isBlank(config.keyPrefix())) {
-      builder.keyPrefix(properties.getKeyPrefixx());
+      builder.keyPrefix(properties.getRedisKeyPrefix());
     }
 
     if (config.expireTime() == null) {

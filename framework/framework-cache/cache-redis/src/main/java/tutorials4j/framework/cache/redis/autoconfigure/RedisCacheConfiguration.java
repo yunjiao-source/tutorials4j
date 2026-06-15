@@ -86,7 +86,7 @@ public class RedisCacheConfiguration {
     log.debug("[CACHE-REDIS] Redis Template Decorator");
 
     // 基于租户key的序列化器
-    TenantKeySerializer serializer = new TenantKeySerializer(properties.getTemplageCacheName());
+    TenantKeySerializer serializer = new TenantKeySerializer(properties.getTemplateCacheName());
     stringRedisTemplate.setKeySerializer(serializer);
     stringRedisTemplate.setHashKeySerializer(serializer);
 

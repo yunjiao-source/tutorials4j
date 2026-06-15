@@ -9,18 +9,29 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>feature-controller</artifactId>
+    <artifactId>feature-sign-in</artifactId>
     <packaging>jar</packaging>
-    <name>Feature :: Controller</name>
-    <description>控制器功能模块</description>
+    <name>Feature :: Sign In</name>
+    <description>签到功能模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>feature-domain</artifactId>
+            <artifactId>feature-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>cache-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>data-hibernate</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -18,11 +18,11 @@ import tutorials4j.framework.feature.signin.SignInService;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(SignInProperties.class)
-public class SignInFeatureConfiguration {
+@EnableConfigurationProperties({SignInProperties.class})
+public class FeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE-CORE] Sign-In Feature Configuration");
+    log.debug("[FEATURE-CORE] Feature Configuration");
   }
 
   @Bean

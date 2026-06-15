@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.controller;
+package tutorials4j.framework.feature.signin.web;
 
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.controller;
+package tutorials4j.framework.feature.signin.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -7,10 +7,9 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.feature.domain.signin.SignInResultEntity;
-import tutorials4j.framework.feature.domain.signin.SignInResultQuery;
-import tutorials4j.framework.feature.domain.signin.SignInResultService;
-import tutorials4j.framework.feature.domain.signin.SignInResultVO;
+import tutorials4j.framework.feature.signin.domain.SignInResultEntity;
+import tutorials4j.framework.feature.signin.domain.SignInResultQuery;
+import tutorials4j.framework.feature.signin.domain.SignInResultService;
 
 /**
  * TODO
