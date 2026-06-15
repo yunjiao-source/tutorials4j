@@ -1,5 +1,6 @@
 package tutorials4j.framework.schedule.core.bean;
 
+import java.time.Instant;
 import lombok.Builder;
 
 /**
@@ -9,9 +10,9 @@ import lombok.Builder;
  */
 @Builder
 public record ChangeStatusEvent(
-    long timestamp,
+    Instant timestamp,
     String taskName,
     TaskStatusEnum taskStatus,
-    TaskCondition lastTaskCondition,
+    TaskRunData lastTaskRunData,
     String message,
     Throwable throwable) {}

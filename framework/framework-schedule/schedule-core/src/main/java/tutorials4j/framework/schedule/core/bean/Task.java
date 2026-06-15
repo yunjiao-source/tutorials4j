@@ -51,7 +51,7 @@ public interface Task {
 
   Instant getDueDate();
 
-  default void isInvalid() {
+  default void assertValid() {
     Assert.hasText(getName(), "name must not be null or empty");
     Assert.hasText(getCron(), "cron must not be null or empty");
     Assert.hasText(getClassSimpleName(), "classSimpleName must not be null or empty");

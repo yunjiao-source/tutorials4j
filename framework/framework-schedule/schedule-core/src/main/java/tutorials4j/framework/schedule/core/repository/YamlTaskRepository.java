@@ -79,6 +79,6 @@ public class YamlTaskRepository implements TaskRepository<YamlTask> {
 
   private static void assertTask(YamlTask task) {
     Assert.notNull(task, "task must not be null");
-    task.isInvalid();
+    task.assertValid();
   }
 }

@@ -2,6 +2,7 @@ package tutorials4j.framework.schedule.core.component;
 
 import cn.hutool.extra.spring.SpringUtil;
 import jakarta.annotation.PreDestroy;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +20,7 @@ import org.springframework.util.Assert;
 import tutorials4j.framework.schedule.core.bean.ChangeStatusEvent;
 import tutorials4j.framework.schedule.core.bean.ScheduledTaskData;
 import tutorials4j.framework.schedule.core.bean.Task;
-import tutorials4j.framework.schedule.core.bean.TaskCondition;
+import tutorials4j.framework.schedule.core.bean.TaskRunData;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 import tutorials4j.framework.schedule.core.repository.TaskRepository;
@@ -46,16 +47,16 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   public void addTask(Task task) {
     Assert.notNull(task, "task must not be null");
-    task.isInvalid();
+    task.assertValid();
 
     String name = task.getName();
     if (!task.isEnabled()) {
-      log.warn("忽略操作！ 任务未开启, taksName={}", name);
+      log.warn("忽略操作！ 任务未开启, taskName={}", name);
       return;
     }
 
     if (triggerTaskMap.containsKey(name)) {
-      log.warn("忽略操作！ 任务已经存在, taksName={}", name);
+      log.warn("忽略操作！ 任务已经存在, taskName={}", name);
       return;
     }
 
@@ -103,11 +104,12 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   public void cancelTask(String taskName) {
     if (isDestroy) {
-      log.warn("Instance is destroyed, SKIP!!!");
+      log.warn("实例已经销毁，忽略此次操作");
       return;
     }
 
     if (!triggerTaskMap.containsKey(taskName)) {
+      log.warn("任务不存在，无法取消，忽略此次操作；taskName={}", taskName);
       return;
     }
 
@@ -119,13 +121,13 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     return Collections.unmodifiableList(this.consumers);
   }
 
-  public TaskCondition getLastTaskCondition(String taskName) {
+  public TaskRunData getLastTaskRunData(String taskName) {
     ScheduledTaskData data = triggerTaskMap.get(taskName);
     if (data == null) {
       return null;
     }
 
-    return data.runner().getLastTaskCondition();
+    return data.runner().getLastTaskRunData();
   }
 
   public Collection<String> getTaskNames() {
@@ -177,7 +179,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     notifyListeners(taskName, TaskStatusEnum.EXCEPTION, null, throwable);
   }
 
-  private void completeEvent(String taskName, TaskCondition taskCondition) {
+  private void completeEvent(String taskName, TaskRunData taskRunData) {
     notifyListeners(taskName, TaskStatusEnum.COMPLETED, null, null);
   }
 
@@ -189,13 +191,18 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
       String taskName, TaskStatusEnum taskStatus, String message, Throwable throwable) {
     ChangeStatusEvent event =
         ChangeStatusEvent.builder()
-            .timestamp(System.nanoTime())
+            .timestamp(Instant.now())
             .taskName(taskName)
-            .lastTaskCondition(getLastTaskCondition(taskName))
+            .lastTaskRunData(getLastTaskRunData(taskName))
             .taskStatus(taskStatus)
             .message(message)
             .throwable(throwable)
             .build();
-    consumers.forEach(consumer -> consumer.consumer(event));
+
+    try {
+      consumers.forEach(consumer -> consumer.consumer(event));
+    } catch (Exception e) {
+      log.error("执行任务状态监听异常，taskName={}, taskStatus={}", taskName, taskStatus, e);
+    }
   }
 }

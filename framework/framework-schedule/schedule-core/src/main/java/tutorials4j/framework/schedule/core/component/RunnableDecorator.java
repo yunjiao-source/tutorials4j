@@ -15,7 +15,7 @@ import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.support.CronTrigger;
 import tutorials4j.framework.schedule.core.bean.Task;
-import tutorials4j.framework.schedule.core.bean.TaskCondition;
+import tutorials4j.framework.schedule.core.bean.TaskRunData;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 
 /**
@@ -29,15 +29,15 @@ public class RunnableDecorator implements Runnable, Trigger {
   private CronTrigger cronTrigger;
 
   private Consumer<String> startEvent;
-  private BiConsumer<String, TaskCondition> completeEvent;
+  private BiConsumer<String, TaskRunData> completeEvent;
 
   private BiConsumer<String, String> stopEvent;
 
   private BiConsumer<String, Throwable> failureEvent;
 
-  private final Queue<TaskCondition> taskConditionHistory = EvictingQueue.create(30);
+  private final Queue<TaskRunData> taskRunDataHistory = EvictingQueue.create(30);
 
-  @Getter private TaskCondition lastTaskCondition;
+  @Getter private TaskRunData lastTaskRunData;
 
   private final AtomicInteger totalCount = new AtomicInteger(0);
 
@@ -96,10 +96,10 @@ public class RunnableDecorator implements Runnable, Trigger {
   @Override
   public void run() {
     String name = task.getName();
-    TaskCondition.TaskConditionBuilder taskStatusBuilder =
-        TaskCondition.builder().timestamp(Instant.now());
-    taskStatusBuilder
-        .startTime(System.nanoTime())
+    TaskRunData.TaskRunDataBuilder taskRunDataBuilder =
+        TaskRunData.builder().timestamp(Instant.now());
+    taskRunDataBuilder
+        .startTime(Instant.now())
         .totalCount(totalCount.get())
         .totalFailureCount(totalFailureCount.get());
     if (startEvent != null) {
@@ -108,15 +108,15 @@ public class RunnableDecorator implements Runnable, Trigger {
 
     try {
       runner.run(task.getMetadata());
-      lastTaskCondition = taskStatusBuilder.endTime(System.nanoTime()).build();
-      taskConditionHistory.add(lastTaskCondition);
+      lastTaskRunData = taskRunDataBuilder.endTime(Instant.now()).build();
+      taskRunDataHistory.add(lastTaskRunData);
 
       if (completeEvent != null) {
-        completeEvent.accept(name, lastTaskCondition);
+        completeEvent.accept(name, lastTaskRunData);
       }
     } catch (Throwable t) {
-      lastTaskCondition = taskStatusBuilder.error(t.getMessage()).build();
-      taskConditionHistory.add(lastTaskCondition);
+      lastTaskRunData = taskRunDataBuilder.error(t.getMessage()).build();
+      taskRunDataHistory.add(lastTaskRunData);
 
       if (failureEvent != null) {
         failureEvent.accept(name, t);
@@ -139,7 +139,7 @@ public class RunnableDecorator implements Runnable, Trigger {
     return this;
   }
 
-  public RunnableDecorator onComplete(BiConsumer<String, TaskCondition> consumer) {
+  public RunnableDecorator onComplete(BiConsumer<String, TaskRunData> consumer) {
     this.completeEvent = consumer;
     return this;
   }
@@ -153,7 +153,7 @@ public class RunnableDecorator implements Runnable, Trigger {
     return this;
   }
 
-  public List<TaskCondition> getTaskStatus() {
-    return new ArrayList<>(taskConditionHistory);
+  public List<TaskRunData> getTaskStatus() {
+    return new ArrayList<>(taskRunDataHistory);
   }
 }

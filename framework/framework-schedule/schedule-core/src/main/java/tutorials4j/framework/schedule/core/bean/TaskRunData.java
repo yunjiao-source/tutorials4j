@@ -9,10 +9,10 @@ import lombok.Builder;
  * @author Yun Jiao
  */
 @Builder
-public record TaskCondition(
+public record TaskRunData(
     Instant timestamp,
     int totalCount,
     int totalFailureCount,
-    long startTime,
-    long endTime,
+    Instant startTime,
+    Instant endTime,
     String error) {}

@@ -128,6 +128,7 @@ public class Jackson2Utils {
     }
   }
 
+  @SuppressWarnings("deprecation")
   public <R> R loop(JsonNode jsonNode, Function<JsonNode, R> function) {
     if (jsonNode.isObject()) {
       Iterator<Entry<String, JsonNode>> it = jsonNode.fields();
