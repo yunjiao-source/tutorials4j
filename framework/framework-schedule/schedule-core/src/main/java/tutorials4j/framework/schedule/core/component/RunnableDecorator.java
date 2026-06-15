@@ -56,7 +56,7 @@ public class RunnableDecorator implements Runnable, Trigger {
     if (maxExecutionCount != null && maxExecutionCount <= totalCount.get()) {
       if (stopEvent != null) {
         String message = String.format("已最大超过最大执行数量，将停止任务，最大执行数量=%s", maxExecutionCount);
-        stopEvent.accept(task.getName(), message);
+        stopEvent.accept(task.getTaskCode(), message);
       }
       return null;
     }
@@ -65,7 +65,7 @@ public class RunnableDecorator implements Runnable, Trigger {
     if (maxFailureCount != null && maxFailureCount <= totalFailureCount.get()) {
       if (stopEvent != null) {
         String message = String.format("已最大超过最大失败数量，将停止任务，最大执行数量=%s", maxFailureCount);
-        stopEvent.accept(task.getName(), message);
+        stopEvent.accept(task.getTaskCode(), message);
       }
       return null;
     }
@@ -79,7 +79,7 @@ public class RunnableDecorator implements Runnable, Trigger {
     if (dueDate != null && dueDate.isBefore(nextExecutionTime)) {
       if (stopEvent != null) {
         String message = String.format("已超过任务结束日期，将停止任务，任务结束日期=%s", dueDate);
-        stopEvent.accept(task.getName(), message);
+        stopEvent.accept(task.getTaskCode(), message);
       }
       return null;
     }
@@ -95,7 +95,7 @@ public class RunnableDecorator implements Runnable, Trigger {
 
   @Override
   public void run() {
-    String name = task.getName();
+    String taskCode = task.getTaskCode();
     TaskRunData.TaskRunDataBuilder taskRunDataBuilder =
         TaskRunData.builder().timestamp(Instant.now());
     taskRunDataBuilder
@@ -103,7 +103,7 @@ public class RunnableDecorator implements Runnable, Trigger {
         .totalCount(totalCount.get())
         .totalFailureCount(totalFailureCount.get());
     if (startEvent != null) {
-      startEvent.accept(name);
+      startEvent.accept(taskCode);
     }
 
     try {
@@ -112,14 +112,14 @@ public class RunnableDecorator implements Runnable, Trigger {
       taskRunDataHistory.add(lastTaskRunData);
 
       if (completeEvent != null) {
-        completeEvent.accept(name, lastTaskRunData);
+        completeEvent.accept(taskCode, lastTaskRunData);
       }
     } catch (Throwable t) {
       lastTaskRunData = taskRunDataBuilder.error(t.getMessage()).build();
       taskRunDataHistory.add(lastTaskRunData);
 
       if (failureEvent != null) {
-        failureEvent.accept(name, t);
+        failureEvent.accept(taskCode, t);
       }
       throw t;
     }

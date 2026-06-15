@@ -49,14 +49,14 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     Assert.notNull(task, "task must not be null");
     task.assertValid();
 
-    String name = task.getName();
+    String taskCode = task.getTaskCode();
     if (!task.isEnabled()) {
-      log.warn("忽略操作！ 任务未开启, taskName={}", name);
+      log.warn("忽略操作！ 任务未开启, taskCode={}", taskCode);
       return;
     }
 
-    if (triggerTaskMap.containsKey(name)) {
-      log.warn("忽略操作！ 任务已经存在, taskName={}", name);
+    if (triggerTaskMap.containsKey(taskCode)) {
+      log.warn("忽略操作！ 任务已经存在, taskCode={}", taskCode);
       return;
     }
 
@@ -71,8 +71,8 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
     Assert.notNull(scheduledTaskRegistrar, "task must not be null");
 
-    String taskName = task.getName();
-    if (triggerTaskMap.containsKey(taskName)) {
+    String taskCode = task.getTaskCode();
+    if (triggerTaskMap.containsKey(taskCode)) {
       return;
     }
 
@@ -98,31 +98,31 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
             .runner(runnableDecorator)
             .triggerTask(triggerTask)
             .build();
-    triggerTaskMap.put(taskName, container);
-    createEvent(taskName);
+    triggerTaskMap.put(taskCode, container);
+    createEvent(taskCode);
   }
 
-  public void cancelTask(String taskName) {
+  public void cancelTask(String taskCode) {
     if (isDestroy) {
       log.warn("实例已经销毁，忽略此次操作");
       return;
     }
 
-    if (!triggerTaskMap.containsKey(taskName)) {
-      log.warn("任务不存在，无法取消，忽略此次操作；taskName={}", taskName);
+    if (!triggerTaskMap.containsKey(taskCode)) {
+      log.warn("任务不存在，无法取消，忽略此次操作；taskCode={}", taskCode);
       return;
     }
 
-    doCancelTask(taskName);
-    cancelEvent(taskName);
+    doCancelTask(taskCode);
+    cancelEvent(taskCode);
   }
 
   public List<ChangeStatusEventConsumer> getChangeStatusEventConsumers() {
     return Collections.unmodifiableList(this.consumers);
   }
 
-  public TaskRunData getLastTaskRunData(String taskName) {
-    ScheduledTaskData data = triggerTaskMap.get(taskName);
+  public TaskRunData getLastTaskRunData(String taskCode) {
+    ScheduledTaskData data = triggerTaskMap.get(taskCode);
     if (data == null) {
       return null;
     }
@@ -130,7 +130,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     return data.runner().getLastTaskRunData();
   }
 
-  public Collection<String> getTaskNames() {
+  public Collection<String> getTaskCodes() {
     return Collections.unmodifiableSet(triggerTaskMap.keySet());
   }
 
@@ -140,9 +140,9 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     if (log.isDebugEnabled()) {
       log.debug("正在销毁所有计划任务，计划任务总数={}", triggerTaskMap.size());
     }
-    List<String> taskNames = new ArrayList<>(triggerTaskMap.keySet());
-    for (String taskName : taskNames) {
-      doCancelTask(taskName);
+    List<String> taskCodes = new ArrayList<>(triggerTaskMap.keySet());
+    for (String taskCode : taskCodes) {
+      doCancelTask(taskCode);
     }
   }
 
@@ -152,48 +152,48 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     initTasks();
   }
 
-  private synchronized void doCancelTask(String taskName) {
-    ScheduledTaskData container = triggerTaskMap.get(taskName);
+  private synchronized void doCancelTask(String taskCode) {
+    ScheduledTaskData container = triggerTaskMap.get(taskCode);
     if (container == null) {
       return;
     }
 
-    triggerTaskMap.remove(taskName);
+    triggerTaskMap.remove(taskCode);
     container.scheduledTask().cancel();
   }
 
-  private void createEvent(String taskName) {
-    notifyListeners(taskName, TaskStatusEnum.CREATED, null, null);
+  private void createEvent(String taskCode) {
+    notifyListeners(taskCode, TaskStatusEnum.CREATED, null, null);
   }
 
-  private void cancelEvent(String taskName) {
-    notifyListeners(taskName, TaskStatusEnum.CANCELLED, null, null);
+  private void cancelEvent(String taskCode) {
+    notifyListeners(taskCode, TaskStatusEnum.CANCELLED, null, null);
   }
 
-  private void stopEvent(String taskName, String message) {
-    doCancelTask(taskName);
-    notifyListeners(taskName, TaskStatusEnum.STOPPED, message, null);
+  private void stopEvent(String taskCode, String message) {
+    doCancelTask(taskCode);
+    notifyListeners(taskCode, TaskStatusEnum.STOPPED, message, null);
   }
 
-  private void failureEvent(String taskName, Throwable throwable) {
-    notifyListeners(taskName, TaskStatusEnum.EXCEPTION, null, throwable);
+  private void failureEvent(String taskCode, Throwable throwable) {
+    notifyListeners(taskCode, TaskStatusEnum.EXCEPTION, null, throwable);
   }
 
-  private void completeEvent(String taskName, TaskRunData taskRunData) {
-    notifyListeners(taskName, TaskStatusEnum.COMPLETED, null, null);
+  private void completeEvent(String taskCode, TaskRunData taskRunData) {
+    notifyListeners(taskCode, TaskStatusEnum.COMPLETED, null, null);
   }
 
-  private void startEvent(String taskName) {
-    notifyListeners(taskName, TaskStatusEnum.STARTED, null, null);
+  private void startEvent(String taskCode) {
+    notifyListeners(taskCode, TaskStatusEnum.STARTED, null, null);
   }
 
   private void notifyListeners(
-      String taskName, TaskStatusEnum taskStatus, String message, Throwable throwable) {
+      String taskCode, TaskStatusEnum taskStatus, String message, Throwable throwable) {
     ChangeStatusEvent event =
         ChangeStatusEvent.builder()
             .timestamp(Instant.now())
-            .taskName(taskName)
-            .lastTaskRunData(getLastTaskRunData(taskName))
+            .taskCode(taskCode)
+            .lastTaskRunData(getLastTaskRunData(taskCode))
             .taskStatus(taskStatus)
             .message(message)
             .throwable(throwable)
@@ -202,7 +202,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     try {
       consumers.forEach(consumer -> consumer.consumer(event));
     } catch (Exception e) {
-      log.error("执行任务状态监听异常，taskName={}, taskStatus={}", taskName, taskStatus, e);
+      log.error("执行任务状态监听异常，taskCode={}, taskStatus={}", taskCode, taskStatus, e);
     }
   }
 }

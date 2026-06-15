@@ -214,12 +214,12 @@ public class RedisLockService {
   /**
    * 自动续期模式的分布式锁实现。
    *
-   * <p>锁的默认过期时间为 30 秒，并在每 5 秒自动续期一次。 只要持有锁的业务逻辑仍在运行，锁就会一直被续期，直到业务执行完毕并主动释放。 适用于执行时间不确定的长任务。
+   * <p>锁的默认过期时间为 30 秒，并在每 9 秒自动续期一次。 只要持有锁的业务逻辑仍在运行，锁就会一直被续期，直到业务执行完毕并主动释放。 适用于执行时间不确定的长任务。
    */
   @RequiredArgsConstructor
   public class AutoRenewal {
     private static final Duration DEFAULT_EXPIRE_TIME = Duration.ofSeconds(30);
-    private static final Duration DEFAULT_RENEWAL_PERIOD_TIME = Duration.ofSeconds(5);
+    private static final Duration DEFAULT_RENEWAL_PERIOD_TIME = Duration.ofSeconds(9);
 
     private final RedisTemplateDecorator redisTemplateDecorator;
     private final RedisLockOptions redisLockOptions;

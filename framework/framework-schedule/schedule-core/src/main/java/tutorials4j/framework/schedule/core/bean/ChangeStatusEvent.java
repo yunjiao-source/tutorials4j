@@ -11,7 +11,7 @@ import lombok.Builder;
 @Builder
 public record ChangeStatusEvent(
     Instant timestamp,
-    String taskName,
+    String taskCode,
     TaskStatusEnum taskStatus,
     TaskRunData lastTaskRunData,
     String message,

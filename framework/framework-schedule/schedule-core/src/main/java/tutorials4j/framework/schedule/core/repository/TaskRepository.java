@@ -15,9 +15,9 @@ public interface TaskRepository<T extends Task> {
 
   void update(T updateTask);
 
-  boolean delete(String name);
+  boolean delete(String taskCode);
 
-  Optional<T> findByName(String name);
+  Optional<T> findByTaskCode(String taskCode);
 
   List<T> findAll();
 }

@@ -14,7 +14,7 @@ import tutorials4j.framework.schedule.core.properties.TaskOptions;
  * @author Yun Jiao
  */
 public class YamlTask implements Task {
-  private String name;
+  private String taskCode;
   private String classSimpleName;
   private String cron;
   private boolean enabled;
@@ -27,13 +27,13 @@ public class YamlTask implements Task {
   private Instant dueDate;
 
   @Override
-  public void setName(String name) {
-    this.name = name;
+  public void setTaskCode(String taskCode) {
+    this.taskCode = taskCode;
   }
 
   @Override
-  public String getName() {
-    return name;
+  public String getTaskCode() {
+    return taskCode;
   }
 
   @Override

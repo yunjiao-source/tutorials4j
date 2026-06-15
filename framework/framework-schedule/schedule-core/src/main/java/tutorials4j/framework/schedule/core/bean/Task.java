@@ -11,9 +11,9 @@ import org.springframework.util.Assert;
  * @author Yun Jiao
  */
 public interface Task {
-  void setName(String name);
+  void setTaskCode(String taskCode);
 
-  String getName();
+  String getTaskCode();
 
   void setClassSimpleName(String classSimpleName);
 
@@ -52,7 +52,7 @@ public interface Task {
   Instant getDueDate();
 
   default void assertValid() {
-    Assert.hasText(getName(), "name must not be null or empty");
+    Assert.hasText(getTaskCode(), "name must not be null or empty");
     Assert.hasText(getCron(), "cron must not be null or empty");
     Assert.hasText(getClassSimpleName(), "classSimpleName must not be null or empty");
   }

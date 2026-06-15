@@ -28,7 +28,7 @@ public class YamlTaskRepository implements TaskRepository<YamlTask> {
                 throw new IllegalArgumentException("taskOptions is not valid");
               }
               YamlTask yamlTask = YamlTask.of(v);
-              yamlTask.setName(k);
+              yamlTask.setTaskCode(k);
               taskMap.put(k, yamlTask);
             });
   }
@@ -37,11 +37,11 @@ public class YamlTaskRepository implements TaskRepository<YamlTask> {
   public void create(YamlTask createTask) {
     assertTask(createTask);
 
-    String name = createTask.getName();
-    YamlTask task = taskMap.putIfAbsent(name, createTask);
+    String taskCode = createTask.getTaskCode();
+    YamlTask task = taskMap.putIfAbsent(taskCode, createTask);
     if (task != null) {
       // 键已存在且对应的值不为null
-      throw new ScheduleException("重复创建任务:" + name);
+      throw new ScheduleException("重复创建任务, taskCode=" + taskCode);
     }
   }
 
@@ -49,27 +49,29 @@ public class YamlTaskRepository implements TaskRepository<YamlTask> {
   public void update(YamlTask updateTask) {
     assertTask(updateTask);
 
-    String name = updateTask.getName();
-    findByName(name)
+    String taskCode = updateTask.getTaskCode();
+    findByTaskCode(taskCode)
         .map(
             task -> {
               BeanUtils.copyProperties(updateTask, task, "name");
-              taskMap.computeIfPresent(name, (k, v) -> task);
+              taskMap.computeIfPresent(taskCode, (k, v) -> task);
               return task;
             })
-        .orElseThrow(() -> new ScheduleException("任务不存在:" + name));
+        .orElseThrow(() -> new ScheduleException("任务不存在:" + taskCode));
   }
 
   @Override
-  public boolean delete(String name) {
-    Assert.hasText(name, "name must not be null or empty");
-    return findByName(name).map(task -> taskMap.remove(task.getName(), task)).orElse(false);
+  public boolean delete(String taskCode) {
+    Assert.hasText(taskCode, "name must not be null or empty");
+    return findByTaskCode(taskCode)
+        .map(task -> taskMap.remove(task.getTaskCode(), task))
+        .orElse(false);
   }
 
   @Override
-  public Optional<YamlTask> findByName(String name) {
-    Assert.hasText(name, "name must not be null or empty");
-    return Optional.ofNullable(taskMap.get(name));
+  public Optional<YamlTask> findByTaskCode(String taskCode) {
+    Assert.hasText(taskCode, "taskCode must not be null or empty");
+    return Optional.ofNullable(taskMap.get(taskCode));
   }
 
   @Override
