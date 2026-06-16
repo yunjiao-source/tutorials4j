@@ -18,6 +18,7 @@
         <module>feature-core</module>
         <module>feature-sign-in</module>
         <module>feature-captcha</module>
+        <module>feature-crypto</module>
         <module>feature-spring-boot-starter</module>
     </modules>
 

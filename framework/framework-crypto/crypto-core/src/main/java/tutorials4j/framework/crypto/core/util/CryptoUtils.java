@@ -12,8 +12,6 @@ import tutorials4j.framework.crypto.core.annotation.Crypto;
 public class CryptoUtils {
   public static boolean supported(MethodParameter parameter) {
     Crypto crypto = parameter.getMethodAnnotation(Crypto.class);
-    boolean supported = ObjectUtils.isNotEmpty(crypto) && crypto.request();
-
-    return supported;
+    return ObjectUtils.isNotEmpty(crypto) && crypto.request();
   }
 }

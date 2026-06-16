@@ -14,4 +14,5 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 public class FeatureProperties {
   private boolean signInEnabled = false;
   private boolean captchaEnabled = false;
+  private boolean cryptoEnabled = false;
 }

@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-core</artifactId>
+            <artifactId>common-spring</artifactId>
             <version>${revision}</version>
         </dependency>
 

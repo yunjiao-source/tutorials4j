@@ -4,35 +4,29 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>yunjiao-source.tutorials4j.framework</groupId>
-        <artifactId>framework-examples</artifactId>
+        <artifactId>framework-feature</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>examples-test</artifactId>
+    <artifactId>feature-crypto</artifactId>
     <packaging>jar</packaging>
-    <name>Examples :: Test</name>
+    <name>Feature :: Crypto</name>
+    <description>加解密功能模块</description>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-spring-boot-starter</artifactId>
+            <artifactId>feature-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>crypto-web</artifactId>
+            <version>${revision}</version>
         </dependency>
+
     </dependencies>
+
 </project>

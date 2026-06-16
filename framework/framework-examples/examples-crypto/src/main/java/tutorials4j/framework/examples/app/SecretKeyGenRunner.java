@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.simple;
+package tutorials4j.framework.examples.app;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

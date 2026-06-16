@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.feature.captcha.autoconfigure.CaptchaFeatureConfiguration;
+import tutorials4j.framework.feature.crypto.autoconfigure.CryptoFeatureConfiguration;
 import tutorials4j.framework.feature.signin.autoconfigure.SignInFeatureConfiguration;
 
 /**
@@ -17,7 +18,8 @@ import tutorials4j.framework.feature.signin.autoconfigure.SignInFeatureConfigura
 @Import({
   FeatureConfiguration.class,
   SignInFeatureConfiguration.class,
-  CaptchaFeatureConfiguration.class
+  CaptchaFeatureConfiguration.class,
+  CryptoFeatureConfiguration.class
 })
 public class FeatureAutoConfiguration {
   @PostConstruct

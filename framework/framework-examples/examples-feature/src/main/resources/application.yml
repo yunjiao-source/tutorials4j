@@ -1,9 +1,10 @@
 spring:
   profiles:
 #    active: signin
-    active: captchaendpoint
+#    active: captchaendpoint
 #    active: tianaicaptchaendpoint
 #    active: captchafilter
+    active: crypto-api
 
   data:
     # Redis 配置

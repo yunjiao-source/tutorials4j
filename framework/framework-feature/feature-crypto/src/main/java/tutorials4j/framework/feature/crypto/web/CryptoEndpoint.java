@@ -1,4 +1,4 @@
-package tutorials4j.framework.crypto.web;
+package tutorials4j.framework.feature.crypto.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

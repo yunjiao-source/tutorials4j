@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Profile;
  */
 @Slf4j
 @Configuration
-@Profile("simple")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.simple"})
-public class SimpleConfig {}
+@Profile("crypto-api")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.crypto.api"})
+public class CryptoApiConfig {}
