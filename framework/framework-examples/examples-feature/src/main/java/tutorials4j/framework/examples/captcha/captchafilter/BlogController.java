@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.captchafilter;
+package tutorials4j.framework.examples.captcha.captchafilter;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

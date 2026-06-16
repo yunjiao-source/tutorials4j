@@ -1,4 +1,4 @@
-package tutorials4j.framework.captcha.web;
+package tutorials4j.framework.feature.captcha.web;
 
 import cloud.tianai.captcha.application.ImageCaptchaApplication;
 import cloud.tianai.captcha.common.response.ApiResponse;
@@ -30,7 +30,7 @@ import tutorials4j.framework.captcha.CaptchaServiceFactory;
 @RequestMapping("/api/captcha/tianai")
 @RequiredArgsConstructor
 @Tag(name = "天意验证码接口", description = "生成滑块、旋转等行为验证码，并校验用户轨迹")
-public class TianaiCaptchaEndpoint {
+public class CaptchaTianaiEndpoint {
   private final CaptchaServiceFactory factory;
   private final ImageCaptchaApplication imageCaptchaApplication;
 

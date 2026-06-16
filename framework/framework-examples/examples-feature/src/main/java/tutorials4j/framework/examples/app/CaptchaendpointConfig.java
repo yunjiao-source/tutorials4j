@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Profile;
  * @author Yun Jiao
  */
 @Configuration
-@Profile("captchafilter")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.captchafilter"})
-public class CaptchafilterConfig {}
+@Profile("captchaendpoint")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.captcha.captchaendpoint"})
+public class CaptchaendpointConfig {}

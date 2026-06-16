@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.captchaendpoint;
+package tutorials4j.framework.examples.captcha.captchaendpoint;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

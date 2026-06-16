@@ -1,5 +1,7 @@
-
 tutorials4j:
+  captcha:
+    filter:
+      url-patterns: /post
   cache:
     named:
       defaults:
@@ -7,8 +9,11 @@ tutorials4j:
         cacheNullValues: false
         enable-statistics: false
       caches:
-        captcha-graphic:
+        captcha-behavior:
           timeToLive: 1m
           cacheNullValues: false
           redis:
             cache-prefix: "token:"
+
+  feature:
+    captcha-enabled: true

@@ -1,4 +1,3 @@
 tutorials4j:
   feature:
-    sign-in:
-      enabled: true
+    sign-in-enabled: true

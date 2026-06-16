@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.feature.signin.LoggingSignInResultHandler;
-import tutorials4j.framework.feature.signin.SignInProperties;
+import tutorials4j.framework.feature.signin.SignInFeatureProperties;
 import tutorials4j.framework.feature.signin.SignInResultHandler;
 import tutorials4j.framework.feature.signin.SignInService;
 
@@ -18,7 +18,7 @@ import tutorials4j.framework.feature.signin.SignInService;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({SignInProperties.class})
+@EnableConfigurationProperties({FeatureProperties.class, SignInFeatureProperties.class})
 public class FeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
@@ -35,7 +35,7 @@ public class FeatureConfiguration {
   @Bean
   @ConditionalOnMissingBean
   SignInService signInService(
-      SignInResultHandler signInResultHandler, SignInProperties properties) {
+      SignInResultHandler signInResultHandler, SignInFeatureProperties properties) {
     log.debug("[FEATURE-CORE] Sign In Service");
     return new SignInService(signInResultHandler, properties);
   }

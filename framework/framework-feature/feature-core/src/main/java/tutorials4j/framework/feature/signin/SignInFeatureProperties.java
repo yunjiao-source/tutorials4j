@@ -12,8 +12,7 @@ import tutorials4j.framework.common.core.PropertiesConsts;
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_FEATURE_SIGN_IN)
-public class SignInProperties {
-  private boolean enabled = false;
+public class SignInFeatureProperties {
   private String redisKeyPrefix = "sign-in:";
   private Duration expireTime = Duration.ofDays(365);
 }

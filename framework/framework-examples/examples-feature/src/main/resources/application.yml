@@ -1,6 +1,9 @@
 spring:
   profiles:
-    active: signin
+#    active: signin
+    active: captchaendpoint
+#    active: tianaicaptchaendpoint
+#    active: captchafilter
 
   data:
     # Redis 配置
@@ -21,6 +24,7 @@ spring:
 
   thymeleaf:
     cache: false
+
 
 logging:
   level:

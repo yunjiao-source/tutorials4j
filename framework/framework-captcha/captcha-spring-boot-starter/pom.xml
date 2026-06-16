@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-spring-boot-starter</artifactId>
+            <artifactId>cache-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
 

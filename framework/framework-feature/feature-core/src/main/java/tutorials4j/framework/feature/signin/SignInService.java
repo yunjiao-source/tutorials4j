@@ -17,7 +17,7 @@ import org.springframework.util.Assert;
 public class SignInService {
   private final Map<String, SignInTemplate> templateMap = new ConcurrentHashMap<>();
   private final SignInResultHandler signInResultHandler;
-  private final SignInProperties properties;
+  private final SignInFeatureProperties properties;
 
   public SignInTemplate template(String source) {
     Assert.hasText(source, "source must not be null or empty");

@@ -26,12 +26,6 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-spring-boot-starter</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>captcha-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>

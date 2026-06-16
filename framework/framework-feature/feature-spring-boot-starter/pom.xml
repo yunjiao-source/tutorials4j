@@ -17,6 +17,12 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>feature-captcha</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>feature-sign-in</artifactId>
             <version>${revision}</version>
         </dependency>
@@ -30,6 +36,18 @@
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>web-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>cache-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>captcha-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

@@ -9,22 +9,24 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>feature-core</artifactId>
+    <artifactId>feature-captcha</artifactId>
     <packaging>jar</packaging>
-    <name>Feature :: Core</name>
-    <description>功能核心模块</description>
+    <name>Feature :: Captcha</name>
+    <description>验证码功能模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-core</artifactId>
+            <artifactId>feature-core</artifactId>
             <version>${revision}</version>
         </dependency>
+
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-redis</artifactId>
+            <artifactId>captcha-web</artifactId>
             <version>${revision}</version>
         </dependency>
+
     </dependencies>
 
 </project>

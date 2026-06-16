@@ -5,11 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * 天爱验证码
  *
  * @author Yun Jiao
  */
 @Configuration
-@Profile("captchaendpoint")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.captchaendpoint"})
-public class CaptchaendpointConfig {}
+@Profile("tianaicaptchaendpoint")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.captcha.captchatianaiendpoint"})
+public class CaptchatianaiendpointConfig {}

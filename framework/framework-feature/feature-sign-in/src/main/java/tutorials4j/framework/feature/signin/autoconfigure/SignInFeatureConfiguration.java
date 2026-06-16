@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.signin;
+package tutorials4j.framework.feature.signin.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -10,18 +10,20 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import tutorials4j.framework.common.core.PropertiesConsts;
 
 /**
- * 签到功能配置
+ * 功能配置
  *
  * @author Yun Jiao
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@ComponentScan(basePackages = {"tutorials4j.framework.feature.signin"})
-@EnableJpaRepositories(basePackages = {"tutorials4j.framework.feature.signin"})
-@EntityScan(basePackages = {"tutorials4j.framework.feature.signin"})
-@ConditionalOnProperty(
-    prefix = PropertiesConsts.PROPERTY_PREFIX_FEATURE_SIGN_IN,
-    name = PropertiesConsts.PROPERTY_ENABLED)
+@ComponentScan(
+    basePackages = {
+      "tutorials4j.framework.feature.signin.domain",
+      "tutorials4j.framework.feature.signin.web"
+    })
+@EnableJpaRepositories(basePackages = {"tutorials4j.framework.feature.signin.domain"})
+@EntityScan(basePackages = {"tutorials4j.framework.feature.signin.domain"})
+@ConditionalOnProperty(prefix = PropertiesConsts.PROPERTY_PREFIX_FEATURE, name = "sign-in-enabled")
 public class SignInFeatureConfiguration {
   @PostConstruct
   public void postConstruct() {

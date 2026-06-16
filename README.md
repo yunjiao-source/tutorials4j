@@ -26,11 +26,41 @@ Java 教程
 
 ### 功能模块示例（framework/framework-examples/examples-feature）
 
+#### profile:signin
+
 > 签到示例
-![签到示例](docs/images/examples-feature-01.jpg )
+![签到示例](docs/images/001.jpg )
 
 > 签到记录查询示例
-![签到记录查询示例](docs/images/examples-feature-02.jpg)
+![签到记录查询示例](docs/images/023.jpg)
+
+
+#### profile:captchaendpoint
+
+> hutool验证码接口
+![hutool验证码接口](docs/images/008.jpg)
+![hutool验证码接口](docs/images/009.jpg)
+![hutool验证码接口](docs/images/010.jpg)
+![hutool验证码接口](docs/images/011.jpg)
+
+> tianai验证码接口
+![tianai验证码接口](docs/images/012.jpg)
+![tianai验证码接口](docs/images/013.jpg)
+![tianai验证码接口](docs/images/014.jpg)
+
+
+#### profile:tianaicaptchaendpoint
+
+> tianai验证码官方标准接口
+![hutool验证码接口](docs/images/015.jpg)
+![hutool验证码接口](docs/images/016.jpg)
+![hutool验证码接口](docs/images/017.jpg)
+![hutool验证码接口](docs/images/018.jpg)
+
+#### profile:tianaicaptchaendpoint
+
+> 基于过滤器的验证码校验
+![博客文章提交](docs/images/019.jpg)
 
 
 ### 缓存模块示例（framework/framework-examples/examples-cache）
@@ -38,58 +68,29 @@ Java 教程
 #### profile:cacheable
 
 > @Cacheable 示例
-![@Cacheable 示例](docs/images/examples-cache-01.jpg)
+![@Cacheable 示例](docs/images/002.jpg)
 
 #### profile:lock
 
 > Redisson 锁示例
-![Redisson 锁示例](docs/images/examples-cache-02.jpg)
+![Redisson 锁示例](docs/images/003.jpg)
 
 > Redis 锁示例
-![Redis 锁示例](docs/images/examples-cache-03.jpg)
+![Redis 锁示例](docs/images/004.jpg)
 
 > 本地（JVM） 锁
-![本地（JVM） 锁](docs/images/examples-cache-04.jpg)
+![本地（JVM） 锁](docs/images/005.jpg)
 
 #### profile:template
 
 > 缓存模版
-![本地（JVM） 锁](docs/images/examples-cache-05.jpg)
+![本地（JVM） 锁](docs/images/006.jpg)
 
 #### profile:multi-level
 
 > 缓存模版
-![本地（JVM） 锁](docs/images/examples-cache-06.jpg)
+![本地（JVM） 锁](docs/images/007.jpg)
 
-
-### 验证码模块示例（framework/framework-examples/examples-captcha）
-
-#### profile:captchaendpoint
-
-> hutool验证码接口
-![hutool验证码接口](docs/images/examples-captcha-01.jpg)
-![hutool验证码接口](docs/images/examples-captcha-02.jpg)
-![hutool验证码接口](docs/images/examples-captcha-03.jpg)
-![hutool验证码接口](docs/images/examples-captcha-04.jpg)
-
-> tianai验证码接口
-![tianai验证码接口](docs/images/examples-captcha-05.jpg)
-![tianai验证码接口](docs/images/examples-captcha-06.jpg)
-![tianai验证码接口](docs/images/examples-captcha-07.jpg)
-
-
-#### profile:tianaicaptchaendpoint
-
-> tianai验证码官方标准接口
-![hutool验证码接口](docs/images/examples-captcha-08.jpg)
-![hutool验证码接口](docs/images/examples-captcha-09.jpg)
-![hutool验证码接口](docs/images/examples-captcha-10.jpg)
-![hutool验证码接口](docs/images/examples-captcha-11.jpg)
-
-#### profile:tianaicaptchaendpoint
-
-> 基于过滤器的验证码校验
-![博客文章提交](docs/images/examples-captcha-12.jpg)
 
 
 ### 加解密模块示例（framework/framework-examples/examples-crypto）
@@ -97,20 +98,20 @@ Java 教程
 #### profile:api
 
 > api请求，响应加解密
-![api请求，响应加解密](docs/images/examples-crypto-01.jpg)
+![api请求，响应加解密](docs/images/020.jpg)
 
 ### 数据模块示例（framework/framework-examples/examples-data）
 
 #### profile:jpa
 
 > 基于jpa的查询
-![api请求，响应加解密](docs/images/examples-data-01.jpg)
+![api请求，响应加解密](docs/images/021.jpg)
 
 
 #### profile:mybatis
 
 > 基mybatis的curd
-![基mybatis的curd](docs/images/examples-data-02.jpg)
+![基mybatis的curd](docs/images/022.jpg)
 
 
 ### 多租户模块示例（framework/framework-examples/examples-tenant）
@@ -118,66 +119,66 @@ Java 教程
 #### profile:cache
 
 > Spring Cache 多租户演示
-![Spring Cache 多租户演示](docs/images/examples-tenant-01.jpg)
+![Spring Cache 多租户演示](docs/images/024.jpg)
 
 #### profile:jpa-database
 
 > 多租户用户管理系统(JPA+数据库隔离)
-![多租户用户管理系统(JPA+数据库隔离)](docs/images/examples-tenant-02.jpg)
+![多租户用户管理系统(JPA+数据库隔离)](docs/images/025.jpg)
 
 > 多租户用户管理系统(JPA+表隔离)
-![多租户用户管理系统(JPA+表隔离)](docs/images/examples-tenant-03.jpg)
+![多租户用户管理系统(JPA+表隔离)](docs/images/026.jpg)
 
 
 #### profile:mybatis-database
 
 > 多租户用户管理系统(MYBATIS+表隔离)
-![多租户用户管理系统(MYBATIS+表隔离)](docs/images/examples-tenant-04.jpg)
+![多租户用户管理系统(MYBATIS+表隔离)](docs/images/027.jpg)
 
 > 多租户用户管理系统(MYBATIS+数据库隔离)
-![多租户用户管理系统(MYBATIS+数据库隔离)](docs/images/examples-tenant-05.jpg)
+![多租户用户管理系统(MYBATIS+数据库隔离)](docs/images/028.jpg)
 
 ### web模块示例（framework/framework-examples/examples-web）
 
 #### profile:annotation
 
 > 接口防护 示例
-![接口防护 示例](docs/images/examples-web-01.jpg)
+![接口防护 示例](docs/images/029.jpg)
 
 #### profile:cached-body
 
 > 请求体缓存演示
-![请求体缓存演示](docs/images/examples-web-02.jpg)
+![请求体缓存演示](docs/images/030.jpg)
 
 #### profile:client
 
 > 三种HTTP客户端对比
-![三种HTTP客户端对比](docs/images/examples-web-03.jpg)
+![三种HTTP客户端对比](docs/images/031.jpg)
 
 #### profile:googleauth
 
 > 两步验证
-![两步验证](docs/images/examples-web-04.jpg)
+![两步验证](docs/images/032.jpg)
 
 > 博客发布(2fa)
-![博客发布(2fa)](docs/images/examples-web-05.jpg)
+![博客发布(2fa)](docs/images/033.jpg)
 
 #### profile:request-logging
 
 > 请求日志 示例
-![请求日志 示例](docs/images/examples-web-06.jpg)
+![请求日志 示例](docs/images/034.jpg)
 
 #### profile:signature
 
 > 签名支付示例 示例
-![签名支付示例 示例](docs/images/examples-web-07.jpg)
+![签名支付示例 示例](docs/images/035.jpg)
 
 #### profile:trace
 
 > Trace API 测试控制台
-![Trace API 测试控制台](docs/images/examples-web-08.jpg)
+![Trace API 测试控制台](docs/images/036.jpg)
 
 #### profile:xss
 
 > XSS 防护演示
-![XSS 防护演示](docs/images/examples-web-09.jpg)
+![XSS 防护演示](docs/images/037.jpg)

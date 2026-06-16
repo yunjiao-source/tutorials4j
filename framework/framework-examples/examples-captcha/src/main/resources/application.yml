@@ -1,10 +1,4 @@
 spring:
-  profiles:
-#      active: captchaendpoint
-#      active: tianaicaptchaendpoint
-      active: captchafilter
-
-
   data:
     # Redis 配置
     redis:
@@ -30,9 +24,6 @@ tutorials4j:
           cacheNullValues: false
           redis:
             cache-prefix: "token:"
-        web-security-access-limited:
-          timeToLive: 1s
-          cacheNullValues: false
 
 logging:
   level:

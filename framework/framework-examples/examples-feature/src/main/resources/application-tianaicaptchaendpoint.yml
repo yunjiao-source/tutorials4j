@@ -1,3 +1,4 @@
+
 tutorials4j:
   cache:
     named:
@@ -6,8 +7,11 @@ tutorials4j:
         cacheNullValues: false
         enable-statistics: false
       caches:
-        captcha-behavior:
+        captcha-graphic:
           timeToLive: 1m
           cacheNullValues: false
           redis:
             cache-prefix: "token:"
+
+  feature:
+    captcha-enabled: true

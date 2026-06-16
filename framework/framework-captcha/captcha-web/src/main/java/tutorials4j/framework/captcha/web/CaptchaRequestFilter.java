@@ -1,4 +1,4 @@
-package tutorials4j.framework.captcha.filter;
+package tutorials4j.framework.captcha.web;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

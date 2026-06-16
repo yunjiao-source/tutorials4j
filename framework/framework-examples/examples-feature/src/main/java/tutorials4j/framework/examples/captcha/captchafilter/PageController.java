@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.tianaicaptchaendpoint;
+package tutorials4j.framework.examples.captcha.captchafilter;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class PageController {
-  @GetMapping("tianai-websdk")
-  public String tianaiWebsdk() {
-    return "tianaicaptchaendpoint/tianai-websdk";
+  @GetMapping("captcha-filter")
+  public String captchafilter() {
+    return "captchafilter/captcha-filter";
   }
 }
