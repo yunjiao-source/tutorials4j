@@ -9,8 +9,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.crypto.core.CryptoCategory;
-import tutorials4j.framework.crypto.core.DigestCategory;
+import tutorials4j.framework.crypto.core.bean.CryptoCategory;
+import tutorials4j.framework.crypto.core.bean.DigestCategory;
+import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
 import tutorials4j.framework.crypto.core.processor.DigestProcessor;
@@ -29,6 +30,17 @@ public class CryptoConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.debug("[CRYPTO-CORE] Crypto Configuration");
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  CryptoProcessorCacheTemplate cryptoRequestCacheTemplate(
+      CryptoProperties properties, CryptoProcessorFactory cryptoProcessorFactory) {
+    log.debug("[CRYPTO-CORE] Crypto Request Cache Template");
+    return new CryptoProcessorCacheTemplate(
+        cryptoProcessorFactory,
+        properties.getAsymmetricCryptoStrategy(),
+        properties.getSymmetricCryptoStrategy());
   }
 
   @Bean

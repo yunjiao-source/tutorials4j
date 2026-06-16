@@ -4,20 +4,26 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>yunjiao-source.tutorials4j.framework</groupId>
-        <artifactId>framework-crypto</artifactId>
+        <artifactId>framework-feature</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>crypto-core</artifactId>
+    <artifactId>feature-schedule</artifactId>
     <packaging>jar</packaging>
-    <name>Crypto :: Core</name>
-    <description>加解密核心模块</description>
+    <name>Feature :: Schedule</name>
+    <description>定时任务功能模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-caffeine</artifactId>
+            <artifactId>feature-core</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>schedule-core</artifactId>
             <version>${revision}</version>
         </dependency>
 

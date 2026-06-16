@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import org.apache.commons.lang3.EnumUtils;
-import tutorials4j.framework.crypto.core.CryptoCategory;
+import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 import tutorials4j.framework.crypto.core.exception.CryptoException;
 
 /**

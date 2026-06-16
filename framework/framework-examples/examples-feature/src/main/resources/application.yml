@@ -4,8 +4,8 @@ spring:
 #    active: captchaendpoint
 #    active: captchatianaiendpoint
 #    active: captchafilter
-#    active: crypto-api
-    active: totp
+    active: crypto-api
+#    active: totp
 
   data:
     # Redis 配置

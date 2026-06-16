@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
-import tutorials4j.framework.crypto.core.DigestCategory;
+import tutorials4j.framework.crypto.core.bean.DigestCategory;
 
 class HmacSHA512DigestProcessorTest {
 

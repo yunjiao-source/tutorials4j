@@ -1,7 +1,7 @@
 package tutorials4j.framework.feature.crypto.web;
 
-import tutorials4j.framework.crypto.core.AsymmetricCryptoStrategy;
-import tutorials4j.framework.crypto.core.SymmetricCryptoStrategy;
+import tutorials4j.framework.crypto.core.bean.AsymmetricCryptoStrategy;
+import tutorials4j.framework.crypto.core.bean.SymmetricCryptoStrategy;
 
 /**
  * TODO

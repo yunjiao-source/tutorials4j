@@ -20,6 +20,7 @@
         <module>feature-captcha</module>
         <module>feature-crypto</module>
         <module>feature-totp</module>
+        <module>feature-schedule</module>
         <module>feature-spring-boot-starter</module>
     </modules>
 

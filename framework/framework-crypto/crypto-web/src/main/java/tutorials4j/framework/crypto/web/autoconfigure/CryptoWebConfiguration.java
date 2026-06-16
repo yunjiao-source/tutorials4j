@@ -3,12 +3,12 @@ package tutorials4j.framework.crypto.web.autoconfigure;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
-import tutorials4j.framework.crypto.core.properties.CryptoProperties;
+import tutorials4j.framework.common.core.PropertiesConsts;
+import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
 import tutorials4j.framework.crypto.web.body.CryptoRequestBodyAdvice;
-import tutorials4j.framework.crypto.web.body.CryptoRequestCacheTemplate;
 import tutorials4j.framework.crypto.web.body.CryptoResponseBodyAdvice;
 
 /**
@@ -18,6 +18,9 @@ import tutorials4j.framework.crypto.web.body.CryptoResponseBodyAdvice;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(
+    prefix = PropertiesConsts.PROPERTY_PREFIX_CRYPTO,
+    name = "body-crypto-enabled")
 public class CryptoWebConfiguration {
   @PostConstruct
   public void postConstruct() {
@@ -26,28 +29,17 @@ public class CryptoWebConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  CryptoRequestCacheTemplate cryptoRequestCacheTemplate(
-      CryptoProperties properties, CryptoProcessorFactory cryptoProcessorFactory) {
-    log.debug("[CRYPTO-WEB] Crypto Request Cache Template");
-    return new CryptoRequestCacheTemplate(
-        cryptoProcessorFactory,
-        properties.getAsymmetricCryptoStrategy(),
-        properties.getSymmetricCryptoStrategy());
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
   CryptoRequestBodyAdvice cryptoRequestBodyAdvice(
-      CryptoRequestCacheTemplate cryptoRequestCacheTemplate) {
+      CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate) {
     log.debug("[CRYPTO-WEB] Crypto Request Body Advice");
-    return new CryptoRequestBodyAdvice(cryptoRequestCacheTemplate);
+    return new CryptoRequestBodyAdvice(cryptoProcessorCacheTemplate);
   }
 
   @Bean
   @ConditionalOnMissingBean
   CryptoResponseBodyAdvice cryptoResponseBodyAdvice(
-      CryptoRequestCacheTemplate cryptoRequestCacheTemplate) {
+      CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate) {
     log.debug("[CRYPTO-WEB] Crypto Response Body Advice");
-    return new CryptoResponseBodyAdvice(cryptoRequestCacheTemplate);
+    return new CryptoResponseBodyAdvice(cryptoProcessorCacheTemplate);
   }
 }

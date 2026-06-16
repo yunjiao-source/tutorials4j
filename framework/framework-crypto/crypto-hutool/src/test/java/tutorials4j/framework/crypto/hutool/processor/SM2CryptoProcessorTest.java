@@ -10,7 +10,7 @@ import java.security.KeyPair;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
-import tutorials4j.framework.crypto.core.CryptoCategory;
+import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 
 class SM2CryptoProcessorTest {
 

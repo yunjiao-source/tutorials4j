@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
 import tutorials4j.framework.common.core.bean.SecretKey;
-import tutorials4j.framework.crypto.core.DigestCategory;
+import tutorials4j.framework.crypto.core.bean.DigestCategory;
 import tutorials4j.framework.crypto.core.processor.DigestProcessor;
 import tutorials4j.framework.crypto.hutool.SecretKeyGenerator;
 

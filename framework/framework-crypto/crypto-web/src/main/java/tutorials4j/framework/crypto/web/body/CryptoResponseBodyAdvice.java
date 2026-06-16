@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
+import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 import tutorials4j.framework.crypto.core.util.CryptoUtils;
 
@@ -25,7 +26,7 @@ import tutorials4j.framework.crypto.core.util.CryptoUtils;
 @ControllerAdvice // 全局控制器增强
 @RequiredArgsConstructor
 public class CryptoResponseBodyAdvice implements ResponseBodyAdvice<Object> {
-  private final CryptoRequestCacheTemplate cryptoRequestCacheTemplate;
+  private final CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate;
 
   @Override
   public boolean supports(
@@ -57,7 +58,8 @@ public class CryptoResponseBodyAdvice implements ResponseBodyAdvice<Object> {
       return body;
     }
 
-    CryptoProcessor cryptoProcessor = cryptoRequestCacheTemplate.createIfAbsent(encryptedSecretKey);
+    CryptoProcessor cryptoProcessor =
+        cryptoProcessorCacheTemplate.createIfAbsent(encryptedSecretKey);
     String bodyString = Jackson2Utils.instance.toJson(body);
     String result = cryptoProcessor.encrypt(bodyString);
     if (StringUtils.isNotBlank(result)) {

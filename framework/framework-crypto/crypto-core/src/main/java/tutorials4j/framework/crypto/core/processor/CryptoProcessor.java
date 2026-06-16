@@ -1,7 +1,7 @@
 package tutorials4j.framework.crypto.core.processor;
 
 import tutorials4j.framework.common.core.bean.SecretKey;
-import tutorials4j.framework.crypto.core.CryptoCategory;
+import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 
 /**
  * TODO

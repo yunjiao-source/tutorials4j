@@ -11,7 +11,7 @@ import org.springframework.cache.Cache;
  * 缓存模板抽象基类。
  *
  * <p>实现了 {@link CacheTemplate} 接口大部分方法，并作为 {@link SmartInitializingSingleton} 在单例初始化后自动调用 {@link
- * #initCache()} 来获取底层 {@link Cache} 实例。子类需提供具体的缓存初始化逻辑以及值类型。
+ * #getCache()} 来获取底层 {@link Cache} 实例。子类需提供具体的缓存初始化逻辑以及值类型。
  *
  * @param <K> 缓存键类型
  * @param <V> 缓存值类型

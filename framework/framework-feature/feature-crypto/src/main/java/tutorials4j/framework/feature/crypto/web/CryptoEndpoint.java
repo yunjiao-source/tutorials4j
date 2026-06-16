@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.crypto.core.AsymmetricCryptoStrategy;
-import tutorials4j.framework.crypto.core.SymmetricCryptoStrategy;
+import tutorials4j.framework.crypto.core.bean.AsymmetricCryptoStrategy;
+import tutorials4j.framework.crypto.core.bean.SymmetricCryptoStrategy;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
 

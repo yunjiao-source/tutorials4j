@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
+import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 import tutorials4j.framework.crypto.core.util.CryptoUtils;
 
@@ -29,7 +30,7 @@ import tutorials4j.framework.crypto.core.util.CryptoUtils;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
-  private final CryptoRequestCacheTemplate cryptoRequestCacheTemplate;
+  private final CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate;
 
   @Override
   public boolean supports(
@@ -68,7 +69,8 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
           DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY_HEX);
       return inputMessage;
     }
-    CryptoProcessor cryptoProcessor = cryptoRequestCacheTemplate.createIfAbsent(encryptedSecretKey);
+    CryptoProcessor cryptoProcessor =
+        cryptoProcessorCacheTemplate.createIfAbsent(encryptedSecretKey);
     // 移除可能的首尾引号（前端传参可能带引号）
     encryptedBody = encryptedBody.replaceAll("^\"|\"$", "");
     // 解密请求体

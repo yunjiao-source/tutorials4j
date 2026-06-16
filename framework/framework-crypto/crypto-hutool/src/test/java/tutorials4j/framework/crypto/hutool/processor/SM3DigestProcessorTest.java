@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
-import tutorials4j.framework.crypto.core.DigestCategory;
+import tutorials4j.framework.crypto.core.bean.DigestCategory;
 
 class SM3DigestProcessorTest {
 

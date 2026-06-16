@@ -13,6 +13,8 @@ tutorials4j:
             expire-after-access: 30s
             initial-capacity: 2
             maximum-size: 5
+  crypto:
+    body-crypto-enabled: true
 
   feature:
     crypto-enabled: true

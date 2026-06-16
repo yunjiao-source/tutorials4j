@@ -1,4 +1,4 @@
-package tutorials4j.framework.crypto.core;
+package tutorials4j.framework.crypto.core.bean;
 
 import lombok.Getter;
 

@@ -45,6 +45,12 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>schedule-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>web-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
@@ -67,11 +73,6 @@
             <version>${revision}</version>
         </dependency>
 
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-spring-boot-starter</artifactId>
-            <version>${revision}</version>
-        </dependency>
     </dependencies>
 
 </project>

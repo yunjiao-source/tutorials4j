@@ -68,6 +68,15 @@ Java 教程
 > api请求，响应加解密
 ![api请求，响应加解密](docs/images/020.jpg)
 
+#### profile:totp
+
+> 两步验证
+![两步验证](docs/images/032.jpg)
+
+> 博客发布(2fa)
+![博客发布(2fa)](docs/images/033.jpg)
+
+
 ### 缓存模块示例（framework/framework-examples/examples-cache）
 
 #### profile:cacheable
@@ -153,13 +162,6 @@ Java 教程
 > 三种HTTP客户端对比
 ![三种HTTP客户端对比](docs/images/031.jpg)
 
-#### profile:googleauth
-
-> 两步验证
-![两步验证](docs/images/032.jpg)
-
-> 博客发布(2fa)
-![博客发布(2fa)](docs/images/033.jpg)
 
 #### profile:request-logging
 

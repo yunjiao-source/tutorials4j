@@ -3,8 +3,8 @@ package tutorials4j.framework.crypto.core.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.crypto.core.AsymmetricCryptoStrategy;
-import tutorials4j.framework.crypto.core.SymmetricCryptoStrategy;
+import tutorials4j.framework.crypto.core.bean.AsymmetricCryptoStrategy;
+import tutorials4j.framework.crypto.core.bean.SymmetricCryptoStrategy;
 
 /**
  * TODO
@@ -22,4 +22,7 @@ public class CryptoProperties {
   private String salt;
   private int saltPosition = 0;
   private int digestCount = 1;
+
+  // 是否开启解密请求与加密响应
+  private boolean bodyCryptoEnabled = false;
 }
