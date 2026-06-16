@@ -22,7 +22,7 @@ import tutorials4j.framework.feature.signin.SignInService;
 @RestController
 @RequestMapping("/api/sign-in")
 @RequiredArgsConstructor
-public class SignInController {
+public class SignInEndpoint {
   private final SignInService signInService;
 
   @PostMapping("do")

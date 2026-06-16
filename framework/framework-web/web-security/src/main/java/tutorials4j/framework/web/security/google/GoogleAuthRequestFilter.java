@@ -43,12 +43,11 @@ public class GoogleAuthRequestFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String userName =
-        HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME);
+    String userName = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_TOTP_AUTH_USERNAME);
     if (StringUtils.isBlank(userName)) {
       userName = SecurityUtils.getAccount();
     }
-    String code = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE);
+    String code = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_TOTP_AUTH_CODE);
 
     // 1. 参数校验
     if (StringUtils.isAnyBlank(userName, code)) {

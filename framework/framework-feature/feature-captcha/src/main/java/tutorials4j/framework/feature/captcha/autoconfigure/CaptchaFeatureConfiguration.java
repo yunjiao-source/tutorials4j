@@ -37,9 +37,9 @@ public class CaptchaFeatureConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  CaptchaTianaiEndpoint tianaiCaptchaEndpoint(
+  CaptchaTianaiEndpoint captchaTianaiEndpoint(
       CaptchaServiceFactory factory, ImageCaptchaApplication imageCaptchaApplication) {
-    log.debug("[FEATURE-CAPTCHA] Tianai Captcha Endpoint");
+    log.debug("[FEATURE-CAPTCHA] Captcha Tianai Endpoint");
     return new CaptchaTianaiEndpoint(factory, imageCaptchaApplication);
   }
 }

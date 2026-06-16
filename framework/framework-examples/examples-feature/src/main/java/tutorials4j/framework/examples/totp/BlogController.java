@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.googleauth;
+package tutorials4j.framework.examples.totp;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

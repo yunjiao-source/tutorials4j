@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Import;
 import tutorials4j.framework.feature.captcha.autoconfigure.CaptchaFeatureConfiguration;
 import tutorials4j.framework.feature.crypto.autoconfigure.CryptoFeatureConfiguration;
 import tutorials4j.framework.feature.signin.autoconfigure.SignInFeatureConfiguration;
+import tutorials4j.framework.feature.totp.autoconfigure.TotpFeatureConfiguration;
 
 /**
  * 功能模块自动配置
@@ -19,7 +20,8 @@ import tutorials4j.framework.feature.signin.autoconfigure.SignInFeatureConfigura
   FeatureConfiguration.class,
   SignInFeatureConfiguration.class,
   CaptchaFeatureConfiguration.class,
-  CryptoFeatureConfiguration.class
+  CryptoFeatureConfiguration.class,
+  TotpFeatureConfiguration.class
 })
 public class FeatureAutoConfiguration {
   @PostConstruct

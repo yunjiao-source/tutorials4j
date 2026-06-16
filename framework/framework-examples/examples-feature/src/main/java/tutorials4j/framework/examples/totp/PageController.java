@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.googleauth;
+package tutorials4j.framework.examples.totp;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
-  @GetMapping("googleauth/2fa")
+  @GetMapping("2fa")
   public String a2fa() {
-    return "googleauth/2fa";
+    return "totp/2fa";
   }
 
-  @GetMapping("googleauth/blog-2fa")
+  @GetMapping("blog-2fa")
   public String blog2fa() {
-    return "googleauth/blog-2fa";
+    return "totp/blog-2fa";
   }
 }

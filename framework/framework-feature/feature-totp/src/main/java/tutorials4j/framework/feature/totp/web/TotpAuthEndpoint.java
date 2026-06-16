@@ -1,4 +1,4 @@
-package tutorials4j.framework.web.security.google;
+package tutorials4j.framework.feature.totp.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,19 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.spring.util.QrCodeUtils;
+import tutorials4j.framework.web.security.google.GoogleAuthService;
 
 /**
  * Google Authenticator 管理接口，提供 TOTP 校验、二维码生成等 REST API。
  *
- * <p>所有接口路径以 {@code /t4j/google-auth} 为前缀。
- *
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("api/google-auth")
+@RequestMapping("api/totp")
 @RequiredArgsConstructor
-@Tag(name = "Google Authenticator", description = "TOTP 双因素认证接口")
-public class GoogleAuthEndpoint {
+@Tag(name = "Totp Authenticator", description = "TOTP 双因素认证接口")
+public class TotpAuthEndpoint {
 
   private final GoogleAuthService googleAuthService;
 

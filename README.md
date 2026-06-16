@@ -49,7 +49,7 @@ Java 教程
 ![tianai验证码接口](docs/images/014.jpg)
 
 
-#### profile:tianaicaptchaendpoint
+#### profile:captchatianaiendpoint
 
 > tianai验证码官方标准接口
 ![hutool验证码接口](docs/images/015.jpg)
@@ -57,11 +57,16 @@ Java 教程
 ![hutool验证码接口](docs/images/017.jpg)
 ![hutool验证码接口](docs/images/018.jpg)
 
-#### profile:tianaicaptchaendpoint
+#### profile:captchafilter
 
 > 基于过滤器的验证码校验
 ![博客文章提交](docs/images/019.jpg)
 
+
+#### profile:crypto-api
+
+> api请求，响应加解密
+![api请求，响应加解密](docs/images/020.jpg)
 
 ### 缓存模块示例（framework/framework-examples/examples-cache）
 
@@ -92,13 +97,6 @@ Java 教程
 ![本地（JVM） 锁](docs/images/007.jpg)
 
 
-
-### 加解密模块示例（framework/framework-examples/examples-crypto）
-
-#### profile:api
-
-> api请求，响应加解密
-![api请求，响应加解密](docs/images/020.jpg)
 
 ### 数据模块示例（framework/framework-examples/examples-data）
 

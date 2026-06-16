@@ -175,7 +175,7 @@
         </div>
       </div>
       <footer>
-        🔐 安全验证 · Google Authenticator 双因素认证 | 请求头: X-Google-Auth-Username / X-Google-Auth-Code | 接口: POST /post
+        🔐 安全验证 · Google Authenticator 双因素认证 | 请求头: X-Totp-Auth-Username / X-Totp-Auth-Code | 接口: POST /post
       </footer>
     </div>
   </div>
@@ -293,15 +293,15 @@
     $submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>验证并发布中...');
 
     // 发送请求, 遵循接口规范: POST /post, Content-Type: text/plain, 请求体为博客原始内容
-    // 添加自定义请求头: X-Google-Auth-Username, X-Google-Auth-Code
+    // 添加自定义请求头: X-Totp-Auth-Username, X-Totp-Auth-Code
     $.ajax({
       url: '/post',
       method: 'POST',
       contentType: 'text/plain; charset=utf-8',
       data: content,                     // 博客内容纯文本
       headers: {
-        'X-Google-Auth-Username': username,
-        'X-Google-Auth-Code': authCode
+        'X-Totp-Auth-Username': username,
+        'X-Totp-Auth-Code': authCode
       },
       timeout: 15000,
       success: function(response) {

@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.googleauth;
+package tutorials4j.framework.examples.totp;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

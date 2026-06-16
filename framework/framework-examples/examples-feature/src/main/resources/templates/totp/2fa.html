@@ -257,7 +257,7 @@
         qrArea.style.display = 'block';
 
         // 使用 img 直接加载图片，但需要处理错误（用户不存在/服务端异常）
-        const qrUrl = buildUrl(`/api/google-auth/generate/qr?username=${encodeURIComponent(username)}&t=${Date.now()}`);
+        const qrUrl = buildUrl(`/api/totp/generate/qr?username=${encodeURIComponent(username)}&t=${Date.now()}`);
         qrImage.src = qrUrl;
 
         // 监听图片加载失败情况（服务器返回错误页面或非图片内容）
@@ -298,7 +298,7 @@
         formData.append('code', code);
 
         try {
-            const response = await fetch(buildUrl('/api/google-auth/check'), {
+            const response = await fetch(buildUrl('/api/totp/check'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

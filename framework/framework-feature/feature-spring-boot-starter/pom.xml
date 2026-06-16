@@ -17,6 +17,11 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>feature-totp</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>feature-crypto</artifactId>
             <version>${revision}</version>
         </dependency>
@@ -59,6 +64,12 @@
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>crypto-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>web-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

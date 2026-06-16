@@ -53,8 +53,8 @@ public interface DefaultConsts {
   String HTTP_HEADER_CAPTCHA_CATEGORY = "X-Captcha-Category";
   String HTTP_HEADER_CAPTCHA_CODE = "X-Captcha-Code";
 
-  String HTTP_HEADER_GOOGLE_AUTH_USERNAME = "X-Google-Auth-Username";
-  String HTTP_HEADER_GOOGLE_AUTH_CODE = "X-Google-Auth-Code";
+  String HTTP_HEADER_TOTP_AUTH_USERNAME = "X-Totp-Auth-Username";
+  String HTTP_HEADER_TOTP_AUTH_CODE = "X-Totp-Auth-Code";
 
   String HTTP_HEADER_CRYPTO_SECRET_KEY_HEX = "X-Crypto-Secret-Key-Hex";
 
@@ -82,6 +82,6 @@ public interface DefaultConsts {
 
   String[] HTTP_GOOGLE_AUTH =
       new String[] {
-        DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_USERNAME, DefaultConsts.HTTP_HEADER_GOOGLE_AUTH_CODE
+        DefaultConsts.HTTP_HEADER_TOTP_AUTH_USERNAME, DefaultConsts.HTTP_HEADER_TOTP_AUTH_CODE
       };
 }

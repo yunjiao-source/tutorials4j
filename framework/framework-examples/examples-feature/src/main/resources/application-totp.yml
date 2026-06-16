@@ -11,3 +11,6 @@ tutorials4j:
             security-key: T6LFESCGW4QGYX33Z2ZAFNJLAU5JWKO7
           - username: zhangs
             security-key: GP2GM5U4WVNXSPD2Y3WSKZQTMW4TZRYL
+
+  feature:
+    totp-enabled: true

@@ -11,7 +11,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
-import tutorials4j.framework.web.security.google.GoogleAuthEndpoint;
 import tutorials4j.framework.web.security.google.GoogleAuthRequestFilter;
 import tutorials4j.framework.web.security.google.GoogleAuthService;
 import tutorials4j.framework.web.security.google.GoogleAuthenticatorConfigCustomizer;
@@ -87,12 +86,5 @@ public class GoogleWebConfiguration {
       log.debug("[WEB-SECURITY] Google Auth 校验过滤器：{}", options);
     }
     return registration;
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  GoogleAuthEndpoint totpAuthEndpoint(GoogleAuthService googleAuthService) {
-    log.debug("[FEATURE-REST] Totp Auth Endpoint");
-    return new GoogleAuthEndpoint(googleAuthService);
   }
 }

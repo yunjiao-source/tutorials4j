@@ -19,7 +19,7 @@ import tutorials4j.framework.feature.signin.domain.SignInResultService;
 @RestController
 @RequestMapping("/api/sign-in-result")
 @RequiredArgsConstructor
-public class SignInResultController {
+public class SignInResultEndpoint {
   private final SignInResultService signInResultService;
 
   @GetMapping
