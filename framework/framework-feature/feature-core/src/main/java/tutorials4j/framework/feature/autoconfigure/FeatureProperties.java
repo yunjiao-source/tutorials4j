@@ -16,4 +16,5 @@ public class FeatureProperties {
   private boolean captchaEnabled = false;
   private boolean cryptoEnabled = false;
   private boolean totpEnabled = false;
+  private boolean scheduleEnabled = false;
 }

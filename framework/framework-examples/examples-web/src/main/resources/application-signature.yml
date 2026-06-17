@@ -9,14 +9,17 @@ spring:
 
 tutorials4j:
   web:
-    rest:
-      cached-body:
+    cached-body:
+      enabled: true
+      filter:
         url-patterns: /signature/pay
-    security:
-      signature:
-        nonce-redis-key-prefix: 'signature:nonce:'
-        interceptor:
-          include-path-patterns: /signature/pay
-        keys:
-          appkey1: appSecret1
-          appkey2: appSecret2
+        name: cachedBodyFilter
+
+    signature:
+      enabled: true
+      nonce-redis-key-prefix: 'signature:nonce:'
+      interceptor:
+        include-path-patterns: /signature/pay
+      keys:
+        appkey1: appSecret1
+        appkey2: appSecret2

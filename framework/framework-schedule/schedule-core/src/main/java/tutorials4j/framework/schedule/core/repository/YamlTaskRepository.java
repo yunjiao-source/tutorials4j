@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import tutorials4j.framework.schedule.core.bean.YamlTask;
-import tutorials4j.framework.schedule.core.exception.ScheduleException;
 import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
 
 /**
@@ -25,47 +23,13 @@ public class YamlTaskRepository implements TaskRepository<YamlTask> {
         .forEach(
             (k, v) -> {
               if (!v.validate()) {
-                throw new IllegalArgumentException("taskOptions is not valid");
+                throw new IllegalArgumentException(
+                    "The task data validation has failed. Please review the configuration file.");
               }
               YamlTask yamlTask = YamlTask.of(v);
               yamlTask.setTaskCode(k);
               taskMap.put(k, yamlTask);
             });
-  }
-
-  @Override
-  public void create(YamlTask createTask) {
-    assertTask(createTask);
-
-    String taskCode = createTask.getTaskCode();
-    YamlTask task = taskMap.putIfAbsent(taskCode, createTask);
-    if (task != null) {
-      // 键已存在且对应的值不为null
-      throw new ScheduleException("重复创建任务, taskCode=" + taskCode);
-    }
-  }
-
-  @Override
-  public void update(YamlTask updateTask) {
-    assertTask(updateTask);
-
-    String taskCode = updateTask.getTaskCode();
-    findByTaskCode(taskCode)
-        .map(
-            task -> {
-              BeanUtils.copyProperties(updateTask, task, "name");
-              taskMap.computeIfPresent(taskCode, (k, v) -> task);
-              return task;
-            })
-        .orElseThrow(() -> new ScheduleException("任务不存在:" + taskCode));
-  }
-
-  @Override
-  public boolean delete(String taskCode) {
-    Assert.hasText(taskCode, "name must not be null or empty");
-    return findByTaskCode(taskCode)
-        .map(task -> taskMap.remove(task.getTaskCode(), task))
-        .orElse(false);
   }
 
   @Override
@@ -77,10 +41,5 @@ public class YamlTaskRepository implements TaskRepository<YamlTask> {
   @Override
   public List<YamlTask> findAll() {
     return new ArrayList<>(taskMap.values());
-  }
-
-  private static void assertTask(YamlTask task) {
-    Assert.notNull(task, "task must not be null");
-    task.assertValid();
   }
 }

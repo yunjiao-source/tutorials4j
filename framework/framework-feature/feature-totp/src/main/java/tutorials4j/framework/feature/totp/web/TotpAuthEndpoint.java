@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.spring.util.QrCodeUtils;
-import tutorials4j.framework.web.security.google.GoogleAuthService;
+import tutorials4j.framework.web.security.totp.GoogleAuthService;
 
 /**
  * Google Authenticator 管理接口，提供 TOTP 校验、二维码生成等 REST API。

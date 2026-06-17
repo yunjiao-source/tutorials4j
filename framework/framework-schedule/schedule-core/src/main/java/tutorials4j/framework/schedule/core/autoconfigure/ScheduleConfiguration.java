@@ -9,7 +9,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.schedule.core.component.ChangeStatusEventConsumer;
+import tutorials4j.framework.schedule.core.component.EventConsumerContainer;
 import tutorials4j.framework.schedule.core.component.ScheduleTaskManager;
+import tutorials4j.framework.schedule.core.component.SyncEventConsumerContainer;
 import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
 import tutorials4j.framework.schedule.core.repository.TaskRepository;
 import tutorials4j.framework.schedule.core.repository.YamlTaskRepository;
@@ -39,10 +41,17 @@ public class ScheduleConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
+  EventConsumerContainer syncEventConsumerContainer(
+      ObjectProvider<ChangeStatusEventConsumer> consumers) {
+    log.debug("[SCHEDULE-CORE] Sync Event Consumer Container");
+    return new SyncEventConsumerContainer(consumers.orderedStream().collect(Collectors.toList()));
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
   ScheduleTaskManager scheduleTaskManager(
-      TaskRepository<?> taskRepository, ObjectProvider<ChangeStatusEventConsumer> consumers) {
-    log.debug("[SCHEDULE-CORE] ScheduleTaskManager");
-    return new ScheduleTaskManager(
-        taskRepository, consumers.orderedStream().collect(Collectors.toList()));
+      TaskRepository<?> taskRepository, EventConsumerContainer syncEventConsumerContainer) {
+    log.debug("[SCHEDULE-CORE] Schedule Task Manager");
+    return new ScheduleTaskManager(taskRepository, syncEventConsumerContainer);
   }
 }

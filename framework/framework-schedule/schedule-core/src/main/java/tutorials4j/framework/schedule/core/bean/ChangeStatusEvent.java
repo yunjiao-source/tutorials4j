@@ -13,6 +13,4 @@ public record ChangeStatusEvent(
     Instant timestamp,
     String taskCode,
     TaskStatusEnum taskStatus,
-    TaskRunData lastTaskRunData,
-    String message,
-    Throwable throwable) {}
+    TaskRuntimeData taskRuntimeData) {}

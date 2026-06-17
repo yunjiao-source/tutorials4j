@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class PageController {
-  @GetMapping("annotation/idempotent")
+  @GetMapping("idempotent")
   public String idempotent() {
     return "annotation/idempotent";
   }

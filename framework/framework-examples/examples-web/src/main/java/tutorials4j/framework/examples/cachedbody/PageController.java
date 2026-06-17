@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
-  @GetMapping("cache-body/simple")
+  @GetMapping("simple")
   public String cacheBody() {
     return "cache-body/simple";
   }

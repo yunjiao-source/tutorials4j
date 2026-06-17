@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +12,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
-import tutorials4j.framework.web.security.properties.GoogleWebProperties;
 import tutorials4j.framework.web.security.properties.SecurityWebProperties;
 import tutorials4j.framework.web.security.rest.AccessLimitedCacheTemplate;
 import tutorials4j.framework.web.security.rest.AccessLimitedHandlerInterceptor;
 import tutorials4j.framework.web.security.rest.IdempotentCacheTemplate;
 import tutorials4j.framework.web.security.rest.IdempotentHandlerInterceptor;
-import tutorials4j.framework.web.security.signature.InMemerySignatureKeyRepository;
-import tutorials4j.framework.web.security.signature.SignatureHandlerInterceptor;
-import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
 
 /**
  * TODO
@@ -29,11 +27,14 @@ import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({SecurityWebProperties.class, GoogleWebProperties.class})
+@ConditionalOnProperty(
+    prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_SECURITY,
+    name = PropertiesConsts.PROPERTY_ENABLED)
+@EnableConfigurationProperties(SecurityWebProperties.class)
 public class SecurityWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-SECURITY] Web Security Configuration");
+    log.debug("[WEB-SECURITY] Security Web Configuration");
   }
 
   @Bean
@@ -50,21 +51,13 @@ public class SecurityWebConfiguration {
     return new IdempotentCacheTemplate();
   }
 
-  @Bean
-  @ConditionalOnMissingBean
-  SignatureKeyRepository inMemerySignatureKeyRepository(SecurityWebProperties properties) {
-    log.debug("[WEB-SECURITY] In Memery Signature Key Repository");
-    return new InMemerySignatureKeyRepository(properties);
-  }
-
   @Slf4j
   @Configuration(proxyBeanMethods = false)
   @RequiredArgsConstructor
-  public static class InterceptorWebConfiguration implements WebMvcConfigurer {
+  public static class SecurityWebMvcConfigurer implements WebMvcConfigurer {
 
     private final AccessLimitedCacheTemplate accessLimitedCacheTemplate;
     private final IdempotentCacheTemplate idempotentCacheTemplate;
-    private final SignatureKeyRepository signatureKeyRepository;
     private final SecurityWebProperties properties;
 
     @Override
@@ -78,26 +71,12 @@ public class SecurityWebConfiguration {
       IdempotentHandlerInterceptor idempotentHandlerInterceptor =
           new IdempotentHandlerInterceptor(idempotentCacheTemplate);
       doAddInterceptor(registry, idempotentHandlerInterceptor, idempotentOptions);
-
-      HandlerInterceptorOptions signatureOptions = properties.getSignature().getInterceptor();
-      SignatureHandlerInterceptor signatureHandlerInterceptor =
-          new SignatureHandlerInterceptor(
-              properties.getSignature().getNonceRedisKeyPrefix(), signatureKeyRepository);
-      doAddInterceptor(registry, signatureHandlerInterceptor, signatureOptions);
     }
 
     private void doAddInterceptor(
         InterceptorRegistry registry,
         HandlerInterceptor interceptor,
         HandlerInterceptorOptions options) {
-      if (options.getExcludePathPatterns().length == 0
-          && options.getIncludePathPatterns().length == 0) {
-        log.warn(
-            "[WEB-SECURITY] 请求拦截器'{}' 未配置，原因是'include-path-patterns'或‘exclude-path-patterns’没有设置值",
-            interceptor);
-        return;
-      }
-
       InterceptorRegistration registration = registry.addInterceptor(interceptor);
       if (options.getExcludePathPatterns().length > 0) {
         registration.excludePathPatterns(options.getExcludePathPatterns());

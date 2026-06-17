@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.feature.totp.web.TotpAuthEndpoint;
-import tutorials4j.framework.web.security.google.GoogleAuthService;
+import tutorials4j.framework.web.security.totp.GoogleAuthService;
 
 /**
  * 功能配置

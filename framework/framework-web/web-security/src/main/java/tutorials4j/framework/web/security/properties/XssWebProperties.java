@@ -12,16 +12,10 @@ import tutorials4j.framework.common.spring.web.ServletFilterOptions;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_SECURITY_XSS)
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_XSS)
 public class XssWebProperties {
   private boolean enabled = false;
 
   /** xss攻击配置 */
-  @NestedConfigurationProperty
-  private ServletFilterOptions filter =
-      new ServletFilterOptions(
-          new String[] {"/*"},
-          1,
-          "xssRequestFilter",
-          ServletFilterOptions.DEFAULT_DISPATCHER_TYPES);
+  @NestedConfigurationProperty private ServletFilterOptions filter = new ServletFilterOptions();
 }

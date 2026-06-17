@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class PageController {
-  @GetMapping("xss/simple")
+  @GetMapping("simple")
   public String simple() {
     return "xss/simple";
   }

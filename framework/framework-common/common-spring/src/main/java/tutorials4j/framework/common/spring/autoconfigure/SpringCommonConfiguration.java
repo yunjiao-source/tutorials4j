@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.framework.common.spring.core.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
@@ -46,6 +47,13 @@ public class SpringCommonConfiguration {
     List<TaskDecoratorCreator> creators =
         taskDecoratorCreators.orderedStream().collect(Collectors.toList());
     return new CompositeTaskDecoratorCreator(creators);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
+    log.debug("[COMMON-SPRING] Composite Task Decorator");
+    return creator.getInstance();
   }
 
   @Bean

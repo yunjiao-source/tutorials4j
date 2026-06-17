@@ -22,15 +22,14 @@ import tutorials4j.framework.web.security.xss.XssRequestFilter;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({XssWebProperties.class})
 @ConditionalOnProperty(
-    prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_SECURITY_XSS,
-    name = PropertiesConsts.PROPERTY_ENABLED,
-    havingValue = "true")
+    prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_XSS,
+    name = PropertiesConsts.PROPERTY_ENABLED)
+@EnableConfigurationProperties(XssWebProperties.class)
 public class XssWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-SECURITY] Web Xss Configuration");
+    log.debug("[WEB-SECURITY] Xss Web Configuration");
   }
 
   @Bean

@@ -8,8 +8,10 @@ server:
     include-binding-errors: always
 
 springdoc:
+  api-docs.enabled: true
   use-fqn: true
   swagger-ui:
+    enabled: true
     show-extensions: true
     show-common-extensions: true
 

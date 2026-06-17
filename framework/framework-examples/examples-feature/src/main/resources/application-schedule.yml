@@ -1,0 +1,10 @@
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 6  # 设定线程池大小，根据你的任务并发需求调整
+      thread-name-prefix: example-scheduler-  # 可选：自定义线程名前缀，便于日志追踪
+
+tutorials4j:
+  feature:
+    schedule-enabled: true

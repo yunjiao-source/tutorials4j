@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.web.client.autoconfigure.ClientWebConfiguration;
-import tutorials4j.framework.web.logging.autoconfigure.LoggingWebConfiguration;
+import tutorials4j.framework.web.logging.autoconfigure.RequestLoggingWebConfiguration;
 import tutorials4j.framework.web.logging.autoconfigure.SpringdocWebConfiguration;
-import tutorials4j.framework.web.rest.autoconfigure.RestWebConfiguration;
-import tutorials4j.framework.web.security.autoconfigure.GoogleWebConfiguration;
+import tutorials4j.framework.web.logging.autoconfigure.TraceWebConfiguration;
+import tutorials4j.framework.web.rest.autoconfigure.CachedBodyConfiguration;
 import tutorials4j.framework.web.security.autoconfigure.SecurityWebConfiguration;
+import tutorials4j.framework.web.security.autoconfigure.SignatureWebConfiguration;
+import tutorials4j.framework.web.security.autoconfigure.TotpWebConfiguration;
 import tutorials4j.framework.web.security.autoconfigure.XssWebConfiguration;
 import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfiguration;
 
@@ -22,13 +24,15 @@ import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfigura
 @AutoConfiguration
 @Import({
   ClientWebConfiguration.class,
-  LoggingWebConfiguration.class,
+  RequestLoggingWebConfiguration.class,
   SpringdocWebConfiguration.class,
-  RestWebConfiguration.class,
+  TraceWebConfiguration.class,
+  CachedBodyConfiguration.class,
   SecurityWebConfiguration.class,
-  GoogleWebConfiguration.class,
+  SignatureWebConfiguration.class,
+  TotpWebConfiguration.class,
+  XssWebConfiguration.class,
   ValidatorsWebConfiguration.class,
-  XssWebConfiguration.class
 })
 public class WebAutoConfiguration {
   @PostConstruct

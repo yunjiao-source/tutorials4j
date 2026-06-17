@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeansException;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
@@ -20,8 +21,8 @@ import org.springframework.util.Assert;
 import tutorials4j.framework.schedule.core.bean.ChangeStatusEvent;
 import tutorials4j.framework.schedule.core.bean.ScheduledTaskData;
 import tutorials4j.framework.schedule.core.bean.Task;
-import tutorials4j.framework.schedule.core.bean.TaskRunData;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
+import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 import tutorials4j.framework.schedule.core.repository.TaskRepository;
 
@@ -34,7 +35,7 @@ import tutorials4j.framework.schedule.core.repository.TaskRepository;
 @RequiredArgsConstructor
 public class ScheduleTaskManager implements SchedulingConfigurer {
   private final TaskRepository<?> taskRepository;
-  private final List<ChangeStatusEventConsumer> consumers;
+  private final EventConsumerContainer consumers;
 
   private ScheduledTaskRegistrar scheduledTaskRegistrar;
   private final ConcurrentMap<String, ScheduledTaskData> triggerTaskMap = new ConcurrentHashMap<>();
@@ -64,12 +65,15 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
   }
 
   private synchronized void doAddTask(Task task) {
+    if (log.isDebugEnabled()) {
+      log.debug("[SCHEDULE-CORE] Add Schedule Task. taskCode={}", task.getTaskCode());
+    }
+
     if (isDestroy) {
       log.warn("Instance is destroyed, SKIP!!!");
       return;
     }
-
-    Assert.notNull(scheduledTaskRegistrar, "task must not be null");
+    Assert.notNull(scheduledTaskRegistrar, "scheduledTaskRegistrar must not be null");
 
     String taskCode = task.getTaskCode();
     if (triggerTaskMap.containsKey(taskCode)) {
@@ -77,7 +81,13 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     }
 
     String classSimpleName = task.getClassSimpleName();
-    TaskRunner taskRunner = SpringUtil.getBean(classSimpleName, TaskRunner.class);
+    TaskRunner taskRunner = null;
+    try {
+      taskRunner = SpringUtil.getBean(classSimpleName, TaskRunner.class);
+    } catch (BeansException e) {
+      log.error("获取bean异常, classSimpleName = {}, errorMessage={}", classSimpleName, e.getMessage());
+    }
+
     if (taskRunner == null) {
       log.warn("Spring容器中找不到任务Bean，或者任务类未实现TaskRunner接口， className={}", classSimpleName);
       return;
@@ -99,7 +109,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
             .triggerTask(triggerTask)
             .build();
     triggerTaskMap.put(taskCode, container);
-    createEvent(taskCode);
+    createEvent(runnableDecorator.buildTaskRuntimeData().build());
   }
 
   public void cancelTask(String taskCode) {
@@ -113,21 +123,32 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
       return;
     }
 
-    doCancelTask(taskCode);
-    cancelEvent(taskCode);
+    ScheduledTaskData scheduledTaskData = doCancelTask(taskCode);
+    if (scheduledTaskData != null) {
+      cancelEvent(scheduledTaskData.runner().buildTaskRuntimeData().build());
+    }
   }
 
-  public List<ChangeStatusEventConsumer> getChangeStatusEventConsumers() {
-    return Collections.unmodifiableList(this.consumers);
-  }
-
-  public TaskRunData getLastTaskRunData(String taskCode) {
+  public Task getTask(String taskCode) {
     ScheduledTaskData data = triggerTaskMap.get(taskCode);
     if (data == null) {
       return null;
     }
 
-    return data.runner().getLastTaskRunData();
+    return data.runner().getTask();
+  }
+
+  public TaskRuntimeData getLastTaskRuntimeData(String taskCode) {
+    ScheduledTaskData data = triggerTaskMap.get(taskCode);
+    if (data == null) {
+      return null;
+    }
+
+    return data.runner().getLastTaskRuntimeData();
+  }
+
+  public boolean isTaskRunning(String taskCode) {
+    return triggerTaskMap.containsKey(taskCode);
   }
 
   public Collection<String> getTaskCodes() {
@@ -152,57 +173,51 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     initTasks();
   }
 
-  private synchronized void doCancelTask(String taskCode) {
+  private synchronized ScheduledTaskData doCancelTask(String taskCode) {
     ScheduledTaskData container = triggerTaskMap.get(taskCode);
     if (container == null) {
-      return;
+      return null;
     }
 
     triggerTaskMap.remove(taskCode);
     container.scheduledTask().cancel();
+    return container;
   }
 
-  private void createEvent(String taskCode) {
-    notifyListeners(taskCode, TaskStatusEnum.CREATED, null, null);
+  private void createEvent(TaskRuntimeData data) {
+    notifyConsumers(data, TaskStatusEnum.CREATED);
   }
 
-  private void cancelEvent(String taskCode) {
-    notifyListeners(taskCode, TaskStatusEnum.CANCELLED, null, null);
+  private void cancelEvent(TaskRuntimeData data) {
+    notifyConsumers(data, TaskStatusEnum.CANCELLED);
   }
 
-  private void stopEvent(String taskCode, String message) {
-    doCancelTask(taskCode);
-    notifyListeners(taskCode, TaskStatusEnum.STOPPED, message, null);
+  private void stopEvent(TaskRuntimeData data) {
+    doCancelTask(data.taskCode());
+    notifyConsumers(data, TaskStatusEnum.STOPPED);
   }
 
-  private void failureEvent(String taskCode, Throwable throwable) {
-    notifyListeners(taskCode, TaskStatusEnum.EXCEPTION, null, throwable);
+  private void failureEvent(TaskRuntimeData data) {
+    notifyConsumers(data, TaskStatusEnum.EXCEPTION);
   }
 
-  private void completeEvent(String taskCode, TaskRunData taskRunData) {
-    notifyListeners(taskCode, TaskStatusEnum.COMPLETED, null, null);
+  private void completeEvent(TaskRuntimeData data) {
+    notifyConsumers(data, TaskStatusEnum.COMPLETED);
   }
 
-  private void startEvent(String taskCode) {
-    notifyListeners(taskCode, TaskStatusEnum.STARTED, null, null);
+  private void startEvent(TaskRuntimeData data) {
+    notifyConsumers(data, TaskStatusEnum.STARTED);
   }
 
-  private void notifyListeners(
-      String taskCode, TaskStatusEnum taskStatus, String message, Throwable throwable) {
+  private void notifyConsumers(TaskRuntimeData data, TaskStatusEnum taskStatus) {
     ChangeStatusEvent event =
         ChangeStatusEvent.builder()
             .timestamp(Instant.now())
-            .taskCode(taskCode)
-            .lastTaskRunData(getLastTaskRunData(taskCode))
+            .taskCode(data.taskCode())
+            .taskRuntimeData(data)
             .taskStatus(taskStatus)
-            .message(message)
-            .throwable(throwable)
             .build();
 
-    try {
-      consumers.forEach(consumer -> consumer.consumer(event));
-    } catch (Exception e) {
-      log.error("执行任务状态监听异常，taskCode={}, taskStatus={}", taskCode, taskStatus, e);
-    }
+    this.consumers.notifyConsumers(event);
   }
 }

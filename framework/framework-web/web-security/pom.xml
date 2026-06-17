@@ -30,6 +30,12 @@
         <dependency>
             <groupId>com.warrenstrange</groupId>
             <artifactId>googleauth</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

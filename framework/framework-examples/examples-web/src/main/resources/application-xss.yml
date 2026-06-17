@@ -1,7 +1,8 @@
 tutorials4j:
   web:
-    security:
-      xss:
-        enabled: true
-        filter:
-          url-patterns: /xss-demo/*
+    xss:
+      enabled: true
+      filter:
+        url-patterns: /xss-demo/*
+        name: xssFilter
+

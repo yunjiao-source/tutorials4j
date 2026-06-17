@@ -28,6 +28,8 @@ tutorials4j:
 
   web:
     security:
+      enabled: true
+
       idempotent:
         include-path-patterns: /annotation/**
       access-limited:

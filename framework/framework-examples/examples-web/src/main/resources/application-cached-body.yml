@@ -1,3 +1,7 @@
-tutorials4j.web.rest:
-  cached-body:
-    url-patterns: /cached-body/cached
+tutorials4j:
+  web:
+    cached-body:
+      enabled: true
+      filter:
+        url-patterns: /cached-body/cached
+        name: cachedBodyFilter

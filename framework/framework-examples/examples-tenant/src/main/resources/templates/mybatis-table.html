@@ -279,7 +279,7 @@
   // 通用ajax请求，自动携带租户头 X-Tenant-Code
   function ajaxRequest(method, url, data = null, contentType = 'application/json') {
     return new Promise((resolve, reject) => {
-      const options = {
+      const requestOptions = {
         url: url,
         type: method,
         headers: {
@@ -302,10 +302,10 @@
         }
       };
       if (data && (method === 'POST' || method === 'PUT')) {
-        options.data = JSON.stringify(data);
-        options.contentType = contentType;
+        requestOptions.data = JSON.stringify(data);
+        requestOptions.contentType = contentType;
       }
-      $.ajax(options);
+      $.ajax(requestOptions);
     });
   }
 

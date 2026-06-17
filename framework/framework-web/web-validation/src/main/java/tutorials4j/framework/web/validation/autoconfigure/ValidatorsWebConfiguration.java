@@ -17,7 +17,7 @@ import tutorials4j.framework.web.validation.LocalDateTimeValidator;
 public class ValidatorsWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-VALIDATION] Web Validation Configuration");
+    log.debug("[WEB-VALIDATION] Validation Web Configuration");
   }
 
   @Bean

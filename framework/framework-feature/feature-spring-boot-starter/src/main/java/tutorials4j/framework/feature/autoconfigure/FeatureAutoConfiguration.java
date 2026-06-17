@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.feature.captcha.autoconfigure.CaptchaFeatureConfiguration;
 import tutorials4j.framework.feature.crypto.autoconfigure.CryptoFeatureConfiguration;
+import tutorials4j.framework.feature.schedule.autoconfigure.ScheduleFeatureConfiguration;
 import tutorials4j.framework.feature.signin.autoconfigure.SignInFeatureConfiguration;
 import tutorials4j.framework.feature.totp.autoconfigure.TotpFeatureConfiguration;
 
@@ -21,7 +22,8 @@ import tutorials4j.framework.feature.totp.autoconfigure.TotpFeatureConfiguration
   SignInFeatureConfiguration.class,
   CaptchaFeatureConfiguration.class,
   CryptoFeatureConfiguration.class,
-  TotpFeatureConfiguration.class
+  TotpFeatureConfiguration.class,
+  ScheduleFeatureConfiguration.class
 })
 public class FeatureAutoConfiguration {
   @PostConstruct

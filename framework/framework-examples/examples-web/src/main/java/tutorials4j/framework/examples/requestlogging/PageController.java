@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class PageController {
-  @GetMapping("requestlogging/simple")
+  @GetMapping("simple")
   public String simple() {
     return "requestlogging/simple";
   }

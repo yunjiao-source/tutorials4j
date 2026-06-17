@@ -1,13 +1,16 @@
 tutorials4j:
   web:
-    logging:
-      request:
+    request-logging:
+      enabled: true
+
+      filter:
+        url-patterns: /request-logging/*
+        name: requestLoggingFilter
+      options:
         include-timestamp: true
         include-query-string: true
         include-client-info: true
         include-headers: true
         include-payload: true
-        filter:
-          url-patterns: /request-logging/*
-          order: 1
+
 

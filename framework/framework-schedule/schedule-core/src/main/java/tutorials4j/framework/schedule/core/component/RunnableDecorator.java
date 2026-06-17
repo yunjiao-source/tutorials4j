@@ -1,22 +1,16 @@
 package tutorials4j.framework.schedule.core.component;
 
-import com.google.common.collect.EvictingQueue;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import lombok.Getter;
-import org.springframework.lang.Nullable;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.support.CronTrigger;
 import tutorials4j.framework.schedule.core.bean.Task;
-import tutorials4j.framework.schedule.core.bean.TaskRunData;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
+import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
 
 /**
  * TODO
@@ -24,20 +18,21 @@ import tutorials4j.framework.schedule.core.bean.TaskRunner;
  * @author Yun Jiao
  */
 public class RunnableDecorator implements Runnable, Trigger {
-  private final Task task;
+  private static final AtomicInteger NO = new AtomicInteger(0);
+  @Getter private final Task task;
   private final TaskRunner runner;
   private CronTrigger cronTrigger;
 
-  private Consumer<String> startEvent;
-  private BiConsumer<String, TaskRunData> completeEvent;
+  @Getter private TaskRuntimeData lastTaskRuntimeData;
 
-  private BiConsumer<String, String> stopEvent;
+  private Consumer<TaskRuntimeData> startEvent;
+  private Consumer<TaskRuntimeData> completeEvent;
 
-  private BiConsumer<String, Throwable> failureEvent;
+  private Consumer<TaskRuntimeData> stopEvent;
 
-  private final Queue<TaskRunData> taskRunDataHistory = EvictingQueue.create(30);
+  private Consumer<TaskRuntimeData> failureEvent;
 
-  @Getter private TaskRunData lastTaskRunData;
+  private final String lotNo;
 
   private final AtomicInteger totalCount = new AtomicInteger(0);
 
@@ -47,16 +42,16 @@ public class RunnableDecorator implements Runnable, Trigger {
     this.task = task;
     this.runner = runner;
     this.cronTrigger = new CronTrigger(task.getCron());
+    this.lotNo = String.format("%06d - %s", NO.incrementAndGet(), Instant.now());
   }
 
-  @Nullable
   @Override
   public Instant nextExecution(TriggerContext triggerContext) {
     Integer maxExecutionCount = task.getMaxExecutionCount();
     if (maxExecutionCount != null && maxExecutionCount <= totalCount.get()) {
       if (stopEvent != null) {
         String message = String.format("已最大超过最大执行数量，将停止任务，最大执行数量=%s", maxExecutionCount);
-        stopEvent.accept(task.getTaskCode(), message);
+        stopEvent.accept(buildTaskRuntimeData().message(message).build());
       }
       return null;
     }
@@ -65,7 +60,7 @@ public class RunnableDecorator implements Runnable, Trigger {
     if (maxFailureCount != null && maxFailureCount <= totalFailureCount.get()) {
       if (stopEvent != null) {
         String message = String.format("已最大超过最大失败数量，将停止任务，最大执行数量=%s", maxFailureCount);
-        stopEvent.accept(task.getTaskCode(), message);
+        stopEvent.accept(buildTaskRuntimeData().message(message).build());
       }
       return null;
     }
@@ -79,12 +74,12 @@ public class RunnableDecorator implements Runnable, Trigger {
     if (dueDate != null && dueDate.isBefore(nextExecutionTime)) {
       if (stopEvent != null) {
         String message = String.format("已超过任务结束日期，将停止任务，任务结束日期=%s", dueDate);
-        stopEvent.accept(task.getTaskCode(), message);
+        stopEvent.accept(buildTaskRuntimeData().message(message).build());
       }
       return null;
     }
 
-    if (totalCount.get() == 0) {
+    if (totalCount.get() == 0 && task.getInitialDelay() != null) {
       // 第一次执行, 添加延时
       return nextExecutionTime.plusMillis(task.getInitialDelay().toMillis());
     } else {
@@ -95,65 +90,68 @@ public class RunnableDecorator implements Runnable, Trigger {
 
   @Override
   public void run() {
-    String taskCode = task.getTaskCode();
-    TaskRunData.TaskRunDataBuilder taskRunDataBuilder =
-        TaskRunData.builder().timestamp(Instant.now());
-    taskRunDataBuilder
-        .startTime(Instant.now())
-        .totalCount(totalCount.get())
-        .totalFailureCount(totalFailureCount.get());
+    TaskRuntimeData.TaskRuntimeDataBuilder taskRuntimeDataBuilder = buildTaskRuntimeData();
     if (startEvent != null) {
-      startEvent.accept(taskCode);
+      startEvent.accept(taskRuntimeDataBuilder.startTime(Instant.now()).build());
     }
 
     try {
       runner.run(task.getMetadata());
-      lastTaskRunData = taskRunDataBuilder.endTime(Instant.now()).build();
-      taskRunDataHistory.add(lastTaskRunData);
-
       if (completeEvent != null) {
-        completeEvent.accept(taskCode, lastTaskRunData);
+        completeEvent.accept(taskRuntimeDataBuilder.endTime(Instant.now()).build());
       }
     } catch (Throwable t) {
-      lastTaskRunData = taskRunDataBuilder.error(t.getMessage()).build();
-      taskRunDataHistory.add(lastTaskRunData);
-
       if (failureEvent != null) {
-        failureEvent.accept(taskCode, t);
+        failureEvent.accept(taskRuntimeDataBuilder.throwable(t).build());
       }
       throw t;
     }
   }
 
-  public RunnableDecorator onStart(Consumer<String> consumer) {
+  public RunnableDecorator onStart(Consumer<TaskRuntimeData> consumer) {
     this.startEvent =
-        s -> {
+        data -> {
           totalCount.incrementAndGet();
-          consumer.accept(s);
+          lastTaskRuntimeData = data;
+          consumer.accept(data);
         };
     return this;
   }
 
-  public RunnableDecorator onStop(BiConsumer<String, String> consumer) {
-    this.stopEvent = consumer;
+  public RunnableDecorator onStop(Consumer<TaskRuntimeData> consumer) {
+    this.stopEvent =
+        data -> {
+          lastTaskRuntimeData = data;
+          consumer.accept(data);
+        };
     return this;
   }
 
-  public RunnableDecorator onComplete(BiConsumer<String, TaskRunData> consumer) {
-    this.completeEvent = consumer;
+  public RunnableDecorator onComplete(Consumer<TaskRuntimeData> consumer) {
+    this.completeEvent =
+        data -> {
+          lastTaskRuntimeData = data;
+          consumer.accept(data);
+        };
     return this;
   }
 
-  public RunnableDecorator onFailure(BiConsumer<String, Throwable> consumer) {
+  public RunnableDecorator onFailure(Consumer<TaskRuntimeData> consumer) {
     this.failureEvent =
-        (s, t) -> {
+        data -> {
           totalFailureCount.incrementAndGet();
-          consumer.accept(s, t);
+          lastTaskRuntimeData = data;
+          consumer.accept(data);
         };
     return this;
   }
 
-  public List<TaskRunData> getTaskStatus() {
-    return new ArrayList<>(taskRunDataHistory);
+  public TaskRuntimeData.TaskRuntimeDataBuilder buildTaskRuntimeData() {
+    return TaskRuntimeData.builder()
+        .taskCode(task.getTaskCode())
+        .lotNo(lotNo)
+        .totalCount(totalCount.get())
+        .totalFailureCount(totalFailureCount.get())
+        .timestamp(Instant.now());
   }
 }

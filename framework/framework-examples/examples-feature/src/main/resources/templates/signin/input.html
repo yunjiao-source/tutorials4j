@@ -331,18 +331,18 @@
           }
           headers['X-Sign-In-Account'] = account;
         }
-        let options = {
+        let requestOptions = {
           method: method,
           headers: headers,
         };
         if (method === 'POST' && bodyData) {
-          options.body = bodyData;
+          requestOptions.body = bodyData;
         } else if (method === 'GET' && params && Object.keys(params).length) {
           const query = new URLSearchParams(params).toString();
           url += '?' + query;
         } else if (method === 'POST' && params) {
           // 处理常规POST表单数据
-          options.body = new URLSearchParams(params).toString();
+          requestOptions.body = new URLSearchParams(params).toString();
         }
         $.ajax({
           url: url,

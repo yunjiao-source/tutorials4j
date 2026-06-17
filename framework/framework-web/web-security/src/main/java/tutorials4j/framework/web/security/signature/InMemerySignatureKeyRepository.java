@@ -2,7 +2,7 @@ package tutorials4j.framework.web.security.signature;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import tutorials4j.framework.web.security.properties.SecurityWebProperties;
+import tutorials4j.framework.web.security.properties.SignatureWebProperties;
 
 /**
  * 基于内存 Map 的简单签名密钥仓库实现。
@@ -20,8 +20,8 @@ public class InMemerySignatureKeyRepository implements SignatureKeyRepository {
    *
    * @param properties
    */
-  public InMemerySignatureKeyRepository(SecurityWebProperties properties) {
-    cacheMap.putAll(properties.getSignature().getKeys());
+  public InMemerySignatureKeyRepository(SignatureWebProperties properties) {
+    cacheMap.putAll(properties.getKeys());
   }
 
   @Override

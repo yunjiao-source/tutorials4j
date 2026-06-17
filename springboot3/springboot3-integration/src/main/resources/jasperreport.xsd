@@ -4175,7 +4175,7 @@
 
     <element name="chartLegend">
         <annotation>
-            <documentation>Specifies layout options for the legend of a chart.</documentation>
+            <documentation>Specifies layout requestOptions for the legend of a chart.</documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -4439,7 +4439,7 @@
 
     <element name="piePlot">
         <annotation>
-            <documentation>Plot options for a <elem>pieChart</elem></documentation>
+            <documentation>Plot requestOptions for a <elem>pieChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -4698,7 +4698,7 @@
 
     <element name="plot">
         <annotation>
-            <documentation>Defines generic plot options for charts</documentation>
+            <documentation>Defines generic plot requestOptions for charts</documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -4795,7 +4795,7 @@
 
     <element name="pie3DPlot">
         <annotation>
-            <documentation>Defines plot options for a <elem>pie3DChart</elem></documentation>
+            <documentation>Defines plot requestOptions for a <elem>pie3DChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -4952,7 +4952,7 @@
 
     <element name="barPlot">
         <annotation>
-            <documentation>Plot options for a <elem>barChart</elem></documentation>
+            <documentation>Plot requestOptions for a <elem>barChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5171,7 +5171,7 @@
 
     <element name="bar3DPlot">
         <annotation>
-            <documentation>Defines plot options for a bar chart with 3D effect</documentation>
+            <documentation>Defines plot requestOptions for a bar chart with 3D effect</documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5325,7 +5325,7 @@
 
     <element name="linePlot">
         <annotation>
-            <documentation>Defines plot options for a <elem>lineChart</elem></documentation>
+            <documentation>Defines plot requestOptions for a <elem>lineChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5446,7 +5446,7 @@
 
     <element name="areaPlot">
         <annotation>
-            <documentation>Defines rendering options for an <elem>areaChart</elem></documentation>
+            <documentation>Defines rendering requestOptions for an <elem>areaChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5491,7 +5491,7 @@
 
     <element name="scatterPlot">
         <annotation>
-            <documentation>Specifies the plot options for a <elem>scatterChart</elem></documentation>
+            <documentation>Specifies the plot requestOptions for a <elem>scatterChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5616,7 +5616,7 @@
 
     <element name="bubblePlot">
         <annotation>
-            <documentation>Plot options for a <elem>bubbleChart</elem></documentation>
+            <documentation>Plot requestOptions for a <elem>bubbleChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5632,7 +5632,7 @@
             </sequence>
             <attribute name="scaleType" use="optional">
                 <annotation>
-                    <documentation>Scale options for the bubble chart items</documentation>
+                    <documentation>Scale requestOptions for the bubble chart items</documentation>
                 </annotation>
                 <simpleType>
                     <restriction base="string">
@@ -5721,7 +5721,7 @@
 
     <element name="timeSeriesPlot">
         <annotation>
-            <documentation>Defines plot options for a <elem>timeSeriesChart</elem></documentation>
+            <documentation>Defines plot requestOptions for a <elem>timeSeriesChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5816,7 +5816,7 @@
 
     <element name="highLowPlot">
         <annotation>
-            <documentation>Plot options for a <elem>highLowChart</elem></documentation>
+            <documentation>Plot requestOptions for a <elem>highLowChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5918,7 +5918,7 @@
 
     <element name="candlestickPlot">
         <annotation>
-            <documentation>Plot options for a <elem>candlestickChart</elem></documentation>
+            <documentation>Plot requestOptions for a <elem>candlestickChart</elem></documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -5975,7 +5975,7 @@
 
     <element name="meterPlot">
         <annotation>
-            <documentation>Plot options for a <elem>meterChart</elem>.</documentation>
+            <documentation>Plot requestOptions for a <elem>meterChart</elem>.</documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -6159,7 +6159,7 @@
 
     <element name="thermometerPlot">
         <annotation>
-            <documentation>Plot options for a <elem>thermometerChart</elem>.</documentation>
+            <documentation>Plot requestOptions for a <elem>thermometerChart</elem>.</documentation>
         </annotation>
         <complexType>
             <sequence>
@@ -6277,7 +6277,7 @@
                 different scales.  Each chart will have its own axis showing its range, and it is
                 highly recommended to color the data series and the axis to match.
                 <br/><br/>
-                The plot options of the nested reports are ignored - the plot is configured via the
+                The plot requestOptions of the nested reports are ignored - the plot is configured via the
                 multiAxisPlot.  The only exception to this is any seriesColors specified in the
                 plot of a nested report, which will be used to color a specific series in that
                 report.  In this case the seriesOrder in the seriesColor is an absolute specification
@@ -6294,8 +6294,8 @@
 
     <element name="multiAxisPlot">
         <annotation>
-            <documentation>Plot options for a <elem>multiAxisChart</elem>.
-                The set plot options will be shared by all the charts inside this plot, and the
+            <documentation>Plot requestOptions for a <elem>multiAxisChart</elem>.
+                The set plot requestOptions will be shared by all the charts inside this plot, and the
                 nested charts are specified via the <elem>axis</elem> tags.
                 All nested charts must share the same type of domain axis - a category, a numeric (xy)
                 or a time based axis.

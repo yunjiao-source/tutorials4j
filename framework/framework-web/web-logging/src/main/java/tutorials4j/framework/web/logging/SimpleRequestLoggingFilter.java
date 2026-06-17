@@ -1,9 +1,8 @@
 package tutorials4j.framework.web.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import tutorials4j.framework.web.logging.LoggingWebProperties.RequestOptions;
+import tutorials4j.framework.web.logging.properties.RequestLoggingWebProperties.RequestOptions;
 
 /**
  * 默认的请求日志过滤器，扩展自 Spring 的 {@link CommonsRequestLoggingFilter}。
@@ -25,17 +24,10 @@ import tutorials4j.framework.web.logging.LoggingWebProperties.RequestOptions;
  * @see CommonsRequestLoggingFilter
  * @see RequestOptions
  */
-@RequiredArgsConstructor
 public class SimpleRequestLoggingFilter extends CommonsRequestLoggingFilter {
-  private final RequestOptions options;
-
   @Override
   protected String createMessage(HttpServletRequest request, String prefix, String suffix) {
-    String newsuffix = suffix;
-    if (options.isIncludeTimestamp()) {
-      newsuffix = ", timestamp=" + System.currentTimeMillis() + suffix;
-    }
-    return super.createMessage(request, prefix, newsuffix);
+    return super.createMessage(request, prefix, suffix);
   }
 
   @Override
@@ -48,15 +40,15 @@ public class SimpleRequestLoggingFilter extends CommonsRequestLoggingFilter {
    *
    * <p>将 {@link RequestOptions} 中的各项配置应用到当前过滤器实例。
    */
-  public void init() {
-    setIncludeClientInfo(options.isIncludeClientInfo());
-    setIncludeClientInfo(options.isIncludeClientInfo());
-    setIncludeHeaders(options.isIncludeHeaders());
-    setIncludePayload(options.isIncludePayload());
-    setMaxPayloadLength(options.getMaxPayloadLength());
-    setBeforeMessagePrefix(options.getBeforeMessagePrefix());
-    setBeforeMessageSuffix(options.getBeforeMessageSuffix());
-    setAfterMessagePrefix(options.getAfterMessagePrefix());
-    setAfterMessageSuffix(options.getAfterMessageSuffix());
+  public void init(RequestOptions requestOptions) {
+    setIncludeClientInfo(requestOptions.isIncludeClientInfo());
+    setIncludeClientInfo(requestOptions.isIncludeClientInfo());
+    setIncludeHeaders(requestOptions.isIncludeHeaders());
+    setIncludePayload(requestOptions.isIncludePayload());
+    setMaxPayloadLength(requestOptions.getMaxPayloadLength());
+    setBeforeMessagePrefix(requestOptions.getBeforeMessagePrefix());
+    setBeforeMessageSuffix(requestOptions.getBeforeMessageSuffix());
+    setAfterMessagePrefix(requestOptions.getAfterMessagePrefix());
+    setAfterMessageSuffix(requestOptions.getAfterMessageSuffix());
   }
 }

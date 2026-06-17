@@ -1,7 +1,5 @@
 package tutorials4j.framework.web.security.properties;
 
-import java.util.HashMap;
-import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -16,6 +14,8 @@ import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_SECURITY)
 public class SecurityWebProperties {
+  private boolean enabled = false;
+
   /** 幂等配置 */
   @NestedConfigurationProperty
   private HandlerInterceptorOptions idempotent = new HandlerInterceptorOptions();
@@ -23,15 +23,4 @@ public class SecurityWebProperties {
   /** 访问限制 */
   @NestedConfigurationProperty
   private HandlerInterceptorOptions accessLimited = new HandlerInterceptorOptions();
-
-  private SignatureOptions signature = new SignatureOptions();
-
-  @Data
-  public static class SignatureOptions {
-    @NestedConfigurationProperty
-    private HandlerInterceptorOptions interceptor = new HandlerInterceptorOptions();
-
-    private String nonceRedisKeyPrefix = "signature:nonce:";
-    private Map<String, String> keys = new HashMap<>();
-  }
 }

@@ -2,6 +2,7 @@ package tutorials4j.framework.web.client.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
@@ -10,10 +11,11 @@ import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequest;
+import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.web.client.ClientUtils;
-import tutorials4j.framework.web.client.ClientWebProperties;
-import tutorials4j.framework.web.client.ClientWebProperties.RetryOptions;
 import tutorials4j.framework.web.client.LoggingClientHttpRequestInterceptor;
+import tutorials4j.framework.web.client.properties.ClientWebProperties;
+import tutorials4j.framework.web.client.properties.ClientWebProperties.RetryOptions;
 
 /**
  * TODO
@@ -22,11 +24,14 @@ import tutorials4j.framework.web.client.LoggingClientHttpRequestInterceptor;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(
+    prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT,
+    name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties({ClientWebProperties.class})
 public class ClientWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-CLIENT] Web Client Configuration");
+    log.debug("[WEB-CLIENT] Client Web Configuration");
   }
 
   @Bean
@@ -47,7 +52,7 @@ public class ClientWebConfiguration {
   }
 
   @Configuration(proxyBeanMethods = false)
-  public static class RestClientConfiguration {
+  public static class RestClientWebConfiguration {
     @PostConstruct
     public void postConstruct() {
       log.debug("[WEB-CLIENT] Rest Client Configuration");
@@ -72,7 +77,7 @@ public class ClientWebConfiguration {
   }
 
   @Configuration(proxyBeanMethods = false)
-  public static class WebClientConfiguration {
+  public static class WebClientWebConfiguration {
     @PostConstruct
     public void postConstruct() {
       log.debug("[WEB-CLIENT] Web Client Configuration");
