@@ -1,211 +1,86 @@
+
+
 # tutorials4j
 
-Java 教程
+Java 教程项目
 
-## 项目列表
+## 项目简介
 
-| 组件            | 作用              |
-|---------------|-----------------|
-| `framework`   | 基于Spring Boot的框架 |
-| `assembly`    | 基于`framework`框架的集成模块 |
-| `java21`      | Java21示例项目      |
-| `springboot3` | Spring Boot3的示例项目 |
-| `springboot4` | Spring Boot4的示例项目 |
-| `springcloud` | Spring Cloud的示例项目 |
+tutorials4j 是一个基于 Spring Boot 的 Java 教程项目，提供丰富的示例代码和实用的企业级框架组件。
 
+## 核心模块
 
-## 公众号
+| 模块 | 说明 |
+|------|------|
+| framework | 核心框架，包含缓存、验证码、加解密、数据等功能 |
+| framework-examples | 各功能模块的使用示例 |
+| assembly | 集成模块，组合多个框架组件 |
+| java21 | Java 21 新特性示例 |
+| springboot3 | Spring Boot 3 示例 |
+| springboot4 | Spring Boot 4 示例 |
+| springcloud | Spring Cloud 示例 |
 
-如果对我的项目代码感兴趣，请关注我的公众号，有很多文章等着你
+## 框架功能
 
+### 缓存模块 (framework-cache)
+- Caffeine 本地缓存
+- Redis 分布式缓存
+- Redisson 分布式锁
+- 多级缓存支持
 
-![杨运交](qrcode_for_gh_31209a11b93e_258.jpg)
+### 验证码模块 (framework-captcha)
+- Hutool 图形验证码
+- Tianai 行为验证码（滑块、旋转、点击等）
+- 验证码 Web 防护
 
+### 加解密模块 (framework-crypto)
+- 对称加密（AES、DES、SM4）
+- 非对称加密（RSA、SM2）
+- 摘要算法（SHA256、SM3、HMac）
 
-## 示例图
+### 数据模块 (framework-data)
+- JPA/Hibernate 支持
+- MyBatis-Plus 支持
+- 多数据源路由
+- 雪花算法 ID 生成
 
-### 功能模块示例（framework/framework-examples/examples-feature）
+### 功能模块 (framework-feature)
+- 签到系统
+- 任务调度
+- TOTP 两步验证
 
-#### profile:signin
+## 技术栈
 
-> 签到示例
-![签到示例](docs/images/001.jpg )
+- Java 21
+- Spring Boot 3/4
+- Spring Cloud
+- Redis
+- MySQL
+- Maven
 
-> 签到记录查询示例
-![签到记录查询示例](docs/images/023.jpg)
+## 快速开始
 
+```bash
+# 克隆项目
+git clone https://gitee.com/yunjiao-source/tutorials4j.git
 
-#### profile:captchaendpoint
+# 构建项目
+cd tutorials4j
+mvn clean install -DskipTests
+```
 
-> hutool验证码接口
-![hutool验证码接口](docs/images/008.jpg)
-![hutool验证码接口](docs/images/009.jpg)
-![hutool验证码接口](docs/images/010.jpg)
-![hutool验证码接口](docs/images/011.jpg)
+## 示例运行
 
-> tianai验证码接口
-![tianai验证码接口](docs/images/012.jpg)
-![tianai验证码接口](docs/images/013.jpg)
-![tianai验证码接口](docs/images/014.jpg)
+各示例模块通过 Spring Profile 区分运行：
 
+```bash
+# 运行缓存示例
+java -jar examples-cache.jar --spring.profiles.active=cacheable
 
-#### profile:captchatianaiendpoint
+# 运行验证码示例
+java -jar examples-captcha.jar --spring.profiles.active=simple
+```
 
-> tianai验证码官方标准接口
-![hutool验证码接口](docs/images/015.jpg)
-![hutool验证码接口](docs/images/016.jpg)
-![hutool验证码接口](docs/images/017.jpg)
-![hutool验证码接口](docs/images/018.jpg)
+## License
 
-#### profile:captchafilter
-
-> 基于过滤器的验证码校验
-![博客文章提交](docs/images/019.jpg)
-
-
-#### profile:crypto-api
-
-> api请求，响应加解密
-![api请求，响应加解密](docs/images/020.jpg)
-
-#### profile:totp
-
-> 两步验证
-![两步验证](docs/images/032.jpg)
-
-> 博客发布(2fa)
-![博客发布(2fa)](docs/images/033.jpg)
-
-
-#### profile:schedule
-
-> 任务调度管理
-![任务调度管理](docs/images/041.jpg)
-
-> 任务管理
-![任务管理](docs/images/043.jpg)
-
-> 任务日志
-![任务日志](docs/images/043.jpg)
-
-### 缓存模块示例（framework/framework-examples/examples-cache）
-
-#### profile:cacheable
-
-> @Cacheable 示例
-![@Cacheable 示例](docs/images/002.jpg)
-
-#### profile:lock
-
-> Redisson 锁示例
-![Redisson 锁示例](docs/images/003.jpg)
-
-> Redis 锁示例
-![Redis 锁示例](docs/images/004.jpg)
-
-> 本地（JVM） 锁
-![本地（JVM） 锁](docs/images/005.jpg)
-
-#### profile:template
-
-> 缓存模版
-![本地（JVM） 锁](docs/images/006.jpg)
-
-#### profile:multi-level
-
-> 缓存模版
-![本地（JVM） 锁](docs/images/007.jpg)
-
-### 验证码模块示例（framework/framework-examples/examples-captcha）
-
-#### profile:simple
-
-> 验证码数据
-![验证码数据](docs/images/038.jpg)
-
-
-### 加解密模块示例（framework/framework-examples/examples-crypto）
-
-#### profile:simple
-
-> 加密/解密 工具
-![加密/解密 工具](docs/images/039.jpg)
-
-> 摘要计算
-![摘要计算](docs/images/040.jpg)
-
-### 数据模块示例（framework/framework-examples/examples-data）
-
-#### profile:jpa
-
-> 基于jpa的查询
-![api请求，响应加解密](docs/images/021.jpg)
-
-
-#### profile:mybatis
-
-> 基mybatis的curd
-![基mybatis的curd](docs/images/022.jpg)
-
-
-### 多租户模块示例（framework/framework-examples/examples-tenant）
-
-#### profile:cache
-
-> Spring Cache 多租户演示
-![Spring Cache 多租户演示](docs/images/024.jpg)
-
-#### profile:jpa-database
-
-> 多租户用户管理系统(JPA+数据库隔离)
-![多租户用户管理系统(JPA+数据库隔离)](docs/images/025.jpg)
-
-> 多租户用户管理系统(JPA+表隔离)
-![多租户用户管理系统(JPA+表隔离)](docs/images/026.jpg)
-
-
-#### profile:mybatis-database
-
-> 多租户用户管理系统(MYBATIS+表隔离)
-![多租户用户管理系统(MYBATIS+表隔离)](docs/images/027.jpg)
-
-> 多租户用户管理系统(MYBATIS+数据库隔离)
-![多租户用户管理系统(MYBATIS+数据库隔离)](docs/images/028.jpg)
-
-### web模块示例（framework/framework-examples/examples-web）
-
-#### profile:annotation
-
-> 接口防护 示例
-![接口防护 示例](docs/images/029.jpg)
-
-#### profile:cached-body
-
-> 请求体缓存演示
-![请求体缓存演示](docs/images/030.jpg)
-
-#### profile:client
-
-> 三种HTTP客户端对比
-![三种HTTP客户端对比](docs/images/031.jpg)
-
-
-#### profile:request-logging
-
-> 请求日志 示例
-![请求日志 示例](docs/images/034.jpg)
-
-#### profile:signature
-
-> 签名支付示例 示例
-![签名支付示例 示例](docs/images/035.jpg)
-
-#### profile:trace
-
-> Trace API 测试控制台
-![Trace API 测试控制台](docs/images/036.jpg)
-
-#### profile:xss
-
-> XSS 防护演示
-![XSS 防护演示](docs/images/037.jpg)
+Apache License 2.0
