@@ -1,12 +1,8 @@
 package tutorials4j.framework.feature.schedule.domain;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Duration;
@@ -17,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import tutorials4j.framework.common.core.entity.DataStatusEnum;
 import tutorials4j.framework.data.hibernate.domain.BaseStatusEntity;
 import tutorials4j.framework.schedule.core.bean.Task;
@@ -43,10 +41,8 @@ public class JobEntity extends BaseStatusEntity implements Task {
   @Column(length = 254)
   private String description;
 
-  @ElementCollection
-  @CollectionTable(name = "feat_job_metadata", joinColumns = @JoinColumn(name = "job_id"))
-  @MapKeyColumn(name = "meta_key")
-  @Column(name = "meta_value")
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(columnDefinition = "json")
   private Map<String, String> metadata;
 
   private Duration initialDelay;
@@ -59,7 +55,11 @@ public class JobEntity extends BaseStatusEntity implements Task {
 
   @Override
   public void setEnabled(boolean enabled) {
-    this.setDataStatus(DataStatusEnum.NORMAL);
+    if (enabled) {
+      this.setDataStatus(DataStatusEnum.NORMAL);
+    } else {
+      this.setDataStatus(DataStatusEnum.DISABLED);
+    }
   }
 
   @Override

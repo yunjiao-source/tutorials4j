@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import tutorials4j.framework.common.core.entity.YesNoEnum;
 import tutorials4j.framework.data.hibernate.domain.BaseIdEntity;
-import tutorials4j.framework.data.hibernate.domain.DataStatusAttributeConverter;
 import tutorials4j.framework.data.hibernate.domain.YesNoEnumAttributeConverter;
 import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 
@@ -26,7 +25,7 @@ import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 @Table(name = "feat_job_log")
 @EqualsAndHashCode(callSuper = false)
 public class JobLogEntity extends BaseIdEntity {
-  @Convert(converter = DataStatusAttributeConverter.class)
+  @Convert(converter = TaskStatusEnumAttributeConverter.class)
   private TaskStatusEnum taskStatus;
 
   @Column(length = 64)

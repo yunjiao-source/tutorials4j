@@ -1,5 +1,6 @@
 package tutorials4j.framework.feature.schedule.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public class JobEndpoint {
 
   @PutMapping("/{id}")
   public ResponseEntity<JobVO> updateJob(
-      @PathVariable("id") Long id, @RequestBody JobUpdateDTO dto) {
+      @PathVariable("id") Long id, @Valid @RequestBody JobUpdateDTO dto) {
     JobEntity job = jobService.findById(id);
     checkJobIsRunning(job.getTaskCode());
 
@@ -45,7 +46,7 @@ public class JobEndpoint {
   }
 
   @PostMapping
-  public ResponseEntity<JobVO> save(@RequestBody JobCreateDTO dto) {
+  public ResponseEntity<JobVO> save(@Valid @RequestBody JobCreateDTO dto) {
     JobEntity job = new JobEntity();
     BeanUtils.copyProperties(dto, job);
     JobEntity created = jobService.save(job);

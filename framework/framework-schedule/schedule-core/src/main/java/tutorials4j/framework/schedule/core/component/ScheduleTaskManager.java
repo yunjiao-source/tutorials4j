@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +26,7 @@ import tutorials4j.framework.schedule.core.bean.Task;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
 import tutorials4j.framework.schedule.core.repository.TaskRepository;
 
 /**
@@ -36,17 +39,24 @@ import tutorials4j.framework.schedule.core.repository.TaskRepository;
 public class ScheduleTaskManager implements SchedulingConfigurer {
   private final TaskRepository<?> taskRepository;
   private final EventConsumerContainer consumers;
+  private final ScheduleProperties properties;
 
   private ScheduledTaskRegistrar scheduledTaskRegistrar;
   private final ConcurrentMap<String, ScheduledTaskData> triggerTaskMap = new ConcurrentHashMap<>();
 
+  @Getter private Map<String, TaskRuntimeData> lastTaskRuntimeDataMap = new ConcurrentHashMap<>();
+
   private volatile boolean isDestroy = false;
 
-  private void initTasks() {
-    taskRepository.findAll().forEach(this::addTask);
+  private void createTasks() {
+    if (!properties.isAllTaskAutoStartOnBoot()) {
+      log.warn("配置属性: allTaskAutoStartOnBoot=false, 忽略创建所有定时任务");
+      return;
+    }
+    taskRepository.findAll().forEach(this::createTask);
   }
 
-  public void addTask(Task task) {
+  public void createTask(Task task) {
     Assert.notNull(task, "task must not be null");
     task.assertValid();
 
@@ -93,7 +103,8 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
       return;
     }
 
-    RunnableDecorator runnableDecorator = new RunnableDecorator(task, taskRunner);
+    RunnableDecorator runnableDecorator =
+        new RunnableDecorator(task, taskRunner, properties.getDefaultExecution());
     runnableDecorator
         .onStart(this::startEvent)
         .onComplete(this::completeEvent)
@@ -109,7 +120,8 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
             .triggerTask(triggerTask)
             .build();
     triggerTaskMap.put(taskCode, container);
-    createEvent(runnableDecorator.buildTaskRuntimeData().build());
+    createEvent(
+        runnableDecorator.buildTaskRuntimeData().taskStatus(TaskStatusEnum.CREATED).build());
   }
 
   public void cancelTask(String taskCode) {
@@ -125,7 +137,12 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
     ScheduledTaskData scheduledTaskData = doCancelTask(taskCode);
     if (scheduledTaskData != null) {
-      cancelEvent(scheduledTaskData.runner().buildTaskRuntimeData().build());
+      cancelEvent(
+          scheduledTaskData
+              .runner()
+              .buildTaskRuntimeData()
+              .taskStatus(TaskStatusEnum.CANCELLED)
+              .build());
     }
   }
 
@@ -139,12 +156,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
   }
 
   public TaskRuntimeData getLastTaskRuntimeData(String taskCode) {
-    ScheduledTaskData data = triggerTaskMap.get(taskCode);
-    if (data == null) {
-      return null;
-    }
-
-    return data.runner().getLastTaskRuntimeData();
+    return lastTaskRuntimeDataMap.get(taskCode);
   }
 
   public boolean isTaskRunning(String taskCode) {
@@ -159,7 +171,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
   public void destroy() {
     isDestroy = true;
     if (log.isDebugEnabled()) {
-      log.debug("正在销毁所有计划任务，计划任务总数={}", triggerTaskMap.size());
+      log.debug("正在销毁所有计划任务，任务总数={}", triggerTaskMap.size());
     }
     List<String> taskCodes = new ArrayList<>(triggerTaskMap.keySet());
     for (String taskCode : taskCodes) {
@@ -170,7 +182,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
   @Override
   public void configureTasks(@NotNull ScheduledTaskRegistrar taskRegistrar) {
     this.scheduledTaskRegistrar = taskRegistrar;
-    initTasks();
+    createTasks();
   }
 
   private synchronized ScheduledTaskData doCancelTask(String taskCode) {
@@ -185,38 +197,39 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
   }
 
   private void createEvent(TaskRuntimeData data) {
-    notifyConsumers(data, TaskStatusEnum.CREATED);
+    lastTaskRuntimeDataMap.put(data.taskCode(), data);
+    notifyConsumers(data);
   }
 
   private void cancelEvent(TaskRuntimeData data) {
-    notifyConsumers(data, TaskStatusEnum.CANCELLED);
+    lastTaskRuntimeDataMap.put(data.taskCode(), data);
+    notifyConsumers(data);
   }
 
   private void stopEvent(TaskRuntimeData data) {
+    lastTaskRuntimeDataMap.put(data.taskCode(), data);
     doCancelTask(data.taskCode());
-    notifyConsumers(data, TaskStatusEnum.STOPPED);
+    notifyConsumers(data);
   }
 
   private void failureEvent(TaskRuntimeData data) {
-    notifyConsumers(data, TaskStatusEnum.EXCEPTION);
+    lastTaskRuntimeDataMap.put(data.taskCode(), data);
+    notifyConsumers(data);
   }
 
   private void completeEvent(TaskRuntimeData data) {
-    notifyConsumers(data, TaskStatusEnum.COMPLETED);
+    lastTaskRuntimeDataMap.put(data.taskCode(), data);
+    notifyConsumers(data);
   }
 
   private void startEvent(TaskRuntimeData data) {
-    notifyConsumers(data, TaskStatusEnum.STARTED);
+    lastTaskRuntimeDataMap.put(data.taskCode(), data);
+    notifyConsumers(data);
   }
 
-  private void notifyConsumers(TaskRuntimeData data, TaskStatusEnum taskStatus) {
+  private void notifyConsumers(TaskRuntimeData data) {
     ChangeStatusEvent event =
-        ChangeStatusEvent.builder()
-            .timestamp(Instant.now())
-            .taskCode(data.taskCode())
-            .taskRuntimeData(data)
-            .taskStatus(taskStatus)
-            .build();
+        ChangeStatusEvent.builder().timestamp(Instant.now()).taskRuntimeData(data).build();
 
     this.consumers.notifyConsumers(event);
   }

@@ -2,10 +2,12 @@ package tutorials4j.framework.feature.schedule.domain;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.core.entity.YesNoEnum;
 import tutorials4j.framework.common.core.util.ExceptionUtils;
 import tutorials4j.framework.schedule.core.bean.ChangeStatusEvent;
+import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.core.component.ChangeStatusEventConsumer;
 
 /**
@@ -22,25 +24,27 @@ public class JobLogEventConsumer implements ChangeStatusEventConsumer {
 
   @Override
   public void consumer(ChangeStatusEvent event) {
+    TaskRuntimeData runtimeData = event.taskRuntimeData();
     jobRepository
-        .findByTaskCode(event.taskCode())
+        .findByTaskCode(runtimeData.taskCode())
         .ifPresentOrElse(
             task -> {
               JobLogEntity log = new JobLogEntity();
               log.setJob(task);
-              log.setTaskStatus(event.taskStatus());
-              log.setLotNo(event.taskRuntimeData().lotNo());
-              log.setTotalCount(event.taskRuntimeData().totalCount());
-              log.setTotalFailureCount(event.taskRuntimeData().totalFailureCount());
-              log.setStartTime(event.taskRuntimeData().startTime());
-              log.setEndTime(event.taskRuntimeData().endTime());
+              log.setTaskStatus(runtimeData.taskStatus());
+              log.setLotNo(runtimeData.lotNo());
+              log.setTotalCount(runtimeData.totalCount());
+              log.setTotalFailureCount(runtimeData.totalFailureCount());
+              log.setStartTime(runtimeData.startTime());
+              log.setEndTime(runtimeData.endTime());
               log.setHasError(YesNoEnum.N);
-              log.setMessage(event.taskRuntimeData().message());
+              log.setMessage(runtimeData.message());
 
-              Throwable throwable = event.taskRuntimeData().throwable();
+              Throwable throwable = runtimeData.throwable();
               if (throwable != null) {
                 log.setHasError(YesNoEnum.Y);
-                log.setMessage(ExceptionUtils.getSelfStackTrace(throwable).substring(0, 500));
+                log.setMessage(
+                    StringUtils.substring(ExceptionUtils.getSelfStackTrace(throwable), 0, 500));
               }
 
               jobLogRepository.save(log);

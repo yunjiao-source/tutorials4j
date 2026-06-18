@@ -77,6 +77,17 @@ Java 教程
 ![博客发布(2fa)](docs/images/033.jpg)
 
 
+#### profile:schedule
+
+> 任务调度管理
+![任务调度管理](docs/images/041.jpg)
+
+> 任务管理
+![任务管理](docs/images/043.jpg)
+
+> 任务日志
+![任务日志](docs/images/043.jpg)
+
 ### 缓存模块示例（framework/framework-examples/examples-cache）
 
 #### profile:cacheable

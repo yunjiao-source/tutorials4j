@@ -57,6 +57,7 @@ class MultiLevelCacheGetCallableRealCacheTest {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T get(Object key, Callable<T> valueLoader) {
       return (T)
           store.computeIfAbsent(

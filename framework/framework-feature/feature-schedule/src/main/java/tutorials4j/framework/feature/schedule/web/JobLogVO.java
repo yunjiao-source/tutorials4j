@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
 import tutorials4j.framework.common.core.entity.BaseVO;
 import tutorials4j.framework.common.core.entity.YesNoEnum;
+import tutorials4j.framework.feature.schedule.domain.JobEntity;
 import tutorials4j.framework.feature.schedule.domain.JobLogEntity;
 import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 
@@ -27,9 +28,18 @@ public class JobLogVO extends BaseVO {
   private String message;
   private Instant createdAt;
 
+  private String taskCode;
+  private String classSimpleName;
+
   public static JobLogVO of(JobLogEntity entity) {
     JobLogVO resultVO = new JobLogVO();
     BeanUtils.copyProperties(entity, resultVO);
+
+    JobEntity job = entity.getJob();
+    if (job != null) {
+      resultVO.setTaskCode(job.getTaskCode());
+      resultVO.setClassSimpleName(job.getClassSimpleName());
+    }
     return resultVO;
   }
 }

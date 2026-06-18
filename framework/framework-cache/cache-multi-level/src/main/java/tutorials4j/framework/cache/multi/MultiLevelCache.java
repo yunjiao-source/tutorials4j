@@ -109,6 +109,7 @@ public class MultiLevelCache implements Cache {
    * @throws ValueRetrievalException 若 valueLoader 执行失败
    */
   @Override
+  @SuppressWarnings("unchecked")
   public <T> T get(Object key, Callable<T> valueLoader) {
     // 1. 查本地
     Cache.ValueWrapper localWrapper = local.get(key);

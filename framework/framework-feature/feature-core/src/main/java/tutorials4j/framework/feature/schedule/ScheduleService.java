@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import tutorials4j.framework.common.core.util.MapUtils;
 import tutorials4j.framework.schedule.core.bean.Task;
 import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.core.component.ScheduleTaskManager;
@@ -35,7 +36,7 @@ public class ScheduleService {
     Optional<? extends Task> taskOpt = taskRepository.findByTaskCode(taskCode);
     if (taskOpt.isPresent()) {
       Task task = taskOpt.get();
-      scheduleTaskManager.addTask(task);
+      scheduleTaskManager.createTask(task);
       return buildDetails(task);
     }
 
@@ -69,27 +70,22 @@ public class ScheduleService {
             .cron(task.getCron())
             .enabled(task.isEnabled())
             .description(task.getDescription())
-            .metadata(Collections.unmodifiableMap(task.getMetadata()))
+            .metadata(MapUtils.unmodifiableMap(task.getMetadata()))
             .initialDelay(task.getInitialDelay())
             .maxExecutionCount(task.getMaxExecutionCount())
             .maxFailureCount(task.getMaxFailureCount())
             .dueDate(task.getDueDate());
 
-    if (!scheduleTaskManager.isTaskRunning(task.getTaskCode())) {
-      // 任务还没有运行或已经取消
-      return builder.build();
-    }
-
     // 获取运行的任务信息
     Task runningTask = scheduleTaskManager.getTask(task.getTaskCode());
     if (runningTask != null) {
-      TaskExecutionDetails.builder()
+      builder
           .taskCode(runningTask.getTaskCode())
           .classSimpleName(runningTask.getClassSimpleName())
           .cron(runningTask.getCron())
           .enabled(runningTask.isEnabled())
           .description(runningTask.getDescription())
-          .metadata(Collections.unmodifiableMap(runningTask.getMetadata()))
+          .metadata(MapUtils.unmodifiableMap(runningTask.getMetadata()))
           .initialDelay(runningTask.getInitialDelay())
           .maxExecutionCount(runningTask.getMaxExecutionCount())
           .maxFailureCount(runningTask.getMaxFailureCount())
@@ -101,6 +97,7 @@ public class ScheduleService {
         scheduleTaskManager.getLastTaskRuntimeData(task.getTaskCode());
     if (lastTaskRuntimeData != null) {
       builder
+          .taskStatus(lastTaskRuntimeData.taskStatus())
           .lotNo(lastTaskRuntimeData.lotNo())
           .totalCount(lastTaskRuntimeData.totalCount())
           .totalFailureCount(lastTaskRuntimeData.totalFailureCount())

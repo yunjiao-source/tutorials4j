@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>任务日志</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container-fluid mt-3">
+  <h2>任务执行日志</h2>
+
+  <!-- 查询表单 -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <form id="searchForm" class="row g-3">
+        <div class="col-md-2">
+          <label for="taskCode" class="form-label">任务编码</label>
+          <input type="text" class="form-control" id="taskCode" name="taskCode">
+        </div>
+        <div class="col-md-2">
+          <label for="classSimpleName" class="form-label">类名</label>
+          <input type="text" class="form-control" id="classSimpleName" name="classSimpleName">
+        </div>
+        <div class="col-md-2">
+          <label for="lotNo" class="form-label">批次号</label>
+          <input type="text" class="form-control" id="lotNo" name="lotNo">
+        </div>
+        <div class="col-md-2">
+          <label for="taskStatus" class="form-label">状态</label>
+          <select class="form-select" id="taskStatus" name="taskStatus">
+            <option value="">全部</option>
+            <option value="CREATED">创建</option>
+            <option value="STARTED">启动</option>
+            <option value="COMPLETED">完成</option>
+            <option value="STOPPED">停止</option>
+            <option value="CANCELLED">取消</option>
+            <option value="EXCEPTION">异常</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary">查询</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 日志列表表格 -->
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+    <tr>
+      <th>ID</th>
+      <th>任务编码</th>
+      <th>类名</th>
+      <th>批次号</th>
+      <th>状态</th>
+      <th>总数量</th>
+      <th>失败数量</th>
+      <th>开始时间</th>
+      <th>结束时间</th>
+      <th>有错误</th>
+      <th>消息</th>
+      <th>创建时间</th>
+    </tr>
+    </thead>
+    <tbody id="logTableBody"></tbody>
+  </table>
+
+  <!-- 分页控件 -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center" id="pagination"></ul>
+  </nav>
+</div>
+
+<script>
+  $(function() {
+    let currentPage = 0;
+    let pageSize = 10;
+
+    function loadLogs(params) {
+      params = params || {};
+      params.page = currentPage;
+      params.size = pageSize;
+      params.sort = 'createdAt,desc';
+      $.ajax({
+        url: '/api/job-log/page',
+        data: params,
+        success: function(res) {
+          renderLogs(res.content);
+          renderPagination(res);
+        },
+        error: function() {
+          alert('加载日志失败');
+        }
+      });
+    }
+
+    function renderLogs(logs) {
+      let html = '';
+      if (!logs || logs.length === 0) {
+        html = '<tr><td colspan="12" class="text-center">暂无日志</td></tr>';
+      } else {
+        $.each(logs, function(i, log) {
+          html += '<tr>';
+          html += '<td>' + log.id + '</td>';
+          html += '<td>' + (log.taskCode || '') + '</td>';
+          html += '<td>' + (log.classSimpleName || '') + '</td>';
+          html += '<td>' + (log.lotNo || '') + '</td>';
+          html += '<td>' + (log.taskStatus || '') + '</td>';
+          html += '<td>' + (log.totalCount || 0) + '</td>';
+          html += '<td>' + (log.totalFailureCount || 0) + '</td>';
+          html += '<td>' + (log.startTime ? new Date(log.startTime).toLocaleString() : '') + '</td>';
+          html += '<td>' + (log.endTime ? new Date(log.endTime).toLocaleString() : '') + '</td>';
+          html += '<td>' + (log.hasError == 'Y' ? '是' : '否') + '</td>';
+          html += '<td>' + (log.message || '') + '</td>';
+          html += '<td>' + (log.createdAt ? new Date(log.createdAt).toLocaleString() : '') + '</td>';
+          html += '</tr>';
+        });
+      }
+      $('#logTableBody').html(html);
+    }
+
+    function renderPagination(pageData) {
+      let totalPages = pageData.page.totalPages;
+      let number = pageData.page.number;
+      let html = '';
+      if (totalPages <= 1) {
+        $('#pagination').empty();
+        return;
+      }
+      html += '<li class="page-item' + (number === 0 ? ' disabled' : '') + '"><a class="page-link" href="#" data-page="' + (number-1) + '">上一页</a></li>';
+      for (let i = 0; i < totalPages; i++) {
+        html += '<li class="page-item' + (i === number ? ' active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + (i+1) + '</a></li>';
+      }
+      html += '<li class="page-item' + (number === totalPages-1 ? ' disabled' : '') + '"><a class="page-link" href="#" data-page="' + (number+1) + '">下一页</a></li>';
+      $('#pagination').html(html);
+    }
+
+    $(document).on('click', '#pagination .page-link', function(e) {
+      e.preventDefault();
+      var page = $(this).data('page');
+      if (page !== undefined && page >= 0) {
+        currentPage = page;
+        var params = $('#searchForm').serializeArray().reduce(function(obj, item) {
+          obj[item.name] = item.value;
+          return obj;
+        }, {});
+        loadLogs(params);
+      }
+    });
+
+    $('#searchForm').submit(function(e) {
+      e.preventDefault();
+      currentPage = 0;
+      var params = $(this).serializeArray().reduce(function(obj, item) {
+        obj[item.name] = item.value;
+        return obj;
+      }, {});
+      loadLogs(params);
+    });
+
+    // 初始加载
+    loadLogs();
+  });
+</script>
+</body>
+</html>

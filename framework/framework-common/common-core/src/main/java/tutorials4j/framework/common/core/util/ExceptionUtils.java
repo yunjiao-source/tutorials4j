@@ -11,7 +11,7 @@ import java.util.function.Predicate;
  *
  * @author Yun Jiao
  */
-public class ExceptionUtils extends org.apache.commons.lang3.exception.ExceptionUtils {
+public class ExceptionUtils {
   public static String getSelfStackTrace(Throwable throwable) {
     return getStackTrace(throwable, "tutorials4j");
   }

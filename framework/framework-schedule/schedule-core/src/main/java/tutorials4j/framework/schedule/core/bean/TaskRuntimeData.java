@@ -10,6 +10,7 @@ import lombok.Builder;
  */
 @Builder
 public record TaskRuntimeData(
+    TaskStatusEnum taskStatus,
     Instant timestamp,
     String taskCode,
     String lotNo,

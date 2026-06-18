@@ -6,5 +6,11 @@ spring:
       thread-name-prefix: example-scheduler-  # 可选：自定义线程名前缀，便于日志追踪
 
 tutorials4j:
+  schedule:
+    default-execution:
+      max-failure-count: 3
+      initial-delay: 20s
+    all-task-auto-start-on-boot: true
+    event-consumer-type: async
   feature:
     schedule-enabled: true

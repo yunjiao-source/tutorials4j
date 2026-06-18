@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>任务管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container-fluid mt-3">
+  <h2>任务管理</h2>
+
+  <!-- 查询表单 -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <form id="searchForm" class="row g-3">
+        <div class="col-md-3">
+          <label for="taskCode" class="form-label">任务编码</label>
+          <input type="text" class="form-control" id="taskCode" name="taskCode">
+        </div>
+        <div class="col-md-3">
+          <label for="classSimpleName" class="form-label">类名</label>
+          <input type="text" class="form-control" id="classSimpleName" name="classSimpleName">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary me-2">查询</button>
+          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">新建任务</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 任务列表表格 -->
+  <div id="jobTableContainer">
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>任务编码</th>
+        <th>类名</th>
+        <th>Cron</th>
+        <th>描述</th>
+        <th>创建时间</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody id="jobTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- 分页控件 -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center" id="pagination"></ul>
+  </nav>
+</div>
+
+<!-- ========== 创建模态框 ========== -->
+<div class="modal fade" id="createModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">新建任务</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="createForm">
+          <div class="mb-3">
+            <label for="cTaskCode" class="form-label">任务编码 *</label>
+            <input type="text" class="form-control" id="cTaskCode" name="taskCode" required>
+          </div>
+          <div class="mb-3">
+            <label for="cClassSimpleName" class="form-label">类名 *</label>
+            <input type="text" class="form-control" id="cClassSimpleName" name="classSimpleName" required>
+          </div>
+          <div class="mb-3">
+            <label for="cCron" class="form-label">Cron *</label>
+            <input type="text" class="form-control" id="cCron" name="cron" required>
+          </div>
+          <div class="mb-3">
+            <label for="cDescription" class="form-label">描述</label>
+            <textarea class="form-control" id="cDescription" name="description"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="createSubmitBtn">提交</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 编辑模态框 ========== -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">编辑任务</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <input type="hidden" id="editId" name="id">
+          <div class="mb-3">
+            <label for="eClassSimpleName" class="form-label">类名 *</label>
+            <input type="text" class="form-control" id="eClassSimpleName" name="classSimpleName" required>
+          </div>
+          <div class="mb-3">
+            <label for="eCron" class="form-label">Cron *</label>
+            <input type="text" class="form-control" id="eCron" name="cron" required>
+          </div>
+          <div class="mb-3">
+            <label for="eDescription" class="form-label">描述</label>
+            <textarea class="form-control" id="eDescription" name="description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="eMetadata" class="form-label">Metadata (JSON格式)</label>
+            <textarea class="form-control" id="eMetadata" name="metadata" rows="2"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="eInitialDelay" class="form-label">初始延迟 (如 PT10S)</label>
+            <input type="text" class="form-control" id="eInitialDelay" name="initialDelay">
+          </div>
+          <div class="mb-3">
+            <label for="eMaxFailureCount" class="form-label">最大失败次数</label>
+            <input type="number" class="form-control" id="eMaxFailureCount" name="maxFailureCount">
+          </div>
+          <div class="mb-3">
+            <label for="eMaxExecutionCount" class="form-label">最大执行次数</label>
+            <input type="number" class="form-control" id="eMaxExecutionCount" name="maxExecutionCount">
+          </div>
+          <div class="mb-3">
+            <label for="eDueDate" class="form-label">截止日期 (ISO 8601)</label>
+            <input type="datetime-local" class="form-control" id="eDueDate" name="dueDate">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="editSubmitBtn">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    // ---------- 全局状态 ----------
+    let currentPage = 0;
+    let pageSize = 10;
+
+    // ---------- 加载任务列表 ----------
+    function loadJobs(params) {
+      params = params || {};
+      params.page = currentPage;
+      params.size = pageSize;
+      $.ajax({
+        url: '/api/job/page',
+        data: params,
+        success: function(res) {
+          renderJobs(res.content);
+          renderPagination(res);
+        },
+        error: function() {
+          alert('加载任务列表失败');
+        }
+      });
+    }
+
+    function renderJobs(jobs) {
+      let html = '';
+      if (!jobs || jobs.length === 0) {
+        html = '<tr><td colspan="7" class="text-center">暂无数据</td></tr>';
+      } else {
+        $.each(jobs, function(i, job) {
+          html += '<tr>';
+          html += '<td>' + job.id + '</td>';
+          html += '<td>' + job.taskCode + '</td>';
+          html += '<td>' + job.classSimpleName + '</td>';
+          html += '<td>' + job.cron + '</td>';
+          html += '<td>' + (job.description || '') + '</td>';
+          html += '<td>' + (job.createdAt ? new Date(job.createdAt).toLocaleString() : '') + '</td>';
+          html += '<td>';
+          html += '<button class="btn btn-sm btn-warning me-1 editBtn" data-id="' + job.id + '">编辑</button>';
+          html += '<button class="btn btn-sm btn-danger deleteBtn" data-id="' + job.id + '" data-code="' + job.taskCode + '">删除</button>';
+          html += '</td>';
+          html += '</tr>';
+        });
+      }
+      $('#jobTableBody').html(html);
+    }
+
+    function renderPagination(pageData) {
+      let totalPages = pageData.page.totalPages;
+      let number = pageData.page.number;
+      let html = '';
+      if (totalPages <= 1) {
+        $('#pagination').empty();
+        return;
+      }
+      // 上一页
+      html += '<li class="page-item' + (number === 0 ? ' disabled' : '') + '"><a class="page-link" href="#" data-page="' + (number-1) + '">上一页</a></li>';
+      for (let i = 0; i < totalPages; i++) {
+        html += '<li class="page-item' + (i === number ? ' active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + (i+1) + '</a></li>';
+      }
+      html += '<li class="page-item' + (number === totalPages-1 ? ' disabled' : '') + '"><a class="page-link" href="#" data-page="' + (number+1) + '">下一页</a></li>';
+      $('#pagination').html(html);
+    }
+
+    // 分页点击事件
+    $(document).on('click', '#pagination .page-link', function(e) {
+      e.preventDefault();
+      var page = $(this).data('page');
+      if (page !== undefined && page >= 0) {
+        currentPage = page;
+        var params = $('#searchForm').serializeArray().reduce(function(obj, item) {
+          obj[item.name] = item.value;
+          return obj;
+        }, {});
+        loadJobs(params);
+      }
+    });
+
+    // 查询表单提交
+    $('#searchForm').submit(function(e) {
+      e.preventDefault();
+      currentPage = 0;
+      var params = $(this).serializeArray().reduce(function(obj, item) {
+        obj[item.name] = item.value;
+        return obj;
+      }, {});
+      loadJobs(params);
+    });
+
+    // 初始加载
+    loadJobs();
+
+    // ---------- 创建任务 ----------
+    $('#createSubmitBtn').click(function() {
+      var formData = $('#createForm').serializeArray().reduce(function(obj, item) {
+        obj[item.name] = item.value;
+        return obj;
+      }, {});
+      $.ajax({
+        url: '/api/job',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function() {
+          $('#createModal').modal('hide');
+          $('#createForm')[0].reset();
+          loadJobs($('#searchForm').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+          }, {}));
+          alert('创建成功');
+        },
+        error: function(xhr) {
+          alert('创建失败：' + (xhr.responseJSON?.message || xhr.statusText));
+        }
+      });
+    });
+
+    // ---------- 编辑任务 ----------
+    $(document).on('click', '.editBtn', function() {
+      var id = $(this).data('id');
+      // 先获取任务详情
+      $.ajax({
+        url: '/api/job/page?size=1000', // 简单方式：从列表数据中获取，但这里我们直接请求所有数据或单独接口。此处我们通过列表数据填充，但更好的方式是增加一个GET /api/job/{id}接口，但未提供。
+        // 由于没有单独查询接口，我们使用已有的page接口查询所有，然后过滤，但这不优雅。实际开发会提供详情接口。
+        // 为演示，我们假设可以从列表数据中获取，但当前我们没有存储列表数据。简便起见，我们重新加载一次并找到对应数据。
+        // 实际上，我们应该在列表渲染时存储数据，或增加后端详情接口。鉴于题目未提供，我采用重新查询方式。
+        success: function(res) {
+          var job = res.content.find(function(item) { return item.id === id; });
+          if (!job) {
+            alert('未找到该任务');
+            return;
+          }
+          // 填充编辑表单
+          $('#editId').val(job.id);
+          $('#eClassSimpleName').val(job.classSimpleName);
+          $('#eCron').val(job.cron);
+          $('#eDescription').val(job.description || '');
+          $('#eMetadata').val(job.metadata ? JSON.stringify(job.metadata, null, 2) : '');
+          $('#eInitialDelay').val(job.initialDelay || '');
+          $('#eMaxFailureCount').val(job.maxFailureCount || '');
+          $('#eMaxExecutionCount').val(job.maxExecutionCount || '');
+          // dueDate 转换为 datetime-local 格式
+          if (job.dueDate) {
+            var date = new Date(job.dueDate);
+            var local = date.toISOString().slice(0, 16);
+            $('#eDueDate').val(local);
+          } else {
+            $('#eDueDate').val('');
+          }
+          $('#editModal').modal('show');
+        },
+        error: function() {
+          alert('获取任务详情失败');
+        }
+      });
+    });
+
+    $('#editSubmitBtn').click(function() {
+      var id = $('#editId').val();
+      var formData = $('#editForm').serializeArray().reduce(function(obj, item) {
+        var val = item.value;
+        if (item.name === 'metadata') {
+          try {
+            if (val.trim()) obj[item.name] = JSON.parse(val);
+            else obj[item.name] = null;
+          } catch(e) {
+            alert('Metadata 格式错误，请输入合法JSON');
+            throw e;
+          }
+        } else if (item.name === 'initialDelay' || item.name === 'dueDate') {
+          if (val.trim()) obj[item.name] = val;
+          else obj[item.name] = null;
+        } else {
+          obj[item.name] = val;
+        }
+        return obj;
+      }, {});
+      // 移除id字段（它不在DTO中）
+      delete formData.id;
+      $.ajax({
+        url: '/api/job/' + id,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function() {
+          $('#editModal').modal('hide');
+          loadJobs($('#searchForm').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+          }, {}));
+          alert('更新成功');
+        },
+        error: function(xhr) {
+          alert('更新失败：' + (xhr.responseJSON?.message || xhr.statusText));
+        }
+      });
+    });
+
+    // ---------- 删除任务 ----------
+    $(document).on('click', '.deleteBtn', function() {
+      var id = $(this).data('id');
+      var code = $(this).data('code');
+      if (!confirm('确认删除任务 [' + code + '] 吗？')) return;
+      $.ajax({
+        url: '/api/job/' + id,
+        type: 'DELETE',
+        success: function() {
+          loadJobs($('#searchForm').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+          }, {}));
+          alert('删除成功');
+        },
+        error: function(xhr) {
+          alert('删除失败：' + (xhr.responseJSON?.message || xhr.statusText));
+        }
+      });
+    });
+
+    // 模态框关闭时清空表单（可选）
+    $('#createModal').on('hidden.bs.modal', function() {
+      $('#createForm')[0].reset();
+    });
+    $('#editModal').on('hidden.bs.modal', function() {
+      $('#editForm')[0].reset();
+    });
+  });
+</script>
+</body>
+</html>

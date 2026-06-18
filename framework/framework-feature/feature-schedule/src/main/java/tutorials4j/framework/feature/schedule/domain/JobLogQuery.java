@@ -19,18 +19,26 @@ public class JobLogQuery {
   private Long jobId;
   private TaskStatusEnum taskStatus;
   private YesNoEnum hasError;
+  private String lotNo;
   private String errorMessage;
   private Instant startCreatedAt;
   private Instant endCreatedAt;
 
+  private String taskCode;
+  private String classSimpleName;
+
   public Specification<JobLogEntity> buildSpecification() {
     List<Specification<JobLogEntity>> specList = new ArrayList<>();
     specList.add(JobLogSpecification.jobIdEqual(jobId));
+    specList.add(JobLogSpecification.lotNoEqual(lotNo));
     specList.add(JobLogSpecification.taskStatusEqual(taskStatus));
     specList.add(JobLogSpecification.hasErrorEqual(hasError));
     specList.add(JobLogSpecification.errorMessageLike(errorMessage));
     specList.add(JobLogSpecification.createdAtGte(startCreatedAt));
     specList.add(JobLogSpecification.createdAtLte(endCreatedAt));
+
+    specList.add(JobLogSpecification.taskCodeEqual(taskCode));
+    specList.add(JobLogSpecification.classSimpleNameEqual(classSimpleName));
 
     return specList.stream()
         .filter(Objects::nonNull)

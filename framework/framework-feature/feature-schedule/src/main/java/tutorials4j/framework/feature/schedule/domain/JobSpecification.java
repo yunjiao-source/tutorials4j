@@ -5,6 +5,7 @@ import static tutorials4j.framework.data.core.util.JPAUtils.like;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -18,7 +19,7 @@ public class JobSpecification {
   }
 
   public static Predicate taskCodeEqual(Path<JobEntity> path, String taskCode, CriteriaBuilder cb) {
-    if (taskCode == null) {
+    if (StringUtils.isBlank(taskCode)) {
       return cb.conjunction();
     }
     return cb.equal(path.get("taskCode"), taskCode);
@@ -30,7 +31,7 @@ public class JobSpecification {
 
   public static Predicate classSimpleNameEqual(
       Path<JobEntity> path, String classSimpleName, CriteriaBuilder cb) {
-    if (classSimpleName == null) {
+    if (StringUtils.isBlank(classSimpleName)) {
       return cb.conjunction();
     }
     return cb.equal(path.get("classSimpleName"), classSimpleName);
@@ -42,7 +43,7 @@ public class JobSpecification {
 
   public static Predicate descriptionLike(
       Path<JobEntity> path, String description, CriteriaBuilder cb) {
-    if (description == null) {
+    if (StringUtils.isBlank(description)) {
       return cb.conjunction();
     }
     return cb.like(path.get("description"), like(description));

@@ -15,8 +15,17 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_SCHEDULE)
 public class ScheduleProperties {
+  private boolean allTaskAutoStartOnBoot = true;
+  private EventConsumerType eventConsumerType = EventConsumerType.sync;
+
   @NestedConfigurationProperty
   private TaskExecutionOptions defaultExecution = new TaskExecutionOptions();
 
   private Map<String, TaskOptions> tasks = new HashMap<>();
+
+  public enum EventConsumerType {
+    sync,
+    async,
+    custom
+  }
 }

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Utils {
   public static void sleep() {
-    long milli = ThreadLocalRandom.current().nextInt(1000);
+    long milli = ThreadLocalRandom.current().nextInt(10000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);
     } catch (InterruptedException e) {

@@ -1,11 +1,9 @@
-package tutorials4j.framework.feature.schedule;
+package tutorials4j.framework.schedule.core.component;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import tutorials4j.framework.schedule.core.bean.ChangeStatusEvent;
-import tutorials4j.framework.schedule.core.component.ChangeStatusEventConsumer;
-import tutorials4j.framework.schedule.core.component.EventConsumerContainer;
 
 /**
  * TODO

@@ -9,8 +9,4 @@ import lombok.Builder;
  * @author Yun Jiao
  */
 @Builder
-public record ChangeStatusEvent(
-    Instant timestamp,
-    String taskCode,
-    TaskStatusEnum taskStatus,
-    TaskRuntimeData taskRuntimeData) {}
+public record ChangeStatusEvent(Instant timestamp, TaskRuntimeData taskRuntimeData) {}

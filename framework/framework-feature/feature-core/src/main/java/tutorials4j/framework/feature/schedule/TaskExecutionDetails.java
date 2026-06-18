@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import lombok.Builder;
+import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 
 /**
  * TODO
@@ -22,6 +23,7 @@ public record TaskExecutionDetails(
     Integer maxFailureCount,
     Integer maxExecutionCount,
     Instant dueDate,
+    TaskStatusEnum taskStatus,
     String lotNo,
     int totalCount,
     int totalFailureCount,
