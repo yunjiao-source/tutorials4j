@@ -58,9 +58,6 @@ public class CaptchaData implements Serializable {
    * @return 包含验证码信息的Map
    */
   public Map<String, Object> toMap() {
-    if (log.isDebugEnabled()) {
-      log.debug("验证码数据：{}", this);
-    }
     Map<String, Object> map = new HashMap<>();
     map.put("key", this.key());
     // map.put("code", this.code());

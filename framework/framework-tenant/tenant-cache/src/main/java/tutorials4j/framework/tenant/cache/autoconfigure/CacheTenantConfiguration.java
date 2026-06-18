@@ -20,14 +20,14 @@ import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
 public class CacheTenantConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[TENANT-CACHE] Cache Configuration");
+    log.trace("[TENANT-CACHE] Cache Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator(
       CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
-    log.debug("[TENANT-CACHE] Tenant Caffeine Cache Manager Creator");
+    log.trace("[TENANT-CACHE] Tenant Caffeine Cache Manager Creator");
 
     return new TenantCaffeineCacheManagerCreator(caffeineCacheManagerCreator);
   }
@@ -37,7 +37,7 @@ public class CacheTenantConfiguration {
   TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator(
       TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator,
       RedisCacheManagerCreator redisCacheManagerCreator) {
-    log.debug("[TENANT-CACHE] Tenant Multi Level Cache Manager Creator");
+    log.trace("[TENANT-CACHE] Tenant Multi Level Cache Manager Creator");
 
     return new TenantMultiLevelCacheManagerCreator(
         tenantCaffeineCacheManagerCreator, redisCacheManagerCreator);

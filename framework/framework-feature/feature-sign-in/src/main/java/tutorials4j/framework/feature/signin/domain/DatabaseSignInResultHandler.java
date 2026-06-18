@@ -23,10 +23,6 @@ public class DatabaseSignInResultHandler implements SignInResultHandler {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void handle(SignInResult signInResult) {
-    if (log.isDebugEnabled()) {
-      log.debug("签到结果：{}", signInResult);
-    }
-
     SignInResultEntity entity = new SignInResultEntity();
     BeanUtils.copyProperties(signInResult, entity);
     entity.setCreateDate(Instant.now());

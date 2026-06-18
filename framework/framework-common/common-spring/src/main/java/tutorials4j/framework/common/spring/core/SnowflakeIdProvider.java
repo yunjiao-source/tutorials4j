@@ -25,9 +25,13 @@ public class SnowflakeIdProvider {
     if (workerId == null) {
       workerId = fetchProperty(DefaultConsts.WORKER_ID, workerId);
       if (workerId == 1L) {
-        log.debug("[COMMON-SPRING] 框架雪花算法配置使用默认参数, worker = {}", workerId);
+        log.trace(
+            "[COMMON-SPRING] Snowflake algorithm parameters use DEFAULT configuration, worker = {}",
+            workerId);
       } else {
-        log.info("[COMMON-SPRING] 加载雪花算法 workerId = {}", workerId);
+        log.trace(
+            "[COMMON-SPRING] Snowflake algorithm parameters use CUSTOM configuration, workerId = {}",
+            workerId);
       }
     }
     return workerId;
@@ -37,9 +41,13 @@ public class SnowflakeIdProvider {
     if (datacenterId == null) {
       datacenterId = fetchProperty(DefaultConsts.DATACENTER_ID, datacenterId);
       if (datacenterId == 1L) {
-        log.debug("[COMMON-SPRING] 框架雪花算法配置使用默认参数, datacenter = {}", datacenterId);
+        log.trace(
+            "[COMMON-SPRING] Snowflake algorithm parameters use DEFAULT configuration, datacenter = {}",
+            datacenterId);
       } else {
-        log.info("[COMMON-SPRING] 加载雪花算法 datacenterId = {}", datacenterId);
+        log.trace(
+            "[COMMON-SPRING] Snowflake algorithm parameters use CUSTOM configuration datacenterId = {}",
+            datacenterId);
       }
     }
     return datacenterId;
@@ -55,7 +63,6 @@ public class SnowflakeIdProvider {
       Environment env = SpringUtil.getBean(Environment.class);
       return EnvPropertyFinder.getProperty(env, key, Long.class, defaultValue);
     } catch (Exception e) {
-      log.error("[COMMON-SPRING] 获取环境配置失败，key={}, 将使用默认值={}", key, defaultValue, e);
       return defaultValue;
     }
   }

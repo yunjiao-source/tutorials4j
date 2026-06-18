@@ -34,7 +34,7 @@ import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEval
 public class CacheConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CACHE-CORE] Cache Configuration");
+    log.trace("[CACHE-CORE] Cache Configuration");
   }
 
   @Bean
@@ -44,14 +44,15 @@ public class CacheConfiguration {
         providers.stream().collect(Collectors.toMap(CacheManagerCreator::getCategory, m -> m));
     CacheManagerCreatorFactory.instance.setCreatorMap(creators);
 
-    log.debug("[CACHE-CORE] 工厂'CacheManagerCreatorFactory'注入实例：{}", creators);
+    log.trace(
+        "[CACHE-CORE] Injected instances in CacheManagerCreatorFactory is {}", creators.keySet());
     return CacheManagerCreatorFactory.instance;
   }
 
   @Bean
   @ConditionalOnMissingBean
   LocalLockService localLockService(LockCacheProperties properties) {
-    log.debug("[CACHE-CORE] Local Lock Service");
+    log.trace("[CACHE-CORE] Local Lock Service");
     return new LocalLockService(properties.getLocal());
   }
 
@@ -60,7 +61,7 @@ public class CacheConfiguration {
   LocalLockableAspect localLockableAspect(
       SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
       LocalLockService localLockService) {
-    log.debug("[CACHE-CORE] Local Lockable Aspect");
+    log.trace("[CACHE-CORE] Local Lockable Aspect");
     return new LocalLockableAspect(spelMethodBasedExpressionEvaluator, localLockService);
   }
 }

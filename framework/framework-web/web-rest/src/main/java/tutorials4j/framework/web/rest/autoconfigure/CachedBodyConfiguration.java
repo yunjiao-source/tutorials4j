@@ -27,7 +27,7 @@ public class CachedBodyConfiguration {
 
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-REST] Cached Body Configuration");
+    log.trace("[WEB-REST] Cached Body Configuration");
   }
 
   @Bean
@@ -39,9 +39,7 @@ public class CachedBodyConfiguration {
     registration.setFilter(filter);
     options.fill(registration);
 
-    if (log.isDebugEnabled()) {
-      log.debug("[WEB-REST] 缓存请求体过滤器：{}", options);
-    }
+    log.trace("[WEB-REST] CachedBodyRequestFilter configuration parameters are {}", options);
     return registration;
   }
 }

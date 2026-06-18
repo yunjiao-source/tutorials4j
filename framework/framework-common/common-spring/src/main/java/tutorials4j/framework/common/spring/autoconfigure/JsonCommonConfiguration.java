@@ -19,13 +19,13 @@ import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
 public class JsonCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON-SPRING] Json Common Configuration");
+    log.trace("[COMMON-SPRING] Json Common Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   Jackson2Utils jackson2Utils(ObjectMapper objectMapper) {
-    log.debug("[COMMON-SPRING] Jackson2 Utils");
+    log.trace("[COMMON-SPRING] Jackson2 Utils");
     Jackson2Utils.instance.setObjectMapper(objectMapper);
     return Jackson2Utils.instance;
   }
@@ -33,7 +33,7 @@ public class JsonCommonConfiguration {
   @Bean
   @ConditionalOnMissingBean
   CommonSimpleModule commonSimpleModule() {
-    log.debug("[COMMON-SPRING] Common Simple Module");
+    log.trace("[COMMON-SPRING] Common Simple Module");
     return new CommonSimpleModule();
   }
 }

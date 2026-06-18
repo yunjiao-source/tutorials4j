@@ -32,13 +32,13 @@ import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
 public class SignatureWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-SECURITY] Signature Web Configuration");
+    log.trace("[WEB-SECURITY] Signature Web Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   SignatureKeyRepository inMemerySignatureKeyRepository(SignatureWebProperties properties) {
-    log.debug("[WEB-SECURITY] In Memery Signature Key Repository");
+    log.trace("[WEB-SECURITY] In Memery Signature Key Repository");
     return new InMemerySignatureKeyRepository(properties);
   }
 
@@ -65,7 +65,7 @@ public class SignatureWebConfiguration {
         registration.addPathPatterns(options.getIncludePathPatterns());
       }
 
-      log.debug("[WEB-SECURITY] 添加请求拦截器：{}, {}", signatureHandlerInterceptor, options);
+      log.trace("[WEB-SECURITY] 添加请求拦截器：{}, {}", signatureHandlerInterceptor, options);
     }
   }
 }

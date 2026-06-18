@@ -19,6 +19,6 @@ import tutorials4j.framework.crypto.web.autoconfigure.CryptoWebConfiguration;
 public class CryptoAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CRYPTO] Crypto Auto Configuration");
+    log.trace("[CRYPTO] Crypto Auto Configuration");
   }
 }

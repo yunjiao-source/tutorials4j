@@ -17,13 +17,13 @@ import tutorials4j.framework.web.validation.LocalDateTimeValidator;
 public class ValidatorsWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-VALIDATION] Validation Web Configuration");
+    log.trace("[WEB-VALIDATION] Validation Web Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   LocalDateTimeValidator localDateTimeValidator() {
-    log.debug("[WEB-VALIDATION] Local DateTime Validator");
+    log.trace("[WEB-VALIDATION] Local DateTime Validator");
     return new LocalDateTimeValidator();
   }
 }

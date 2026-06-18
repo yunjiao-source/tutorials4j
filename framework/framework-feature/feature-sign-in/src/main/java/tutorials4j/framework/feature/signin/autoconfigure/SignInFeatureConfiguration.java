@@ -29,20 +29,20 @@ import tutorials4j.framework.feature.signin.web.SignInResultEndpoint;
 public class SignInFeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE-SIGN-IN] Sign-In Feature Configuration");
+    log.trace("[FEATURE-SIGN-IN] Sign-In Feature Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   SignInEndpoint signInEndpoint(SignInService signInService) {
-    log.debug("[FEATURE-SIGN-IN] Sign In Endpoint");
+    log.trace("[FEATURE-SIGN-IN] Sign In Endpoint");
     return new SignInEndpoint(signInService);
   }
 
   @Bean
   @ConditionalOnMissingBean
   SignInResultEndpoint signInResultEndpoint(SignInResultService signInResultService) {
-    log.debug("[FEATURE-SIGN-IN] Sign In Result End point");
+    log.trace("[FEATURE-SIGN-IN] Sign In Result End point");
     return new SignInResultEndpoint(signInResultService);
   }
 }

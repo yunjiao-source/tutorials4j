@@ -25,13 +25,13 @@ import tutorials4j.framework.schedule.core.repository.TaskRepository;
 public class FeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE-CORE] Feature Configuration");
+    log.trace("[FEATURE-CORE] Feature Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   SignInResultHandler LoggingSignInResultHandler() {
-    log.debug("[FEATURE-CORE] Logging Sign In Result Handler");
+    log.trace("[FEATURE-CORE] Logging Sign In Result Handler");
     return new LoggingSignInResultHandler();
   }
 
@@ -39,7 +39,7 @@ public class FeatureConfiguration {
   @ConditionalOnMissingBean
   SignInService signInService(
       SignInResultHandler signInResultHandler, SignInFeatureProperties properties) {
-    log.debug("[FEATURE-CORE] Sign In Service");
+    log.trace("[FEATURE-CORE] Sign In Service");
     return new SignInService(signInResultHandler, properties);
   }
 
@@ -47,7 +47,7 @@ public class FeatureConfiguration {
   @ConditionalOnMissingBean
   ScheduleService scheduleService(
       ScheduleTaskManager scheduleTaskManager, TaskRepository<?> taskRepository) {
-    log.debug("[FEATURE-CORE] Schedule Service");
+    log.trace("[FEATURE-CORE] Schedule Service");
     return new ScheduleService(scheduleTaskManager, taskRepository);
   }
 }

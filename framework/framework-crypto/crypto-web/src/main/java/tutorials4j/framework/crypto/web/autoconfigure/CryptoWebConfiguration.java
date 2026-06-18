@@ -24,14 +24,14 @@ import tutorials4j.framework.crypto.web.body.CryptoResponseBodyAdvice;
 public class CryptoWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CRYPTO-WEB] Crypto Web Configuration");
+    log.trace("[CRYPTO-WEB] Crypto Web Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   CryptoRequestBodyAdvice cryptoRequestBodyAdvice(
       CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate) {
-    log.debug("[CRYPTO-WEB] Crypto Request Body Advice");
+    log.trace("[CRYPTO-WEB] Crypto Request Body Advice");
     return new CryptoRequestBodyAdvice(cryptoProcessorCacheTemplate);
   }
 
@@ -39,7 +39,7 @@ public class CryptoWebConfiguration {
   @ConditionalOnMissingBean
   CryptoResponseBodyAdvice cryptoResponseBodyAdvice(
       CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate) {
-    log.debug("[CRYPTO-WEB] Crypto Response Body Advice");
+    log.trace("[CRYPTO-WEB] Crypto Response Body Advice");
     return new CryptoResponseBodyAdvice(cryptoProcessorCacheTemplate);
   }
 }

@@ -71,16 +71,16 @@ public class ExecutorServiceHolder<T extends ExecutorService> {
       try {
         if (!instance.awaitTermination(
             option.getAwaitTerminationPeriod().toMillis(), TimeUnit.MILLISECONDS)) {
-          log.warn("Executor did not terminate within timeout, forcing shutdown...");
+          log.trace("Executor did not terminate within timeout, forcing shutdown...");
           instance.shutdownNow(); // 超时则强制终止
         }
       } catch (InterruptedException e) {
-        log.error("Await termination interrupted", e);
+        log.error("等待线程池终结异常", e);
         instance.shutdownNow();
         Thread.currentThread().interrupt();
       }
     } else {
-      log.debug("Force shutdown without awaiting termination");
+      log.trace("[COMMON-CORE] Force shutdown without awaiting termination");
       instance.shutdownNow();
     }
   }

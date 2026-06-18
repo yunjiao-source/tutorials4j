@@ -56,9 +56,9 @@ public class SimpleImageCaptchaApplication extends DefaultImageCaptchaApplicatio
   @Override
   @PreDestroy
   public void close() {
-    super.close();
     if (log.isDebugEnabled()) {
-      log.debug("[CAPTCHA-TIANAI] DefaultImageCaptchaApplication 销毁成功");
+      log.debug("DefaultImageCaptchaApplication 实例关闭");
     }
+    super.close();
   }
 }

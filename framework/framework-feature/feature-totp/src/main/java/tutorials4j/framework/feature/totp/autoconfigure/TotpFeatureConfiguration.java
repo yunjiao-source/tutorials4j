@@ -21,13 +21,13 @@ import tutorials4j.framework.web.security.totp.GoogleAuthService;
 public class TotpFeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE-TOTP] TOTP Feature Configuration");
+    log.trace("[FEATURE-TOTP] TOTP Feature Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   TotpAuthEndpoint totpAuthEndpoint(GoogleAuthService googleAuthService) {
-    log.debug("[FEATURE-TOTP] Totp Auth Endpoint");
+    log.trace("[FEATURE-TOTP] Totp Auth Endpoint");
     return new TotpAuthEndpoint(googleAuthService);
   }
 }

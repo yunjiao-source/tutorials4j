@@ -31,7 +31,7 @@ import tutorials4j.framework.web.logging.properties.RequestLoggingWebProperties.
 public class RequestLoggingWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-LOGGING] Request Logging Configuration");
+    log.trace("[WEB-LOGGING] Request Logging Configuration");
   }
 
   /**
@@ -62,9 +62,9 @@ public class RequestLoggingWebConfiguration {
       logger.isEnabledForLevel(Level.DEBUG);
     }
 
-    if (log.isDebugEnabled()) {
-      log.debug("[WEB-LOGGING] 请求日志过滤器：{}", servletFilterOptions);
-    }
+    log.trace(
+        "[WEB-LOGGING] SimpleRequestLoggingFilter configuration parameters are {}",
+        servletFilterOptions);
     return registration;
   }
 }

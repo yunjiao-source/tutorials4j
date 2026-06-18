@@ -337,7 +337,9 @@ public class RedisLockService {
     }
 
     public void destory() {
-      log.debug("Redis分布式锁自动续期定时任务执行器关闭");
+      if (log.isDebugEnabled()) {
+        log.debug("分布式锁自动续期定时任务执行器关闭");
+      }
       executorServiceHolder.shutdown();
     }
 
@@ -362,8 +364,8 @@ public class RedisLockService {
         redisTemplateDecorator
             .getStringRedisTemplate()
             .execute(SCRIPT_UNLOCK, Collections.singletonList(lockKey), lockId);
-    if (!Boolean.parseBoolean(value)) {
-      log.debug("[CACHE-REDIS] 释放分布式锁不存在，可能因为已过期，locKey={}", lockKey);
+    if (!Boolean.parseBoolean(value) && log.isDebugEnabled()) {
+      log.debug("释放分布式锁不存在，可能因为已过期，lockKey={}", lockKey);
     }
   }
 

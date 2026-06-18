@@ -22,7 +22,7 @@ import tutorials4j.framework.tenant.mybatis.SimpleTenantLineInterceptorCustomize
 public class MybatisPlusTenantConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[TENANT-MYBATIS-PLUS] Mybatis Plus Configuration");
+    log.trace("[TENANT-MYBATIS-PLUS] Mybatis Plus Configuration");
   }
 
   /** 租户配置：共享表 */
@@ -34,13 +34,13 @@ public class MybatisPlusTenantConfiguration {
 
     @PostConstruct
     public void postConstruct() {
-      log.debug("[TENANT-MYBATIS-PLUS] Table Tenant Configuration");
+      log.trace("[TENANT-MYBATIS-PLUS] Table Tenant Configuration");
     }
 
     @Bean
     MybatisPlusInterceptorCustomizer defaultTenantLineInterceptorCustomizer(
         TenantProperties properties) {
-      log.debug("[TENANT-MYBATIS-PLUS] Simple Tenant Line Interceptor Customizer");
+      log.trace("[TENANT-MYBATIS-PLUS] Simple Tenant Line Interceptor Customizer");
       return new SimpleTenantLineInterceptorCustomizer(properties);
     }
   }
@@ -54,13 +54,13 @@ public class MybatisPlusTenantConfiguration {
 
     @PostConstruct
     public void postConstruct() {
-      log.debug("[TENANT-MYBATIS-PLUS] Database Tenant Configuration");
+      log.trace("[TENANT-MYBATIS-PLUS] Database Tenant Configuration");
     }
 
     @Bean
     SqlSessionFactoryBeanCustomizer databaseSqlSessionFactoryBeanCustomizer(
         MultipleRoutingDataSource dataSource) {
-      log.debug("[TENANT-MYBATIS-PLUS] Database SqlSession Factory Bean Customizer ");
+      log.trace("[TENANT-MYBATIS-PLUS] Database SqlSession Factory Bean Customizer ");
       return factoryBean -> {
         factoryBean.setDataSource(dataSource);
       };

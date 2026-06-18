@@ -25,7 +25,7 @@ public class TenantHandlerInterceptor implements HandlerInterceptor {
     }
 
     if (log.isDebugEnabled()) {
-      log.debug("[DATA-CORE] 租户请求拦截器：url={}, tenant={}", request.getRequestURI(), tenant);
+      log.debug("租户拦截器, url={}, tenant={}", request.getRequestURI(), tenant);
     }
     return true;
   }

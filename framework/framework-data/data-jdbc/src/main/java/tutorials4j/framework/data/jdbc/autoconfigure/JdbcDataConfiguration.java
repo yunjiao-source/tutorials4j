@@ -21,20 +21,20 @@ import tutorials4j.framework.data.jdbc.routing.MultipleRoutingDataSource;
 public class JdbcDataConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[DATA-JDBC] Data Jdbc Configuration");
+    log.trace("[DATA-JDBC] Data Jdbc Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   DataSourceRoutingManagerCreator dataSourceRoutingManagerCreator(DataSource dataSource) {
-    log.debug("[DATA-JDBC] Data Source Routing Manager Creator");
+    log.trace("[DATA-JDBC] Data Source Routing Manager Creator");
     return new DataSourceRoutingManagerCreator(dataSource);
   }
 
   @Bean
   @ConditionalOnMissingBean
   MultipleRoutingDataSource MultipleRoutingDataSource(DataSourceRoutingManagerCreator creator) {
-    log.debug("[DATA-JDBC] Multiple Routing DataSource");
+    log.trace("[DATA-JDBC] Multiple Routing DataSource");
     return new MultipleRoutingDataSource(creator.getInstance(), creator.getDefaultDataSource());
   }
 }

@@ -23,6 +23,6 @@ import tutorials4j.framework.common.uid.autoconfigure.UidCommonConfiguration;
 public class CommonAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON] Common Auto Configuration");
+    log.trace("[COMMON] Common Auto Configuration");
   }
 }

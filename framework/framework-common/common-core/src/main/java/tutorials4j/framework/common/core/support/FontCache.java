@@ -59,7 +59,7 @@ public final class FontCache {
     String fontName = font.getFontName();
     fontCache.put(fontName, font);
     if (log.isDebugEnabled()) {
-      log.debug("成功注册字体: {}", fontName);
+      log.debug("成功注册字体, fontName={}", fontName);
     }
   }
 

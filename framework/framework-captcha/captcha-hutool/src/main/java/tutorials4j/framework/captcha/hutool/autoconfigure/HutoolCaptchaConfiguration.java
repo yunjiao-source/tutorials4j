@@ -33,14 +33,14 @@ import tutorials4j.framework.captcha.support.BehaviorCaptchaCacheTemplate;
 public class HutoolCaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CAPTCHA-HUTOOL] Hutool Captcha Configuration");
+    log.trace("[CAPTCHA-HUTOOL] Hutool Captcha Configuration");
   }
 
   @Bean
   LineCaptchaService lineCaptchaService(
       HutoolCaptchaProperties properties,
       BehaviorCaptchaCacheTemplate behaviorCaptchaCacheTemplate) {
-    log.debug("[CAPTCHA-HUTOOL] Line Captcha Service");
+    log.trace("[CAPTCHA-HUTOOL] Line Captcha Service");
 
     HutoolCaptchaProperties.DrawingOptions options = properties.getLine();
     validate(options);
@@ -55,7 +55,7 @@ public class HutoolCaptchaConfiguration {
   CircleCaptchaService circleCaptchaService(
       HutoolCaptchaProperties properties,
       BehaviorCaptchaCacheTemplate behaviorCaptchaCacheTemplate) {
-    log.debug("[CAPTCHA-HUTOOL] Circle Captcha Service");
+    log.trace("[CAPTCHA-HUTOOL] Circle Captcha Service");
     HutoolCaptchaProperties.DrawingOptions options = properties.getCircle();
     validate(options);
 
@@ -69,7 +69,7 @@ public class HutoolCaptchaConfiguration {
   ShearCaptchaService sheareCaptchaService(
       HutoolCaptchaProperties properties,
       BehaviorCaptchaCacheTemplate behaviorCaptchaCacheTemplate) {
-    log.debug("[CAPTCHA-HUTOOL] Shear Captcha Service");
+    log.trace("[CAPTCHA-HUTOOL] Shear Captcha Service");
     HutoolCaptchaProperties.DrawingOptions options = properties.getShear();
     validate(options);
 

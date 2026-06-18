@@ -81,7 +81,7 @@ public class XssUtils {
     temp = temp.replaceAll(getInstance().quot, "\"");
     String result = temp.replaceAll("\n", "");
     if (log.isDebugEnabled()) {
-      log.debug("[COMMON-SPRING] Antisamy 处理完成：{} -> {}", taintedHTML, result);
+      log.debug("Antisamy processing completed, {} -> {}", taintedHTML, result);
     }
     return result;
   }
@@ -98,7 +98,9 @@ public class XssUtils {
       URL url = ResourceUtils.getURL("classpath:antisamy/antisamy-anythinggoes.xml");
       return Policy.getInstance(url);
     } catch (IOException | PolicyException e) {
-      log.debug("[COMMON-SPRING] Antisamy创建策略异常：{}", e.getMessage());
+      log.trace(
+          "[COMMON-SPRING] An exception occurred during Antisamy strategy creation {}",
+          e.getMessage());
       return null;
     }
   }
@@ -127,7 +129,7 @@ public class XssUtils {
       final CleanResults cleanResults = scan(taintedHtml);
       return cleanResults.getCleanHTML();
     } catch (ScanException | PolicyException e) {
-      log.debug("[COMMON-SPRING] Antisamy 扫描异常：{}", e.getMessage());
+      log.trace("[COMMON-SPRING] An exception occurred during Antisamy scan {}", e.getMessage());
       return taintedHtml;
     }
   }

@@ -25,6 +25,6 @@ import tutorials4j.framework.tenant.mybatis.autoconfigure.MybatisPlusTenantConfi
 public class TenantAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[TENANT] Tenant Auto Configuration");
+    log.trace("[TENANT] Tenant Auto Configuration");
   }
 }

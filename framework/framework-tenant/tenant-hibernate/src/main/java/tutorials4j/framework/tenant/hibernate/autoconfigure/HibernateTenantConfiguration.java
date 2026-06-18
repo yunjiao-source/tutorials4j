@@ -25,7 +25,7 @@ import tutorials4j.framework.tenant.hibernate.TenantDataSourceBasedMultiTenantCo
 public class HibernateTenantConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[TENANT-HIBERNATE] Hibernate Configuration");
+    log.trace("[TENANT-HIBERNATE] Hibernate Configuration");
   }
 
   /** 租户配置：共享表 */
@@ -38,13 +38,13 @@ public class HibernateTenantConfiguration {
 
     @PostConstruct
     public void postConstruct() {
-      log.debug("[TENANT-HIBERNATE] Table Tenant Configuration");
+      log.trace("[TENANT-HIBERNATE] Table Tenant Configuration");
     }
 
     @Bean
     @ConditionalOnMissingBean
     DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
-      log.debug("[TENANT-HIBERNATE] Default Current Tenant Identifier Resolver");
+      log.trace("[TENANT-HIBERNATE] Default Current Tenant Identifier Resolver");
       return new DefaultCurrentTenantIdentifierResolver();
     }
   }
@@ -57,13 +57,13 @@ public class HibernateTenantConfiguration {
   static class DatabaseTenantConfiguration {
     @PostConstruct
     public void postConstruct() {
-      log.debug("[TENANT-HIBERNATE] Database Tenant Configuration");
+      log.trace("[TENANT-HIBERNATE] Database Tenant Configuration");
     }
 
     @Bean
     @ConditionalOnMissingBean
     DefaultCurrentTenantIdentifierResolver defaultCurrentTenantIdentifierResolver() {
-      log.debug("[TENANT-HIBERNATE] Default Current Tenant Identifier Resolver");
+      log.trace("[TENANT-HIBERNATE] Default Current Tenant Identifier Resolver");
       return new DefaultCurrentTenantIdentifierResolver();
     }
 
@@ -72,7 +72,7 @@ public class HibernateTenantConfiguration {
     TenantDataSourceBasedMultiTenantConnectionProvider
         tenantDataSourceBasedMultiTenantConnectionProvider(
             DataSourceRoutingManagerCreator creator, TenantProperties properties) {
-      log.debug("[TENANT-HIBERNATE] Tenant Data Source Based Multi Tenant Connection Provider");
+      log.trace("[TENANT-HIBERNATE] Tenant Data Source Based Multi Tenant Connection Provider");
       DataSourceRoutingManager dataSourceRoutingManager = creator.getInstance();
 
       properties

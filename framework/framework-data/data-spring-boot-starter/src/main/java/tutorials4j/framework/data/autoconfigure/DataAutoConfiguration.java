@@ -25,6 +25,6 @@ import tutorials4j.framework.data.mybatis.autoconfigure.MybatisPlusDataConfigura
 public class DataAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[DATA] Data Auto Configuration");
+    log.trace("[DATA] Data Auto Configuration");
   }
 }

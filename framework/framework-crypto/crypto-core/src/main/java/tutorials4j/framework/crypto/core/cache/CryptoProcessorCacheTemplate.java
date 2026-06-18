@@ -87,11 +87,12 @@ public class CryptoProcessorCacheTemplate
 
   @Override
   public CryptoProcessor valueGenerator(String key) {
-    if (log.isDebugEnabled()) {
-      log.debug("[CRYPTO-CORE] 创建新的对称加密处理器，key={}...", key.substring(0, Math.min(8, key.length())));
-    }
     // 用非对称解密私钥
     String secretKey = asymmetricProcessor.decrypt(key);
+
+    if (log.isDebugEnabled()) {
+      log.debug("创建对称算法处理器, category = {}", symmetricProcessor.getCategory());
+    }
     // 创建新的实例
     return symmetricProcessor.newInstance(new SecretKey(secretKey));
   }

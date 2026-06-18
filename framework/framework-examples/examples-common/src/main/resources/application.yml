@@ -5,5 +5,5 @@ spring:
 
 logging:
   level:
-    tutorials4j: DEBUG
+    tutorials4j: TRACE
 #    org.springframework: DEBUG

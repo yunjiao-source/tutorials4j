@@ -28,6 +28,6 @@ import tutorials4j.framework.feature.totp.autoconfigure.TotpFeatureConfiguration
 public class FeatureAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE] Feature Auto Configuration");
+    log.trace("[FEATURE] Feature Auto Configuration");
   }
 }

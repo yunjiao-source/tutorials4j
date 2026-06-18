@@ -37,12 +37,7 @@ public class CompositeTaskDecoratorCreator implements BeanCreator<CompositeTaskD
         return instance;
       }
 
-      List<TaskDecorator> taskDecorators =
-          taskDecoratorCreators.stream()
-              .map(TaskDecoratorCreator::getInstance)
-              .collect(Collectors.toList());
-      log.debug("[COMMON-SPRING] 创建组合任务装饰器：{}", taskDecorators);
-      instance = new CompositeTaskDecorator(taskDecorators);
+      instance = newInstance();
     }
     return instance;
   }
@@ -53,10 +48,12 @@ public class CompositeTaskDecoratorCreator implements BeanCreator<CompositeTaskD
         taskDecoratorCreators.stream()
             .map(TaskDecoratorCreator::getInstance)
             .collect(Collectors.toList());
-
-    CompositeTaskDecorator decorator = new CompositeTaskDecorator(taskDecorators);
-    log.debug("[COMMON-SPRING] 创建'{}'组合任务装饰器：{}", decorator, taskDecorators);
-    return decorator;
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "TaskDecorator instances will be injected into the CompositeTaskDecorator instance, totaling {}",
+          taskDecorators);
+    }
+    return new CompositeTaskDecorator(taskDecorators);
   }
 
   @Override

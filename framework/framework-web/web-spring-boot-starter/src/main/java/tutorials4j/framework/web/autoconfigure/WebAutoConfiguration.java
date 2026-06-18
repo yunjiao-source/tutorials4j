@@ -37,6 +37,6 @@ import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfigura
 public class WebAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB] Web Auto Configuration");
+    log.trace("[WEB] Web Auto Configuration");
   }
 }

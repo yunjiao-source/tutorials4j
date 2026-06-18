@@ -43,7 +43,7 @@ public class TenantCaffeineCacheManager extends AbstractRoutingCacheManager<Caff
   @Override
   protected CaffeineCacheManager createCacheManager(Object name) {
     if (log.isDebugEnabled()) {
-      log.debug("[TENANT-CACHE] 创建[Caffeine]租户缓存管理器: {}", name);
+      log.debug("创建Caffeine租户缓存管理器, name = {}", name);
     }
 
     return caffeineCacheManagerCreator.newInstance();

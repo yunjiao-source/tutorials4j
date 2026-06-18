@@ -29,14 +29,14 @@ import tutorials4j.framework.crypto.core.properties.CryptoProperties;
 public class CryptoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CRYPTO-CORE] Crypto Configuration");
+    log.trace("[CRYPTO-CORE] Crypto Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   CryptoProcessorCacheTemplate cryptoRequestCacheTemplate(
       CryptoProperties properties, CryptoProcessorFactory cryptoProcessorFactory) {
-    log.debug("[CRYPTO-CORE] Crypto Request Cache Template");
+    log.trace("[CRYPTO-CORE] Crypto Request Cache Template");
     return new CryptoProcessorCacheTemplate(
         cryptoProcessorFactory,
         properties.getAsymmetricCryptoStrategy(),
@@ -48,7 +48,8 @@ public class CryptoConfiguration {
   CryptoProcessorFactory cryptoProcessorFactory(ObjectProvider<CryptoProcessor> providers) {
     Map<CryptoCategory, CryptoProcessor> processors =
         providers.stream().collect(Collectors.toMap(CryptoProcessor::getCategory, m -> m));
-    log.debug("[CRYPTO-CORE] 工厂'CryptoProcessorFactory'注入实例：{}", processors);
+    log.trace(
+        "[CRYPTO-CORE] Injected instances in CryptoProcessorFactory is {}", processors.keySet());
     CryptoProcessorFactory.instance.setProcessors(processors);
     return CryptoProcessorFactory.instance;
   }
@@ -58,7 +59,8 @@ public class CryptoConfiguration {
   DigestProcessorFactory digestProcessorFactory(ObjectProvider<DigestProcessor> providers) {
     Map<DigestCategory, DigestProcessor> processors =
         providers.stream().collect(Collectors.toMap(DigestProcessor::getCategory, m -> m));
-    log.debug("[CRYPTO-CORE] 工厂'DigestProcessorFactory'注入实例：{}", processors);
+    log.trace(
+        "[CRYPTO-CORE] Injected instances in DigestProcessorFactory is {}", processors.keySet());
     DigestProcessorFactory.instance.setProcessors(processors);
     return DigestProcessorFactory.instance;
   }

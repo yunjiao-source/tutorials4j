@@ -2,6 +2,7 @@ package tutorials4j.framework.crypto.web.body;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -13,9 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
+import tutorials4j.framework.crypto.core.annotation.Crypto;
 import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
-import tutorials4j.framework.crypto.core.util.CryptoUtils;
 
 /**
  * TODO
@@ -30,12 +31,13 @@ public class CryptoResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
   @Override
   public boolean supports(
-      MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-    boolean supported = CryptoUtils.supported(returnType);
+      MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> converterType) {
+    Crypto crypto = methodParameter.getMethodAnnotation(Crypto.class);
+    boolean supported = ObjectUtils.isNotEmpty(crypto) && crypto.response();
     if (log.isDebugEnabled()) {
-      String methodName = returnType.getMethod().getName();
-      String className = returnType.getDeclaringClass().getName();
-      log.debug("[CRYPTO-WEB] 类 {} 的方法 {} 支持解密？ {}", className, methodName, supported);
+      String methodName = methodParameter.getMethod().getName();
+      String className = methodParameter.getDeclaringClass().getName();
+      log.debug("{} :: {} 支持加密吗? {}", className, methodName, supported);
     }
     return supported;
   }
@@ -53,7 +55,7 @@ public class CryptoResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY_HEX);
     if (StringUtils.isBlank(encryptedSecretKey)) {
       log.warn(
-          "[CRYPTO-WEB] 在请求头中未获取到加密密钥: headerName={}",
+          "Failed to obtain the encryption key from the request header {}",
           DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY_HEX);
       return body;
     }
@@ -66,7 +68,7 @@ public class CryptoResponseBodyAdvice implements ResponseBodyAdvice<Object> {
       if (log.isDebugEnabled()) {
         String methodName = returnType.getMethod().getName();
         String className = returnType.getDeclaringClass().getName();
-        log.debug("[CRYPTO-WEB] 类的方法执行加密完成: className={}, methodName={}", className, methodName);
+        log.debug("{} :: {} 响应体加密完成", className, methodName);
       }
       return result;
     } else {

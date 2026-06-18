@@ -27,7 +27,7 @@ import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 public class WebCaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CAPTCHA-WEB] Web Captcha Configuration");
+    log.trace("[CAPTCHA-WEB] Web Captcha Configuration");
   }
 
   @Bean
@@ -39,9 +39,7 @@ public class WebCaptchaConfiguration {
     registration.setFilter(filter);
     options.fill(registration);
 
-    if (log.isDebugEnabled()) {
-      log.debug("[CAPTCHA-CORE] 验证码校验过滤器：{}", options);
-    }
+    log.trace("[CAPTCHA-CORE] CaptchaRequestFilter configuration parameters are {}", options);
     return registration;
   }
 }

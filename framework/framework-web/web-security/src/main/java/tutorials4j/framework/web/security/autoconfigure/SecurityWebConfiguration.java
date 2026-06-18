@@ -34,20 +34,20 @@ import tutorials4j.framework.web.security.rest.IdempotentHandlerInterceptor;
 public class SecurityWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-SECURITY] Security Web Configuration");
+    log.trace("[WEB-SECURITY] Security Web Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   AccessLimitedCacheTemplate accessLimitedCacheTemplate() {
-    log.debug("[WEB-SECURITY] Access Limited Cache Template");
+    log.trace("[WEB-SECURITY] Access Limited Cache Template");
     return new AccessLimitedCacheTemplate();
   }
 
   @Bean
   @ConditionalOnMissingBean
   IdempotentCacheTemplate idempotentCacheTemplate() {
-    log.debug("[WEB-SECURITY] Idempotent Cache Template");
+    log.trace("[WEB-SECURITY] Idempotent Cache Template");
     return new IdempotentCacheTemplate();
   }
 
@@ -86,7 +86,7 @@ public class SecurityWebConfiguration {
         registration.addPathPatterns(options.getIncludePathPatterns());
       }
 
-      log.debug("[WEB-SECURITY] 添加请求拦截器：{}, {}", interceptor, options);
+      log.trace("[WEB-SECURITY] 添加请求拦截器：{}, {}", interceptor, options);
     }
   }
 }

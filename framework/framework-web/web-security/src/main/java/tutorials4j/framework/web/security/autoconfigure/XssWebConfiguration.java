@@ -29,13 +29,13 @@ import tutorials4j.framework.web.security.xss.XssRequestFilter;
 public class XssWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-SECURITY] Xss Web Configuration");
+    log.trace("[WEB-SECURITY] Xss Web Configuration");
   }
 
   @Bean
   @Order(JacksonConsts.MODULE_ORDER_XSS)
   XssJacksonSimpleModule xssJacksonSimpleModule() {
-    log.debug("[WEB-SECURITY] Xss Jackson Simple Module");
+    log.trace("[WEB-SECURITY] Xss Jackson Simple Module");
     return new XssJacksonSimpleModule();
   }
 
@@ -47,9 +47,8 @@ public class XssWebConfiguration {
     XssRequestFilter filter = new XssRequestFilter();
     registration.setFilter(filter);
     options.fill(registration);
-    if (log.isDebugEnabled()) {
-      log.debug("[WEB-SECURITY] Xss攻击过滤器：{}", options);
-    }
+
+    log.trace("[WEB-SECURITY] XssRequestFilter configuration parameters are {}", options);
     return registration;
   }
 }

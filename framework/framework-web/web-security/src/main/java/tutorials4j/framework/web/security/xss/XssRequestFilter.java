@@ -26,7 +26,7 @@ public class XssRequestFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper(request);
     if (log.isDebugEnabled()) {
-      log.debug("[WEB-SECURITY] Xss攻击过滤器：{}", request.getRequestURI());
+      log.debug("Xss攻击, method={}, uri={}", request.getMethod(), request.getRequestURI());
     }
     filterChain.doFilter(xssRequest, response);
   }

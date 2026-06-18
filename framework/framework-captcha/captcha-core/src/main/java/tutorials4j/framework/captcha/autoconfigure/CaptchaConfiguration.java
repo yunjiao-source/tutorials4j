@@ -24,20 +24,20 @@ import tutorials4j.framework.captcha.support.GraphicCaptchaCacheTemplate;
 public class CaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CAPTCHA-CORE] Captcha Configuration");
+    log.trace("[CAPTCHA-CORE] Captcha Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   BehaviorCaptchaCacheTemplate behaviorCaptchaCacheTemplate() {
-    log.debug("[CAPTCHA-CORE] Behavior Captcha Cache Template");
+    log.trace("[CAPTCHA-CORE] Behavior Captcha Cache Template");
     return new BehaviorCaptchaCacheTemplate();
   }
 
   @Bean
   @ConditionalOnMissingBean
   GraphicCaptchaCacheTemplate graphicCaptchaCacheTemplate() {
-    log.debug("[CAPTCHA-CORE] Graphic Captcha Cache Template");
+    log.trace("[CAPTCHA-CORE] Graphic Captcha Cache Template");
     return new GraphicCaptchaCacheTemplate();
   }
 
@@ -46,7 +46,7 @@ public class CaptchaConfiguration {
   CaptchaServiceFactory captchaServiceFactory(ObjectProvider<CaptchaService> providers) {
     Map<CaptchaCategory, CaptchaService> services =
         providers.stream().collect(Collectors.toMap(CaptchaService::getCategory, m -> m));
-    log.debug("[CAPTCHA-CORE] 工厂'CaptchaServiceFactory'注入实例：{}", services);
+    log.trace("[CAPTCHA-CORE] 工厂'CaptchaServiceFactory'注入实例：{}", services);
     CaptchaServiceFactory.instance.setServices(services);
     return CaptchaServiceFactory.instance;
   }

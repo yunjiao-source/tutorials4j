@@ -31,12 +31,12 @@ import tutorials4j.framework.web.client.properties.ClientWebProperties.RetryOpti
 public class ClientWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-CLIENT] Client Web Configuration");
+    log.trace("[WEB-CLIENT] Client Web Configuration");
   }
 
   @Bean
   RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
-    log.debug("[WEB-CLIENT] Log Headers Rest Template Builder Customizer");
+    log.trace("[WEB-CLIENT] Log Headers Rest Template Builder Customizer");
     return restTemplate -> {
       restTemplate.getInterceptors().add(new LoggingClientHttpRequestInterceptor());
     };
@@ -45,7 +45,7 @@ public class ClientWebConfiguration {
   @Bean
   RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(
       ClientWebProperties properties) {
-    log.debug("[WEB-CLIENT] Default Headers Rest Template Request Customizer");
+    log.trace("[WEB-CLIENT] Default Headers Rest Template Request Customizer");
     return request -> {
       properties.getDefaultHeaders().forEach(request.getHeaders()::set);
     };
@@ -55,12 +55,12 @@ public class ClientWebConfiguration {
   public static class RestClientWebConfiguration {
     @PostConstruct
     public void postConstruct() {
-      log.debug("[WEB-CLIENT] Rest Client Configuration");
+      log.trace("[WEB-CLIENT] Rest Client Configuration");
     }
 
     @Bean
     RestClientCustomizer logHeadersRestClientCustomizer() {
-      log.debug("[WEB-CLIENT] Log Headers Rest Client Customizer");
+      log.trace("[WEB-CLIENT] Log Headers Rest Client Customizer");
       return restClientBuilder -> {
         restClientBuilder.requestInterceptor(new LoggingClientHttpRequestInterceptor());
       };
@@ -68,7 +68,7 @@ public class ClientWebConfiguration {
 
     @Bean
     RestClientCustomizer defaultHeadersRestClientCustomizer(ClientWebProperties properties) {
-      log.debug("[WEB-CLIENT] Default Headers Rest Client Customizer");
+      log.trace("[WEB-CLIENT] Default Headers Rest Client Customizer");
       return restClientBuilder -> {
         restClientBuilder.defaultHeaders(
             header -> properties.getDefaultHeaders().forEach(header::set));
@@ -80,12 +80,12 @@ public class ClientWebConfiguration {
   public static class WebClientWebConfiguration {
     @PostConstruct
     public void postConstruct() {
-      log.debug("[WEB-CLIENT] Web Client Configuration");
+      log.trace("[WEB-CLIENT] Web Client Configuration");
     }
 
     @Bean
     WebClientCustomizer defaultHeadersWebClientCustomizer(ClientWebProperties properties) {
-      log.debug("[WEB-CLIENT] Default Headers Web Client Customizer");
+      log.trace("[WEB-CLIENT] Default Headers Web Client Customizer");
       return webClientBuilder -> {
         webClientBuilder.defaultHeaders(
             header -> properties.getDefaultHeaders().forEach(header::set));
@@ -94,7 +94,7 @@ public class ClientWebConfiguration {
 
     @Bean
     WebClientCustomizer defaultWebClientCustomizer() {
-      log.debug("[WEB-CLIENT] Default Web Client Customizer");
+      log.trace("[WEB-CLIENT] Default Web Client Customizer");
       return restClientBuilder -> {
         restClientBuilder.filter(ClientUtils.ofCatchExcepitonLogger());
       };
@@ -102,7 +102,7 @@ public class ClientWebConfiguration {
 
     @Bean
     WebClientCustomizer logHeadersWebClientCustomizer() {
-      log.debug("[WEB-CLIENT] Log Headers Web Client Customizer");
+      log.trace("[WEB-CLIENT] Log Headers Web Client Customizer");
       return webClientBuilder -> {
         webClientBuilder.filter(ClientUtils.ofClientRequestLogger());
         webClientBuilder.filter(ClientUtils.ofClientResponseLogger());
@@ -111,7 +111,7 @@ public class ClientWebConfiguration {
 
     @Bean
     WebClientCustomizer retryWebClientCustomizer(ClientWebProperties properties) {
-      log.debug("[WEB-CLIENT] Retry Web Client Customizer");
+      log.trace("[WEB-CLIENT] Retry Web Client Customizer");
       RetryOptions options = properties.getRetry();
       return webClientBuilder ->
           webClientBuilder.filter(

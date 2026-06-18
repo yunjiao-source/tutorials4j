@@ -34,19 +34,19 @@ import tutorials4j.framework.web.logging.properties.TraceWebProperties;
 public class TraceWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-LOGGING] Trace Logging Configuration");
+    log.trace("[WEB-LOGGING] Trace Logging Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   TaskDecoratorCreator traceTaskDecoratorCreator() {
-    log.debug("[WEB-LOGGING] Trace Task Decorator Creator");
+    log.trace("[WEB-LOGGING] Trace Task Decorator Creator");
     return TraceTaskDecorator::new;
   }
 
   @Bean
   RestTemplateCustomizer traceRestTemplateCustomizer() {
-    log.debug("[WEB-LOGGING] Trace Rest Template Customizer");
+    log.trace("[WEB-LOGGING] Trace Rest Template Customizer");
     return restTemplate -> {
       restTemplate.getInterceptors().add(new TraceRestTemplateInterceptor());
     };
@@ -54,7 +54,7 @@ public class TraceWebConfiguration {
 
   @Bean
   RestClientCustomizer traceRestClientCustomizer() {
-    log.debug("[WEB-LOGGING] Trace Rest Client Customizer");
+    log.trace("[WEB-LOGGING] Trace Rest Client Customizer");
     return restClientBuilder -> {
       restClientBuilder.requestInterceptor(new TraceRestTemplateInterceptor());
     };
@@ -62,7 +62,7 @@ public class TraceWebConfiguration {
 
   @Bean
   WebClientCustomizer traceWebClientCustomizer() {
-    log.debug("[WEB-LOGGING] Trace Web Client Customizer");
+    log.trace("[WEB-LOGGING] Trace Web Client Customizer");
     return webClientBuilder -> {
       webClientBuilder.filter(new TraceExchangeFilterFunction());
     };
@@ -77,9 +77,7 @@ public class TraceWebConfiguration {
     registration.setFilter(filter);
     options.fill(registration);
 
-    if (log.isDebugEnabled()) {
-      log.debug("[WEB-LOGGING] 跟踪信息过滤器：{}", options);
-    }
+    log.trace("[WEB-LOGGING] TraceRequestFilter configuration parameters are {}", options);
     return registration;
   }
 }

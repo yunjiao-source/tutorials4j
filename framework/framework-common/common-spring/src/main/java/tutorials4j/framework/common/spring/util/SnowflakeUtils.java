@@ -49,7 +49,11 @@ public class SnowflakeUtils {
 
     snowflake = IdUtil.getSnowflake(workerId, datacenterId);
     if (log.isDebugEnabled()) {
-      log.debug("[COMMON-CORE] 雪花算法ID工具初始化完成：datacenter = {}, worker = {}", datacenterId, workerId);
+      log.debug(
+          "雪花算法工具[{}]初始化完成, datacenter = {}, worker = {}",
+          snowflake.getClass().getName(),
+          datacenterId,
+          workerId);
     }
   }
 

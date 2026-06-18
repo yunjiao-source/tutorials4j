@@ -24,6 +24,6 @@ import tutorials4j.framework.captcha.web.autoconfigure.WebCaptchaConfiguration;
 public class CaptchaAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON] Common Auto Configuration");
+    log.trace("[COMMON] Common Auto Configuration");
   }
 }

@@ -31,13 +31,13 @@ public class SpringdocWebConfiguration implements WebMvcConfigurer {
 
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-LOGGING] Web Springdoc Configuration");
+    log.trace("[WEB-LOGGING] Web Springdoc Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   OpenAPI t4jOpenAPI() {
-    log.debug("[WEB-LOGGING] T4J Open API");
+    log.trace("[WEB-LOGGING] T4J Open API");
     return new OpenAPI()
         .info(
             new Info()
@@ -55,7 +55,7 @@ public class SpringdocWebConfiguration implements WebMvcConfigurer {
   @ConditionalOnBean(ObjectMapper.class)
   @ConditionalOnMissingBean
   ModelResolver simpleSwaggerModelResolver(ObjectMapper mapper) {
-    log.debug("[WEB-LOGGING] Simple Validation Model Resolver");
+    log.trace("[WEB-LOGGING] Simple Validation Model Resolver");
     return new SimpleSwaggerModelResolver(mapper);
   }
 }

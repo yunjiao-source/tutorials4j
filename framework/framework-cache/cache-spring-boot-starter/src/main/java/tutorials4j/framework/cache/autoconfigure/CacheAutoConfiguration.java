@@ -27,6 +27,6 @@ import tutorials4j.framework.cache.redisson.autoconfigure.RedissonCacheConfigura
 public class CacheAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CACHE] Cache Auto Configuration");
+    log.trace("[CACHE] Cache Auto Configuration");
   }
 }

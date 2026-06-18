@@ -36,7 +36,7 @@ public class AccessLimitedHandlerInterceptor implements HandlerInterceptor {
       throws Exception {
 
     if (log.isDebugEnabled()) {
-      log.debug("[WEB-SECURITY] 访问限制拦截器：{}", request.getRequestURI());
+      log.debug("访问限制, method={}, uri={}", request.getMethod(), request.getRequestURI());
     }
 
     AccessLimited accessLimited = WebUtils.getHandlerMethodAnnotation(handler, AccessLimited.class);

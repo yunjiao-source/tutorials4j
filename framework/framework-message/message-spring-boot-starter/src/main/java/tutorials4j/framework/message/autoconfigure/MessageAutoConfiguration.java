@@ -16,6 +16,6 @@ import org.springframework.context.annotation.Import;
 public class MessageAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[MESSAGE] Message Auto Configuration");
+    log.trace("[MESSAGE] Message Auto Configuration");
   }
 }

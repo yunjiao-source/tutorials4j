@@ -25,13 +25,13 @@ import tutorials4j.framework.feature.captcha.web.CaptchaTianaiEndpoint;
 public class CaptchaFeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE-CAPTCHA] Captcha Feature Configuration");
+    log.trace("[FEATURE-CAPTCHA] Captcha Feature Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   CaptchaEndpoint uniformCaptchaEndpoint(CaptchaServiceFactory factory) {
-    log.debug("[FEATURE-CAPTCHA] Uniform Captcha Endpoint");
+    log.trace("[FEATURE-CAPTCHA] Uniform Captcha Endpoint");
     return new CaptchaEndpoint(factory);
   }
 
@@ -39,7 +39,7 @@ public class CaptchaFeatureConfiguration {
   @ConditionalOnMissingBean
   CaptchaTianaiEndpoint captchaTianaiEndpoint(
       CaptchaServiceFactory factory, ImageCaptchaApplication imageCaptchaApplication) {
-    log.debug("[FEATURE-CAPTCHA] Captcha Tianai Endpoint");
+    log.trace("[FEATURE-CAPTCHA] Captcha Tianai Endpoint");
     return new CaptchaTianaiEndpoint(factory, imageCaptchaApplication);
   }
 }

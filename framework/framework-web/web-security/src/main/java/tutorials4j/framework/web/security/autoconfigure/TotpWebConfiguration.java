@@ -35,7 +35,7 @@ import tutorials4j.framework.web.security.totp.GoogleYamlCredentialRepository;
 public class TotpWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[WEB-SECURITY] Web Google Configuration");
+    log.trace("[WEB-SECURITY] Web Google Configuration");
   }
 
   @Bean
@@ -59,14 +59,14 @@ public class TotpWebConfiguration {
     // 关键：设置我们自定义的凭证仓库
     authenticator.setCredentialRepository(repository);
 
-    log.debug("[WEB-SECURITY] Google Authenticator");
+    log.trace("[WEB-SECURITY] Google Authenticator");
     return authenticator;
   }
 
   @Bean
   @ConditionalOnMissingBean
   ICredentialRepository yamlCredentialRepository(TotpWebProperties properties) {
-    log.debug("[WEB-SECURITY] Yaml Credential Repository");
+    log.trace("[WEB-SECURITY] Yaml Credential Repository");
     return new GoogleYamlCredentialRepository(properties.getCredentials());
   }
 
@@ -74,7 +74,7 @@ public class TotpWebConfiguration {
   @ConditionalOnMissingBean
   GoogleAuthService googleAuthService(
       GoogleAuthenticator authenticator, TotpWebProperties properties) {
-    log.debug("[WEB-SECURITY] Google Auth Service");
+    log.trace("[WEB-SECURITY] Google Auth Service");
     return new GoogleAuthService(authenticator, properties.getOtpAuthTotpURL());
   }
 
@@ -87,9 +87,7 @@ public class TotpWebConfiguration {
     registration.setFilter(filter);
     options.fill(registration);
 
-    if (log.isDebugEnabled()) {
-      log.debug("[WEB-SECURITY] Google Auth 校验过滤器：{}", options);
-    }
+    log.trace("[WEB-SECURITY] GoogleAuthRequestFilter configuration parameters are {}", options);
     return registration;
   }
 }

@@ -36,14 +36,14 @@ import tutorials4j.framework.captcha.tianai.support.SimpleImageCaptchaApplicatio
 public class TianaiCaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CAPTCHA-TIANAI] Tianai Captcha Configuration");
+    log.trace("[CAPTCHA-TIANAI] Tianai Captcha Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   RotateCaptchaService rotateCaptchaService(
       ImageCaptchaApplication imageCaptchaApplication, TianaiCaptchaProperties properties) {
-    log.debug("[CAPTCHA-TIANAI] Rotate Captcha Service");
+    log.trace("[CAPTCHA-TIANAI] Rotate Captcha Service");
     TianaiOptions options = properties.getRotate();
     options.merge(properties.getCommon());
     return new RotateCaptchaService(
@@ -54,7 +54,7 @@ public class TianaiCaptchaConfiguration {
   @ConditionalOnMissingBean
   SliderCaptchaService sliderCaptchaService(
       ImageCaptchaApplication imageCaptchaApplication, TianaiCaptchaProperties properties) {
-    log.debug("[CAPTCHA-TIANAI] Slider Captcha Service");
+    log.trace("[CAPTCHA-TIANAI] Slider Captcha Service");
     TianaiOptions options = properties.getSlider();
     options.merge(properties.getCommon());
     return new SliderCaptchaService(
@@ -65,7 +65,7 @@ public class TianaiCaptchaConfiguration {
   @ConditionalOnMissingBean
   WordImageClickCaptchaService wordImageClickCaptchaService(
       ImageCaptchaApplication imageCaptchaApplication, TianaiCaptchaProperties properties) {
-    log.debug("[CAPTCHA-TIANAI] Word Image Click Captcha Service");
+    log.trace("[CAPTCHA-TIANAI] Word Image Click Captcha Service");
     TianaiOptions options = properties.getSlider();
     options.merge(properties.getCommon());
     return new WordImageClickCaptchaService(
@@ -77,7 +77,7 @@ public class TianaiCaptchaConfiguration {
   @ConditionalOnMissingBean
   ConcatCaptchaService concatCaptchaService(
       ImageCaptchaApplication imageCaptchaApplication, TianaiCaptchaProperties properties) {
-    log.debug("[CAPTCHA-TIANAI] Concat Captcha Service");
+    log.trace("[CAPTCHA-TIANAI] Concat Captcha Service");
     TianaiOptions options = properties.getConcat();
     options.merge(properties.getCommon());
     return new ConcatCaptchaService(
@@ -87,14 +87,14 @@ public class TianaiCaptchaConfiguration {
   @Bean
   @ConditionalOnMissingBean
   ImageResourceTACBuilderCustomizer defaultResourceTACBuilderCustomizer() {
-    log.debug("[CAPTCHA-TIANAI] Image Resource TAC Builder Customizer");
+    log.trace("[CAPTCHA-TIANAI] Image Resource TAC Builder Customizer");
     return new ImageResourceTACBuilderCustomizer();
   }
 
   @Bean
   @ConditionalOnMissingBean
   RedisCacheStore redisCacheStore(GraphicCaptchaCacheTemplate captchaCacheTemplate) {
-    log.debug("[CAPTCHA-TIANAI] Redis Cache Store");
+    log.trace("[CAPTCHA-TIANAI] Redis Cache Store");
     return new RedisCacheStore(captchaCacheTemplate);
   }
 
@@ -102,7 +102,7 @@ public class TianaiCaptchaConfiguration {
   @ConditionalOnMissingBean
   ImageCaptchaApplication imageCaptchaApplication(
       RedisCacheStore redisCacheStore, ObjectProvider<TACBuilderCustomizer> customizers) {
-    log.debug("[CAPTCHA-TIANAI] Slider Image Captcha Application");
+    log.trace("[CAPTCHA-TIANAI] Slider Image Captcha Application");
     TACBuilder builder = TACBuilder.builder().addDefaultTemplate().setCacheStore(redisCacheStore);
     customizers.orderedStream().forEach(customizer -> customizer.customiz(builder));
 

@@ -48,7 +48,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   private void createTasks() {
     if (!properties.isAllTaskAutoStartOnBoot()) {
-      log.warn("配置属性: allTaskAutoStartOnBoot=false, 忽略创建所有定时任务");
+      log.warn("忽略创建所有定时任务，因为配置属性allTaskAutoStartOnBoot=false");
       return;
     }
     taskRepository.findAll().forEach(this::createTask);
@@ -57,15 +57,16 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
   public void createTask(Task task) {
     Assert.notNull(task, "task must not be null");
     task.assertValid();
+    Assert.notNull(scheduledTaskRegistrar, "scheduledTaskRegistrar must not be null");
 
     String taskCode = task.getTaskCode();
     if (!task.isEnabled()) {
-      log.warn("忽略操作！ 任务未开启, taskCode={}", taskCode);
+      // TODO EXCEPTION
       return;
     }
 
     if (triggerTaskMap.containsKey(taskCode)) {
-      log.warn("忽略操作！ 任务已经存在, taskCode={}", taskCode);
+      // TODO EXCEPTION
       return;
     }
 
@@ -74,14 +75,13 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   private synchronized void doAddTask(Task task) {
     if (log.isDebugEnabled()) {
-      log.debug("[SCHEDULE-CORE] Add Schedule Task. taskCode={}", task.getTaskCode());
+      log.debug("添加定时任务， taskCode={}", task.getTaskCode());
     }
 
     if (isDestroy) {
-      log.warn("Instance is destroyed, SKIP!!!");
+      log.warn("实例已经被销毁");
       return;
     }
-    Assert.notNull(scheduledTaskRegistrar, "scheduledTaskRegistrar must not be null");
 
     String taskCode = task.getTaskCode();
     if (triggerTaskMap.containsKey(taskCode)) {
@@ -93,7 +93,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     try {
       taskRunner = SpringUtil.getBean(classSimpleName, TaskRunner.class);
     } catch (BeansException e) {
-      log.error("获取bean异常, classSimpleName = {}, errorMessage={}", classSimpleName, e.getMessage());
+      log.error("获取bean异常", e);
     }
 
     if (taskRunner == null) {
@@ -124,12 +124,12 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   public void cancelTask(String taskCode) {
     if (isDestroy) {
-      log.warn("实例已经销毁，忽略此次操作");
+      log.warn("实例已经销毁，无法取消，taskCode={}", taskCode);
       return;
     }
 
     if (!triggerTaskMap.containsKey(taskCode)) {
-      log.warn("任务不存在，无法取消，忽略此次操作；taskCode={}", taskCode);
+      log.warn("任务不存在，无法取消，taskCode={}", taskCode);
       return;
     }
 
@@ -169,7 +169,7 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
   public void destroy() {
     isDestroy = true;
     if (log.isDebugEnabled()) {
-      log.debug("正在销毁所有计划任务，任务总数={}", triggerTaskMap.size());
+      log.debug("正在停止所有计划任务，总数={}", triggerTaskMap.size());
     }
     List<String> taskCodes = new ArrayList<>(triggerTaskMap.keySet());
     for (String taskCode : taskCodes) {

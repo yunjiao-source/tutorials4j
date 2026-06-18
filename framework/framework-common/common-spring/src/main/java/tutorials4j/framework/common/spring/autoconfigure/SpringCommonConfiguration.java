@@ -26,7 +26,7 @@ import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
 public class SpringCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON-SPRING] Spring Common Configuration");
+    log.trace("[COMMON-SPRING] Spring Common Configuration");
   }
 
   /**
@@ -42,7 +42,7 @@ public class SpringCommonConfiguration {
   @ConditionalOnMissingBean
   CompositeTaskDecoratorCreator compositeTaskDecoratorCreator(
       ObjectProvider<TaskDecoratorCreator> taskDecoratorCreators) {
-    log.debug("[COMMON-SPRING] Composite Task Decorator Creator");
+    log.trace("[COMMON-SPRING] Composite Task Decorator Creator");
 
     List<TaskDecoratorCreator> creators =
         taskDecoratorCreators.orderedStream().collect(Collectors.toList());
@@ -52,14 +52,14 @@ public class SpringCommonConfiguration {
   @Bean
   @ConditionalOnMissingBean
   CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
-    log.debug("[COMMON-SPRING] Composite Task Decorator");
+    log.trace("[COMMON-SPRING] Composite Task Decorator");
     return creator.getInstance();
   }
 
   @Bean
   @ConditionalOnMissingBean
   SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator() {
-    log.debug("[COMMON-SPRING] Spel Method Based Expression Evaluator");
+    log.trace("[COMMON-SPRING] Spel Method Based Expression Evaluator");
     return new SpelMethodBasedExpressionEvaluator();
   }
 }

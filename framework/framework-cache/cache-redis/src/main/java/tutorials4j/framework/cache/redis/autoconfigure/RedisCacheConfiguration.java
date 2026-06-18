@@ -36,14 +36,14 @@ import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEval
 public class RedisCacheConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CACHE-REDIS] Cache Redis Configuration");
+    log.trace("[CACHE-REDIS] Cache Redis Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer
       jsonSerializerRedisCacheManagerBuilderCustomizer() {
-    log.debug("[CACHE-REDIS] Json Serializer Value Redis Cache Manager Builder Customizerr");
+    log.trace("[CACHE-REDIS] Json Serializer Value Redis Cache Manager Builder Customizerr");
     return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer();
   }
 
@@ -51,14 +51,14 @@ public class RedisCacheConfiguration {
   @ConditionalOnMissingBean
   NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(
       NamedCacheProperties properties) {
-    log.debug("[CACHE-REDIS] Named Redis Cache Manager Builder Customizer");
+    log.trace("[CACHE-REDIS] Named Redis Cache Manager Builder Customizer");
     return new NamedRedisCacheManagerBuilderCustomizer(properties);
   }
 
   @Bean
   @ConditionalOnMissingBean
   NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
-    log.debug("[CACHE-REDIS] Named Redis Cache Manager Customizer");
+    log.trace("[CACHE-REDIS] Named Redis Cache Manager Customizer");
     return new NamedCacheManagerCustomizer();
   }
 
@@ -69,7 +69,7 @@ public class RedisCacheConfiguration {
       RedisConnectionFactory factory,
       ObjectProvider<RedisCacheManagerBuilderCustomizer> redisCacheManagerBuilderCustomizers,
       ObjectProvider<CacheManagerCustomizer<RedisCacheManager>> cacheManagerCustomizers) {
-    log.debug("[CACHE-REDIS] Redis Cache Manager Creator");
+    log.trace("[CACHE-REDIS] Redis Cache Manager Creator");
     return new RedisCacheManagerCreator(
         properties,
         factory,
@@ -83,7 +83,7 @@ public class RedisCacheConfiguration {
       CacheProperties properties,
       StringRedisTemplate stringRedisTemplate,
       RedisTemplate<Object, Object> redisTemplate) {
-    log.debug("[CACHE-REDIS] Redis Template Decorator");
+    log.trace("[CACHE-REDIS] Redis Template Decorator");
 
     // 基于租户key的序列化器
     TenantKeySerializer serializer = new TenantKeySerializer(properties.getTemplateCacheName());
@@ -102,7 +102,7 @@ public class RedisCacheConfiguration {
   @ConditionalOnMissingBean
   RedisLockService redisLockService(
       RedisTemplateDecorator redisTemplateDecorator, LockCacheProperties properties) {
-    log.debug("[CACHE-REDIS] Redis Lock Service");
+    log.trace("[CACHE-REDIS] Redis Lock Service");
     RedisLockService.instance.setRedisLockOptions(properties.getRedis());
     RedisLockService.instance.setRedisTemplateDecorator(redisTemplateDecorator);
     return RedisLockService.instance;
@@ -113,7 +113,7 @@ public class RedisCacheConfiguration {
   RedisLockableAspect redisLockableAspect(
       SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
       RedisLockService redisLockService) {
-    log.debug("[CACHE-REDIS] Redis Lockable Aspect");
+    log.trace("[CACHE-REDIS] Redis Lockable Aspect");
     return new RedisLockableAspect(spelMethodBasedExpressionEvaluator, redisLockService);
   }
 }

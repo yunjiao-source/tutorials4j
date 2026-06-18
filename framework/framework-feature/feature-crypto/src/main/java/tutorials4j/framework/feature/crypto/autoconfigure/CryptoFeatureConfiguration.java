@@ -21,13 +21,13 @@ import tutorials4j.framework.feature.crypto.web.CryptoEndpoint;
 public class CryptoFeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE-CRYPTO] Crypto Feature Configuration");
+    log.trace("[FEATURE-CRYPTO] Crypto Feature Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   CryptoEndpoint cryptoEndpoint(CryptoProperties properties) {
-    log.debug("[FEATURE-CRYPTO] Crypto Endpoint");
+    log.trace("[FEATURE-CRYPTO] Crypto Endpoint");
     return new CryptoEndpoint(
         properties.getAsymmetricCryptoStrategy(), properties.getSymmetricCryptoStrategy());
   }

@@ -17,6 +17,6 @@ import tutorials4j.framework.schedule.core.autoconfigure.ScheduleConfiguration;
 public class ScheduleAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[SCHEDULE] Schedule Auto Configuration");
+    log.trace("[SCHEDULE] Schedule Auto Configuration");
   }
 }

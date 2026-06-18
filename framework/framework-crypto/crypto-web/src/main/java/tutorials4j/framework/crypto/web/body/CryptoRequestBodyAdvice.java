@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -17,9 +18,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
+import tutorials4j.framework.crypto.core.annotation.Crypto;
 import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
-import tutorials4j.framework.crypto.core.util.CryptoUtils;
 
 /**
  * TODO
@@ -37,11 +38,12 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
       MethodParameter methodParameter,
       Type targetType,
       Class<? extends HttpMessageConverter<?>> converterType) {
-    boolean supported = CryptoUtils.supported(methodParameter);
+    Crypto crypto = methodParameter.getMethodAnnotation(Crypto.class);
+    boolean supported = ObjectUtils.isNotEmpty(crypto) && crypto.request();
     if (log.isDebugEnabled()) {
       String methodName = methodParameter.getMethod().getName();
       String className = methodParameter.getDeclaringClass().getName();
-      log.debug("[CRYPTO-WEB] 类 {} 的方法 {} 支持解密？ {}", className, methodName, supported);
+      log.debug("{} :: {} 支持解密吗? {}", className, methodName, supported);
     }
     return supported;
   }
@@ -65,7 +67,7 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
             inputMessage.getHeaders(), DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY_HEX);
     if (StringUtils.isBlank(encryptedSecretKey)) {
       log.warn(
-          "[CRYPTO-WEB] 在请求头中未获取到加密密钥: headerName={}",
+          "[CRYPTO-WEB] Failed to obtain the encryption key from the request header {}",
           DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY_HEX);
       return inputMessage;
     }
@@ -78,7 +80,7 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
     if (log.isDebugEnabled()) {
       String methodName = parameter.getMethod().getName();
       String className = parameter.getDeclaringClass().getName();
-      log.debug("[CRYPTO-WEB] 类的方法执行解密完成: className={}, methodName={}", className, methodName);
+      log.debug("{} :: {} 请求体解密完成", className, methodName);
     }
 
     // 返回解密后的请求体

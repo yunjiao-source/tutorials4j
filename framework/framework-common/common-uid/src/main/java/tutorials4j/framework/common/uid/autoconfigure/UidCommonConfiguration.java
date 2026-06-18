@@ -22,13 +22,13 @@ import tutorials4j.framework.common.uid.UidDefaultedGenerator;
 public class UidCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON-UID] Uid Common Configuration");
+    log.trace("[COMMON-UID] Uid Common Configuration");
   }
 
   @Bean
   UidDefaultedGenerator uidDefaultedGenerator(
       UidCommonProperties properties, ObjectProvider<DefaultUidGeneratorCustomizer> customizers) {
-    log.debug("[COMMON-UID] Uid Defaulted Generator");
+    log.trace("[COMMON-UID] Uid Defaulted Generator");
     return new UidDefaultedGenerator(
         properties, customizers.orderedStream().collect(Collectors.toList()));
   }
@@ -36,7 +36,7 @@ public class UidCommonConfiguration {
   @Bean
   UidCachedGenerator uidCachedGenerator(
       UidCommonProperties properties, ObjectProvider<DefaultUidGeneratorCustomizer> customizers) {
-    log.debug("[COMMON-UID] Uid Cached Generator");
+    log.trace("[COMMON-UID] Uid Cached Generator");
     return new UidCachedGenerator(
         properties, customizers.orderedStream().collect(Collectors.toList()));
   }

@@ -13,6 +13,6 @@ public class LoggingTaskRuntimeDataHandler implements TaskRuntimeDataHandler {
 
   @Override
   public void handle(TaskRuntimeData data) {
-    log.debug("[SCHEDULE-CORE] TaskRuntimeData = {}", data);
+    log.warn("需自定义处理的关键数据！！！ {}", data);
   }
 }

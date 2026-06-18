@@ -28,7 +28,7 @@ public class TraceTaskDecorator implements TaskDecorator {
           MDC.setContextMap(contextMap);
         }
         if (log.isDebugEnabled()) {
-          log.debug("[WEB-LOGGING] 跟踪信息任务装饰器：{}", contextMap);
+          log.debug("跟踪信息, MDC={}", contextMap);
         }
         runnable.run();
       } finally {

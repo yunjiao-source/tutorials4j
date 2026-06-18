@@ -24,7 +24,7 @@ import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 public class MultiLevelCacheConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CACHE-MULTI-LEVEL] Cache Multi Level Configuration");
+    log.trace("[CACHE-MULTI-LEVEL] Cache Multi Level Configuration");
   }
 
   @Bean
@@ -32,7 +32,7 @@ public class MultiLevelCacheConfiguration {
   MultiLevelCacheManagerCreator multiLevelCacheManagerCreator(
       CaffeineCacheManagerCreator caffeineCacheManagerCreator,
       RedisCacheManagerCreator redisCacheManagerCreator) {
-    log.debug("[CACHE-MULTI-LEVEL] Multi Level Cache Manager Creator");
+    log.trace("[CACHE-MULTI-LEVEL] Multi Level Cache Manager Creator");
 
     return new MultiLevelCacheManagerCreator(caffeineCacheManagerCreator, redisCacheManagerCreator);
   }

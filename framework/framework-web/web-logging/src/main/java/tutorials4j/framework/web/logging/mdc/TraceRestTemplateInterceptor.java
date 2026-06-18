@@ -43,7 +43,7 @@ public class TraceRestTemplateInterceptor implements ClientHttpRequestIntercepto
     }
 
     if (log.isDebugEnabled()) {
-      log.debug("[WEB-LOGGING] 跟踪信息拦截器：{}", request.getURI());
+      log.debug("跟踪信息, method={}, uri={}", request.getMethod(), request.getURI());
     }
 
     return execution.execute(request, body);

@@ -25,13 +25,13 @@ import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEval
 public class RedissonCacheConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CACHE-REDISSON] Redisson Configuration");
+    log.trace("[CACHE-REDISSON] Redisson Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   PrefixNameMapper prefixNameMapper(CacheProperties properties) {
-    log.debug("[CACHE-REDISSON] Prefix Name Mapper");
+    log.trace("[CACHE-REDISSON] Prefix Name Mapper");
     return new PrefixNameMapper(properties.getRedissonCacheName());
   }
 
@@ -39,14 +39,14 @@ public class RedissonCacheConfiguration {
   @ConditionalOnMissingBean
   RedissonAutoConfigurationCustomizer prefixNameRedissonConfigCustomizer(
       PrefixNameMapper prefixNameMapper) {
-    log.debug("[CACHE-REDISSON] Prefix Name Redisson Config Customizer");
+    log.trace("[CACHE-REDISSON] Prefix Name Redisson Config Customizer");
     return config -> config.setNameMapper(prefixNameMapper);
   }
 
   @Bean
   @ConditionalOnMissingBean
   RedissonBlockLockService blockRedissonLock(RedissonClient redissonClient) {
-    log.debug("[CACHE-REDISSON] Redisson Block Lock Service");
+    log.trace("[CACHE-REDISSON] Redisson Block Lock Service");
     RedissonBlockLockService.instance.setRedissonClient(redissonClient);
     return RedissonBlockLockService.instance;
   }
@@ -54,7 +54,7 @@ public class RedissonCacheConfiguration {
   @Bean
   @ConditionalOnMissingBean
   RedissonReentrantLockService reentrantRedissonLock(RedissonClient redissonClient) {
-    log.debug("[CACHE-REDISSON] Reentrant Redisson Lock");
+    log.trace("[CACHE-REDISSON] Reentrant Redisson Lock");
     RedissonReentrantLockService.instance.setRedissonClient(redissonClient);
     return RedissonReentrantLockService.instance;
   }
@@ -64,7 +64,7 @@ public class RedissonCacheConfiguration {
   RedissonBlockLockableAspect blockRedissonLockableAspect(
       SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
       RedissonBlockLockService redissonBlockLockService) {
-    log.debug("[CACHE-REDISSON] Redisson Block Lockable Aspect");
+    log.trace("[CACHE-REDISSON] Redisson Block Lockable Aspect");
     return new RedissonBlockLockableAspect(
         spelMethodBasedExpressionEvaluator, redissonBlockLockService);
   }
@@ -74,7 +74,7 @@ public class RedissonCacheConfiguration {
   RedissonReentrantLockableAspect redissonReentrantLockableAspect(
       SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
       RedissonReentrantLockService redissonReentrantLockService) {
-    log.debug("[CACHE-REDISSON] Redisson Reentrant Lockable Aspect");
+    log.trace("[CACHE-REDISSON] Redisson Reentrant Lockable Aspect");
     return new RedissonReentrantLockableAspect(
         spelMethodBasedExpressionEvaluator, redissonReentrantLockService);
   }

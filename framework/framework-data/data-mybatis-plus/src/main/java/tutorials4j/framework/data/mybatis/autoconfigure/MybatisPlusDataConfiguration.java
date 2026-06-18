@@ -29,14 +29,14 @@ import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorC
 public class MybatisPlusDataConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[DATA-MYBATIS-PLUS] Data Mybatis Plus Configuration");
+    log.trace("[DATA-MYBATIS-PLUS] Data Mybatis Plus Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   MybatisPlusInterceptor mybatisPlusInterceptor(
       ObjectProvider<MybatisPlusInterceptorCustomizer> customizers) {
-    log.debug("[DATA-MYBATIS-PLUS] Mybatis Plus Interceptor");
+    log.trace("[DATA-MYBATIS-PLUS] Mybatis Plus Interceptor");
     MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
     customizers.orderedStream().forEach(customizer -> customizer.custom(interceptor));
     return interceptor;
@@ -50,7 +50,7 @@ public class MybatisPlusDataConfiguration {
       matchIfMissing = true)
   MybatisPlusInterceptorCustomizer paginationInnerInterceptorCustomizer(
       MybatisPlusDataProperties properties) {
-    log.debug("[DATA-MYBATIS-PLUS] Pagination Inner Interceptor Customizer");
+    log.trace("[DATA-MYBATIS-PLUS] Pagination Inner Interceptor Customizer");
     return new PaginationInnerInterceptorCustomizer(properties.getDbType());
   }
 
@@ -61,7 +61,7 @@ public class MybatisPlusDataConfiguration {
       havingValue = "true",
       matchIfMissing = true)
   MybatisPlusInterceptorCustomizer optimisticLockerInnerInterceptorCustomizer() {
-    log.debug("[DATA-MYBATIS-PLUS] Optimistic Locker Inner Interceptor Customizer");
+    log.trace("[DATA-MYBATIS-PLUS] Optimistic Locker Inner Interceptor Customizer");
     return new OptimisticLockerInterceptorCustomizer();
   }
 
@@ -72,13 +72,13 @@ public class MybatisPlusDataConfiguration {
       havingValue = "true",
       matchIfMissing = true)
   MybatisPlusInterceptorCustomizer blockAttackInnerInterceptorCustomizer() {
-    log.debug("[DATA-MYBATIS-PLUS] Block Attack Inner Interceptor Customizer");
+    log.trace("[DATA-MYBATIS-PLUS] Block Attack Inner Interceptor Customizer");
     return new BlockAttackInterceptorCustomizer();
   }
 
   @Bean
   MybatisPlusPropertiesCustomizer defaultIdentifierGeneratorMybatisPlusPropertiesCustomizer() {
-    log.debug(
+    log.trace(
         "[DATA-MYBATIS-PLUS] Default Identifier Generator Mybatis Plus Properties Customizer");
     return plusProperties ->
         // plusProperties.getGlobalConfig().setIdentifierGenerator(new
@@ -89,7 +89,7 @@ public class MybatisPlusDataConfiguration {
   @Bean
   @ConditionalOnMissingBean
   MetaObjectHandler auditMetaObjectHandler() {
-    log.debug("[DATA-MYBATIS-PLUS] Audit Meta Object Handler");
+    log.trace("[DATA-MYBATIS-PLUS] Audit Meta Object Handler");
     return new AuditMetaObjectHandler();
   }
 }

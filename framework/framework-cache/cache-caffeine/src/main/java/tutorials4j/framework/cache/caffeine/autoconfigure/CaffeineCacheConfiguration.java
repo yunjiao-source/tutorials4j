@@ -23,7 +23,7 @@ import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 public class CaffeineCacheConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CACHE-CAFFEINE] Cache Caffeine Configuration");
+    log.trace("[CACHE-CAFFEINE] Cache Caffeine Configuration");
   }
 
   /**
@@ -35,7 +35,7 @@ public class CaffeineCacheConfiguration {
   @Bean
   @ConditionalOnMissingBean
   Caffeine<Object, Object> defaultCaffeine(NamedCacheProperties properties) {
-    log.debug("[CACHE-CAFFEINE] Default Caffeine");
+    log.trace("[CACHE-CAFFEINE] Default Caffeine");
 
     Caffeine<Object, Object> caffeine = Caffeine.newBuilder();
     CaffeineUtils.copyOption(caffeine, properties.getDefaults());
@@ -55,7 +55,7 @@ public class CaffeineCacheConfiguration {
   @ConditionalOnMissingBean
   CaffeineCacheManagerCreator caffeineCacheManagerCreator(
       Caffeine<Object, Object> caffeine, NamedCacheProperties properties) {
-    log.debug("[CACHE-CAFFEINE] Caffeine Cache Manager Creator");
+    log.trace("[CACHE-CAFFEINE] Caffeine Cache Manager Creator");
 
     return new CaffeineCacheManagerCreator(properties, caffeine);
   }

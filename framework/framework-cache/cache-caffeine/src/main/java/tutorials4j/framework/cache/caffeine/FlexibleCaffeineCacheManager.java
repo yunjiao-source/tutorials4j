@@ -64,7 +64,7 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
     NamedCacheOptions options = optionsMap.get(name);
     if (options == null) {
       // 使用默认配置
-      log.warn("[CACHE-CAFFEINE] 未配置缓存，将使用默认配置： name={}", name);
+      log.warn("未配置缓存，将使用默认配置： name={}", name);
       options = properties.getDefaults();
     }
 
@@ -75,7 +75,7 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
     CaffeineUtils.copyOption(caffeine, options);
 
     if (log.isDebugEnabled()) {
-      log.debug("[CACHE-CAFFEINE] Caffeine缓存管理器初始化缓存: name={}, options={}", name, options);
+      log.debug("Caffeine 缓存初始化, name={}, options={}", name, options);
     }
     return caffeine.build();
   }

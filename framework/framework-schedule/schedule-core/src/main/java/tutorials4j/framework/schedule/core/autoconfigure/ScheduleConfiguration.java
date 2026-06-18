@@ -26,20 +26,20 @@ import tutorials4j.framework.schedule.core.repository.YamlTaskRepository;
 public class ScheduleConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[SCHEDULE-CORE] Schedule Configuration");
+    log.trace("[SCHEDULE-CORE] Schedule Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   TaskRepository<?> yamlTaskRepository(ScheduleProperties properties) {
-    log.debug("[SCHEDULE-CORE] Yaml Task Repository");
+    log.trace("[SCHEDULE-CORE] Yaml Task Repository");
     return new YamlTaskRepository(properties);
   }
 
   @Bean
   @ConditionalOnMissingBean
   TaskRuntimeDataHandler loggingTaskRuntimeDataHandler() {
-    log.debug("[SCHEDULE-CORE] Logging Task Runtime Data Handler");
+    log.trace("[SCHEDULE-CORE] Logging Task Runtime Data Handler");
     return new LoggingTaskRuntimeDataHandler();
   }
 
@@ -49,7 +49,7 @@ public class ScheduleConfiguration {
       TaskRepository<?> taskRepository,
       TaskRuntimeDataHandler taskRuntimeDataHandler,
       ScheduleProperties properties) {
-    log.debug("[SCHEDULE-CORE] Schedule Task Manager");
+    log.trace("[SCHEDULE-CORE] Schedule Task Manager");
     return new ScheduleTaskManager(taskRepository, taskRuntimeDataHandler, properties);
   }
 }

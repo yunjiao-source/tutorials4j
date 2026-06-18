@@ -19,11 +19,12 @@ import tutorials4j.framework.common.spring.util.SecurityUtils;
 public class HibernateDataConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[DATA-HIBERNATE] Data Hibernate Configuration");
+    log.trace("[DATA-HIBERNATE] Data Hibernate Configuration");
   }
 
   @Bean
-  AuditorAware<String> auditorProvider() {
+  AuditorAware<String> simpleAuditorProvider() {
+    log.trace("[DATA-HIBERNATE] simple Auditor Provider");
     return SecurityUtils::getAccountOptional;
   }
 }

@@ -27,6 +27,6 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 public class ScheduleFeatureConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[FEATURE-SCHEDULE] Schedule Feature Configuration");
+    log.trace("[FEATURE-SCHEDULE] Schedule Feature Configuration");
   }
 }

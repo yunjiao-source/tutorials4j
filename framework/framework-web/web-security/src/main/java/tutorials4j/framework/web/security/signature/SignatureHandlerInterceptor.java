@@ -36,7 +36,7 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     if (log.isDebugEnabled()) {
-      log.debug("[WEB-SECURITY] 签名拦截器：{}", request.getRequestURI());
+      log.debug("签名：method={}, url={}", request.getMethod(), request.getRequestURI());
     }
 
     RequiredSignature annotation =
