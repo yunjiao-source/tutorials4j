@@ -4,20 +4,21 @@ import jakarta.annotation.PostConstruct;
 import java.awt.Font;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
-import tutorials4j.framework.captcha.BehaviorCaptchaCacheTemplate;
-import tutorials4j.framework.captcha.hutool.AbstractCaptchaBuilder;
-import tutorials4j.framework.captcha.hutool.CircleCaptchaBuilder;
-import tutorials4j.framework.captcha.hutool.CircleCaptchaService;
-import tutorials4j.framework.captcha.hutool.GifCaptchaBuilder;
-import tutorials4j.framework.captcha.hutool.GifCaptchaService;
-import tutorials4j.framework.captcha.hutool.LineCaptchaBuilder;
-import tutorials4j.framework.captcha.hutool.LineCaptchaService;
-import tutorials4j.framework.captcha.hutool.ShearCaptchaBuilder;
-import tutorials4j.framework.captcha.hutool.ShearCaptchaService;
-import tutorials4j.framework.captcha.properties.HutoolCaptchaProperties;
+import tutorials4j.framework.captcha.hutool.builder.AbstractCaptchaBuilder;
+import tutorials4j.framework.captcha.hutool.builder.CircleCaptchaBuilder;
+import tutorials4j.framework.captcha.hutool.builder.GifCaptchaBuilder;
+import tutorials4j.framework.captcha.hutool.builder.LineCaptchaBuilder;
+import tutorials4j.framework.captcha.hutool.builder.ShearCaptchaBuilder;
+import tutorials4j.framework.captcha.hutool.properties.HutoolCaptchaProperties;
+import tutorials4j.framework.captcha.hutool.service.CircleCaptchaService;
+import tutorials4j.framework.captcha.hutool.service.GifCaptchaService;
+import tutorials4j.framework.captcha.hutool.service.LineCaptchaService;
+import tutorials4j.framework.captcha.hutool.service.ShearCaptchaService;
+import tutorials4j.framework.captcha.support.BehaviorCaptchaCacheTemplate;
 
 /**
  * Hutool验证码自动配置类。
@@ -28,6 +29,7 @@ import tutorials4j.framework.captcha.properties.HutoolCaptchaProperties;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(HutoolCaptchaProperties.class)
 public class HutoolCaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {

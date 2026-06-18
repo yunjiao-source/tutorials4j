@@ -2,7 +2,7 @@ package tutorials4j.framework.feature.captcha.web;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import tutorials4j.framework.captcha.CaptchaCategory;
+import tutorials4j.framework.captcha.support.CaptchaCategory;
 
 /**
  * 验证码校验对象

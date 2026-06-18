@@ -6,21 +6,22 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.captcha.GraphicCaptchaCacheTemplate;
-import tutorials4j.framework.captcha.properties.TianaiCaptchaProperties;
-import tutorials4j.framework.captcha.properties.TianaiOptions;
-import tutorials4j.framework.captcha.tianai.CaptchaGenerateParamBuilder;
-import tutorials4j.framework.captcha.tianai.CaptchaType;
-import tutorials4j.framework.captcha.tianai.RedisCacheStore;
-import tutorials4j.framework.captcha.tianai.SimpleImageCaptchaApplication;
+import tutorials4j.framework.captcha.support.GraphicCaptchaCacheTemplate;
 import tutorials4j.framework.captcha.tianai.customizer.ImageResourceTACBuilderCustomizer;
 import tutorials4j.framework.captcha.tianai.customizer.TACBuilderCustomizer;
+import tutorials4j.framework.captcha.tianai.properties.TianaiCaptchaProperties;
+import tutorials4j.framework.captcha.tianai.properties.TianaiOptions;
 import tutorials4j.framework.captcha.tianai.service.ConcatCaptchaService;
 import tutorials4j.framework.captcha.tianai.service.RotateCaptchaService;
 import tutorials4j.framework.captcha.tianai.service.SliderCaptchaService;
 import tutorials4j.framework.captcha.tianai.service.WordImageClickCaptchaService;
+import tutorials4j.framework.captcha.tianai.support.CaptchaGenerateParamBuilder;
+import tutorials4j.framework.captcha.tianai.support.CaptchaType;
+import tutorials4j.framework.captcha.tianai.support.RedisCacheStore;
+import tutorials4j.framework.captcha.tianai.support.SimpleImageCaptchaApplication;
 
 /**
  * 天意验证码自动配置类。
@@ -31,6 +32,7 @@ import tutorials4j.framework.captcha.tianai.service.WordImageClickCaptchaService
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(TianaiCaptchaProperties.class)
 public class TianaiCaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {

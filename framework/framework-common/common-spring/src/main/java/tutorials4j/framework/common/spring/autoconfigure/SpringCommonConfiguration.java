@@ -26,7 +26,7 @@ import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
 public class SpringCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[COMMON-SPRING] Common Configuration");
+    log.debug("[COMMON-SPRING] Spring Common Configuration");
   }
 
   /**

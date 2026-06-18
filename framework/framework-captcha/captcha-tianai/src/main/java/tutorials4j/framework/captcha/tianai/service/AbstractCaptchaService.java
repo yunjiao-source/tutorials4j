@@ -8,9 +8,9 @@ import cloud.tianai.captcha.validator.common.model.dto.MatchParam;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.util.StringUtils;
-import tutorials4j.framework.captcha.CaptchaService;
 import tutorials4j.framework.captcha.exception.CaptchaException;
-import tutorials4j.framework.captcha.tianai.CaptchaGenerateParamBuilder;
+import tutorials4j.framework.captcha.support.CaptchaService;
+import tutorials4j.framework.captcha.tianai.support.CaptchaGenerateParamBuilder;
 import tutorials4j.framework.common.core.util.GsonUtils;
 
 /**

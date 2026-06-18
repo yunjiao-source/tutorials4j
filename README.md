@@ -105,7 +105,23 @@ Java 教程
 > 缓存模版
 ![本地（JVM） 锁](docs/images/007.jpg)
 
+### 验证码模块示例（framework/framework-examples/examples-captcha）
 
+#### profile:simple
+
+> 验证码数据
+![验证码数据](docs/images/038.jpg)
+
+
+### 加解密模块示例（framework/framework-examples/examples-crypto）
+
+#### profile:simple
+
+> 加密/解密 工具
+![加密/解密 工具](docs/images/039.jpg)
+
+> 摘要计算
+![摘要计算](docs/images/040.jpg)
 
 ### 数据模块示例（framework/framework-examples/examples-data）
 

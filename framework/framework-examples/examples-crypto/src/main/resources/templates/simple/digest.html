@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>摘要计算工具</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome 6 (图标库) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <!-- jQuery 3 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js">
+  </script>
+
+  <style>
+    /* ===== 全局样式 ===== */
+    body {
+      background: linear-gradient(145deg, #f0f4f8 0%, #e6ecf3 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 2rem 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    .main-card {
+      border: none;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 20, 40, 0.12), 0 8px 24px rgba(0, 20, 40, 0.06);
+      backdrop-filter: blur(2px);
+      background: rgba(255, 255, 255, 0.85);
+      transition: box-shadow 0.25s ease;
+    }
+
+    .main-card:hover {
+      box-shadow: 0 28px 72px rgba(0, 20, 40, 0.16), 0 10px 32px rgba(0, 20, 40, 0.08);
+    }
+
+    .card-header-custom {
+      background: transparent;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 1.5rem 2rem 1rem 2rem;
+    }
+
+    .card-header-custom h2 {
+      font-weight: 600;
+      font-size: 1.65rem;
+      color: #1a2639;
+      letter-spacing: -0.02em;
+    }
+
+    .card-header-custom h2 i {
+      color: #2c7be5;
+    }
+
+    .card-header-custom .badge-api {
+      background: #eef3fc;
+      color: #2c7be5;
+      font-weight: 500;
+      font-size: 0.75rem;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      border: 1px solid rgba(44, 123, 229, 0.15);
+    }
+
+    .card-body-custom {
+      padding: 2rem 2rem 1.8rem 2rem;
+    }
+
+    /* ===== 表单控件 ===== */
+    .form-label {
+      font-weight: 500;
+      color: #2d3748;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-select,
+    .form-control {
+      border-radius: 12px;
+      border: 1.5px solid #e2e8f0;
+      padding: 0.65rem 1rem;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: #fafcff;
+    }
+
+    .form-select:focus,
+    .form-control:focus {
+      border-color: #2c7be5;
+      box-shadow: 0 0 0 4px rgba(44, 123, 229, 0.12);
+      background-color: #ffffff;
+    }
+
+    .form-control::placeholder {
+      color: #a0b3cc;
+      font-size: 0.9rem;
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ===== 字符计数 ===== */
+    .char-counter {
+      font-size: 0.78rem;
+      color: #8896b0;
+      margin-top: 0.4rem;
+      text-align: right;
+      letter-spacing: 0.02em;
+    }
+
+    .char-counter .count-num {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    /* ===== 按钮 ===== */
+    .btn-primary-custom {
+      background: linear-gradient(135deg, #2c7be5 0%, #1a5fc7 100%);
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 2.2rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #fff;
+      transition: transform 0.15s, box-shadow 0.25s;
+      box-shadow: 0 4px 14px rgba(44, 123, 229, 0.30);
+    }
+
+    .btn-primary-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(44, 123, 229, 0.40);
+      color: #fff;
+    }
+
+    .btn-primary-custom:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(44, 123, 229, 0.30);
+    }
+
+    .btn-primary-custom:disabled {
+      opacity: 0.7;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-outline-secondary-custom {
+      border-radius: 12px;
+      border: 1.5px solid #dce3ed;
+      color: #4a5a72;
+      font-weight: 500;
+      padding: 0.65rem 1.6rem;
+      transition: all 0.2s;
+    }
+
+    .btn-outline-secondary-custom:hover {
+      background: #f1f5fa;
+      border-color: #bcc9db;
+      color: #1a2639;
+    }
+
+    /* ===== 结果区域 ===== */
+    .result-area {
+      background: #f8faff;
+      border-radius: 16px;
+      border: 1.5px solid #e8edf6;
+      padding: 1.25rem 1.5rem;
+      margin-top: 0.5rem;
+      min-height: 80px;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .result-area.has-result {
+      background: #f2f8ff;
+      border-color: #b8d0f0;
+    }
+
+    .result-area .result-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #5b6f8c;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-area .result-content {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.9rem;
+      word-break: break-all;
+      color: #1a2639;
+      line-height: 1.7;
+      min-height: 2.2rem;
+    }
+
+    .result-area .result-content .placeholder-text {
+      color: #a9bcd6;
+      font-style: italic;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-weight: 400;
+    }
+
+    .result-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 1.2rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed #dce4ef;
+    }
+
+    .result-meta .meta-item {
+      font-size: 0.78rem;
+      color: #5b6f8c;
+    }
+
+    .result-meta .meta-item strong {
+      color: #2d3748;
+      font-weight: 600;
+    }
+
+    .btn-copy-result {
+      border-radius: 40px;
+      font-size: 0.78rem;
+      padding: 0.3rem 1.1rem;
+      background: #eef3fc;
+      border: 1px solid #d6e0ee;
+      color: #2c7be5;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-result:hover {
+      background: #2c7be5;
+      color: #fff;
+      border-color: #2c7be5;
+    }
+
+    .btn-copy-result:active {
+      transform: scale(0.95);
+    }
+
+    /* ===== 算法辅助标签 ===== */
+    .algo-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.15rem 0.7rem;
+      border-radius: 40px;
+      background: #eef3fc;
+      color: #3a5a7a;
+      margin-left: 0.5rem;
+      border: 1px solid #dce4ef;
+    }
+
+    /* ===== 响应式调整 ===== */
+    @media (max-width: 576px) {
+      .card-header-custom {
+        padding: 1.2rem 1.2rem 0.8rem 1.2rem;
+      }
+      .card-body-custom {
+        padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+      }
+      .card-header-custom h2 {
+        font-size: 1.3rem;
+      }
+      .btn-primary-custom {
+        width: 100%;
+        justify-content: center;
+      }
+      .btn-outline-secondary-custom {
+        width: 100%;
+        justify-content: center;
+      }
+      .btn-group-actions {
+        flex-direction: column;
+        gap: 0.6rem !important;
+      }
+    }
+
+    /* 加载动画 */
+    .spinner-border-sm-custom {
+      width: 1.1rem;
+      height: 1.1rem;
+      border-width: 0.18rem;
+    }
+
+    /* Toast 提示 */
+    .toast-container-custom {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+    }
+
+    .toast-custom {
+      background: #1a2639;
+      color: #fff;
+      border-radius: 14px;
+      padding: 0.9rem 1.6rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.20);
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(-12px) scale(0.96);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast-custom.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .toast-custom i {
+      margin-right: 0.6rem;
+    }
+
+    .toast-custom.toast-success i {
+      color: #4cda8c;
+    }
+    .toast-custom.toast-error i {
+      color: #f87171;
+    }
+    .toast-custom.toast-info i {
+      color: #60b0f4;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== Toast 提示容器 ===== -->
+<div class="toast-container-custom" id="toastContainer"></div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+
+      <!-- ===== 主卡片 ===== -->
+      <div class="card main-card">
+
+        <!-- 卡片头部 -->
+        <div class="card-header-custom d-flex flex-wrap align-items-center justify-content-between">
+          <h2>
+            <i class="fas fa-fingerprint me-2"></i>摘要计算
+          </h2>
+          <span class="badge-api mt-1 mt-sm-0">
+                            <i class="fas fa-plug me-1"></i> API: /captcha/digest
+                        </span>
+        </div>
+
+        <!-- 卡片主体 -->
+        <div class="card-body-custom">
+
+          <!-- 算法选择 -->
+          <div class="mb-4">
+            <label for="categorySelect" class="form-label">
+              <i class="fas fa-cog me-1"></i>摘要算法
+            </label>
+            <select id="categorySelect" class="form-select">
+              <option value="SM3">SM3 (国密)</option>
+              <option value="SHA256">SHA-256</option>
+              <option value="HmacSHA256">HmacSHA256</option>
+              <option value="HmacSHA512">HmacSHA512</option>
+            </select>
+            <div class="form-text mt-1" style="font-size:0.78rem; color:#7a8aa5;">
+              <i class="fas fa-info-circle me-1"></i>
+              Hmac 算法使用服务端默认密钥
+            </div>
+          </div>
+
+          <!-- 内容输入 -->
+          <div class="mb-3">
+            <label for="contentInput" class="form-label">
+              <i class="fas fa-file-alt me-1"></i>待摘要内容
+            </label>
+            <textarea id="contentInput" class="form-control" rows="4"
+                      placeholder="请输入要计算摘要的文本内容……"
+            >Hello, World!</textarea>
+            <div class="char-counter">
+              字符数: <span class="count-num" id="charCount">13</span>
+            </div>
+          </div>
+
+          <!-- 操作按钮 -->
+          <div class="btn-group-actions d-flex flex-wrap gap-2 mb-4">
+            <button id="digestBtn" class="btn btn-primary-custom flex-grow-1">
+              <i class="fas fa-calculator me-2"></i>计算摘要
+            </button>
+            <button id="clearBtn" class="btn btn-outline-secondary-custom">
+              <i class="fas fa-eraser me-1"></i>清空
+            </button>
+          </div>
+
+          <!-- 结果展示 -->
+          <div>
+            <label class="form-label mb-1">
+              <i class="fas fa-check-circle me-1"></i>摘要结果
+            </label>
+            <div id="resultArea" class="result-area">
+              <div class="result-label">
+                <i class="far fa-clock me-1"></i>等待计算
+              </div>
+              <div class="result-content" id="resultContent">
+                <span class="placeholder-text">输入内容后点击「计算摘要」</span>
+              </div>
+              <div class="result-meta" id="resultMeta" style="display:none;">
+                                <span class="meta-item">
+                                    <i class="far fa-file me-1"></i>长度: <strong id="resultLen">0</strong> 字符
+                                </span>
+                <span class="meta-item">
+                                    <i class="far fa-calendar-alt me-1"></i>算法: <strong id="resultAlgo">-</strong>
+                                </span>
+                <button id="copyBtn" class="btn btn-copy-result ms-auto">
+                  <i class="far fa-copy me-1"></i>复制
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 底部小提示 -->
+          <div class="mt-3 text-center" style="font-size:0.75rem; color:#97a9c2;">
+            <i class="fas fa-shield-alt me-1"></i>
+            摘要值由服务端计算，Hmac 使用默认密钥
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== jQuery 逻辑 ===== -->
+<script>
+  $(function() {
+
+    // ---------- DOM 引用 ----------
+    const $category = $('#categorySelect');
+    const $content = $('#contentInput');
+    const $charCount = $('#charCount');
+    const $digestBtn = $('#digestBtn');
+    const $clearBtn = $('#clearBtn');
+    const $resultArea = $('#resultArea');
+    const $resultContent = $('#resultContent');
+    const $resultMeta = $('#resultMeta');
+    const $resultLen = $('#resultLen');
+    const $resultAlgo = $('#resultAlgo');
+    const $copyBtn = $('#copyBtn');
+
+    // ---------- 字符计数 ----------
+    function updateCharCount() {
+      const len = $content.val().length;
+      $charCount.text(len);
+    }
+    $content.on('input', updateCharCount);
+    updateCharCount();
+
+    // ---------- Toast 提示 ----------
+    let toastTimer = null;
+
+    function showToast(message, type) {
+      type = type || 'info';
+      const $container = $('#toastContainer');
+      const iconMap = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        info: 'fa-info-circle'
+      };
+      const icon = iconMap[type] || iconMap.info;
+      const html =
+          `<div class="toast-custom toast-${type} show">
+                        <i class="fas ${icon}"></i> ${message}
+                    </div>`;
+      // 清除之前的 toast
+      $container.empty();
+      $container.append(html);
+      // 自动隐藏
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() {
+        $container.find('.toast-custom').removeClass('show');
+        setTimeout(function() { $container.empty(); }, 350);
+      }, 3500);
+    }
+
+    // ---------- 清空 ----------
+    $clearBtn.on('click', function() {
+      $content.val('');
+      updateCharCount();
+      // 清空结果
+      $resultContent.html('<span class="placeholder-text">输入内容后点击「计算摘要」</span>');
+      $resultArea.removeClass('has-result');
+      $resultMeta.hide();
+      // 移除复制按钮的临时状态
+      $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
+      $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+      // 聚焦输入框
+      $content.focus();
+    });
+
+    // ---------- 计算摘要 ----------
+    $digestBtn.on('click', function() {
+      const category = $category.val();
+      const content = $content.val().trim();
+
+      if (!content) {
+        showToast('⚠️ 请输入待摘要的内容', 'error');
+        $content.focus();
+        return;
+      }
+
+      // 禁用按钮，显示加载状态
+      $digestBtn.prop('disabled', true);
+      $digestBtn.html(
+          '<span class="spinner-border spinner-border-sm spinner-border-sm-custom me-2" role="status" aria-hidden="true"></span> 计算中...'
+      );
+
+      // 清除旧结果
+      $resultContent.html('<span style="color:#8a9bb8;"><i class="fas fa-spinner fa-spin me-2"></i>请求中…</span>');
+      $resultArea.removeClass('has-result');
+      $resultMeta.hide();
+
+      // ---------- 发起 AJAX 请求 ----------
+      $.ajax({
+        url: '/captcha/digest',
+        method: 'GET',
+        data: {
+          category: category,
+          content: content
+        },
+        dataType: 'text', // 后端直接返回字符串
+        timeout: 15000,
+        success: function(data) {
+          // 结果显示
+          $resultContent.text(data);
+          $resultArea.addClass('has-result');
+
+          const len = data.length;
+          $resultLen.text(len);
+          $resultAlgo.text(category);
+          $resultMeta.show();
+
+          // 恢复按钮
+          $digestBtn.prop('disabled', false);
+          $digestBtn.html('<i class="fas fa-calculator me-2"></i>计算摘要');
+
+          // 复制按钮复位
+          $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
+          $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+
+          showToast('✅ 摘要计算完成', 'success');
+        },
+        error: function(xhr, status, error) {
+          let msg = '❌ 请求失败';
+          if (xhr.status === 400) {
+            msg = '❌ 参数错误，请检查输入';
+          } else if (xhr.status === 404) {
+            msg = '❌ 接口不存在，请检查后端服务';
+          } else if (status === 'timeout') {
+            msg = '⏱️ 请求超时，请稍后重试';
+          } else if (xhr.responseText) {
+            // 尝试提取后端返回的错误信息
+            try {
+              const errJson = JSON.parse(xhr.responseText);
+              if (errJson.message) msg = '❌ ' + errJson.message;
+              else if (errJson.error) msg = '❌ ' + errJson.error;
+              else msg = '❌ ' + xhr.responseText.substring(0, 80);
+            } catch (e) {
+              msg = '❌ ' + xhr.responseText.substring(0, 80);
+            }
+          } else {
+            msg = '❌ ' + status + ' — ' + error;
+          }
+          showToast(msg, 'error');
+
+          // 恢复按钮
+          $digestBtn.prop('disabled', false);
+          $digestBtn.html('<i class="fas fa-calculator me-2"></i>计算摘要');
+
+          // 显示错误占位
+          $resultContent.html(
+              `<span style="color:#d9534f;"><i class="fas fa-exclamation-triangle me-2"></i>${msg}</span>`
+          );
+          $resultArea.addClass('has-result');
+          $resultMeta.hide();
+        }
+      });
+    });
+
+    // ---------- 复制结果 ----------
+    $copyBtn.on('click', function() {
+      const text = $resultContent.text();
+      if (!text || text.includes('点击「计算摘要」') || text.includes('请求中') || text.includes('错误')) {
+        showToast('📋 没有可复制的内容', 'info');
+        return;
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          $copyBtn.html('<i class="fas fa-check me-1"></i>已复制');
+          $copyBtn.removeClass('btn-copy-result').addClass('btn-success');
+          showToast('📋 已复制到剪贴板', 'success');
+          setTimeout(function() {
+            $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
+            $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+          }, 2000);
+        }).catch(function() {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    });
+
+    // 兼容方案
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      textarea.style.top = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        $copyBtn.html('<i class="fas fa-check me-1"></i>已复制');
+        $copyBtn.removeClass('btn-copy-result').addClass('btn-success');
+        showToast('📋 已复制到剪贴板', 'success');
+        setTimeout(function() {
+          $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
+          $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+        }, 2000);
+      } catch (e) {
+        showToast('❌ 复制失败，请手动选择复制', 'error');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // ---------- 键盘快捷键：Ctrl+Enter 提交 ----------
+    $content.on('keydown', function(e) {
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        $digestBtn.click();
+      }
+    });
+
+    // ---------- 初始化：默认选中 SM3 ----------
+    $category.val('SM3');
+
+    // 如果 URL 参数带 ?algo=xxx 可自动切换（方便调试）
+    const urlParams = new URLSearchParams(window.location.search);
+    const algoParam = urlParams.get('algo');
+    if (algoParam && ['SM3', 'SHA256', 'HmacSHA256', 'HmacSHA512'].includes(algoParam)) {
+      $category.val(algoParam);
+    }
+
+    // 自动聚焦输入框
+    $content.focus();
+  });
+</script>
+
+<!-- Bootstrap JS (用于一些交互增强，非必须) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+</script>
+</body>
+</html>

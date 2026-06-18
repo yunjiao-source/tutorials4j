@@ -2,12 +2,15 @@ package tutorials4j.framework.captcha.web.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.captcha.CaptchaServiceFactory;
-import tutorials4j.framework.captcha.properties.CaptchaProperties;
-import tutorials4j.framework.captcha.web.CaptchaRequestFilter;
+import tutorials4j.framework.captcha.support.CaptchaServiceFactory;
+import tutorials4j.framework.captcha.web.filter.CaptchaRequestFilter;
+import tutorials4j.framework.captcha.web.properties.WebCaptchaProperties;
+import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
@@ -17,15 +20,19 @@ import tutorials4j.framework.common.spring.web.ServletFilterOptions;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(
+    prefix = PropertiesConsts.PROPERTY_PREFIX_CAPTCHA_WEB,
+    name = PropertiesConsts.PROPERTY_ENABLED)
+@EnableConfigurationProperties(WebCaptchaProperties.class)
 public class WebCaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.debug("[CAPTCHA-WEB] Captcha Web Configuration");
+    log.debug("[CAPTCHA-WEB] Web Captcha Configuration");
   }
 
   @Bean
   FilterRegistrationBean<CaptchaRequestFilter> captchaRequestFilterRegistration(
-      CaptchaServiceFactory captchaServiceFactory, CaptchaProperties properties) {
+      CaptchaServiceFactory captchaServiceFactory, WebCaptchaProperties properties) {
     ServletFilterOptions options = properties.getFilter();
     FilterRegistrationBean<CaptchaRequestFilter> registration = new FilterRegistrationBean<>();
     CaptchaRequestFilter filter = new CaptchaRequestFilter(captchaServiceFactory);

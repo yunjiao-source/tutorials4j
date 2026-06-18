@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.captcha.CaptchaServiceFactory;
+import tutorials4j.framework.captcha.support.CaptchaServiceFactory;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.feature.captcha.web.CaptchaEndpoint;
 import tutorials4j.framework.feature.captcha.web.CaptchaTianaiEndpoint;

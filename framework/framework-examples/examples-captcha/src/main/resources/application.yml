@@ -1,4 +1,8 @@
 spring:
+  profiles:
+    active: simple
+
+
   data:
     # Redis 配置
     redis:

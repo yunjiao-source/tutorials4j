@@ -1,8 +1,8 @@
 package tutorials4j.framework.captcha.tianai.service;
 
 import cloud.tianai.captcha.application.ImageCaptchaApplication;
-import tutorials4j.framework.captcha.CaptchaCategory;
-import tutorials4j.framework.captcha.tianai.CaptchaGenerateParamBuilder;
+import tutorials4j.framework.captcha.support.CaptchaCategory;
+import tutorials4j.framework.captcha.tianai.support.CaptchaGenerateParamBuilder;
 
 /**
  * 拼图验证码服务。

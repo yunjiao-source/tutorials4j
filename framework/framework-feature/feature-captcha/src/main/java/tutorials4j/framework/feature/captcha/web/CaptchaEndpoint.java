@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.captcha.CaptchaCategory;
-import tutorials4j.framework.captcha.CaptchaService;
-import tutorials4j.framework.captcha.CaptchaServiceFactory;
+import tutorials4j.framework.captcha.support.CaptchaCategory;
+import tutorials4j.framework.captcha.support.CaptchaService;
+import tutorials4j.framework.captcha.support.CaptchaServiceFactory;
 
 /**
  * 验证码接口
