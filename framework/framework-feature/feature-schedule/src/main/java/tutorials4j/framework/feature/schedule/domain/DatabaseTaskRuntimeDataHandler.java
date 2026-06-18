@@ -3,12 +3,12 @@ package tutorials4j.framework.feature.schedule.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.core.entity.YesNoEnum;
 import tutorials4j.framework.common.core.util.ExceptionUtils;
-import tutorials4j.framework.schedule.core.bean.ChangeStatusEvent;
 import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
-import tutorials4j.framework.schedule.core.component.ChangeStatusEventConsumer;
+import tutorials4j.framework.schedule.core.component.TaskRuntimeDataHandler;
 
 /**
  * TODO
@@ -18,29 +18,29 @@ import tutorials4j.framework.schedule.core.component.ChangeStatusEventConsumer;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JobLogEventConsumer implements ChangeStatusEventConsumer {
+public class DatabaseTaskRuntimeDataHandler implements TaskRuntimeDataHandler {
   private final JobLogRepository jobLogRepository;
   private final JobRepository jobRepository;
 
+  @Async
   @Override
-  public void consumer(ChangeStatusEvent event) {
-    TaskRuntimeData runtimeData = event.taskRuntimeData();
+  public void handle(TaskRuntimeData data) {
     jobRepository
-        .findByTaskCode(runtimeData.taskCode())
+        .findByTaskCode(data.taskCode())
         .ifPresentOrElse(
             task -> {
               JobLogEntity log = new JobLogEntity();
               log.setJob(task);
-              log.setTaskStatus(runtimeData.taskStatus());
-              log.setLotNo(runtimeData.lotNo());
-              log.setTotalCount(runtimeData.totalCount());
-              log.setTotalFailureCount(runtimeData.totalFailureCount());
-              log.setStartTime(runtimeData.startTime());
-              log.setEndTime(runtimeData.endTime());
+              log.setTaskStatus(data.taskStatus());
+              log.setLotNo(data.lotNo());
+              log.setTotalCount(data.totalCount());
+              log.setTotalFailureCount(data.totalFailureCount());
+              log.setStartTime(data.startTime());
+              log.setEndTime(data.endTime());
               log.setHasError(YesNoEnum.N);
-              log.setMessage(runtimeData.message());
+              log.setMessage(data.message());
 
-              Throwable throwable = runtimeData.throwable();
+              Throwable throwable = data.throwable();
               if (throwable != null) {
                 log.setHasError(YesNoEnum.Y);
                 log.setMessage(
@@ -49,6 +49,6 @@ public class JobLogEventConsumer implements ChangeStatusEventConsumer {
 
               jobLogRepository.save(log);
             },
-            () -> log.warn("任务不存在，无法处理事件，event={}", event));
+            () -> log.warn("任务不存在，无法处理事件，data={}", data));
   }
 }

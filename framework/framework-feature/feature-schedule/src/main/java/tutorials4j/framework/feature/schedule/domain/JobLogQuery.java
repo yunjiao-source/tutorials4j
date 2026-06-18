@@ -20,7 +20,7 @@ public class JobLogQuery {
   private TaskStatusEnum taskStatus;
   private YesNoEnum hasError;
   private String lotNo;
-  private String errorMessage;
+  private String message;
   private Instant startCreatedAt;
   private Instant endCreatedAt;
 
@@ -33,7 +33,7 @@ public class JobLogQuery {
     specList.add(JobLogSpecification.lotNoEqual(lotNo));
     specList.add(JobLogSpecification.taskStatusEqual(taskStatus));
     specList.add(JobLogSpecification.hasErrorEqual(hasError));
-    specList.add(JobLogSpecification.errorMessageLike(errorMessage));
+    specList.add(JobLogSpecification.messageLike(message));
     specList.add(JobLogSpecification.createdAtGte(startCreatedAt));
     specList.add(JobLogSpecification.createdAtLte(endCreatedAt));
 

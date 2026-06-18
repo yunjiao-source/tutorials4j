@@ -2,9 +2,6 @@ package tutorials4j.framework.feature.schedule.domain;
 
 import static tutorials4j.framework.data.core.util.JPAUtils.like;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Path;
-import jakarta.persistence.criteria.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -15,37 +12,29 @@ import org.springframework.data.jpa.domain.Specification;
  */
 public class JobSpecification {
   public static Specification<JobEntity> taskCodeEqual(String taskCode) {
-    return (root, query, cb) -> taskCodeEqual(root, taskCode, cb);
-  }
-
-  public static Predicate taskCodeEqual(Path<JobEntity> path, String taskCode, CriteriaBuilder cb) {
-    if (StringUtils.isBlank(taskCode)) {
-      return cb.conjunction();
-    }
-    return cb.equal(path.get("taskCode"), taskCode);
+    return (root, query, cb) -> {
+      if (StringUtils.isBlank(taskCode)) {
+        return cb.conjunction();
+      }
+      return cb.equal(root.get("taskCode"), taskCode);
+    };
   }
 
   public static Specification<JobEntity> classSimpleNameEqual(String classSimpleName) {
-    return (root, query, cb) -> classSimpleNameEqual(root, classSimpleName, cb);
-  }
-
-  public static Predicate classSimpleNameEqual(
-      Path<JobEntity> path, String classSimpleName, CriteriaBuilder cb) {
-    if (StringUtils.isBlank(classSimpleName)) {
-      return cb.conjunction();
-    }
-    return cb.equal(path.get("classSimpleName"), classSimpleName);
+    return (root, query, cb) -> {
+      if (StringUtils.isBlank(classSimpleName)) {
+        return cb.conjunction();
+      }
+      return cb.equal(root.get("classSimpleName"), classSimpleName);
+    };
   }
 
   public static Specification<JobEntity> descriptionLike(String description) {
-    return (root, query, cb) -> descriptionLike(root, description, cb);
-  }
-
-  public static Predicate descriptionLike(
-      Path<JobEntity> path, String description, CriteriaBuilder cb) {
-    if (StringUtils.isBlank(description)) {
-      return cb.conjunction();
-    }
-    return cb.like(path.get("description"), like(description));
+    return (root, query, cb) -> {
+      if (StringUtils.isBlank(description)) {
+        return cb.conjunction();
+      }
+      return cb.like(root.get("description"), like(description));
+    };
   }
 }

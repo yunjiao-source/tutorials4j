@@ -2,7 +2,6 @@ package tutorials4j.framework.schedule.core.component;
 
 import cn.hutool.extra.spring.SpringUtil;
 import jakarta.annotation.PreDestroy;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +19,6 @@ import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.config.TriggerTask;
 import org.springframework.util.Assert;
-import tutorials4j.framework.schedule.core.bean.ChangeStatusEvent;
 import tutorials4j.framework.schedule.core.bean.ScheduledTaskData;
 import tutorials4j.framework.schedule.core.bean.Task;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
@@ -38,7 +36,7 @@ import tutorials4j.framework.schedule.core.repository.TaskRepository;
 @RequiredArgsConstructor
 public class ScheduleTaskManager implements SchedulingConfigurer {
   private final TaskRepository<?> taskRepository;
-  private final EventConsumerContainer consumers;
+  private final TaskRuntimeDataHandler taskRuntimeDataHandler;
   private final ScheduleProperties properties;
 
   private ScheduledTaskRegistrar scheduledTaskRegistrar;
@@ -198,39 +196,32 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   private void createEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    notifyConsumers(data);
+    taskRuntimeDataHandler.handle(data);
   }
 
   private void cancelEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    notifyConsumers(data);
+    taskRuntimeDataHandler.handle(data);
   }
 
   private void stopEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
     doCancelTask(data.taskCode());
-    notifyConsumers(data);
+    taskRuntimeDataHandler.handle(data);
   }
 
   private void failureEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    notifyConsumers(data);
+    taskRuntimeDataHandler.handle(data);
   }
 
   private void completeEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    notifyConsumers(data);
+    taskRuntimeDataHandler.handle(data);
   }
 
   private void startEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    notifyConsumers(data);
-  }
-
-  private void notifyConsumers(TaskRuntimeData data) {
-    ChangeStatusEvent event =
-        ChangeStatusEvent.builder().timestamp(Instant.now()).taskRuntimeData(data).build();
-
-    this.consumers.notifyConsumers(event);
+    taskRuntimeDataHandler.handle(data);
   }
 }

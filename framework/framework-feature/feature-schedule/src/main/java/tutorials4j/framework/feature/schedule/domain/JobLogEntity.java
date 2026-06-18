@@ -5,6 +5,8 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.Instant;
@@ -24,6 +26,7 @@ import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 @Entity
 @Table(name = "feat_job_log")
 @EqualsAndHashCode(callSuper = false)
+@NamedEntityGraph(name = "JobLogEntity.withJob", attributeNodes = @NamedAttributeNode("job"))
 public class JobLogEntity extends BaseIdEntity {
   @Convert(converter = TaskStatusEnumAttributeConverter.class)
   private TaskStatusEnum taskStatus;

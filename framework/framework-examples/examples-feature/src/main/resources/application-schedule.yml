@@ -11,6 +11,5 @@ tutorials4j:
       max-failure-count: 3
       initial-delay: 20s
     all-task-auto-start-on-boot: true
-    event-consumer-type: async
   feature:
     schedule-enabled: true
