@@ -1,3 +1,12 @@
+tutorials4j:
+  data:
+    mybatis-plus:
+      db-type: postgre_sql
+      interceptors:
+        block-attack: true
+        optimisticLocker: true
+        pagination: true
+
 mybatis-plus:
   configuration:
     default-enum-type-handler: tutorials4j.framework.data.mybatis.BaseEnumTypeHandler

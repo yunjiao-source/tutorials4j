@@ -1,6 +1,5 @@
 package tutorials4j.framework.cache.core.support;
 
-import lombok.Getter;
 import tutorials4j.framework.common.core.bean.BaseEnum;
 
 /**
@@ -9,18 +8,18 @@ import tutorials4j.framework.common.core.bean.BaseEnum;
  * @author Yun Jiao
  */
 public enum CacheManagerCreatorCategory implements BaseEnum<Integer> {
-  CAFFEINE(1, "本地缓存"),
-  MULTI_LEVEL(2, "两级缓存"),
-  REDIS(3, "REDIS缓存"),
-  TENANT_CAFFEINE(4, "本地缓存（租户）"),
-  TENANT_MULTI_LEVEL(5, "两级缓存（租户）");
+  CAFFEINE(1, "Caffeine缓存"),
+  MULTI_LEVEL(2, "两级缓存(Caffeine + Redis)"),
+  REDIS(3, "Redis缓存"),
+  TENANT_CAFFEINE(4, "本地Caffeine缓存（租户）"),
+  TENANT_MULTI_LEVEL(5, "两级缓存(Caffeine + Redis)（租户）");
 
   private final Integer code;
-  @Getter private final String note;
+  private final String label;
 
-  CacheManagerCreatorCategory(Integer code, String note) {
+  CacheManagerCreatorCategory(Integer code, String label) {
     this.code = code;
-    this.note = note;
+    this.label = label;
   }
 
   @Override
@@ -35,6 +34,6 @@ public enum CacheManagerCreatorCategory implements BaseEnum<Integer> {
 
   @Override
   public String getLabel() {
-    return note;
+    return label;
   }
 }

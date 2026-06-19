@@ -1,5 +1,6 @@
 package tutorials4j.framework.cache.redis.autoconfigure;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +43,9 @@ public class RedisCacheConfiguration {
   @Bean
   @ConditionalOnMissingBean
   ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer
-      jsonSerializerRedisCacheManagerBuilderCustomizer() {
+      jsonSerializerRedisCacheManagerBuilderCustomizer(ObjectMapper objectMapper) {
     log.trace("[CACHE-REDIS] Json Serializer Value Redis Cache Manager Builder Customizerr");
-    return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer();
+    return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer(objectMapper);
   }
 
   @Bean

@@ -1,4 +1,4 @@
-package tutorials4j.framework.data.core.properties;
+package tutorials4j.framework.data.mybatis.properties;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import lombok.Data;

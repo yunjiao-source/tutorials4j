@@ -1,0 +1,35 @@
+tutorials4j:
+  data:
+    hibernate:
+      second-level-cache-type: multi_level
+
+  cache:
+    named:
+      defaults:
+        timeToLive: 2m
+        cacheNullValues: false
+        enable-statistics: false
+      caches:
+        employeeCache:
+          timeToLive: 30s
+          cacheNullValues: false
+
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: tutorials4j.framework.data.hibernate.spi.CacheRegionFactoryTemplate
+          use_query_cache: true
+          region_prefix: hibernate-cache-
+        generate_statistics: true
+
+

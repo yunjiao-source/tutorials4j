@@ -1,10 +1,21 @@
 package tutorials4j.framework.cache.core.support;
 
+import static tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory.CAFFEINE;
+import static tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory.MULTI_LEVEL;
+import static tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory.REDIS;
+import static tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory.TENANT_CAFFEINE;
+import static tutorials4j.framework.cache.core.support.CacheManagerCreatorCategory.TENANT_MULTI_LEVEL;
+
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.util.Assert;
 import tutorials4j.framework.cache.core.exception.CacheManagerCreatorNotFoundException;
 
 /**
@@ -15,12 +26,8 @@ import tutorials4j.framework.cache.core.exception.CacheManagerCreatorNotFoundExc
 @Slf4j
 public class CacheManagerCreatorFactory {
   public static final CacheManagerCreatorFactory instance = new CacheManagerCreatorFactory();
-  private EnumMap<CacheManagerCreatorCategory, CacheManagerCreator<?>> creators =
+  private final EnumMap<CacheManagerCreatorCategory, CacheManagerCreator<?>> creators =
       new EnumMap<>(CacheManagerCreatorCategory.class);
-
-  public CacheManagerCreator<?> getCacheManagerCreator(CacheManagerCreatorCategory category) {
-    return creators.get(category);
-  }
 
   /**
    * 根据缓存名称获取多级缓存（两级缓存）实例。
@@ -30,18 +37,11 @@ public class CacheManagerCreatorFactory {
    * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
    */
   public Cache findMultiLevelCache(String cacheName) {
-    CacheManagerCreator<?> creator =
-        getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_MULTI_LEVEL);
-    if (creator != null) {
-      return creator.getInstance().getCache(cacheName);
-    }
+    return findMultiLevelCacheManager().getCache(cacheName);
+  }
 
-    creator = getCacheManagerCreator(CacheManagerCreatorCategory.MULTI_LEVEL);
-    if (creator != null) {
-      return creator.getInstance().getCache(cacheName);
-    }
-
-    throw new CacheManagerCreatorNotFoundException("获取两级缓存管理器失败");
+  public CacheManager findMultiLevelCacheManager() {
+    return findFirstCacheManagerCreator(TENANT_MULTI_LEVEL, MULTI_LEVEL).getInstance();
   }
 
   /**
@@ -52,12 +52,11 @@ public class CacheManagerCreatorFactory {
    * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
    */
   public Cache findRedisCache(String cacheName) {
-    CacheManagerCreator<?> creator = getCacheManagerCreator(CacheManagerCreatorCategory.REDIS);
-    if (creator != null) {
-      return creator.getInstance().getCache(cacheName);
-    }
+    return findRedisCacheManager().getCache(cacheName);
+  }
 
-    throw new CacheManagerCreatorNotFoundException("获取Redis缓存管理器失败");
+  public CacheManager findRedisCacheManager() {
+    return findFirstCacheManagerCreator(REDIS).getInstance();
   }
 
   /**
@@ -70,19 +69,11 @@ public class CacheManagerCreatorFactory {
    * @throws CacheManagerCreatorNotFoundException 如果未找到任何本地缓存管理器创建器
    */
   public Cache findCaffeineCache(String cacheName) {
-    // 先获取支持租户的
-    CacheManagerCreator<?> creator =
-        getCacheManagerCreator(CacheManagerCreatorCategory.TENANT_CAFFEINE);
-    if (creator != null) {
-      return creator.getInstance().getCache(cacheName);
-    }
+    return findCaffeineCacheManager().getCache(cacheName);
+  }
 
-    creator = getCacheManagerCreator(CacheManagerCreatorCategory.CAFFEINE);
-    if (creator != null) {
-      return creator.getInstance().getCache(cacheName);
-    }
-
-    throw new CacheManagerCreatorNotFoundException("获取本地缓存管理器失败");
+  public CacheManager findCaffeineCacheManager() {
+    return findFirstCacheManagerCreator(TENANT_CAFFEINE, CAFFEINE).getInstance();
   }
 
   public Map<CacheManagerCreatorCategory, CacheManagerCreator<?>> getCreatorMap() {
@@ -91,5 +82,22 @@ public class CacheManagerCreatorFactory {
 
   public void setCreatorMap(Map<CacheManagerCreatorCategory, CacheManagerCreator<?>> creators) {
     this.creators.putAll(creators);
+  }
+
+  public Cache findFirstCache(String cacheName, CacheManagerCreatorCategory... categories) {
+    Assert.hasText(cacheName, "cacheName must not be null or empty");
+    return findFirstCacheManagerCreator(categories).getInstance().getCache(cacheName);
+  }
+
+  public CacheManagerCreator<?> findFirstCacheManagerCreator(
+      CacheManagerCreatorCategory... categories) {
+    return Stream.of(categories)
+        .map(creators::get)
+        .filter(Objects::nonNull)
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new CacheManagerCreatorNotFoundException(
+                    "获取CacheManagerCreator实例失败：" + Arrays.toString(categories)));
   }
 }

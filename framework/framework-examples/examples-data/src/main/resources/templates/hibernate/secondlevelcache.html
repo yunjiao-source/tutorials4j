@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hibernate 二级缓存演示</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery 3 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    body { padding-top: 20px; }
+    .section { margin-top: 30px; border: 1px solid #dee2e6; padding: 20px; border-radius: 8px; }
+    .section-title { margin-bottom: 15px; }
+    #detailArea { margin-top: 15px; }
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 999; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1 class="text-center mb-4">🧩 Hibernate 二级缓存示例</h1>
+
+  <!-- ========== 所有员工列表 ========== -->
+  <div class="section">
+    <h5 class="section-title">📋 所有员工</h5>
+    <button class="btn btn-primary btn-sm mb-3" id="refreshListBtn">刷新列表</button>
+    <div id="employeeList">
+      <table class="table table-bordered table-hover">
+        <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>姓名</th>
+          <th>邮箱</th>
+          <th>部门</th>
+        </tr>
+        </thead>
+        <tbody id="employeeTableBody">
+        <tr><td colspan="4" class="text-center text-muted">暂无数据</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== 按ID查询 ========== -->
+  <div class="section">
+    <h5 class="section-title">🔍 查询单个员工</h5>
+    <div class="row g-2">
+      <div class="col-auto">
+        <input type="number" class="form-control" id="searchId" placeholder="输入员工ID" min="1">
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-info" id="searchBtn">查询</button>
+      </div>
+    </div>
+    <div id="detailArea" class="mt-2">
+      <!-- 查询结果显示在这里 -->
+    </div>
+  </div>
+
+  <!-- ========== 新增员工 ========== -->
+  <div class="section">
+    <h5 class="section-title">➕ 新增员工</h5>
+    <form id="createForm">
+      <div class="row g-2">
+        <div class="col-md-3">
+          <input type="text" class="form-control" name="name" placeholder="姓名" required>
+        </div>
+        <div class="col-md-4">
+          <input type="email" class="form-control" name="email" placeholder="邮箱" required>
+        </div>
+        <div class="col-md-3">
+          <input type="text" class="form-control" name="department" placeholder="部门" required>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-success w-100">创建</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- ========== 删除员工 ========== -->
+  <div class="section">
+    <h5 class="section-title">🗑️ 删除员工</h5>
+    <div class="row g-2">
+      <div class="col-auto">
+        <input type="number" class="form-control" id="deleteId" placeholder="输入员工ID" min="1">
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-danger" id="deleteBtn">删除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 缓存操作 ========== -->
+  <div class="section">
+    <h5 class="section-title">⚙️ 缓存管理</h5>
+    <button class="btn btn-warning me-2" id="clearCacheBtn">清除缓存</button>
+    <button class="btn btn-secondary" id="statsBtn">查看统计（控制台）</button>
+  </div>
+
+</div>
+
+<!-- Toast 提示 -->
+<div class="toast-container">
+  <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMessage">
+        操作成功
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+
+    // ---------- 工具函数 ----------
+    function showToast(message, type = 'success') {
+      const toast = $('#liveToast');
+      toast.removeClass('bg-success bg-danger bg-warning');
+      if (type === 'success') toast.addClass('bg-success');
+      else if (type === 'danger') toast.addClass('bg-danger');
+      else if (type === 'warning') toast.addClass('bg-warning');
+      $('#toastMessage').text(message);
+      const bsToast = new bootstrap.Toast(toast);
+      bsToast.show();
+    }
+
+    // 渲染员工列表
+    function loadEmployees() {
+      $.ajax({
+        url: '/api/employees',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          const tbody = $('#employeeTableBody');
+          if (data && data.length > 0) {
+            let html = '';
+            $.each(data, function(index, emp) {
+              html += `<tr>
+                                <td>${emp.id}</td>
+                                <td>${emp.name}</td>
+                                <td>${emp.email}</td>
+                                <td>${emp.department || '—'}</td>
+                            </tr>`;
+            });
+            tbody.html(html);
+          } else {
+            tbody.html('<tr><td colspan="4" class="text-center text-muted">暂无员工</td></tr>');
+          }
+        },
+        error: function() {
+          showToast('加载员工列表失败', 'danger');
+        }
+      });
+    }
+
+    // 页面加载时自动加载列表
+    loadEmployees();
+
+    // ---------- 刷新列表 ----------
+    $('#refreshListBtn').click(function() {
+      loadEmployees();
+      showToast('列表已刷新', 'success');
+    });
+
+    // ---------- 查询单个员工 ----------
+    $('#searchBtn').click(function() {
+      const id = $('#searchId').val().trim();
+      if (!id) {
+        showToast('请输入员工ID', 'warning');
+        return;
+      }
+      $.ajax({
+        url: `/api/employees/${id}`,
+        method: 'GET',
+        dataType: 'json',
+        success: function(emp) {
+          let detailHtml = `
+                        <div class="alert alert-info">
+                            <strong>ID:</strong> ${emp.id} &nbsp;|&nbsp;
+                            <strong>姓名:</strong> ${emp.name} &nbsp;|&nbsp;
+                            <strong>邮箱:</strong> ${emp.email} &nbsp;|&nbsp;
+                            <strong>部门:</strong> ${emp.department || '—'}
+                        </div>
+                    `;
+          $('#detailArea').html(detailHtml);
+        },
+        error: function(xhr) {
+          if (xhr.status === 404) {
+            showToast(`未找到 ID 为 ${id} 的员工`, 'danger');
+          } else {
+            showToast('查询失败', 'danger');
+          }
+          $('#detailArea').html('');
+        }
+      });
+    });
+
+    // ---------- 创建员工 ----------
+    $('#createForm').submit(function(e) {
+      e.preventDefault();
+      const formData = {
+        name: $('input[name="name"]').val().trim(),
+        email: $('input[name="email"]').val().trim(),
+        department: $('input[name="department"]').val().trim()
+      };
+      if (!formData.name || !formData.email || !formData.department) {
+        showToast('请完整填写所有字段', 'warning');
+        return;
+      }
+      $.ajax({
+        url: '/api/employees',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        dataType: 'json',
+        success: function(newEmp) {
+          showToast(`员工 ${newEmp.name} 创建成功！`, 'success');
+          // 清空表单
+          $('#createForm')[0].reset();
+          // 刷新列表
+          loadEmployees();
+        },
+        error: function() {
+          showToast('创建员工失败', 'danger');
+        }
+      });
+    });
+
+    // ---------- 删除员工 ----------
+    $('#deleteBtn').click(function() {
+      const id = $('#deleteId').val().trim();
+      if (!id) {
+        showToast('请输入要删除的员工ID', 'warning');
+        return;
+      }
+      if (!confirm(`确定要删除 ID 为 ${id} 的员工吗？`)) return;
+      $.ajax({
+        url: `/api/employees/${id}`,
+        method: 'DELETE',
+        success: function() {
+          showToast(`员工 ID ${id} 删除成功`, 'success');
+          $('#deleteId').val('');
+          loadEmployees();
+        },
+        error: function(xhr) {
+          if (xhr.status === 404) {
+            showToast(`未找到 ID 为 ${id} 的员工`, 'danger');
+          } else {
+            showToast('删除失败', 'danger');
+          }
+        }
+      });
+    });
+
+    // ---------- 清除缓存 ----------
+    $('#clearCacheBtn').click(function() {
+      $.ajax({
+        url: '/api/employees/clear-cache',
+        method: 'POST',
+        success: function() {
+          showToast('缓存已清除', 'success');
+          // 清除后刷新列表（因为二级缓存失效，重新查询数据库）
+          loadEmployees();
+        },
+        error: function() {
+          showToast('清除缓存失败', 'danger');
+        }
+      });
+    });
+
+    // ---------- 查看统计 ----------
+    $('#statsBtn').click(function() {
+      // 由于后端只打印到控制台，没有返回体，所以只用 success 提示
+      $.ajax({
+        url: '/api/employees/stats',
+        method: 'GET',
+        success: function() {
+          showToast('统计信息已打印到应用控制台，请查看日志', 'success');
+        },
+        error: function() {
+          showToast('获取统计信息失败', 'danger');
+        }
+      });
+    });
+
+  });
+</script>
+
+<!-- Bootstrap JS (用于 Toast) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

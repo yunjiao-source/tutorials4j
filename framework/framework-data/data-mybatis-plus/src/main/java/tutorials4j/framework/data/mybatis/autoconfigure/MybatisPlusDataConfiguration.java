@@ -8,16 +8,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.data.core.properties.MybatisPlusDataProperties;
 import tutorials4j.framework.data.mybatis.AuditMetaObjectHandler;
 import tutorials4j.framework.data.mybatis.UidentifierGenerator;
 import tutorials4j.framework.data.mybatis.customizer.BlockAttackInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.MybatisPlusInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.OptimisticLockerInterceptorCustomizer;
 import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorCustomizer;
+import tutorials4j.framework.data.mybatis.properties.MybatisPlusDataProperties;
 
 /**
  * MyBatis Plus 的自动配置类
@@ -26,6 +27,7 @@ import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorC
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties({MybatisPlusDataProperties.class})
 public class MybatisPlusDataConfiguration {
   @PostConstruct
   public void postConstruct() {

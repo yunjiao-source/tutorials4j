@@ -11,13 +11,13 @@
 
     <artifactId>data-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <name>Data :: Hibernate Tenant DB Spring Boot Starter</name>
-    <description>基于Hibernate，独立数据库的多租户启动器</description>
+    <name>Data :: Data Spring Boot Starter</name>
+    <description>Data启动器</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-spring-boot-starter</artifactId>
+            <artifactId>cache-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
 

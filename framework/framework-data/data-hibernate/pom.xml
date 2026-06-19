@@ -17,6 +17,12 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>cache-core</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>data-jdbc</artifactId>
             <version>${revision}</version>
         </dependency>

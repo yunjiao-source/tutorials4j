@@ -2,7 +2,14 @@ spring:
   profiles:
 #    active: p6spy
 #    active: mybatis
-    active: jpa
+#    active: jpa
+    active: hibernate-secondlevelcache
+  data:
+    # Redis 配置
+    redis:
+      host: localhost # Redis服务器地址
+      port: 6379 # Redis端口
+      database: 2
 
   datasource:
     url: jdbc:postgresql://localhost:5432/demo
