@@ -1,7 +1,7 @@
 package tutorials4j.framework.crypto.core.cache;
 
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.cache.core.CacheNameConsts;
+import tutorials4j.framework.cache.core.NamedCacheConsts;
 import tutorials4j.framework.cache.core.template.AbstractCaffeineCacheTemplate;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.AsymmetricCryptoStrategy;
@@ -36,7 +36,7 @@ import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
  *   <li><b>解耦</b>：将缓存策略与加密策略分离，利用 Spring 依赖注入灵活配置非对称/对称算法。
  * </ul>
  *
- * <p><b>缓存配置</b>：底层缓存实例的名称为 {@link CacheNameConsts#CRYPTO_PROCESSOR}，具体过期策略、最大容量等由 Caffeine
+ * <p><b>缓存配置</b>：底层缓存实例的名称为 {@link NamedCacheConsts#CRYPTO_PROCESSOR}，具体过期策略、最大容量等由 Caffeine
  * 配置决定（通常通过 {@link tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory} 统一管理）。
  *
  * <p><b>线程安全</b>：本类是无状态的（仅持有处理器工厂实例），且父类 {@link
@@ -62,7 +62,7 @@ public class CryptoProcessorCacheTemplate
    * 构造一个新的 {@code CryptoExchangeCacheTemplate} 实例。
    *
    * <p>构造过程中会从 {@link CryptoProcessorFactory} 中根据策略的 {@code category} 分别获取非对称和对称处理器。 缓存名称自动设为
-   * {@link CacheNameConsts#CRYPTO_PROCESSOR}。
+   * {@link NamedCacheConsts#CRYPTO_PROCESSOR}。
    *
    * @param cryptoProcessorFactory 加密处理器工厂，用于根据策略类别查找具体的处理器实现
    * @param asymmetricCryptoStrategy 非对称加密策略配置（如 RSA），其 {@code category} 用于查找对应的非对称处理器
@@ -73,7 +73,7 @@ public class CryptoProcessorCacheTemplate
       CryptoProcessorFactory cryptoProcessorFactory,
       AsymmetricCryptoStrategy asymmetricCryptoStrategy,
       SymmetricCryptoStrategy symmetricCryptoStrategy) {
-    super(CacheNameConsts.CRYPTO_PROCESSOR);
+    super(NamedCacheConsts.CRYPTO_PROCESSOR);
     this.asymmetricProcessor =
         cryptoProcessorFactory.findProcessor(asymmetricCryptoStrategy.getCategory());
     this.symmetricProcessor =

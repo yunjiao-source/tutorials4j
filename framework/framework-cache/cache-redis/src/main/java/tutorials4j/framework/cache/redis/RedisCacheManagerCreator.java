@@ -53,7 +53,8 @@ public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheM
   public RedisCacheManager newInstance() {
     RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
     // 使用配置默认值
-    defaultCacheConfig = RedisUtils.fillConfiguration(defaultCacheConfig, properties.getDefaults());
+    defaultCacheConfig =
+        RedisUtils.fillConfiguration(defaultCacheConfig, properties.getDefaults(), properties);
 
     RedisCacheManager.RedisCacheManagerBuilder builder =
         RedisCacheManager.builder(factory).cacheDefaults(defaultCacheConfig);

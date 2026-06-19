@@ -5,12 +5,8 @@ tutorials4j:
         timeToLive: 20s
         cacheNullValues: false
         enable-statistics: true
-        redis:
-          cache-prefix: 'share:'
       caches:
         users:
           timeToLive: 10s
           cacheNullValues: false
-          redis:
-            cache-prefix: 'user:'
 

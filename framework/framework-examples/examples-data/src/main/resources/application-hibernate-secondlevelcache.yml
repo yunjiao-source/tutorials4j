@@ -29,7 +29,7 @@ spring:
           region:
             factory_class: tutorials4j.framework.data.hibernate.spi.CacheRegionFactoryTemplate
           use_query_cache: true
-          region_prefix: hibernate-cache-
+          #region_prefix: hibernate-cache-
         generate_statistics: true
 
 

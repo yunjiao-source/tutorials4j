@@ -196,7 +196,7 @@
         url: url,
         type: 'GET',
         data: { id: id },
-        dataType: 'json',  // 统一期望json，但users/orders返回的是字符串会被转为json? 实际响应的content-type可能是text/plain, 但jQuery会按智能转换, 一般能处理
+        dataType: 'text',
         success: function(data) {
           let displayText = '';
           if (formatResponse) {

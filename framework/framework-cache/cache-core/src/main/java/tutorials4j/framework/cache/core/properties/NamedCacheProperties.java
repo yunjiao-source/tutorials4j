@@ -19,6 +19,8 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE_NAMED)
 public class NamedCacheProperties {
+  private String cacheNamePrefix = "named:";
+
   /** 全局默认缓存配置，当某个具体缓存未定义配置时使用该默认值。 */
   @NestedConfigurationProperty private NamedCacheOptions defaults = new NamedCacheOptions();
 

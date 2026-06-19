@@ -46,13 +46,11 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
     Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
     Map<String, NamedCacheOptions> redisOption = properties.getCaches();
 
+    // 命名缓存配置
     redisOption.forEach(
         (key, redisProp) -> {
-          // 独立配置覆盖默认配置
-          redisProp.applyDefaults(properties.getDefaults());
-
           RedisCacheConfiguration namedCacheConfiguration =
-              RedisUtils.fillConfiguration(defaultConfig, redisProp);
+              RedisUtils.fillConfiguration(defaultConfig, redisProp, properties);
           configMap.put(key, namedCacheConfiguration);
         });
 

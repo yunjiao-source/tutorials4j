@@ -6,6 +6,7 @@ import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import tutorials4j.framework.cache.core.RedisKeyPrefix;
 import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
+import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 import tutorials4j.framework.common.core.TenantContextHolder;
 
 /**
@@ -49,12 +50,17 @@ public interface RedisUtils {
    *
    * @param configuration 原始的 {@link RedisCacheConfiguration} 实例，将基于它进行修改
    * @param prop 包含具体缓存配置的 {@link NamedCacheOptions} 对象
+   * @param properties
    * @return 填充后的 {@link RedisCacheConfiguration} 实例
    */
   static RedisCacheConfiguration fillConfiguration(
-      RedisCacheConfiguration configuration, NamedCacheOptions prop) {
+      RedisCacheConfiguration configuration,
+      NamedCacheOptions prop,
+      NamedCacheProperties properties) {
 
-    configuration = configuration.computePrefixWith(RedisUtils.tenantCacheKeyPrefix());
+    // 独立配置覆盖默认配置
+    prop.applyDefaults(properties.getDefaults());
+
     if (prop.getTimeToLive() != null) {
       configuration = configuration.entryTtl(prop.getTimeToLive());
     }
@@ -63,11 +69,9 @@ public interface RedisUtils {
       configuration = configuration.disableCachingNullValues();
     }
 
-    if (StringUtils.isNotBlank(prop.getRedis().getCachePrefix())) {
-      configuration =
-          configuration.computePrefixWith(
-              RedisUtils.tenantCacheKeyPrefix(prop.getRedis().getCachePrefix()));
-    }
+    configuration =
+        configuration.computePrefixWith(
+            RedisUtils.tenantCacheKeyPrefix(properties.getCacheNamePrefix()));
 
     return configuration;
   }

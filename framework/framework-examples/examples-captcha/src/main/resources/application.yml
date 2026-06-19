@@ -21,13 +21,9 @@ tutorials4j:
         captcha-behavior:
           timeToLive: 2m
           cacheNullValues: false
-          redis:
-            cache-prefix: "token:"
         captcha-graphic:
           timeToLive: 1m
           cacheNullValues: false
-          redis:
-            cache-prefix: "token:"
 
 logging:
   level:

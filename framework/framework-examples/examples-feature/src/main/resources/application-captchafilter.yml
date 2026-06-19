@@ -12,8 +12,6 @@ tutorials4j:
         captcha-behavior:
           timeToLive: 1m
           cacheNullValues: false
-          redis:
-            cache-prefix: "token:"
 
   feature:
     captcha-enabled: true

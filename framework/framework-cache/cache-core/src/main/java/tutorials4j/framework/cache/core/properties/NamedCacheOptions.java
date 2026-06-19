@@ -24,18 +24,8 @@ public class NamedCacheOptions {
   /** 是否启用缓存统计（如命中率、miss 率等）。 若为 {@code null} 则使用默认配置值。 */
   private Boolean enableStatistics;
 
-  /** Redis 缓存的专属配置，例如键前缀。 */
-  @NestedConfigurationProperty private RedisOptions redis = new RedisOptions();
-
   /** Caffeine 缓存的专属配置，例如初始容量、最大大小等。 */
   @NestedConfigurationProperty private CaffeineOptions caffeine = new CaffeineOptions();
-
-  /** Redis 缓存的配置选项。 */
-  @Data
-  public static class RedisOptions {
-    /** Redis 缓存键的前缀，用于区分不同缓存或应用。 若未指定则可能使用默认前缀或无前缀。 */
-    private String cachePrefix;
-  }
 
   /** Caffeine 缓存的配置选项。 */
   @Data
@@ -71,10 +61,6 @@ public class NamedCacheOptions {
 
     if (this.enableStatistics == null) {
       this.enableStatistics = defaults.enableStatistics;
-    }
-
-    if (this.redis.cachePrefix == null) {
-      this.redis.cachePrefix = defaults.redis.cachePrefix;
     }
 
     if (this.caffeine.initialCapacity == null) {

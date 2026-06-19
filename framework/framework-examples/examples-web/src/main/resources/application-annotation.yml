@@ -18,13 +18,9 @@ tutorials4j:
         web-security-idempotent:
           timeToLive: 3s
           cacheNullValues: false
-          redis:
-            cache-prefix: 'token:'
         web-security-access-limited:
           timeToLive: 5s
           cacheNullValues: true
-          redis:
-            cache-prefix: 'token:'
 
   web:
     security:

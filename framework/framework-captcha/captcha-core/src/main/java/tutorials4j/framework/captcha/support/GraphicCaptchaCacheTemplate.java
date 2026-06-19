@@ -1,6 +1,6 @@
 package tutorials4j.framework.captcha.support;
 
-import tutorials4j.framework.cache.core.CacheNameConsts;
+import tutorials4j.framework.cache.core.NamedCacheConsts;
 import tutorials4j.framework.cache.core.template.AbstractMultiLevelCacheTemplate;
 
 /**
@@ -13,7 +13,7 @@ import tutorials4j.framework.cache.core.template.AbstractMultiLevelCacheTemplate
 public class GraphicCaptchaCacheTemplate extends AbstractMultiLevelCacheTemplate<String, String> {
 
   public GraphicCaptchaCacheTemplate() {
-    super(CacheNameConsts.CAPTCHA_GRAPHIC);
+    super(NamedCacheConsts.CAPTCHA_GRAPHIC);
   }
 
   @Override

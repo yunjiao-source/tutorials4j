@@ -1,9 +1,9 @@
 spring:
   profiles:
-#    active: cacheable
+    active: cacheable
 #    active: lock
 #    active: template
-    active: multi-level
+#    active: multi-level
 
 
   data:

@@ -10,12 +10,9 @@ tutorials4j:
         users:
           timeToLive: 10s
           cacheNullValues: false
-          redis:
-            cache-prefix: 'cacheable:'
         orders:
           timeToLive: 20s
           cacheNullValues: true
-          redis:
-            cache-prefix: 'cacheable:'
+
 
 

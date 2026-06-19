@@ -22,19 +22,19 @@ public class CacheRegionFactoryTemplate extends RegionFactoryTemplate {
   @Override
   protected StorageAccess createTimestampsRegionStorageAccess(
       String regionName, SessionFactoryImplementor sessionFactory) {
-    return new CacheDomainDataStorageAccess(regionPrefix + regionName, cacheType);
+    return new CacheDomainDataStorageAccess(regionName, cacheType);
   }
 
   @Override
   protected DomainDataStorageAccess createDomainDataStorageAccess(
       DomainDataRegionConfig regionConfig, DomainDataRegionBuildingContext buildingContext) {
-    return new CacheDomainDataStorageAccess(regionPrefix + regionConfig.getRegionName(), cacheType);
+    return new CacheDomainDataStorageAccess(regionConfig.getRegionName(), cacheType);
   }
 
   @Override
   protected StorageAccess createQueryResultsRegionStorageAccess(
       String regionName, SessionFactoryImplementor sessionFactory) {
-    return new CacheDomainDataStorageAccess(regionPrefix + regionName, cacheType);
+    return new CacheDomainDataStorageAccess(regionName, cacheType);
   }
 
   @Override

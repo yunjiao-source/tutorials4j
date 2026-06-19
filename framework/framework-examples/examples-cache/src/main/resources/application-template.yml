@@ -6,8 +6,6 @@ tutorials4j:
         timeToLive: 2m
         cacheNullValues: false
         enable-statistics: true
-        redis:
-          cache-prefix: 'share:'
       caches:
         captcha:
           timeToLive: 10s
@@ -15,8 +13,6 @@ tutorials4j:
         counter:
           timeToLive: 20s
           cacheNullValues: false
-          redis:
-            cache-prefix: 'share1:share1:'
 
 
 

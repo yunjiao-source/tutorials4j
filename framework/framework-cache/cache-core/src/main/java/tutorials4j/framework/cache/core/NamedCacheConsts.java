@@ -5,7 +5,7 @@ package tutorials4j.framework.cache.core;
  *
  * @author Yun Jiao
  */
-public interface CacheNameConsts {
+public interface NamedCacheConsts {
   String CAPTCHA_GRAPHIC = "captcha-graphic";
 
   String CAPTCHA_BEHAVIOR = "captcha-behavior";
