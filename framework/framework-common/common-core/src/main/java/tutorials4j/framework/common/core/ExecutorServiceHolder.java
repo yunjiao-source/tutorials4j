@@ -66,6 +66,12 @@ public class ExecutorServiceHolder<T extends ExecutorService> {
   }
 
   public void shutdown() {
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "关闭线程池，class={}, threadNamePrefix={}",
+          instance.getClass().getSimpleName(),
+          option.getThreadNamePrefix());
+    }
     if (option.isAwaitTermination()) {
       instance.shutdown(); // 拒绝新任务
       try {

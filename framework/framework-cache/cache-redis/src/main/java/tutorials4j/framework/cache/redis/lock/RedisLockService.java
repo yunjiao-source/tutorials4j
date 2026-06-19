@@ -337,9 +337,6 @@ public class RedisLockService {
     }
 
     public void destory() {
-      if (log.isDebugEnabled()) {
-        log.debug("分布式锁自动续期定时任务执行器关闭");
-      }
       executorServiceHolder.shutdown();
     }
 
