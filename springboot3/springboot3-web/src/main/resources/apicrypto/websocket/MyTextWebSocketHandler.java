@@ -1,4 +1,4 @@
-package tutorials4j.springboot3.web.websocket;
+package apicrypto.websocket;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;

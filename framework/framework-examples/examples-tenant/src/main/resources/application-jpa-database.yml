@@ -4,8 +4,8 @@ tutorials4j:
       strategy: database
       jdbc:
         demo1:
-          url: jdbc:postgresql://localhost:5432/demo1
-          username: postgres
-          password: postgres
-          driver-class-name: org.postgresql.Driver
+          url: jdbc:mysql://localhost:3306/demo1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver
 

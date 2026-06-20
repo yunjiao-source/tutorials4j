@@ -6,10 +6,10 @@ spring:
     active: simple
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/springcloud
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://localhost:3306/springcloud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       # 初始配置
       minimum-idle: 2

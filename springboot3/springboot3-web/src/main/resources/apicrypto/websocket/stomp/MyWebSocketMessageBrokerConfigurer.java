@@ -1,4 +1,4 @@
-package tutorials4j.springboot3.web.websocket.stomp;
+package apicrypto.websocket.stomp;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

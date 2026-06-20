@@ -87,6 +87,8 @@
         <qrgen.version>1.4</qrgen.version>
         <jasperreports.version>6.21.5</jasperreports.version>
         <bcpkix-jdk18on.version>1.84</bcpkix-jdk18on.version>
+        <powerjob.version>5.1.2</powerjob.version>
+        <xxl-job.version>3.4.2</xxl-job.version>
     </properties>
 
     <dependencyManagement>
@@ -257,6 +259,18 @@
                 <groupId>net.sf.jasperreports</groupId>
                 <artifactId>jasperreports</artifactId>
                 <version>${jasperreports.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>tech.powerjob</groupId>
+                <artifactId>powerjob-worker</artifactId>
+                <version>${powerjob.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

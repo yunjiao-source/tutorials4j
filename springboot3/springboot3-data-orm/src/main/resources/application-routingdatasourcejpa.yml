@@ -12,12 +12,12 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
 tenants:
   tenant-a:
-    url: jdbc:postgresql://localhost:5432/demo
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://localhost:3306/demo1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   tenant-b:
-    url: jdbc:postgresql://localhost:5432/demo1
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://localhost:3306/demo1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver

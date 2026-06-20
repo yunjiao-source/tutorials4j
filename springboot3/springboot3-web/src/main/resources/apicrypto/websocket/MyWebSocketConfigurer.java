@@ -1,4 +1,4 @@
-package tutorials4j.springboot3.web.websocket;
+package apicrypto.websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

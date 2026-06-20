@@ -18,6 +18,8 @@
         <module>schedule-core</module>
         <module>schedule-redis</module>
         <module>schedule-redisson</module>
+        <module>schedule-xxl-job</module>
+        <module>schedule-powerjob-worker</module>
         <module>schedule-spring-boot-starter</module>
     </modules>
 

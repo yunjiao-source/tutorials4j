@@ -172,6 +172,17 @@ Java 教程
 > 多租户用户管理系统(MYBATIS+数据库隔离)
 ![多租户用户管理系统(MYBATIS+数据库隔离)](docs/images/028.jpg)
 
+### web模块示例（framework/framework-examples/examples-schedule）
+
+#### profile:xxl-job
+
+> xxl-job 任务 示例
+![xxl-job 任务 示例](docs/images/045.jpg)
+
+> powerjob 任务 示例
+![powerjob 任务 示例](docs/images/046.jpg)
+
+
 ### web模块示例（framework/framework-examples/examples-web）
 
 #### profile:annotation

@@ -1,0 +1,9 @@
+tutorials4j:
+  schedule:
+    xxl-job:
+      enabled: true
+      admin:
+        addresses: http://127.0.0.1:8081
+      executor:
+        app-name: xxl-job-example
+        enabled: true
