@@ -28,6 +28,7 @@
         <module>springboot3-batch</module>
         <module>springboot3-integration</module>
         <module>springboot3-schedule</module>
+        <module>springboot3-none-web</module>
     </modules>
 
     <dependencyManagement>

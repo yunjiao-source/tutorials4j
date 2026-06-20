@@ -17,6 +17,7 @@
 
     <modules>
         <module>java21-lang</module>
+        <module>java21-guava</module>
     </modules>
 
     <dependencies>

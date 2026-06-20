@@ -12,7 +12,8 @@ spring:
 #    active: validation
 #    active: websocket
 #    active: responsebodyemitter
-    active: apicrypto
+#    active: apicrypto
+    active: chainofresponsibility
 
 
 
