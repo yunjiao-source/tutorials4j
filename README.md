@@ -88,6 +88,9 @@ Java 教程
 > 任务日志
 ![任务日志](docs/images/043.jpg)
 
+> prometheus监控日志
+![prometheus监控日志](docs/images/047.jpg)
+
 ### 缓存模块示例（framework/framework-examples/examples-cache）
 
 #### profile:cacheable

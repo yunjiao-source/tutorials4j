@@ -36,7 +36,7 @@ import tutorials4j.framework.schedule.core.repository.TaskRepository;
 @RequiredArgsConstructor
 public class ScheduleTaskManager implements SchedulingConfigurer {
   private final TaskRepository<?> taskRepository;
-  private final TaskRuntimeDataHandler taskRuntimeDataHandler;
+  private final List<TaskRuntimeDataHandler> taskRuntimeDataHandlers;
   private final ScheduleProperties properties;
 
   private ScheduledTaskRegistrar scheduledTaskRegistrar;
@@ -196,32 +196,47 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   private void createEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    taskRuntimeDataHandler.handle(data);
+    notifyTaskRuntimeDataHandlers(data);
   }
 
   private void cancelEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    taskRuntimeDataHandler.handle(data);
+    notifyTaskRuntimeDataHandlers(data);
   }
 
   private void stopEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
     doCancelTask(data.taskCode());
-    taskRuntimeDataHandler.handle(data);
+    notifyTaskRuntimeDataHandlers(data);
   }
 
   private void failureEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    taskRuntimeDataHandler.handle(data);
+    notifyTaskRuntimeDataHandlers(data);
   }
 
   private void completeEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    taskRuntimeDataHandler.handle(data);
+    notifyTaskRuntimeDataHandlers(data);
   }
 
   private void startEvent(TaskRuntimeData data) {
     lastTaskRuntimeDataMap.put(data.taskCode(), data);
-    taskRuntimeDataHandler.handle(data);
+    notifyTaskRuntimeDataHandlers(data);
+  }
+
+  private void notifyTaskRuntimeDataHandlers(TaskRuntimeData data) {
+    if (taskRuntimeDataHandlers == null || taskRuntimeDataHandlers.isEmpty()) {
+      log.warn("没有注册任务事件处理器，TaskRuntimeData={}", data);
+      return;
+    }
+
+    try {
+      for (TaskRuntimeDataHandler taskRuntimeDataHandler : taskRuntimeDataHandlers) {
+        taskRuntimeDataHandler.handle(data);
+      }
+    } catch (Exception e) {
+      log.error("处理任务事件异常", e);
+    }
   }
 }

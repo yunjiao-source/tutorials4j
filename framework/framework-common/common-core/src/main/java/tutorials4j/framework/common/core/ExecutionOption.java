@@ -27,6 +27,7 @@ public class ExecutionOption {
   /** 线程空闲存活时间（秒），默认 60 当 allowCoreThreadTimeOut = true 时生效 */
   private Duration keepAlive = Duration.ofSeconds(60);
 
+  // 不要设置太大，如果队列已满，且当前线程数 < maximumPoolSize，创建新线程执行任务
   private int queueCapacity = 100;
 
   /**

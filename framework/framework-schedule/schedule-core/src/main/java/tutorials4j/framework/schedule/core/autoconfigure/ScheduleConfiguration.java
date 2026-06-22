@@ -2,11 +2,11 @@ package tutorials4j.framework.schedule.core.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.schedule.core.component.LoggingTaskRuntimeDataHandler;
 import tutorials4j.framework.schedule.core.component.ScheduleTaskManager;
 import tutorials4j.framework.schedule.core.component.TaskRuntimeDataHandler;
 import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
@@ -38,18 +38,11 @@ public class ScheduleConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  TaskRuntimeDataHandler loggingTaskRuntimeDataHandler() {
-    log.trace("[SCHEDULE-CORE] Logging Task Runtime Data Handler");
-    return new LoggingTaskRuntimeDataHandler();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
   ScheduleTaskManager scheduleTaskManager(
       TaskRepository<?> taskRepository,
-      TaskRuntimeDataHandler taskRuntimeDataHandler,
+      ObjectProvider<TaskRuntimeDataHandler> handlers,
       ScheduleProperties properties) {
     log.trace("[SCHEDULE-CORE] Schedule Task Manager");
-    return new ScheduleTaskManager(taskRepository, taskRuntimeDataHandler, properties);
+    return new ScheduleTaskManager(taskRepository, handlers.orderedStream().toList(), properties);
   }
 }
