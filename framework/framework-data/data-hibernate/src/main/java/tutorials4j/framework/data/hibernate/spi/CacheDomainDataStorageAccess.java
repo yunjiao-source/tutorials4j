@@ -1,11 +1,13 @@
 package tutorials4j.framework.data.hibernate.spi;
 
+import com.google.common.hash.Hashing;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.cache.spi.QueryKey;
 import org.hibernate.cache.spi.support.DomainDataStorageAccess;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.springframework.cache.Cache;
+import org.springframework.util.SerializationUtils;
 import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
 import tutorials4j.framework.cache.core.support.CacheType;
 
@@ -41,14 +43,6 @@ public class CacheDomainDataStorageAccess implements DomainDataStorageAccess {
             .getCache(regionName);
   }
 
-  private String wrapper(Object key) {
-    if (key instanceof QueryKey queryKey) {
-      int hashCode = queryKey.hashCode();
-      return String.valueOf(hashCode);
-    }
-    return String.valueOf(key);
-  }
-
   @Override
   public Object getFromCache(Object key, SharedSessionContractImplementor session) {
     Cache.ValueWrapper valueWrapper = getCache().get(wrapper(key));
@@ -77,4 +71,12 @@ public class CacheDomainDataStorageAccess implements DomainDataStorageAccess {
 
   @Override
   public void release() {}
+
+  private String wrapper(Object key) {
+    if (key instanceof QueryKey queryKey) {
+      byte[] serialized = SerializationUtils.serialize(queryKey);
+      return Hashing.murmur3_128().hashBytes(serialized).toString();
+    }
+    return String.valueOf(key);
+  }
 }
