@@ -1,0 +1,1 @@
+# 责任链设计模式（Chain Of Responsibility Design Pattern）

@@ -83,7 +83,7 @@ Java 教程
 ![任务调度管理](docs/images/041.jpg)
 
 > 任务管理
-![任务管理](docs/images/043.jpg)
+![任务管理](docs/images/042.jpg)
 
 > 任务日志
 ![任务日志](docs/images/043.jpg)

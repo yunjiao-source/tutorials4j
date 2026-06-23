@@ -1,0 +1,14 @@
+spring:
+  main:
+    web-application-type: none
+  profiles:
+    active: demo2
+
+
+
+
+
+logging:
+  level:
+    tutorials4j: DEBUG
+#    org.springframework: debug
