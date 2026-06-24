@@ -1,4 +1,4 @@
-package tutorials4j.java21.lang.concurrent.funcion;
+package tutorials4j.java21.lang.demo2;
 
 /** 自定义函数式接口 */
 @FunctionalInterface

@@ -61,6 +61,7 @@
 
         <springboot3.version>3.5.13</springboot3.version>
         <springcloud3.version>2025.0.3</springcloud3.version>
+        <alibaba-cloud.version>2025.0.0.0</alibaba-cloud.version>
         <springboot4.version>4.0.5</springboot4.version>
 
         <javafaker.version>1.0.2</javafaker.version>

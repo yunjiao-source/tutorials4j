@@ -1,4 +1,4 @@
-package tutorials4j.java21.lang.concurrent.funcion;
+package tutorials4j.java21.lang.demo2;
 
 import java.util.function.Function;
 

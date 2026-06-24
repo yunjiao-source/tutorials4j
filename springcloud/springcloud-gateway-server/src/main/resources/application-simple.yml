@@ -1,31 +1,9 @@
 
 spring:
   cloud:
-    gateway:
-      # 开启网关日志（调试用）
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-origins: "*"
-            allowed-methods: "*"
-            allowed-headers: "*"
-      routes:
-        - id: oauth-server  # 路由ID，唯一
-          uri: http://localhost:9110  # 目标服务地址
-          predicates:  # 断言：匹配请求路径
-            - Path=/oauth-server/**
-          filters:
-            - StripPrefix=1  # 去掉第一层路径 /oauth-server
-
-        - id: resource-server  # 路由ID，唯一
-          uri: http://localhost:9111  # 目标服务地址
-          predicates:  # 断言：匹配请求路径
-            - Path=/resource-server/**
-          filters:
-            - StripPrefix=1  # 去掉第一层路径 /oauth-server
             -
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9101
+          issuer-uri: http://localhost:9111

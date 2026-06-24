@@ -1,0 +1,20 @@
+package tutorials4j.springcloud.gateway.demo1.feign;
+
+import org.springframework.context.annotation.Configuration;
+
+// 下游服务如何透传灰度标签
+
+@Configuration
+public class GrayFeignInterceptor implements feign.RequestInterceptor {
+
+    @Override
+    public void apply(feign.RequestTemplate template) {
+        var attrs = RequestContextHolder.getRequestAttributes();
+        if (attrs instanceof ServletRequestAttributes servletAttrs) {
+            String grayTag = servletAttrs.getRequest().getHeader("X-Gray-Tag");
+            if (grayTag != null && !grayTag.isBlank()) {
+                template.header("X-Gray-Tag", grayTag);
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "routeId": "order-route",
+    "serviceId": "order-service",
+    "order": 10,
+    "enabled": true,
+    "paths": ["/api/order/**"],
+    "methods": ["GET", "POST"],
+    "filters": [
+      { "name": "StripPrefix", "args": { "_genkey_0": "1" } }
+    ]
+  },
+  {
+    "routeId": "payment-route",
+    "serviceId": "payment-service",
+    "order": 20,
+    "enabled": true,
+    "paths": ["/api/payment/**"],
+    "methods": ["POST"],
+    "filters": [
+      { "name": "StripPrefix", "args": { "_genkey_0": "1" } }
+    ]
+  }
+]

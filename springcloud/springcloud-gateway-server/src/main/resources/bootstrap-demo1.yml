@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    sentinel:
+      eager: true
+      transport:
+        dashboard: sentinel-dashboard:9102
+      datasource:
+        gw-flow:
+          nacos:
+            server-addr: ${env.nacos.server-addr}
+            group-id: GATEWAY_GROUP
+            data-id: gateway-flow-rules.json
+            rule-type: gw-flow
+            data-type: json

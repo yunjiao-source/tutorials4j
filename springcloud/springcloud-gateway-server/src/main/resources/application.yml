@@ -1,3 +1,37 @@
 server:
-  port: 9100  # 网关端口
+  shutdown: graceful                  # 避免发布时正在处理的请求被硬切断
+  port: 9110  # 网关端口
+
+spring:
+  profiles:
+#      active: simple
+      active: demo1
+
+  lifecycle:
+    timeout-per-shutdown-phase: 30s   # 避免发布时正在处理的请求被硬切断
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            connect-timeout: 3000     # 要足够快失败，避免大量连接长时间挂起
+            response-timeout: 5s      # 要依据业务接口 SLA 区分
+            pool:
+              type: elastic
+              max-connections: 4000   # 要根据下游吞吐与实例数估算
+              acquire-timeout: 3000
+              max-idle-time: 30s
+              max-life-time: 300s
+
+  security:
+    user:
+      name: admin
+      password: 123456
+      roles: USER
+
+
+
+
+
 

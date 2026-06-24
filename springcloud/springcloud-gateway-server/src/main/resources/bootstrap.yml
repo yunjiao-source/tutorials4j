@@ -1,0 +1,29 @@
+env:
+  nacos:
+    username: nacos
+    password: nacos
+    server-addr: localhost:8848
+    namespace: 0abfd754-32ba-42d7-bc5a-5959cf38e297
+
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    nacos:
+      username: ${env.nacos.username}
+      password: ${env.nacos.password}
+      discovery:
+        # 服务注册地址
+        server-addr: ${env.nacos.server-addr}
+        namespace: ${env.nacos.namespace}
+      config:
+        server-addr: ${env.nacos.server-addr}
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        namespace: ${env.nacos.namespace}
+        extension-configs:
+          - # 服务配置
+            data-id: ${spring.application.name}.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+

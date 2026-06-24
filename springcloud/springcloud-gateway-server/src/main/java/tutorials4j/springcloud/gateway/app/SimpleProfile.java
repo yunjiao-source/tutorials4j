@@ -12,4 +12,4 @@ import org.springframework.context.annotation.Profile;
 @Profile("simple")
 @Configuration
 @ComponentScan(basePackages = {"tutorials4j.springcloud.gateway.simple"})
-public class SimpleConfig {}
+public class SimpleProfile {}
