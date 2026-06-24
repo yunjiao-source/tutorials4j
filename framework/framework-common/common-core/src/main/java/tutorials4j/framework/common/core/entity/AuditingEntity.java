@@ -1,6 +1,6 @@
 package tutorials4j.framework.common.core.entity;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * 审计实体接口，提供创建和修改信息的记录能力。
@@ -23,7 +23,7 @@ public interface AuditingEntity extends Entity {
    *
    * @return 创建时间
    */
-  LocalDateTime getCreatedDate();
+  Instant getCreatedDate();
 
   /**
    * 获取最后修改人标识。
@@ -37,7 +37,7 @@ public interface AuditingEntity extends Entity {
    *
    * @return 最后修改时间
    */
-  LocalDateTime getLastModifiedDate();
+  Instant getLastModifiedDate();
 
   /**
    * 设置创建人标识。
@@ -51,7 +51,7 @@ public interface AuditingEntity extends Entity {
    *
    * @param createdDate 创建时间
    */
-  void setCreatedDate(LocalDateTime createdDate);
+  void setCreatedDate(Instant createdDate);
 
   /**
    * 设置最后修改人标识。
@@ -65,5 +65,5 @@ public interface AuditingEntity extends Entity {
    *
    * @param lastModifiedDate 最后修改时间
    */
-  void setLastModifiedDate(LocalDateTime lastModifiedDate);
+  void setLastModifiedDate(Instant lastModifiedDate);
 }

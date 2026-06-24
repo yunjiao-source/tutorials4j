@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,9 +27,9 @@ public class BaseEntity extends BaseIdEntity implements VersionEntity, AuditingE
 
   @Column(updatable = false)
   @CreatedDate
-  private LocalDateTime createDate = LocalDateTime.now();
+  private Instant createDate = Instant.now();
 
-  @Column @LastModifiedDate private LocalDateTime lastModifiedDate = LocalDateTime.now();
+  @Column @LastModifiedDate private Instant lastModifiedDate = Instant.now();
 
   @Column(length = 36)
   @CreatedBy
@@ -45,7 +45,7 @@ public class BaseEntity extends BaseIdEntity implements VersionEntity, AuditingE
   }
 
   @Override
-  public LocalDateTime getCreatedDate() {
+  public Instant getCreatedDate() {
     return createDate;
   }
 
@@ -55,7 +55,7 @@ public class BaseEntity extends BaseIdEntity implements VersionEntity, AuditingE
   }
 
   @Override
-  public LocalDateTime getLastModifiedDate() {
+  public Instant getLastModifiedDate() {
     return lastModifiedDate;
   }
 
@@ -65,7 +65,7 @@ public class BaseEntity extends BaseIdEntity implements VersionEntity, AuditingE
   }
 
   @Override
-  public void setCreatedDate(LocalDateTime createdDate) {
+  public void setCreatedDate(Instant createdDate) {
     this.createDate = createdDate;
   }
 
@@ -75,7 +75,7 @@ public class BaseEntity extends BaseIdEntity implements VersionEntity, AuditingE
   }
 
   @Override
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+  public void setLastModifiedDate(Instant lastModifiedDate) {
     this.lastModifiedDate = lastModifiedDate;
   }
 

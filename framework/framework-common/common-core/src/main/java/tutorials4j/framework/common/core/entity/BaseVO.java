@@ -1,7 +1,7 @@
 package tutorials4j.framework.common.core.entity;
 
 import com.google.common.base.Objects;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * 基础数据传输对象（DTO），实现了标识、版本和审计实体接口。
@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class BaseVO implements IdEntity<Long>, VersionEntity, AuditingEntity, StatusEntity {
   private Long id;
   private Integer version;
-  private LocalDateTime createDate = LocalDateTime.now();
-  private LocalDateTime lastModifiedDate = LocalDateTime.now();
+  private Instant createDate;
+  private Instant lastModifiedDate;
   private String createBy;
   private String lastModifiedBy;
 
@@ -26,7 +26,7 @@ public class BaseVO implements IdEntity<Long>, VersionEntity, AuditingEntity, St
   }
 
   @Override
-  public LocalDateTime getCreatedDate() {
+  public Instant getCreatedDate() {
     return createDate;
   }
 
@@ -36,7 +36,7 @@ public class BaseVO implements IdEntity<Long>, VersionEntity, AuditingEntity, St
   }
 
   @Override
-  public LocalDateTime getLastModifiedDate() {
+  public Instant getLastModifiedDate() {
     return lastModifiedDate;
   }
 
@@ -46,7 +46,7 @@ public class BaseVO implements IdEntity<Long>, VersionEntity, AuditingEntity, St
   }
 
   @Override
-  public void setCreatedDate(LocalDateTime createdDate) {
+  public void setCreatedDate(Instant createdDate) {
     this.createDate = createdDate;
   }
 
@@ -56,7 +56,7 @@ public class BaseVO implements IdEntity<Long>, VersionEntity, AuditingEntity, St
   }
 
   @Override
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+  public void setLastModifiedDate(Instant lastModifiedDate) {
     this.lastModifiedDate = lastModifiedDate;
   }
 
