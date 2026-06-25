@@ -2,7 +2,7 @@ spring:
   main:
     web-application-type: none
   profiles:
-    active: demo4
+    active: demo5
 
 
 
