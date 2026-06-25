@@ -22,7 +22,7 @@ Java 教程
 ![杨运交](qrcode_for_gh_31209a11b93e_258.jpg)
 
 
-## 示例图
+## 框架示例图
 
 ### 功能模块示例（framework/framework-examples/examples-feature）
 

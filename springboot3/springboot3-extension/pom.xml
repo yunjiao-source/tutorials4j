@@ -9,16 +9,15 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>springboot3-design-patterns</artifactId>
+    <artifactId>springboot3-extension</artifactId>
     <packaging>jar</packaging>
-    <name>Spring Boot3 :: Design Patterns</name>
-    <description>无Web的应用</description>
+    <name>Spring Boot3 :: Extension</name>
+    <description>扩展</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
     </dependencies>
 </project>
