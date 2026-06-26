@@ -1,9 +1,9 @@
 spring:
   profiles:
 #    active: schedule
-#    active: redis
+    active: redis
 #    active: redisson
-    active: powerjobworker
+#    active: powerjobworker
 #    active: xxl-job
 
   data:

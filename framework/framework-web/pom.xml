@@ -18,7 +18,7 @@
         <module>web-core</module>
         <module>web-security</module>
         <module>web-logging</module>
-        <module>web-client</module>
+        <module>web-flux</module>
         <module>web-validation</module>
 
         <module>web-rest</module>

@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import tutorials4j.framework.common.core.bean.BaseEnum;
+import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.core.support.EnumCache;
-import tutorials4j.framework.data.core.exception.DataFrameworkException;
 
 /**
  * MyBatis 类型处理器，用于实现了 {@link BaseEnum} 接口的枚举类型。
@@ -34,7 +34,7 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
 
   public BaseEnumTypeHandler(Class<E> type) {
     if (type == null) {
-      throw new DataFrameworkException("Type argument cannot be null");
+      throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION.throwed().param("type", null);
     }
     this.type = type;
     initCache();
@@ -43,7 +43,9 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
   private void initCache() {
     E[] enumConstants = type.getEnumConstants();
     if (enumConstants == null) {
-      throw new DataFrameworkException(type.getSimpleName() + " 不是枚举类型");
+      throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION
+          .throwed("不是枚举类型")
+          .param("class", type.getSimpleName());
     }
     EnumCache.registerByValue(type, enumConstants, BaseEnum::getCode);
   }
@@ -81,7 +83,10 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
   private E codeToEnum(Object code) {
     E value = EnumCache.findByValue(type, code);
     if (value == null) {
-      throw new DataFrameworkException("Unknown code: " + code + " for enum " + type.getName());
+      throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION
+          .throwed("不存在的枚举代码")
+          .param("enum", type.getName())
+          .param("code", code);
     }
 
     return value;

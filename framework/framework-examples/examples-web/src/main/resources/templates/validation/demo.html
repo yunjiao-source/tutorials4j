@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>校验异常演示 - 字段级错误</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    .card { margin-bottom: 24px; }
+    .field-error-area { margin-top: 4px; }
+    .result-box { margin-top: 12px; }
+    .invalid-feedback { display: block; } /* 确保总是显示（配合 .is-invalid） */
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h1 class="mb-4">全局异常处理 – 字段级错误实时反馈</h1>
+
+  <!-- ========== 1. @RequestBody JSON 校验 ========== -->
+  <div class="card border-primary">
+    <div class="card-header bg-primary text-white">
+      ① @RequestBody JSON 校验（MethodArgumentNotValidException）
+    </div>
+    <div class="card-body">
+      <form id="jsonForm">
+        <div class="mb-3">
+          <label for="jsonUsername" class="form-label">用户名（3~20位）</label>
+          <input type="text" id="jsonUsername" class="form-control"
+                 placeholder="至少3位" value="ab" data-field="username">
+          <div class="invalid-feedback" id="jsonUsernameError"></div>
+        </div>
+        <div class="mb-3">
+          <label for="jsonPassword" class="form-label">密码（至少6位）</label>
+          <input type="text" id="jsonPassword" class="form-control"
+                 placeholder="至少6位" value="123" data-field="password">
+          <div class="invalid-feedback" id="jsonPasswordError"></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btnJson">发送 JSON 请求</button>
+      </form>
+      <div id="jsonResult" class="result-box"></div>
+    </div>
+  </div>
+
+  <!-- ========== 2. @ModelAttribute 表单校验 ========== -->
+  <div class="card border-success">
+    <div class="card-header bg-success text-white">
+      ② 表单/@ModelAttribute 校验（BindException）
+    </div>
+    <div class="card-body">
+      <form id="formForm">
+        <div class="mb-3">
+          <label for="formName" class="form-label">姓名（2~10位）</label>
+          <input type="text" id="formName" class="form-control"
+                 placeholder="2~10位" value="J" data-field="name">
+          <div class="invalid-feedback" id="formNameError"></div>
+        </div>
+        <div class="mb-3">
+          <label for="formEmail" class="form-label">邮箱（不能为空）</label>
+          <input type="text" id="formEmail" class="form-control"
+                 placeholder="必填" value="" data-field="email">
+          <div class="invalid-feedback" id="formEmailError"></div>
+        </div>
+        <button type="button" class="btn btn-success" id="btnForm">提交表单</button>
+      </form>
+      <div id="formResult" class="result-box"></div>
+    </div>
+  </div>
+
+  <!-- ========== 3. @RequestParam 校验 ========== -->
+  <div class="card border-warning">
+    <div class="card-header bg-warning text-dark">
+      ③ @RequestParam 校验（ConstraintViolationException）
+    </div>
+    <div class="card-body">
+      <form id="paramForm">
+        <div class="mb-3">
+          <label for="paramName" class="form-label">name 参数（2~10位）</label>
+          <input type="text" id="paramName" class="form-control"
+                 placeholder="2~10位" value="x" data-field="name">
+          <div class="invalid-feedback" id="paramNameError"></div>
+        </div>
+        <button type="button" class="btn btn-warning" id="btnParam">GET 请求带参数</button>
+      </form>
+      <div id="paramResult" class="result-box"></div>
+    </div>
+  </div>
+
+  <!-- ========== 4. 不存在的静态资源 ========== -->
+  <div class="card border-danger">
+    <div class="card-header bg-danger text-white">
+      ④ 访问不存在的静态资源（NoResourceFoundException）
+    </div>
+    <div class="card-body">
+      <p>点击下方链接将请求一个不存在的资源，触发 404 异常。</p>
+      <a href="#" id="linkNotFound" class="btn btn-danger">请求 /nonexistent.js</a>
+      <div id="notFoundResult" class="result-box"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    // ---------- 工具：清空所有字段错误状态 ----------
+    function clearFieldErrors(formSelector) {
+      $(formSelector).find('.form-control').removeClass('is-invalid');
+      $(formSelector).find('.invalid-feedback').empty().hide();
+    }
+
+    // ---------- 工具：显示字段错误 ----------
+    function showFieldErrors(formSelector, fieldErrors) {
+      if (!fieldErrors) return;
+      $.each(fieldErrors, function(field, message) {
+        // 通过 data-field 属性匹配对应的输入框
+        var input = $(formSelector).find('.form-control[data-field="' + field + '"]');
+        if (input.length) {
+          input.addClass('is-invalid');
+          var feedback = input.closest('.mb-3').find('.invalid-feedback');
+          feedback.text(message).show();
+        }
+      });
+    }
+
+    // ---------- 工具：显示整体结果（成功/错误） ----------
+    function showResult(container, data, isError) {
+      let html = '';
+      if (isError) {
+        html = `<div class="alert alert-danger">`;
+        html += `<strong>错误码：</strong>${data.code || ''}<br>`;
+        html += `<strong>状态：</strong>${data.status || ''}<br>`;
+        html += `<strong>消息：</strong>${data.message || ''}<br>`;
+        if (data.error && data.error.detail) {
+          html += `<strong>详情：</strong>${data.error.detail}<br>`;
+        }
+        if (data.traceId) {
+          html += `<strong>TraceId：</strong>${data.traceId}<br>`;
+        }
+        if (data.error && data.error.fieldErrors) {
+          html += `<strong>字段错误：</strong><ul class="field-errors">`;
+          $.each(data.error.fieldErrors, function(field, msg) {
+            html += `<li>${field}：${msg}</li>`;
+          });
+          html += `</ul>`;
+        }
+        html += `</div>`;
+      } else {
+        html = `<div class="alert alert-success">${data.message || '成功'}</div>`;
+      }
+      $(container).html(html);
+    }
+
+    // ---------- 1. JSON 校验 ----------
+    $('#btnJson').click(function() {
+      var formSelector = '#jsonForm';
+      clearFieldErrors(formSelector);
+      $('#jsonResult').empty();
+
+      var username = $('#jsonUsername').val();
+      var password = $('#jsonPassword').val();
+      var payload = { username, password };
+      $.ajax({
+        url: '/api/test/json',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function(res) {
+          showResult('#jsonResult', res, false);
+        },
+        error: function(xhr) {
+          var res = xhr.responseJSON;
+          if (res) {
+            showResult('#jsonResult', res, true);
+            showFieldErrors(formSelector, res.error?.fieldErrors);
+          } else {
+            $('#jsonResult').html('<div class="alert alert-danger">请求失败，请检查网络。</div>');
+          }
+        }
+      });
+    });
+
+    // ---------- 2. 表单校验 ----------
+    $('#btnForm').click(function() {
+      var formSelector = '#formForm';
+      clearFieldErrors(formSelector);
+      $('#formResult').empty();
+
+      var name = $('#formName').val();
+      var email = $('#formEmail').val();
+      $.ajax({
+        url: '/api/test/form',
+        type: 'POST',
+        contentType: 'application/x-www-form-urlencoded',
+        data: { name, email },
+        success: function(res) {
+          showResult('#formResult', res, false);
+        },
+        error: function(xhr) {
+          var res = xhr.responseJSON;
+          if (res) {
+            showResult('#formResult', res, true);
+            showFieldErrors(formSelector, res.error?.fieldErrors);
+          } else {
+            $('#formResult').html('<div class="alert alert-danger">请求失败，请检查网络。</div>');
+          }
+        }
+      });
+    });
+
+    // ---------- 3. 参数校验 ----------
+    $('#btnParam').click(function() {
+      var formSelector = '#paramForm';
+      clearFieldErrors(formSelector);
+      $('#paramResult').empty();
+
+      var name = $('#paramName').val();
+      $.ajax({
+        url: '/api/test/param',
+        type: 'GET',
+        data: { name: name },
+        success: function(res) {
+          showResult('#paramResult', res, false);
+        },
+        error: function(xhr) {
+          var res = xhr.responseJSON;
+          if (res) {
+            showResult('#paramResult', res, true);
+            showFieldErrors(formSelector, res.error?.fieldErrors);
+          } else {
+            $('#paramResult').html('<div class="alert alert-danger">请求失败，请检查网络。</div>');
+          }
+        }
+      });
+    });
+
+    // ---------- 4. 静态资源不存在 ----------
+    $('#linkNotFound').click(function(e) {
+      e.preventDefault();
+      $('#notFoundResult').empty();
+      $.ajax({
+        url: '/nonexistent.js',
+        type: 'GET',
+        dataType: 'text',
+        success: function() { /* 不可能成功 */ },
+        error: function(xhr) {
+          var res = xhr.responseJSON;
+          if (res) {
+            showResult('#notFoundResult', res, true);
+          } else {
+            $('#notFoundResult').html(`<div class="alert alert-danger">状态码：${xhr.status}，资源不存在</div>`);
+          }
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

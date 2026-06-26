@@ -1,5 +1,6 @@
 package tutorials4j.framework.web.security.totp;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import com.warrenstrange.googleauth.ICredentialRepository;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
-import tutorials4j.framework.web.core.exception.WebFrameworkException;
+import tutorials4j.framework.web.core.exception.WebErrorCode;
 import tutorials4j.framework.web.security.properties.TotpWebProperties.CredentialOptions;
 
 /**
@@ -23,7 +24,9 @@ public class GoogleYamlCredentialRepository implements ICredentialRepository, In
   public String getSecretKey(String userName) {
     String securityKey = credentialMap.get(userName);
     if (StringUtils.isBlank(securityKey)) {
-      throw new WebFrameworkException("凭据不存在");
+      throw WebErrorCode.WEB_TOTP_SECRET_NOT_EXIST
+          .throwed()
+          .param("username", CharSequenceUtil.maxLength(userName, 4));
     }
     return securityKey;
   }

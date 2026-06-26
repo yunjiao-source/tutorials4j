@@ -90,10 +90,23 @@
         <bcpkix-jdk18on.version>1.84</bcpkix-jdk18on.version>
         <powerjob.version>5.1.2</powerjob.version>
         <xxl-job.version>3.4.2</xxl-job.version>
+        <jquery.version>4.0.0</jquery.version>
+        <bootstrap.version>5.3.8</bootstrap.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>bootstrap</artifactId>
+                <version>${bootstrap.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery</artifactId>
+                <version>${jquery.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpkix-jdk18on</artifactId>

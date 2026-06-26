@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import tutorials4j.framework.common.core.entity.YesNoEnum;
+import tutorials4j.framework.common.core.bean.YesNoEnum;
 import tutorials4j.framework.data.hibernate.domain.BaseIdEntity;
 import tutorials4j.framework.data.hibernate.domain.YesNoEnumAttributeConverter;
 import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;

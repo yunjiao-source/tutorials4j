@@ -42,8 +42,6 @@ public class LocalLockableAspect {
    * @param joinPoint 切点连接点
    * @param localLockable 方法上的锁注解
    * @return 原方法的执行结果
-   * @throws Throwable 原方法可能抛出的任何异常，或锁获取失败时抛出的 {@link
-   *     tutorials4j.framework.cache.core.exception.LockException}
    */
   @Around("@annotation(localLockable)")
   public Object around(ProceedingJoinPoint joinPoint, LocalLockable localLockable)

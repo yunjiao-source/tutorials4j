@@ -3,8 +3,8 @@ package tutorials4j.framework.data.hibernate.convert;
 import jakarta.persistence.AttributeConverter;
 import java.util.concurrent.ConcurrentHashMap;
 import tutorials4j.framework.common.core.bean.BaseEnum;
+import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.core.support.EnumCache;
-import tutorials4j.framework.data.core.exception.DataFrameworkException;
 
 /**
  * JPA 属性转换器抽象基类，用于实现 {@link BaseEnum} 枚举与数据库列之间的双向转换。
@@ -49,7 +49,9 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
   private void initCache() {
     E[] enumConstants = enumClass.getEnumConstants();
     if (enumConstants == null) {
-      throw new DataFrameworkException(enumClass.getSimpleName() + " 不是枚举类型");
+      throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION
+          .throwed("不是枚举类型")
+          .param("class", enumClass.getSimpleName());
     }
     EnumCache.registerByValue(enumClass, enumConstants, BaseEnum::getCode);
   }
@@ -66,7 +68,10 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
     }
     E enumValue = EnumCache.findByValue(enumClass, dbData);
     if (enumValue == null) {
-      throw new DataFrameworkException("无法识别的数据库值: " + dbData + " ，枚举类: " + enumClass);
+      throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION
+          .throwed("不存在的枚举代码")
+          .param("enum", enumClass.getName())
+          .param("code", dbData);
     }
     return enumValue;
   }

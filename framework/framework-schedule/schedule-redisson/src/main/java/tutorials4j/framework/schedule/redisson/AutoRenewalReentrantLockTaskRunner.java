@@ -2,9 +2,11 @@ package tutorials4j.framework.schedule.redisson;
 
 import java.time.Duration;
 import java.util.Map;
-import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.cache.core.exception.CacheErrorCode;
 import tutorials4j.framework.cache.core.lock.Lockable;
 import tutorials4j.framework.cache.redisson.lock.RedissonReentrantLockService;
+import tutorials4j.framework.common.core.exception.BaseRuntimeException;
+import tutorials4j.framework.common.core.exception.ErrorCode;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 
 /**
@@ -20,8 +22,12 @@ public interface AutoRenewalReentrantLockTaskRunner extends TaskRunner, Lockable
       RedissonReentrantLockService.instance
           .autoRenewal()
           .doInLock(key(), waitTime(), () -> doRun(params));
-    } catch (LockException e) {
-      handleException(e);
+    } catch (BaseRuntimeException e) {
+      ErrorCode errorCode = e.getErrorCode();
+      if (errorCode instanceof CacheErrorCode) {
+        handleException(e);
+      }
+      throw e;
     }
   }
 

@@ -8,7 +8,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
-import tutorials4j.framework.web.core.exception.SignatureException;
+import tutorials4j.framework.web.core.exception.WebErrorCode;
 
 /**
  * 签名工具类，提供签名生成和验证功能。
@@ -32,7 +32,6 @@ public final class SignatureUtils {
    * @param path 请求路径
    * @param body 请求体内容，可为空
    * @return 十六进制字符串形式的签名
-   * @throws SignatureException 签名生成失败时抛出
    */
   public static String generate(
       String appKey,
@@ -109,7 +108,6 @@ public final class SignatureUtils {
    * @param secret 密钥
    * @param message 原始消息
    * @return 十六进制加密结果
-   * @throws SignatureException 加密算法不支持或初始化失败时抛出
    */
   private static String hmacSha256(String secret, String message) {
     try {
@@ -120,7 +118,7 @@ public final class SignatureUtils {
       byte[] hash = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
       return Hex.encodeHexString(hash);
     } catch (Exception e) {
-      throw new SignatureException("签名生成失败", e);
+      throw WebErrorCode.WEB_SIGNATURE_GENERATE_FAILURE.throwed(e);
     }
   }
 }

@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.common.core.exception.BaseRuntimeException;
 import tutorials4j.framework.schedule.redisson.AutoRenewalReentrantLockTaskRunner;
 
 /**
@@ -38,7 +38,7 @@ public class Demo7AutoRenewalReentrantTaskRunner implements AutoRenewalReentrant
   }
 
   @Override
-  public void handleException(LockException exception) {
+  public void handleException(BaseRuntimeException exception) {
     log.error(this.getClass().getSimpleName() + ": {}", exception.getMessage());
   }
 }

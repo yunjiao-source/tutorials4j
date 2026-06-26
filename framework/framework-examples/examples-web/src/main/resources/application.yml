@@ -7,8 +7,11 @@ spring:
 #    active: swagger
 #    active: cached-body
 #    active: trace
-    active: client
+#    active: client
+    active: validation
 
+  thymeleaf:
+    cache: false
 logging:
   level:
     tutorials4j: TRACE

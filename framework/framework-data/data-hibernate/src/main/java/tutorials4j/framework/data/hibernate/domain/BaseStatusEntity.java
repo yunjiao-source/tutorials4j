@@ -4,8 +4,9 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreRemove;
-import tutorials4j.framework.common.core.entity.DataStatusEnum;
+import tutorials4j.framework.common.core.bean.DataStatusEnum;
 import tutorials4j.framework.common.core.entity.StatusEntity;
+import tutorials4j.framework.data.core.exception.DataErrorCode;
 
 /**
  * 带数据状态的基础实体类，扩展自 {@link BaseEntity} 并实现 {@link StatusEntity}。
@@ -46,7 +47,7 @@ public class BaseStatusEntity extends BaseEntity implements StatusEntity {
   @PreRemove
   public void preRemove() {
     if (isReserved()) {
-      throw new RuntimeException("保留数据，不能删除");
+      throw DataErrorCode.DATA_ENTITY_RESERVED_CANNT_REMOVE.throwed();
     }
   }
 }

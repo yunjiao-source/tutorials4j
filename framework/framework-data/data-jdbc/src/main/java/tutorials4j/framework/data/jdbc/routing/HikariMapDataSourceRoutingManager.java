@@ -4,9 +4,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.SQLException;
 import javax.sql.DataSource;
-import org.apache.commons.dbcp2.BasicDataSource;
 import tutorials4j.framework.common.core.JdbcOptions;
-import tutorials4j.framework.data.core.exception.DataSourceTypeMismatchException;
+import tutorials4j.framework.data.core.exception.DataErrorCode;
 
 /**
  * 基于 HikariCP 连接池的数据源路由管理器实现。
@@ -34,8 +33,10 @@ public class HikariMapDataSourceRoutingManager extends AbstractMapDataSourceRout
 
       return new HikariDataSource(hikariConfig);
     } else {
-      throw new DataSourceTypeMismatchException(
-          BasicDataSource.class.getSimpleName(), defaultDataSource.getClass().getSimpleName());
+      throw DataErrorCode.DATA_SOURCE_NOT_EXIST
+          .throwed()
+          .param("Expected", HikariDataSource.class.getSimpleName())
+          .param("Actual", defaultDataSource.getClass().getSimpleName());
     }
   }
 

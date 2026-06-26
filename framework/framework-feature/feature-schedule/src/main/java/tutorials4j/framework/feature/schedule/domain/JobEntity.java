@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import tutorials4j.framework.common.core.entity.DataStatusEnum;
+import tutorials4j.framework.common.core.bean.DataStatusEnum;
 import tutorials4j.framework.data.hibernate.domain.BaseStatusEntity;
 import tutorials4j.framework.schedule.core.bean.Task;
 

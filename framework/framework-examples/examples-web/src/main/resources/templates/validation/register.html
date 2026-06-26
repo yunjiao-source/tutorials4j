@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户注册 - 校验异常示例</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 图标库 (可选) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* 自定义样式 */
+    body {
+      background-color: #f5f7fa;
+      padding: 2rem 0;
+    }
+    .register-card {
+      max-width: 720px;
+      margin: 0 auto;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      overflow: hidden;
+    }
+    .register-card .card-header {
+      background: linear-gradient(135deg, #4e73df, #224abe);
+      color: white;
+      padding: 1.5rem 2rem;
+      border: none;
+      border-radius: 16px 16px 0 0;
+    }
+    .register-card .card-header h4 {
+      font-weight: 600;
+      margin: 0;
+    }
+    .register-card .card-header p {
+      margin: 0;
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+    .register-card .card-body {
+      padding: 2rem 2rem 1.5rem;
+    }
+    .register-card .card-footer {
+      background: #f8f9fc;
+      border-top: 1px solid #eaecf4;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    .form-label {
+      font-weight: 500;
+      color: #2d3748;
+    }
+    .form-label .required {
+      color: #e53e3e;
+      margin-left: 2px;
+    }
+    .form-control:focus {
+      border-color: #4e73df;
+      box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    .form-control.is-invalid {
+      border-color: #e53e3e;
+      background-image: none;
+    }
+    .form-control.is-invalid:focus {
+      box-shadow: 0 0 0 0.2rem rgba(229, 62, 62, 0.25);
+    }
+    .field-error {
+      font-size: 0.8rem;
+      color: #e53e3e;
+      margin-top: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .field-error i {
+      font-size: 0.75rem;
+    }
+    .field-error.hidden {
+      display: none;
+    }
+    .btn-register {
+      background: linear-gradient(135deg, #4e73df, #224abe);
+      border: none;
+      padding: 0.6rem 2.5rem;
+      font-weight: 600;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+    .btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(78, 115, 223, 0.35);
+    }
+    .btn-register:disabled {
+      opacity: 0.7;
+      transform: none;
+    }
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .spinner-border-sm {
+      width: 1rem;
+      height: 1rem;
+      border-width: 0.15em;
+    }
+    .password-hint {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-top: 0.2rem;
+    }
+    .gender-group .form-check {
+      display: inline-block;
+      margin-right: 1.5rem;
+    }
+    .gender-group .form-check-label {
+      font-weight: 400;
+    }
+    /* 成功动画 */
+    .success-check {
+      color: #38a169;
+      font-size: 4rem;
+    }
+    .summary-errors {
+      background: #fff5f5;
+      border: 1px solid #fed7d7;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .summary-errors .error-item {
+      font-size: 0.9rem;
+      color: #c53030;
+    }
+    .summary-errors .error-item i {
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ==================== 主卡片 ==================== -->
+  <div class="card register-card">
+    <div class="card-header">
+      <div class="d-flex align-items-center">
+        <div>
+          <h4><i class="fas fa-user-plus me-2"></i>用户注册</h4>
+          <p>填写信息后提交，体验完整校验异常处理</p>
+        </div>
+        <div class="ms-auto">
+                    <span class="badge bg-light text-dark opacity-75">
+                        <i class="fas fa-code me-1"></i> 异常演示
+                    </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- 全局错误汇总区 (显示所有字段错误) -->
+      <div id="errorSummary" class="summary-errors" style="display: none;">
+        <div class="d-flex align-items-start">
+          <i class="fas fa-exclamation-circle text-danger me-2 mt-1"></i>
+          <div>
+            <strong class="text-danger">提交失败，请修正以下错误：</strong>
+            <div id="errorList" class="mt-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 成功提示 (提交成功后显示) -->
+      <div id="successAlert" class="alert alert-success" style="display: none;">
+        <i class="fas fa-check-circle me-2"></i>
+        <strong>注册成功！</strong> 所有校验通过，数据已提交。
+        <button type="button" class="btn-close float-end" onclick="$('#successAlert').hide();"></button>
+      </div>
+
+      <!-- ==================== 表单 ==================== -->
+      <form id="registerForm" novalidate>
+        <!-- 1. 用户名 -->
+        <div class="mb-3">
+          <label for="username" class="form-label">
+            用户名 <span class="required">*</span>
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="username"
+                 name="username"
+                 placeholder="请输入用户名（3-20位字母或数字）"
+                 th:value="${userForm?.username}"
+                 required>
+          <div class="field-error hidden" id="username-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="username-error-msg"></span>
+          </div>
+          <div class="form-text">长度 3-20 位，必填</div>
+        </div>
+
+        <!-- 2. 邮箱 -->
+        <div class="mb-3">
+          <label for="email" class="form-label">
+            邮箱 <span class="required">*</span>
+          </label>
+          <input type="email"
+                 class="form-control"
+                 id="email"
+                 name="email"
+                 placeholder="请输入邮箱地址"
+                 th:value="${userForm?.email}"
+                 required>
+          <div class="field-error hidden" id="email-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="email-error-msg"></span>
+          </div>
+          <div class="form-text">必填，需符合邮箱格式</div>
+        </div>
+
+        <!-- 3. 密码 -->
+        <div class="mb-3">
+          <label for="password" class="form-label">
+            密码 <span class="required">*</span>
+          </label>
+          <input type="password"
+                 class="form-control"
+                 id="password"
+                 name="password"
+                 placeholder="请输入密码（6-20位）"
+                 th:value="${userForm?.password}"
+                 required>
+          <div class="field-error hidden" id="password-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="password-error-msg"></span>
+          </div>
+          <div class="password-hint">长度 6-20 位，必填</div>
+        </div>
+
+        <!-- 4. 确认密码 (自定义校验) -->
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">
+            确认密码 <span class="required">*</span>
+          </label>
+          <input type="password"
+                 class="form-control"
+                 id="confirmPassword"
+                 name="confirmPassword"
+                 placeholder="请再次输入密码"
+                 th:value="${userForm?.confirmPassword}"
+                 required>
+          <div class="field-error hidden" id="confirmPassword-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="confirmPassword-error-msg"></span>
+          </div>
+          <div class="password-hint">必须与密码一致</div>
+        </div>
+
+        <!-- 5. 年龄 -->
+        <div class="mb-3">
+          <label for="age" class="form-label">
+            年龄 <span class="required">*</span>
+          </label>
+          <input type="number"
+                 class="form-control"
+                 id="age"
+                 name="age"
+                 placeholder="请输入年龄（18-60）"
+                 th:value="${userForm?.age}"
+                 min="18"
+                 max="60"
+                 required>
+          <div class="field-error hidden" id="age-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="age-error-msg"></span>
+          </div>
+          <div class="form-text">范围 18-60，必填</div>
+        </div>
+
+        <!-- 6. 手机号 -->
+        <div class="mb-3">
+          <label for="phone" class="form-label">手机号</label>
+          <input type="tel"
+                 class="form-control"
+                 id="phone"
+                 name="phone"
+                 placeholder="请输入手机号（选填）"
+                 th:value="${userForm?.phone}">
+          <div class="field-error hidden" id="phone-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="phone-error-msg"></span>
+          </div>
+          <div class="form-text">选填，格式需为 1 开头的 11 位数字</div>
+        </div>
+
+        <!-- 7. 性别 -->
+        <div class="mb-3">
+          <label class="form-label">
+            性别 <span class="required">*</span>
+          </label>
+          <div class="gender-group">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gender" id="genderMale" value="1"
+                     th:checked="${userForm?.gender == 1}">
+              <label class="form-check-label" for="genderMale">男</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="2"
+                     th:checked="${userForm?.gender == 2}">
+              <label class="form-check-label" for="genderFemale">女</label>
+            </div>
+          </div>
+          <div class="field-error hidden" id="gender-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="gender-error-msg"></span>
+          </div>
+        </div>
+
+        <!-- 提交按钮 -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+          <button type="button" class="btn btn-secondary me-md-2" id="resetBtn">
+            <i class="fas fa-undo me-1"></i>重置
+          </button>
+          <button type="submit" class="btn btn-register text-white" id="submitBtn">
+            <i class="fas fa-paper-plane me-2"></i>
+            <span id="submitText">提交注册</span>
+            <span id="submitSpinner" class="spinner-border spinner-border-sm" style="display: none;" role="status"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card-footer">
+      <i class="fas fa-info-circle me-1"></i>
+      后端使用 <code>@Valid</code> + 全局异常处理器 <code>GlobalWebFluxExceptionHandler</code>，
+      校验失败返回 <code>Result</code> 包含 <code>fieldErrors</code>
+    </div>
+  </div>
+
+  <!-- ==================== 校验类型说明 ==================== -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title"><i class="fas fa-list-check me-2 text-primary"></i>本页面覆盖的校验异常类型</h6>
+          <div class="row g-2 mt-2">
+            <div class="col-md-3 col-6">
+                            <span class="badge bg-danger bg-opacity-10 text-danger p-2 d-block">
+                                <i class="fas fa-asterisk me-1"></i> @NotBlank / @NotNull
+                            </span>
+            </div>
+            <div class="col-md-3 col-6">
+                            <span class="badge bg-warning bg-opacity-10 text-warning p-2 d-block">
+                                <i class="fas fa-ruler me-1"></i> @Size / @Min / @Max
+                            </span>
+            </div>
+            <div class="col-md-3 col-6">
+                            <span class="badge bg-info bg-opacity-10 text-info p-2 d-block">
+                                <i class="fas fa-envelope me-1"></i> @Email / @Pattern
+                            </span>
+            </div>
+            <div class="col-md-3 col-6">
+                            <span class="badge bg-success bg-opacity-10 text-success p-2 d-block">
+                                <i class="fas fa-check-double me-1"></i> 自定义 @PasswordMatch
+                            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Toast 容器 (用于提示) ==================== -->
+<div class="toast-container">
+  <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMessage"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 脚本 ==================== -->
+<!-- jQuery 3.x -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous">
+</script>
+<!-- Bootstrap 5 JS (含 Toast) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script th:inline="javascript">
+  (function() {
+    'use strict';
+
+    // ---------- DOM 引用 ----------
+    const $form = $('#registerForm');
+    const $submitBtn = $('#submitBtn');
+    const $submitText = $('#submitText');
+    const $submitSpinner = $('#submitSpinner');
+    const $errorSummary = $('#errorSummary');
+    const $errorList = $('#errorList');
+    const $successAlert = $('#successAlert');
+
+    // ---------- 工具函数 ----------
+    // 清除所有字段错误状态
+    function clearAllFieldErrors() {
+      $('.field-error').each(function() {
+        $(this).addClass('hidden');
+        $(this).find('span').text('');
+      });
+      $('.form-control').removeClass('is-invalid');
+      $('.form-check-input').removeClass('is-invalid');
+      $errorSummary.hide();
+      $errorList.empty();
+      $successAlert.hide();
+    }
+
+    // 显示字段错误
+    function showFieldError(fieldName, message) {
+      const $errorEl = $('#' + fieldName + '-error');
+      const $msgEl = $('#' + fieldName + '-error-msg');
+      if ($errorEl.length && $msgEl.length) {
+        $msgEl.text(message);
+        $errorEl.removeClass('hidden');
+        // 给对应的输入框添加 is-invalid 类
+        const $input = $('[name="' + fieldName + '"]');
+        if ($input.length) {
+          $input.addClass('is-invalid');
+          // 如果是 radio，特殊处理
+          if ($input.attr('type') === 'radio') {
+            $input.closest('.gender-group').find('.form-check-input').addClass('is-invalid');
+          }
+        }
+      }
+    }
+
+    // 显示汇总错误
+    function showSummaryErrors(fieldErrors) {
+      if (!fieldErrors || Object.keys(fieldErrors).length === 0) return;
+      $errorSummary.show();
+      let html = '';
+      for (const [field, msg] of Object.entries(fieldErrors)) {
+        const label = {
+          'username': '用户名',
+          'email': '邮箱',
+          'password': '密码',
+          'confirmPassword': '确认密码',
+          'age': '年龄',
+          'phone': '手机号',
+          'gender': '性别'
+        }[field] || field;
+        html += '<div class="error-item"><i class="fas fa-circle-exclamation"></i>' +
+            label + '：' + msg + '</div>';
+      }
+      $errorList.html(html);
+    }
+
+    // 显示 Toast
+    function showToast(message, type) {
+      const toastEl = document.getElementById('liveToast');
+      const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+      const $toast = $(toastEl);
+      $toast.removeClass('bg-success bg-danger bg-warning');
+      if (type === 'success') {
+        $toast.addClass('bg-success');
+      } else if (type === 'error') {
+        $toast.addClass('bg-danger');
+      } else {
+        $toast.addClass('bg-warning');
+      }
+      $('#toastMessage').text(message);
+      toast.show();
+    }
+
+    // ---------- 重置表单 ----------
+    $('#resetBtn').on('click', function() {
+      $form[0].reset();
+      clearAllFieldErrors();
+      // 重置所有输入框的 is-invalid
+      $('.form-control').removeClass('is-invalid');
+      $('.form-check-input').removeClass('is-invalid');
+      // 清空所有输入框的值（除了 radio）
+      $form.find('input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"]')
+      .val('');
+      $form.find('input[type="radio"]').prop('checked', false);
+      showToast('已重置表单', '');
+    });
+
+    // ---------- 表单提交 (Ajax) ----------
+    $form.on('submit', function(e) {
+      e.preventDefault();
+
+      // 1. 清除之前的错误状态
+      clearAllFieldErrors();
+      $submitBtn.prop('disabled', true);
+      $submitText.text('提交中...');
+      $submitSpinner.show();
+
+      // 收集表单数据并转换为 JSON 对象
+      const form = document.getElementById('registerForm');
+      const formData = new FormData(form);
+      const jsonData = {};
+      formData.forEach((value, key) => {
+        // 处理 radio 按钮：只取选中的值，这里 FormData 会自动处理同名 radio
+        // 但如果存在多个同名字段，forEach 会依次覆盖，我们保留最后一个（即选中的）
+        jsonData[key] = value;
+      });
+
+      // 3. 发送 Ajax 请求
+      $.ajax({
+        url: '/user/register',
+        type: 'POST',
+        contentType: 'application/json',          // 重点：改为 JSON
+        data: JSON.stringify(jsonData),
+        dataType: 'json',
+        success: function(response) {
+          // 成功 (HTTP 200 且 Result.success 为 true)
+          $submitBtn.prop('disabled', false);
+          $submitText.text('提交注册');
+          $submitSpinner.hide();
+          $successAlert.show();
+          showToast('✅ 注册成功！所有校验通过', 'success');
+          // 可以在这里跳转或执行其他成功逻辑
+        },
+        error: function(xhr, status, error) {
+          // 4. 处理错误响应 (由全局异常处理器返回的 Result)
+          $submitBtn.prop('disabled', false);
+          $submitText.text('提交注册');
+          $submitSpinner.hide();
+
+          try {
+            const response = xhr.responseJSON;
+            if (response && response.error && response.error.fieldErrors) {
+              const fieldErrors = response.error.fieldErrors;
+              // 显示每个字段的错误
+              for (const [field, msg] of Object.entries(fieldErrors)) {
+                showFieldError(field, msg);
+              }
+              // 显示汇总错误
+              showSummaryErrors(fieldErrors);
+              showToast('❌ 校验失败，请检查表单中的错误', 'error');
+            } else if (response && response.message) {
+              // 其他业务错误
+              showToast('❌ ' + response.message, 'error');
+            } else {
+              showToast('❌ 提交失败，请稍后重试', 'error');
+            }
+          } catch (e) {
+            showToast('❌ 提交失败，请稍后重试', 'error');
+          }
+        }
+      });
+    });
+
+    // ---------- 输入时自动清除错误状态 (提升体验) ----------
+    $form.find('input').on('input change', function() {
+      const name = $(this).attr('name');
+      if (!name) return;
+      // 清除该字段的错误状态
+      const $errorEl = $('#' + name + '-error');
+      if ($errorEl.length) {
+        $errorEl.addClass('hidden');
+        $errorEl.find('span').text('');
+      }
+      $(this).removeClass('is-invalid');
+      // 如果是 radio，清除同组所有 radio 的 is-invalid
+      if ($(this).attr('type') === 'radio') {
+        $(this).closest('.gender-group').find('.form-check-input').removeClass('is-invalid');
+      }
+      // 如果汇总错误中只有这一个错误，重新生成汇总
+      // 简单处理：只要有任何输入变化，重新生成汇总（从当前字段错误中重新构建）
+      // 但为了简单，我们直接隐藏汇总，让用户重新提交时再显示
+      // 更好的做法是实时检查所有字段错误，但这里简化
+      $errorSummary.hide();
+      $errorList.empty();
+    });
+
+    // 特殊处理：如果所有错误都被清除，隐藏汇总
+    // 这里使用 mutation observer 或者简单监听
+    // 简单做法：在 input 时也检查是否还有可见的错误
+    $form.find('input').on('input change', function() {
+      // 检查是否还有任何可见的 field-error
+      const hasVisibleError = $('.field-error:not(.hidden)').length > 0;
+      if (!hasVisibleError) {
+        $errorSummary.hide();
+        $errorList.empty();
+      } else {
+        // 重新生成汇总（仅显示当前可见的错误）
+        // 但为了不搞复杂，这里不重新生成，用户再次提交时会重新生成
+        // 或者我们可以让汇总只显示当前可见的错误
+        // 简单起见，隐藏汇总，让用户再次提交时重新生成
+        $errorSummary.hide();
+        $errorList.empty();
+      }
+    });
+
+    // ---------- 页面加载完成后的初始化 ----------
+    // 如果页面有预先存在的错误 (比如 th:errors)，可以在这里处理
+    // 但因为我们使用 Ajax，初始没有错误
+    console.log('✅ 校验示例页面已加载');
+    console.log('📋 支持的校验类型: @NotBlank, @Size, @Email, @Pattern, @Min, @Max, 自定义 @PasswordMatch');
+
+  })();
+</script>
+
+</body>
+</html>

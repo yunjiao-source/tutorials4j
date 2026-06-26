@@ -1,6 +1,6 @@
 package tutorials4j.framework.data.hibernate.domain;
 
-import tutorials4j.framework.common.core.entity.YesNoEnum;
+import tutorials4j.framework.common.core.bean.YesNoEnum;
 import tutorials4j.framework.data.hibernate.convert.AbstractBaseEnumAttributeConverter;
 
 /**

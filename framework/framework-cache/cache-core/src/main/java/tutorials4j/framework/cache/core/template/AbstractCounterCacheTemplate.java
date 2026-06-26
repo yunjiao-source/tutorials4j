@@ -1,10 +1,11 @@
 package tutorials4j.framework.cache.core.template;
 
-import cn.hutool.crypto.SecureUtil;
+import com.google.common.hash.Hashing;
+import java.nio.charset.StandardCharsets;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.Assert;
-import tutorials4j.framework.common.core.exception.CounterOverflowException;
+import tutorials4j.framework.cache.core.exception.CounterOverflowException;
 
 /**
  * 基于 Redis 的计数器缓存模板抽象类。
@@ -66,8 +67,8 @@ public abstract class AbstractCounterCacheTemplate
     return counting(key, maxTimes, false);
   }
 
-  public int counting(String key, boolean useMd5) throws CounterOverflowException {
-    return counting(key, maxTimes, useMd5);
+  public int counting(String key, boolean shouldHashKey) throws CounterOverflowException {
+    return counting(key, maxTimes, shouldHashKey);
   }
 
   /**
@@ -86,15 +87,19 @@ public abstract class AbstractCounterCacheTemplate
    *
    * @param key 待计数的键
    * @param maxTimes 最大允许计数次数
-   * @param useMd5 是否对键进行 MD5 摘要处理
+   * @param shouldHashKey 是否对键进行哈希处理
    * @return 当前计数后的值（已自增后的次数）
    * @throws CounterOverflowException 当计数达到或超过 {@code maxTimes} 时抛出
    * @throws IllegalArgumentException 如果 {@code key} 为 {@code null}
    */
-  public int counting(String key, int maxTimes, boolean useMd5) throws CounterOverflowException {
+  public int counting(String key, int maxTimes, boolean shouldHashKey)
+      throws CounterOverflowException {
     Assert.notNull(key, "key cannot be null");
 
-    String newKey = useMd5 ? SecureUtil.md5(key) : key;
+    String newKey =
+        shouldHashKey
+            ? Hashing.murmur3_128().hashString(key, StandardCharsets.UTF_8).toString()
+            : key;
     Integer index = get(newKey);
     if (index == null) {
       index = 0;

@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-import tutorials4j.framework.cache.core.exception.LockCreateException;
+import tutorials4j.framework.cache.core.exception.CacheErrorCode;
 import tutorials4j.framework.cache.core.properties.RedisLockOptions;
 import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.common.core.ExecutionOption;
@@ -168,14 +168,13 @@ public class RedisLockService {
      * @param lockKey 锁的 key
      * @param expireTime 锁的固定租期
      * @param task 要执行的任务
-     * @throws LockCreateException 如果获取锁失败（锁已被占用）
      */
     public void doInLock(String lockKey, Duration expireTime, Runnable task) {
       String lockId = null;
       try {
         lockId = lock(lockKey, expireTime);
         if (lockId == null) {
-          throw new LockCreateException(lockKey);
+          throw CacheErrorCode.CACHE_ACCQUIRE_LOCK_FAILURE.throwed().param("lockKey", lockKey);
         }
         // 执行业务逻辑
         task.run();
@@ -193,7 +192,6 @@ public class RedisLockService {
      * @param <T> 返回值类型
      * @return 任务执行结果
      * @throws Throwable 任务抛出的原始异常
-     * @throws LockCreateException 如果获取锁失败
      */
     public <T> T doInLock(String lockKey, Duration expireTime, ThrowingCallable<T> task)
         throws Throwable {
@@ -201,7 +199,7 @@ public class RedisLockService {
       try {
         lockId = lock(lockKey, expireTime);
         if (lockId == null) {
-          throw new LockCreateException(lockKey);
+          throw CacheErrorCode.CACHE_ACCQUIRE_LOCK_FAILURE.throwed().param("lockKey", lockKey);
         }
         // 执行业务逻辑
         return task.call();
@@ -294,14 +292,13 @@ public class RedisLockService {
      *
      * @param lockKey 锁的 key
      * @param task 要执行的任务
-     * @throws LockCreateException 如果获取锁失败（锁已被占用）
      */
     public void doInLock(String lockKey, Runnable task) {
       String lockId = null;
       try {
         lockId = lock(lockKey);
         if (lockId == null) {
-          throw new LockCreateException(lockKey);
+          throw CacheErrorCode.CACHE_ACCQUIRE_LOCK_FAILURE.throwed().param("lockKey", lockKey);
         }
         // 执行业务逻辑
         task.run();
@@ -319,14 +316,13 @@ public class RedisLockService {
      * @param <T> 返回值类型
      * @return 任务执行结果
      * @throws Throwable 任务抛出的原始异常
-     * @throws LockCreateException 如果获取锁失败
      */
     public <T> T doInLock(String lockKey, ThrowingCallable<T> task) throws Throwable {
       String lockId = null;
       try {
         lockId = lock(lockKey);
         if (lockId == null) {
-          throw new LockCreateException(lockKey);
+          throw CacheErrorCode.CACHE_ACCQUIRE_LOCK_FAILURE.throwed().param("lockKey", lockKey);
         }
         // 执行业务逻辑
         return task.call();

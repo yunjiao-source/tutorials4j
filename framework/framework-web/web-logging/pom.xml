@@ -23,7 +23,7 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>web-client</artifactId>
+            <artifactId>web-flux</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

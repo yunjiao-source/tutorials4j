@@ -1,5 +1,6 @@
 package tutorials4j.framework.web.security.signature;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.web.core.annotation.RequiredSignature;
-import tutorials4j.framework.web.core.exception.SignatureException;
+import tutorials4j.framework.web.core.exception.WebErrorCode;
 import tutorials4j.framework.web.core.util.WebUtils;
 
 /**
@@ -53,14 +54,14 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
 
     // 1. 参数校验
     if (StringUtils.isAnyBlank(appKey, timestamp, nonce, signature)) {
-      throw new SignatureException("签名参数不完整");
+      throw WebErrorCode.WEB_SIGNATURE_PARAMETERS_INCOMPLETE.throwed();
     }
 
     // 2. 时间戳验证
     long requestTime = Long.parseLong(timestamp);
     long currentTime = System.currentTimeMillis();
     if (Math.abs(currentTime - requestTime) > annotation.timeWindowSeconds() * 1000) {
-      throw new SignatureException("请求已过期");
+      throw WebErrorCode.WEB_SIGNATURE_EXPIRED.throwed();
     }
 
     // 3. Nonce 验证（防重放）
@@ -72,12 +73,16 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
                   generateNonceKey(nonce),
                   Instant.now().toString(),
                   Duration.ofSeconds(annotation.timeWindowSeconds()));
-      if (!success) throw new SignatureException("重复的请求");
+      if (!success) {
+        throw WebErrorCode.WEB_SIGNATURE_DUPLICATE_REQUEST.throwed();
+      }
     }
 
     String appSecret = signatureKeyRepository.getSecretKey(appKey);
     if (StringUtils.isBlank(appSecret)) {
-      throw new SignatureException("未找到签名KEY");
+      throw WebErrorCode.WEB_SIGNATURE_SECRET_NOT_EXIST
+          .throwed()
+          .param("appKey", CharSequenceUtil.maxLength(appKey, 4));
     }
 
     // 4. 签名验证
@@ -94,7 +99,9 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
             signature);
 
     if (!valid) {
-      throw new SignatureException("签名验证失败");
+      throw WebErrorCode.WEB_SIGNATURE_VERIFY_FAILURE
+          .throwed()
+          .param("appKey", CharSequenceUtil.maxLength(appKey, 4));
     }
 
     return true;

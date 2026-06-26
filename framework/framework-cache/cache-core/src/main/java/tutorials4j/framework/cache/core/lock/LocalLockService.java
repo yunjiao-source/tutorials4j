@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
-import tutorials4j.framework.cache.core.exception.LockCreateException;
-import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.cache.core.exception.CacheErrorCode;
 import tutorials4j.framework.cache.core.properties.LocalLockOptions;
+import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
 
 /**
@@ -53,8 +53,6 @@ public class LocalLockService implements InitializingBean {
    * @param lockKey 锁 key
    * @param waitTime 最大等待时间
    * @param task 需要同步执行的任务
-   * @throws LockCreateException 如果在等待时间内未能获取锁
-   * @throws LockException 如果当前线程在等待时被中断
    */
   public void doInLock(String lockKey, Duration waitTime, Runnable task) {
     Lock lock = acquireLock(lockKey);
@@ -66,11 +64,11 @@ public class LocalLockService implements InitializingBean {
           lock.unlock();
         }
       } else {
-        throw new LockCreateException(lockKey);
+        throw CacheErrorCode.CACHE_ACCQUIRE_LOCK_FAILURE.throwed().param("lockKey", lockKey);
       }
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new LockException(lockKey, e);
+      throw BaseErrorCode.INTERNAL_SERVER_ERROR.throwed(e);
     }
   }
 
@@ -99,8 +97,6 @@ public class LocalLockService implements InitializingBean {
    * @param task 需要同步执行并返回结果的任务
    * @param <T> 返回值类型
    * @return 任务的执行结果
-   * @throws LockCreateException 如果在等待时间内未能获取锁
-   * @throws LockException 如果当前线程在等待时被中断
    * @throws Throwable 原任务可能抛出的任何异常
    */
   public <T> T doInLock(String lockKey, Duration waitTime, ThrowingCallable<T> task)
@@ -114,11 +110,11 @@ public class LocalLockService implements InitializingBean {
           lock.unlock();
         }
       } else {
-        throw new LockCreateException(lockKey);
+        throw CacheErrorCode.CACHE_ACCQUIRE_LOCK_FAILURE.throwed().param("lockKey", lockKey);
       }
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new LockException(lockKey, e);
+      throw BaseErrorCode.INTERNAL_SERVER_ERROR.throwed(e);
     }
   }
 

@@ -2,6 +2,7 @@ package tutorials4j.framework.common.core.entity;
 
 import com.google.common.base.Objects;
 import java.time.Instant;
+import tutorials4j.framework.common.core.bean.DataStatusEnum;
 
 /**
  * 基础数据传输对象（DTO），实现了标识、版本和审计实体接口。

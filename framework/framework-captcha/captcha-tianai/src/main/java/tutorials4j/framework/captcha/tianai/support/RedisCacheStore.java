@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import tutorials4j.framework.captcha.support.GraphicCaptchaCacheTemplate;
-import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
+import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.core.util.GsonUtils;
 
 /**
@@ -48,12 +48,12 @@ public class RedisCacheStore implements CacheStore {
 
   @Override
   public Long incr(String key, long delta, Long expire, TimeUnit timeUnit) {
-    throw new FrameworkRuntimeException("方法不支持");
+    throw BaseErrorCode.METHOD_NOT_ALLOWED.throwed();
   }
 
   @Override
   public Long getLong(String key) {
-    throw new FrameworkRuntimeException("方法不支持");
+    throw BaseErrorCode.METHOD_NOT_ALLOWED.throwed();
   }
 
   @Override

@@ -1,6 +1,6 @@
 package tutorials4j.framework.data.hibernate.domain;
 
-import tutorials4j.framework.common.core.entity.DataStatusEnum;
+import tutorials4j.framework.common.core.bean.DataStatusEnum;
 import tutorials4j.framework.data.hibernate.convert.AbstractBaseEnumAttributeConverter;
 
 /**

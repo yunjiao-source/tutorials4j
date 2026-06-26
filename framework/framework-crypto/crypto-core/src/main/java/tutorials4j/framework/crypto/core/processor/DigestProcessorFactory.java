@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import org.apache.commons.lang3.EnumUtils;
 import tutorials4j.framework.crypto.core.bean.DigestCategory;
-import tutorials4j.framework.crypto.core.exception.CryptoException;
+import tutorials4j.framework.crypto.core.exception.CryptoErrorCode;
 
 /**
  * TODO
@@ -21,7 +21,9 @@ public class DigestProcessorFactory {
   public DigestProcessor findProcessor(String categoryName) {
     DigestCategory category = EnumUtils.getEnum(DigestCategory.class, categoryName);
     if (category == null) {
-      throw new CryptoException("摘要处理器分类代码不存在:" + categoryName);
+      throw CryptoErrorCode.CRYPTO_DIGEST_CATEGORY_NOT_EXISTS
+          .throwed()
+          .param("category", categoryName);
     }
     return findProcessor(category);
   }
@@ -29,7 +31,9 @@ public class DigestProcessorFactory {
   public DigestProcessor findProcessor(DigestCategory category) {
     DigestProcessor processor = processors.get(category);
     if (processor == null) {
-      throw new CryptoException("根据分类查找摘要处理器未找到, 分类是：" + category);
+      throw CryptoErrorCode.CRYPTO_DIGEST_PROCESSOR_NOT_EXISTS
+          .throwed()
+          .param("category", category);
     }
 
     return processor;

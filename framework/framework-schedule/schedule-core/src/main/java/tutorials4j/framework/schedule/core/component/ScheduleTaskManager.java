@@ -24,6 +24,7 @@ import tutorials4j.framework.schedule.core.bean.Task;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.core.exception.ScheduleErrorCode;
 import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
 import tutorials4j.framework.schedule.core.repository.TaskRepository;
 
@@ -93,12 +94,9 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
     try {
       taskRunner = SpringUtil.getBean(classSimpleName, TaskRunner.class);
     } catch (BeansException e) {
-      log.error("获取bean异常", e);
-    }
-
-    if (taskRunner == null) {
-      log.warn("Spring容器中找不到任务Bean，或者任务类未实现TaskRunner接口， className={}", classSimpleName);
-      return;
+      throw ScheduleErrorCode.SCHEDULE_JOB_BEAN_NOT_EXIST
+          .throwed(e)
+          .param("class", classSimpleName);
     }
 
     RunnableDecorator runnableDecorator =

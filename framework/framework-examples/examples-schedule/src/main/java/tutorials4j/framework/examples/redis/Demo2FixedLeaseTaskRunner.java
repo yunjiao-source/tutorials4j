@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.common.core.exception.BaseRuntimeException;
 import tutorials4j.framework.schedule.redis.FixedLeaseLockTaskRunner;
 
 /**
@@ -41,7 +41,7 @@ public class Demo2FixedLeaseTaskRunner implements FixedLeaseLockTaskRunner {
   }
 
   @Override
-  public void handleException(LockException exception) {
+  public void handleException(BaseRuntimeException exception) {
     log.error("DEMO2: {}", exception.getMessage());
   }
 }

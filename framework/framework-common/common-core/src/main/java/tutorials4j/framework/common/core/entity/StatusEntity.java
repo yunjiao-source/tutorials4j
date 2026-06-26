@@ -1,5 +1,7 @@
 package tutorials4j.framework.common.core.entity;
 
+import tutorials4j.framework.common.core.bean.DataStatusEnum;
+
 /**
  * 具有数据状态的实体接口，提供状态管理和便捷的状态判断方法。
  *

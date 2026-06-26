@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import tutorials4j.framework.common.core.JdbcOptions;
 import tutorials4j.framework.common.core.support.DataSourceRoutingManager;
-import tutorials4j.framework.data.core.exception.DataSourceNameNotFoundException;
+import tutorials4j.framework.data.core.exception.DataErrorCode;
 
 /**
  * 数据源路由管理的抽象基类。
@@ -74,17 +74,15 @@ public abstract class AbstractDataSourceRoutingManager implements DataSourceRout
   /**
    * 根据路由名称创建数据源。
    *
-   * <p>先从 {@link #getJdbcOptionsMap()} 中获取对应的 {@code JdbcOptions}， 若不存在则抛出 {@link
-   * DataSourceNameNotFoundException}。
+   * <p>先从 {@link #getJdbcOptionsMap()} 中获取对应的 {@code JdbcOptions}， 若不存在则抛出。
    *
    * @param name 路由名称，不能为 {@code null}
    * @return 新创建的数据源
-   * @throws DataSourceNameNotFoundException 如果未找到对应名称的 JdbcOptions
    */
   protected DataSource createDataSource(String name) {
     JdbcOptions jdbcOptions = jdbcOptionsMap.get(name);
     if (jdbcOptions == null) {
-      throw new DataSourceNameNotFoundException(name);
+      throw DataErrorCode.DATA_SOURCE_NOT_EXIST.throwed().param("name", name);
     }
     if (log.isDebugEnabled()) {
       log.debug("创建数据源， name = {}, url = {}", name, jdbcOptions.getUrl());

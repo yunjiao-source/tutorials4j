@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import org.apache.commons.lang3.EnumUtils;
-import tutorials4j.framework.captcha.exception.CaptchaException;
+import tutorials4j.framework.captcha.exception.CaptchaErrorCode;
 
 /**
  * 验证码服务工厂
@@ -26,7 +26,7 @@ public class CaptchaServiceFactory {
   public CaptchaService findService(String categoryName) {
     CaptchaCategory category = EnumUtils.getEnum(CaptchaCategory.class, categoryName);
     if (category == null) {
-      throw new CaptchaException("验证码分类代码不存在:" + categoryName);
+      throw CaptchaErrorCode.CAPTCHA_CATEGORY_NOT_EXISTS.throwed().param("category", categoryName);
     }
     return findService(category);
   }
@@ -40,7 +40,7 @@ public class CaptchaServiceFactory {
   public CaptchaService findService(CaptchaCategory category) {
     CaptchaService service = services.get(category);
     if (service == null) {
-      throw new CaptchaException("根据分类查找验证码服务未找到, 分类是：" + category);
+      throw CaptchaErrorCode.CAPTCHA_SERVICE_NOT_EXISTS.throwed().param("category", category);
     }
 
     return service;

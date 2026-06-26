@@ -225,3 +225,14 @@ Java 教程
 
 > XSS 防护演示
 ![XSS 防护演示](docs/images/037.jpg)
+
+#### profile:validation
+
+> 校验异常演示
+![校验异常演示](docs/images/048.jpg)
+![校验异常演示](docs/images/049.jpg)
+![校验异常演示](docs/images/050.jpg)
+![校验异常演示](docs/images/051.jpg)
+
+> 校验异常演示(响应式)
+![校验异常演示(响应式)](docs/images/052.jpg)

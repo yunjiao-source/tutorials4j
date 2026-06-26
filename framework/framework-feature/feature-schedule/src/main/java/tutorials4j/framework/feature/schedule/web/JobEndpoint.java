@@ -20,7 +20,7 @@ import tutorials4j.framework.feature.schedule.domain.JobEntity;
 import tutorials4j.framework.feature.schedule.domain.JobQuery;
 import tutorials4j.framework.feature.schedule.domain.JobService;
 import tutorials4j.framework.schedule.core.component.ScheduleTaskManager;
-import tutorials4j.framework.schedule.core.exception.ScheduleException;
+import tutorials4j.framework.schedule.core.exception.ScheduleErrorCode;
 
 /**
  * TODO
@@ -70,7 +70,7 @@ public class JobEndpoint {
 
   private void checkJobIsRunning(String taskCode) {
     if (scheduleTaskManager.isTaskRunning(taskCode)) {
-      throw new ScheduleException("任务运行中，不能操作；先取消任务，然后再尝试本操作");
+      throw ScheduleErrorCode.SCHEDULE_JOB_IS_RUNNING.throwed().param("taskCode", taskCode);
     }
   }
 }

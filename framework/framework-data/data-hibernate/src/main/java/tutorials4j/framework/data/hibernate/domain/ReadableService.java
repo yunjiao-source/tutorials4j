@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.framework.common.core.entity.Entity;
-import tutorials4j.framework.data.core.exception.EntityNotExistException;
+import tutorials4j.framework.data.core.exception.DataErrorCode;
 
 /**
  * 只读服务接口，提供基本的查询、分页、计数等功能。
@@ -32,12 +32,16 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
    *
    * @param id 主键
    * @return 实体
-   * @throws EntityNotExistException 当实体不存在时
    */
   default E findById(ID id) {
     return getRepository()
         .findById(id)
-        .orElseThrow(() -> new EntityNotExistException(id.toString()));
+        .orElseThrow(
+            () ->
+                DataErrorCode.DATA_SOURCE_NOT_EXIST
+                    .throwed()
+                    .param("entity", getRepository().getEntityClass())
+                    .param("id", id));
   }
 
   default E getReferenceById(ID id) {

@@ -7,8 +7,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import tutorials4j.framework.captcha.exception.CaptchaException;
+import tutorials4j.framework.captcha.exception.CaptchaErrorCode;
 import tutorials4j.framework.captcha.hutool.bean.CaptchaData;
 import tutorials4j.framework.captcha.support.BehaviorCaptchaCacheTemplate;
 import tutorials4j.framework.captcha.support.CaptchaService;
@@ -74,19 +75,18 @@ public abstract class AbstractCaptchaService implements CaptchaService {
       captchaCacheTemplate.put(key, code);
       return new CaptchaData().key(key).code(code).category(getCategory()).captchaImage(imageBytes);
     } catch (IOException e) {
-      throw new CaptchaException("生成验证码图片异常", e);
+      throw CaptchaErrorCode.CAPTCHA_GENERATE_FAILURE.throwed(e);
     }
   }
 
   @Override
   public boolean verify(String key, String userCode) {
-    if (!StringUtils.hasText(userCode)) {
-      throw new CaptchaException();
-    }
+    Assert.hasText(key, "key must not be null or empty");
+    Assert.hasText(userCode, "userCode must not be null or empty");
 
     String cacheCode = captchaCacheTemplate.get(key);
     if (!StringUtils.hasText(cacheCode)) {
-      throw new CaptchaException();
+      throw CaptchaErrorCode.CAPTCHA_HAS_EXPIRED.throwed().param("key", key);
     }
 
     // 删除缓存: 验证码key只使用一次

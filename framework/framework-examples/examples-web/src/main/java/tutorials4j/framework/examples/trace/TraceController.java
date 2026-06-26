@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import tutorials4j.framework.common.core.exception.BaseErrorCode;
 
 /**
  * trace 示例接口
@@ -30,7 +31,7 @@ public class TraceController {
   @GetMapping("common/exception")
   public String commonException() {
     log.info("commonException");
-    throw new RuntimeException("异常");
+    throw BaseErrorCode.NOT_ACCEPTABLE.throwed("异常");
   }
 
   @GetMapping("/mono/get1")

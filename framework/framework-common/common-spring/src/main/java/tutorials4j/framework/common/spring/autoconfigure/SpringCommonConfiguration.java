@@ -14,6 +14,7 @@ import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.framework.common.spring.core.CompositeTaskDecoratorCreator;
 import tutorials4j.framework.common.spring.core.TaskDecoratorCreator;
+import tutorials4j.framework.common.spring.web.GlobalExceptionHandler;
 
 /**
  * 公共核心模块的配置类
@@ -27,6 +28,12 @@ public class SpringCommonConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.trace("[COMMON-SPRING] Spring Common Configuration");
+  }
+
+  @Bean
+  GlobalExceptionHandler globalExceptionHandler() {
+    log.trace("[COMMON-SPRING] Global Exception Handler");
+    return new GlobalExceptionHandler();
   }
 
   /**

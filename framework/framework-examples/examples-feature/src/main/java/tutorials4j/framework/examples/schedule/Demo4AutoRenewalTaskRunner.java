@@ -3,7 +3,7 @@ package tutorials4j.framework.examples.schedule;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.common.core.exception.BaseRuntimeException;
 import tutorials4j.framework.schedule.redis.AutoRenewalLockTaskRunner;
 
 /**
@@ -32,7 +32,7 @@ public class Demo4AutoRenewalTaskRunner implements AutoRenewalLockTaskRunner {
   }
 
   @Override
-  public void handleException(LockException exception) {
+  public void handleException(BaseRuntimeException exception) {
     log.error(this.getClass().getSimpleName() + ": {}", exception.getMessage());
   }
 }

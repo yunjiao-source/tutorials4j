@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import org.apache.commons.lang3.EnumUtils;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
-import tutorials4j.framework.crypto.core.exception.CryptoException;
+import tutorials4j.framework.crypto.core.exception.CryptoErrorCode;
 
 /**
  * TODO
@@ -21,7 +21,7 @@ public class CryptoProcessorFactory {
   public CryptoProcessor findProcessor(String categoryName) {
     CryptoCategory category = EnumUtils.getEnum(CryptoCategory.class, categoryName);
     if (category == null) {
-      throw new CryptoException("加解密处理器分类代码不存在:" + categoryName);
+      throw CryptoErrorCode.CRYPTO_CATEGORY_NOT_EXISTS.throwed().param("category", categoryName);
     }
     return findProcessor(category);
   }
@@ -29,7 +29,7 @@ public class CryptoProcessorFactory {
   public CryptoProcessor findProcessor(CryptoCategory category) {
     CryptoProcessor processor = processors.get(category);
     if (processor == null) {
-      throw new CryptoException("根据分类查找加解密处理器未找到, 分类是：" + category);
+      throw CryptoErrorCode.CRYPTO_PROCESSOR_NOT_EXISTS.throwed().param("category", category);
     }
 
     return processor;

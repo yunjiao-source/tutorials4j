@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.cache.core.exception.CacheErrorCode;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
 
 /**
@@ -62,7 +62,7 @@ public class RedissonBlockLockService {
 
   /** 固定租约模式的阻塞锁操作类。 */
   @RequiredArgsConstructor
-  public static class FixedLease {
+  public class FixedLease {
     private final RedissonClient redissonClient;
 
     /**
@@ -86,7 +86,6 @@ public class RedissonBlockLockService {
      * @param task 需要执行的任务（Supplier）
      * @param <T> 返回值类型
      * @return 任务执行结果
-     * @throws LockException 解锁异常
      */
     public <T> T doInLock(String lockKey, Duration expireTime, ThrowingCallable<T> task)
         throws Throwable {
@@ -105,7 +104,6 @@ public class RedissonBlockLockService {
      * @param lockKey 锁的键
      * @param expireTime 锁的持有时间（租约）
      * @param task 需要执行的任务（Runnable）
-     * @throws LockException 解锁异常
      */
     public void doInLock(String lockKey, Duration expireTime, Runnable task) {
       RLock lock = null;
@@ -116,28 +114,11 @@ public class RedissonBlockLockService {
         unlock(lock);
       }
     }
-
-    /**
-     * 安全释放锁。仅当当前线程持有该锁且锁仍处于锁定状态时才执行解锁。
-     *
-     * @param lock Redisson 锁对象，可为 null
-     * @throws LockException 解锁失败时抛出
-     */
-    private void unlock(RLock lock) {
-      if (lock == null) return;
-      try {
-        if (lock.isHeldByCurrentThread() && lock.isLocked()) {
-          lock.unlock();
-        }
-      } catch (Exception e) {
-        throw new LockException(lock.getName(), e);
-      }
-    }
   }
 
   /** 自动续期模式的阻塞锁操作类。 */
   @RequiredArgsConstructor
-  public static class AutoRenewal {
+  public class AutoRenewal {
     private final RedissonClient redissonClient;
 
     /**
@@ -159,7 +140,6 @@ public class RedissonBlockLockService {
      * @param task 需要执行的任务（Supplier）
      * @param <T> 返回值类型
      * @return 任务执行结果
-     * @throws LockException 解锁异常
      */
     public <T> T doInLock(String lockKey, ThrowingCallable<T> task) throws Throwable {
       RLock lock = null;
@@ -176,7 +156,6 @@ public class RedissonBlockLockService {
      *
      * @param lockKey 锁的键
      * @param task 需要执行的任务（Runnable）
-     * @throws LockException 解锁异常
      */
     public void doInLock(String lockKey, Runnable task) {
       RLock lock = null;
@@ -187,22 +166,21 @@ public class RedissonBlockLockService {
         unlock(lock);
       }
     }
+  }
 
-    /**
-     * 安全释放锁。仅当当前线程持有该锁且锁仍处于锁定状态时才执行解锁。
-     *
-     * @param lock Redisson 锁对象，可为 null
-     * @throws LockException 解锁失败时抛出
-     */
-    private void unlock(RLock lock) {
-      if (lock == null) return;
-      try {
-        if (lock.isHeldByCurrentThread() && lock.isLocked()) {
-          lock.unlock();
-        }
-      } catch (Exception e) {
-        throw new LockException(lock.getName(), e);
+  /**
+   * 安全释放锁。仅当当前线程持有该锁且锁仍处于锁定状态时才执行解锁。
+   *
+   * @param lock Redisson 锁对象，可为 null
+   */
+  private void unlock(RLock lock) {
+    if (lock == null) return;
+    try {
+      if (lock.isHeldByCurrentThread() && lock.isLocked()) {
+        lock.unlock();
       }
+    } catch (Exception e) {
+      throw CacheErrorCode.CACHE_RELEASE_LOCK_FAILURE.throwed(e).param("name", lock.getName());
     }
   }
 }

@@ -12,7 +12,7 @@ import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import tutorials4j.framework.web.client.ClientUtils;
+import tutorials4j.framework.web.flux.ClientUtils;
 
 /**
  * 配置

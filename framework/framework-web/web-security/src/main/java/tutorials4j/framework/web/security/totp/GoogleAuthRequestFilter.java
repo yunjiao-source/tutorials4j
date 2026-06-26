@@ -14,18 +14,17 @@ import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.common.spring.util.SecurityUtils;
 import tutorials4j.framework.common.spring.web.RemoveHeaderRequestWrapper;
-import tutorials4j.framework.web.core.exception.WebFrameworkException;
+import tutorials4j.framework.web.core.exception.WebErrorCode;
 
 /**
  * TOTP 验证请求过滤器。
  *
- * <p>该过滤器会拦截请求，从请求头中获取用户名和 TOTP 验证码，执行校验。 校验失败时抛出 {@link WebFrameworkException}；校验通过后移除验证码相关的请求头，
- * 避免后续处理再次读取敏感信息。
+ * <p>该过滤器会拦截请求，从请求头中获取用户名和 TOTP 验证码，执行校验。 校验失败时抛出异常；校验通过后移除验证码相关的请求头， 避免后续处理再次读取敏感信息。
  *
  * <p>用户名的获取顺序：
  *
  * <ol>
- *   <li>首先尝试读取请求头 {@link DefaultConsts#HTTP_HEADER_GOOGLE_AUTH_USERNAME}
+ *   <li>首先尝试读取请求头 {@link DefaultConsts#HTTP_HEADER_TOTP_AUTH_USERNAME}
  *   <li>若为空，则调用 {@link SecurityUtils#getAccount()} 从当前安全上下文中获取
  * </ol>
  *
@@ -51,11 +50,11 @@ public class GoogleAuthRequestFilter extends OncePerRequestFilter {
 
     // 1. 参数校验
     if (StringUtils.isAnyBlank(userName, code)) {
-      throw new WebFrameworkException("Google Auth 参数不完整");
+      throw WebErrorCode.WEB_TOTP_PARAMETERS_INCOMPLETE.throwed();
     }
 
     if (!googleAuthService.verifyByUserName(userName, Integer.parseInt(code))) {
-      throw new WebFrameworkException("Google Auth 校验失败");
+      throw WebErrorCode.WEB_TOTP_VERIFY_FAILURE.throwed();
     }
 
     // 删除验证码请求头

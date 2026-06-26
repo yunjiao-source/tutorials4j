@@ -4,7 +4,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.web.client.autoconfigure.ClientWebConfiguration;
+import tutorials4j.framework.web.core.autoconfigure.WebConfiguration;
+import tutorials4j.framework.web.flux.autoconfigure.ClientWebConfiguration;
+import tutorials4j.framework.web.flux.autoconfigure.FluxWebConfiguration;
 import tutorials4j.framework.web.logging.autoconfigure.RequestLoggingWebConfiguration;
 import tutorials4j.framework.web.logging.autoconfigure.SpringdocWebConfiguration;
 import tutorials4j.framework.web.logging.autoconfigure.TraceWebConfiguration;
@@ -23,7 +25,9 @@ import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfigura
 @Slf4j
 @AutoConfiguration
 @Import({
+  WebConfiguration.class,
   ClientWebConfiguration.class,
+  FluxWebConfiguration.class,
   RequestLoggingWebConfiguration.class,
   SpringdocWebConfiguration.class,
   TraceWebConfiguration.class,

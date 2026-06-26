@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.core.support.BeanCreator;
 import tutorials4j.framework.common.core.support.DataSourceRoutingManager;
-import tutorials4j.framework.data.core.exception.DataSourceNotSupportException;
+import tutorials4j.framework.data.core.exception.DataErrorCode;
 
 /**
  * 数据源路由管理器的创建器，实现 {@link BeanCreator} 接口以提供单例实例。
@@ -63,7 +63,6 @@ public class DataSourceRoutingManagerCreator implements BeanCreator<DataSourceRo
    * </ul>
    *
    * @return 新创建的路由管理器实例
-   * @throws DataSourceNotSupportException 如果数据源类型不受支持
    */
   @Override
   public DataSourceRoutingManager newInstance() {
@@ -89,7 +88,10 @@ public class DataSourceRoutingManagerCreator implements BeanCreator<DataSourceRo
         dataSourceRoutingManager.init(dataSource);
         return dataSourceRoutingManager;
       }
-      default -> throw new DataSourceNotSupportException(dataSource.getClass().getName());
+      default ->
+          throw DataErrorCode.DATA_SOURCE_NOT_EXIST
+              .throwed()
+              .param("class", dataSource.getClass().getName());
     }
   }
 

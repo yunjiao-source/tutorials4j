@@ -7,8 +7,8 @@ import cloud.tianai.captcha.validator.common.model.dto.ImageCaptchaTrack;
 import cloud.tianai.captcha.validator.common.model.dto.MatchParam;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.util.StringUtils;
-import tutorials4j.framework.captcha.exception.CaptchaException;
+import org.springframework.util.Assert;
+import tutorials4j.framework.captcha.exception.CaptchaErrorCode;
 import tutorials4j.framework.captcha.support.CaptchaService;
 import tutorials4j.framework.captcha.tianai.support.CaptchaGenerateParamBuilder;
 import tutorials4j.framework.common.core.util.GsonUtils;
@@ -42,7 +42,7 @@ public abstract class AbstractCaptchaService implements CaptchaService {
     ApiResponse<ImageCaptchaVO> res =
         imageCaptchaApplication.generateCaptcha(builder.createGenerateParam());
     if (!res.isSuccess()) {
-      throw new RuntimeException("aaa");
+      throw CaptchaErrorCode.CAPTCHA_GENERATE_FAILURE.throwed(res.getMsg());
     }
 
     ImageCaptchaVO captcha = res.getData();
@@ -64,9 +64,8 @@ public abstract class AbstractCaptchaService implements CaptchaService {
 
   @Override
   public boolean verify(String key, String userCode) {
-    if (!StringUtils.hasText(userCode)) {
-      throw new CaptchaException();
-    }
+    Assert.hasText(key, "key must not be null or empty");
+    Assert.hasText(userCode, "userCode must not be null or empty");
 
     ImageCaptchaTrack imageCaptchaTrack = GsonUtils.toObject(userCode, ImageCaptchaTrack.class);
     ApiResponse<?> valid = imageCaptchaApplication.matching(key, new MatchParam(imageCaptchaTrack));

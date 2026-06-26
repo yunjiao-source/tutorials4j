@@ -1,7 +1,7 @@
 package tutorials4j.framework.cache.core.lock;
 
 import java.time.Duration;
-import tutorials4j.framework.cache.core.exception.LockException;
+import tutorials4j.framework.common.core.exception.BaseRuntimeException;
 
 /**
  * TODO
@@ -15,5 +15,5 @@ public interface Lockable {
 
   Duration expireTime();
 
-  default void handleException(LockException exception) {}
+  default void handleException(BaseRuntimeException exception) {}
 }

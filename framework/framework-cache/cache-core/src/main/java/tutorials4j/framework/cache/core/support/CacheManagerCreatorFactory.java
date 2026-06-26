@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.util.Assert;
-import tutorials4j.framework.cache.core.exception.CacheManagerCreatorNotFoundException;
+import tutorials4j.framework.cache.core.exception.CacheErrorCode;
 
 /**
  * 缓存管理器创建器工厂。
@@ -34,7 +34,6 @@ public class CacheManagerCreatorFactory {
    *
    * @param cacheName 缓存名称
    * @return 多级缓存实例
-   * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
    */
   public Cache findMultiLevelCache(String cacheName) {
     return findMultiLevelCacheManager().getCache(cacheName);
@@ -49,7 +48,6 @@ public class CacheManagerCreatorFactory {
    *
    * @param cacheName 缓存名称
    * @return Redis 缓存实例
-   * @throws CacheManagerCreatorNotFoundException 如果未找到对应的缓存管理器创建器
    */
   public Cache findRedisCache(String cacheName) {
     return findRedisCacheManager().getCache(cacheName);
@@ -66,7 +64,6 @@ public class CacheManagerCreatorFactory {
    *
    * @param cacheName 缓存名称
    * @return Caffeine 缓存实例
-   * @throws CacheManagerCreatorNotFoundException 如果未找到任何本地缓存管理器创建器
    */
   public Cache findCaffeineCache(String cacheName) {
     return findCaffeineCacheManager().getCache(cacheName);
@@ -97,7 +94,8 @@ public class CacheManagerCreatorFactory {
         .findFirst()
         .orElseThrow(
             () ->
-                new CacheManagerCreatorNotFoundException(
-                    "获取CacheManagerCreator实例失败：" + Arrays.toString(categories)));
+                CacheErrorCode.CACHE_MANAGER_CREATOR_NOT_EXIST
+                    .throwed("获取CacheManagerCreator实例失败")
+                    .param("categories", Arrays.toString(categories)));
   }
 }

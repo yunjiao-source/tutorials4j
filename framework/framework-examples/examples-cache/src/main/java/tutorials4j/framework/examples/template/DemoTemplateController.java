@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.common.core.exception.CounterOverflowException;
+import tutorials4j.framework.cache.core.exception.CounterOverflowException;
 
 /**
  * 示例

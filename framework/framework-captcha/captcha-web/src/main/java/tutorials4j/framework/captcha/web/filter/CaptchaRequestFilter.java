@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tutorials4j.framework.captcha.exception.CaptchaException;
+import tutorials4j.framework.captcha.exception.CaptchaErrorCode;
 import tutorials4j.framework.captcha.support.CaptchaServiceFactory;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
@@ -18,8 +18,7 @@ import tutorials4j.framework.common.spring.web.RemoveHeaderRequestWrapper;
 /**
  * 验证码请求过滤器。
  *
- * <p>该过滤器在每个请求中拦截并校验请求头中的验证码参数（key、category、code）。 若参数不完整或验证失败，则抛出 {@link CaptchaException}
- * 异常；若校验通过， 则移除验证码相关的请求头后继续执行过滤器链。
+ * <p>该过滤器在每个请求中拦截并校验请求头中的验证码参数（key、category、code）。 若参数不完整或验证失败，则抛出异常； 若校验通过， 则移除验证码相关的请求头后继续执行过滤器链。
  *
  * @author Yun Jiao
  */
@@ -39,11 +38,11 @@ public class CaptchaRequestFilter extends OncePerRequestFilter {
 
     // 1. 参数校验
     if (StringUtils.isAnyBlank(key, category, code)) {
-      throw new CaptchaException("验证码参数不完整");
+      throw CaptchaErrorCode.CAPTCHA_PARAMETERS_INCOMPLETE.throwed();
     }
 
     if (!captchaServiceFactory.findService(category).verify(key, code)) {
-      throw new CaptchaException("验证码校验失败");
+      throw CaptchaErrorCode.CAPTCHA_VERIFY_FAILURE.throwed();
     }
 
     // 删除验证码请求头

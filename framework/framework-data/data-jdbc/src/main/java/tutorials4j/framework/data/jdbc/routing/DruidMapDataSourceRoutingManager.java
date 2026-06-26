@@ -4,8 +4,8 @@ import com.alibaba.druid.pool.DruidDataSource;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import tutorials4j.framework.common.core.JdbcOptions;
-import tutorials4j.framework.common.core.exception.FrameworkRuntimeException;
-import tutorials4j.framework.data.core.exception.DataSourceTypeMismatchException;
+import tutorials4j.framework.common.core.exception.BaseErrorCode;
+import tutorials4j.framework.data.core.exception.DataErrorCode;
 
 /**
  * 基于 Alibaba Druid 连接池的数据源路由管理器实现。
@@ -32,11 +32,13 @@ public class DruidMapDataSourceRoutingManager extends AbstractMapDataSourceRouti
         newDataSource.init();
         return newDataSource;
       } catch (Exception e) {
-        throw new FrameworkRuntimeException("创建数据源异常", e);
+        throw BaseErrorCode.THIRD_PARTY_EXCEPTION.throwed(e);
       }
     } else {
-      throw new DataSourceTypeMismatchException(
-          DruidDataSource.class.getSimpleName(), defaultDataSource.getClass().getSimpleName());
+      throw DataErrorCode.DATA_SOURCE_NOT_EXIST
+          .throwed()
+          .param("Expected", DruidDataSource.class.getSimpleName())
+          .param("Actual", defaultDataSource.getClass().getSimpleName());
     }
   }
 
