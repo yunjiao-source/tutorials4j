@@ -79,9 +79,4 @@ public interface DefaultConsts {
         DefaultConsts.HTTP_HEADER_TRACE_SPAN_ID,
         DefaultConsts.HTTP_HEADER_TRACE_PARENT_SPAN_ID
       };
-
-  String[] HTTP_GOOGLE_AUTH =
-      new String[] {
-        DefaultConsts.HTTP_HEADER_TOTP_AUTH_USERNAME, DefaultConsts.HTTP_HEADER_TOTP_AUTH_CODE
-      };
 }

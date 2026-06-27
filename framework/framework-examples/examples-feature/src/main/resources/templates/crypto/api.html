@@ -236,6 +236,7 @@
       timeout: 10000
     }).then(res => {
       // 后端返回 CryptoInfo: { asymmetricCryptoStrategy, symmetricCryptoStrategy, publicKeyHex }
+      res = res.data;
       if (res && res.publicKeyHex) {
         // 获取算法类别 (策略对象中可能有category字段或者根据类型推断)
         let asymCategory = (res.asymmetricCryptoStrategy && (res.asymmetricCryptoStrategy.category || res.asymmetricCryptoStrategy.strategyType)) || 'RSA';

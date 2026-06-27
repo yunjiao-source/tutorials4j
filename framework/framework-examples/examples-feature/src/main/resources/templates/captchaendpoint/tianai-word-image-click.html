@@ -454,7 +454,8 @@
       const createUrl = '/api/captcha/create?category=TIANAI_WORD_IMAGE_CLICK';
       const response = await fetch(createUrl);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+      const json = await response.json();
+      const data = json.data;
 
       // 存储验证码会话信息
       currentCaptcha.id = data.id;                // 作为后续key
@@ -624,17 +625,9 @@
       //   throw new Error(`HTTP ${checkResponse.status}: ${errorText}`);
       // }
 
-      const result = await checkResponse.json();   // 后端返回布尔值 (或者可能是对象，题目说返回布尔值)
-      let isValid = false;
-      if (typeof result === 'boolean') {
-        isValid = result;
-      } else if (result && typeof result === 'object') {
-        // 兼容某些封装 {success: true} 但文档明确布尔值；稳妥判断
-        isValid = result.success === true || result.data === true || result === true;
-        if (result.code === 200) isValid = true;
-      } else {
-        isValid = !!result;
-      }
+      const json = await checkResponse.json();   // 后端返回布尔值 (或者可能是对象，题目说返回布尔值)
+      const isValid = json.data;
+
 
       if (isValid) {
         resultArea.innerHTML = '🎉 验证通过！ 点选位置与轨迹符合预期，校验成功！';

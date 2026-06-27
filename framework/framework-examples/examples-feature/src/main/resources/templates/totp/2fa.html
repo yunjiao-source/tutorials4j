@@ -256,21 +256,13 @@
         qrImage.src = '';
         qrArea.style.display = 'block';
 
-        // 使用 img 直接加载图片，但需要处理错误（用户不存在/服务端异常）
         const qrUrl = buildUrl(`/api/totp/generate/qr?username=${encodeURIComponent(username)}&t=${Date.now()}`);
-        qrImage.src = qrUrl;
-
-        // 监听图片加载失败情况（服务器返回错误页面或非图片内容）
-        qrImage.onerror = () => {
-            showQrError('二维码生成失败，请检查用户名是否存在或后端服务是否正常');
-            qrImage.src = '';
-            qrArea.style.display = 'block';  // 保持显示错误区域
-        };
-        qrImage.onload = () => {
-            // 成功加载，清除之前的错误
-            qrErrorDiv.style.display = 'none';
-            qrErrorDiv.innerText = '';
-        };
+        fetch(qrUrl)
+        .then(response => response.json())
+        .then(res => {
+            qrImage.src = 'data:image/png;base64,' + res.data;
+        })
+        .catch(console.error);
     });
 
     function showQrError(msg) {
@@ -306,15 +298,16 @@
                 body: formData.toString()
             });
 
-            const responseText = await response.text();  // 后端返回纯文本消息
-            if (response.ok) {
+            const res = await response.json();  // 后端返回纯文本消息
+            const isOk = res.data;
+            if (isOk) {
                 // 登录成功 (status 2xx)
-                showLoginMessage(responseText || '登录成功，即将跳转...', 'success');
+                showLoginMessage('登录成功，即将跳转...');
                 // 可在此重定向或刷新token，演示仅停留提示
                 // 例如：setTimeout(() => window.location.href = '/dashboard', 1500);
-            } else if (response.status === 401) {
+            } else if (res.status === 401) {
                 // 未授权：用户名密码错误或2FA失败
-                showLoginMessage(responseText || '用户名/密码错误 或 2FA验证码无效', 'error');
+                showLoginMessage('用户名/密码错误 或 2FA验证码无效');
             } else {
                 showLoginMessage(`登录失败 (${response.status}): ${responseText}`, 'error');
             }

@@ -7,14 +7,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Base64;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.framework.common.core.bean.Result;
 import tutorials4j.framework.common.spring.util.QrCodeUtils;
 import tutorials4j.framework.web.security.totp.GoogleAuthService;
 
@@ -52,18 +52,14 @@ public class TotpAuthEndpoint {
         @ApiResponse(responseCode = "400", description = "参数不完整或格式错误"),
         @ApiResponse(responseCode = "500", description = "服务器内部错误")
       })
-  public ResponseEntity<?> check(
+  public Result<Boolean> check(
       @Parameter(description = "用户名", required = true, example = "admin") @RequestParam("username")
           String username,
       @Parameter(description = "TOTP 动态验证码（6位数字）", required = true, example = "123456")
           @RequestParam("code")
           int code) {
-    boolean sucess = googleAuthService.verifyByUserName(username, code);
-    if (sucess) {
-      return ResponseEntity.ok("Google Auth 校验成功");
-    } else {
-      return ResponseEntity.badRequest().body("Google Auth 校验失败");
-    }
+    boolean passed = googleAuthService.verifyByUserName(username, code);
+    return Result.success(passed);
   }
 
   /**
@@ -88,11 +84,11 @@ public class TotpAuthEndpoint {
         @ApiResponse(responseCode = "400", description = "用户名无效"),
         @ApiResponse(responseCode = "500", description = "服务器内部错误")
       })
-  public ResponseEntity<byte[]> generateQRCode(
+  public Result<String> generateQRCode(
       @Parameter(description = "用户名", required = true, example = "admin") @RequestParam("username")
           String username) {
     String barcodeURL = googleAuthService.getQRBarcodeURL(username);
     byte[] qrCode = QrCodeUtils.defaultGeneratePng(barcodeURL);
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(qrCode);
+    return Result.success(Base64.getEncoder().encodeToString(qrCode));
   }
 }

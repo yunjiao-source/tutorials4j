@@ -87,8 +87,8 @@
         url: '/api/job-log/page',
         data: params,
         success: function(res) {
-          renderLogs(res.content);
-          renderPagination(res);
+          renderLogs(res.data.content);
+          renderPagination(res.data);
         },
         error: function() {
           alert('加载日志失败');

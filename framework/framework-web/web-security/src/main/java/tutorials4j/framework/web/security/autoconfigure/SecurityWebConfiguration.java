@@ -66,11 +66,17 @@ public class SecurityWebConfiguration {
       AccessLimitedHandlerInterceptor accessLimitedHandlerInterceptor =
           new AccessLimitedHandlerInterceptor(accessLimitedCacheTemplate);
       doAddInterceptor(registry, accessLimitedHandlerInterceptor, accessLimitedOptions);
+      log.trace(
+          "[WEB-SECURITY] 'AccessLimitedHandlerInterceptor' configuration parameters are {}",
+          accessLimitedOptions);
 
       HandlerInterceptorOptions idempotentOptions = properties.getIdempotent();
       IdempotentHandlerInterceptor idempotentHandlerInterceptor =
           new IdempotentHandlerInterceptor(idempotentCacheTemplate);
       doAddInterceptor(registry, idempotentHandlerInterceptor, idempotentOptions);
+      log.trace(
+          "[WEB-SECURITY] 'IdempotentHandlerInterceptor' configuration parameters are {}",
+          idempotentOptions);
     }
 
     private void doAddInterceptor(
@@ -85,8 +91,6 @@ public class SecurityWebConfiguration {
       if (options.getIncludePathPatterns().length > 0) {
         registration.addPathPatterns(options.getIncludePathPatterns());
       }
-
-      log.trace("[WEB-SECURITY] 添加请求拦截器：{}, {}", interceptor, options);
     }
   }
 }

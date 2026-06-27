@@ -77,7 +77,7 @@ public class TraceWebConfiguration {
     registration.setFilter(filter);
     options.fill(registration);
 
-    log.trace("[WEB-LOGGING] TraceRequestFilter configuration parameters are {}", options);
+    log.trace("[WEB-LOGGING] 'TraceRequestFilter' configuration parameters are {}", options);
     return registration;
   }
 }

@@ -445,7 +445,8 @@
         throw new Error(`HTTP ${response.status}: 获取验证码失败, 后端返回 ${errorText.substring(0, 100)}`);
       }
 
-      const data = await response.json();
+      const json = await response.json()
+      const data = json.data;
       // 根据接口文档: { key, captchaImageBase64, backgroundImageBase64, category }
       if (data && data.key && data.captchaImageBase64) {
         currentKey = data.key;
@@ -522,43 +523,28 @@
         body: JSON.stringify(requestBody)
       });
 
-      let responseData = null;
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        responseData = await response.json();
-      } else {
-        const rawText = await response.text();
-        console.warn("后端非JSON响应:", rawText);
-        // 尝试简单处理
-        responseData = { success: response.ok, message: rawText };
-      }
+      let responseData = await response.json();
+      responseData = responseData.data;
+
+      // let responseData = null;
+      // const contentType = response.headers.get("content-type");
+      // if (contentType && contentType.includes("application/json")) {
+      //   responseData = await response.json();
+      // } else {
+      //   const rawText = await response.text();
+      //   console.warn("后端非JSON响应:", rawText);
+      //   // 尝试简单处理
+      //   responseData = { success: response.ok, message: rawText };
+      // }
 
       // 解析校验结果（适配多种返回结构）
-      let isSuccess = false;
+      let isSuccess = responseData;
       let serverMessage = "";
 
       if (responseData) {
-        if (typeof responseData.success === 'boolean') {
-          isSuccess = responseData.success;
-          serverMessage = responseData.message || responseData.msg || (isSuccess ? "验证通过" : "验证码错误");
-        } else if (typeof responseData.result === 'boolean') {
-          isSuccess = responseData.result;
-          serverMessage = responseData.msg || responseData.message || (isSuccess ? "验证通过" : "验证码错误");
-        } else if (responseData.code !== undefined) {
-          const okCodes = [200, 0, "200", "SUCCESS"];
-          isSuccess = okCodes.includes(responseData.code);
-          if (responseData.data && typeof responseData.data === 'object') {
-            if (responseData.data.success !== undefined) isSuccess = responseData.data.success;
-            if (responseData.data.result !== undefined) isSuccess = responseData.data.result;
-          }
-          serverMessage = responseData.msg || responseData.message || (isSuccess ? "校验成功" : "校验失败");
-        } else {
-          isSuccess = response.ok;
-          serverMessage = responseData.message || (isSuccess ? "验证成功" : "验证不通过");
-        }
+          serverMessage = "验证成功" ;
       } else {
-        isSuccess = response.ok;
-        serverMessage = isSuccess ? "验证成功" : "验证失败";
+        serverMessage =  "验证失败";
       }
 
       if (!response.ok && isSuccess === true) {

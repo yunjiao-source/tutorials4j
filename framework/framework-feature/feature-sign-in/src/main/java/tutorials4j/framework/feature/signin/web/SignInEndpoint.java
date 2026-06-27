@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.core.DefaultConsts;
+import tutorials4j.framework.common.core.bean.Result;
 import tutorials4j.framework.feature.signin.SignInCalendar;
 import tutorials4j.framework.feature.signin.SignInResult;
 import tutorials4j.framework.feature.signin.SignInService;
@@ -26,47 +27,53 @@ public class SignInEndpoint {
   private final SignInService signInService;
 
   @PostMapping("do")
-  public SignInResult sign(
+  public Result<SignInResult> sign(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source) {
-    return signInService.template(source).signIn(account, LocalDate.now());
+    SignInResult result = signInService.template(source).signIn(account, LocalDate.now());
+    return Result.success(result);
   }
 
   @GetMapping("status")
-  public boolean status(
+  public Result<Boolean> status(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    return signInService.template(source).checkStatus(account, date);
+    Boolean result = signInService.template(source).checkStatus(account, date);
+    return Result.success(result);
   }
 
   @GetMapping("daily")
-  public SignInResult info(
+  public Result<SignInResult> info(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    return signInService.template(source).queryDaily(account, date);
+    SignInResult result = signInService.template(source).queryDaily(account, date);
+    return Result.success(result);
   }
 
   @GetMapping("calendar")
-  public SignInCalendar calendar(
+  public Result<SignInCalendar> calendar(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    return signInService.template(source).queryCalendar(account, date);
+    SignInCalendar result = signInService.template(source).queryCalendar(account, date);
+    return Result.success(result);
   }
 
   @GetMapping("count-daily-active")
-  public Long countDailyActive(
+  public Result<Long> countDailyActive(
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    return signInService.template(source).countDailyActive(date);
+    Long result = signInService.template(source).countDailyActive(date);
+    return Result.success(result);
   }
 
   @GetMapping("count-month-active")
-  public Long countMonthActive(
+  public Result<Long> countMonthActive(
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    return signInService.template(source).countMonthActive(date);
+    Long result = signInService.template(source).countMonthActive(date);
+    return Result.success(result);
   }
 }

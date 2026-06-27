@@ -65,7 +65,8 @@ public class SignatureWebConfiguration {
         registration.addPathPatterns(options.getIncludePathPatterns());
       }
 
-      log.trace("[WEB-SECURITY] 添加请求拦截器：{}, {}", signatureHandlerInterceptor, options);
+      log.trace(
+          "[WEB-SECURITY] 'SignatureHandlerInterceptor' configuration parameters are {}", options);
     }
   }
 }

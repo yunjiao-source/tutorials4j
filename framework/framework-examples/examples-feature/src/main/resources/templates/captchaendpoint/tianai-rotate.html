@@ -431,7 +431,8 @@
     try {
       const response = await fetch('/api/captcha/create?category=TIANAI_ROTATE');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+      const json = await response.json();
+      const data = json.data;
 
       // 校验必要字段
       if (!data.id || !data.backgroundImage || !data.templateImage) {
@@ -546,7 +547,9 @@
       });
 
 
-      const result = await response.json();
+      const json = await response.json();
+      result = json.data;
+
       // 返回布尔值 true/false
       if (result === true || result === "true" || result === true) {
         showMessage('🎉 验证通过！ 旋转角度正确，轨迹有效', 'success');

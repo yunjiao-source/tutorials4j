@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.common.spring.web.ServletFilterOptions;
+import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 
 /**
  * 验证码属性配置
@@ -16,6 +16,6 @@ import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 public class WebCaptchaProperties {
   private boolean enabled = false;
 
-  /** 验证码过滤器 */
-  @NestedConfigurationProperty private ServletFilterOptions filter = new ServletFilterOptions();
+  @NestedConfigurationProperty
+  private HandlerInterceptorOptions interceptor = new HandlerInterceptorOptions();
 }

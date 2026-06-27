@@ -159,8 +159,8 @@
         url: '/api/job/page',
         data: params,
         success: function(res) {
-          renderJobs(res.content);
-          renderPagination(res);
+          renderJobs(res.data.content);
+          renderPagination(res.data);
         },
         error: function() {
           alert('加载任务列表失败');
@@ -272,6 +272,7 @@
         // 为演示，我们假设可以从列表数据中获取，但当前我们没有存储列表数据。简便起见，我们重新加载一次并找到对应数据。
         // 实际上，我们应该在列表渲染时存储数据，或增加后端详情接口。鉴于题目未提供，我采用重新查询方式。
         success: function(res) {
+          res = res.data;
           var job = res.content.find(function(item) { return item.id === id; });
           if (!job) {
             alert('未找到该任务');

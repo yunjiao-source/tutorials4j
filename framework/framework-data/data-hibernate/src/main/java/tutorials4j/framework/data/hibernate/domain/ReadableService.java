@@ -40,7 +40,7 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
             () ->
                 DataErrorCode.DATA_SOURCE_NOT_EXIST
                     .throwed()
-                    .param("entity", getRepository().getEntityClass())
+                    .param("repository", getRepository().getClass().getName())
                     .param("id", id));
   }
 

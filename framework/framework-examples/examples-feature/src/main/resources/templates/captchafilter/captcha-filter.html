@@ -264,7 +264,8 @@
       method: 'GET',
       dataType: 'json',
       timeout: 10000,
-      success: function(resp) {
+      success: function(res) {
+        const resp = res.data;
         // 期望结构: { captchaImageBase64, category, key }
         if (resp && resp.captchaImageBase64 && resp.key) {
           // 设置验证码图片

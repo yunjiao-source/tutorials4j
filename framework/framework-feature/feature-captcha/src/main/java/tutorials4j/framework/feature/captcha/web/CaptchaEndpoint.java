@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.captcha.support.CaptchaCategory;
 import tutorials4j.framework.captcha.support.CaptchaService;
 import tutorials4j.framework.captcha.support.CaptchaServiceFactory;
+import tutorials4j.framework.common.core.bean.Result;
 
 /**
  * 验证码接口
@@ -46,21 +46,17 @@ public class CaptchaEndpoint {
       content =
           @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
   @GetMapping("create")
-  public Map<String, Object> create(@RequestParam("category") CaptchaCategory category) {
+  public Result<Map<String, Object>> create(@RequestParam("category") CaptchaCategory category) {
     CaptchaService service = factory.findService(category);
-    return service.draw();
+    return Result.success(service.draw());
   }
 
   @Operation(summary = "校验验证码", description = "校验用户输入的验证码是否正确")
   @ApiResponse(responseCode = "200", description = "校验结果（true/false）")
   @PostMapping("check")
-  public ResponseEntity<Boolean> check(@RequestBody CaptchaRequest validate) {
+  public Result<Boolean> check(@RequestBody CaptchaRequest validate) {
     CaptchaService service = factory.findService(validate.getCategory());
     boolean isOk = service.verify(validate.getKey(), validate.getCode());
-    if (isOk) {
-      return ResponseEntity.ok().body(true);
-    } else {
-      return ResponseEntity.badRequest().body(false);
-    }
+    return Result.success(isOk);
   }
 }

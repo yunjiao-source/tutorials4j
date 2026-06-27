@@ -1,16 +1,14 @@
 tutorials4j:
   web:
-    security:
-      google:
-#        authenticator:
-#          code-digits: 8
-        filter:
-          url-patterns: /post
-        credentials:
-          - username: tom
-            security-key: T6LFESCGW4QGYX33Z2ZAFNJLAU5JWKO7
-          - username: zhangs
-            security-key: GP2GM5U4WVNXSPD2Y3WSKZQTMW4TZRYL
+    totp:
+      enabled: true
+#       authenticator:
+#         code-digits: 8
+      credentials:
+        - username: tom
+          security-key: T6LFESCGW4QGYX33Z2ZAFNJLAU5JWKO7
+        - username: zhangs
+          security-key: GP2GM5U4WVNXSPD2Y3WSKZQTMW4TZRYL
 
   feature:
     totp-enabled: true

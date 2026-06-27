@@ -63,7 +63,7 @@ public class RequestLoggingWebConfiguration {
     }
 
     log.trace(
-        "[WEB-LOGGING] SimpleRequestLoggingFilter configuration parameters are {}",
+        "[WEB-LOGGING] 'SimpleRequestLoggingFilter' configuration parameters are {}",
         servletFilterOptions);
     return registration;
   }

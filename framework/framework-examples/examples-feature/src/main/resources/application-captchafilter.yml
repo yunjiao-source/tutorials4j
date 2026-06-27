@@ -1,7 +1,4 @@
 tutorials4j:
-  captcha:
-    filter:
-      url-patterns: /post
   cache:
     named:
       defaults:
@@ -15,3 +12,6 @@ tutorials4j:
 
   feature:
     captcha-enabled: true
+  captcha:
+    web:
+      enabled: true

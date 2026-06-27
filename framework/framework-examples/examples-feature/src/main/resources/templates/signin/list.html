@@ -385,7 +385,8 @@
       data: params,
       dataType: 'json',
       timeout: 15000,
-      success: function(response) {
+      success: function(res) {
+        const response = res.data;
         var content = response.content || response._embedded?.signInResultVOList || [];
         var pageMeta = response.page || {};
         var totalPages = pageMeta.totalPages || 0;

@@ -48,7 +48,7 @@ public class XssWebConfiguration {
     registration.setFilter(filter);
     options.fill(registration);
 
-    log.trace("[WEB-SECURITY] XssRequestFilter configuration parameters are {}", options);
+    log.trace("[WEB-SECURITY] 'XssRequestFilter' configuration parameters are {}", options);
     return registration;
   }
 }

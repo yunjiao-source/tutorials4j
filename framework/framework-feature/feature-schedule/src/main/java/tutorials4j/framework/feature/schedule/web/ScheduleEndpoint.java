@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.framework.common.core.bean.Result;
 import tutorials4j.framework.feature.schedule.ScheduleService;
 import tutorials4j.framework.feature.schedule.TaskExecutionDetails;
 
@@ -21,22 +22,22 @@ public class ScheduleEndpoint {
   private final ScheduleService scheduleService;
 
   @GetMapping("cancel")
-  public TaskExecutionDetails cancelTask(@RequestParam("taskCode") String taskCode) {
-    return scheduleService.cancelTask(taskCode);
+  public Result<TaskExecutionDetails> cancelTask(@RequestParam("taskCode") String taskCode) {
+    return Result.success(scheduleService.cancelTask(taskCode));
   }
 
   @GetMapping("start")
-  public TaskExecutionDetails startTask(@RequestParam("taskCode") String taskCode) {
-    return scheduleService.startTask(taskCode);
+  public Result<TaskExecutionDetails> startTask(@RequestParam("taskCode") String taskCode) {
+    return Result.success(scheduleService.startTask(taskCode));
   }
 
   @GetMapping("details")
-  public TaskExecutionDetails getTaskDetails(@RequestParam("taskCode") String taskCode) {
-    return scheduleService.getTaskDetails(taskCode);
+  public Result<TaskExecutionDetails> getTaskDetails(@RequestParam("taskCode") String taskCode) {
+    return Result.success(scheduleService.getTaskDetails(taskCode));
   }
 
   @GetMapping("all")
-  public List<TaskExecutionDetails> getAll() {
-    return scheduleService.getAllTaskDetails();
+  public Result<List<TaskExecutionDetails>> getAll() {
+    return Result.success(scheduleService.getAllTaskDetails());
   }
 }

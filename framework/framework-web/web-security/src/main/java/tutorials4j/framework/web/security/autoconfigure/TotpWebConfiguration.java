@@ -4,22 +4,25 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorConfig;
 import com.warrenstrange.googleauth.ICredentialRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.framework.common.core.PropertiesConsts;
-import tutorials4j.framework.common.spring.web.ServletFilterOptions;
+import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 import tutorials4j.framework.web.security.properties.TotpWebProperties;
 import tutorials4j.framework.web.security.properties.TotpWebProperties.AuthenticatorOptions;
-import tutorials4j.framework.web.security.totp.GoogleAuthRequestFilter;
 import tutorials4j.framework.web.security.totp.GoogleAuthService;
 import tutorials4j.framework.web.security.totp.GoogleAuthenticatorConfigCustomizer;
 import tutorials4j.framework.web.security.totp.GoogleYamlCredentialRepository;
+import tutorials4j.framework.web.security.totp.TotpAuthHandlerInterceptor;
 
 /**
  * Totp Authenticator 自动配置类。
@@ -79,15 +82,31 @@ public class TotpWebConfiguration {
   }
 
   @Bean
-  FilterRegistrationBean<GoogleAuthRequestFilter> googleAuthRequestFilterRegistration(
-      GoogleAuthService googleAuthService, TotpWebProperties properties) {
-    ServletFilterOptions options = properties.getFilter();
-    FilterRegistrationBean<GoogleAuthRequestFilter> registration = new FilterRegistrationBean<>();
-    GoogleAuthRequestFilter filter = new GoogleAuthRequestFilter(googleAuthService);
-    registration.setFilter(filter);
-    options.fill(registration);
+  @ConditionalOnMissingBean
+  TotpAuthHandlerInterceptor totpAuthHandlerInterceptor(GoogleAuthService googleAuthService) {
+    log.trace("[WEB-SECURITY] Totp Auth Handler Interceptor");
+    return new TotpAuthHandlerInterceptor(googleAuthService);
+  }
 
-    log.trace("[WEB-SECURITY] GoogleAuthRequestFilter configuration parameters are {}", options);
-    return registration;
+  @Slf4j
+  @Configuration(proxyBeanMethods = false)
+  @RequiredArgsConstructor
+  public static class TotpAuthWebMvcConfigurer implements WebMvcConfigurer {
+    private final GoogleAuthService googleAuthService;
+    private final TotpWebProperties properties;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+      TotpAuthHandlerInterceptor totpAuthHandlerInterceptor =
+          new TotpAuthHandlerInterceptor(googleAuthService);
+
+      InterceptorRegistration registration = registry.addInterceptor(totpAuthHandlerInterceptor);
+      HandlerInterceptorOptions options = properties.getInterceptor();
+      registration.excludePathPatterns(options.getExcludePathPatterns());
+      registration.addPathPatterns(options.getIncludePathPatterns());
+
+      log.trace(
+          "[WEB-SECURITY] 'TotpAuthHandlerInterceptor' configuration parameters are {}", options);
+    }
   }
 }

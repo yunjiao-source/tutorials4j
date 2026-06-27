@@ -17,8 +17,4 @@ import tutorials4j.framework.common.core.entity.Entity;
  */
 @NoRepositoryBean
 public interface BaseRepository<E extends Entity, ID extends Serializable>
-    extends JpaRepository<E, ID>, JpaSpecificationExecutor<E> {
-  Class<E> getEntityClass();
-
-  Class<ID> getIdClass();
-}
+    extends JpaRepository<E, ID>, JpaSpecificationExecutor<E> {}

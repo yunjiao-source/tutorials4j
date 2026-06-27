@@ -39,7 +39,7 @@ public class CachedBodyConfiguration {
     registration.setFilter(filter);
     options.fill(registration);
 
-    log.trace("[WEB-REST] CachedBodyRequestFilter configuration parameters are {}", options);
+    log.trace("[WEB-REST] 'CachedBodyRequestFilter' configuration parameters are {}", options);
     return registration;
   }
 }

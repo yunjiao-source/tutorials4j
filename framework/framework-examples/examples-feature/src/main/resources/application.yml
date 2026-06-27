@@ -3,10 +3,10 @@ spring:
 #    active: signin
 #    active: captchaendpoint
 #    active: captchatianaiendpoint
-#    active: captchafilter
+    active: captchafilter
 #    active: crypto-api
 #    active: totp
-    active: schedule
+#    active: schedule
 
   data:
     # Redis 配置

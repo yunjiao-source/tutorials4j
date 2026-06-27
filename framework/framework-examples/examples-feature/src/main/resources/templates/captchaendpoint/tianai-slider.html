@@ -275,7 +275,8 @@
       // 调用获取验证码接口 (category = TIANAI_SLIDER)
       const response = await fetch('/api/captcha/create?category=TIANAI_SLIDER');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+      const json = await response.json();
+      const data = json.data
 
       // 校验必要字段
       if (!data.id || !data.backgroundImage || !data.templateImage) {
@@ -455,7 +456,8 @@
         throw new Error(`服务器响应错误 ${response.status}`);
       }
 
-      const result = await response.json(); // 预期返回布尔值 true/false
+      const json = await response.json(); // 预期返回布尔值 true/false
+      const result = json.data;
 
       if (result === true || result === "true" || result === true) {
         setStatus("✅ 验证通过！", "success");

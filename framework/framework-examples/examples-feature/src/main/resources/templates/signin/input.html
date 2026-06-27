@@ -368,7 +368,8 @@
       if (!account) { $signResult.html('<span class="text-danger">⚠️ 请填写账号</span>'); return; }
       $signResult.html('<i class="bi bi-hourglass-split"></i> 签到中...');
       try {
-        const result = await apiRequest('POST', '/api/sign-in/do', { source: source }, true, null);
+        const res = await apiRequest('POST', '/api/sign-in/do', { source: source }, true, null);
+        const result = res.data;
         // result 是 SignInResult
         let msg = '';
         if (result) {
@@ -407,7 +408,8 @@
       const source = $source.val().trim();
       if (!source) { $statusResult.html('请填写source'); return; }
       try {
-        const isSigned = await apiRequest('GET', '/api/sign-in/status', { source: source, date: date }, true);
+        const res = await apiRequest('GET', '/api/sign-in/status', { source: source, date: date }, true);
+        const isSigned = res.data;
         $statusResult.html(isSigned === true ?
             `<i class="bi bi-check-circle-fill text-success"></i> 已签到` :
             `<i class="bi bi-x-circle-fill text-danger"></i> 未签到`);
@@ -421,7 +423,8 @@
       const source = $source.val().trim();
       if (!source) { $dailyResult.html('请填写source'); return; }
       try {
-        const detail = await apiRequest('GET', '/api/sign-in/daily', { source: source, date: date }, true);
+        const res = await apiRequest('GET', '/api/sign-in/daily', { source: source, date: date }, true);
+        const detail = res.data;
         if (detail) {
           let html = `<strong>📅 ${detail.signDate || date}</strong><br>
                                 签到状态: ${detail.signedIn === true ? '✅ 已签到' : '❌ 未签到'}<br>
@@ -439,7 +442,8 @@
       const account = $account.val().trim();
       if (!account) { alert('请填写账号'); return; }
       try {
-        const calendarData = await apiRequest('GET', '/api/sign-in/calendar', { source: source, date: basedate }, true);
+        const res = await apiRequest('GET', '/api/sign-in/calendar', { source: source, date: basedate }, true);
+        const calendarData = res.data;
         if (calendarData) {
           currentCalendarDate = basedate;
           // 更新标题月
@@ -565,7 +569,7 @@
       if (!date) return;
       try {
         const res = await apiRequest('GET', '/api/sign-in/count-daily-active', { source: source, date: date }, false);
-        $dailyActiveResult.html(`<strong>📊 ${date}</strong><br>活跃用户数: <span class="fw-bold fs-5">${res ?? 0}</span> 人`);
+        $dailyActiveResult.html(`<strong>📊 ${date}</strong><br>活跃用户数: <span class="fw-bold fs-5">${res.data ?? 0}</span> 人`);
       } catch(e) { $dailyActiveResult.html(`错误: ${e.message}`); }
     }
 
@@ -576,7 +580,7 @@
       if (!date) return;
       try {
         const res = await apiRequest('GET', '/api/sign-in/count-month-active', { source: source, date: date }, false);
-        $monthActiveResult.html(`<strong>🗓️ ${date.substring(0, 7)}</strong><br>月活跃用户: <span class="fw-bold fs-5">${res ?? 0}</span> 人`);
+        $monthActiveResult.html(`<strong>🗓️ ${date.substring(0, 7)}</strong><br>月活跃用户: <span class="fw-bold fs-5">${res.data ?? 0}</span> 人`);
       } catch(e) { $monthActiveResult.html(`错误: ${e.message}`); }
     }
 

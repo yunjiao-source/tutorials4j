@@ -7,6 +7,7 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.framework.common.core.bean.Result;
 import tutorials4j.framework.feature.signin.domain.SignInResultEntity;
 import tutorials4j.framework.feature.signin.domain.SignInResultQuery;
 import tutorials4j.framework.feature.signin.domain.SignInResultService;
@@ -23,8 +24,9 @@ public class SignInResultEndpoint {
   private final SignInResultService signInResultService;
 
   @GetMapping
-  public PagedModel<SignInResultVO> find(SignInResultQuery query, Pageable pageable) {
+  public Result<PagedModel<SignInResultVO>> find(SignInResultQuery query, Pageable pageable) {
     Page<SignInResultEntity> page = signInResultService.find(query, pageable);
-    return new PagedModel<>(page.map(SignInResultVO::of));
+    PagedModel<SignInResultVO> result = new PagedModel<>(page.map(SignInResultVO::of));
+    return Result.success(result);
   }
 }

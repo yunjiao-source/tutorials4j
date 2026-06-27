@@ -36,8 +36,8 @@
   $(document).ready(function() {
     // 加载所有任务
     $('#loadAllBtn').click(function() {
-      $.get('/api/schedule/all', function(data) {
-        displayTaskTable(data);
+      $.get('/api/schedule/all', function(res) {
+        displayTaskTable(res.data);
       }).fail(function() {
         alert('加载失败');
       });
@@ -47,8 +47,8 @@
     $('#getDetailBtn').click(function() {
       var taskCode = $('#taskCodeInput').val().trim();
       if (!taskCode) { alert('请输入任务代码'); return; }
-      $.get('/api/schedule/details', {taskCode: taskCode}, function(data) {
-        displayTaskDetail(data);
+      $.get('/api/schedule/details', {taskCode: taskCode}, function(res) {
+        displayTaskDetail(res.data);
       }).fail(function() {
         alert('获取详情失败');
       });
@@ -58,8 +58,8 @@
     $('#startBtn').click(function() {
       var taskCode = $('#taskCodeInput').val().trim();
       if (!taskCode) { alert('请输入任务代码'); return; }
-      $.get('/api/schedule/start', {taskCode: taskCode}, function(data) {
-        displayTaskDetail(data);
+      $.get('/api/schedule/start', {taskCode: taskCode}, function(res) {
+        displayTaskDetail(res.data);
       }).fail(function() {
         alert('启动失败');
       });
@@ -69,8 +69,8 @@
     $('#cancelBtn').click(function() {
       var taskCode = $('#taskCodeInput').val().trim();
       if (!taskCode) { alert('请输入任务代码'); return; }
-      $.get('/api/schedule/cancel', {taskCode: taskCode}, function(data) {
-        displayTaskDetail(data);
+      $.get('/api/schedule/cancel', {taskCode: taskCode}, function(res) {
+        displayTaskDetail(res.data);
       }).fail(function() {
         alert('取消失败');
       });
