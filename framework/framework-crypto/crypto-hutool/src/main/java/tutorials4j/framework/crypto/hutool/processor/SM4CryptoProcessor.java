@@ -3,7 +3,7 @@ package tutorials4j.framework.crypto.hutool.processor;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.symmetric.SM4;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.Assert;
+import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
@@ -14,17 +14,21 @@ import tutorials4j.framework.crypto.hutool.SecretKeyGenerator;
  *
  * @author Yun Jiao
  */
+@Slf4j
 @RequiredArgsConstructor
 public class SM4CryptoProcessor implements CryptoProcessor {
   private final SM4 sm4;
   protected final SecretKey secretKey;
 
   public static SM4CryptoProcessor create() {
-    return create(SecretKeyGenerator.generateSM4Key());
+    return create(null);
   }
 
   public static SM4CryptoProcessor create(SecretKey secretKey) {
-    Assert.notNull(secretKey, "'secretKey' must not be null");
+    if (secretKey == null) {
+      secretKey = SecretKeyGenerator.generateSM4Key();
+      log.info("{} automatically generates a random key", SM4CryptoProcessor.class.getSimpleName());
+    }
 
     SM4 sm4 = SmUtil.sm4(secretKey.symmetricKeyByte());
     return new SM4CryptoProcessor(sm4, secretKey);

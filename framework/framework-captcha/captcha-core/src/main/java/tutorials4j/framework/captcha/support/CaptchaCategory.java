@@ -2,7 +2,6 @@ package tutorials4j.framework.captcha.support;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  * 验证码类别
@@ -10,7 +9,6 @@ import lombok.ToString;
  * @author Yun Jiao
  */
 @Getter
-@ToString
 public enum CaptchaCategory {
   @Schema(description = "滑动还原验证码（PNG）")
   TIANAI_CONCAT("png", "滑动还原验证码"),

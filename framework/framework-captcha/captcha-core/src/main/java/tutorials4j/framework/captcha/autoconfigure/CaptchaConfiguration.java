@@ -46,7 +46,8 @@ public class CaptchaConfiguration {
   CaptchaServiceFactory captchaServiceFactory(ObjectProvider<CaptchaService> providers) {
     Map<CaptchaCategory, CaptchaService> services =
         providers.stream().collect(Collectors.toMap(CaptchaService::getCategory, m -> m));
-    log.trace("[CAPTCHA-CORE] 工厂'CaptchaServiceFactory'注入实例：{}", services);
+    log.trace(
+        "[CAPTCHA-CORE] Injected instances in CaptchaServiceFactory is {}", services.keySet());
     CaptchaServiceFactory.instance.setServices(services);
     return CaptchaServiceFactory.instance;
   }

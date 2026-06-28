@@ -3,7 +3,7 @@ package tutorials4j.framework.crypto.hutool.processor;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.Assert;
+import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
@@ -14,17 +14,21 @@ import tutorials4j.framework.crypto.hutool.SecretKeyGenerator;
  *
  * @author Yun Jiao
  */
+@Slf4j
 @RequiredArgsConstructor
 public class AESCryptoProcessor implements CryptoProcessor {
   protected final AES aes;
   protected final SecretKey secretKey;
 
   public static AESCryptoProcessor create() {
-    return create(SecretKeyGenerator.generateASEKey());
+    return create(null);
   }
 
   public static AESCryptoProcessor create(SecretKey secretKey) {
-    Assert.notNull(secretKey, "'secretKey' must not be null");
+    if (secretKey == null) {
+      secretKey = SecretKeyGenerator.generateASEKey();
+      log.info("{} automatically generates a random key", AESCryptoProcessor.class.getSimpleName());
+    }
 
     AES aes = SecureUtil.aes(secretKey.symmetricKeyByte());
     return new AESCryptoProcessor(aes, secretKey);

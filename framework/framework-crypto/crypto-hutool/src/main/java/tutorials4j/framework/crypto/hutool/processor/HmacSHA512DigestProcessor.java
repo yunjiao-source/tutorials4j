@@ -5,7 +5,7 @@ import cn.hutool.crypto.digest.HmacAlgorithm;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.Assert;
+import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.DigestCategory;
 import tutorials4j.framework.crypto.core.processor.DigestProcessor;
@@ -16,17 +16,23 @@ import tutorials4j.framework.crypto.hutool.SecretKeyGenerator;
  *
  * @author Yun Jiao
  */
+@Slf4j
 @RequiredArgsConstructor
 public class HmacSHA512DigestProcessor implements DigestProcessor {
   private final HMac mac;
   protected final SecretKey secretKey;
 
   public static HmacSHA512DigestProcessor create() {
-    return create(SecretKeyGenerator.generateHmacSHA512Key());
+    return create(null);
   }
 
   public static HmacSHA512DigestProcessor create(SecretKey secretKey) {
-    Assert.notNull(secretKey, "'secretKey' must not be empty or blank");
+    if (secretKey == null) {
+      secretKey = SecretKeyGenerator.generateHmacSHA512Key();
+      log.info(
+          "{} automatically generates a random key",
+          HmacSHA512DigestProcessor.class.getSimpleName());
+    }
 
     HMac mac = new HMac(HmacAlgorithm.HmacSHA512, secretKey.symmetricKeyByte());
     return new HmacSHA512DigestProcessor(mac, secretKey);

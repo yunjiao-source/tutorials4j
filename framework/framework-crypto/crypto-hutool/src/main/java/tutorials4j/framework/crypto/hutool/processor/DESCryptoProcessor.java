@@ -3,7 +3,7 @@ package tutorials4j.framework.crypto.hutool.processor;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.DES;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.Assert;
+import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
@@ -14,17 +14,21 @@ import tutorials4j.framework.crypto.hutool.SecretKeyGenerator;
  *
  * @author Yun Jiao
  */
+@Slf4j
 @RequiredArgsConstructor
 public class DESCryptoProcessor implements CryptoProcessor {
   protected final DES des;
   protected final SecretKey secretKey;
 
   public static DESCryptoProcessor create() {
-    return create(SecretKeyGenerator.generateDESKey());
+    return create(null);
   }
 
   public static DESCryptoProcessor create(SecretKey secretKey) {
-    Assert.notNull(secretKey, "'secretKey' must not be empty or blank");
+    if (secretKey == null) {
+      secretKey = SecretKeyGenerator.generateDESKey();
+      log.info("{} automatically generates a random key", DESCryptoProcessor.class.getSimpleName());
+    }
 
     DES des = SecureUtil.des(secretKey.symmetricKeyByte());
     return new DESCryptoProcessor(des, secretKey);

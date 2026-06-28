@@ -4,7 +4,7 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.SM2;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.Assert;
+import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
@@ -15,17 +15,21 @@ import tutorials4j.framework.crypto.hutool.SecretKeyGenerator;
  *
  * @author Yun Jiao
  */
+@Slf4j
 @RequiredArgsConstructor
 public class SM2CryptoProcessor implements CryptoProcessor {
   private final SM2 sm2;
   private final SecretKey secretKey;
 
   public static SM2CryptoProcessor create() {
-    return create(SecretKeyGenerator.generateSM2Key());
+    return create(null);
   }
 
   public static SM2CryptoProcessor create(SecretKey secretKey) {
-    Assert.notNull(secretKey, "'secretKey' must not be null");
+    if (secretKey == null) {
+      secretKey = SecretKeyGenerator.generateSM2Key();
+      log.info("{} automatically generates a random key", SM2CryptoProcessor.class.getSimpleName());
+    }
 
     SM2 sm2 = new SM2(secretKey.privateKeyByte(), secretKey.publicKeyByte());
     return new SM2CryptoProcessor(sm2, secretKey);
