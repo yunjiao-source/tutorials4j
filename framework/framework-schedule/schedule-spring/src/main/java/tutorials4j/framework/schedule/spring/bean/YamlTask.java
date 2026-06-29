@@ -1,12 +1,13 @@
-package tutorials4j.framework.schedule.core.bean;
+package tutorials4j.framework.schedule.spring.bean;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Map;
 import org.springframework.util.Assert;
-import tutorials4j.framework.schedule.core.properties.TaskExecutionOptions;
-import tutorials4j.framework.schedule.core.properties.TaskOptions;
+import tutorials4j.framework.schedule.core.bean.Task;
+import tutorials4j.framework.schedule.spring.properties.TaskExecutionOptions;
+import tutorials4j.framework.schedule.spring.properties.TaskOptions;
 
 /**
  * TODO

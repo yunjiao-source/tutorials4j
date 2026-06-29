@@ -17,6 +17,11 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>schedule-spring</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>schedule-redis</artifactId>
             <version>${revision}</version>
         </dependency>

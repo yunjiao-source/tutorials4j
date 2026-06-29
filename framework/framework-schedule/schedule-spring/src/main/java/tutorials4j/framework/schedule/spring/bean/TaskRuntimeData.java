@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.bean;
+package tutorials4j.framework.schedule.spring.bean;
 
 import java.time.Instant;
 import lombok.Builder;

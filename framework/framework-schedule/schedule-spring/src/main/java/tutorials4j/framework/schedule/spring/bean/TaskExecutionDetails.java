@@ -1,10 +1,9 @@
-package tutorials4j.framework.feature.schedule;
+package tutorials4j.framework.schedule.spring.bean;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import lombok.Builder;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 
 /**
  * TODO

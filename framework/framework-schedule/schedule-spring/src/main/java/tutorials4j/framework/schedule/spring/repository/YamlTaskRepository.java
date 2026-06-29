@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.repository;
+package tutorials4j.framework.schedule.spring.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import org.springframework.util.Assert;
-import tutorials4j.framework.schedule.core.bean.YamlTask;
-import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
+import tutorials4j.framework.schedule.spring.bean.YamlTask;
+import tutorials4j.framework.schedule.spring.properties.SpringScheduleProperties;
 
 /**
  * TODO
@@ -17,7 +17,7 @@ import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
 public class YamlTaskRepository implements TaskRepository<YamlTask> {
   private final ConcurrentMap<String, YamlTask> taskMap = new ConcurrentHashMap<>();
 
-  public YamlTaskRepository(ScheduleProperties properties) {
+  public YamlTaskRepository(SpringScheduleProperties properties) {
     properties
         .getTasks()
         .forEach(

@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.component;
+package tutorials4j.framework.schedule.spring.component;
 
 import cn.hutool.extra.spring.SpringUtil;
 import jakarta.annotation.PreDestroy;
@@ -19,14 +19,16 @@ import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.config.TriggerTask;
 import org.springframework.util.Assert;
-import tutorials4j.framework.schedule.core.bean.ScheduledTaskData;
 import tutorials4j.framework.schedule.core.bean.Task;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
-import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
 import tutorials4j.framework.schedule.core.exception.ScheduleErrorCode;
-import tutorials4j.framework.schedule.core.properties.ScheduleProperties;
-import tutorials4j.framework.schedule.core.repository.TaskRepository;
+import tutorials4j.framework.schedule.spring.bean.RunnableDecorator;
+import tutorials4j.framework.schedule.spring.bean.ScheduledTaskData;
+import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
+import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.spring.handler.TaskRuntimeDataHandler;
+import tutorials4j.framework.schedule.spring.properties.SpringScheduleProperties;
+import tutorials4j.framework.schedule.spring.repository.TaskRepository;
 
 /**
  * TODO
@@ -38,7 +40,7 @@ import tutorials4j.framework.schedule.core.repository.TaskRepository;
 public class ScheduleTaskManager implements SchedulingConfigurer {
   private final TaskRepository<?> taskRepository;
   private final List<TaskRuntimeDataHandler> taskRuntimeDataHandlers;
-  private final ScheduleProperties properties;
+  private final SpringScheduleProperties properties;
 
   private ScheduledTaskRegistrar scheduledTaskRegistrar;
   private final ConcurrentMap<String, ScheduledTaskData> triggerTaskMap = new ConcurrentHashMap<>();

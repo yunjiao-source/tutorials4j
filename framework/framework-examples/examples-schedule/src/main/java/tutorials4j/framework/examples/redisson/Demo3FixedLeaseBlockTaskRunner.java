@@ -20,7 +20,7 @@ public class Demo3FixedLeaseBlockTaskRunner implements FixedLeaseBlockLockTaskRu
 
   @Override
   public String key() {
-    return "schedule:demo3";
+    return "fixed-lease-block:demo3";
   }
 
   @Override
@@ -30,18 +30,18 @@ public class Demo3FixedLeaseBlockTaskRunner implements FixedLeaseBlockLockTaskRu
 
   @Override
   public void doRun(Map<String, String> params) {
-    log.info(
-        ">>> {}, {}, {}", Thread.currentThread().getName(), "demo3", System.currentTimeMillis());
+    log.info(">>> {}, {}, {}", key(), Thread.currentThread().getName(), System.currentTimeMillis());
     long milli = ThreadLocalRandom.current().nextInt(10000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
+    log.info("<<< {}, {}, {}", key(), Thread.currentThread().getName(), System.currentTimeMillis());
   }
 
   @Override
   public void handleException(BaseRuntimeException exception) {
-    log.error("DEMO3: {}", exception.getMessage());
+    log.error("{}: {}", key(), exception.getMessage());
   }
 }

@@ -1,6 +1,6 @@
-package tutorials4j.framework.schedule.core.component;
+package tutorials4j.framework.schedule.spring.handler;
 
-import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
+import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
 
 /**
  * TODO

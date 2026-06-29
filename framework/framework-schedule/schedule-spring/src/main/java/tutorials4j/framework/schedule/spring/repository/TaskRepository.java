@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.repository;
+package tutorials4j.framework.schedule.spring.repository;
 
 import java.util.List;
 import java.util.Optional;

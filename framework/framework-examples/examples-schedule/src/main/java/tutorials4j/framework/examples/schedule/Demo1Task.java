@@ -19,7 +19,10 @@ public class Demo1Task implements TaskRunner {
   @Override
   public void run(Map<String, String> params) {
     log.info(
-        ">>> {}, {}, {}", Thread.currentThread().getName(), params, System.currentTimeMillis());
+        ">>> demo1, {}, {}, {}",
+        Thread.currentThread().getName(),
+        params,
+        System.currentTimeMillis());
     long milli = ThreadLocalRandom.current().nextInt(3000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);

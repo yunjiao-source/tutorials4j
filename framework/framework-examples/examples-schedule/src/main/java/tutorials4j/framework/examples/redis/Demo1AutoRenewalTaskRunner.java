@@ -24,8 +24,7 @@ public class Demo1AutoRenewalTaskRunner implements AutoRenewalLockTaskRunner {
 
   @Override
   public void doRun(Map<String, String> params) {
-    log.info(
-        ">>> {}, {}, {}", Thread.currentThread().getName(), params, System.currentTimeMillis());
+    log.info(">>> {}, {}, {}", key(), Thread.currentThread().getName(), System.currentTimeMillis());
     long milli = ThreadLocalRandom.current().nextInt(10000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);
@@ -36,6 +35,6 @@ public class Demo1AutoRenewalTaskRunner implements AutoRenewalLockTaskRunner {
 
   @Override
   public void handleException(BaseRuntimeException exception) {
-    log.error("DEMO1: {}", exception.getMessage());
+    log.error("{}: {}", key(), exception.getMessage());
   }
 }

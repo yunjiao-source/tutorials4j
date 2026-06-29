@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.schedule;
+package tutorials4j.framework.schedule.spring.component;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,9 +7,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.framework.common.core.util.MapUtils;
 import tutorials4j.framework.schedule.core.bean.Task;
-import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
-import tutorials4j.framework.schedule.core.component.ScheduleTaskManager;
-import tutorials4j.framework.schedule.core.repository.TaskRepository;
+import tutorials4j.framework.schedule.spring.bean.TaskExecutionDetails;
+import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
+import tutorials4j.framework.schedule.spring.repository.TaskRepository;
 
 /**
  * TODO

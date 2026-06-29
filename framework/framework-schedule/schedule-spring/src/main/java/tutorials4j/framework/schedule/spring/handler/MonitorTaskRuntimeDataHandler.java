@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.component;
+package tutorials4j.framework.schedule.spring.handler;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
-import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
+import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
 
 /**
  * TODO

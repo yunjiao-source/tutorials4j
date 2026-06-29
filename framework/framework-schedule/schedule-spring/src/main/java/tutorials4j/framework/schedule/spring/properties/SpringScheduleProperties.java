@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.properties;
+package tutorials4j.framework.schedule.spring.properties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +13,9 @@ import tutorials4j.framework.common.core.PropertiesConsts;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_SCHEDULE)
-public class ScheduleProperties {
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_SCHEDULE_SPRING)
+public class SpringScheduleProperties {
+  private boolean enabled = false;
   private boolean allTaskAutoStartOnBoot = true;
 
   @NestedConfigurationProperty

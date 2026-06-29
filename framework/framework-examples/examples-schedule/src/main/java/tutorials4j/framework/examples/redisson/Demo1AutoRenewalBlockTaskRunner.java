@@ -19,23 +19,23 @@ public class Demo1AutoRenewalBlockTaskRunner implements AutoRenewalBlockLockTask
 
   @Override
   public String key() {
-    return "schedule:demo1";
+    return "auto-renewal-block:demo1";
   }
 
   @Override
   public void doRun(Map<String, String> params) {
-    log.info(
-        ">>> {}, {}, {}", Thread.currentThread().getName(), "demo1", System.currentTimeMillis());
+    log.info(">>> {}, {}, {}", key(), Thread.currentThread().getName(), System.currentTimeMillis());
     long milli = ThreadLocalRandom.current().nextInt(10000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
+    log.info("<<< {}, {}, {}", key(), Thread.currentThread().getName(), System.currentTimeMillis());
   }
 
   @Override
   public void handleException(BaseRuntimeException exception) {
-    log.error("DEMO1: {}", exception.getMessage());
+    log.error("{}: {}", key(), exception.getMessage());
   }
 }

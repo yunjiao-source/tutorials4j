@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.bean;
+package tutorials4j.framework.schedule.spring.bean;
 
 import tutorials4j.framework.common.core.bean.BaseEnum;
 

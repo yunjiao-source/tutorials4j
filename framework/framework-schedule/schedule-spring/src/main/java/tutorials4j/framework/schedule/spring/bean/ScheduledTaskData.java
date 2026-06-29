@@ -1,9 +1,8 @@
-package tutorials4j.framework.schedule.core.bean;
+package tutorials4j.framework.schedule.spring.bean;
 
 import lombok.Builder;
 import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.scheduling.config.TriggerTask;
-import tutorials4j.framework.schedule.core.component.RunnableDecorator;
 
 /**
  * TODO

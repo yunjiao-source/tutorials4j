@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.component;
+package tutorials4j.framework.schedule.spring.bean;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -11,9 +11,7 @@ import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.support.CronTrigger;
 import tutorials4j.framework.schedule.core.bean.Task;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
-import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
-import tutorials4j.framework.schedule.core.properties.TaskExecutionOptions;
+import tutorials4j.framework.schedule.spring.properties.TaskExecutionOptions;
 
 /**
  * TODO

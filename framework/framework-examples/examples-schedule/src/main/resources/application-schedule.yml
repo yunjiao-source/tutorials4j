@@ -7,39 +7,43 @@ spring:
 
 tutorials4j:
   schedule:
-    tasks:
-      demo1Task:
-        enabled: true
-        cron: 0/5 * * * * ?
-        class-simple-name: demo1Task
-        description: 测试任务1
-        metadata:
-          key1: value1
+    spring:
+      enabled: true
+      all-task-auto-start-on-boot: true
+      tasks:
+        demo1Task:
+          enabled: true
+          cron: 0/5 * * * * ?
+          class-simple-name: demo1Task
+          description: 测试任务1
+          metadata:
+            key1: value1
 
 
-      demo1Task_1:
-        enabled: true
-        cron: 0/2 * * * * ?
-        class-simple-name: demo1Task
-        description: 测试任务1
-        metadata:
-          key2: value2
+        demo1Task_1:
+          enabled: true
+          cron: 0/2 * * * * ?
+          class-simple-name: demo1Task
+          description: 测试任务1
+          metadata:
+            key2: value2
 
 
-      longTimeTask:
-        enabled: true
-        cron: 0/3 * * * * ?
-        class-simple-name: longTimeTask
-        description: 测试任务2
-        execution:
-          initial-delay: 10s
-          max-execution-count: 3
+        demo2Task:
+          enabled: true
+          cron: 0/3 * * * * ?
+          class-simple-name: demo2Task
+          description: 测试任务2
+          execution:
+            initial-delay: 10s
+            max-execution-count: 3
 
-      exceptionTask:
-        enabled: true
-        cron: 0/6 * * * * ?
-        class-simple-name: exceptionTask
-        description: 测试任务2
-        execution:
-          initial-delay: 10s
-          max-failure-count: 3
+        demo3Task:
+          enabled: true
+          cron: 0/6 * * * * ?
+          class-simple-name: demo3Task
+          description: 测试任务3
+          execution:
+            initial-delay: 10s
+            max-failure-count: 3
+

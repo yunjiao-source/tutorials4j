@@ -14,12 +14,15 @@ import tutorials4j.framework.schedule.core.bean.TaskRunner;
  */
 @Slf4j
 @Component
-public class ExceptionTask implements TaskRunner {
+public class Demo2Task implements TaskRunner {
 
   @Override
   public void run(Map<String, String> params) {
     log.info(
-        ">>> {}, {}, {}", Thread.currentThread().getName(), params, System.currentTimeMillis());
+        ">>> demo2, {}, {}, {}",
+        Thread.currentThread().getName(),
+        params,
+        System.currentTimeMillis());
     long milli = ThreadLocalRandom.current().nextInt(4000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);

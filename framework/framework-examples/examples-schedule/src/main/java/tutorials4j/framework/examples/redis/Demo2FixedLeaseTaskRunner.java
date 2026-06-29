@@ -30,8 +30,7 @@ public class Demo2FixedLeaseTaskRunner implements FixedLeaseLockTaskRunner {
 
   @Override
   public void doRun(Map<String, String> params) {
-    log.info(
-        ">>> {}, {}, {}", Thread.currentThread().getName(), params, System.currentTimeMillis());
+    log.info(">>> {}, {}, {}", key(), Thread.currentThread().getName(), System.currentTimeMillis());
     long milli = ThreadLocalRandom.current().nextInt(10000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);
@@ -42,6 +41,6 @@ public class Demo2FixedLeaseTaskRunner implements FixedLeaseLockTaskRunner {
 
   @Override
   public void handleException(BaseRuntimeException exception) {
-    log.error("DEMO2: {}", exception.getMessage());
+    log.error("{}: {}", key(), exception.getMessage());
   }
 }

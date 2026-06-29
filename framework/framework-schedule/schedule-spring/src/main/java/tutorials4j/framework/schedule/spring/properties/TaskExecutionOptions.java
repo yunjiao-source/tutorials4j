@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.properties;
+package tutorials4j.framework.schedule.spring.properties;
 
 import java.time.Duration;
 import java.time.Instant;

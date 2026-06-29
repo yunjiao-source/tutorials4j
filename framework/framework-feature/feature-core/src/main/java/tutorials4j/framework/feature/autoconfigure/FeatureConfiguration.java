@@ -6,13 +6,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.feature.schedule.ScheduleService;
 import tutorials4j.framework.feature.signin.LoggingSignInResultHandler;
 import tutorials4j.framework.feature.signin.SignInFeatureProperties;
 import tutorials4j.framework.feature.signin.SignInResultHandler;
 import tutorials4j.framework.feature.signin.SignInService;
-import tutorials4j.framework.schedule.core.component.ScheduleTaskManager;
-import tutorials4j.framework.schedule.core.repository.TaskRepository;
 
 /**
  * 签到功能配置
@@ -41,13 +38,5 @@ public class FeatureConfiguration {
       SignInResultHandler signInResultHandler, SignInFeatureProperties properties) {
     log.trace("[FEATURE-CORE] Sign In Service");
     return new SignInService(signInResultHandler, properties);
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  ScheduleService scheduleService(
-      ScheduleTaskManager scheduleTaskManager, TaskRepository<?> taskRepository) {
-    log.trace("[FEATURE-CORE] Schedule Service");
-    return new ScheduleService(scheduleTaskManager, taskRepository);
   }
 }

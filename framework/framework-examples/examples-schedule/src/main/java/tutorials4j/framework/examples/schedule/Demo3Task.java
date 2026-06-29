@@ -14,12 +14,15 @@ import tutorials4j.framework.schedule.core.bean.TaskRunner;
  */
 @Slf4j
 @Component
-public class LongTimeTask implements TaskRunner {
+public class Demo3Task implements TaskRunner {
 
   @Override
   public void run(Map<String, String> params) {
     log.info(
-        ">>> {}, {}, {}", Thread.currentThread().getName(), params, System.currentTimeMillis());
+        ">>> demo3, {}, {}, {}",
+        Thread.currentThread().getName(),
+        params,
+        System.currentTimeMillis());
     long milli = ThreadLocalRandom.current().nextInt(5000);
     try {
       TimeUnit.MILLISECONDS.sleep(milli);

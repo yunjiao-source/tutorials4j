@@ -1,4 +1,4 @@
-package tutorials4j.framework.schedule.core.autoconfigure;
+package tutorials4j.framework.schedule.spring.autoconfigure;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.schedule.core.component.MonitorTaskRuntimeDataHandler;
+import tutorials4j.framework.schedule.spring.component.ScheduleTaskManager;
+import tutorials4j.framework.schedule.spring.handler.MonitorTaskRuntimeDataHandler;
 
 /**
  * TODO
@@ -18,17 +19,17 @@ import tutorials4j.framework.schedule.core.component.MonitorTaskRuntimeDataHandl
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(MeterRegistry.class)
-@ConditionalOnBean(MeterRegistry.class)
+@ConditionalOnBean({MeterRegistry.class, ScheduleTaskManager.class})
 public class MonitorScheduleConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[SCHEDULE-CORE] Monitor Schedule Configuration");
+    log.trace("[SCHEDULE-SPRING] Monitor Schedule Configuration");
   }
 
   @Bean
   @ConditionalOnMissingBean
   MonitorTaskRuntimeDataHandler monitorTaskRuntimeDataHandler(MeterRegistry meterRegistry) {
-    log.trace("[SCHEDULE-CORE] Monitor Task Runtime Data Handler");
+    log.trace("[SCHEDULE-SPRING] Monitor Task Runtime Data Handler");
     return new MonitorTaskRuntimeDataHandler(meterRegistry);
   }
 }

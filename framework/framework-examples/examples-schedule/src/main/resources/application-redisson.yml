@@ -5,38 +5,4 @@ spring:
         size: 10  # 设定线程池大小，根据你的任务并发需求调整
       thread-name-prefix: example-scheduler-  # 可选：自定义线程名前缀，便于日志追踪
 
-tutorials4j:
-  schedule:
-    tasks:
-      demo1:
-        enabled: true
-        cron: 0/5 * * * * ?
-        class-simple-name: demo1AutoRenewalBlockTaskRunner
-        description: 测试任务1
-        execution:
-          initial-delay: 10s
-
-      demo2:
-        enabled: true
-        cron: 0/4 * * * * ?
-        class-simple-name: demo2AutoRenewalReentrantTaskRunner
-        description: 测试任务2
-        execution:
-          initial-delay: 10s
-
-      demo3:
-        enabled: true
-        cron: 0/3 * * * * ?
-        class-simple-name: demo3FixedLeaseBlockTaskRunner
-        description: 测试任务3
-        execution:
-          initial-delay: 10s
-
-      demo4:
-        enabled: true
-        cron: 0/2 * * * * ?
-        class-simple-name: demo4FixedLeaseReentrantTaskRunner
-        description: 测试任务4
-        execution:
-          initial-delay: 10s
 
