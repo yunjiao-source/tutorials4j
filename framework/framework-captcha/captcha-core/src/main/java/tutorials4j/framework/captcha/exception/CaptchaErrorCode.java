@@ -18,6 +18,7 @@ public enum CaptchaErrorCode implements ErrorCode {
   CAPTCHA_HAS_EXPIRED(new NotAcceptableFeedback("验证码已过期")),
   CAPTCHA_PARAMETERS_INCOMPLETE(new NotAcceptableFeedback("验证码参数不完整")),
   CAPTCHA_VERIFY_FAILURE(new NotAcceptableFeedback("验证码校验失败")),
+  CAPTCHA_AUTH_FAILURE(new NotAcceptableFeedback("验证码认证失败")),
   ;
 
   private final Feedback feedback;

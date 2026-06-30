@@ -1,7 +1,9 @@
 spring:
   profiles:
-    active: simple
-
+#    active: simple
+    active: interceptor
+#    active: tianai
+#    active: unified
 
   data:
     # Redis 配置
@@ -24,6 +26,7 @@ tutorials4j:
         captcha-graphic:
           timeToLive: 1m
           cacheNullValues: false
+
 
 logging:
   level:

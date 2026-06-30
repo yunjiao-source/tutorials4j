@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.feature.signin.SignInService;
+import tutorials4j.framework.feature.signin.service.SignInService;
 
 /**
  * 测试数据

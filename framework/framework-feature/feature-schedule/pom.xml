@@ -23,7 +23,7 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>schedule-core</artifactId>
+            <artifactId>schedule-spring</artifactId>
             <version>${revision}</version>
         </dependency>
 

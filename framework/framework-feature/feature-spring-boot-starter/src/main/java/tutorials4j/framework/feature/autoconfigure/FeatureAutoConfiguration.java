@@ -4,11 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.feature.captcha.autoconfigure.CaptchaFeatureConfiguration;
-import tutorials4j.framework.feature.crypto.autoconfigure.CryptoFeatureConfiguration;
-import tutorials4j.framework.feature.schedule.autoconfigure.ScheduleFeatureConfiguration;
-import tutorials4j.framework.feature.signin.autoconfigure.SignInFeatureConfiguration;
-import tutorials4j.framework.feature.totp.autoconfigure.TotpFeatureConfiguration;
+import tutorials4j.framework.feature.signin.autoconfigure.SignInServiceFeatureConfiguration;
 
 /**
  * 功能模块自动配置
@@ -17,14 +13,7 @@ import tutorials4j.framework.feature.totp.autoconfigure.TotpFeatureConfiguration
  */
 @Slf4j
 @AutoConfiguration
-@Import({
-  FeatureConfiguration.class,
-  SignInFeatureConfiguration.class,
-  CaptchaFeatureConfiguration.class,
-  CryptoFeatureConfiguration.class,
-  TotpFeatureConfiguration.class,
-  ScheduleFeatureConfiguration.class
-})
+@Import({SignInServiceFeatureConfiguration.class})
 public class FeatureAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

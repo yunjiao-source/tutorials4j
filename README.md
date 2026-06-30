@@ -35,39 +35,6 @@ Java 教程
 ![签到记录查询示例](docs/images/023.jpg)
 
 
-#### profile:captchaendpoint
-
-> hutool验证码接口
-![hutool验证码接口](docs/images/008.jpg)
-![hutool验证码接口](docs/images/009.jpg)
-![hutool验证码接口](docs/images/010.jpg)
-![hutool验证码接口](docs/images/011.jpg)
-
-> tianai验证码接口
-![tianai验证码接口](docs/images/012.jpg)
-![tianai验证码接口](docs/images/013.jpg)
-![tianai验证码接口](docs/images/014.jpg)
-
-
-#### profile:captchatianaiendpoint
-
-> tianai验证码官方标准接口
-![hutool验证码接口](docs/images/015.jpg)
-![hutool验证码接口](docs/images/016.jpg)
-![hutool验证码接口](docs/images/017.jpg)
-![hutool验证码接口](docs/images/018.jpg)
-
-#### profile:captchafilter
-
-> 基于过滤器的验证码校验
-![博客文章提交](docs/images/019.jpg)
-
-
-#### profile:crypto-api
-
-> api请求，响应加解密
-![api请求，响应加解密](docs/images/020.jpg)
-
 #### profile:totp
 
 > 两步验证
@@ -127,6 +94,34 @@ Java 教程
 ![验证码数据](docs/images/038.jpg)
 
 
+#### profile:unified
+
+> hutool验证码接口
+![hutool验证码接口](docs/images/008.jpg)
+![hutool验证码接口](docs/images/009.jpg)
+![hutool验证码接口](docs/images/010.jpg)
+![hutool验证码接口](docs/images/011.jpg)
+
+> tianai验证码接口
+![tianai验证码接口](docs/images/012.jpg)
+![tianai验证码接口](docs/images/013.jpg)
+![tianai验证码接口](docs/images/014.jpg)
+
+
+#### profile:tianai
+
+> tianai验证码官方标准接口
+![hutool验证码接口](docs/images/015.jpg)
+![hutool验证码接口](docs/images/016.jpg)
+![hutool验证码接口](docs/images/017.jpg)
+![hutool验证码接口](docs/images/018.jpg)
+
+#### profile:interceptor
+
+> 基于过滤器的验证码校验
+![博客文章提交](docs/images/019.jpg)
+
+
 ### 加解密模块示例（framework/framework-examples/examples-crypto）
 
 #### profile:simple
@@ -136,6 +131,12 @@ Java 教程
 
 > 摘要计算
 ![摘要计算](docs/images/040.jpg)
+
+
+#### profile:api
+
+> api请求，响应加解密
+![api请求，响应加解密](docs/images/020.jpg)
 
 ### 数据模块示例（framework/framework-examples/examples-data）
 

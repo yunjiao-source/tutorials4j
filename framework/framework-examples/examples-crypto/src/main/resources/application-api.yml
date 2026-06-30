@@ -1,0 +1,22 @@
+tutorials4j:
+  cache:
+    named:
+      defaults:
+        timeToLive: 2m
+        cacheNullValues: false
+        enable-statistics: true
+      caches:
+        crypto-processor:
+          timeToLive: 30s
+          cacheNullValues: false
+          caffeine:
+            expire-after-access: 30s
+            initial-capacity: 2
+            maximum-size: 5
+
+  crypto:
+    web:
+      enabled: true
+  web:
+    cached-body:
+      enabled: true

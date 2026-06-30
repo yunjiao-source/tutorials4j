@@ -20,16 +20,6 @@
             <artifactId>web-core</artifactId>
             <version>${revision}</version>
         </dependency>
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>schedule-core</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>cache-redis</artifactId>
-            <version>${revision}</version>
-        </dependency>
     </dependencies>
 
 </project>

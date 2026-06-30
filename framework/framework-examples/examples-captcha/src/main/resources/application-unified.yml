@@ -1,0 +1,4 @@
+tutorials4j:
+  captcha:
+    web:
+      enabled: true

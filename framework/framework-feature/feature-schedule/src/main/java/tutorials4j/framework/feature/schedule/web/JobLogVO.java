@@ -8,7 +8,7 @@ import tutorials4j.framework.common.core.bean.YesNoEnum;
 import tutorials4j.framework.common.core.entity.BaseVO;
 import tutorials4j.framework.feature.schedule.domain.JobEntity;
 import tutorials4j.framework.feature.schedule.domain.JobLogEntity;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
 
 /**
  * TODO

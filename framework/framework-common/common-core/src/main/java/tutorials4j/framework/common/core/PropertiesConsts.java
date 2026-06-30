@@ -38,6 +38,8 @@ public interface PropertiesConsts {
   /** crypto */
   String PROPERTY_PREFIX_CRYPTO = PROPERTY_PREFIX_TUTORIALS4J + ".crypto";
 
+  String PROPERTY_PREFIX_CRYPTO_WEB = PROPERTY_PREFIX_CRYPTO + ".web";
+
   /** captcha */
   String PROPERTY_PREFIX_CAPTCHA = PROPERTY_PREFIX_TUTORIALS4J + ".captcha";
 
@@ -58,7 +60,7 @@ public interface PropertiesConsts {
 
   String PROPERTY_PREFIX_WEB_TOTP = PROPERTY_PREFIX_WEB + ".totp";
 
-  String PROPERTY_PREFIX_WEB_CACHAED_BODY = PROPERTY_PREFIX_WEB + ".cached-body";
+  String PROPERTY_PREFIX_WEB_CACHED_BODY = PROPERTY_PREFIX_WEB + ".cached-body";
 
   String PROPERTY_PREFIX_WEB_REQUEST_LOGGING = PROPERTY_PREFIX_WEB + ".request-logging";
 

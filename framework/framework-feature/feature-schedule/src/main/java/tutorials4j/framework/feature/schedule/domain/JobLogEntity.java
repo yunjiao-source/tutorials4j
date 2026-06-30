@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import tutorials4j.framework.common.core.bean.YesNoEnum;
 import tutorials4j.framework.data.hibernate.domain.BaseIdEntity;
 import tutorials4j.framework.data.hibernate.domain.YesNoEnumAttributeConverter;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
 
 /**
  * TODO

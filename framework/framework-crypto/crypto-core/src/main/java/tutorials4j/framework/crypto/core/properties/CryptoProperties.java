@@ -22,7 +22,4 @@ public class CryptoProperties {
   private String salt;
   private int saltPosition = 0;
   private int digestCount = 1;
-
-  // 是否开启解密请求与加密响应
-  private boolean bodyCryptoEnabled = false;
 }

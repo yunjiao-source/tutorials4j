@@ -7,8 +7,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.core.bean.YesNoEnum;
 import tutorials4j.framework.common.core.util.ExceptionUtils;
-import tutorials4j.framework.schedule.core.bean.TaskRuntimeData;
-import tutorials4j.framework.schedule.core.component.TaskRuntimeDataHandler;
+import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
+import tutorials4j.framework.schedule.spring.handler.TaskRuntimeDataHandler;
 
 /**
  * TODO

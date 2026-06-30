@@ -12,10 +12,10 @@ import lombok.Data;
  */
 @Data
 public class ExecutionOption {
-  /** 核心线程数，默认 1 */
-  private int corePoolSize = 1;
+  /** 核心线程数，默认 4 */
+  private int corePoolSize = 4;
 
-  private int maximumPoolSize = 3;
+  private int maximumPoolSize = 8;
 
   private String threadNamePrefix = "t4j-thread-pool-";
 

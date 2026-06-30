@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tutorials4j.framework.schedule.core.repository.TaskRepository;
+import tutorials4j.framework.schedule.spring.repository.TaskRepository;
 
 /**
  * TODO

@@ -7,9 +7,16 @@ spring:
 
 tutorials4j:
   schedule:
-    default-execution:
-      max-failure-count: 3
-      initial-delay: 20s
-    all-task-auto-start-on-boot: true
-  feature:
-    schedule-enabled: true
+    spring:
+      default-execution:
+        max-failure-count: 3
+        initial-delay: 20s
+      all-task-auto-start-on-boot: true
+      enabled: true
+
+  cache:
+    lock:
+      redis:
+        auto-renewal:
+          thread-name-prefix: demo-auto-renewal-scheduler-
+          core-pool-size: 2

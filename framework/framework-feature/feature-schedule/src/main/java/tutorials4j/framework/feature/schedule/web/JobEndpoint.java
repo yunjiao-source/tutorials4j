@@ -18,8 +18,8 @@ import tutorials4j.framework.common.core.bean.Result;
 import tutorials4j.framework.feature.schedule.domain.JobEntity;
 import tutorials4j.framework.feature.schedule.domain.JobQuery;
 import tutorials4j.framework.feature.schedule.domain.JobService;
-import tutorials4j.framework.schedule.core.component.ScheduleTaskManager;
 import tutorials4j.framework.schedule.core.exception.ScheduleErrorCode;
+import tutorials4j.framework.schedule.spring.component.ScheduleTaskManager;
 
 /**
  * TODO

@@ -53,6 +53,8 @@ public interface DefaultConsts {
   String HTTP_HEADER_CAPTCHA_CATEGORY = "X-Captcha-Category";
   String HTTP_HEADER_CAPTCHA_CODE = "X-Captcha-Code";
 
+  String HTTP_HEADER_CAPTCHA_AUTH = "X-Captcha-Auth";
+
   String HTTP_HEADER_TOTP_AUTH_USERNAME = "X-Totp-Auth-Username";
   String HTTP_HEADER_TOTP_AUTH_CODE = "X-Totp-Auth-Code";
 

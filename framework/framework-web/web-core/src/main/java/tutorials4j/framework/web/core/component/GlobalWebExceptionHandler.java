@@ -9,7 +9,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 import tutorials4j.framework.common.core.bean.Result;
 import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.spring.web.GlobalExceptionHandler;
@@ -23,16 +22,6 @@ import tutorials4j.framework.common.spring.web.GlobalExceptionHandler;
 @RestControllerAdvice
 @Order(20)
 public class GlobalWebExceptionHandler {
-
-  @ExceptionHandler(NoResourceFoundException.class)
-  public Result<Void> handleNoResourceFound(
-      NoResourceFoundException ex, HttpServletRequest request, HttpServletResponse response) {
-    Result<Void> result =
-        GlobalExceptionHandler.resolveException(
-            ex, request.getRequestURI(), BaseErrorCode.STATIC_RESOURCE_NOT_FOUND);
-    response.setStatus(result.getStatus());
-    return result;
-  }
 
   /** 处理 @RequestBody 参数校验失败 */
   @ExceptionHandler(MethodArgumentNotValidException.class)

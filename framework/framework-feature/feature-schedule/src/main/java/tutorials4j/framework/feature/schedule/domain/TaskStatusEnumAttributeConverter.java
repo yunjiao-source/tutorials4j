@@ -1,7 +1,7 @@
 package tutorials4j.framework.feature.schedule.domain;
 
 import tutorials4j.framework.data.hibernate.convert.AbstractBaseEnumAttributeConverter;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
 
 /**
  * TODO

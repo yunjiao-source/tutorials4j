@@ -20,7 +20,7 @@ import tutorials4j.framework.web.rest.properties.CachedBodyWebProperties;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
-    prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CACHAED_BODY,
+    prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CACHED_BODY,
     name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties(CachedBodyWebProperties.class)
 public class CachedBodyConfiguration {

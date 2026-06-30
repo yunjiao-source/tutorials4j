@@ -17,6 +17,7 @@ import tutorials4j.framework.crypto.core.processor.CryptoProcessorFactory;
 import tutorials4j.framework.crypto.core.processor.DigestProcessor;
 import tutorials4j.framework.crypto.core.processor.DigestProcessorFactory;
 import tutorials4j.framework.crypto.core.properties.CryptoProperties;
+import tutorials4j.framework.crypto.core.properties.WebCryptoProperties;
 
 /**
  * TODO
@@ -25,7 +26,7 @@ import tutorials4j.framework.crypto.core.properties.CryptoProperties;
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({CryptoProperties.class})
+@EnableConfigurationProperties({CryptoProperties.class, WebCryptoProperties.class})
 public class CryptoConfiguration {
   @PostConstruct
   public void postConstruct() {

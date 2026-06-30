@@ -1,16 +1,21 @@
 package tutorials4j.framework.captcha.web.autoconfigure;
 
+import cloud.tianai.captcha.application.ImageCaptchaApplication;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.framework.captcha.support.CaptchaServiceFactory;
-import tutorials4j.framework.captcha.web.component.CaptchaAuthHandlerInterceptor;
+import tutorials4j.framework.captcha.web.endpoint.TianaiCaptchaEndpoint;
+import tutorials4j.framework.captcha.web.endpoint.UnifiedCaptchaEndpoint;
+import tutorials4j.framework.captcha.web.interceptor.CaptchaAuthHandlerInterceptor;
 import tutorials4j.framework.captcha.web.properties.WebCaptchaProperties;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
@@ -30,6 +35,21 @@ public class WebCaptchaConfiguration {
   @PostConstruct
   public void postConstruct() {
     log.trace("[CAPTCHA-WEB] Web Captcha Configuration");
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  UnifiedCaptchaEndpoint unifiedCaptchaEndpoint(CaptchaServiceFactory factory) {
+    log.trace("[CAPTCHA-WEB] Unified Captcha Endpoint");
+    return new UnifiedCaptchaEndpoint(factory);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  TianaiCaptchaEndpoint tianaiCaptchaEndpoint(
+      CaptchaServiceFactory factory, ImageCaptchaApplication imageCaptchaApplication) {
+    log.trace("[CAPTCHA-WEB] Tianai Captcha Endpoint");
+    return new TianaiCaptchaEndpoint(factory, imageCaptchaApplication);
   }
 
   @Slf4j

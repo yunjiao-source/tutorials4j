@@ -227,7 +227,8 @@ public class ScheduleTaskManager implements SchedulingConfigurer {
 
   private void notifyTaskRuntimeDataHandlers(TaskRuntimeData data) {
     if (taskRuntimeDataHandlers == null || taskRuntimeDataHandlers.isEmpty()) {
-      log.warn("没有注册任务事件处理器，TaskRuntimeData={}", data);
+      log.warn(
+          "没有注册任务事件处理器'{}'，TaskRuntimeData={}", TaskRuntimeDataHandler.class.getSimpleName(), data);
       return;
     }
 

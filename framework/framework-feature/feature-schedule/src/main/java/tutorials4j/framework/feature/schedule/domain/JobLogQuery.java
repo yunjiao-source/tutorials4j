@@ -7,7 +7,7 @@ import java.util.Objects;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.framework.common.core.bean.YesNoEnum;
-import tutorials4j.framework.schedule.core.bean.TaskStatusEnum;
+import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
 
 /**
  * TODO

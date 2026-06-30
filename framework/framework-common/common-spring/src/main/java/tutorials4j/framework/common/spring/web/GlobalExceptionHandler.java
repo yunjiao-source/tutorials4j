@@ -32,6 +32,7 @@ public class GlobalExceptionHandler {
   private static final Map<String, ErrorCode> EXCEPTION_DICTIONARY = new HashMap<>();
 
   static {
+    EXCEPTION_DICTIONARY.put("NoResourceFoundException", BaseErrorCode.RESOURCE_NOT_FOUND);
     EXCEPTION_DICTIONARY.put(
         "HttpMediaTypeNotSupportedException", BaseErrorCode.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE);
     EXCEPTION_DICTIONARY.put(

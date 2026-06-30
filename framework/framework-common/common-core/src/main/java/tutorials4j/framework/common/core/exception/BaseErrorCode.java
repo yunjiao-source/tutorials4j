@@ -36,7 +36,7 @@ public enum BaseErrorCode implements ErrorCode {
   SERVER_ERROR(new InternalServerErrorFeedback("服务器遇到意外情况，无法满足请求")),
   ILLEGAL_ARGUMENT_EXCEPTION(new InternalServerErrorFeedback("参数不合法错误，请仔细确认参数使用是否正确")),
   IO_EXCEPTION(new InternalServerErrorFeedback("IO异常")),
-  STATIC_RESOURCE_NOT_FOUND(new NotFoundFeedback("静态资源未找到")),
+  RESOURCE_NOT_FOUND(new NotFoundFeedback("资源未找到")),
   MISSING_SERVLET_REQUEST_PARAMETER_EXCEPTION(
       new InternalServerErrorFeedback("接口参数使用错误或必要参数缺失，请查阅接口文档")),
   NULL_POINTER_EXCEPTION(new InternalServerErrorFeedback("后台代码执行过程中出现了空值")),

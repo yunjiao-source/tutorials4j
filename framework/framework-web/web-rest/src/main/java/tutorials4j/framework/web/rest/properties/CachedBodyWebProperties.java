@@ -12,7 +12,7 @@ import tutorials4j.framework.common.spring.web.ServletFilterOptions;
  * @author Yun Jiao
  */
 @Data
-@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CACHAED_BODY)
+@ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_CACHED_BODY)
 public class CachedBodyWebProperties {
   private boolean enabled = false;
 

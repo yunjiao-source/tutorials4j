@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.framework.common.core.bean.Result;
-import tutorials4j.framework.feature.schedule.ScheduleService;
-import tutorials4j.framework.feature.schedule.TaskExecutionDetails;
+import tutorials4j.framework.schedule.spring.bean.TaskExecutionDetails;
+import tutorials4j.framework.schedule.spring.component.ScheduleService;
 
 /**
  * TODO

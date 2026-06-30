@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
-import tutorials4j.framework.crypto.web.body.CryptoRequestBodyAdvice;
-import tutorials4j.framework.crypto.web.body.CryptoResponseBodyAdvice;
+import tutorials4j.framework.crypto.core.properties.CryptoProperties;
+import tutorials4j.framework.crypto.web.advice.CryptoRequestBodyAdvice;
+import tutorials4j.framework.crypto.web.advice.CryptoResponseBodyAdvice;
+import tutorials4j.framework.crypto.web.endpoint.CryptoEndpoint;
 
 /**
  * TODO
@@ -19,8 +21,8 @@ import tutorials4j.framework.crypto.web.body.CryptoResponseBodyAdvice;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
-    prefix = PropertiesConsts.PROPERTY_PREFIX_CRYPTO,
-    name = "body-crypto-enabled")
+    prefix = PropertiesConsts.PROPERTY_PREFIX_CRYPTO_WEB,
+    name = PropertiesConsts.PROPERTY_ENABLED)
 public class CryptoWebConfiguration {
   @PostConstruct
   public void postConstruct() {
@@ -41,5 +43,13 @@ public class CryptoWebConfiguration {
       CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate) {
     log.trace("[CRYPTO-WEB] Crypto Response Body Advice");
     return new CryptoResponseBodyAdvice(cryptoProcessorCacheTemplate);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  CryptoEndpoint cryptoEndpoint(CryptoProperties properties) {
+    log.trace("[CRYPTO-WEB] Crypto Endpoint");
+    return new CryptoEndpoint(
+        properties.getAsymmetricCryptoStrategy(), properties.getSymmetricCryptoStrategy());
   }
 }
