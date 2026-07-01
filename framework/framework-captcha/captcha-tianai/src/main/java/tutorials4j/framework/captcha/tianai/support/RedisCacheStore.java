@@ -48,12 +48,12 @@ public class RedisCacheStore implements CacheStore {
 
   @Override
   public Long incr(String key, long delta, Long expire, TimeUnit timeUnit) {
-    throw BaseErrorCode.METHOD_NOT_ALLOWED.throwed();
+    throw BaseErrorCode.CLASS_METHOD_NOT_IMPLEMENTED.throwed();
   }
 
   @Override
   public Long getLong(String key) {
-    throw BaseErrorCode.METHOD_NOT_ALLOWED.throwed();
+    throw BaseErrorCode.CLASS_METHOD_NOT_IMPLEMENTED.throwed();
   }
 
   @Override

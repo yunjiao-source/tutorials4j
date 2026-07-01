@@ -1,7 +1,5 @@
 package tutorials4j.framework.common.core.exception.feedback;
 
-import cn.hutool.http.HttpStatus;
-
 /**
  * TODO
  *
@@ -10,6 +8,6 @@ import cn.hutool.http.HttpStatus;
 public class BadRequestErrorFeedback extends Feedback {
 
   public BadRequestErrorFeedback(String message) {
-    super(message, HttpStatus.HTTP_BAD_REQUEST);
+    super(message, 400);
   }
 }

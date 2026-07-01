@@ -1,7 +1,5 @@
 package tutorials4j.framework.common.core.exception.feedback;
 
-import cn.hutool.http.HttpStatus;
-
 /**
  * TODO
  *
@@ -10,6 +8,6 @@ import cn.hutool.http.HttpStatus;
 public class UnauthorizedFeedback extends Feedback {
 
   public UnauthorizedFeedback(String message) {
-    super(message, HttpStatus.HTTP_UNAUTHORIZED);
+    super(message, 401);
   }
 }

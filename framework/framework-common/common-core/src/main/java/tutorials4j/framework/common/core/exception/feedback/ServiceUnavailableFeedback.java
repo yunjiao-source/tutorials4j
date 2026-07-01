@@ -1,7 +1,5 @@
 package tutorials4j.framework.common.core.exception.feedback;
 
-import cn.hutool.http.HttpStatus;
-
 /**
  * TODO
  *
@@ -10,6 +8,6 @@ import cn.hutool.http.HttpStatus;
 public class ServiceUnavailableFeedback extends Feedback {
 
   public ServiceUnavailableFeedback(String message) {
-    super(message, HttpStatus.HTTP_UNAVAILABLE);
+    super(message, 503);
   }
 }

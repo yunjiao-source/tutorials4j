@@ -34,7 +34,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().writeValueAsString(domain);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.THIRD_PARTY_EXCEPTION.throwed(e);
+      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
     }
   }
 
@@ -46,7 +46,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readValue(content, valueType);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.THIRD_PARTY_EXCEPTION.throwed(e);
+      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
     }
   }
 
@@ -54,7 +54,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().convertValue(content, valueType);
     } catch (IllegalArgumentException e) {
-      throw BaseErrorCode.THIRD_PARTY_EXCEPTION.throwed(e);
+      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
     }
   }
 
@@ -62,7 +62,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readValue(content, typeReference);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.THIRD_PARTY_EXCEPTION.throwed(e);
+      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
     }
   }
 
@@ -70,7 +70,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readValue(content, javaType);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.THIRD_PARTY_EXCEPTION.throwed(e);
+      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
     }
   }
 
@@ -108,7 +108,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readTree(content);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.THIRD_PARTY_EXCEPTION.throwed(e);
+      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
     }
   }
 
