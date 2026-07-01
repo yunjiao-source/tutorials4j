@@ -309,7 +309,7 @@
                 // 未授权：用户名密码错误或2FA失败
                 showLoginMessage('用户名/密码错误 或 2FA验证码无效');
             } else {
-                showLoginMessage(`登录失败 (${response.status}): ${responseText}`, 'error');
+                showLoginMessage(`登录失败`, 'error');
             }
         } catch (err) {
             console.error('登录请求异常:', err);

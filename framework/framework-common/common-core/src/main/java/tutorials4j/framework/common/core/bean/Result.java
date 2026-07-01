@@ -1,8 +1,10 @@
 package tutorials4j.framework.common.core.bean;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import lombok.Data;
+import org.apache.commons.lang3.tuple.Pair;
 import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.core.exception.ErrorCode;
 import tutorials4j.framework.common.core.exception.feedback.Feedback;
@@ -72,7 +74,7 @@ public class Result<T> {
     return this;
   }
 
-  public Result<T> errorParams(Map<String, Object> params) {
+  public Result<T> errorParams(List<Pair<String, Object>> params) {
     if (this.error == null) {
       this.error = new Error();
     }
@@ -101,6 +103,6 @@ public class Result<T> {
     private String detail;
     private Map<String, String> fieldErrors;
     private StackTraceElement[] stackTrace;
-    private Map<String, Object> params;
+    private List<Pair<String, Object>> params;
   }
 }

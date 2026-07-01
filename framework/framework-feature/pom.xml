@@ -17,7 +17,6 @@
     <modules>
         <module>feature-core</module>
         <module>feature-sign-in</module>
-        <module>feature-totp</module>
         <module>feature-schedule</module>
         <module>feature-spring-boot-starter</module>
     </modules>

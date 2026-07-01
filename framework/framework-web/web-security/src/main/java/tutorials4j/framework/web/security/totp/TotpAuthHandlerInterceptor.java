@@ -6,9 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
-import tutorials4j.framework.common.core.exception.BaseErrorCode;
+import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.common.spring.util.SecurityUtils;
 import tutorials4j.framework.web.core.annotation.TotpAuth;
@@ -45,12 +44,11 @@ public class TotpAuthHandlerInterceptor implements HandlerInterceptor {
       if (StringUtils.isAnyBlank(userName, code)) {
         throw WebErrorCode.WEB_TOTP_PARAMETERS_INCOMPLETE.throwed();
       }
-      if (NumberUtils.isCreatable(code)) {
-        throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION.throwed().param("code", code);
-      }
       if (!googleAuthService.verifyByUserName(userName, Integer.parseInt(code))) {
         throw WebErrorCode.WEB_TOTP_VERIFY_FAILURE.throwed();
       }
+
+      response.setHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_AUTH, "SUCCESS");
     }
 
     return true;

@@ -23,6 +23,7 @@ public enum WebErrorCode implements ErrorCode {
   WEB_SIGNATURE_VERIFY_FAILURE(new NotAcceptableFeedback("签名校验失败")),
   WEB_TOTP_PARAMETERS_INCOMPLETE(new NotAcceptableFeedback("TOTP参数不完整")),
   WEB_TOTP_VERIFY_FAILURE(new NotAcceptableFeedback("TOTP校验失败")),
+  WEB_TOTP_AUTH_FAILURE(new NotAcceptableFeedback("TOTP认证失败")),
   WEB_TOTP_SECRET_NOT_EXIST(new NotAcceptableFeedback("TOTP密钥不存在")),
   ;
 

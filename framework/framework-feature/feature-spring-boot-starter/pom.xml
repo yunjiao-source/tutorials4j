@@ -20,11 +20,6 @@
             <artifactId>feature-schedule</artifactId>
             <version>${revision}</version>
         </dependency>
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>feature-totp</artifactId>
-            <version>${revision}</version>
-        </dependency>
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>

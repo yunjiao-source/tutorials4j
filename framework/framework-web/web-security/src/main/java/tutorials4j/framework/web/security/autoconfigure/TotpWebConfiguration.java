@@ -22,6 +22,7 @@ import tutorials4j.framework.web.security.properties.TotpWebProperties.Authentic
 import tutorials4j.framework.web.security.totp.GoogleAuthService;
 import tutorials4j.framework.web.security.totp.GoogleAuthenticatorConfigCustomizer;
 import tutorials4j.framework.web.security.totp.GoogleYamlCredentialRepository;
+import tutorials4j.framework.web.security.totp.TotpAuthEndpoint;
 import tutorials4j.framework.web.security.totp.TotpAuthHandlerInterceptor;
 
 /**
@@ -38,7 +39,7 @@ import tutorials4j.framework.web.security.totp.TotpAuthHandlerInterceptor;
 public class TotpWebConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[WEB-SECURITY] Web Google Configuration");
+    log.trace("[WEB-SECURITY] Totp Web Configuration");
   }
 
   @Bean
@@ -86,6 +87,13 @@ public class TotpWebConfiguration {
   TotpAuthHandlerInterceptor totpAuthHandlerInterceptor(GoogleAuthService googleAuthService) {
     log.trace("[WEB-SECURITY] Totp Auth Handler Interceptor");
     return new TotpAuthHandlerInterceptor(googleAuthService);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  TotpAuthEndpoint totpAuthEndpoint(GoogleAuthService googleAuthService) {
+    log.trace("[WEB-SECURITY] Totp Auth Endpoint");
+    return new TotpAuthEndpoint(googleAuthService);
   }
 
   @Slf4j

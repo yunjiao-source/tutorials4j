@@ -1,8 +1,7 @@
 spring:
   profiles:
 #    active: signin
-#    active: totp
-#    active: schedule
+    active: schedule
 
   data:
     # Redis 配置

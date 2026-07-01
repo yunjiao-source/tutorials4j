@@ -10,5 +10,5 @@ tutorials4j:
         - username: zhangs
           security-key: GP2GM5U4WVNXSPD2Y3WSKZQTMW4TZRYL
 
-  feature:
-    totp-enabled: true
+      interceptor:
+        include-path-patterns: /post

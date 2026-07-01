@@ -57,6 +57,7 @@ public interface DefaultConsts {
 
   String HTTP_HEADER_TOTP_AUTH_USERNAME = "X-Totp-Auth-Username";
   String HTTP_HEADER_TOTP_AUTH_CODE = "X-Totp-Auth-Code";
+  String HTTP_HEADER_TOTP_AUTH = "X-Totp-Auth";
 
   String HTTP_HEADER_CRYPTO_SECRET_KEY_HEX = "X-Crypto-Secret-Key-Hex";
 
