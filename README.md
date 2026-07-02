@@ -35,14 +35,6 @@ Java 教程
 ![签到记录查询示例](docs/images/023.jpg)
 
 
-#### profile:totp
-
-> 两步验证
-![两步验证](docs/images/032.jpg)
-
-> 博客发布(2fa)
-![博客发布(2fa)](docs/images/033.jpg)
-
 
 #### profile:schedule
 
@@ -237,3 +229,11 @@ Java 教程
 
 > 校验异常演示(响应式)
 ![校验异常演示(响应式)](docs/images/052.jpg)
+
+#### profile:totp
+
+> 两步验证
+![两步验证](docs/images/032.jpg)
+
+> 博客发布(2fa)
+![博客发布(2fa)](docs/images/033.jpg)
