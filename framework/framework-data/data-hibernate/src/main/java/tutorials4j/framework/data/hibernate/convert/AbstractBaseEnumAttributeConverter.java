@@ -3,7 +3,6 @@ package tutorials4j.framework.data.hibernate.convert;
 import jakarta.persistence.AttributeConverter;
 import java.util.concurrent.ConcurrentHashMap;
 import tutorials4j.framework.common.core.bean.BaseEnum;
-import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.core.support.EnumCache;
 
 /**
@@ -49,9 +48,7 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
   private void initCache() {
     E[] enumConstants = enumClass.getEnumConstants();
     if (enumConstants == null) {
-      throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION
-          .throwed("不是枚举类型")
-          .param("class", enumClass.getSimpleName());
+      throw new IllegalArgumentException("不是枚举类型:" + enumClass.getSimpleName());
     }
     EnumCache.registerByValue(enumClass, enumConstants, BaseEnum::getCode);
   }
@@ -68,10 +65,8 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
     }
     E enumValue = EnumCache.findByValue(enumClass, dbData);
     if (enumValue == null) {
-      throw BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION
-          .throwed("不存在的枚举代码")
-          .param("enum", enumClass.getName())
-          .param("code", dbData);
+      throw new IllegalArgumentException(
+          "不存在的枚举代码, enum=" + enumClass.getSimpleName() + ", code=" + dbData);
     }
     return enumValue;
   }

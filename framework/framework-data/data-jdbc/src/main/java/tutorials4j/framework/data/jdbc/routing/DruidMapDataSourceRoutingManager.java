@@ -4,7 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import tutorials4j.framework.common.core.JdbcOptions;
-import tutorials4j.framework.common.core.exception.BaseErrorCode;
+import tutorials4j.framework.common.core.exception.WrapCheckException;
 import tutorials4j.framework.data.core.exception.DataErrorCode;
 
 /**
@@ -32,7 +32,7 @@ public class DruidMapDataSourceRoutingManager extends AbstractMapDataSourceRouti
         newDataSource.init();
         return newDataSource;
       } catch (Exception e) {
-        throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
+        throw new WrapCheckException("创建数据源异常", e);
       }
     } else {
       throw DataErrorCode.DATA_SOURCE_NOT_EXIST

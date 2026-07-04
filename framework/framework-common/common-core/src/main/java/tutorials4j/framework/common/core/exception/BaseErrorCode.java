@@ -9,7 +9,6 @@ import tutorials4j.framework.common.core.exception.feedback.MethodNotAllowedFeed
 import tutorials4j.framework.common.core.exception.feedback.NoContentFeedback;
 import tutorials4j.framework.common.core.exception.feedback.NotAcceptableFeedback;
 import tutorials4j.framework.common.core.exception.feedback.NotFoundFeedback;
-import tutorials4j.framework.common.core.exception.feedback.NotImplementedFeedback;
 import tutorials4j.framework.common.core.exception.feedback.OkFeedback;
 import tutorials4j.framework.common.core.exception.feedback.PreconditionFailedFeedback;
 import tutorials4j.framework.common.core.exception.feedback.ServiceUnavailableFeedback;
@@ -37,12 +36,6 @@ public enum BaseErrorCode implements ErrorCode {
   MISSING_SERVLET_REQUEST_PARAMETER_EXCEPTION(new InternalServerErrorFeedback("请求参数缺失")),
   NULL_POINTER_EXCEPTION(new InternalServerErrorFeedback("发生了空指针异常")),
   TYPE_MISMATCH_EXCEPTION(new InternalServerErrorFeedback("类型转换失败")),
-  CHECK_EXCEPTION(new InternalServerErrorFeedback("检查异常")),
-  CLASS_METHOD_NOT_IMPLEMENTED(new InternalServerErrorFeedback("类方法未实现")),
-  ILLEGAL_ARGUMENT_EXCEPTION(
-      new InternalServerErrorFeedback("调用方传递给方法或 API 的某个参数值是无效的、不被接受的，或不符合预期的格式/范围")),
-  IO_EXCEPTION(new InternalServerErrorFeedback("IO异常")),
-  NOT_IMPLEMENTED(new NotImplementedFeedback("方法未实现")),
   SERVICE_UNAVAILABLE(new ServiceUnavailableFeedback("服务不可用"));
 
   private final Feedback feedback;

@@ -17,7 +17,7 @@ import tutorials4j.framework.feature.signin.properties.SignInFeatureProperties;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class SignInService {
+public class SignInTemplateFactory {
   private final Map<String, SignInTemplate> templateMap = new ConcurrentHashMap<>();
   private final List<SignInResultHandler> signInResultHandlers;
   private final SignInFeatureProperties properties;

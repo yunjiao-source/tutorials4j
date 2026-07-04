@@ -1,4 +1,4 @@
-package tutorials4j.framework.feature.exception;
+package tutorials4j.framework.feature.core.exception;
 
 import lombok.Getter;
 import tutorials4j.framework.common.core.exception.ErrorCode;

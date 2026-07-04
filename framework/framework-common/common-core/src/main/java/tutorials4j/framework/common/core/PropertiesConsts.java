@@ -78,10 +78,13 @@ public interface PropertiesConsts {
   /** tenant */
   String PROPERTY_PREFIX_TENANT = PROPERTY_PREFIX_TUTORIALS4J + ".tenant";
 
+  /** message */
+  String PROPERTY_PREFIX_MESSAGE = PROPERTY_PREFIX_TUTORIALS4J + ".message";
+
+  String PROPERTY_PREFIX_MESSAGE_REDIS = PROPERTY_PREFIX_MESSAGE + ".redis";
+
   /** feature */
   String PROPERTY_PREFIX_FEATURE = PROPERTY_PREFIX_TUTORIALS4J + ".feature";
 
   String PROPERTY_PREFIX_FEATURE_SIGN_IN = PROPERTY_PREFIX_FEATURE + ".sign-in";
-
-  String PROPERTY_PREFIX_FEATURE_CAPTCHA = PROPERTY_PREFIX_FEATURE + ".captcha";
 }

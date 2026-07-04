@@ -1,0 +1,8 @@
+tutorials4j:
+  message:
+    redis:
+      list-queues:
+        sms:
+          sleep-when-exception: 5s
+          sleep-when-no-data: 5s
+          block-timeout: 3s

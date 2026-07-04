@@ -5,7 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.common.core.exception.BaseRuntimeException;
 import tutorials4j.framework.schedule.redis.AutoRenewalLockTaskRunner;
 
 /**
@@ -34,7 +33,7 @@ public class Demo1AutoRenewalTaskRunner implements AutoRenewalLockTaskRunner {
   }
 
   @Override
-  public void handleException(BaseRuntimeException exception) {
+  public void handleException(Exception exception) {
     log.error("{}: {}", key(), exception.getMessage());
   }
 }

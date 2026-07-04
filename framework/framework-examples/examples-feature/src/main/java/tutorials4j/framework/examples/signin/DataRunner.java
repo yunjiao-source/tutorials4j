@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.feature.signin.service.SignInService;
+import tutorials4j.framework.feature.signin.service.SignInTemplateFactory;
 
 /**
  * 测试数据
@@ -17,7 +17,7 @@ import tutorials4j.framework.feature.signin.service.SignInService;
 @RequiredArgsConstructor
 public class DataRunner implements CommandLineRunner {
   private static final String SOURCE = "web_app";
-  private final SignInService signInService;
+  private final SignInTemplateFactory signInTemplateFactory;
 
   @Override
   public void run(String... args) throws Exception {
@@ -26,7 +26,7 @@ public class DataRunner implements CommandLineRunner {
     IntStream.range(1, 3)
         .forEach(
             i -> {
-              signInService.template(SOURCE).signIn("demo_user", now.minusDays(i));
+              signInTemplateFactory.template(SOURCE).signIn("demo_user", now.minusDays(i));
             });
 
     YearMonth yearMonth = YearMonth.now();
@@ -35,6 +35,6 @@ public class DataRunner implements CommandLineRunner {
 
     firstDay
         .datesUntil(lastDay.plusDays(1))
-        .forEach(date -> signInService.template(SOURCE).signIn("demo_user1", date));
+        .forEach(date -> signInTemplateFactory.template(SOURCE).signIn("demo_user1", date));
   }
 }

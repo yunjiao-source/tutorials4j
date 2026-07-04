@@ -2,7 +2,6 @@ package tutorials4j.framework.common.spring.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.core.bean.Result;
 import tutorials4j.framework.common.core.exception.BaseErrorCode;
-import tutorials4j.framework.common.core.exception.BaseRuntimeException;
+import tutorials4j.framework.common.core.exception.ErrorCodeException;
 
 /**
  * TODO
@@ -28,19 +27,17 @@ import tutorials4j.framework.common.core.exception.BaseRuntimeException;
 @RestControllerAdvice
 @Order(300)
 public class GlobalExceptionHandler extends AbstractExceptionHandler {
-  @ExceptionHandler(BaseRuntimeException.class)
+  @ExceptionHandler(ErrorCodeException.class)
   public Result<Void> handleBaseException(
-      BaseRuntimeException ex, HttpServletRequest request, HttpServletResponse response) {
+      ErrorCodeException ex, HttpServletRequest request, HttpServletResponse response) {
     Result<Void> result =
         ex.getResult()
             .path(request.getRequestURI())
             .traceId(MDC.get(DefaultConsts.HTTP_HEADER_TRACE_ID));
-    if (ex.getErrorCode().getFeedback().isSystemError()) {
-      log.error("系统异常", ex);
-    } else {
-      log.warn("业务异常: {}", result);
-    }
+
     response.setStatus(result.getStatus());
+
+    log.warn("业务异常: {}", result);
     return result;
   }
 
@@ -50,6 +47,8 @@ public class GlobalExceptionHandler extends AbstractExceptionHandler {
 
     Result<Void> result = resolveException(ex, request.getRequestURI());
     response.setStatus(result.getStatus());
+
+    log.error("系统异常", ex);
     return result;
   }
 
@@ -57,6 +56,9 @@ public class GlobalExceptionHandler extends AbstractExceptionHandler {
   protected List<ExceptionMapping> getExceptionMappings() {
     List<ExceptionMapping> mappings = new ArrayList<>();
     // ========== 4xx 客户端异常（具体类优先） ==========
+    mappings.add(
+        new ExceptionMapping(
+            UnsupportedOperationException.class, BaseErrorCode.INTERNAL_SERVER_ERROR));
     mappings.add(
         new ExceptionMapping(
             HttpMediaTypeNotSupportedException.class, BaseErrorCode.HTTP_MEDIA_TYPE_UNSUPPORTED));
@@ -72,11 +74,7 @@ public class GlobalExceptionHandler extends AbstractExceptionHandler {
     mappings.add(
         new ExceptionMapping(NullPointerException.class, BaseErrorCode.NULL_POINTER_EXCEPTION));
     mappings.add(
-        new ExceptionMapping(
-            IllegalArgumentException.class, BaseErrorCode.ILLEGAL_ARGUMENT_EXCEPTION));
-    mappings.add(
         new ExceptionMapping(TypeMismatchException.class, BaseErrorCode.TYPE_MISMATCH_EXCEPTION));
-    mappings.add(new ExceptionMapping(IOException.class, BaseErrorCode.IO_EXCEPTION));
 
     return mappings;
   }

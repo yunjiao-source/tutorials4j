@@ -82,12 +82,7 @@ public abstract class AbstractExceptionHandler {
       default -> {}
     }
 
-    if (errorCode.getFeedback().isSystemError()) {
-      result.errorStackTrace(ex.getStackTrace());
-      log.error("系统异常", ex);
-    } else {
-      log.warn("系统警告: {}", result);
-    }
+    result.errorStackTrace(ex.getStackTrace());
     return result;
   }
 

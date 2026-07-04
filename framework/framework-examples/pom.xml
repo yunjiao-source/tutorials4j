@@ -24,6 +24,7 @@
         <module>examples-crypto</module>
         <module>examples-feature</module>
         <module>examples-schedule</module>
+        <module>examples-message</module>
     </modules>
 
     <dependencies>

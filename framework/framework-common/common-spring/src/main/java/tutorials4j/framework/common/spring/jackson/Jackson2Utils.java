@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.Setter;
-import tutorials4j.framework.common.core.exception.BaseErrorCode;
+import tutorials4j.framework.common.core.exception.WrapCheckException;
 
 /**
  * TODO
@@ -34,7 +34,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().writeValueAsString(domain);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 
@@ -46,7 +46,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readValue(content, valueType);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 
@@ -54,7 +54,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().convertValue(content, valueType);
     } catch (IllegalArgumentException e) {
-      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 
@@ -62,7 +62,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readValue(content, typeReference);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 
@@ -70,7 +70,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readValue(content, javaType);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 
@@ -108,7 +108,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readTree(content);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.CHECK_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 
@@ -116,7 +116,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().readTree(jsonParser);
     } catch (IOException e) {
-      throw BaseErrorCode.IO_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 
@@ -124,7 +124,7 @@ public class Jackson2Utils {
     try {
       return getObjectMapper().createParser(content);
     } catch (IOException e) {
-      throw BaseErrorCode.IO_EXCEPTION.throwed(e);
+      throw new WrapCheckException("字符串转换对象异常", e);
     }
   }
 

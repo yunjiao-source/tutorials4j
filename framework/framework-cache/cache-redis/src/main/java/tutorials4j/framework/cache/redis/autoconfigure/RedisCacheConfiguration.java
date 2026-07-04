@@ -81,16 +81,17 @@ public class RedisCacheConfiguration {
   @Bean
   @ConditionalOnMissingBean
   RedisTemplateDecorator redisTemplateDecorator(
-      CacheProperties properties,
-      StringRedisTemplate stringRedisTemplate,
-      RedisTemplate<Object, Object> redisTemplate) {
+      RedisConnectionFactory redisConnectionFactory, CacheProperties properties) {
     log.trace("[CACHE-REDIS] Redis Template Decorator");
 
     // 基于租户key的序列化器
     TenantKeySerializer serializer = new TenantKeySerializer(properties.getTemplateCacheName());
+    StringRedisTemplate stringRedisTemplate = new StringRedisTemplate(redisConnectionFactory);
     stringRedisTemplate.setKeySerializer(serializer);
     stringRedisTemplate.setHashKeySerializer(serializer);
 
+    RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setConnectionFactory(redisConnectionFactory);
     redisTemplate.setKeySerializer(serializer);
     redisTemplate.setHashKeySerializer(serializer);
 

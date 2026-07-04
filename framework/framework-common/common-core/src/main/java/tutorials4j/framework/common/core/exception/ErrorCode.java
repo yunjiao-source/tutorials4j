@@ -10,19 +10,19 @@ import tutorials4j.framework.common.core.exception.feedback.Feedback;
 public interface ErrorCode {
   Feedback getFeedback();
 
-  default BaseRuntimeException throwed() {
-    return new BaseRuntimeException(this);
+  default ErrorCodeException throwed() {
+    return new ErrorCodeException(this);
   }
 
-  default BaseRuntimeException throwed(String message) {
-    return new BaseRuntimeException(this, message);
+  default ErrorCodeException throwed(String message) {
+    return new ErrorCodeException(this, message);
   }
 
-  default BaseRuntimeException throwed(String message, Throwable cause) {
-    return new BaseRuntimeException(this, message, cause);
+  default ErrorCodeException throwed(String message, Throwable cause) {
+    return new ErrorCodeException(this, message, cause);
   }
 
-  default BaseRuntimeException throwed(Throwable cause) {
-    return new BaseRuntimeException(this, cause);
+  default ErrorCodeException throwed(Throwable cause) {
+    return new ErrorCodeException(this, cause);
   }
 }

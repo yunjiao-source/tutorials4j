@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.feature.signin.properties.SignInFeatureProperties;
 import tutorials4j.framework.feature.signin.service.SignInEndpoint;
 import tutorials4j.framework.feature.signin.service.SignInResultHandler;
-import tutorials4j.framework.feature.signin.service.SignInService;
+import tutorials4j.framework.feature.signin.service.SignInTemplateFactory;
 
 /**
  * 功能配置
@@ -28,17 +28,17 @@ public class SignInServiceFeatureConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  SignInEndpoint signInEndpoint(SignInService signInService) {
+  SignInEndpoint signInEndpoint(SignInTemplateFactory signInTemplateFactory) {
     log.trace("[FEATURE-SIGN-IN] Sign In Endpoint");
-    return new SignInEndpoint(signInService);
+    return new SignInEndpoint(signInTemplateFactory);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  SignInService signInService(
+  SignInTemplateFactory signInService(
       SignInFeatureProperties properties,
       ObjectProvider<SignInResultHandler> signInResultHandlers) {
-    log.trace("[FEATURE-SIGN-IN] Sign In Service");
-    return new SignInService(signInResultHandlers.stream().sorted().toList(), properties);
+    log.trace("[FEATURE-SIGN-IN] Sign In Template Factory");
+    return new SignInTemplateFactory(signInResultHandlers.stream().sorted().toList(), properties);
   }
 }

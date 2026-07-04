@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
+import tutorials4j.framework.data.jdbc.routing.DataSourceRoutingManagerCreator;
 import tutorials4j.framework.data.jdbc.routing.MultipleRoutingDataSource;
 import tutorials4j.framework.data.mybatis.customizer.MybatisPlusInterceptorCustomizer;
 import tutorials4j.framework.tenant.core.properties.TenantProperties;
@@ -59,10 +60,11 @@ public class MybatisPlusTenantConfiguration {
 
     @Bean
     SqlSessionFactoryBeanCustomizer databaseSqlSessionFactoryBeanCustomizer(
-        MultipleRoutingDataSource dataSource) {
+        DataSourceRoutingManagerCreator creator) {
       log.trace("[TENANT-MYBATIS-PLUS] Database SqlSession Factory Bean Customizer ");
       return factoryBean -> {
-        factoryBean.setDataSource(dataSource);
+        factoryBean.setDataSource(
+            new MultipleRoutingDataSource(creator.getInstance(), creator.getDefaultDataSource()));
       };
     }
   }

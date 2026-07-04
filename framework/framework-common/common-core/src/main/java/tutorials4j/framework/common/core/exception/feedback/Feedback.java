@@ -14,8 +14,4 @@ public abstract class Feedback {
   private final String message;
   private final int httpStatus;
   private String code;
-
-  public boolean isSystemError() {
-    return httpStatus >= 500;
-  }
 }

@@ -21,13 +21,13 @@ import tutorials4j.framework.common.core.bean.Result;
 @RequestMapping("/api/sign-in")
 @RequiredArgsConstructor
 public class SignInEndpoint {
-  private final SignInService signInService;
+  private final SignInTemplateFactory signInTemplateFactory;
 
   @PostMapping("do")
   public Result<SignInResult> sign(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source) {
-    SignInResult result = signInService.template(source).signIn(account, LocalDate.now());
+    SignInResult result = signInTemplateFactory.template(source).signIn(account, LocalDate.now());
     return Result.success(result);
   }
 
@@ -36,7 +36,7 @@ public class SignInEndpoint {
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    Boolean result = signInService.template(source).checkStatus(account, date);
+    Boolean result = signInTemplateFactory.template(source).checkStatus(account, date);
     return Result.success(result);
   }
 
@@ -45,7 +45,7 @@ public class SignInEndpoint {
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    SignInResult result = signInService.template(source).queryDaily(account, date);
+    SignInResult result = signInTemplateFactory.template(source).queryDaily(account, date);
     return Result.success(result);
   }
 
@@ -54,7 +54,7 @@ public class SignInEndpoint {
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    SignInCalendar result = signInService.template(source).queryCalendar(account, date);
+    SignInCalendar result = signInTemplateFactory.template(source).queryCalendar(account, date);
     return Result.success(result);
   }
 
@@ -62,7 +62,7 @@ public class SignInEndpoint {
   public Result<Long> countDailyActive(
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    Long result = signInService.template(source).countDailyActive(date);
+    Long result = signInTemplateFactory.template(source).countDailyActive(date);
     return Result.success(result);
   }
 
@@ -70,7 +70,7 @@ public class SignInEndpoint {
   public Result<Long> countMonthActive(
       @RequestParam(name = "source") String source,
       @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    Long result = signInService.template(source).countMonthActive(date);
+    Long result = signInTemplateFactory.template(source).countMonthActive(date);
     return Result.success(result);
   }
 }

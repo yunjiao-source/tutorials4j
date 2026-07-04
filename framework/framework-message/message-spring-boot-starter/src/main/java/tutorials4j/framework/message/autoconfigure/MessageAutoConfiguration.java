@@ -4,6 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
+import tutorials4j.framework.message.core.autoconfigure.MessageConfiguration;
+import tutorials4j.framework.message.redis.autoconfigure.RedisMessageConfiguration;
 
 /**
  * 自动配置
@@ -12,7 +14,7 @@ import org.springframework.context.annotation.Import;
  */
 @Slf4j
 @AutoConfiguration
-@Import({})
+@Import({MessageConfiguration.class, RedisMessageConfiguration.class})
 public class MessageAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

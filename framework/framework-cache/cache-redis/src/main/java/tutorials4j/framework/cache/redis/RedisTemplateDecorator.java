@@ -31,14 +31,6 @@ public class RedisTemplateDecorator {
     return getStringRedisSerializer().serialize(key);
   }
 
-  public String deserializeKey(byte[] key) {
-    return getStringRedisSerializer().deserialize(key);
-  }
-
-  public String wrapKey(String key) {
-    return deserializeKey(serializeKey(key));
-  }
-
   private StringRedisSerializer getStringRedisSerializer() {
     if (stringRedisTemplate.getKeySerializer()
         instanceof StringRedisSerializer stringRedisSerializer) {

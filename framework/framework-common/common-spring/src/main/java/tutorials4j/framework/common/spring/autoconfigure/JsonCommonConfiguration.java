@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.jackson.CommonSimpleModule;
 import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
+import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 
 /**
  * 公共核心Json模块的配置类
@@ -35,5 +36,12 @@ public class JsonCommonConfiguration {
   CommonSimpleModule commonSimpleModule() {
     log.trace("[COMMON-SPRING] Common Simple Module");
     return new CommonSimpleModule();
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  ObjectMapperCreator objectMapperCreator(ObjectMapper objectMapper) {
+    log.trace("[COMMON-SPRING] Object Mapper Creator");
+    return new ObjectMapperCreator(objectMapper);
   }
 }
