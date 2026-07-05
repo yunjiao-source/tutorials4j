@@ -47,7 +47,7 @@ public class ListMessageTemplate {
     this.deadLetterQueueName = config.getDeadLetterQueueName();
   }
 
-  public String send(Map<String, String> data) {
+  public String send(String data) {
     Assert.notNull(data, "data must not be null");
 
     BaseRedisMessage message =

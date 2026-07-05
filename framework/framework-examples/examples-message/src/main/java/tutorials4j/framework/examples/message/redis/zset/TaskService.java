@@ -2,11 +2,13 @@ package tutorials4j.framework.examples.message.redis.zset;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tutorials4j.framework.common.spring.jackson.JacksonRecord;
+import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
+import tutorials4j.framework.examples.message.redis.list.SmsData;
 import tutorials4j.framework.message.redis.factory.ZSetMessageFactory;
 import tutorials4j.framework.message.redis.template.ZSetMessageTemplate;
 
@@ -23,22 +25,23 @@ public class TaskService {
   private final ZSetMessageTemplate taskTemplate;
   private final TaskHandler taskHandler;
   private final TaskExceptionHandler taskExceptionHandler;
+  private final JacksonRecord jacksonRecord;
 
-  public TaskService(ZSetMessageFactory factory) {
+  public TaskService(ZSetMessageFactory factory, ObjectMapperCreator creator) {
     this.taskTemplate = factory.template(MESSAGE_KEY);
 
-    taskExceptionHandler = new TaskExceptionHandler(taskTemplate);
-    taskHandler = new TaskHandler(taskTemplate);
+    jacksonRecord = new JacksonRecord(creator.getInstance());
+    taskExceptionHandler = new TaskExceptionHandler(taskTemplate, jacksonRecord);
+    taskHandler = new TaskHandler(taskTemplate, jacksonRecord);
   }
 
   public void addTask() {
-    Map<String, String> data =
-        Map.of("id", "" + id.incrementAndGet(), "Date", Instant.now().toString());
+    SmsData data = new SmsData(id.incrementAndGet(), Instant.now());
     log.info("生成任务信息：{}", data);
 
     long milli = ThreadLocalRandom.current().nextInt(10000);
 
-    taskTemplate.addTask(data, Duration.ofMillis(milli));
+    taskTemplate.addTask(jacksonRecord.toJson(data), Duration.ofMillis(milli));
   }
 
   public void init() {

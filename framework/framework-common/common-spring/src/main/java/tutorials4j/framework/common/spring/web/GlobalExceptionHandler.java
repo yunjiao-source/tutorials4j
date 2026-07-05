@@ -55,7 +55,6 @@ public class GlobalExceptionHandler extends AbstractExceptionHandler {
   @Override
   protected List<ExceptionMapping> getExceptionMappings() {
     List<ExceptionMapping> mappings = new ArrayList<>();
-    // ========== 4xx 客户端异常（具体类优先） ==========
     mappings.add(
         new ExceptionMapping(
             UnsupportedOperationException.class, BaseErrorCode.INTERNAL_SERVER_ERROR));
@@ -70,7 +69,6 @@ public class GlobalExceptionHandler extends AbstractExceptionHandler {
             MissingServletRequestParameterException.class,
             BaseErrorCode.MISSING_SERVLET_REQUEST_PARAMETER_EXCEPTION));
 
-    // ========== 5xx 服务器异常（具体类优先） ==========
     mappings.add(
         new ExceptionMapping(NullPointerException.class, BaseErrorCode.NULL_POINTER_EXCEPTION));
     mappings.add(

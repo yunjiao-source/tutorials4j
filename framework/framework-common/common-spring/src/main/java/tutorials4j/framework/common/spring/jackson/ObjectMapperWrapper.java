@@ -25,7 +25,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().writeValueAsString(domain);
     } catch (JsonProcessingException e) {
-      throw new WrapCheckException("字符串转换对象异常", e);
+      throw new WrapCheckException("对象转换字符串异常:" + domain, e);
     }
   }
 
@@ -37,7 +37,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readValue(content, valueType);
     } catch (JsonProcessingException e) {
-      throw new WrapCheckException("字符串转换对象异常", e);
+      throw new WrapCheckException("字符串转换对象异常:" + content, e);
     }
   }
 
@@ -45,7 +45,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().convertValue(content, valueType);
     } catch (IllegalArgumentException e) {
-      throw new WrapCheckException("字符串转换对象异常", e);
+      throw new WrapCheckException("字符串转换对象异常:" + content, e);
     }
   }
 
@@ -53,7 +53,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readValue(content, typeReference);
     } catch (JsonProcessingException e) {
-      throw new WrapCheckException("字符串转换对象异常", e);
+      throw new WrapCheckException("字符串转换对象异常:" + content, e);
     }
   }
 
@@ -97,7 +97,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readTree(content);
     } catch (JsonProcessingException e) {
-      throw new WrapCheckException("字符串转换对象异常", e);
+      throw new WrapCheckException("字符串转换对象异常:" + content, e);
     }
   }
 

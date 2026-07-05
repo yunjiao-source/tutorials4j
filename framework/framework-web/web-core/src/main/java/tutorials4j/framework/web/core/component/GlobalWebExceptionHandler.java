@@ -73,8 +73,7 @@ public class GlobalWebExceptionHandler extends AbstractExceptionHandler {
     mappings.add(new ExceptionMapping(BindException.class, BaseErrorCode.VALIDATION_FAILED));
     mappings.add(
         new ExceptionMapping(ConstraintViolationException.class, BaseErrorCode.VALIDATION_FAILED));
-    mappings.add(
-        new ExceptionMapping(NoResourceFoundException.class, BaseErrorCode.RESOURCE_NOT_FOUND));
+    mappings.add(new ExceptionMapping(NoResourceFoundException.class, BaseErrorCode.NOT_FOUND));
     return mappings;
   }
 }

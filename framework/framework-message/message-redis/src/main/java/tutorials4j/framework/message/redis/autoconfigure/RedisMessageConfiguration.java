@@ -44,7 +44,6 @@ public class RedisMessageConfiguration {
     PolymorphicTypeValidator ptv =
         BasicPolymorphicTypeValidator.builder()
             .allowIfSubType("tutorials4j.framework.message.redis.bean")
-            .allowIfSubType("java.util")
             .build();
     objectMapper.activateDefaultTyping(
         ptv, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
@@ -66,7 +65,6 @@ public class RedisMessageConfiguration {
     PolymorphicTypeValidator ptv =
         BasicPolymorphicTypeValidator.builder()
             .allowIfSubType("tutorials4j.framework.message.redis.bean")
-            .allowIfSubType("java.util")
             .build();
     objectMapper.activateDefaultTyping(
         ptv, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);

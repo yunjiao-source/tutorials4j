@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
 import tutorials4j.framework.message.redis.template.ListMessageTemplate;
 
@@ -17,6 +18,7 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
 @RequiredArgsConstructor
 public class SmsConsumerDeadLetter implements Runnable, Consumer<BaseRedisMessage> {
   private final ListMessageTemplate smsTemplate;
+  private final JacksonRecord jacksonRecord;
 
   public void start() {
     Thread thread = new Thread(this);

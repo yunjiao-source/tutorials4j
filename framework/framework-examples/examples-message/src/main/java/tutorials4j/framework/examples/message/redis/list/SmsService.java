@@ -1,10 +1,11 @@
 package tutorials4j.framework.examples.message.redis.list;
 
 import java.time.Instant;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tutorials4j.framework.common.spring.jackson.JacksonRecord;
+import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 import tutorials4j.framework.message.redis.bean.MessageConsts;
 import tutorials4j.framework.message.redis.factory.ListMessageFactory;
 import tutorials4j.framework.message.redis.template.ListMessageTemplate;
@@ -21,19 +22,20 @@ public class SmsService {
   private final ListMessageTemplate smsTemplate;
   private final SmsConsumerMain smsConsumerMain;
   private final SmsConsumerDeadLetter smsConsumerDeadLetter;
+  private final JacksonRecord jacksonRecord;
 
-  public SmsService(ListMessageFactory factory) {
+  public SmsService(ListMessageFactory factory, ObjectMapperCreator creator) {
     this.smsTemplate = factory.template(MessageConsts.MESSAGE_KEY_SMS);
 
-    smsConsumerDeadLetter = new SmsConsumerDeadLetter(smsTemplate);
-    smsConsumerMain = new SmsConsumerMain(smsTemplate);
+    jacksonRecord = new JacksonRecord(creator.getInstance());
+    smsConsumerDeadLetter = new SmsConsumerDeadLetter(smsTemplate, jacksonRecord);
+    smsConsumerMain = new SmsConsumerMain(smsTemplate, jacksonRecord);
   }
 
   public void sendSms() {
-    Map<String, String> data =
-        Map.of("id", "" + id.incrementAndGet(), "Date", Instant.now().toString());
+    SmsData data = new SmsData(id.incrementAndGet(), Instant.now());
     log.info("生成短信消息：{}", data);
-    smsTemplate.send(data);
+    smsTemplate.send(jacksonRecord.toJson(data));
   }
 
   public void init() {

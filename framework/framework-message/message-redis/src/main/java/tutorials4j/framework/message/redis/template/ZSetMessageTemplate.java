@@ -3,7 +3,6 @@ package tutorials4j.framework.message.redis.template;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -64,7 +63,7 @@ public class ZSetMessageTemplate {
     startTransfer();
   }
 
-  public String addTask(Map<String, String> data, Duration delayTime) {
+  public String addTask(String data, Duration delayTime) {
     Assert.notNull(data, "data must not be null");
     Assert.notNull(delayTime, "delayTime must not be null");
 

@@ -32,7 +32,7 @@ public enum BaseErrorCode implements ErrorCode {
   PRECONDITION_FAILED(new PreconditionFailedFeedback("客户端发出的请求缺少必要的先决条件")),
   HTTP_MEDIA_TYPE_UNSUPPORTED(new UnsupportedMediaTypeFeedback("服务器无法处理请求中携带的实体内容的格式")),
   INTERNAL_SERVER_ERROR(new InternalServerErrorFeedback("服务器内部错误")),
-  RESOURCE_NOT_FOUND(new NotFoundFeedback("资源未找到")),
+  NOT_FOUND(new NotFoundFeedback("资源未找到")),
   MISSING_SERVLET_REQUEST_PARAMETER_EXCEPTION(new InternalServerErrorFeedback("请求参数缺失")),
   NULL_POINTER_EXCEPTION(new InternalServerErrorFeedback("发生了空指针异常")),
   TYPE_MISMATCH_EXCEPTION(new InternalServerErrorFeedback("类型转换失败")),

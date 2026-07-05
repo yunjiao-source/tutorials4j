@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
 import tutorials4j.framework.message.redis.template.ListMessageTemplate;
 
@@ -19,6 +20,7 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
 public class SmsConsumerMain implements Runnable, Function<BaseRedisMessage, Boolean> {
   private AtomicInteger id = new AtomicInteger(0);
   private final ListMessageTemplate smsTemplate;
+  private final JacksonRecord jacksonRecord;
 
   public void start() {
     Thread thread = new Thread(this);
@@ -48,7 +50,7 @@ public class SmsConsumerMain implements Runnable, Function<BaseRedisMessage, Boo
       throw new RuntimeException(e);
     }
 
-    log.info("发送短信：{}", message);
+    log.info("发送短信：{}", jacksonRecord.toObject(message.data(), SmsData.class));
     return true;
   }
 }
