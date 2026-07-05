@@ -237,3 +237,12 @@ Java 教程
 
 > 博客发布(2fa)
 ![博客发布(2fa)](docs/images/033.jpg)
+
+
+### web模块示例（framework/framework-examples/examples-message）
+
+#### profile:redis-list
+
+> 基于Redis List的短信消息示例
+![基于Redis List的短信消息示例](docs/images/053.jpg)
+
