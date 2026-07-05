@@ -30,9 +30,7 @@ public class ZSetMessageTemplate {
   private final RedisTemplate<String, String> stringRedisTemplate;
   private final JacksonRecord jacksonRecord;
   private final ZSetMessageConfig config;
-  private final String mainQueueName;
   private final String processQueueName;
-  private final String delayQueueName;
   private final String deadLetterQueueName;
   private final DelayMessageHandler delayMessageHandler2Prcoess;
   private final DelayMessageHandler delayMessageHandler2DeadLetter;
@@ -45,11 +43,11 @@ public class ZSetMessageTemplate {
     this.stringRedisTemplate = stringRedisTemplate;
     this.jacksonRecord = jacksonRecord;
     this.config = config;
-    this.mainQueueName = MessageConsts.getMessageQueueMain(config.queueName());
     this.processQueueName = MessageConsts.getMessageQueueProcess(config.queueName());
-    this.delayQueueName = MessageConsts.getMessageQueueDelay(config.queueName());
     this.deadLetterQueueName = MessageConsts.getMessageQueueDeadLetter(config.queueName());
 
+    String mainQueueName = MessageConsts.getMessageQueueMain(config.queueName());
+    String delayQueueName = MessageConsts.getMessageQueueDelay(config.queueName());
     delayMessageHandler2Prcoess =
         new DelayMessageHandler(
             stringRedisTemplate, mainQueueName, processQueueName, config.sleepWhenExcption());
@@ -85,8 +83,7 @@ public class ZSetMessageTemplate {
           .param("message key", message.baseMessage().queueName());
     }
 
-    long triggerTime = System.currentTimeMillis() + message.delayTime().toMillis();
-    stringRedisTemplate.opsForZSet().add(mainQueueName, jacksonRecord.toJson(message), triggerTime);
+    delayMessageHandler2Prcoess.addMessage(jacksonRecord.toJson(message), message.delayTime());
     return message.baseMessage().id();
   }
 

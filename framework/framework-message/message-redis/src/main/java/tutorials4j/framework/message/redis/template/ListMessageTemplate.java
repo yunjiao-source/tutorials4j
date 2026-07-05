@@ -33,7 +33,6 @@ public class ListMessageTemplate {
   private final ListMessageConfig config;
   private final String mainQueueName;
   private final String processQueueName;
-  private final String delayQueueName;
   private final String deadLetterQueueName;
   private final DelayMessageHandler delayMessageHandler;
 
@@ -48,9 +47,9 @@ public class ListMessageTemplate {
     this.config = config;
     this.mainQueueName = MessageConsts.getMessageQueueMain(config.queueName());
     this.processQueueName = MessageConsts.getMessageQueueProcess(config.queueName());
-    this.delayQueueName = MessageConsts.getMessageQueueDelay(config.queueName());
     this.deadLetterQueueName = MessageConsts.getMessageQueueDeadLetter(config.queueName());
 
+    String delayQueueName = MessageConsts.getMessageQueueDelay(config.queueName());
     delayMessageHandler =
         new DelayMessageHandler(
             stringRedisTemplate, delayQueueName, deadLetterQueueName, config.sleepWhenExcption());
