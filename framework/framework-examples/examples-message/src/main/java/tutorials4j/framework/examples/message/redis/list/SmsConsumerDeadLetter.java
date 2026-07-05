@@ -33,10 +33,6 @@ public class SmsConsumerDeadLetter implements Runnable, Consumer<BaseRedisMessag
 
   @Override
   public void accept(BaseRedisMessage message) {
-    if (message.retryCount() >= 3) {
-      log.error("超过最大重试次数：{}", message);
-      return;
-    }
 
     // 等待
     long milli = ThreadLocalRandom.current().nextInt(3000);
@@ -46,7 +42,6 @@ public class SmsConsumerDeadLetter implements Runnable, Consumer<BaseRedisMessag
       throw new RuntimeException(e);
     }
 
-    // 重新发送
-    smsTemplate.send(message.cloneAndIncreaseRetryCount());
+    log.info("死信处理：{}", jacksonRecord.toObject(message.data(), SmsData.class));
   }
 }

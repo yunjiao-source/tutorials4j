@@ -21,6 +21,7 @@ import tutorials4j.framework.message.redis.template.ZSetMessageTemplate;
  */
 @Slf4j
 public class ZSetMessageFactory {
+  public static final String MESSAGE_TYPE = "zset";
   public static final ZSetMessageFactory instance = new ZSetMessageFactory();
 
   @Setter private RedisTemplate<String, String> stringRedisTemplate;
@@ -61,9 +62,11 @@ public class ZSetMessageFactory {
     QueueOptions options = queueOptionsMap.get(queueName);
     ZSetMessageConfig config =
         ZSetMessageConfig.builder()
-            .queueName(queueName)
+            .queueName(MESSAGE_TYPE + ":" + queueName)
             .sleepWhenExcption(options.getSleepWhenException())
             .blockTimeout(options.getBlockTimeout())
+            .delayTimeout(options.getDelayTimeout())
+            .maxRetryCount(options.getMaxRetryCount())
             .build();
 
     ZSetMessageTemplate template =

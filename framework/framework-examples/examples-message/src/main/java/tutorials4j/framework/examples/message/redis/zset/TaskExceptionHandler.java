@@ -33,11 +33,6 @@ public class TaskExceptionHandler implements Runnable, Consumer<DelayRedisMessag
 
   @Override
   public void accept(DelayRedisMessage message) {
-    if (message.baseMessage().retryCount() >= 3) {
-      log.error("超过最大重试次数：{}", message);
-      return;
-    }
-
     // 等待
     long milli = ThreadLocalRandom.current().nextInt(3000);
     try {
@@ -46,7 +41,6 @@ public class TaskExceptionHandler implements Runnable, Consumer<DelayRedisMessag
       throw new RuntimeException(e);
     }
 
-    // 重新发送
-    taskTemplate.addTask(message.cloneAndIncreaseRetryCount());
+    log.error("超过最大重试次数：{}", message);
   }
 }

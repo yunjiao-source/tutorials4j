@@ -1,6 +1,5 @@
 package tutorials4j.framework.message.redis.template;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +14,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.util.SnowflakeUtils;
+import tutorials4j.framework.message.core.bean.MessageConsts;
 import tutorials4j.framework.message.core.exception.MessageErrorCode;
+import tutorials4j.framework.message.core.util.MessageUtils;
 import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
 import tutorials4j.framework.message.redis.bean.ListMessageConfig;
+import tutorials4j.framework.message.redis.component.DelayMessageHandler;
 
 /**
  * TODO
@@ -31,7 +33,9 @@ public class ListMessageTemplate {
   private final ListMessageConfig config;
   private final String mainQueueName;
   private final String processQueueName;
+  private final String delayQueueName;
   private final String deadLetterQueueName;
+  private final DelayMessageHandler delayMessageHandler;
 
   private final AtomicBoolean running = new AtomicBoolean(true);
 
@@ -42,9 +46,14 @@ public class ListMessageTemplate {
     this.stringRedisTemplate = stringRedisTemplate;
     this.jacksonRecord = jacksonRecord;
     this.config = config;
-    this.mainQueueName = config.getMainQueueName();
-    this.processQueueName = config.getProcessQueueName();
-    this.deadLetterQueueName = config.getDeadLetterQueueName();
+    this.mainQueueName = MessageConsts.getMessageQueueMain(config.queueName());
+    this.processQueueName = MessageConsts.getMessageQueueProcess(config.queueName());
+    this.delayQueueName = MessageConsts.getMessageQueueDelay(config.queueName());
+    this.deadLetterQueueName = MessageConsts.getMessageQueueDeadLetter(config.queueName());
+
+    delayMessageHandler =
+        new DelayMessageHandler(
+            stringRedisTemplate, delayQueueName, deadLetterQueueName, config.sleepWhenExcption());
   }
 
   public String send(String data) {
@@ -96,22 +105,29 @@ public class ListMessageTemplate {
           continue;
         }
 
-        consumer.accept(jacksonRecord.toObject(message, BaseRedisMessage.class));
+        BaseRedisMessage baseRedisMessage = jacksonRecord.toObject(message, BaseRedisMessage.class);
+        if (baseRedisMessage.retryCount() >= config.maxRetryCount()) {
+          consumer.accept(baseRedisMessage);
+        } else {
+          send(baseRedisMessage.cloneAndIncreaseRetryCount());
+        }
+
       } catch (Exception e) {
         if (Thread.currentThread().isInterrupted()) {
           break;
         }
 
         log.error("消费死信消息异常, queueName={}, message={}", config.queueName(), e.getMessage());
-        sleepForWait(config.sleepWhenExcption());
+        MessageUtils.sleepForWait(config.sleepWhenExcption());
       }
     }
   }
 
   public void consumerMain(Function<BaseRedisMessage, Boolean> function) {
     while (running.get()) {
+      String message = null;
       try {
-        final String message =
+        message =
             stringRedisTemplate
                 .opsForList()
                 .rightPopAndLeftPush(
@@ -123,16 +139,11 @@ public class ListMessageTemplate {
           continue;
         }
 
-        try {
-          Boolean success = function.apply(jacksonRecord.toObject(message, BaseRedisMessage.class));
-          if (success != null && success) {
-            ack(message);
-          } else {
-            fail(message);
-          }
-        } catch (Exception e) {
+        Boolean success = function.apply(jacksonRecord.toObject(message, BaseRedisMessage.class));
+        if (success != null && success) {
+          ack(message);
+        } else {
           fail(message);
-          log.error("处理消息异常, queueName={}, message={}", config.queueName(), e.getMessage());
         }
 
       } catch (Exception e) {
@@ -140,8 +151,9 @@ public class ListMessageTemplate {
           break;
         }
 
+        fail(message);
         log.error("消费消息异常, queueName={}, message={}", config.queueName(), e.getMessage());
-        sleepForWait(config.sleepWhenExcption());
+        MessageUtils.sleepForWait(config.sleepWhenExcption());
       }
     }
   }
@@ -152,6 +164,7 @@ public class ListMessageTemplate {
     }
 
     running.set(false);
+    delayMessageHandler.shutdown();
   }
 
   protected void ack(String message) {
@@ -170,18 +183,10 @@ public class ListMessageTemplate {
       return;
     }
     ack(message);
-    stringRedisTemplate.opsForList().leftPush(deadLetterQueueName, message);
+    // 发送到延时队列
+    delayMessageHandler.addMessage(message, config.delayTimeout());
     if (log.isDebugEnabled()) {
-      log.debug("消息进入死信, queueName={}", config.queueName());
-    }
-  }
-
-  private void sleepForWait(Duration waitTime) {
-    // 避免连接异常时快速空转，短暂等待后重试
-    try {
-      TimeUnit.MILLISECONDS.sleep(waitTime.toMillis());
-    } catch (InterruptedException ie) {
-      Thread.currentThread().interrupt(); // 保留中断状态
+      log.debug("消息进入延时队列, queueName={}", config.queueName());
     }
   }
 }

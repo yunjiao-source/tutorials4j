@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
-import tutorials4j.framework.message.redis.bean.MessageConsts;
+import tutorials4j.framework.message.core.bean.MessageConsts;
 import tutorials4j.framework.message.redis.factory.ListMessageFactory;
 import tutorials4j.framework.message.redis.template.ListMessageTemplate;
 

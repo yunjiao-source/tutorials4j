@@ -21,6 +21,7 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
  */
 @Slf4j
 public class ListMessageFactory {
+  public static final String MESSAGE_TYPE = "list";
   public static final ListMessageFactory instance = new ListMessageFactory();
 
   @Setter private RedisTemplate<String, String> stringRedisTemplate;
@@ -61,9 +62,11 @@ public class ListMessageFactory {
     QueueOptions options = queueOptionsMap.get(queueName);
     ListMessageConfig config =
         ListMessageConfig.builder()
-            .queueName(queueName)
+            .queueName(MESSAGE_TYPE + ":" + queueName)
             .sleepWhenExcption(options.getSleepWhenException())
             .blockTimeout(options.getBlockTimeout())
+            .delayTimeout(options.getDelayTimeout())
+            .maxRetryCount(options.getMaxRetryCount())
             .build();
 
     ListMessageTemplate template =

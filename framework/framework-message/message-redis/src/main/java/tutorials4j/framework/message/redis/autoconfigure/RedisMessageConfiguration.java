@@ -49,7 +49,7 @@ public class RedisMessageConfiguration {
         ptv, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
     ListMessageFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
     ListMessageFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    ListMessageFactory.instance.setQueueOptionsMap(properties.getList());
+    ListMessageFactory.instance.setQueueOptionsMap(properties.getListQueues());
     return ListMessageFactory.instance;
   }
 

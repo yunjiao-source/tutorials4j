@@ -10,17 +10,8 @@ import lombok.Builder;
  */
 @Builder
 public record ZSetMessageConfig(
-    String queueName, Duration blockTimeout, Duration sleepWhenExcption) {
-
-  public String getMainQueueName() {
-    return "message:zset:" + queueName + ":main";
-  }
-
-  public String getProcessQueueName() {
-    return "message:zset:" + queueName + ":process";
-  }
-
-  public String getDeadLetterQueueName() {
-    return "message:zset:" + queueName + ":dead_letter";
-  }
-}
+    String queueName,
+    Duration delayTimeout,
+    Duration blockTimeout,
+    Duration sleepWhenExcption,
+    int maxRetryCount) {}
