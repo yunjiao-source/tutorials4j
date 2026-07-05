@@ -1,7 +1,8 @@
 tutorials4j:
   message:
     redis:
-      list:
-        sms:
+      zset-queues:
+        task1:
           sleep-when-exception: 3s
           block-timeout: 5s
+

@@ -2,7 +2,7 @@ package tutorials4j.framework.message.redis.bean;
 
 import java.time.Duration;
 import lombok.Builder;
-import org.springframework.util.Assert;
+import tutorials4j.framework.common.core.ExecutionOption;
 
 /**
  * TODO
@@ -11,25 +11,20 @@ import org.springframework.util.Assert;
  */
 @Builder
 public record ListMessageConfig(
-    String queueName, Duration blockTimeout, Duration sleepWhenExcption, Duration sleepWhenNoData) {
+    String queueName,
+    Duration blockTimeout,
+    Duration sleepWhenExcption,
+    ExecutionOption execution) {
 
   public String getMainQueueName() {
-    return "message:" + queueName + ":main";
+    return "message:list:" + queueName + ":main";
   }
 
   public String getProcessQueueName() {
-    return "message:" + queueName + ":process";
+    return "message:list:" + queueName + ":process";
   }
 
   public String getDeadLetterQueueName() {
-    return "message:" + queueName + ":dead_letter";
-  }
-
-  public static ListMessageConfig defaultConfig(String queueName) {
-    Assert.hasText(queueName, "queueName must not be null or empty");
-    return ListMessageConfig.builder()
-        .queueName(queueName)
-        .blockTimeout(Duration.ofSeconds(5L))
-        .build();
+    return "message:list:" + queueName + ":dead_letter";
   }
 }

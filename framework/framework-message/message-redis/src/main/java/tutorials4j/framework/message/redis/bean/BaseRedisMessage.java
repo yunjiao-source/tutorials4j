@@ -15,7 +15,7 @@ import tutorials4j.framework.common.spring.util.SnowflakeUtils;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 @Builder
-public record RedisMessage(
+public record BaseRedisMessage(
     String id,
     String parentId,
     Instant timestamp,
@@ -23,9 +23,9 @@ public record RedisMessage(
     int retryCount,
     Map<String, String> data) {
 
-  public RedisMessage cloneAndIncreaseRetryCount() {
+  public BaseRedisMessage cloneAndIncreaseRetryCount() {
     String parentId = StringUtils.isBlank(this.parentId) ? this.id : this.parentId;
-    return RedisMessage.builder()
+    return BaseRedisMessage.builder()
         .id(SnowflakeUtils.nextIdStr())
         .parentId(parentId)
         .timestamp(Instant.now())
@@ -43,7 +43,7 @@ public record RedisMessage(
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RedisMessage that = (RedisMessage) o;
+    BaseRedisMessage that = (BaseRedisMessage) o;
     return Objects.equals(id, that.id);
   }
 

@@ -1,13 +1,13 @@
-package tutorials4j.framework.examples.message.redis.list;
+package tutorials4j.framework.examples.message.redis.zset;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
-import tutorials4j.framework.message.redis.template.ListMessageTemplate;
+import tutorials4j.framework.message.redis.bean.DelayRedisMessage;
+import tutorials4j.framework.message.redis.template.ZSetMessageTemplate;
 
 /**
  * TODO
@@ -16,29 +16,26 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class SmsConsumerMain implements Runnable, Function<BaseRedisMessage, Boolean> {
+public class TaskHandler implements Runnable, Consumer<DelayRedisMessage> {
   private AtomicInteger id = new AtomicInteger(0);
-  private final ListMessageTemplate smsTemplate;
+
+  private final ZSetMessageTemplate taskTemplate;
 
   public void start() {
     Thread thread = new Thread(this);
-    thread.setName("sms-consumer-main-" + id.incrementAndGet());
+    thread.setName("task-handler=" + id.incrementAndGet());
     thread.start();
   }
 
   @Override
   public void run() {
-    smsTemplate.consumerMain(this);
+    taskTemplate.consumerProcess(this);
   }
 
   @Override
-  public Boolean apply(BaseRedisMessage message) {
-    if (ThreadLocalRandom.current().nextInt(99) < 40) {
+  public void accept(DelayRedisMessage message) {
+    if (ThreadLocalRandom.current().nextInt(99) < 60) {
       throw new RuntimeException("业务处理异常");
-    }
-
-    if (ThreadLocalRandom.current().nextInt(99) < 40) {
-      return false;
     }
 
     long milli = ThreadLocalRandom.current().nextInt(5000);
@@ -48,7 +45,6 @@ public class SmsConsumerMain implements Runnable, Function<BaseRedisMessage, Boo
       throw new RuntimeException(e);
     }
 
-    log.info("发送短信：{}", message);
-    return true;
+    log.info("任务完成：{}", message);
   }
 }

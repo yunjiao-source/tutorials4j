@@ -37,7 +37,7 @@ public class SmsService {
   }
 
   public void init() {
-    // 开启两个消费线程
+    // 开启两个线程
     smsConsumerMain.start();
     smsConsumerMain.start();
 

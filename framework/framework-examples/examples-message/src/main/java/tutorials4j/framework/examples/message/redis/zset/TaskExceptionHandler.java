@@ -1,12 +1,12 @@
-package tutorials4j.framework.examples.message.redis.list;
+package tutorials4j.framework.examples.message.redis.zset;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
-import tutorials4j.framework.message.redis.template.ListMessageTemplate;
+import tutorials4j.framework.message.redis.bean.DelayRedisMessage;
+import tutorials4j.framework.message.redis.template.ZSetMessageTemplate;
 
 /**
  * TODO
@@ -15,23 +15,23 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class SmsConsumerDeadLetter implements Runnable, Consumer<BaseRedisMessage> {
-  private final ListMessageTemplate smsTemplate;
+public class TaskExceptionHandler implements Runnable, Consumer<DelayRedisMessage> {
+  private final ZSetMessageTemplate taskTemplate;
 
   public void start() {
     Thread thread = new Thread(this);
-    thread.setName("sms-consumer-dead_letter");
+    thread.setName("task-exception-handler");
     thread.start();
   }
 
   @Override
   public void run() {
-    smsTemplate.consumerDeadLetter(this);
+    taskTemplate.consumerDeadLetter(this);
   }
 
   @Override
-  public void accept(BaseRedisMessage message) {
-    if (message.retryCount() >= 3) {
+  public void accept(DelayRedisMessage message) {
+    if (message.baseMessage().retryCount() >= 3) {
       log.error("超过最大重试次数：{}", message);
       return;
     }
@@ -45,6 +45,6 @@ public class SmsConsumerDeadLetter implements Runnable, Consumer<BaseRedisMessag
     }
 
     // 重新发送
-    smsTemplate.send(message.cloneAndIncreaseRetryCount());
+    taskTemplate.addTask(message.cloneAndIncreaseRetryCount());
   }
 }

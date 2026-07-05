@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.jackson.CommonSimpleModule;
-import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
+import tutorials4j.framework.common.spring.jackson.JacksonUtils;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 
 /**
@@ -25,10 +25,10 @@ public class JsonCommonConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  Jackson2Utils jackson2Utils(ObjectMapper objectMapper) {
+  JacksonUtils jackson2Utils(ObjectMapper objectMapper) {
     log.trace("[COMMON-SPRING] Jackson2 Utils");
-    Jackson2Utils.instance.setObjectMapper(objectMapper);
-    return Jackson2Utils.instance;
+    JacksonUtils.instance.setObjectMapper(objectMapper);
+    return JacksonUtils.instance;
   }
 
   @Bean

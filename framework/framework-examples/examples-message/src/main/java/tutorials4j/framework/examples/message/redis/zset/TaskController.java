@@ -1,4 +1,4 @@
-package tutorials4j.framework.examples.message.redis.list;
+package tutorials4j.framework.examples.message.redis.zset;
 
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Yun Jiao
  */
-@RequestMapping("/sms")
+@RequestMapping("/task")
 @RestController
 @RequiredArgsConstructor
-public class SmsController {
-  private final SmsService smsService;
+public class TaskController {
+  private final TaskService taskService;
 
-  @GetMapping("send")
+  @GetMapping("add")
   public String send() {
-    IntStream.range(0, 5).forEach((i) -> smsService.sendSms());
+    IntStream.range(0, 5).forEach((i) -> taskService.addTask());
     return "ok";
   }
 }

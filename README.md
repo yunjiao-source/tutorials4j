@@ -239,10 +239,13 @@ Java 教程
 ![博客发布(2fa)](docs/images/033.jpg)
 
 
-### web模块示例（framework/framework-examples/examples-message）
+### 消息模块示例（framework/framework-examples/examples-message）
 
 #### profile:redis-list
 
 > 基于Redis List的短信消息示例
 ![基于Redis List的短信消息示例](docs/images/053.jpg)
+
+> 基于 Redis ZSet 的延迟任务队列
+![基于 Redis ZSet 的延迟任务队列](docs/images/054.jpg)
 

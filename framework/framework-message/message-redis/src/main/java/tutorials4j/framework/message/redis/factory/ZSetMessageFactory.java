@@ -10,9 +10,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.message.core.exception.MessageErrorCode;
-import tutorials4j.framework.message.redis.bean.ListMessageConfig;
+import tutorials4j.framework.message.redis.bean.ZSetMessageConfig;
 import tutorials4j.framework.message.redis.properties.QueueOptions;
-import tutorials4j.framework.message.redis.template.ListMessageTemplate;
+import tutorials4j.framework.message.redis.template.ZSetMessageTemplate;
 
 /**
  * TODO
@@ -20,15 +20,15 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
  * @author Yun Jiao
  */
 @Slf4j
-public class ListMessageFactory {
-  public static final ListMessageFactory instance = new ListMessageFactory();
+public class ZSetMessageFactory {
+  public static final ZSetMessageFactory instance = new ZSetMessageFactory();
 
   @Setter private RedisTemplate<String, String> stringRedisTemplate;
   @Setter private JacksonRecord jacksonRecord;
   @Setter private Map<String, QueueOptions> queueOptionsMap;
-  private final Map<String, ListMessageTemplate> templateMap = new ConcurrentHashMap<>();
+  private final Map<String, ZSetMessageTemplate> templateMap = new ConcurrentHashMap<>();
 
-  public ListMessageTemplate template(String queueName) {
+  public ZSetMessageTemplate template(String queueName) {
     Assert.hasText(queueName, "queueName must not be null or empty");
 
     if (!templateMap.containsKey(queueName)) {
@@ -59,15 +59,15 @@ public class ListMessageFactory {
     }
 
     QueueOptions options = queueOptionsMap.get(queueName);
-    ListMessageConfig config =
-        ListMessageConfig.builder()
+    ZSetMessageConfig config =
+        ZSetMessageConfig.builder()
             .queueName(queueName)
             .sleepWhenExcption(options.getSleepWhenException())
             .blockTimeout(options.getBlockTimeout())
             .build();
 
-    ListMessageTemplate template =
-        new ListMessageTemplate(stringRedisTemplate, jacksonRecord, config);
+    ZSetMessageTemplate template =
+        new ZSetMessageTemplate(stringRedisTemplate, jacksonRecord, config);
     templateMap.put(queueName, template);
   }
 }

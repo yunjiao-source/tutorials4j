@@ -12,7 +12,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import tutorials4j.framework.common.core.DefaultConsts;
-import tutorials4j.framework.common.spring.jackson.Jackson2Utils;
+import tutorials4j.framework.common.spring.jackson.JacksonUtils;
 import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.crypto.core.annotation.Crypto;
 import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
@@ -62,7 +62,7 @@ public class CryptoResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     CryptoProcessor cryptoProcessor =
         cryptoProcessorCacheTemplate.createIfAbsent(encryptedSecretKey);
-    String bodyString = Jackson2Utils.instance.toJson(body);
+    String bodyString = JacksonUtils.instance.toJson(body);
     String result = cryptoProcessor.encrypt(bodyString);
     if (StringUtils.isNotBlank(result)) {
       if (log.isDebugEnabled()) {
