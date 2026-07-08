@@ -1,5 +1,6 @@
 package tutorials4j.framework.examples.message.redis.list;
 
+import jakarta.annotation.PreDestroy;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +8,8 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 import tutorials4j.framework.message.core.bean.MessageConsts;
-import tutorials4j.framework.message.redis.factory.ListMessageFactory;
-import tutorials4j.framework.message.redis.template.ListMessageTemplate;
+import tutorials4j.framework.message.redis.list.ListMessageFactory;
+import tutorials4j.framework.message.redis.list.ListMessageHandler;
 
 /**
  * TODO
@@ -19,30 +20,32 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
 @Component
 public class SmsService {
   private final AtomicLong id = new AtomicLong();
-  private final ListMessageTemplate smsTemplate;
-  private final SmsConsumerMain smsConsumerMain;
-  private final SmsConsumerDeadLetter smsConsumerDeadLetter;
+  private final ListMessageHandler smsHandler;
+  private final SmsConsumer smsConsumer;
   private final JacksonRecord jacksonRecord;
 
   public SmsService(ListMessageFactory factory, ObjectMapperCreator creator) {
-    this.smsTemplate = factory.template(MessageConsts.MESSAGE_KEY_SMS);
+    this.smsHandler = factory.template(MessageConsts.MESSAGE_KEY_SMS);
 
     jacksonRecord = new JacksonRecord(creator.getInstance());
-    smsConsumerDeadLetter = new SmsConsumerDeadLetter(smsTemplate, jacksonRecord);
-    smsConsumerMain = new SmsConsumerMain(smsTemplate, jacksonRecord);
+    smsConsumer = new SmsConsumer(jacksonRecord, smsHandler);
   }
 
   public void sendSms() {
     SmsData data = new SmsData(id.incrementAndGet(), Instant.now());
     log.info("生成短信消息：{}", data);
-    smsTemplate.send(jacksonRecord.toJson(data));
+    smsHandler.send(jacksonRecord.toJson(data));
   }
 
   public void init() {
     // 开启两个线程
-    smsConsumerMain.start();
-    smsConsumerMain.start();
+    smsConsumer.start();
+    smsConsumer.start();
+  }
 
-    smsConsumerDeadLetter.start();
+  @PreDestroy
+  public void destroy() {
+    log.info("短信服务关闭");
+    smsHandler.shutdown();
   }
 }

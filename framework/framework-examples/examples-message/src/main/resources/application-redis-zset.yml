@@ -1,10 +1,8 @@
 tutorials4j:
   message:
     redis:
-      zset-queues:
+      zset:
         task1:
-          sleep-when-exception: 3s
           block-timeout: 5s
-          delay-timeout: 10s
-          max-retry-count: 2
+
 

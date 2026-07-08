@@ -10,8 +10,5 @@ import lombok.Data;
  */
 @Data
 public class QueueOptions {
-  private int maxRetryCount = 3;
-  private Duration delayTimeout = Duration.ofSeconds(30);
   private Duration blockTimeout = Duration.ofSeconds(3);
-  private Duration sleepWhenException = Duration.ofSeconds(5);
 }

@@ -10,12 +10,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
-import tutorials4j.framework.message.redis.factory.ListMessageFactory;
-import tutorials4j.framework.message.redis.factory.ZSetMessageFactory;
+import tutorials4j.framework.message.redis.list.ListMessageFactory;
 import tutorials4j.framework.message.redis.properties.RedisMessageProperties;
+import tutorials4j.framework.message.redis.zset.ZSetMessageFactory;
 
 /**
  * 配置
@@ -35,32 +35,34 @@ public class RedisMessageConfiguration {
   @Bean
   @ConditionalOnMissingBean
   ListMessageFactory listMessageFactory(
-      RedisTemplate<String, String> stringRedisTemplate,
+      StringRedisTemplate stringRedisTemplate,
       ObjectMapperCreator creator,
       RedisMessageProperties properties) {
     log.trace("[MESSAGE-REDIS] List Message Factory");
 
-    ObjectMapper objectMapper = creator.newInstance();
-    PolymorphicTypeValidator ptv =
-        BasicPolymorphicTypeValidator.builder()
-            .allowIfSubType("tutorials4j.framework.message.redis.bean")
-            .build();
-    objectMapper.activateDefaultTyping(
-        ptv, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+    ObjectMapper objectMapper = createObjectMapper(creator);
     ListMessageFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
     ListMessageFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    ListMessageFactory.instance.setQueueOptionsMap(properties.getListQueues());
+    ListMessageFactory.instance.setQueueOptionsMap(properties.getList());
     return ListMessageFactory.instance;
   }
 
   @Bean
   @ConditionalOnMissingBean
   ZSetMessageFactory zsetMessageFactory(
-      RedisTemplate<String, String> stringRedisTemplate,
+      StringRedisTemplate stringRedisTemplate,
       ObjectMapperCreator creator,
       RedisMessageProperties properties) {
     log.trace("[MESSAGE-REDIS] ZSet Message Factory");
 
+    ObjectMapper objectMapper = createObjectMapper(creator);
+    ZSetMessageFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
+    ZSetMessageFactory.instance.setStringRedisTemplate(stringRedisTemplate);
+    ZSetMessageFactory.instance.setQueueOptionsMap(properties.getZset());
+    return ZSetMessageFactory.instance;
+  }
+
+  private ObjectMapper createObjectMapper(ObjectMapperCreator creator) {
     ObjectMapper objectMapper = creator.newInstance();
     PolymorphicTypeValidator ptv =
         BasicPolymorphicTypeValidator.builder()
@@ -68,9 +70,6 @@ public class RedisMessageConfiguration {
             .build();
     objectMapper.activateDefaultTyping(
         ptv, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-    ZSetMessageFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
-    ZSetMessageFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    ZSetMessageFactory.instance.setQueueOptionsMap(properties.getZsetQueues());
-    return ZSetMessageFactory.instance;
+    return objectMapper;
   }
 }

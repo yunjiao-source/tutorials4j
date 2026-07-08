@@ -1,9 +1,7 @@
 tutorials4j:
   message:
     redis:
-      list-queues:
+      list:
         sms:
-          sleep-when-exception: 3s
           block-timeout: 5s
-          delay-timeout: 10s
-          max-retry-count: 2
+

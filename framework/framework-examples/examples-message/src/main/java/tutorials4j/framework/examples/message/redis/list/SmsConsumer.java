@@ -3,12 +3,12 @@ package tutorials4j.framework.examples.message.redis.list;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
-import tutorials4j.framework.message.redis.template.ListMessageTemplate;
+import tutorials4j.framework.message.redis.list.ListMessageHandler;
+import tutorials4j.framework.message.redis.list.ListRedisMessageConsumer;
 
 /**
  * TODO
@@ -17,10 +17,10 @@ import tutorials4j.framework.message.redis.template.ListMessageTemplate;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class SmsConsumerMain implements Runnable, Function<BaseRedisMessage, Boolean> {
-  private AtomicInteger id = new AtomicInteger(0);
-  private final ListMessageTemplate smsTemplate;
+public class SmsConsumer implements Runnable, ListRedisMessageConsumer {
+  private static final AtomicInteger id = new AtomicInteger(0);
   private final JacksonRecord jacksonRecord;
+  private final ListMessageHandler smsHandler;
 
   public void start() {
     Thread thread = new Thread(this);
@@ -29,18 +29,11 @@ public class SmsConsumerMain implements Runnable, Function<BaseRedisMessage, Boo
   }
 
   @Override
-  public void run() {
-    smsTemplate.consumerMain(this);
-  }
+  public void handleMessage(BaseRedisMessage message) {
+    SmsData data = jacksonRecord.toObject(message.getData(), SmsData.class);
 
-  @Override
-  public Boolean apply(BaseRedisMessage message) {
-    if (ThreadLocalRandom.current().nextInt(99) < 40) {
+    if (ThreadLocalRandom.current().nextInt(99) < 30) {
       throw new RuntimeException("业务处理异常");
-    }
-
-    if (ThreadLocalRandom.current().nextInt(99) < 40) {
-      return false;
     }
 
     long milli = ThreadLocalRandom.current().nextInt(5000);
@@ -50,7 +43,16 @@ public class SmsConsumerMain implements Runnable, Function<BaseRedisMessage, Boo
       throw new RuntimeException(e);
     }
 
-    log.info("发送短信：{}", jacksonRecord.toObject(message.data(), SmsData.class));
-    return true;
+    log.info("发送短信：{}", data);
+  }
+
+  @Override
+  public void handleMessageWhenError(BaseRedisMessage message, Throwable throwable) {
+    log.error("短信处理发生异常[{}]，将消息存入数据库[{}]", throwable.getMessage(), message.getId());
+  }
+
+  @Override
+  public void run() {
+    smsHandler.consumer(this);
   }
 }

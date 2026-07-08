@@ -16,6 +16,8 @@ public interface MessageConsts {
   String MESSAGE_QUEUE_DEAD_LETTER = ":dead_letter";
   String MESSAGE_QUEUE_DELAY = ":delay";
 
+  String MESSAGE_QUEUE_IDEMPOTENT = ":idempotent";
+
   static String getMessageQueueMain(String queueName) {
     return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_MAIN;
   }
@@ -30,5 +32,9 @@ public interface MessageConsts {
 
   static String getMessageQueueDelay(String queueName) {
     return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_DELAY;
+  }
+
+  static String getMessageQueueIdempotent(String queueName) {
+    return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_IDEMPOTENT;
   }
 }
