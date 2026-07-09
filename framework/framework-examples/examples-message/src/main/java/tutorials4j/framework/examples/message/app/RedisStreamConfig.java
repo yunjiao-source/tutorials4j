@@ -3,13 +3,15 @@ package tutorials4j.framework.examples.message.app;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * 组合缓存应用配置
  *
  * @author Yun Jiao
  */
+@EnableScheduling
 @Configuration
-@Profile("redis-zset")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.message.redis.zset"})
-public class RedisZSetConfig {}
+@Profile("redis-stream")
+@ComponentScan(basePackages = {"tutorials4j.framework.examples.message.redis.stream"})
+public class RedisStreamConfig {}

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 import tutorials4j.framework.examples.message.redis.list.SmsData;
-import tutorials4j.framework.message.redis.zset.ZSetMessageFactory;
 import tutorials4j.framework.message.redis.zset.ZSetMessageHandler;
+import tutorials4j.framework.message.redis.zset.ZSetMessageHandlerFactory;
 
 /**
  * TODO
@@ -28,8 +28,8 @@ public class TaskService {
 
   private final JacksonRecord jacksonRecord;
 
-  public TaskService(ZSetMessageFactory factory, ObjectMapperCreator creator) {
-    this.taskHandler = factory.template(MESSAGE_KEY);
+  public TaskService(ZSetMessageHandlerFactory factory, ObjectMapperCreator creator) {
+    this.taskHandler = factory.handler(MESSAGE_KEY);
 
     jacksonRecord = new JacksonRecord(creator.getInstance());
     taskConsumer = new TaskConsumer(jacksonRecord, taskHandler);

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 import tutorials4j.framework.message.core.bean.MessageConsts;
-import tutorials4j.framework.message.redis.list.ListMessageFactory;
 import tutorials4j.framework.message.redis.list.ListMessageHandler;
+import tutorials4j.framework.message.redis.list.ListMessageHandlerFactory;
 
 /**
  * TODO
@@ -24,8 +24,8 @@ public class SmsService {
   private final SmsConsumer smsConsumer;
   private final JacksonRecord jacksonRecord;
 
-  public SmsService(ListMessageFactory factory, ObjectMapperCreator creator) {
-    this.smsHandler = factory.template(MessageConsts.MESSAGE_KEY_SMS);
+  public SmsService(ListMessageHandlerFactory factory, ObjectMapperCreator creator) {
+    this.smsHandler = factory.handler(MessageConsts.MESSAGE_KEY_SMS);
 
     jacksonRecord = new JacksonRecord(creator.getInstance());
     smsConsumer = new SmsConsumer(jacksonRecord, smsHandler);

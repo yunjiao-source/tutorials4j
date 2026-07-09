@@ -81,6 +81,7 @@ public class ZSetMessageHandler {
   }
 
   public void consumer(DelayMessageConsumer consumer) {
+    Assert.notNull(consumer, "consumer must not be null or empty");
     while (running.get()) {
       try {
         String message =

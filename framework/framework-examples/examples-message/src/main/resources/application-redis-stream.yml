@@ -1,0 +1,12 @@
+tutorials4j:
+  message:
+    redis:
+      stream:
+        email:
+          consumer-group: email-group
+          sleep-time-when-exception: 3s
+          count-pre-read: 10
+          block-timeout: 5s
+          retention-time: 1m
+
+

@@ -13,9 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
-import tutorials4j.framework.message.redis.list.ListMessageFactory;
+import tutorials4j.framework.message.redis.list.ListMessageHandlerFactory;
 import tutorials4j.framework.message.redis.properties.RedisMessageProperties;
-import tutorials4j.framework.message.redis.zset.ZSetMessageFactory;
+import tutorials4j.framework.message.redis.stream.StreamMessageHandlerFactory;
+import tutorials4j.framework.message.redis.zset.ZSetMessageHandlerFactory;
 
 /**
  * 配置
@@ -34,32 +35,43 @@ public class RedisMessageConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  ListMessageFactory listMessageFactory(
+  ListMessageHandlerFactory listMessageFactory(
       StringRedisTemplate stringRedisTemplate,
       ObjectMapperCreator creator,
       RedisMessageProperties properties) {
     log.trace("[MESSAGE-REDIS] List Message Factory");
 
     ObjectMapper objectMapper = createObjectMapper(creator);
-    ListMessageFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
-    ListMessageFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    ListMessageFactory.instance.setQueueOptionsMap(properties.getList());
-    return ListMessageFactory.instance;
+    ListMessageHandlerFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
+    ListMessageHandlerFactory.instance.setStringRedisTemplate(stringRedisTemplate);
+    ListMessageHandlerFactory.instance.setQueueOptionsMap(properties.getQueues());
+    return ListMessageHandlerFactory.instance;
   }
 
   @Bean
   @ConditionalOnMissingBean
-  ZSetMessageFactory zsetMessageFactory(
+  ZSetMessageHandlerFactory zsetMessageFactory(
       StringRedisTemplate stringRedisTemplate,
       ObjectMapperCreator creator,
       RedisMessageProperties properties) {
     log.trace("[MESSAGE-REDIS] ZSet Message Factory");
 
     ObjectMapper objectMapper = createObjectMapper(creator);
-    ZSetMessageFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
-    ZSetMessageFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    ZSetMessageFactory.instance.setQueueOptionsMap(properties.getZset());
-    return ZSetMessageFactory.instance;
+    ZSetMessageHandlerFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
+    ZSetMessageHandlerFactory.instance.setStringRedisTemplate(stringRedisTemplate);
+    ZSetMessageHandlerFactory.instance.setQueueOptionsMap(properties.getQueues());
+    return ZSetMessageHandlerFactory.instance;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  StreamMessageHandlerFactory streamMessageHandlerFactory(
+      StringRedisTemplate stringRedisTemplate, RedisMessageProperties properties) {
+    log.trace("[MESSAGE-REDIS] Stream Message Handler Factory");
+
+    StreamMessageHandlerFactory.instance.setStringRedisTemplate(stringRedisTemplate);
+    StreamMessageHandlerFactory.instance.setQueueOptionsMap(properties.getQueues());
+    return StreamMessageHandlerFactory.instance;
   }
 
   private ObjectMapper createObjectMapper(ObjectMapperCreator creator) {

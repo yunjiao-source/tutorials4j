@@ -1,4 +1,4 @@
-package tutorials4j.framework.message.redis.list;
+package tutorials4j.framework.message.redis.zset;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,24 +18,24 @@ import tutorials4j.framework.message.redis.properties.QueueOptions;
  * @author Yun Jiao
  */
 @Slf4j
-public class ListMessageFactory {
-  public static final ListMessageFactory instance = new ListMessageFactory();
+public class ZSetMessageHandlerFactory {
+  public static final ZSetMessageHandlerFactory instance = new ZSetMessageHandlerFactory();
 
   @Setter private StringRedisTemplate stringRedisTemplate;
   @Setter private JacksonRecord jacksonRecord;
   @Setter private Map<String, QueueOptions> queueOptionsMap;
-  private final Map<String, ListMessageHandler> handlereMap = new ConcurrentHashMap<>();
+  private final Map<String, ZSetMessageHandler> handlereMap = new ConcurrentHashMap<>();
 
-  public ListMessageHandler template(String key) {
+  public ZSetMessageHandler handler(String key) {
     Assert.hasText(key, "key must not be null or empty");
 
     if (!handlereMap.containsKey(key)) {
-      initTemplate(key);
+      initHandler(key);
     }
     return handlereMap.get(key);
   }
 
-  private synchronized void initTemplate(String key) {
+  private synchronized void initHandler(String key) {
     if (handlereMap.containsKey(key)) {
       return;
     }
@@ -49,13 +49,16 @@ public class ListMessageFactory {
     }
 
     QueueOptions options = queueOptionsMap.get(key);
-    ListMessageConfig config =
-        ListMessageConfig.builder()
-            .queueName(MessageConsts.getMessageQueueMain(key))
+    ZSetMessageConfig config =
+        ZSetMessageConfig.builder()
+            .name(key)
+            .delayQueueName(MessageConsts.getMessageQueueMain(key))
+            .processQueueName(MessageConsts.getMessageQueueProcess(key))
             .blockTimeout(options.getBlockTimeout())
             .build();
+    config.validate();
 
-    ListMessageHandler handler = new ListMessageHandler(stringRedisTemplate, config, jacksonRecord);
+    ZSetMessageHandler handler = new ZSetMessageHandler(stringRedisTemplate, config, jacksonRecord);
     handlereMap.put(key, handler);
   }
 }

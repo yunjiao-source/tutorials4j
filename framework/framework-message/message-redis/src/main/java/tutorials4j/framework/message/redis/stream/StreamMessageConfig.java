@@ -2,7 +2,7 @@ package tutorials4j.framework.message.redis.stream;
 
 import java.time.Duration;
 import lombok.Builder;
-import tutorials4j.framework.message.core.bean.MessageConsts;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * TODO
@@ -11,19 +11,37 @@ import tutorials4j.framework.message.core.bean.MessageConsts;
  */
 @Builder
 public record StreamMessageConfig(
+    String name,
     String queueName,
     int countPreRead,
-    Duration sleepWhenExcption,
-    Duration pendingTimeout,
-    int maxRetryCount,
-    Duration claimMinIdleTime) {
-  public static final String MESSAGE_TYPE = "stream";
+    Duration sleepTimeWhenException,
+    Duration blockTimeout,
+    String consumerGroup,
+    Duration retentionTime) {
 
-  public String getMainQueue() {
-    return MessageConsts.getMessageQueueMain(MESSAGE_TYPE + ":" + queueName);
-  }
+  public void validate() {
+    if (StringUtils.isBlank(name)) {
+      throw new IllegalArgumentException("name must not be null or empty");
+    }
 
-  public String getDeadLetterQueue() {
-    return MessageConsts.getMessageQueueDeadLetter(MESSAGE_TYPE + ":" + queueName);
+    if (StringUtils.isBlank(queueName)) {
+      throw new IllegalArgumentException("queueName must not be null or empty");
+    }
+
+    if (StringUtils.isBlank(consumerGroup)) {
+      throw new IllegalArgumentException("consumerGroup must not be null or empty");
+    }
+
+    if (countPreRead <= 0) {
+      throw new IllegalArgumentException("countPreRead must not be greater than zero");
+    }
+
+    if (sleepTimeWhenException == null) {
+      throw new IllegalArgumentException("sleepTimeWhenException must not be null");
+    }
+
+    if (retentionTime == null) {
+      throw new IllegalArgumentException("retentionTime must not be null");
+    }
   }
 }

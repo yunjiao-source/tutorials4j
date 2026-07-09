@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.Assert;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.message.core.exception.MessageErrorCode;
+import tutorials4j.framework.message.core.util.MessageUtils;
 import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
 
 /**
@@ -63,6 +64,8 @@ public class ListMessageHandler {
   }
 
   public void consumer(ListRedisMessageConsumer consumer) {
+    Assert.notNull(consumer, "consumer must not be null or empty");
+
     while (running.get()) {
       try {
         String message =
@@ -88,11 +91,7 @@ public class ListMessageHandler {
         log.error("消息消费异常：queueName = {}, error = {}", config.queueName(), e.getMessage());
 
         // 休眠，避免错误信息刷屏
-        try {
-          TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException ex) {
-          Thread.currentThread().interrupt();
-        }
+        MessageUtils.sleepForWait(config.sleepTimeWhenException());
       }
     }
   }
