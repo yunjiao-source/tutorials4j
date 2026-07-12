@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.connection.stream.Consumer;
 import org.springframework.data.redis.connection.stream.ObjectRecord;
 import org.springframework.data.redis.connection.stream.ReadOffset;
@@ -16,7 +17,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.Assert;
 import tutorials4j.framework.message.core.exception.MessageErrorCode;
 import tutorials4j.framework.message.core.util.MessageUtils;
-import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
+import tutorials4j.framework.message.redis.bean.RedisMessage;
+import tutorials4j.framework.message.redis.bean.RedisMessageType;
+import tutorials4j.framework.message.redis.template.RedisMessageConsumer;
 
 /**
  * TODO
@@ -24,38 +27,32 @@ import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
  * @author Yun Jiao
  */
 @Slf4j
-public class StreamMessageHandler {
+public class StreamMessageTemplate {
   private final StringRedisTemplate stringRedisTemplate;
   private final StreamMessageConfig config;
 
   private final AtomicBoolean running = new AtomicBoolean(true);
 
-  public StreamMessageHandler(StringRedisTemplate stringRedisTemplate, StreamMessageConfig config) {
+  public StreamMessageTemplate(
+      StringRedisTemplate stringRedisTemplate, StreamMessageConfig config) {
     this.stringRedisTemplate = stringRedisTemplate;
     this.config = config;
 
     init();
   }
 
-  public String send(String data) {
-    Assert.notNull(data, "data must not be null");
-
-    BaseRedisMessage message = new BaseRedisMessage();
-    message.defaultValue();
-    message.setQueueName(config.queueName());
-    message.setData(data);
-
-    return send(message);
-  }
-
-  public String send(BaseRedisMessage message) {
+  public String send(RedisMessage message) {
     Assert.notNull(message, "message must not be null");
 
-    if (!Objects.equals(message.getQueueName(), config.queueName())) {
+    if (StringUtils.isBlank(message.getName())) {
+      // 新消息没有值，重复时有值
+      message.setName(config.name());
+    }
+    if (!Objects.equals(message.getName(), config.name())) {
       throw MessageErrorCode.MESSAGE_KEY_MISMATCH
           .throwed()
-          .param("template key", config.queueName())
-          .param("message key", message.getQueueName());
+          .param("config", config.name())
+          .param("message", message.getName());
     }
 
     RecordId recordId =
@@ -65,12 +62,12 @@ public class StreamMessageHandler {
     return recordId != null ? recordId.getValue() : null;
   }
 
-  public void consumer(String consumerName, StreamMessageConsumer consumer) {
+  public void consumer(String consumerGroup, String consumerName, RedisMessageConsumer consumer) {
+    Assert.hasText(consumerGroup, "consumerGroup must not be null or empty");
     Assert.notNull(consumerName, "consumerName must not be null or empty");
     Assert.notNull(consumer, "consumer must not be null");
 
     String streamKey = config.queueName();
-    String consumerGroup = config.consumerGroup();
 
     while (running.get()) {
       try {
@@ -79,11 +76,11 @@ public class StreamMessageHandler {
             StreamReadOptions.empty().block(config.blockTimeout()).count(config.countPreRead());
 
         // 从消费者组读取消息（从上次消费位置继续）
-        List<ObjectRecord<String, BaseRedisMessage>> messages =
+        List<ObjectRecord<String, RedisMessage>> messages =
             stringRedisTemplate
                 .opsForStream()
                 .read(
-                    BaseRedisMessage.class,
+                    RedisMessage.class,
                     Consumer.from(consumerGroup, consumerName),
                     readOptions,
                     StreamOffset.create(streamKey, ReadOffset.lastConsumed()));
@@ -92,8 +89,8 @@ public class StreamMessageHandler {
           continue;
         }
 
-        for (ObjectRecord<String, BaseRedisMessage> record : messages) {
-          BaseRedisMessage body = record.getValue();
+        for (ObjectRecord<String, RedisMessage> record : messages) {
+          RedisMessage body = record.getValue();
           try {
             consumer.handleMessage(body);
             ack(record);
@@ -139,6 +136,10 @@ public class StreamMessageHandler {
     running.set(false);
   }
 
+  public RedisMessageType getMessageType() {
+    return RedisMessageType.stream;
+  }
+
   private void init() {
     try {
       stringRedisTemplate.opsForStream().createGroup(config.queueName(), config.consumerGroup());
@@ -146,7 +147,7 @@ public class StreamMessageHandler {
     }
   }
 
-  public void ack(ObjectRecord<String, BaseRedisMessage> record) {
+  private void ack(ObjectRecord<String, RedisMessage> record) {
     stringRedisTemplate.opsForStream().acknowledge(config.consumerGroup(), record);
   }
 }

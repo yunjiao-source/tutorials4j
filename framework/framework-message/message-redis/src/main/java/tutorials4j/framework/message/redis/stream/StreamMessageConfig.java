@@ -21,7 +21,7 @@ public record StreamMessageConfig(
 
   public void validate() {
     if (StringUtils.isBlank(name)) {
-      throw new IllegalArgumentException("name must not be null or empty");
+      throw new IllegalArgumentException("type must not be null or empty");
     }
 
     if (StringUtils.isBlank(queueName)) {

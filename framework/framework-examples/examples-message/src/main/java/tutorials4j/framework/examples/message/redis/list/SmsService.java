@@ -4,12 +4,12 @@ import jakarta.annotation.PreDestroy;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
-import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 import tutorials4j.framework.message.core.bean.MessageConsts;
-import tutorials4j.framework.message.redis.list.ListMessageHandler;
-import tutorials4j.framework.message.redis.list.ListMessageHandlerFactory;
+import tutorials4j.framework.message.redis.list.ListMessageTempalteFactory;
+import tutorials4j.framework.message.redis.list.ListMessageTemplate;
 
 /**
  * TODO
@@ -20,21 +20,25 @@ import tutorials4j.framework.message.redis.list.ListMessageHandlerFactory;
 @Component
 public class SmsService {
   private final AtomicLong id = new AtomicLong();
-  private final ListMessageHandler smsHandler;
+  private final ListMessageTemplate smsTemplate;
   private final SmsConsumer smsConsumer;
   private final JacksonRecord jacksonRecord;
 
-  public SmsService(ListMessageHandlerFactory factory, ObjectMapperCreator creator) {
-    this.smsHandler = factory.handler(MessageConsts.MESSAGE_KEY_SMS);
+  public SmsService(
+      ListMessageTempalteFactory factory,
+      JacksonRecord jacksonRecord,
+      ApplicationEventPublisher publisher) {
+    this.jacksonRecord = jacksonRecord;
+    this.smsTemplate = factory.template(MessageConsts.MESSAGE_KEY_SMS);
 
-    jacksonRecord = new JacksonRecord(creator.getInstance());
-    smsConsumer = new SmsConsumer(jacksonRecord, smsHandler);
+    smsConsumer = new SmsConsumer(publisher, jacksonRecord, smsTemplate);
   }
 
   public void sendSms() {
     SmsData data = new SmsData(id.incrementAndGet(), Instant.now());
     log.info("生成短信消息：{}", data);
-    smsHandler.send(jacksonRecord.toJson(data));
+
+    smsTemplate.send(jacksonRecord.toJson(data));
   }
 
   public void init() {
@@ -46,6 +50,6 @@ public class SmsService {
   @PreDestroy
   public void destroy() {
     log.info("短信服务关闭");
-    smsHandler.shutdown();
+    smsTemplate.shutdown();
   }
 }

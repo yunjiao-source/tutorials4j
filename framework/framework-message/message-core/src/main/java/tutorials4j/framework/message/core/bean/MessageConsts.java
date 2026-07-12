@@ -11,30 +11,15 @@ public interface MessageConsts {
   String MESSAGE_KEY_SMS = "sms";
 
   String MESSAGE_QUEUE_PREFIX = "message:";
-  String MESSAGE_QUEUE_MAIN = ":main";
-  String MESSAGE_QUEUE_PROCESS = ":process";
-  String MESSAGE_QUEUE_DEAD_LETTER = ":dead_letter";
-  String MESSAGE_QUEUE_DELAY = ":delay";
 
-  String MESSAGE_QUEUE_IDEMPOTENT = ":idempotent";
+  String MESSAGE_QUEUE_SUFFIX_PROCESS = ":process";
+  String MESSAGE_QUEUE_SUFFIX_DEAD_LETTER = ":dead_letter";
 
-  static String getMessageQueueMain(String queueName) {
-    return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_MAIN;
-  }
+  String MESSAGE_QUEUE_SUFFIX_DELAY = ":delay";
 
-  static String getMessageQueueProcess(String queueName) {
-    return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_PROCESS;
-  }
+  String MESSAGE_QUEUE_SUFFIX_IDEMPOTENT = ":idempotent";
 
-  static String getMessageQueueDeadLetter(String queueName) {
-    return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_DEAD_LETTER;
-  }
-
-  static String getMessageQueueDelay(String queueName) {
-    return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_DELAY;
-  }
-
-  static String getMessageQueueIdempotent(String queueName) {
-    return MESSAGE_QUEUE_PREFIX + queueName + MESSAGE_QUEUE_IDEMPOTENT;
+  static String getMessageQueue(String messageType, String queueName) {
+    return MESSAGE_QUEUE_PREFIX + queueName + ":" + messageType;
   }
 }

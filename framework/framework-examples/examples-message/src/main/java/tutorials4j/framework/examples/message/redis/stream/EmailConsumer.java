@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.examples.message.redis.list.SmsData;
-import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
-import tutorials4j.framework.message.redis.stream.StreamMessageConsumer;
-import tutorials4j.framework.message.redis.stream.StreamMessageHandler;
+import tutorials4j.framework.message.redis.bean.RedisMessage;
+import tutorials4j.framework.message.redis.stream.StreamMessageTemplate;
+import tutorials4j.framework.message.redis.template.RedisMessageConsumer;
 
 /**
  * TODO
@@ -18,22 +18,18 @@ import tutorials4j.framework.message.redis.stream.StreamMessageHandler;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class EmailConsumer implements Runnable, StreamMessageConsumer {
+public class EmailConsumer implements Runnable, RedisMessageConsumer {
   private static final AtomicInteger id = new AtomicInteger(0);
   private final JacksonRecord jacksonRecord;
-  private final StreamMessageHandler emailHandler;
-
-  public void start() {
-    Thread thread = new Thread(this);
-    thread.setName("task-consumer-main-" + id.incrementAndGet());
-    thread.start();
-  }
+  private final StreamMessageTemplate emailTemplate;
+  private final String consumerGroup;
+  private final String consumerName;
 
   @Override
-  public void handleMessage(BaseRedisMessage message) {
+  public void handleMessage(RedisMessage message) {
     SmsData data = jacksonRecord.toObject(message.getData(), SmsData.class);
 
-    if (ThreadLocalRandom.current().nextInt(99) < 30) {
+    if (ThreadLocalRandom.current().nextInt(99) < 50) {
       throw new RuntimeException("业务处理异常");
     }
 
@@ -48,12 +44,12 @@ public class EmailConsumer implements Runnable, StreamMessageConsumer {
   }
 
   @Override
-  public void handleMessageWhenError(BaseRedisMessage message, Throwable throwable) {
+  public void handleMessageWhenError(RedisMessage message, Throwable throwable) {
     log.error("任务处理发生异常[{}]，将消息存入数据库[{}]", throwable.getMessage(), message.getId());
   }
 
   @Override
   public void run() {
-    emailHandler.consumer("instant-" + id.incrementAndGet(), this);
+    emailTemplate.consumer(consumerGroup, consumerName, this);
   }
 }

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -28,28 +29,24 @@ import tutorials4j.framework.common.core.exception.ErrorCodeException;
 @Order(300)
 public class GlobalExceptionHandler extends AbstractExceptionHandler {
   @ExceptionHandler(ErrorCodeException.class)
-  public Result<Void> handleBaseException(
-      ErrorCodeException ex, HttpServletRequest request, HttpServletResponse response) {
+  public ResponseEntity<Result<Void>> handleBaseException(
+      ErrorCodeException ex, HttpServletRequest request) {
     Result<Void> result =
         ex.getResult()
             .path(request.getRequestURI())
             .traceId(MDC.get(DefaultConsts.HTTP_HEADER_TRACE_ID));
 
-    response.setStatus(result.getStatus());
-
     log.warn("业务异常: {}", result);
-    return result;
+    return ResponseEntity.status(result.getStatus()).body(result);
   }
 
   @ExceptionHandler(Exception.class)
-  public Result<Void> handleOtherException(
+  public ResponseEntity<Result<Void>> handleOtherException(
       Exception ex, HttpServletRequest request, HttpServletResponse response) {
 
     Result<Void> result = resolveException(ex, request.getRequestURI());
-    response.setStatus(result.getStatus());
-
     log.error("系统异常", ex);
-    return result;
+    return ResponseEntity.status(result.getStatus()).body(result);
   }
 
   @Override

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>发送短信 - Thymeleaf + Bootstrap + jQuery</title>
+  <!-- 引入 Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/sse.css}">
+  <!-- 引入 jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+<div class="container my-4">
+  <!-- ========== 顶部按钮 ========== -->
+  <div class="d-flex justify-content-end">
+    <button id="sendSmsBtn" class="btn btn-primary btn-lg">
+      📨 发送短信
+    </button>
+  </div>
+
+  <hr class="my-3">
+
+  <!-- ========== 插入 sse.html 的内容 ========== -->
+  <!-- 使用 th:insert，保留外层 div，将片段插入其内部 -->
+  <div th:insert="redis/sse :: content"></div>
+  <!-- 如果 sse.html 只定义了一个片段，且名为 content，则直接引用 -->
+</div>
+
+<!-- ========== jQuery Ajax 调用 ========== -->
+<script th:inline="javascript">
+  $(document).ready(function() {
+    $('#sendSmsBtn').on('click', function() {
+      // 调用 /sms/send 接口（无返回值）
+      $.ajax({
+        url: '/sms/send',
+        type: 'POST',          // 根据实际接口调整（GET/POST）
+        dataType: 'text',      // 即使无返回值，也可指定类型
+        success: function() {
+          // 接口调用成功（HTTP 2xx）
+          alert('✅ 短信发送成功！');
+        },
+        error: function(xhr, status, error) {
+          // 处理错误
+          alert('❌ 发送失败：' + (xhr.statusText || error));
+        }
+      });
+    });
+  });
+</script>
+
+<!-- 可选：引入 Bootstrap JS（如果需要交互组件） -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

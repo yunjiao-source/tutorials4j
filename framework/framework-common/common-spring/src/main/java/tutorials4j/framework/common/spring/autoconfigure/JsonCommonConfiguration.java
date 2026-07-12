@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.spring.jackson.CommonSimpleModule;
+import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.JacksonUtils;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 
@@ -43,5 +44,12 @@ public class JsonCommonConfiguration {
   ObjectMapperCreator objectMapperCreator(ObjectMapper objectMapper) {
     log.trace("[COMMON-SPRING] Object Mapper Creator");
     return new ObjectMapperCreator(objectMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  JacksonRecord jacksonRecord(ObjectMapperCreator objectMapperCreator) {
+    log.trace("[COMMON-SPRING] Jackson Record");
+    return new JacksonRecord(objectMapperCreator.getInstance());
   }
 }

@@ -11,5 +11,9 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @Profile("redis-list")
-@ComponentScan(basePackages = {"tutorials4j.framework.examples.message.redis.list"})
+@ComponentScan(
+    basePackages = {
+      "tutorials4j.framework.examples.message.redis.list",
+      "tutorials4j.framework.examples.message.redis.event"
+    })
 public class RedisListConfig {}

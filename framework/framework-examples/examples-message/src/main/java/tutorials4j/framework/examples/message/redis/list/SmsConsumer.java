@@ -5,10 +5,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
-import tutorials4j.framework.message.redis.bean.BaseRedisMessage;
-import tutorials4j.framework.message.redis.list.ListMessageHandler;
-import tutorials4j.framework.message.redis.list.ListRedisMessageConsumer;
+import tutorials4j.framework.examples.message.redis.event.RedisMessageEvent;
+import tutorials4j.framework.message.redis.bean.RedisMessage;
+import tutorials4j.framework.message.redis.list.ListMessageTemplate;
+import tutorials4j.framework.message.redis.template.RedisMessageConsumer;
 
 /**
  * TODO
@@ -17,22 +19,23 @@ import tutorials4j.framework.message.redis.list.ListRedisMessageConsumer;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class SmsConsumer implements Runnable, ListRedisMessageConsumer {
+public class SmsConsumer implements Runnable, RedisMessageConsumer {
   private static final AtomicInteger id = new AtomicInteger(0);
+  private final ApplicationEventPublisher publisher;
   private final JacksonRecord jacksonRecord;
-  private final ListMessageHandler smsHandler;
+  private final ListMessageTemplate smsTemplate;
 
   public void start() {
     Thread thread = new Thread(this);
-    thread.setName("sms-consumer-main-" + id.incrementAndGet());
+    thread.setName("sms-consumer-" + id.incrementAndGet());
     thread.start();
   }
 
   @Override
-  public void handleMessage(BaseRedisMessage message) {
+  public void handleMessage(RedisMessage message) {
     SmsData data = jacksonRecord.toObject(message.getData(), SmsData.class);
 
-    if (ThreadLocalRandom.current().nextInt(99) < 30) {
+    if (ThreadLocalRandom.current().nextInt(99) < 50) {
       throw new RuntimeException("业务处理异常");
     }
 
@@ -43,16 +46,19 @@ public class SmsConsumer implements Runnable, ListRedisMessageConsumer {
       throw new RuntimeException(e);
     }
 
-    log.info("发送短信：{}", data);
+    publisher.publishEvent(new RedisMessageEvent("成功发送短信：" + data.id()));
   }
 
   @Override
-  public void handleMessageWhenError(BaseRedisMessage message, Throwable throwable) {
-    log.error("短信处理发生异常[{}]，将消息存入数据库[{}]", throwable.getMessage(), message.getId());
+  public void handleMessageWhenError(RedisMessage message, Throwable throwable) {
+    SmsData data = jacksonRecord.toObject(message.getData(), SmsData.class);
+    publisher.publishEvent(
+        new RedisMessageEvent(
+            "短信[id=" + data.id() + "]处理发生异常: " + message.getFailureReasons() + "，将消息存入数据库"));
   }
 
   @Override
   public void run() {
-    smsHandler.consumer(this);
+    smsTemplate.consumer(this);
   }
 }

@@ -2,11 +2,11 @@ tutorials4j:
   message:
     redis:
       queues:
-        email:
-          consumer-group: email-group1
+        demo1:
+          consumer-group: demo1-group1
           sleep-time-when-exception: 3s
           count-pre-read: 10
           block-timeout: 5s
-          retention-time: 1m
+          retention-time: 2m
 
 

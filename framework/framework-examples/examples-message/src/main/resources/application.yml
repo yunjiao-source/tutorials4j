@@ -1,8 +1,9 @@
 spring:
   profiles:
 #    active: redis-list
-#    active: redis-zset
-    active: redis-stream
+    active: redis-zset
+#    active: redis-stream
+#    active: redis-integration
 
 
 

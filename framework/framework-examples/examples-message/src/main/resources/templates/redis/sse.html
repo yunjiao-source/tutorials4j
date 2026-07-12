@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSE 实时消息监控</title>
+
+</head>
+<body>
+<div th:fragment="content">
+<div class="container">
+
+  <!-- ===== 头部 ===== -->
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col-md-7">
+        <h1><i class="fas fa-broadcast"></i> SSE 实时消息监控</h1>
+        <div class="subtitle">
+          <i class="fas fa-arrow-right me-1"></i>
+          通过 Server-Sent Events 接收 Redis 推送消息
+        </div>
+      </div>
+      <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                    <span id="statusBadge" class="status-badge connecting">
+                        <span class="dot"></span>
+                        <span id="statusText">连接中...</span>
+                    </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 信息卡片 ===== -->
+  <div class="row g-4 mb-4">
+    <!-- 连接信息 -->
+    <div class="col-md-6 col-lg-7">
+      <div class="card h-100">
+        <div class="card-header">
+          <span><i class="fas fa-link"></i> 连接信息</span>
+          <span class="badge bg-light text-dark" id="connectionUptime" style="font-weight:400;">
+                            <i class="far fa-clock me-1"></i> <span id="uptimeDisplay">--</span>
+                        </span>
+        </div>
+        <div class="card-body d-flex flex-wrap align-items-center gap-3">
+          <div class="client-id-box">
+            <i class="fas fa-id-card"></i>
+            客户端 ID：<span class="id-value" id="clientIdDisplay">--</span>
+          </div>
+          <div class="d-flex align-items-center gap-3 ms-auto">
+            <div class="text-center">
+              <div class="stat-number" id="messageCount">0</div>
+              <div class="stat-label">消息总数</div>
+            </div>
+            <div class="text-center">
+              <div class="stat-number" id="lastMsgTime">--</div>
+              <div class="stat-label">最后消息</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="col-md-6 col-lg-5">
+      <div class="card h-100">
+        <div class="card-header">
+          <span><i class="fas fa-sliders-h"></i> 控制面板</span>
+        </div>
+        <div class="card-body d-flex flex-wrap align-items-center gap-2">
+          <button id="btnReconnect" class="btn btn-primary btn-action">
+            <i class="fas fa-sync-alt"></i> 重新连接
+          </button>
+          <button id="btnDisconnect" class="btn btn-outline-danger btn-action">
+            <i class="fas fa-plug"></i> 断开
+          </button>
+          <button id="btnClear" class="btn btn-outline-secondary btn-action">
+            <i class="fas fa-eraser"></i> 清空消息
+          </button>
+          <button id="btnScrollBottom" class="btn btn-outline-info btn-action ms-auto">
+            <i class="fas fa-arrow-down"></i> 滚动到底
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 消息列表卡片 ===== -->
+  <div class="card">
+    <div class="card-header">
+      <span><i class="fas fa-list-ul"></i> 消息流</span>
+      <span class="badge bg-secondary" id="msgCountBadge">0 条</span>
+    </div>
+    <div class="card-body p-0">
+      <div id="messageList" class="message-list-container p-3">
+        <!-- 空状态 -->
+        <div id="emptyState" class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <p>暂无消息，等待 Redis 推送 ...</p>
+          <small class="text-muted-light">连接成功后，消息将实时显示在这里</small>
+        </div>
+        <!-- 动态消息将追加到这里 -->
+      </div>
+    </div>
+    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center py-2 px-3">
+      <small class="text-muted-light">
+        <i class="fas fa-info-circle me-1"></i>
+        最多保留 <strong>200</strong> 条消息
+      </small>
+      <small class="text-muted-light" id="footerStatus">
+        <i class="fas fa-circle text-success" style="font-size:0.5rem;"></i> 实时
+      </small>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- JavaScript 逻辑                                              -->
+<!-- ============================================================ -->
+<script>
+  $(function() {
+
+    // ---------- 状态 ----------
+    const STATE = {
+      DISCONNECTED: 'disconnected',
+      CONNECTING: 'connecting',
+      CONNECTED: 'connected',
+    };
+
+    let currentState = STATE.DISCONNECTED;
+    let eventSource = null;
+    let clientId = null;
+    let messageCount = 0;
+    let maxMessages = 200;
+    let connectionStartTime = null;
+    let uptimeInterval = null;
+
+    // DOM 引用
+    const $statusBadge = $('#statusBadge');
+    const $statusText = $('#statusText');
+    const $clientIdDisplay = $('#clientIdDisplay');
+    const $messageCount = $('#messageCount');
+    const $lastMsgTime = $('#lastMsgTime');
+    const $msgCountBadge = $('#msgCountBadge');
+    const $messageList = $('#messageList');
+    const $emptyState = $('#emptyState');
+    const $uptimeDisplay = $('#uptimeDisplay');
+    const $footerStatus = $('#footerStatus');
+
+    const $btnReconnect = $('#btnReconnect');
+    const $btnDisconnect = $('#btnDisconnect');
+    const $btnClear = $('#btnClear');
+    const $btnScrollBottom = $('#btnScrollBottom');
+
+    // ---------- 工具函数 ----------
+    function formatTime(ts) {
+      const d = new Date(ts);
+      return d.toLocaleTimeString('zh-CN', { hour12: false });
+    }
+
+    function formatFullTime(ts) {
+      const d = new Date(ts);
+      return d.toLocaleString('zh-CN', { hour12: false });
+    }
+
+    function getNow() {
+      return Date.now();
+    }
+
+    // 生成短 UUID (仅用于展示)
+    function shortId() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    // ---------- 更新状态 UI ----------
+    function setState(state, extraMsg) {
+      currentState = state;
+      const badge = $statusBadge;
+      const text = $statusText;
+
+      badge.removeClass('connected disconnected connecting');
+      if (state === STATE.CONNECTED) {
+        badge.addClass('connected');
+        text.text('已连接 ' + (extraMsg || ''));
+        $footerStatus.html('<i class="fas fa-circle text-success" style="font-size:0.5rem;"></i> 实时');
+      } else if (state === STATE.CONNECTING) {
+        badge.addClass('connecting');
+        text.text('连接中...');
+        $footerStatus.html('<i class="fas fa-circle text-warning" style="font-size:0.5rem;"></i> 连接中');
+      } else {
+        badge.addClass('disconnected');
+        text.text('已断开 ' + (extraMsg || ''));
+        $footerStatus.html('<i class="fas fa-circle text-danger" style="font-size:0.5rem;"></i> 已断开');
+      }
+
+      // 按钮状态
+      $btnDisconnect.prop('disabled', (state !== STATE.CONNECTED));
+      $btnReconnect.prop('disabled', (state === STATE.CONNECTING));
+    }
+
+    // ---------- 更新消息计数 ----------
+    function updateCount() {
+      $messageCount.text(messageCount);
+      $msgCountBadge.text(messageCount + ' 条');
+    }
+
+    // ---------- 添加消息 ----------
+    function addMessage(content, type, eventName) {
+      // type: 'connected' | 'message' | 'error' | 'info'
+      const now = getNow();
+      const timeStr = formatTime(now);
+      const fullTimeStr = formatFullTime(now);
+
+      // 移除空状态
+      $emptyState.hide();
+
+      // 构建消息 DOM
+      let iconClass = 'type-info';
+      let tagClass = 'tag-info';
+      let tagText = 'INFO';
+      let iconHtml = '<i class="fas fa-info"></i>';
+
+      if (type === 'connected') {
+        iconClass = 'type-connected';
+        tagClass = 'tag-connected';
+        tagText = '连接';
+        iconHtml = '<i class="fas fa-check"></i>';
+      } else if (type === 'message') {
+        iconClass = 'type-message';
+        tagClass = 'tag-message';
+        tagText = '消息';
+        iconHtml = '<i class="fas fa-envelope"></i>';
+      } else if (type === 'error') {
+        iconClass = 'type-error';
+        tagClass = 'tag-error';
+        tagText = '错误';
+        iconHtml = '<i class="fas fa-exclamation-triangle"></i>';
+      }
+
+      // 内容转义 (防止XSS)
+      const safeContent = String(content).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      const itemHtml = `
+                        <div class="message-item" data-time="${now}">
+                            <div class="msg-icon ${iconClass}">${iconHtml}</div>
+                            <div class="msg-body">
+                                <div class="msg-time">${fullTimeStr}</div>
+                                <div class="msg-content">
+                                    <span class="msg-type-tag ${tagClass}">${tagText}</span>
+                                    ${safeContent}
+                                    ${eventName ? `<small class="text-muted-light ms-2">(event: ${eventName})</small>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+      // 追加到列表
+      $messageList.append(itemHtml);
+
+      // 限制最大条数
+      const items = $messageList.children('.message-item');
+      while (items.length > maxMessages) {
+        items.first().remove();
+      }
+
+      // 更新计数
+      messageCount = items.length;
+      updateCount();
+
+      // 更新最后消息时间
+      $lastMsgTime.text(timeStr);
+
+      // 自动滚动到底部
+      const container = $messageList[0];
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // ---------- 清空消息 ----------
+    function clearMessages() {
+      // 保留空状态
+      $messageList.find('.message-item').remove();
+      messageCount = 0;
+      updateCount();
+      $lastMsgTime.text('--');
+      // 显示空状态
+      if (messageCount === 0) {
+        $emptyState.show();
+      }
+    }
+
+    // ---------- 更新 uptime ----------
+    function updateUptime() {
+      if (connectionStartTime && currentState === STATE.CONNECTED) {
+        const diff = Math.floor((getNow() - connectionStartTime) / 1000);
+        const mins = Math.floor(diff / 60);
+        const secs = diff % 60;
+        $uptimeDisplay.text(
+            mins > 0 ? `${mins}分${secs}秒` : `${secs}秒`
+        );
+      } else {
+        $uptimeDisplay.text('--');
+      }
+    }
+
+    // ---------- 建立 SSE 连接 ----------
+    function connectSSE() {
+      // 如果已有连接，先关闭
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+
+      setState(STATE.CONNECTING);
+
+      // 生成客户端ID (如果服务器返回了clientId，我们会从connected事件中获取)
+      // 这里我们生成一个临时ID，但服务器可能会忽略它，或者使用它。
+      // 为了让服务器使用我们生成的ID，我们传递 clientId 参数。
+      // 但服务器代码中，如果传了clientId就用传的，否则生成。
+      // 为了便于识别，我们生成一个带前缀的ID
+      const myClientId = 'web-' + shortId().substring(0, 8);
+      const url = '/sse/connect?clientId=' + encodeURIComponent(myClientId);
+
+      try {
+        eventSource = new EventSource(url);
+
+        // ----- 连接打开 -----
+        eventSource.onopen = function(e) {
+          // 注意：onopen 在连接建立时触发，但此时可能还没收到任何数据
+          // 我们等待 connected 事件来真正确认连接成功
+          console.log('[SSE] onopen', e);
+          // 不要立即设置为CONNECTED，等待connected事件
+        };
+
+        // ----- 普通消息 (message 事件) -----
+        eventSource.onmessage = function(e) {
+          // 这是默认的message事件，对应后端没有指定event名称的data
+          // 后端 broadcast 发送的数据会在这里收到
+          console.log('[SSE] onmessage', e.data);
+          if (e.data) {
+            addMessage(e.data, 'message', 'message');
+          }
+        };
+
+        // ----- 自定义事件：connected -----
+        eventSource.addEventListener('connected', function(e) {
+          // 后端发送的 connected 事件
+          console.log('[SSE] connected event', e.data);
+          const data = e.data || '';
+          // 尝试从数据中提取clientId
+          // 数据格式: "SSE 连接建立成功，clientId=xxx-xxx-xxx"
+          const match = data.match(/clientId=([^\s]+)/);
+          if (match && match[1]) {
+            clientId = match[1];
+            $clientIdDisplay.text(clientId);
+          } else {
+            // 如果没有提取到，使用我们自己生成的
+            clientId = myClientId;
+            $clientIdDisplay.text(clientId);
+          }
+
+          // 记录连接开始时间
+          connectionStartTime = getNow();
+          if (uptimeInterval) clearInterval(uptimeInterval);
+          uptimeInterval = setInterval(updateUptime, 1000);
+
+          setState(STATE.CONNECTED);
+          addMessage(data, 'connected', 'connected');
+        });
+
+        // ----- 错误处理 -----
+        eventSource.onerror = function(e) {
+          console.warn('[SSE] onerror', e);
+          // 如果连接已断开，更新状态
+          if (eventSource && eventSource.readyState === EventSource.CLOSED) {
+            setState(STATE.DISCONNECTED, '连接已关闭');
+            if (uptimeInterval) {
+              clearInterval(uptimeInterval);
+              uptimeInterval = null;
+              $uptimeDisplay.text('--');
+            }
+            // 显示一条错误消息
+            addMessage('SSE 连接已断开，请尝试重新连接', 'error', 'error');
+          } else if (eventSource && eventSource.readyState === EventSource.CONNECTING) {
+            // 自动重连中，状态保持connecting
+            setState(STATE.CONNECTING);
+          } else {
+            // 其他错误
+            setState(STATE.DISCONNECTED, '发生错误');
+            addMessage('SSE 连接发生错误: ' + (e.message || '未知错误'), 'error', 'error');
+          }
+        };
+
+      } catch (err) {
+        console.error('[SSE] 创建EventSource失败', err);
+        setState(STATE.DISCONNECTED, '创建连接失败');
+        addMessage('创建SSE连接失败: ' + err.message, 'error', 'error');
+      }
+    }
+
+    // ---------- 断开连接 ----------
+    function disconnectSSE() {
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+      if (uptimeInterval) {
+        clearInterval(uptimeInterval);
+        uptimeInterval = null;
+        $uptimeDisplay.text('--');
+      }
+      setState(STATE.DISCONNECTED, '已手动断开');
+      addMessage('已手动断开 SSE 连接', 'info', 'info');
+    }
+
+    // ---------- 重新连接 ----------
+    function reconnectSSE() {
+      disconnectSSE();
+      // 清空clientId显示 (等待重新连接后更新)
+      $clientIdDisplay.text('--');
+      // 延迟一点点再连接，确保清理完成
+      setTimeout(connectSSE, 300);
+    }
+
+    // ---------- 滚动到底部 ----------
+    function scrollToBottom() {
+      const container = $messageList[0];
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    // ---------- 页面初始化 ----------
+    function init() {
+      // 清空初始状态
+      clearMessages();
+
+      // 设置按钮事件
+      $btnReconnect.on('click', reconnectSSE);
+      $btnDisconnect.on('click', disconnectSSE);
+      $btnClear.on('click', function() {
+        clearMessages();
+      });
+      $btnScrollBottom.on('click', scrollToBottom);
+
+      // 页面关闭时断开连接
+      $(window).on('beforeunload', function() {
+        if (eventSource) {
+          eventSource.close();
+        }
+      });
+
+      // 自动连接
+      connectSSE();
+
+      // 定期更新uptime (即使没有连接也会显示 -- )
+      setInterval(updateUptime, 1000);
+
+      console.log('[SSE] 页面初始化完成');
+    }
+
+    // 启动
+    init();
+
+  });
+</script>
+</div>
+</body>
+</html>

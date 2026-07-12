@@ -1,8 +1,14 @@
 tutorials4j:
   message:
     redis:
-      zset:
+      queues:
         task1:
           block-timeout: 5s
+          sleep-time-when-exception: 3s
+          retry:
+            enabled: true
+            max-count: 3
+            expire-time: 10s
+            delay-time: 3s
 
 

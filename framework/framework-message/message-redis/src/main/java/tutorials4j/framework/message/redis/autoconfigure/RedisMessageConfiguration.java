@@ -13,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
-import tutorials4j.framework.message.redis.list.ListMessageHandlerFactory;
+import tutorials4j.framework.message.redis.list.ListMessageTempalteFactory;
 import tutorials4j.framework.message.redis.properties.RedisMessageProperties;
-import tutorials4j.framework.message.redis.stream.StreamMessageHandlerFactory;
-import tutorials4j.framework.message.redis.zset.ZSetMessageHandlerFactory;
+import tutorials4j.framework.message.redis.stream.StreamMessageTempalteFactory;
+import tutorials4j.framework.message.redis.zset.ZSetMessageTemplateFactory;
 
 /**
  * 配置
@@ -35,43 +35,47 @@ public class RedisMessageConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  ListMessageHandlerFactory listMessageFactory(
+  StreamMessageTempalteFactory streamMessageTempalteFactory(
       StringRedisTemplate stringRedisTemplate,
       ObjectMapperCreator creator,
       RedisMessageProperties properties) {
-    log.trace("[MESSAGE-REDIS] List Message Factory");
+    log.trace("[MESSAGE-REDIS] Stream Message Tempalte Factory");
 
     ObjectMapper objectMapper = createObjectMapper(creator);
-    ListMessageHandlerFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
-    ListMessageHandlerFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    ListMessageHandlerFactory.instance.setQueueOptionsMap(properties.getQueues());
-    return ListMessageHandlerFactory.instance;
+    StreamMessageTempalteFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
+    StreamMessageTempalteFactory.instance.setStringRedisTemplate(stringRedisTemplate);
+    StreamMessageTempalteFactory.instance.setQueueOptionsMap(properties.getQueues());
+    return StreamMessageTempalteFactory.instance;
   }
 
   @Bean
   @ConditionalOnMissingBean
-  ZSetMessageHandlerFactory zsetMessageFactory(
+  ZSetMessageTemplateFactory zsetMessageTemplateFactory(
       StringRedisTemplate stringRedisTemplate,
       ObjectMapperCreator creator,
       RedisMessageProperties properties) {
-    log.trace("[MESSAGE-REDIS] ZSet Message Factory");
+    log.trace("[MESSAGE-REDIS] ZSet Message TemplateF actory");
 
     ObjectMapper objectMapper = createObjectMapper(creator);
-    ZSetMessageHandlerFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
-    ZSetMessageHandlerFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    ZSetMessageHandlerFactory.instance.setQueueOptionsMap(properties.getQueues());
-    return ZSetMessageHandlerFactory.instance;
+    ZSetMessageTemplateFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
+    ZSetMessageTemplateFactory.instance.setStringRedisTemplate(stringRedisTemplate);
+    ZSetMessageTemplateFactory.instance.setQueueOptionsMap(properties.getQueues());
+    return ZSetMessageTemplateFactory.instance;
   }
 
   @Bean
   @ConditionalOnMissingBean
-  StreamMessageHandlerFactory streamMessageHandlerFactory(
-      StringRedisTemplate stringRedisTemplate, RedisMessageProperties properties) {
-    log.trace("[MESSAGE-REDIS] Stream Message Handler Factory");
+  ListMessageTempalteFactory listMessageTempalteFactory(
+      StringRedisTemplate stringRedisTemplate,
+      ObjectMapperCreator creator,
+      RedisMessageProperties properties) {
+    log.trace("[MESSAGE-REDIS] List Message Tempalte Factory");
 
-    StreamMessageHandlerFactory.instance.setStringRedisTemplate(stringRedisTemplate);
-    StreamMessageHandlerFactory.instance.setQueueOptionsMap(properties.getQueues());
-    return StreamMessageHandlerFactory.instance;
+    ObjectMapper objectMapper = createObjectMapper(creator);
+    ListMessageTempalteFactory.instance.setJacksonRecord(new JacksonRecord(objectMapper));
+    ListMessageTempalteFactory.instance.setStringRedisTemplate(stringRedisTemplate);
+    ListMessageTempalteFactory.instance.setQueueOptionsMap(properties.getQueues());
+    return ListMessageTempalteFactory.instance;
   }
 
   private ObjectMapper createObjectMapper(ObjectMapperCreator creator) {

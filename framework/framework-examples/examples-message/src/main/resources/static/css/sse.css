@@ -1,0 +1,363 @@
+/* ===== 全局样式 ===== */
+body {
+  background: #f0f2f5;
+  font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+.page-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+  padding: 24px 0 18px 0;
+  border-radius: 16px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+.page-header h1 {
+  font-weight: 600;
+  font-size: 1.8rem;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+.page-header h1 i {
+  margin-right: 12px;
+  color: #64ffda;
+}
+.page-header .subtitle {
+  font-size: 0.95rem;
+  opacity: 0.7;
+  margin-top: 4px;
+  font-weight: 300;
+}
+
+/* ===== 卡片通用 ===== */
+.card {
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
+  background: #ffffff;
+}
+.card:hover {
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.10);
+}
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px 22px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-header i {
+  margin-right: 10px;
+  color: #4a6cf7;
+}
+.card-body {
+  padding: 20px 22px;
+}
+
+/* ===== 状态指示器 ===== */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 18px 6px 14px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  gap: 8px;
+}
+.status-badge .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background 0.3s;
+}
+.status-badge.connected {
+  background: #e6f7e6;
+  color: #1a7a3a;
+}
+.status-badge.connected .dot {
+  background: #28a745;
+  animation: pulse-green 1.8s infinite;
+}
+.status-badge.disconnected {
+  background: #f8e8e8;
+  color: #a13d3d;
+}
+.status-badge.disconnected .dot {
+  background: #dc3545;
+}
+.status-badge.connecting {
+  background: #fff3e0;
+  color: #b7650a;
+}
+.status-badge.connecting .dot {
+  background: #ffc107;
+  animation: pulse-yellow 1.2s infinite;
+}
+
+@keyframes pulse-green {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
+}
+@keyframes pulse-yellow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
+/* ===== 客户端ID ===== */
+.client-id-box {
+  background: #f8f9fc;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  color: #2d3748;
+  border: 1px solid #e9edf4;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.client-id-box i {
+  color: #6c7a89;
+  margin-right: 8px;
+}
+.client-id-box .id-value {
+  color: #1a202c;
+  font-weight: 500;
+}
+
+/* ===== 统计数字 ===== */
+.stat-number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a202c;
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8896ab;
+  font-weight: 600;
+}
+
+/* ===== 消息列表 ===== */
+.message-list-container {
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.message-list-container::-webkit-scrollbar {
+  width: 5px;
+}
+.message-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.message-list-container::-webkit-scrollbar-thumb {
+  background: #c1c9d6;
+  border-radius: 10px;
+}
+.message-list-container::-webkit-scrollbar-thumb:hover {
+  background: #a8b2c2;
+}
+
+.message-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: #fafbfc;
+  border-left: 4px solid #d0d7e2;
+  transition: background 0.15s;
+  animation: fadeInItem 0.3s ease;
+}
+.message-item:hover {
+  background: #f2f4f8;
+}
+
+.message-item .msg-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  margin-right: 14px;
+  color: #fff;
+}
+.message-item .msg-icon.type-connected {
+  background: #4a6cf7;
+}
+.message-item .msg-icon.type-message {
+  background: #28a745;
+}
+.message-item .msg-icon.type-error {
+  background: #dc3545;
+}
+.message-item .msg-icon.type-info {
+  background: #6c7a89;
+}
+
+.message-item .msg-body {
+  flex: 1;
+  min-width: 0;
+}
+.message-item .msg-body .msg-time {
+  font-size: 0.75rem;
+  color: #8896ab;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.message-item .msg-body .msg-content {
+  font-size: 0.95rem;
+  color: #1e293b;
+  word-break: break-word;
+  margin-top: 2px;
+  line-height: 1.5;
+}
+.message-item .msg-body .msg-content .msg-type-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 1px 10px;
+  border-radius: 30px;
+  background: #e9edf4;
+  color: #4a5568;
+  margin-right: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.message-item .msg-body .msg-content .msg-type-tag.tag-connected {
+  background: #dbe4fe;
+  color: #2d4bb8;
+}
+.message-item .msg-body .msg-content .msg-type-tag.tag-message {
+  background: #d4edda;
+  color: #155724;
+}
+.message-item .msg-body .msg-content .msg-type-tag.tag-error {
+  background: #f8d7da;
+  color: #721c24;
+}
+.message-item .msg-body .msg-content .msg-type-tag.tag-info {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #a0aec0;
+}
+.empty-state i {
+  font-size: 3.2rem;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.5;
+}
+.empty-state p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ===== 按钮 ===== */
+.btn-action {
+  border-radius: 30px;
+  padding: 6px 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.btn-action i {
+  margin-right: 6px;
+}
+.btn-action:active {
+  transform: scale(0.96);
+}
+
+/* ===== 工具类 ===== */
+.text-muted-light {
+  color: #8896ab;
+}
+.gap-2 {
+  gap: 8px;
+}
+
+/* ===== 动画 ===== */
+@keyframes fadeInItem {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 576px) {
+  .page-header h1 {
+    font-size: 1.3rem;
+  }
+  .page-header .subtitle {
+    font-size: 0.8rem;
+  }
+  .card-header {
+    font-size: 0.95rem;
+    padding: 14px 16px;
+  }
+  .card-body {
+    padding: 14px 16px;
+  }
+  .client-id-box {
+    max-width: 160px;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+  }
+  .stat-number {
+    font-size: 1.2rem;
+  }
+  .message-item {
+    padding: 8px 12px;
+  }
+  .message-item .msg-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+    margin-right: 10px;
+  }
+  .message-item .msg-body .msg-content {
+    font-size: 0.85rem;
+  }
+  .btn-action {
+    font-size: 0.75rem;
+    padding: 4px 14px;
+  }
+}
