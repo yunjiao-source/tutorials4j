@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UID 生成器 · 性能对比</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- jQuery 3 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js">
+  </script>
+  <style>
+    /* ===== 全局 ===== */
+    body {
+      background: linear-gradient(145deg, #f0f4fc 0%, #d9e2ef 100%);
+      min-height: 100vh;
+      padding: 2rem 0;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .main-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ===== 头部 ===== */
+    .header-section {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .header-section .badge-version {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
+      color: #1e2a3e;
+      font-weight: 500;
+      padding: 0.3rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .header-section h1 {
+      font-weight: 700;
+      color: #0b1a2b;
+      margin-top: 0.6rem;
+      font-size: 2.8rem;
+      letter-spacing: -0.5px;
+    }
+    .header-section h1 i {
+      color: #2f6ef7;
+      margin-right: 0.3rem;
+    }
+    .header-section .subtitle {
+      color: #3d5068;
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0.2rem auto 0;
+    }
+
+    /* ===== 控制栏 ===== */
+    .control-bar {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 60px;
+      padding: 0.8rem 1.8rem;
+      margin-bottom: 2.2rem;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem 2rem;
+    }
+    .control-bar .form-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .control-bar label {
+      font-weight: 500;
+      color: #1e2a3e;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+    .control-bar input[type="number"] {
+      width: 90px;
+      padding: 0.3rem 0.6rem;
+      border-radius: 30px;
+      border: 1px solid #ced8e6;
+      background: white;
+      font-weight: 500;
+      text-align: center;
+      transition: 0.2s;
+    }
+    .control-bar input[type="number"]:focus {
+      outline: none;
+      border-color: #2f6ef7;
+      box-shadow: 0 0 0 3px rgba(47, 110, 247, 0.15);
+    }
+    .btn-compare {
+      border-radius: 50px;
+      padding: 0.4rem 2rem;
+      font-weight: 600;
+      background: #2f6ef7;
+      border: none;
+      color: white;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(47, 110, 247, 0.25);
+    }
+    .btn-compare:hover {
+      background: #1a56d6;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(47, 110, 247, 0.35);
+    }
+    .btn-compare:active {
+      transform: scale(0.96);
+    }
+
+    /* ===== 卡片 ===== */
+    .card-uid {
+      border: none;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+      height: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-uid:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+    }
+    .card-uid .card-header {
+      background: transparent;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      padding: 1.2rem 1.5rem 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+    }
+    .card-uid .card-header .title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #0b1a2b;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .card-uid .card-header .badge-endpoint {
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.2rem 0.8rem;
+      border-radius: 50px;
+      background: rgba(47, 110, 247, 0.1);
+      color: #2f6ef7;
+    }
+    .card-uid .card-header .perf-metrics {
+      margin-left: auto;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .card-uid .card-header .perf-metrics .metric-item {
+      background: rgba(0, 0, 0, 0.02);
+      padding: 0.15rem 0.8rem;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    .card-uid .card-body {
+      padding: 1.2rem 1.5rem 1.5rem;
+    }
+
+    /* ===== 状态 + 操作栏 ===== */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem 1rem;
+      margin-bottom: 1rem;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      padding: 0.2rem 1rem;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .status-badge.idle {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+    .status-badge.loading {
+      background: #fff3cd;
+      color: #856404;
+    }
+    .status-badge.success {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status-badge.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .btn-uid {
+      border-radius: 50px;
+      padding: 0.3rem 1.6rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .btn-uid:active {
+      transform: scale(0.94);
+    }
+    .btn-uid-sm {
+      padding: 0.15rem 1rem;
+      font-size: 0.8rem;
+    }
+    .btn-uid-primary {
+      background: #2f6ef7;
+      color: white;
+      border: none;
+    }
+    .btn-uid-primary:hover {
+      background: #1a56d6;
+      color: white;
+    }
+    .btn-uid-success {
+      background: #1ea86a;
+      color: white;
+      border: none;
+    }
+    .btn-uid-success:hover {
+      background: #168f59;
+      color: white;
+    }
+    .btn-uid-outline {
+      background: transparent;
+      border: 1px solid #ced8e6;
+      color: #4a5b6e;
+    }
+    .btn-uid-outline:hover {
+      background: #f0f4fc;
+    }
+
+    /* ===== 表格 ===== */
+    .id-table-wrap {
+      max-height: 300px;
+      overflow-y: auto;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .id-table-wrap table {
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+    .id-table-wrap table th {
+      background: #f4f7fd;
+      font-weight: 600;
+      color: #1e2a3e;
+      border-bottom: 2px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .id-table-wrap table td {
+      font-family: 'JetBrains Mono', 'SF Mono', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.2px;
+      color: #0b1a2b;
+      vertical-align: middle;
+    }
+    .id-table-wrap table tr:hover td {
+      background: #eef4ff;
+    }
+
+    .empty-placeholder {
+      color: #a0b0c0;
+      text-align: center;
+      padding: 1.8rem 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* ===== 底部 ===== */
+    .footer-note {
+      margin-top: 2.5rem;
+      text-align: center;
+      color: #6c7a8a;
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .header-section h1 {
+        font-size: 2rem;
+      }
+      .control-bar {
+        border-radius: 30px;
+        padding: 0.8rem 1rem;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+      .control-bar .form-group {
+        width: 100%;
+        justify-content: center;
+      }
+      .card-uid .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .card-uid .card-header .perf-metrics {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .id-table-wrap {
+        max-height: 200px;
+      }
+      .id-table-wrap table {
+        font-size: 0.8rem;
+      }
+    }
+
+    /* ===== 滚动条 ===== */
+    .id-table-wrap::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .id-table-wrap::-webkit-scrollbar-track {
+      background: #f1f3f5;
+      border-radius: 10px;
+    }
+    .id-table-wrap::-webkit-scrollbar-thumb {
+      background: #c4c9d4;
+      border-radius: 10px;
+    }
+    .id-table-wrap::-webkit-scrollbar-thumb:hover {
+      background: #a8b0be;
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+
+  <!-- ========== 头部 ========== -->
+  <div class="header-section">
+            <span class="badge-version">
+                <i class="bi bi-speedometer2"></i> 性能对比
+            </span>
+    <h1>
+      <i class="bi bi-hash"></i>UID 生成 · 对决
+    </h1>
+    <p class="subtitle">
+      对比 <code>/uid/default</code> 与 <code>/uid/cache</code> 的生成速度与吞吐量
+    </p>
+  </div>
+
+  <!-- ========== 全局控制栏 ========== -->
+  <div class="control-bar">
+    <div class="form-group">
+      <label for="countInput"><i class="bi bi-plus-slash-minus"></i> 生成数量</label>
+      <input type="number" id="countInput" value="1000" min="1000" max="100000" step="1000">
+    </div>
+    <button class="btn-compare" id="btnCompare">
+      <i class="bi bi-arrow-left-right"></i> 同时对比生成
+    </button>
+    <span style="font-size:0.8rem;color:#6c7a8a;">
+                <i class="bi bi-info-circle"></i> 点击对比或独立按钮
+            </span>
+  </div>
+
+  <!-- ========== 双栏卡片 ========== -->
+  <div class="row g-4">
+
+    <!-- ===== 卡片：默认 UID ===== -->
+    <div class="col-12 col-md-6">
+      <div class="card-uid">
+        <div class="card-header">
+          <div class="title">
+            <i class="bi bi-database" style="color:#2f6ef7;"></i> 默认 UID
+          </div>
+          <span class="badge-endpoint">GET /uid/default</span>
+          <div class="perf-metrics">
+                            <span class="metric-item" id="perf-default-time">
+                                <i class="bi bi-clock"></i> <span id="time-default">--</span> ms
+                            </span>
+            <span class="metric-item" id="perf-default-rate">
+                                <i class="bi bi-speedometer"></i> <span id="rate-default">--</span> /s
+                            </span>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <div class="action-bar">
+            <button class="btn btn-uid btn-uid-primary" id="btn-default">
+              <i class="bi bi-plus-circle"></i> 生成
+            </button>
+            <span class="status-badge idle" id="status-default">
+                                <i class="bi bi-circle"></i> 就绪
+                            </span>
+            <span class="text-muted-light" style="font-size:0.75rem;margin-left:auto;" id="time-label-default">
+                                等待操作
+                            </span>
+            <button class="btn btn-uid btn-uid-outline btn-uid-sm" id="clear-default">
+              <i class="bi bi-eraser"></i> 清空
+            </button>
+          </div>
+
+          <div class="id-table-wrap" id="result-wrap-default">
+            <table class="table table-hover mb-0">
+              <thead>
+              <tr><th style="width:20%;">#</th><th>UID (Long)</th></tr>
+              </thead>
+              <tbody id="result-body-default">
+              <tr><td colspan="2" class="empty-placeholder">
+                <i class="bi bi-inbox" style="font-size:2rem;display:block;opacity:0.3;"></i>
+                点击按钮生成
+              </td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-2 d-flex justify-content-between">
+                            <span class="text-muted-light" style="font-size:0.75rem;">
+                                <i class="bi bi-list-ul"></i> 共 <span id="count-default">0</span> 个
+                            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 卡片：缓存 UID ===== -->
+    <div class="col-12 col-md-6">
+      <div class="card-uid">
+        <div class="card-header">
+          <div class="title">
+            <i class="bi bi-speedometer2" style="color:#1ea86a;"></i> 缓存 UID
+          </div>
+          <span class="badge-endpoint" style="background:rgba(30,168,106,0.1);color:#1ea86a;">
+                            GET /uid/cache
+                        </span>
+          <div class="perf-metrics">
+                            <span class="metric-item" id="perf-cache-time">
+                                <i class="bi bi-clock"></i> <span id="time-cache">--</span> ms
+                            </span>
+            <span class="metric-item" id="perf-cache-rate">
+                                <i class="bi bi-speedometer"></i> <span id="rate-cache">--</span> /s
+                            </span>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <div class="action-bar">
+            <button class="btn btn-uid btn-uid-success" id="btn-cache">
+              <i class="bi bi-plus-circle"></i> 生成
+            </button>
+            <span class="status-badge idle" id="status-cache">
+                                <i class="bi bi-circle"></i> 就绪
+                            </span>
+            <span class="text-muted-light" style="font-size:0.75rem;margin-left:auto;" id="time-label-cache">
+                                等待操作
+                            </span>
+            <button class="btn btn-uid btn-uid-outline btn-uid-sm" id="clear-cache">
+              <i class="bi bi-eraser"></i> 清空
+            </button>
+          </div>
+
+          <div class="id-table-wrap" id="result-wrap-cache">
+            <table class="table table-hover mb-0">
+              <thead>
+              <tr><th style="width:20%;">#</th><th>UID (Long)</th></tr>
+              </thead>
+              <tbody id="result-body-cache">
+              <tr><td colspan="2" class="empty-placeholder">
+                <i class="bi bi-inbox" style="font-size:2rem;display:block;opacity:0.3;"></i>
+                点击按钮生成
+              </td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-2 d-flex justify-content-between">
+                            <span class="text-muted-light" style="font-size:0.75rem;">
+                                <i class="bi bi-list-ul"></i> 共 <span id="count-cache">0</span> 个
+                            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /row -->
+
+  <div class="footer-note">
+    <i class="bi bi-github"></i> 性能对比 · 每次请求携带 <code>?count=N</code>
+    &middot; <span id="footer-time"></span>
+  </div>
+
+</div><!-- /main-container -->
+
+
+<!-- ================================================================ -->
+<!-- JavaScript 逻辑                                                  -->
+<!-- ================================================================ -->
+<script>
+  $(function() {
+
+    // ======================== 工具函数 ========================
+
+    function setStatus(type, status, message) {
+      const $el = $('#status-' + type);
+      const map = {
+        idle: { cls: 'idle', icon: 'bi-circle', text: '就绪' },
+        loading: { cls: 'loading', icon: 'bi-arrow-repeat', text: '加载中...' },
+        success: { cls: 'success', icon: 'bi-check-circle-fill', text: '成功' },
+        error: { cls: 'error', icon: 'bi-x-circle-fill', text: '失败' },
+      };
+      const s = map[status] || map.idle;
+      $el.removeClass('idle loading success error').addClass(s.cls);
+      $el.html('<i class="bi ' + s.icon + '"></i> ' + (message || s.text));
+    }
+
+    function nowStr() {
+      return new Date().toLocaleTimeString('zh-CN', { hour12: false });
+    }
+
+    function renderIds(type, ids) {
+      const $tbody = $('#result-body-' + type);
+      const $count = $('#count-' + type);
+      if (!ids || ids.length === 0) {
+        $tbody.html(
+            '<tr><td colspan="2" class="empty-placeholder">' +
+            '<i class="bi bi-inbox" style="font-size:2rem;display:block;opacity:0.3;"></i>' +
+            '暂无数据</td></tr>'
+        );
+        $count.text('0');
+        return;
+      }
+      let html = '';
+      ids.forEach((id, idx) => {
+        html += '<tr><td>' + (idx + 1) + '</td><td>' + id + '</td></tr>';
+      });
+      $tbody.html(html);
+      $count.text(ids.length);
+    }
+
+    function clearTable(type) {
+      renderIds(type, []);
+      $('#time-label-' + type).text('已清空');
+      setStatus(type, 'idle', '就绪');
+      // 重置性能指标
+      $('#time-' + type).text('--');
+      $('#rate-' + type).text('--');
+    }
+
+    /** 执行请求，返回 Promise */
+    function fetchUids(type, url, count) {
+      return new Promise(function(resolve, reject) {
+        const startTime = performance.now();
+
+        $.ajax({
+          url: url + '?count=' + count,
+          type: 'GET',
+          dataType: 'json',
+          timeout: 30000,
+          success: function(resp) {
+            const endTime = performance.now();
+            const elapsed = endTime - startTime;
+            // 解析数据
+            let data = [];
+            if (resp && Array.isArray(resp.data)) {
+              data = resp.data;
+            } else if (resp && resp.data && Array.isArray(resp.data)) {
+              data = resp.data;
+            } else {
+              // 可能直接返回数组？
+              if (Array.isArray(resp)) data = resp;
+            }
+            resolve({ data: data, elapsed: elapsed, success: true, raw: resp });
+          },
+          error: function(xhr, status, err) {
+            const endTime = performance.now();
+            const elapsed = endTime - startTime;
+            let msg = '请求失败';
+            if (status === 'timeout') msg = '超时';
+            else if (xhr.status) msg = 'HTTP ' + xhr.status;
+            else if (err) msg = err;
+            reject({ message: msg, elapsed: elapsed, status: status });
+          }
+        });
+      });
+    }
+
+    /** 更新 UI（包括性能指标） */
+    function updateUI(type, result, count) {
+      // result: { data, elapsed, success }
+      if (result.success) {
+        renderIds(type, result.data);
+        setStatus(type, 'success', '成功 ' + (result.data ? result.data.length : 0) + ' 个');
+        $('#time-label-' + type).text(nowStr() + ' 完成');
+        // 性能指标
+        const elapsedMs = result.elapsed.toFixed(1);
+        $('#time-' + type).text(elapsedMs);
+        // 计算速率 (个/秒)
+        const len = result.data ? result.data.length : 0;
+        const rate = len > 0 && result.elapsed > 0 ? (len / (result.elapsed / 1000)) : 0;
+        $('#rate-' + type).text(rate > 0 ? rate.toFixed(1) : '0.0');
+      } else {
+        renderIds(type, []);
+        setStatus(type, 'error', result.message || '错误');
+        $('#time-label-' + type).text(nowStr() + ' 失败');
+        $('#time-' + type).text(result.elapsed ? result.elapsed.toFixed(1) : '--');
+        $('#rate-' + type).text('--');
+      }
+    }
+
+    /** 执行生成（独立或对比） */
+    function generate(type, url, btnId, count, isCompareMode) {
+      const $btn = $('#' + btnId);
+      if ($btn.prop('disabled')) return Promise.reject('按钮已禁用');
+
+      // 状态 loading
+      setStatus(type, 'loading', '请求中...');
+      $('#time-label-' + type).text(nowStr() + ' 请求中');
+      if (!isCompareMode) {
+        // 独立模式禁用按钮
+        $btn.prop('disabled', true).html(
+            '<span class="spinner-border spinner-border-sm" role="status"></span> 生成中'
+        );
+      }
+
+      return fetchUids(type, url, count)
+      .then(function(result) {
+        updateUI(type, result, count);
+        return result;
+      })
+      .catch(function(err) {
+        updateUI(type, { success: false, message: err.message, elapsed: err.elapsed }, count);
+        throw err;
+      })
+      .finally(function() {
+        if (!isCompareMode) {
+          $btn.prop('disabled', false).html('<i class="bi bi-plus-circle"></i> 生成');
+        }
+      });
+    }
+
+    // ======================== 事件绑定 ========================
+
+    // 获取当前数量
+    function getCount() {
+      let val = parseInt($('#countInput').val(), 10);
+      if (isNaN(val) || val < 1) val = 1;
+      return val;
+    }
+
+    // ---- 独立按钮 ----
+    $('#btn-default').on('click', function() {
+      const count = getCount();
+      generate('default', '/uid/default', 'btn-default', count, false)
+      .catch(function() { /* 错误已处理 */ });
+    });
+
+    $('#btn-cache').on('click', function() {
+      const count = getCount();
+      generate('cache', '/uid/cache', 'btn-cache', count, false)
+      .catch(function() { /* 错误已处理 */ });
+    });
+
+    // ---- 清空 ----
+    $('#clear-default').on('click', function() { clearTable('default'); });
+    $('#clear-cache').on('click', function() { clearTable('cache'); });
+
+    // ---- 对比按钮 ----
+    $('#btnCompare').on('click', function() {
+      const $btn = $(this);
+      if ($btn.prop('disabled')) return;
+
+      const count = getCount();
+      // 同时禁用两个独立按钮（但不要影响对比按钮本身）
+      $('#btn-default, #btn-cache').prop('disabled', true);
+      $btn.prop('disabled', true).html(
+          '<span class="spinner-border spinner-border-sm" role="status"></span> 对比中...'
+      );
+
+      // 同时发起两个请求
+      const p1 = generate('default', '/uid/default', 'btn-default', count, true);
+      const p2 = generate('cache', '/uid/cache', 'btn-cache', count, true);
+
+      Promise.allSettled([p1, p2])
+      .then(function(results) {
+        // 所有完成
+        $('#btn-default, #btn-cache').prop('disabled', false);
+        $btn.prop('disabled', false).html('<i class="bi bi-arrow-left-right"></i> 同时对比生成');
+        // 检查是否全部成功，如果全部成功则显示对比总结
+        const allOk = results.every(r => r.status === 'fulfilled' && r.value && r.value
+            .success);
+        if (allOk) {
+          // 可以显示一个toast，但不强制
+          console.log('对比完成，两者均成功');
+        } else {
+          console.warn('对比完成，存在失败');
+        }
+      })
+      .catch(function() {
+        // 恢复按钮
+        $('#btn-default, #btn-cache').prop('disabled', false);
+        $btn.prop('disabled', false).html('<i class="bi bi-arrow-left-right"></i> 同时对比生成');
+      });
+    });
+
+    // ---- 页脚时间 ----
+    $('#footer-time').text('加载于 ' + nowStr());
+
+    // ---- 回车快捷键（独立生成） ----
+    $(document).on('keydown', function(e) {
+      if (e.key === 'Enter' && e.ctrlKey) {
+        e.preventDefault();
+        $('#btnCompare').click();
+      }
+    });
+
+    console.log('💡 Ctrl+Enter 快速对比生成');
+
+    // ---- 数量输入框防误 ----
+    $('#countInput').on('change', function() {
+      let v = parseInt(this.value, 10);
+      if (isNaN(v) || v < 1) v = 1;
+      this.value = v;
+    });
+
+  });
+</script>
+
+</body>
+</html>

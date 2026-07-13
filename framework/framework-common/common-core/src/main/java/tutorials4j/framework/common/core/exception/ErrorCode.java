@@ -1,7 +1,5 @@
 package tutorials4j.framework.common.core.exception;
 
-import tutorials4j.framework.common.core.exception.feedback.Feedback;
-
 /**
  * TODO
  *

@@ -1,19 +1,23 @@
 package tutorials4j.framework.common.spring.web;
 
 import jakarta.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus.Series;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.core.bean.Result;
-import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.core.exception.ErrorCode;
+import tutorials4j.framework.common.core.exception.ErrorCodeException;
 
 /**
  * TODO
@@ -21,24 +25,36 @@ import tutorials4j.framework.common.core.exception.ErrorCode;
  * @author Yun Jiao
  */
 @Slf4j
-public abstract class AbstractExceptionHandler {
-  // 使用 List 保证顺序（子类在前，父类在后）
-  private final List<ExceptionMapping> exceptionMappings = new ArrayList<>();
+public class BaseExceptionHandler {
+  private static final Map<ErrorCode, HttpStatus> errorCodeMap = new HashMap<>();
 
-  protected abstract List<ExceptionMapping> getExceptionMappings();
+  public static void registeErrorCode(Map<ErrorCode, HttpStatus> tmpErrorCodeMap) {
+    Assert.notNull(tmpErrorCodeMap, "tmpErrorCodeMap must not be null");
 
-  protected synchronized void initMappings() {
-    if (!exceptionMappings.isEmpty()) {
-      return;
-    }
-
-    exceptionMappings.addAll(getExceptionMappings());
+    tmpErrorCodeMap.forEach(errorCodeMap::putIfAbsent);
   }
 
-  protected Result<Void> resolveException(Exception ex, String path) {
-    ErrorCode errorCode = lookupErrorCode(ex);
+  protected ResponseEntity<Result<Void>> resolveException(ErrorCodeException ex, String path) {
+    HttpStatus status = errorCodeMap.get(ex.getErrorCode());
+    if (status == null) {
+      status = HttpStatus.UNPROCESSABLE_ENTITY;
+    }
 
-    Result<Void> result = Result.failure(errorCode);
+    return resolveException(ex, path, ex.getResult(), status);
+  }
+
+  protected ResponseEntity<Result<Void>> resolveException(
+      Exception ex, String path, ErrorCode errorCode) {
+    HttpStatus status = errorCodeMap.get(errorCode);
+    if (status == null) {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+    Result<Void> result = Result.failure(errorCode.getFeedback());
+    return resolveException(ex, path, result, status);
+  }
+
+  private ResponseEntity<Result<Void>> resolveException(
+      Exception ex, String path, Result<Void> result, HttpStatus status) {
     result
         .path(path)
         .errorDetail(ex.getMessage())
@@ -82,21 +98,14 @@ public abstract class AbstractExceptionHandler {
       default -> {}
     }
 
-    result.errorStackTrace(ex.getStackTrace());
-    return result;
-  }
-
-  protected ErrorCode lookupErrorCode(Exception ex) {
-    if (exceptionMappings.isEmpty()) {
-      initMappings();
+    if (status.series() == Series.SERVER_ERROR) {
+      result.errorStackTrace(ex.getStackTrace());
+      log.error("服务器异常: {}", result, ex);
+    } else if (status.series() == Series.CLIENT_ERROR) {
+      log.warn("客户端异常：{}", result);
+    } else {
+      log.warn("其他异常: {}", result, ex);
     }
-    for (ExceptionMapping mapping : exceptionMappings) {
-      // isAssignableFrom 可以匹配子类、实现类
-      if (mapping.exceptionClass().isAssignableFrom(ex.getClass())) {
-        return mapping.errorCode();
-      }
-    }
-    // 若 List 未命中（比如没有加 Exception 兜底），返回默认 500
-    return BaseErrorCode.INTERNAL_SERVER_ERROR;
+    return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(result);
   }
 }

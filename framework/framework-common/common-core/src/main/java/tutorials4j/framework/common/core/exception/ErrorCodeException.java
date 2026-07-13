@@ -3,13 +3,10 @@ package tutorials4j.framework.common.core.exception;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import lombok.Getter;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import tutorials4j.framework.common.core.bean.Result;
-import tutorials4j.framework.common.core.exception.feedback.Feedback;
 
 /**
  * TODO
@@ -58,59 +55,9 @@ public class ErrorCodeException extends BaseRuntimeException {
     return this;
   }
 
-  @Override
-  public String getMessage() {
-    return getFormattedExceptionMessage(super.getMessage());
-  }
-
   public Result<Void> getResult() {
-
-    Result<Void> result = Result.failure(this.getErrorCode());
+    Result<Void> result = Result.failure(errorCode.getFeedback());
     result.errorDetail(this.getDetail()).errorParams(this.getParams());
-
-    //    Feedback feedback = this.getErrorCode().getFeedback();
-    //    if (feedback.isSystemError() && this.getCause() != null) {
-    //      result.errorStackTrace(this.getCause().getStackTrace());
-    //    }
     return result;
-  }
-
-  private String getFormattedExceptionMessage(final String baseMessage) {
-    final StringBuilder buffer = new StringBuilder(256);
-    if (baseMessage != null) {
-      buffer.append(baseMessage);
-    }
-
-    if (!buffer.isEmpty()) {
-      buffer.append('\n');
-    }
-
-    Feedback feedback = errorCode.getFeedback();
-    List<Pair<String, Object>> contextValues = new ArrayList<>();
-    contextValues.add(new ImmutablePair<>("CODE", feedback.getCode()));
-    contextValues.add(new ImmutablePair<>("HTTP_STATUS", feedback.getHttpStatus()));
-    contextValues.addAll(this.params);
-
-    buffer.append("Exception Context:\n");
-
-    int i = 0;
-    for (final Pair<String, Object> pair : contextValues) {
-      buffer.append("\t[");
-      buffer.append(++i);
-      buffer.append(':');
-      buffer.append(pair.getKey());
-      buffer.append("=");
-      final Object value = pair.getValue();
-      try {
-        buffer.append(Objects.toString(value));
-      } catch (final Exception e) {
-        buffer.append("Exception thrown on toString(): ");
-        buffer.append(ExceptionUtils.getStackTrace(e));
-      }
-      buffer.append("]\n");
-    }
-
-    buffer.append("---------------------------------");
-    return buffer.toString();
   }
 }

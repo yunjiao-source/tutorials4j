@@ -2,7 +2,7 @@ package tutorials4j.framework.feature.core.exception;
 
 import lombok.Getter;
 import tutorials4j.framework.common.core.exception.ErrorCode;
-import tutorials4j.framework.common.core.exception.feedback.Feedback;
+import tutorials4j.framework.common.core.exception.Feedback;
 
 /**
  * TODO
@@ -15,8 +15,7 @@ public enum FeatureErrorCode implements ErrorCode {
 
   private final Feedback feedback;
 
-  FeatureErrorCode(Feedback feedback) {
-    this.feedback = feedback;
-    feedback.setCode(this.name());
+  FeatureErrorCode(String message) {
+    this.feedback = Feedback.builder().code(this.name()).message(message).build();
   }
 }

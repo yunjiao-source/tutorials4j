@@ -31,7 +31,7 @@ public class TraceController {
   @GetMapping("common/exception")
   public String commonException() {
     log.info("commonException");
-    throw BaseErrorCode.NOT_ACCEPTABLE.throwed("异常");
+    throw BaseErrorCode.INTERNAL_SERVER_ERROR.throwed();
   }
 
   @GetMapping("/mono/get1")

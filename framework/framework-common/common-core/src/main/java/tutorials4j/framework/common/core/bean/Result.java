@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.Data;
 import org.apache.commons.lang3.tuple.Pair;
-import tutorials4j.framework.common.core.exception.BaseErrorCode;
-import tutorials4j.framework.common.core.exception.ErrorCode;
-import tutorials4j.framework.common.core.exception.feedback.Feedback;
+import tutorials4j.framework.common.core.exception.Feedback;
 
 /**
  * TODO
@@ -20,37 +18,28 @@ public class Result<T> {
   private String message;
   private String path;
   private T data;
-  private int status;
   private String code;
   private String traceId;
   private Error error;
 
-  public static Result<Void> noContent() {
-    return of(BaseErrorCode.NO_CONTENT, null);
-  }
-
-  public static <T> Result<T> success() {
-    return of(BaseErrorCode.OK, null);
+  public static Result<Void> success() {
+    return of(null, null);
   }
 
   public static <T> Result<T> success(T data) {
-    return of(BaseErrorCode.OK, data);
+    return of(null, data);
   }
 
-  public static <T> Result<T> failure() {
-    return of(BaseErrorCode.INTERNAL_SERVER_ERROR, null);
+  public static Result<Void> failure(Feedback feedback) {
+    return of(feedback, null);
   }
 
-  public static <T> Result<T> failure(ErrorCode errorCode) {
-    return of(errorCode, null);
-  }
-
-  private static <T> Result<T> of(ErrorCode errorCode, T data) {
-    Feedback feedback = errorCode.getFeedback();
+  private static <T> Result<T> of(Feedback feedback, T data) {
     Result<T> result = new Result<>();
-    result.code = feedback.getCode();
-    result.message = feedback.getMessage();
-    result.status = feedback.getHttpStatus();
+    if (feedback != null) {
+      result.code = feedback.code();
+      result.message = feedback.message();
+    }
     result.data = data;
     return result;
   }

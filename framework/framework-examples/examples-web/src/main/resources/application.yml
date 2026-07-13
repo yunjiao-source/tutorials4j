@@ -8,8 +8,8 @@ spring:
 #    active: cached-body
 #    active: trace
 #    active: client
-#    active: validation
-    active: totp
+    active: validation
+#    active: totp
 
   data:
     # Redis 配置

@@ -68,7 +68,7 @@ public class LocalLockService implements InitializingBean {
       }
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw BaseErrorCode.INTERNAL_SERVER_ERROR.throwed(e);
+      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed(e);
     }
   }
 
@@ -114,7 +114,7 @@ public class LocalLockService implements InitializingBean {
       }
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw BaseErrorCode.INTERNAL_SERVER_ERROR.throwed(e);
+      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed(e);
     }
   }
 

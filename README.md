@@ -24,6 +24,19 @@ Java 教程
 
 ## 框架示例图
 
+### 通用模块示例（framework/framework-examples/examples-common）
+
+#### profile:exception
+
+> 统一异常处理
+![统一异常处理](docs/images/056.jpg )
+
+> 异步任务执行
+![异步任务执行](docs/images/057.jpg )
+
+> UID 生成器
+![UID 生成器](docs/images/058.jpg )
+
 ### 功能模块示例（framework/framework-examples/examples-feature）
 
 #### profile:signin
