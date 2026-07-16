@@ -1,0 +1,208 @@
+# [030][Web模块]Spring Boot 验证与 OpenAPI 集成实战：从校验规则到文档生成
+
+本项目代码:https://gitee.com/yunjiao-source/tutorials4j
+
+在现代 Web 应用开发中，请求参数的校验与 API 文档的自动生成是不可或缺的两大环节。Spring Boot 结合 Jakarta Validation（原 javax.validation）与 Springdoc OpenAPI 能够很好地解决这两个问题，但要让校验规则自动映射到 OpenAPI 文档中（例如在 Swagger UI 上展示字段的 `@Min`、`@Pattern` 等约束），通常还需要一些定制化工作。本文以一个完整的示例项目为基础，详细分析其实现原理和关键技术点。
+
+## 一、项目整体结构
+
+项目核心包为 `tutorials4j.framework.examples.swagger`，主要包含以下组件：
+
+| 类名 | 作用 |
+|------|------|
+| `Person` | 数据实体，使用 Jakarta / Hibernate 验证注解定义校验规则 |
+| `PersonController` | REST 控制器，演示请求校验、随机异常抛出、查询参数校验 |
+| `GlobalControllerAdvice` | 全局异常处理器（示例中默认注释，可启用） |
+| `Problem` / `ErrorMessage` | 统一错误响应结构 |
+| `MvcSpringdocConfiguration` | Springdoc 配置类，提供 OpenAPI 文档的元信息和自定义模型解析器 |
+| `DefaultValidationModelResolver` | 自定义 `ModelResolver`，将验证注解转换为 OpenAPI 扩展字段 |
+
+## 二、实体层：声明式校验规则
+
+`Person` 类使用 Jakarta Validation 注解声明字段约束：
+
+```java
+@Data
+public class Person {
+    @Size(min = 2)
+    private String firstName;
+
+    @NotNull
+    @NotBlank
+    private String lastName;
+
+    @Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
+    private String email;
+
+    @Email
+    private String email1;
+
+    @Min(18)
+    @Max(30)
+    private int age;
+
+    @CreditCardNumber
+    private String creditCardNumber;
+
+    @LocalDateTimeFormat(pattern = "yyyyMMdd", dateTimeType = DateTimeType.Date)
+    private String registrationDate;
+}
+```
+
+值得注意的是：
+- 混合使用标准注解（`@Pattern`, `@Email`）与 Hibernate 扩展注解（`@CreditCardNumber`）。
+- `@LocalDateTimeFormat` 是一个自定义注解，用于描述日期字符串的格式，同样需要被 OpenAPI 识别。
+
+## 三、控制器层：参数校验与异常模拟
+
+`PersonController` 有两个接口：
+
+### 1. POST `/person` —— 请求体校验
+
+```java
+@PostMapping("/person")
+public Person person(@Valid @RequestBody Person person) {
+    // 模拟随机业务异常
+    if (new Random().nextInt(10) >= 5) {
+        throw new RuntimeException("Breaking logic");
+    }
+    return person;
+}
+```
+
+- 使用 `@Valid` 触发对 `Person` 对象的完整校验。
+- 如果校验失败，Spring 会抛出 `MethodArgumentNotValidException`，由全局异常处理器处理。
+- 同时演示了业务异常（`RuntimeException`）的处理。
+
+### 2. GET `/personByLastName` —— 查询参数校验
+
+```java
+@GetMapping("/personByLastName")
+public List<Person> findByLastName(
+        @RequestParam @NotNull @NotBlank @Size(max = 10) String lastName) {
+    // 硬编码返回示例数据
+}
+```
+
+- 校验 `lastName` 参数不能为 null、不能为空且长度不超过 10。
+- 参数校验失败将抛出 `ConstraintViolationException`。
+
+## 四、全局异常处理：统一错误响应格式
+
+`GlobalControllerAdvice` 类（默认被 `@ControllerAdvice` 注释，需手动启用）为多种异常定义了统一处理逻辑：
+
+| 异常类型 | HTTP 状态 | 响应结构 |
+|----------|-----------|----------|
+| `Throwable` | 500 | `Problem` (logRef + message) |
+| `MethodArgumentNotValidException` | 400 | `ErrorMessage` (字段错误列表) |
+| `ConstraintViolationException` | 400 | `ErrorMessage` (约束违反信息) |
+| `MissingServletRequestParameterException` | 400 | `ErrorMessage` (缺失参数信息) |
+| `HttpMediaTypeNotSupportedException` | 415 | `ErrorMessage` (不支持的媒体类型) |
+| `HttpMessageNotReadableException` | 400 | `ErrorMessage` (请求体解析失败) |
+
+其中 `ErrorMessage` 结构简单灵活，支持单个或多个错误字符串。
+
+> 注意：原代码中 `@ControllerAdvice` 被注释，实际使用时需取消注释以激活全局异常处理。
+
+## 五、Springdoc OpenAPI 集成：基础配置
+
+`MvcSpringdocConfiguration` 类条件化配置 OpenAPI：
+
+```java
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnBean({SpringDocConfiguration.class})
+public class MvcSpringdocConfiguration implements WebMvcConfigurer {
+    @Bean
+    @ConditionalOnMissingBean
+    OpenAPI defaultOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("接口文档")
+                        .version("Swagger V3")
+                        .description(name + "的应用服务文档")
+                        .license(new License().name("MIT License").url("https://mit-license.org/")))
+                .externalDocs(new ExternalDocumentation()
+                        .description("Tutorials For Java")
+                        .url("https://gitee.com/yunjiao-source/tutorials4j"));
+    }
+}
+```
+
+- 仅在 `SpringDocConfiguration` 存在时生效（即项目引入了 `springdoc-openapi-starter-webmvc-ui`）。
+- 提供默认的文档标题、版本、描述和外部文档链接。
+
+## 六、核心创新：将验证注解转为 OpenAPI 扩展
+
+默认情况下，Springdoc 只能将少数标准验证注解（如 `@NotNull`、`@Min`、`@Max`、`@Pattern`）映射到 OpenAPI 的 `required`、`minimum`、`maximum`、`pattern` 等字段。对于非标准注解（如 `@CreditCardNumber`、`@LocalDateTimeFormat`）则会被忽略。
+
+`DefaultValidationModelResolver` 通过继承 Springdoc 的 `ModelResolver`，重写 `applyBeanValidatorAnnotations` 方法，将这些注解的内容以扩展属性（`x-validation-` 前缀）的形式添加到 OpenAPI Schema 中。
+
+### 处理逻辑
+
+1. 首先调用父类方法，让其处理标准注解。
+2. 遍历字段上的所有注解，跳过已由父类处理的或不在白名单包内的注解。
+3. 将每个“额外”注解的属性（如 `@CreditCardNumber` 没有属性，则记录为 `true`）作为扩展添加到 schema 的 `extensions` 中。
+
+```java
+String extKey = "x-validation-" + type.getSimpleName();
+Map<String, Object> extensions = property.getExtensions();
+if (extensions != null && extensions.containsKey(extKey)) continue;
+Object value = extractAnnotationAttributes(annotation);
+property.addExtension(extKey, value);
+```
+
+最终生成的 OpenAPI 文档中，一个带 `@CreditCardNumber` 的字段会类似：
+
+```yaml
+creditCardNumber:
+  type: string
+  x-validation-CreditCardNumber: true
+```
+
+### 白名单控制
+
+为了避免为无关包中的注解添加扩展，代码定义了 `ALLOWED_PACKAGES`：
+
+```java
+private static final Set<String> ALLOWED_PACKAGES = Set.of(
+    "jakarta.validation.constraints",
+    "org.hibernate.validator.constraints",
+    LocalDateTimeFormat.class.getPackage().getName()
+);
+```
+
+这样仅对 Jakarta、Hibernate 和自定义的 `LocalDateTimeFormat` 注解进行扩展输出。
+
+## 七、自定义注解示例：`@LocalDateTimeFormat`
+
+项目中自定义了 `@LocalDateTimeFormat` 注解，用于描述日期字段的格式。通过上述 `DefaultValidationModelResolver`，该注解会变为：
+
+```yaml
+registrationDate:
+  type: string
+  x-validation-LocalDateTimeFormat:
+    pattern: "yyyyMMdd"
+    dateTimeType: "Date"
+```
+
+前端或 API 使用者可以通过该扩展了解字段的具体格式要求。
+
+## 八、运行效果与验证
+
+1. 启动项目后访问 `/swagger-ui/index.html`，可以看到两个接口的详细文档。
+2. 在 `Person` 模型的 Schema 展示中，除了标准化的 `minLength`、`minimum` 等字段，还会出现 `x-validation-CreditCardNumber`、`x-validation-LocalDateTimeFormat` 等自定义扩展。
+3. 发起一个不合法的 POST 请求（例如 age=17、email 格式错误），会收到 400 错误和详细的错误列表。
+4. GET 请求缺少 `lastName` 或长度超过 10 时，同样返回 400 并提示具体错误。
+
+## 九、总结
+
+本文示例展示了以下关键实践：
+
+- **声明式校验**：使用 Jakarta Validation 注解，配合 `@Valid` 自动触发校验。
+- **全局异常处理**：统一不同校验失败的响应格式，提升 API 友好性。
+- **OpenAPI 文档自动生成**：无缝集成 Springdoc，并自定义 `ModelResolver` 将非标准验证注解以扩展形式输出到文档。
+- **自定义注解支持**：通过扩展机制可以轻松让团队自定义的校验规则也出现在 Swagger UI 中。
+
+这种方案既保证了代码校验逻辑的简洁性，又确保了 API 文档与校验规则的一致性，非常适合中大型团队内部接口规范建设。实际开发时，还可以进一步将 `GlobalControllerAdvice` 封装为公共 starter，实现跨项目复用。
+
+阅读最新文章，请关注我的微信公众号`杨运交` 
