@@ -1,0 +1,141 @@
+# [049][Crypto模块]前后端混合加密API实战：基于Spring Boot的AES+RSA安全传输方案
+
+本项目代码: https://gitee.com/yunjiao-source/tutorials4j/tree/master/framework
+
+## 摘要
+
+在Web应用开发中，保障API请求的机密性至关重要。单纯的HTTPS虽然能保护传输链路，但在某些场景下（如内网穿透、网关卸载SSL、客户端加密需求）仍需对请求体进行端到端加密。本文通过一个完整的Spring Boot后端加密框架和Thymeleaf前端页面示例，详细讲解如何实现**非对称加密（RSA）分发对称密钥 + 对称加密（AES/ECB/PKCS5Padding）加密请求体**的混合加密方案，并针对前端加密细节（Hex格式输出、ECB模式适配）进行了定制化改造。文章将分析核心代码、梳理加密流程，并提供可直接运行的实践方案。
+
+---
+
+## 一、背景与目标
+
+许多业务系统需要传输用户敏感信息（如身份证、手机号、财务数据）。常规做法是依赖HTTPS，但有些合规要求或特殊架构需要**应用层加密**。混合加密的优势在于：
+- 非对称加密（RSA）安全传输临时密钥，解决密钥分发问题。
+- 对称加密（AES）效率高，适合加密大量请求体数据。
+
+本文实现的系统要求：
+1. 后端提供公钥获取接口 `/api/crypto/publicKey`，返回RSA公钥（Hex格式）、非对称算法类型、对称算法类型。
+2. 前端在提交请求时：
+   - 随机生成AES对称密钥（Hex字符串）。
+   - 使用RSA公钥加密该对称密钥，将密文（Hex或Base64）放入请求头 `X-Crypto-Secret-Key`。
+   - 使用AES/ECB/PKCS5Padding算法加密整个JSON请求体，将密文（Base64）作为请求体发送。
+3. 后端通过 `@Crypto(request=true)` 注解自动拦截并解密请求体，还原为原始Java对象供业务使用。
+
+---
+
+## 二、后端核心实现分析
+
+后端基于Spring Boot，利用`RequestBodyAdvice`实现全局解密，使用Caffeine缓存对称加密处理器（避免每次请求都重新解析RSA私钥和初始化AES引擎）。
+
+### 2.1 注解驱动：`@Crypto`
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Crypto {
+    boolean response() default false;
+    boolean request() default true;
+}
+```
+
+在控制器方法上标记 `@Crypto(request = true)` 表示该请求体需要自动解密。
+
+### 2.2 `CryptoRequestBodyAdvice` – 请求体解密核心
+
+该类实现 `RequestBodyAdvice`，重写 `beforeBodyRead` 方法：
+1. 从HTTP Headers中获取加密的对称密钥（`X-Crypto-Secret-Key`）。
+2. 利用非对称处理器（RSA私钥）解密得到明文的对称密钥字符串。
+3. 通过缓存模板 `CryptoRequestCacheTemplate` 获取或创建对应的对称加密处理器（AES）。
+4. 用对称处理器解密请求体原文，包装成新的 `HttpInputMessage` 供Spring MVC继续读取。
+
+关键代码：
+
+```java
+String encryptedSecretKey = HeaderUtils.getHeader(..., DefaultConsts.HTTP_HEADER_CRYPTO_SECRET_KEY);
+CryptoProcessor cryptoProcessor = cryptoRequestCacheTemplate.createIfAbsent(encryptedSecretKey);
+String decryptedBody = cryptoProcessor.decrypt(encryptedBody);
+return new DecryptHttpInputMessage(inputMessage, decryptedBody.getBytes());
+```
+
+### 2.3 缓存模板 `CryptoRequestCacheTemplate`
+
+继承 `AbstractCaffeineCacheTemplate`，`valueGenerator` 方法执行真正的密钥解析与处理器创建：
+
+```java
+public CryptoProcessor valueGenerator(String key) {
+    String secretKey = asymmetricProcessor.decrypt(key);  // RSA解密获得对称密钥明文
+    return symmetricProcessor.newInstance(new SecretKey(secretKey));
+}
+```
+
+每次新请求携带的加密对称密钥都会触发一次非对称解密，然后生成AES处理器并缓存，避免重复解析。
+
+### 2.4 公钥端点 `CryptoEndpoint`
+
+前端首先调用该接口获取加密策略：
+
+```java
+@GetMapping("publicKey")
+public CryptoInfo getPublicKey() {
+    String publicKeyHex = cryptoProcessor.getSecretKey().publicKeyHex();
+    return new CryptoInfo(asymmetricCryptoStrategy, symmetricCryptoStrategy, publicKeyHex);
+}
+```
+
+返回的 `CryptoInfo` 包含算法类型和公钥Hex，前端据此配置加密参数。
+
+---
+
+## 三、完整前端提交流程
+
+
+最终的前端提交逻辑：
+1. 调用 `/api/crypto/publicKey` 获取RSA公钥（Hex）和算法类型。
+2. 生成16字节随机AES密钥（Hex）。
+3. 使用RSA公钥加密该密钥，得到Hex密文，放入请求头 `X-Crypto-Secret-Key`。
+4. 构造业务JSON对象，使用AES/ECB/PKCS5Padding加密，得到Base64密文作为请求体。
+5. 发送POST请求到 `/api/secure/submit`，后端自动解密并返回业务结果。
+---
+
+## 四、关键技术点总结
+
+### 4.1 编码一致性至关重要
+
+- 后端RSA解密时，需要知道前端传来的加密对称密钥是Hex还是Base64。本文最终统一为**Hex格式**。
+- 对称密钥明文也约定为**Hex字符串**（32字符对应16字节），后端需要按Hex解析字节数组。
+
+### 4.2 ECB模式注意事项
+
+ECB模式不使用IV，同一密钥加密相同明文块会得到相同密文块，存在一定安全性风险。但若后端要求强制使用ECB，则需严格对齐填充方式（PKCS5Padding/PKCS7Padding）。CryptoJS的`pad.Pkcs7`与Java的`PKCS5Padding`实际兼容（AES块大小128位，PKCS5定义为8字节块，但实践中常混用）。
+
+### 4.3 缓存策略
+
+后端缓存了`CryptoProcessor`实例，避免每次请求都执行非对称解密。但必须确保**加密对称密钥相同才会命中缓存**——由于前端每次随机生成新密钥，缓存实际上很少命中。更好的设计是根据用户会话缓存，但本例仅为演示。
+
+### 4.4 公钥获取与更新
+
+前端应在页面加载时获取公钥，并保留直到页面刷新。若后端轮换密钥对，前端应重新获取，否则无法解密。
+
+---
+
+## 五、运行与测试
+
+1. 启动Spring Boot应用（确保包含 `CryptoRequestBodyAdvice`、`CryptoEndpoint`、`SecureApiController` 等组件）。
+2. 访问Thymeleaf页面（例如 `/secure-test`），页面自动加载公钥并生成随机对称密钥。
+3. 填写表单，点击提交，观察浏览器开发者工具中的请求体为密文，请求头包含加密的对称密钥。
+4. 后端控制台输出解密后的业务数据，并返回JSON响应。
+
+---
+
+## 六、总结与扩展
+
+本文从完整的后端加密框架出发，详细分析了基于注解的请求自动解密实现，并针对前端的加密细节进行了三次定制化改造（Hex密钥、RSA Hex输出、AES ECB模式）。这套混合加密方案具备较高的实用价值，可直接应用于需要应用层加密的内部系统或API网关场景。
+
+**扩展建议**：
+- 可将对称密钥与用户会话绑定，避免每次请求重新生成，提高性能。
+- 增加时间戳或随机数防重放攻击。
+- 对响应体也进行对称加密（`@Crypto(response=true)`），形成双向加密通道。
+
+
+通过本文的讲解和代码示例，开发者可以快速搭建一套前后端一体的加密通信系统，并根据实际需求灵活调整加密算法和编码格式。

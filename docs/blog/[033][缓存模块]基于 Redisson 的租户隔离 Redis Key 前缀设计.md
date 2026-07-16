@@ -1,0 +1,141 @@
+# [033][缓存模块]基于 Redisson 的租户隔离 Redis Key 前缀设计
+
+本项目代码: https://gitee.com/yunjiao-source/tutorials4j
+
+在多租户系统中，不同租户的数据必须严格隔离。Redis 作为一种高性能缓存/存储中间件，通常被多个租户共享。一个经典且高效的隔离方案是为每个租户的 Key 自动添加唯一前缀，从而在逻辑上实现命名空间分离。
+
+本文以 `tutorials4j` 框架中的一段代码为例，分析如何通过函数式接口、Redisson 的 `NameMapper` 扩展点以及 Spring Boot 自动配置，优雅地实现租户感知的 Redis Key 前缀管理。
+
+## 一、核心设计目标
+
+- **无侵入**：业务代码只需使用逻辑 Key（如 `"user:123"`），框架层自动转换为 `{tenantId}:user:123`。
+- **高性能**：前缀添加和剥离在客户端完成，无额外网络开销。
+- **可扩展**：支持多种前缀策略（仅租户、租户+自定义前缀），方便按业务模块细分。
+- **与 Redisson 无缝集成**：利用 Redisson 的 `NameMapper` 能力，统一处理所有 Key（包括分布式锁、对象、集合等）。
+
+## 二、租户前缀策略接口：`RedisKeyPrefix`
+
+`RedisKeyPrefix` 是一个函数式接口，定义了 Key 的计算规则：
+
+```java
+@FunctionalInterface
+public interface RedisKeyPrefix {
+    String SEPARATOR = ":";
+    String compute(String cacheName);
+}
+```
+
+### 2.1 租户策略工厂方法
+
+`tenant()` 方法返回一个基于当前租户 ID 的 Key 生成器：
+
+```java
+static RedisKeyPrefix tenant() {
+    return name -> TenantContextHolder.get() + SEPARATOR + name;
+}
+```
+
+- `TenantContextHolder.get()` 从线程上下文中获取当前租户标识（通常通过拦截器或过滤器设置）。
+- 生成的 Key 格式：`租户ID:原始Key`。
+
+### 2.2 租户+自定义前缀策略
+
+`tenantPrefix(String prefix)` 方法允许在租户 ID 后追加一个固定前缀，便于按模块分组：
+
+```java
+static RedisKeyPrefix tenantPrefix(String prefix) {
+    // 处理 prefix 是否以分隔符结尾，保证格式统一
+}
+```
+
+- 例如 `tenantPrefix("order")` 生成 `租户ID:order:原始Key`。
+- 不同业务模块（订单、用户、商品）使用不同前缀，有助于监控和管理。
+
+### 2.3 反向解析：`uncompute`
+
+由于 Redis 中实际存储的 Key 是带租户前缀的，当需要从外部（如监控工具或手工查询）还原逻辑 Key 时，可使用：
+
+```java
+static String uncompute(String key) {
+    // 去除第一个冒号之前的内容
+}
+```
+
+- 示例：`uncompute("tenantA:user:123")` → `"user:123"`。
+- 该方法是静态工具方法，不依赖具体策略。
+
+## 三、与 Redisson 的集成：`PrefixNameMapper`
+
+Redisson 提供了 `NameMapper` 接口，允许在读写 Redis 时动态改写 Key 名。`PrefixNameMapper` 是其实现类：
+
+```java
+public class PrefixNameMapper implements NameMapper {
+    @Override
+    public String map(String s) {
+        return RedisKeyPrefix.tenant().compute(s);
+    }
+
+    @Override
+    public String unmap(String s) {
+        return RedisKeyPrefix.uncompute(s);
+    }
+}
+```
+
+- **map**：写入/查询时调用，将业务 Key 加上租户前缀。
+- **unmap**：当 Redisson 需要从 Redis 返回的 Key 反向推导原始 Key 时调用（较少使用，但保持对称性）。
+
+注册到 Redisson 配置后，所有通过 Redisson 客户端操作的 Key（`RBucket`、`RMap`、`RLock` 等）都会自动应用该映射，实现全自动租户隔离。
+
+## 四、Spring Boot 自动配置
+
+`RedissonConfiguration` 负责在 Spring 环境中装配上述组件：
+
+```java
+@Configuration(proxyBeanMethods = false)
+public class RedissonConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    PrefixNameMapper prefixNameMapper() {
+        return new PrefixNameMapper();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    RedissonAutoConfigurationCustomizer prefixNameRedissonConfigCustomizer(
+            PrefixNameMapper prefixNameMapper) {
+        return config -> config.setNameMapper(prefixNameMapper);
+    }
+}
+```
+
+- 利用 `@ConditionalOnMissingBean` 允许用户覆盖默认的 `PrefixNameMapper`，例如改用 `tenantPrefix("custom")` 策略。
+- 通过 `RedissonAutoConfigurationCustomizer` 在不修改 Redisson 自动配置源码的前提下注入 `NameMapper`。
+
+## 五、租户隔离的效果
+
+假设有两个租户：`tenant_1001` 和 `tenant_1002`。业务代码执行：
+
+```java
+RBucket<String> bucket = redissonClient.getBucket("user:profile:123");
+bucket.set("some data");
+```
+
+实际 Redis 中存储的 Key 分别为：
+
+- `tenant_1001:user:profile:123`
+- `tenant_1002:user:profile:123`
+
+两个租户的数据完全隔离，互不可见。如果某个租户需要清除自己的缓存，可以扫描 `tenant_1001:*` 模式删除，不会影响其他租户。
+
+## 六、总结
+
+通过 `RedisKeyPrefix` 函数式接口加 Redisson 的 `NameMapper` 扩展点，我们实现了一套轻量、高效、无侵入的多租户 Redis Key 隔离方案。该方案具备以下优点：
+
+- **透明化**：业务代码零改造，只需确保 `TenantContextHolder` 正确传递租户 ID。
+- **灵活性**：可随时切换前缀策略（仅租户、租户+模块前缀等）。
+- **性能**：前缀拼接仅发生在客户端，一次内存操作，无额外网络交互。
+- **兼容性**：完全兼容 Redisson 的所有功能（分布式锁、集合、队列、发布订阅等）。
+
+对于构建 SaaS 化应用或需要严格数据隔离的系统，这种基于 Key 前缀的租户隔离是一种成熟且高效的实践。

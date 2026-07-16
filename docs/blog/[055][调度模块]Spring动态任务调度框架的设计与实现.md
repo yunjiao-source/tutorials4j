@@ -1,0 +1,48 @@
+# [055][调度模块]Spring动态任务调度框架的设计与实现
+
+本项目代码: https://gitee.com/yunjiao-source/tutorials4j
+
+## 摘要
+传统的 `@Scheduled` 注解适合静态任务，但难以满足动态增删改、运行时修改配置等需求。本文介绍一种基于 `SchedulingConfigurer` 和 `ScheduledTaskRegistrar` 的动态任务调度框架，支持从配置文件加载任务、运行时添加/取消任务，并提供任务执行状态跟踪。
+
+## 1. 核心组件
+- **`ScheduleTaskManager`**：实现 `SchedulingConfigurer`，持有 `ScheduledTaskRegistrar` 实例，管理所有动态任务的注册与取消。
+- **`TaskRepository`**：任务数据源接口，用于加载所有任务（如 YAML、数据库）。
+- **`RunnableDecorator`**：包装 `TaskRunner`，同时充当 `Runnable` 和 `Trigger`，实现执行统计、条件判断和下一次执行时间计算。
+
+## 2. 动态注册流程
+```java
+// ScheduleTaskManager 核心方法
+public void addTask(Task task) {
+    if (!task.isEnabled()) return;
+    if (triggerTaskMap.containsKey(task.getName())) return;
+    doAddTask(task);
+}
+
+private synchronized void doAddTask(Task task) {
+    TaskRunner taskRunner = SpringUtil.getBean(task.getClassSimpleName(), TaskRunner.class);
+    RunnableDecorator decorator = new RunnableDecorator(task, taskRunner);
+    TriggerTask triggerTask = new TriggerTask(decorator, decorator);
+    ScheduledTask scheduledTask = scheduledTaskRegistrar.scheduleTriggerTask(triggerTask);
+    triggerTaskMap.put(task.getName(), new ScheduledTaskData(scheduledTask, decorator, triggerTask));
+}
+```
+- 通过 `task.getClassSimpleName()` 从 Spring 容器中获取实现了 `TaskRunner` 接口的 Bean，实现任务逻辑与配置的解耦。
+- 每次 `addTask` 都会动态生成 `TriggerTask` 并注册到 `ScheduledTaskRegistrar`，返回 `ScheduledTask` 供后续取消。
+
+## 3. 动态取消与销毁
+```java
+public void cancelTask(String taskName) {
+    ScheduledTaskData data = triggerTaskMap.get(taskName);
+    if (data != null) {
+        data.scheduledTask().cancel();
+        triggerTaskMap.remove(taskName);
+    }
+}
+```
+在 `@PreDestroy` 阶段批量取消所有任务，确保优雅停机。
+
+## 4. 设计亮点
+- **零侵入**：业务任务只需实现 `TaskRunner` 接口，无需关心调度细节。
+- **运行时可控**：通过 `addTask` / `cancelTask` 动态调整任务，可用于管理后台、运维接口等场景。
+- **线程安全**：使用 `ConcurrentHashMap` 存储任务，关键方法使用 `synchronized` 保护。

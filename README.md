@@ -88,7 +88,7 @@ Java 教程
 
 #### profile:multi-level
 
-> 缓存模版
+> 本地（JVM） 锁
 ![本地（JVM） 锁](docs/images/007.jpg)
 
 ### 验证码模块示例（framework/framework-examples/examples-captcha）

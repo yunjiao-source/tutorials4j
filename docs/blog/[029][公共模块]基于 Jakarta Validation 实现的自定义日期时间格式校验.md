@@ -1,0 +1,192 @@
+# [029][公共模块]基于 Jakarta Validation 实现的自定义日期时间格式校验
+
+本项目代码:https://gitee.com/yunjiao-source/tutorials4j
+
+在实际项目开发中，我们经常需要对用户输入的日期、时间或日期时间字符串进行格式校验。虽然 Jakarta Bean Validation（即 JSR 380）提供了 `@Past`、`@Future` 等内置注解，但并没有直接支持按指定格式校验字符串的注解。为此，我们可以自行扩展，实现一个类似 `@DateTimeFormat` 但结合校验能力的自定义约束。本文介绍了一套完整的实现方案，包含自定义注解、校验器、枚举类型及 Spring Boot 自动配置。
+
+## 一、整体设计思路
+
+需求要点：
+- 支持对 `String` 类型的字段进行校验，判断其是否符合指定的日期/时间格式。
+- 能够区分三种场景：**日期+时间**（`LocalDateTime`）、**纯日期**（`LocalDate`）、**纯时间**（`LocalTime`）。
+- 允许空值或空字符串通过校验（可视为选填字段）。
+- 校验失败时支持国际化错误消息。
+- 能够与 Spring Boot 的校验框架无缝集成。
+
+基于以上需求，我们设计了以下几个核心组件：
+
+| 组件 | 作用 |
+|------|------|
+| `@LocalDateTimeFormat` | 自定义约束注解，标注在需要校验的字段上 |
+| `DateTimeType` | 枚举，指定字段属于哪种时间类型 |
+| `LocalDateTimeValidator` | 实现了 `ConstraintValidator` 的校验逻辑 |
+| `ValidatorsConfiguration` | Spring Boot 配置类，将校验器注册为 Bean |
+| `ValidationMessages*.properties` | 国际化消息文件 |
+
+## 二、自定义注解 `@LocalDateTimeFormat`
+
+该注解是约束的入口，必须使用 `@Constraint(validatedBy = LocalDateTimeValidator.class)` 指定校验器。
+
+```java
+@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RUNTIME)
+@Constraint(validatedBy = LocalDateTimeValidator.class)
+@Documented
+public @interface LocalDateTimeFormat {
+    String message() default "{tutorials4j.framework.common.core.validation.LocalDateTimeFormat.message}";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+    String pattern();
+    DateTimeType dateTimeType() default DateTimeType.DateTime;
+}
+```
+
+- `pattern`：日期时间格式，遵循 `DateTimeFormatter` 语法，如 `"yyyy-MM-dd HH:mm:ss"`。
+- `dateTimeType`：指定待校验字符串的实际类型，默认为 `DateTime`。
+- `message`：使用消息键，便于国际化。
+
+## 三、枚举 `DateTimeType`
+
+用于区分三种校验目标类型，也便于用户阅读和维护。
+
+```java
+public enum DateTimeType {
+    DateTime,  // LocalDateTime
+    Date,      // LocalDate
+    Time       // LocalTime
+}
+```
+
+## 四、校验器实现 `LocalDateTimeValidator`
+
+校验器是核心，实现 `ConstraintValidator<LocalDateTimeFormat, String>` 接口。
+
+```java
+public class LocalDateTimeValidator implements ConstraintValidator<LocalDateTimeFormat, String> {
+    private String pattern;
+    private DateTimeType dateTimeType;
+    private DateTimeFormatter formatter;
+
+    @Override
+    public void initialize(LocalDateTimeFormat constraintAnnotation) {
+        this.pattern = constraintAnnotation.pattern();
+        this.dateTimeType = constraintAnnotation.dateTimeType();
+        this.formatter = DateTimeFormatter.ofPattern(pattern);
+    }
+
+    @Override
+    public boolean isValid(String object, ConstraintValidatorContext context) {
+        if (StringUtils.isBlank(object)) {
+            return true;   // 空值视为合法
+        }
+        try {
+            if (DateTimeType.Time.equals(dateTimeType)) {
+                LocalTime.parse(object, formatter);
+            } else if (DateTimeType.Date.equals(dateTimeType)) {
+                LocalDate.parse(object, formatter);
+            } else {
+                LocalDateTime.parse(object, formatter);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}
+```
+
+**要点说明**：
+- 空值或纯空白字符串直接返回 `true`，即不报错（可根据业务需求修改）。
+- 使用 `DateTimeFormatter` 进行解析，依赖 Java 8+ 时间 API。
+- 捕获任何异常（格式错误、无效日期如 2 月 30 日等）并返回 `false`。
+
+## 五、国际化消息配置
+
+在 `src/main/resources/` 下创建 `ValidationMessages.properties`（中文）和 `ValidationMessages_en.properties`（英文）：
+
+**ValidationMessages.properties**
+```properties
+tutorials4j.framework.common.core.validation.LocalDateTimeFormat.message = 日期时间格式无效
+```
+
+**ValidationMessages_en.properties**
+```properties
+tutorials4j.framework.common.core.validation.LocalDateTimeFormat.message = Invalid date/time format
+```
+
+Spring Boot 会自动读取类路径下的 `ValidationMessages` 资源文件，并在校验失败时替换消息中的占位符（本示例未使用占位符，直接输出固定消息）。
+
+## 六、Spring Boot 自动配置类
+
+为了让校验器能够在 Spring 容器中被扫描到（尤其当项目希望支持依赖注入到 `ConstraintValidator` 中时），提供一个配置类将校验器实例化为 Bean。本例中校验器无外部依赖，但配置类仍是一个好习惯。
+
+```java
+@Slf4j
+@Configuration(proxyBeanMethods = false)
+public class ValidatorsConfiguration {
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("[COMMON-CORE] Validators Configuration");
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    LocalDateTimeValidator localDateTimeValidator() {
+        log.debug("[COMMON-CORE] Local DateTime Validator");
+        return new LocalDateTimeValidator();
+    }
+}
+```
+
+- `@ConditionalOnMissingBean` 允许用户覆盖该 Bean。
+- 如果校验器需要依赖其他 Service（如从数据库读取格式配置），则可以通过 `@Bean` 方法注入。
+
+## 七、使用示例
+
+在 DTO 或 Form 类中直接使用注解：
+
+```java
+public class OrderCreateForm {
+    @LocalDateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", dateTimeType = DateTimeType.DateTime)
+    private String expectDeliveryTime;
+
+    @LocalDateTimeFormat(pattern = "yyyy-MM-dd", dateTimeType = DateTimeType.Date)
+    private String customerBirthday;
+
+    @LocalDateTimeFormat(pattern = "HH:mm:ss", dateTimeType = DateTimeType.Time)
+    private String remindTime;
+}
+```
+
+配合 Controller 中使用 `@Valid` 触发校验：
+
+```java
+@PostMapping("/order")
+public Result createOrder(@RequestBody @Valid OrderCreateForm form) {
+    // 业务逻辑
+}
+```
+
+若输入 `"2025-13-32"` 作为生日，将收到国际化消息“日期时间格式无效”或 “Invalid date/time format”。
+
+## 八、扩展与优化建议
+
+1. **支持多格式校验**  
+   可以在注解中添加 `String[] patterns()`，在校验器中依次尝试解析，任一成功即通过。
+
+2. **允许自定义错误消息中的具体值**  
+   使用 Hibernate Validator 的 `ConstraintValidatorContext` 动态构建错误信息，例如显示期望的格式。
+
+3. **与 Spring 的 `@DateTimeFormat` 结合**  
+   如果同时使用 Spring MVC 的数据绑定转换，注意避免重复转换。本方案专注 `@Valid` 阶段校验，可与 `@DateTimeFormat` 并存。
+
+4. **时区支持**  
+   对于跨时区场景，可在注解中添加 `zoneId` 属性，并在解析时应用指定的时区（虽然 `LocalDateTime` 本身不带时区）。
+
+## 九、总结
+
+通过上述实现，我们在项目中获得了一个高度可复用的日期时间格式校验组件。它遵循 Jakarta Bean Validation 规范，与 Spring Boot 完美集成，支持国际化，且代码清晰易于扩展。开发人员只需通过一个注解即可完成繁琐的格式校验，提高了代码的简洁性和维护性。
+
+这种自定义约束的思路同样适用于其他业务校验场景（如身份证号、手机号、枚举值映射等），希望本文能为您提供有益的参考。
+
+阅读最新文章，请关注我的微信公众号`杨运交` 
