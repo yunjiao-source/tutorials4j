@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 import tutorials4j.framework.examples.message.redis.list.SmsData;
-import tutorials4j.framework.message.redis.zset.ZSetMessageTemplate;
-import tutorials4j.framework.message.redis.zset.ZSetMessageTemplateFactory;
+import tutorials4j.framework.message.redis.support.zset.ZSetMessageTemplate;
+import tutorials4j.framework.message.redis.support.zset.ZSetMessageTemplateFactory;
 
 /**
  * TODO

@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tutorials4j.framework.message.redis.bean.RedisMessage;
+import tutorials4j.framework.message.redis.support.bean.RedisMessage;
 
 /**
  * TODO

@@ -11,7 +11,8 @@ import tutorials4j.framework.common.core.exception.Feedback;
  */
 @Getter
 public enum MessageErrorCode implements ErrorCode {
-  MESSAGE_KEY_MISMATCH("消息与消息键不匹配"),
+  MESSAGE_TYPE_MISMATCH("消息类型不匹配"),
+  MESSAGE_KEY_MISMATCH("消息键不匹配"),
   MESSAGE_KEY_NOT_CONFIG("消息键没有配置信息"),
   ;
 

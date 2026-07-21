@@ -2,8 +2,8 @@ package tutorials4j.framework.examples.message.redis.integration.sub;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import tutorials4j.framework.message.redis.bean.RedisMessage;
-import tutorials4j.framework.message.redis.template.RedisMessageConsumer;
+import tutorials4j.framework.message.redis.support.bean.RedisMessage;
+import tutorials4j.framework.message.redis.support.template.RedisMessageConsumer;
 
 /**
  * TODO

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
 import tutorials4j.framework.message.core.bean.MessageConsts;
-import tutorials4j.framework.message.redis.bean.RedisMessage;
-import tutorials4j.framework.message.redis.stream.StreamMessageTempalteFactory;
-import tutorials4j.framework.message.redis.stream.StreamMessageTemplate;
+import tutorials4j.framework.message.redis.support.bean.RedisMessage;
+import tutorials4j.framework.message.redis.support.stream.StreamMessageTempalteFactory;
+import tutorials4j.framework.message.redis.support.stream.StreamMessageTemplate;
 
 /**
  * TODO

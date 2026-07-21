@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.examples.message.redis.event.RedisMessageEvent;
-import tutorials4j.framework.message.redis.bean.RedisMessage;
-import tutorials4j.framework.message.redis.template.RedisMessageConsumer;
-import tutorials4j.framework.message.redis.zset.ZSetMessageTemplate;
+import tutorials4j.framework.message.redis.support.bean.RedisMessage;
+import tutorials4j.framework.message.redis.support.template.RedisMessageConsumer;
+import tutorials4j.framework.message.redis.support.zset.ZSetMessageTemplate;
 
 /**
  * TODO

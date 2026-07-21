@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.examples.message.redis.list.SmsData;
-import tutorials4j.framework.message.redis.bean.RedisMessage;
-import tutorials4j.framework.message.redis.stream.StreamMessageTemplate;
-import tutorials4j.framework.message.redis.template.RedisMessageConsumer;
+import tutorials4j.framework.message.redis.support.bean.RedisMessage;
+import tutorials4j.framework.message.redis.support.stream.StreamMessageTemplate;
+import tutorials4j.framework.message.redis.support.template.RedisMessageConsumer;
 
 /**
  * TODO

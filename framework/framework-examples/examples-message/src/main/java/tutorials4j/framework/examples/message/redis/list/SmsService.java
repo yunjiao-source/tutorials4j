@@ -8,8 +8,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.message.core.bean.MessageConsts;
-import tutorials4j.framework.message.redis.list.ListMessageTempalteFactory;
-import tutorials4j.framework.message.redis.list.ListMessageTemplate;
+import tutorials4j.framework.message.redis.support.list.ListMessageTempalteFactory;
+import tutorials4j.framework.message.redis.support.list.ListMessageTemplate;
 
 /**
  * TODO

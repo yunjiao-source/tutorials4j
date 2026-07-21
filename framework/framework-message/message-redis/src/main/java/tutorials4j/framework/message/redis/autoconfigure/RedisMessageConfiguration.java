@@ -13,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import tutorials4j.framework.common.spring.jackson.JacksonRecord;
 import tutorials4j.framework.common.spring.jackson.ObjectMapperCreator;
-import tutorials4j.framework.message.redis.list.ListMessageTempalteFactory;
-import tutorials4j.framework.message.redis.properties.RedisMessageProperties;
-import tutorials4j.framework.message.redis.stream.StreamMessageTempalteFactory;
-import tutorials4j.framework.message.redis.zset.ZSetMessageTemplateFactory;
+import tutorials4j.framework.message.redis.support.list.ListMessageTempalteFactory;
+import tutorials4j.framework.message.redis.support.properties.RedisMessageProperties;
+import tutorials4j.framework.message.redis.support.stream.StreamMessageTempalteFactory;
+import tutorials4j.framework.message.redis.support.zset.ZSetMessageTemplateFactory;
 
 /**
  * 配置

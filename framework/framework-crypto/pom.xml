@@ -17,6 +17,7 @@
     <modules>
         <module>crypto-core</module>
         <module>crypto-hutool</module>
+        <module>crypto-apache</module>
         <module>crypto-web</module>
         <module>crypto-spring-boot-starter</module>
     </modules>

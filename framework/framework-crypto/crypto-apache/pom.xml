@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>crypto-hutool</artifactId>
+    <artifactId>crypto-apache</artifactId>
     <packaging>jar</packaging>
-    <name>Crypto :: Hutool</name>
-    <description>Hutool加解密模块</description>
+    <name>Crypto :: apache</name>
+    <description>Apache Commons crypto 加解密模块</description>
 
     <dependencies>
         <dependency>
@@ -22,8 +22,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpkix-jdk18on</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-crypto</artifactId>
         </dependency>
     </dependencies>
 

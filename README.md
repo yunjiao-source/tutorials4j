@@ -340,3 +340,4 @@ Java 教程
 * [077-消息模块-基于 Redis List 的轻量级消息队列框架设计解析](docs/blog/077.md)
 * [078-消息模块-基于 Redis ZSet 的延迟消息队列设计与实现](docs/blog/078.md)
 * [079-消息模块-基于 Redis Stream 的高可靠消息队列实现——Spring Data Redis 实战解析](docs/blog/079.md)  
+* [080-缓存模块-Spring Cache缓存键前缀设计与租户隔离实践](docs/blog/080.md)

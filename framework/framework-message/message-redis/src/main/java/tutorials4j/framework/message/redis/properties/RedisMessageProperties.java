@@ -1,10 +1,10 @@
 package tutorials4j.framework.message.redis.properties;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Duration;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import tutorials4j.framework.common.core.PropertiesConsts;
+import tutorials4j.framework.message.redis.bean.RedisMessageType;
 
 /**
  * TODO
@@ -14,5 +14,19 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_MESSAGE_REDIS)
 public class RedisMessageProperties {
-  private Map<String, QueueOptions> queues = new HashMap<>();
+
+  @Data
+  public static class QueueOptions {
+    private String keyPrefix = "message:";
+    private RedisMessageType messageType = RedisMessageType.list;
+    private Duration blockTimeout = Duration.ofSeconds(3);
+    private Duration sleepTimeWhenException = Duration.ofSeconds(3);
+  }
+
+  @Data
+  public static class RetryOptions {
+    private boolean enabled = false;
+    private int maxCount = 3;
+    private Duration expireTime = Duration.ofMinutes(3);
+  }
 }
