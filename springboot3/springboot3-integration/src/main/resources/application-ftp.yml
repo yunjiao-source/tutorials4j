@@ -1,5 +1,0 @@
-ftp:
-  server: ftp.example.com
-  port: 21
-  user: ftpuser
-  password: ftppassword

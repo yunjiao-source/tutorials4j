@@ -1,6 +1,0 @@
-###
-GET http://localhost:8080/api/users
-Content-Type: application/json
-
-### 页面
-### http://localhost:8080/ui/users

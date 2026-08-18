@@ -1,3 +1,0 @@
-###
-GET http://localhost:8080/task/print-time?cron=0/3 * * * * ?
-Accept: text/plain

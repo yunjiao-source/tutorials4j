@@ -1,9 +1,0 @@
-spring:
-  sql:
-    init:
-      schema-locations: classpath:src/main/db/schema-pg.sql
-      #data-locations: classpath:db/data-h2.sql
-      mode: always
-
-
-
