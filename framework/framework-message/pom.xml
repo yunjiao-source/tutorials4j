@@ -21,6 +21,7 @@
         <module>message-mqtt</module>
         <module>message-redis</module>
         <module>message-web</module>
+        <module>message-rqueue</module>
         <module>message-spring-boot-starter</module>
     </modules>
 

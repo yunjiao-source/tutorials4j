@@ -1,6 +1,8 @@
 package tutorials4j.framework.common.core;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import com.google.common.util.concurrent.Striped;
+import java.util.concurrent.locks.Lock;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -9,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Yun Jiao
  */
 public class TenantContextHolder {
+  private final Striped<Lock> striped = Striped.lock(256);
   private static final ThreadLocal<String> CURRENT_CONTEXT = new TransmittableThreadLocal<>();
 
   /**
