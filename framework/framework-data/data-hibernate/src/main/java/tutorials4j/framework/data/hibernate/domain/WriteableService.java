@@ -7,6 +7,8 @@ import tutorials4j.framework.common.core.entity.Entity;
 /**
  * 可写服务接口，在 {@link ReadableService} 基础上提供保存、删除等写入操作。
  *
+ * <p>所有默认方法均委托给底层 {@link BaseRepository} 的对应方法，实现类仅需提供 {@link #getRepository()} 即可获得完整的写入能力。
+ *
  * @param <E> 实体类型
  * @param <ID> 主键类型
  * @author Yun Jiao
@@ -62,7 +64,7 @@ public interface WriteableService<E extends Entity, ID extends Serializable>
   }
 
   /**
-   * 批量保存实体。
+   * 批量保存给定的实体集合。
    *
    * @param entities 实体集合
    * @param <S> 实体子类型
@@ -83,7 +85,7 @@ public interface WriteableService<E extends Entity, ID extends Serializable>
   }
 
   /**
-   * 批量保存并立即刷新。
+   * 批量保存并立即刷新（同步到数据库）。
    *
    * @param entities 实体列表
    * @return 保存后的实体列表

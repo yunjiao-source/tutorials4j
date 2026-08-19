@@ -63,6 +63,17 @@ public class SpelMethodBasedExpressionEvaluator
   /** 嵌入式值解析器（例如解析 ${...} 占位符），通过 {@link EmbeddedValueResolverAware} 注入 */
   @Setter private StringValueResolver embeddedValueResolver;
 
+  /**
+   * 在指定方法调用上下文中对表达式求值并返回指定类型的值（实现自 {@link MethodBasedExpressionEvaluator}）。
+   *
+   * @param method 被执行的目标方法
+   * @param arguments 方法调用时传入的实际参数数组
+   * @param expression SpEL 表达式字符串
+   * @param resultType 期望的返回值类型
+   * @param variables 额外的变量映射，可在表达式中访问
+   * @param <T> 返回值类型
+   * @return 表达式求值结果，类型与 {@code resultType} 一致
+   */
   @Override
   public <T> T getValue(
       Method method,
@@ -117,11 +128,22 @@ public class SpelMethodBasedExpressionEvaluator
         });
   }
 
+  /**
+   * 注入 {@link BeanFactory}，并创建用于在表达式中引用 Bean 的 {@link BeanFactoryResolver}。
+   *
+   * @param beanFactory Spring 容器 Bean 工厂
+   */
   @Override
   public void setBeanFactory(@NonNull BeanFactory beanFactory) {
     beanResolver = new BeanFactoryResolver(beanFactory);
   }
 
   // 辅助类，用于支持 #root.args[0]
+  /**
+   * 方法参数持有器，作为 SpEL 求值上下文的根对象，支持通过 {@code #root.args[0]} 访问方法参数。
+   *
+   * @param args 方法调用时的实际参数数组
+   * @param methodName 方法引用（用于记录方法元信息）
+   */
   public record MethodArgsHolder(Object[] args, Object methodName) {}
 }

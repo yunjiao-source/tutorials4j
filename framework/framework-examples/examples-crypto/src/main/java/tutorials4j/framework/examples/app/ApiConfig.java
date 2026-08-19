@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 简单配置
+ * API 示例应用的配置类。
+ *
+ * <p>仅在 {@code api} Profile 下生效，扫描 {@code tutorials4j.framework.examples.api} 包下的组件。
  *
  * @author Yun Jiao
  */

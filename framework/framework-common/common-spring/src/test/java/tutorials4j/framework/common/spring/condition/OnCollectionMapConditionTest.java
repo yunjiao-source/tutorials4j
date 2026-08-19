@@ -14,21 +14,20 @@ import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.MutablePropertySources;
 
 /**
- * 集成测试 {@link ConditionalOnMapProperty} 与 {@link OnMapPropertyCondition} 使用
- * ApplicationContextRunner 模拟不同的配置环境
- */
-/**
- * 集成测试 {@link ConditionalOnMapProperty} 与 {@link OnCollectionMapCondition} 使用
- * ApplicationContextRunner 模拟不同的配置环境
+ * {@link ConditionalOnMapProperty} 与 {@link OnCollectionMapCondition} 集成测试。
+ *
+ * <p>使用 {@link ApplicationContextRunner} 模拟不同的配置环境，验证 Map 属性条件的各种匹配场景。
  *
  * @author Yun Jiao
  */
 class OnCollectionMapConditionTest {
 
+  /** 用于模拟 Spring 应用上下文的测试运行器，默认加载 {@link TestConfig}。 */
   private final ApplicationContextRunner runner =
       new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(TestConfig.class));
 
   // ==================== 被测试的配置类 ====================
+  /** 被测试的配置类：声明了各种 Map 条件场景下的 Bean。 */
   @Configuration(proxyBeanMethods = false)
   static class TestConfig {
     @Bean
@@ -87,6 +86,7 @@ class OnCollectionMapConditionTest {
 
   // ==================== 测试场景 ====================
 
+  /** Map 非空且 {@code isEmpty=false} 时，条件应匹配。 */
   @Test
   void nonEmptyMapShouldMatchWhenIsEmptyFalse() {
     runner
@@ -98,6 +98,7 @@ class OnCollectionMapConditionTest {
             });
   }
 
+  /** Map 为空且 {@code isEmpty=true} 时，条件应匹配。 */
   @Test
   void emptyMapShouldMatchWhenIsEmptyTrue() {
     // 模拟一个空 Map：创建一个 PropertySource，其中 "my.empty-map" 键对应的值为空 Map
@@ -117,6 +118,7 @@ class OnCollectionMapConditionTest {
             });
   }
 
+  /** 属性缺失且 {@code matchIfMissing=true} 时，条件应匹配。 */
   @Test
   void missingMapShouldMatchWhenMatchIfMissingTrue() {
     runner.run(
@@ -127,6 +129,7 @@ class OnCollectionMapConditionTest {
         });
   }
 
+  /** 属性缺失且 {@code matchIfMissing=false} 时，条件不应匹配。 */
   @Test
   void missingMapShouldNotMatchWhenMatchIfMissingFalse() {
     runner.run(
@@ -135,6 +138,7 @@ class OnCollectionMapConditionTest {
         });
   }
 
+  /** 使用 {@code value} 作为 {@code name} 的别名时，条件应匹配。 */
   @Test
   void valueAliasShouldWorkWhenNameIsBlank() {
     runner
@@ -146,6 +150,7 @@ class OnCollectionMapConditionTest {
             });
   }
 
+  /** 仅指定 {@code prefix} 且其下存在子属性时，条件应匹配。 */
   @Test
   void onlyPrefixShouldMatchWhenPrefixHasSubProperties() {
     runner
@@ -157,6 +162,7 @@ class OnCollectionMapConditionTest {
             });
   }
 
+  /** 仅指定 {@code prefix} 且其下没有子属性时，条件不应匹配。 */
   @Test
   void onlyPrefixShouldNotMatchWhenNoSubProperties() {
     runner.run(
@@ -166,6 +172,7 @@ class OnCollectionMapConditionTest {
   }
 
   // ==================== 边界测试：同时指定 name 和 value，name 优先 ====================
+  /** 边界测试配置：同时指定 {@code name} 与 {@code value}，用于验证 {@code name} 优先。 */
   @Configuration(proxyBeanMethods = false)
   static class NameOverridesValueConfig {
     @Bean
@@ -179,6 +186,7 @@ class OnCollectionMapConditionTest {
     }
   }
 
+  /** 同时指定 {@code name} 与 {@code value} 且 {@code name} 匹配时，条件应匹配。 */
   @Test
   void nameOverridesValue() {
     new ApplicationContextRunner()
@@ -187,6 +195,7 @@ class OnCollectionMapConditionTest {
         .run(context -> assertThat(context).hasBean("bean"));
   }
 
+  /** 仅 {@code value} 匹配而 {@code name} 不匹配时，条件不应匹配。 */
   @Test
   void nameOverridesValue_shouldNotMatchWhenOnlyValueMatches() {
     new ApplicationContextRunner()

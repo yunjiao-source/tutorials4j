@@ -8,6 +8,7 @@ import cn.hutool.captcha.LineCaptcha;
  * @author Yun Jiao
  */
 public class LineCaptchaBuilder extends AbstractCaptchaBuilder<LineCaptcha> {
+  /** 创建线段干扰验证码实例。 */
   @Override
   protected LineCaptcha createCaptcha() {
     return new LineCaptcha(width(), height(), generator(), interfereCount());

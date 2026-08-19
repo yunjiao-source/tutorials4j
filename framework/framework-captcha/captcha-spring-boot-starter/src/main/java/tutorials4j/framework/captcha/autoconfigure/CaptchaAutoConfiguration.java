@@ -9,7 +9,9 @@ import tutorials4j.framework.captcha.tianai.autoconfigure.TianaiCaptchaConfigura
 import tutorials4j.framework.captcha.web.autoconfigure.WebCaptchaConfiguration;
 
 /**
- * 验证码自动配置
+ * 验证码模块自动配置入口类。
+ *
+ * <p>汇总导入验证码核心、Hutool、天意及 Web 各子模块的自动配置，供 Spring Boot 自动装配加载。
  *
  * @author Yun Jiao
  */
@@ -22,6 +24,7 @@ import tutorials4j.framework.captcha.web.autoconfigure.WebCaptchaConfiguration;
   WebCaptchaConfiguration.class
 })
 public class CaptchaAutoConfiguration {
+  /** 初始化：输出验证码模块自动配置已加载的跟踪日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[COMMON] Common Auto Configuration");

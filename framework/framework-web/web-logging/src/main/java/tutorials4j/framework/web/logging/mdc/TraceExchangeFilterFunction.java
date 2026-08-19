@@ -29,6 +29,13 @@ import tutorials4j.framework.common.core.DefaultConsts;
 @Slf4j
 public class TraceExchangeFilterFunction implements ExchangeFilterFunction {
 
+  /**
+   * 在请求发出前从当前 MDC 提取追踪信息并注入请求头，同时将快照存入 Reactor Context； 在收到响应后从响应头提取新的追踪信息并更新当前 MDC。
+   *
+   * @param request 待发送的客户端请求
+   * @param next 下一个交换函数
+   * @return 响应式结果，包含下游返回的客户端响应
+   */
   @Override
   public Mono<ClientResponse> filter(ClientRequest request, ExchangeFunction next) {
     // 从当前线程 MDC 获取快照

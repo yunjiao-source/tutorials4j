@@ -29,7 +29,10 @@ import org.springframework.util.ResourceUtils;
  */
 @Slf4j
 public class QrCodeUtils extends QrCodeUtil {
+  /** 默认二维码配置：尺寸 300x300，并携带已加载的 Logo。 */
   private static final QrConfig DEFAULT_CONFIG;
+
+  /** 默认 Logo 图片（从 classpath 加载，可能为空）。 */
   private static File logo;
 
   static {

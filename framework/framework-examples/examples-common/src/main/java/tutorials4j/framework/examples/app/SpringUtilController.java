@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * SpringUtil 测试
+ * SpringUtil 工具类测试控制器。
+ *
+ * <p>提供接口验证 {@code SpringUtil} 获取 Spring Bean 的能力。
  *
  * @author Yun Jiao
  */
@@ -14,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SpringUtilController {
 
+  /**
+   * 通过 SpringUtil 获取当前控制器 Bean，验证其可用性。
+   *
+   * @return 获取到 Bean 时返回 {@code true}
+   */
   @GetMapping("/getBean")
   public boolean getBean() {
     Object bean = SpringUtil.getBean(SpringUtilController.class);

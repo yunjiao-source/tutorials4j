@@ -24,8 +24,10 @@ import tutorials4j.framework.common.spring.core.SnowflakeIdProvider;
  */
 @Slf4j
 public class SnowflakeUtils {
+  /** 雪花算法引擎实例。 */
   private Snowflake snowflake;
 
+  /** 单例实例。 */
   private static SnowflakeUtils INSTANCE;
 
   private SnowflakeUtils() {
@@ -57,6 +59,11 @@ public class SnowflakeUtils {
     }
   }
 
+  /**
+   * 获取单例实例（双重检查锁，线程安全）。
+   *
+   * @return SnowflakeUtils 单例
+   */
   protected static SnowflakeUtils getInstance() {
     if (ObjectUtils.isEmpty(INSTANCE)) {
       synchronized (SnowflakeUtils.class) {
@@ -69,18 +76,38 @@ public class SnowflakeUtils {
     return INSTANCE;
   }
 
+  /**
+   * 生成下一个长整型 ID。
+   *
+   * @return 雪花算法 ID
+   */
   protected long nextLongId() {
     return snowflake.nextId();
   }
 
+  /**
+   * 生成下一个字符串形式的 ID。
+   *
+   * @return 雪花算法 ID 字符串
+   */
   protected String nextStrId() {
     return snowflake.nextIdStr();
   }
 
+  /**
+   * 生成下一个长整型 ID（静态入口）。
+   *
+   * @return 雪花算法 ID
+   */
   public static long nextId() {
     return getInstance().nextLongId();
   }
 
+  /**
+   * 生成下一个字符串形式的 ID（静态入口）。
+   *
+   * @return 雪花算法 ID 字符串
+   */
   public static String nextIdStr() {
     return getInstance().nextStrId();
   }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 
 /**
- * TODO
+ * 演示长时间运行定时任务的示例，随机休眠最长 30 秒以模拟耗时任务。
  *
  * @author Yun Jiao
  */
@@ -16,6 +16,7 @@ import tutorials4j.framework.schedule.core.bean.TaskRunner;
 @Component
 public class Demo3LongTimeTaskRunner implements TaskRunner {
 
+  /** 随机休眠 0-30 秒，模拟长时间执行的任务。 */
   @Override
   public void run(Map<String, String> params) {
     log.info(

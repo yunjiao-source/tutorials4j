@@ -27,16 +27,31 @@ public abstract class AbstractDataSourceRoutingManager implements DataSourceRout
 
   private final Map<String, JdbcOptions> jdbcOptionsMap = new HashMap<>();
 
+  /**
+   * 获取默认数据源。
+   *
+   * @return 默认数据源（主数据源）
+   */
   @Override
   public DataSource getDefaultDataSource() {
     return defaultDataSource;
   }
 
+  /**
+   * 设置默认数据源。
+   *
+   * @param defaultDataSource 默认数据源，不能为 {@code null}
+   */
   public void setDefaultDataSource(DataSource defaultDataSource) {
     Assert.notNull(defaultDataSource, "defaultDataSource must not be null");
     this.defaultDataSource = defaultDataSource;
   }
 
+  /**
+   * 获取所有已注册的路由 JDBC 配置（不可修改视图）。
+   *
+   * @return 路由名称到 JDBC 连接选项的映射
+   */
   public Map<String, JdbcOptions> getJdbcOptionsMap() {
     return Collections.unmodifiableMap(jdbcOptionsMap);
   }

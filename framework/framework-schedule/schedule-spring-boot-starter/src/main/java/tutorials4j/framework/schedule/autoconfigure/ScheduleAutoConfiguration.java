@@ -10,7 +10,7 @@ import tutorials4j.framework.schedule.spring.autoconfigure.SpringScheduleConfigu
 import tutorials4j.framework.schedule.xxljob.autoconfigure.XxlJobScheduleConfiguration;
 
 /**
- * 自动配置
+ * 调度模块自动配置入口，导入 Spring 调度、监控调度、PowerJob 与 XXL-JOB 调度配置。
  *
  * @author Yun Jiao
  */
@@ -23,6 +23,7 @@ import tutorials4j.framework.schedule.xxljob.autoconfigure.XxlJobScheduleConfigu
   XxlJobScheduleConfiguration.class
 })
 public class ScheduleAutoConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[SCHEDULE] Schedule Auto Configuration");

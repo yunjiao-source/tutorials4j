@@ -22,11 +22,18 @@ import tutorials4j.framework.common.uid.autoconfigure.UidCommonProperties;
 @Slf4j
 public class UidCachedGenerator extends AbstractUidGenerator {
 
+  /**
+   * 构造缓存模式 UID 生成器。
+   *
+   * @param properties UID 生成器通用配置属性
+   * @param customizers 用户提供的生成器定制器列表
+   */
   public UidCachedGenerator(
       UidCommonProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
     super(properties, customizers);
   }
 
+  /** 释放缓存生成器占用的资源，应用关闭时自动调用。 */
   @Override
   @PreDestroy
   public void destroy() {
@@ -47,6 +54,11 @@ public class UidCachedGenerator extends AbstractUidGenerator {
     }
   }
 
+  /**
+   * 创建缓存模式 UID 生成器实例。
+   *
+   * @return {@link CachedUidGenerator} 实例
+   */
   @Override
   protected DefaultUidGenerator createUidGenerator() {
     return new CachedUidGenerator();

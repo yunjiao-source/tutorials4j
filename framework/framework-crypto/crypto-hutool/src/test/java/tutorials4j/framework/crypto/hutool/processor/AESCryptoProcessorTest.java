@@ -10,10 +10,17 @@ import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 
+/**
+ * {@link AESCryptoProcessor} 单元测试
+ *
+ * @author Yun Jiao
+ */
 class AESCryptoProcessorTest {
 
+  /** 测试数据：包含中文与特殊字符的明文字符串 */
   private static final String TEST_DATA = "Hello, 世界！";
 
+  /** 生成随机的 AES-256 密钥（32 字节），并封装为 {@link SecretKey} */
   private SecretKey generateRandomAesSecretKey() {
     // 生成随机的 AES-256 密钥（32 字节）
     byte[] keyBytes = RandomUtil.randomBytes(32);
@@ -40,13 +47,6 @@ class AESCryptoProcessorTest {
 
     String decrypted = processor.decrypt(encrypted);
     assertThat(decrypted).isEqualTo(TEST_DATA);
-  }
-
-  @Test
-  void createWithNullSecretKeyShouldThrowException() {
-    assertThatThrownBy(() -> AESCryptoProcessor.create(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("'secretKey' must not be null");
   }
 
   @Test

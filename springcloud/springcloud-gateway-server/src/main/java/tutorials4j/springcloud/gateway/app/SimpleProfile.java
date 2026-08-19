@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * simple 环境的网关配置：启用并扫描 simple 示例包下的组件。
  *
  * @author Yun Jiao
  */

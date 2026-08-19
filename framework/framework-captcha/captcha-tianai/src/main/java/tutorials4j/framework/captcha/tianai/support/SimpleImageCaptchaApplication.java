@@ -33,6 +33,15 @@ public class SimpleImageCaptchaApplication extends DefaultImageCaptchaApplicatio
         application.getCaptchaInterceptor());
   }
 
+  /**
+   * 使用给定的组件构造简化版图片验证码应用。
+   *
+   * @param captchaGenerator 验证码生成器
+   * @param imageCaptchaValidator 验证码校验器
+   * @param cacheStore 缓存存储
+   * @param prop 图片验证码配置
+   * @param captchaInterceptor 验证码拦截器
+   */
   public SimpleImageCaptchaApplication(
       ImageCaptchaGenerator captchaGenerator,
       ImageCaptchaValidator imageCaptchaValidator,
@@ -53,6 +62,7 @@ public class SimpleImageCaptchaApplication extends DefaultImageCaptchaApplicatio
     return id;
   }
 
+  /** 关闭验证码应用，释放相关资源。 */
   @Override
   @PreDestroy
   public void close() {

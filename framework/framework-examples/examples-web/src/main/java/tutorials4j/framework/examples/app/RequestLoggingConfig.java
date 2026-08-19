@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * 请求日志记录示例模块的配置类，仅在 request-logging profile 下生效，负责扫描请求日志示例相关组件。
  *
  * @author Yun Jiao
  */

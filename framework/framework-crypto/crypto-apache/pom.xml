@@ -11,8 +11,8 @@
 
     <artifactId>crypto-apache</artifactId>
     <packaging>jar</packaging>
-    <name>Crypto :: apache</name>
-    <description>Apache Commons crypto 加解密模块</description>
+    <name>Crypto :: Apache</name>
+    <description>Apache Commons Crypto 加解密模块</description>
 
     <dependencies>
         <dependency>

@@ -19,6 +19,7 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE_NAMED)
 public class NamedCacheProperties {
+  /** 命名缓存的名称前缀，默认 {@code named:}，用于区分普通缓存与命名缓存。 */
   private String cacheNamePrefix = "named:";
 
   /** 全局默认缓存配置，当某个具体缓存未定义配置时使用该默认值。 */

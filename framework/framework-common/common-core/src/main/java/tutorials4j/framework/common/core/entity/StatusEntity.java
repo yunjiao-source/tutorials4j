@@ -3,7 +3,7 @@ package tutorials4j.framework.common.core.entity;
 import tutorials4j.framework.common.core.bean.DataStatusEnum;
 
 /**
- * 具有数据状态的实体接口，提供状态管理和便捷的状态判断方法。
+ * 具有数据状态的实体接口，提供数据状态的存取能力以及便捷的状态判断方法。
  *
  * @author Yun Jiao
  */
@@ -23,54 +23,54 @@ public interface StatusEntity extends Entity {
   void setDataStatus(DataStatusEnum dataStatus);
 
   /**
-   * 判断状态是否为 {@link DataStatusEnum#NORMAL}。
+   * 判断当前数据状态是否为 {@link DataStatusEnum#NORMAL}。
    *
-   * @return true 如果是正常状态
+   * @return true 表示状态为正常，否则返回 false
    */
   default boolean isNormal() {
     return DataStatusEnum.NORMAL.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatusEnum#RESERVED}。
+   * 判断当前数据状态是否为 {@link DataStatusEnum#RESERVED}。
    *
-   * @return true 如果是保留状态
+   * @return true 表示状态为保留，否则返回 false
    */
   default boolean isReserved() {
     return DataStatusEnum.RESERVED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatusEnum#DISABLED}。
+   * 判断当前数据状态是否为 {@link DataStatusEnum#DISABLED}。
    *
-   * @return true 如果是禁用状态
+   * @return true 表示状态为禁用，否则返回 false
    */
   default boolean isDisabled() {
     return DataStatusEnum.DISABLED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatusEnum#LOCKED}。
+   * 判断当前数据状态是否为 {@link DataStatusEnum#LOCKED}。
    *
-   * @return true 如果是锁定状态
+   * @return true 表示状态为锁定，否则返回 false
    */
   default boolean isLocked() {
     return DataStatusEnum.LOCKED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatusEnum#EXPIRED}。
+   * 判断当前数据状态是否为 {@link DataStatusEnum#EXPIRED}。
    *
-   * @return true 如果是过期状态
+   * @return true 表示状态为过期，否则返回 false
    */
   default boolean isExpired() {
     return DataStatusEnum.EXPIRED.equals(getDataStatus());
   }
 
   /**
-   * 判断状态是否为 {@link DataStatusEnum#DELETED}。
+   * 判断当前数据状态是否为 {@link DataStatusEnum#DELETED}。
    *
-   * @return true 如果是已删除状态
+   * @return true 表示状态为已删除，否则返回 false
    */
   default boolean isDeleted() {
     return DataStatusEnum.DELETED.equals(getDataStatus());

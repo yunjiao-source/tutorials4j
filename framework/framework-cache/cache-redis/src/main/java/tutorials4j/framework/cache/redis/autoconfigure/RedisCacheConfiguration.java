@@ -28,18 +28,30 @@ import tutorials4j.framework.cache.redis.lock.RedisLockableAspect;
 import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
- * 命名缓存配置
+ * Redis 缓存自动配置类。
+ *
+ * <p>装配 Redis 缓存相关的核心 Bean：缓存管理器创建器 {@link RedisCacheManagerCreator}、各类缓存管理器定制器、 基于租户 Key 前缀的
+ * {@link RedisTemplateDecorator}，以及分布式锁服务 {@link RedisLockService} 与切面 {@link RedisLockableAspect}。
  *
  * @author Yun Jiao
+ * @see RedisCacheManagerCreator
+ * @see RedisLockService
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class RedisCacheConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CACHE-REDIS] Cache Redis Configuration");
   }
 
+  /**
+   * 创建值序列化为 JSON 的缓存管理器构建器定制器。
+   *
+   * @param objectMapper Jackson 对象映射器
+   * @return 值 JSON 序列化定制器实例
+   */
   @Bean
   @ConditionalOnMissingBean
   ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer
@@ -48,6 +60,12 @@ public class RedisCacheConfiguration {
     return new ValueJsonSerializerRedisCacVaheManagerBuilderCustomizer(objectMapper);
   }
 
+  /**
+   * 创建命名缓存管理器构建器定制器。
+   *
+   * @param properties 命名缓存配置属性
+   * @return 命名缓存构建器定制器实例
+   */
   @Bean
   @ConditionalOnMissingBean
   NamedRedisCacheManagerBuilderCustomizer namedRedisCacheManagerBuilderCustomizer(
@@ -56,6 +74,11 @@ public class RedisCacheConfiguration {
     return new NamedRedisCacheManagerBuilderCustomizer(properties);
   }
 
+  /**
+   * 创建命名缓存管理器定制器，用于强制初始化命名缓存。
+   *
+   * @return 命名缓存管理器定制器实例
+   */
   @Bean
   @ConditionalOnMissingBean
   NamedCacheManagerCustomizer namedRedisCacheManagerCustomizer() {
@@ -63,6 +86,15 @@ public class RedisCacheConfiguration {
     return new NamedCacheManagerCustomizer();
   }
 
+  /**
+   * 创建 Redis 缓存管理器创建器。
+   *
+   * @param properties 命名缓存配置属性
+   * @param factory Redis 连接工厂
+   * @param redisCacheManagerBuilderCustomizers 构建器定制器集合
+   * @param cacheManagerCustomizers 缓存管理器定制器集合
+   * @return Redis 缓存管理器创建器实例
+   */
   @Bean
   @ConditionalOnMissingBean
   RedisCacheManagerCreator redisCacheManagerCreator(
@@ -78,6 +110,13 @@ public class RedisCacheConfiguration {
         cacheManagerCustomizers.orderedStream().collect(Collectors.toList()));
   }
 
+  /**
+   * 创建 Redis 模板装饰器，配置基于租户 Key 前缀的序列化器并注入单例。
+   *
+   * @param redisConnectionFactory Redis 连接工厂
+   * @param properties 缓存配置属性
+   * @return {@link RedisTemplateDecorator} 单例实例
+   */
   @Bean
   @ConditionalOnMissingBean
   RedisTemplateDecorator redisTemplateDecorator(
@@ -100,6 +139,13 @@ public class RedisCacheConfiguration {
     return RedisTemplateDecorator.instance;
   }
 
+  /**
+   * 创建 Redis 分布式锁服务。
+   *
+   * @param redisTemplateDecorator Redis 模板装饰器
+   * @param properties 锁缓存配置属性
+   * @return {@link RedisLockService} 单例实例
+   */
   @Bean
   @ConditionalOnMissingBean
   RedisLockService redisLockService(
@@ -110,6 +156,13 @@ public class RedisCacheConfiguration {
     return RedisLockService.instance;
   }
 
+  /**
+   * 创建 {@link RedisLockable} 注解的 AOP 切面。
+   *
+   * @param spelMethodBasedExpressionEvaluator SpEL 表达式求值器
+   * @param redisLockService Redis 分布式锁服务
+   * @return 分布式锁切面实例
+   */
   @Bean
   @ConditionalOnMissingBean
   RedisLockableAspect redisLockableAspect(

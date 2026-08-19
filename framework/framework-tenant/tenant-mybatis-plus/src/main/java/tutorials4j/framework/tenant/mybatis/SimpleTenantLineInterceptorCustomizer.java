@@ -23,6 +23,11 @@ import tutorials4j.framework.tenant.core.properties.TenantProperties;
 public class SimpleTenantLineInterceptorCustomizer implements MybatisPlusInterceptorCustomizer {
   private final TenantProperties properties;
 
+  /**
+   * 向 MyBatis Plus 拦截器中添加租户行拦截器。
+   *
+   * @param interceptor MyBatis Plus 拦截器实例
+   */
   @Override
   public void custom(MybatisPlusInterceptor interceptor) {
     TenantLineHandler tenantLineHandler =
@@ -30,6 +35,7 @@ public class SimpleTenantLineInterceptorCustomizer implements MybatisPlusInterce
     interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(tenantLineHandler));
   }
 
+  /** 返回租户拦截器的执行顺序。 */
   @Override
   public int getOrder() {
     return MybatisPlusConsts.INTERCEPTOR_ORDER_TENANT;

@@ -19,7 +19,11 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 // 灰度路由过滤器
-
+/**
+ * 灰度路由全局过滤器：根据请求携带的灰度标签，从注册中心筛选对应版本的服务实例，并改写请求目标地址实现灰度转发。
+ *
+ * @author Yun Jiao
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -27,6 +31,13 @@ public class GrayRouteGlobalFilter implements GlobalFilter, Ordered {
 
   private final ReactiveDiscoveryClient discoveryClient;
 
+  /**
+   * 依据灰度标签选择目标版本的服务实例，若无匹配实例则回退到默认路由，仅对 lb 协议的负载均衡路由生效。
+   *
+   * @param exchange 当前请求的 {@link ServerWebExchange}
+   * @param chain 网关过滤器链
+   * @return 过滤链执行结果的 {@link Mono}
+   */
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
     String grayTag = exchange.getAttributeOrDefault("grayTag", "stable");
@@ -61,10 +72,17 @@ public class GrayRouteGlobalFilter implements GlobalFilter, Ordered {
             });
   }
 
+  /**
+   * 从匹配的实例列表中随机选择一个服务实例。
+   *
+   * @param instances 匹配目标版本的服务实例列表
+   * @return 随机选中的服务实例
+   */
   private ServiceInstance choose(List<ServiceInstance> instances) {
     return instances.get(ThreadLocalRandom.current().nextInt(instances.size()));
   }
 
+  /** 返回过滤器的执行顺序，取值为 10050。 */
   @Override
   public int getOrder() {
     return 10050;

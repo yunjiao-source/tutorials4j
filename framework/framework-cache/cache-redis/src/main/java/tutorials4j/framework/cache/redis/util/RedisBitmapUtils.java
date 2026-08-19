@@ -24,6 +24,7 @@ import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 @Setter
 @Getter
 public class RedisBitmapUtils {
+  /** 全局单例实例，可直接使用该实例调用工具方法。 */
   public static final RedisBitmapUtils instance = new RedisBitmapUtils();
 
   /**
@@ -159,6 +160,12 @@ public class RedisBitmapUtils {
     return bitCount(saveKey);
   }
 
+  /**
+   * 设置指定 Redis 键的过期时间。
+   *
+   * @param key Redis 键名
+   * @param expireTime 过期时长
+   */
   public void setExpireTime(String key, Duration expireTime) {
     RedisTemplateDecorator.stringRedisTemplate().expire(key, expireTime);
   }

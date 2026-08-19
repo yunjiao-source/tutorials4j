@@ -25,11 +25,23 @@ public interface UidGenerator {
   /** 生成下一个唯一ID的字符串形式。 */
   String nextUidStr();
 
+  /**
+   * 解析 UID 的组成信息（时间戳、Worker ID、序列号等）。
+   *
+   * @param uid 待解析的 UID
+   * @return 解析结果字符串
+   */
   String parseUid(long uid);
 
   /** 释放生成器占用的资源（应用关闭时调用）。 */
   void destroy();
 
+  /**
+   * 使用配置属性填充 {@link DefaultUidGenerator} 的默认属性。
+   *
+   * @param properties UID 生成器通用配置属性
+   * @param defaultUidGenerator 待填充的生成器实例
+   */
   default void fill(UidCommonProperties properties, DefaultUidGenerator defaultUidGenerator) {
     defaultUidGenerator.setEpochStr(properties.getEpochStr());
     defaultUidGenerator.setSeqBits(properties.getSeqBits());

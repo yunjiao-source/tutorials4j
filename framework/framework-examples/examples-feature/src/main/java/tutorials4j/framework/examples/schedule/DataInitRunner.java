@@ -7,7 +7,9 @@ import tutorials4j.framework.feature.schedule.domain.JobEntity;
 import tutorials4j.framework.feature.schedule.domain.JobService;
 
 /**
- * 测试数据
+ * 应用启动时初始化定时任务示例数据的执行器。
+ *
+ * <p>若任务表中已存在数据则直接跳过，否则批量注册各类示例任务。
  *
  * @author Yun Jiao
  */
@@ -16,6 +18,7 @@ import tutorials4j.framework.feature.schedule.domain.JobService;
 public class DataInitRunner implements CommandLineRunner {
   private final JobService jobService;
 
+  /** 应用启动后检查并初始化示例任务数据。 */
   @Override
   public void run(String... args) throws Exception {
     if (jobService.count() > 0) {

@@ -7,8 +7,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 命名缓存的配置选项。
  *
- * <p>包含各类缓存（如 Redis、Caffeine）的通用配置以及特定实现的相关配置。 支持时间到期、空值缓存、统计开关等通用设置，以及 Redis 的键前缀、Caffeine
- * 的初始容量等特有设置。
+ * <p>包含各类缓存（如 Redis、Caffeine）的通用配置以及特定实现的相关配置。 支持时间到期、空值缓存、统计开关等通用设置，以及 Caffeine 的初始容量、最大大小等特有设置。
  *
  * @author Yun Jiao
  * @see NamedCacheProperties
@@ -43,8 +42,8 @@ public class NamedCacheOptions {
   /**
    * 将未设置的属性（值为 {@code null}）从默认配置中合并。
    *
-   * <p>对于时间到期、空值缓存开关、统计开关以及 Redis 键前缀， 若当前对象中该属性为 {@code null}，则使用默认配置中的对应值。 对于 Caffeine
-   * 配置中的初始容量和访问过期时间，直接使用默认配置中的值（覆盖当前值）。
+   * <p>对于时间到期、空值缓存开关与统计开关， 若当前对象中该属性为 {@code null}，则使用默认配置中的对应值。 对于 Caffeine
+   * 配置中的初始容量、最大大小和访问过期时间，同样仅在当前值为 {@code null} 时使用默认值。
    *
    * @param defaults 默认配置，若为 {@code null} 则方法直接返回，不执行任何操作
    */

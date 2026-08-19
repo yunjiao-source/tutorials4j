@@ -24,6 +24,15 @@ import tutorials4j.framework.web.core.util.WebUtils;
 @Slf4j
 public class TraceRestTemplateInterceptor implements ClientHttpRequestInterceptor {
 
+  /**
+   * 从当前 MDC 读取 traceId 和 spanId 并写入请求头，同时为本次调用生成新的子 spanId 并将原 spanId 作为 parentSpanId 传递给下游服务。
+   *
+   * @param request HTTP 请求对象
+   * @param body 请求体内容
+   * @param execution 请求执行器
+   * @return 下游返回的客户端响应
+   * @throws IOException 请求执行过程中发生 I/O 异常
+   */
   @Override
   public ClientHttpResponse intercept(
       HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {

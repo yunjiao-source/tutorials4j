@@ -11,7 +11,9 @@ import tutorials4j.framework.common.core.bean.FontNameEnum;
 import tutorials4j.framework.common.core.bean.FontStyleEnum;
 
 /**
- * Hutool 属性配置
+ * Hutool 验证码配置属性。
+ *
+ * <p>以 {@code tutorials4j.captcha.hutool} 为前缀绑定外部配置， 分别配置线段、圆圈、扭曲与 Gif 四种验证码的绘图选项。
  *
  * @author Yun Jiao
  */
@@ -112,6 +114,28 @@ public class HutoolCaptchaProperties {
     /** 设置随机颜色时，最大的取色范围 */
     private Integer maxColor;
 
+    /**
+     * 创建并填充 Gif 绘图配置。
+     *
+     * @param options 待填充的 Gif 绘图配置
+     * @param width 图片宽度
+     * @param height 图片高度
+     * @param interfereCount 干扰元素个数
+     * @param backgroundColor 背景色
+     * @param transparency 文字透明度
+     * @param fuzziness 模糊度
+     * @param validIgnoreCase 校验时是否忽略大小写
+     * @param fontName 字体名称
+     * @param fontStyleEnum 字体风格
+     * @param fontSize 字体大小
+     * @param generator 验证码生成类型
+     * @param length 字符长度
+     * @param quality 量化器取样间隔
+     * @param repeat 帧循环次数
+     * @param minColor 随机颜色最小取色范围
+     * @param maxColor 随机颜色最大取色范围
+     * @return 填充完成的 Gif 绘图配置
+     */
     public static GifDrawingOptions of(
         GifDrawingOptions options,
         int width,
@@ -183,6 +207,24 @@ public class HutoolCaptchaProperties {
     /** 码选项 */
     @NestedConfigurationProperty private CodeOptions code;
 
+    /**
+     * 创建并填充绘图配置。
+     *
+     * @param options 待填充的绘图配置
+     * @param width 图片宽度
+     * @param height 图片高度
+     * @param interfereCount 干扰元素个数
+     * @param backgroundColor 背景色
+     * @param transparency 文字透明度
+     * @param fuzziness 模糊度
+     * @param validIgnoreCase 校验时是否忽略大小写
+     * @param fontName 字体名称
+     * @param fontStyleEnum 字体风格
+     * @param fontSize 字体大小
+     * @param generator 验证码生成类型
+     * @param length 字符长度
+     * @return 填充完成的绘图配置
+     */
     public static DrawingOptions of(
         DrawingOptions options,
         int width,
@@ -227,6 +269,15 @@ public class HutoolCaptchaProperties {
     /** 字体大小 */
     private Integer size;
 
+    /**
+     * 创建并填充字体选项。
+     *
+     * @param options 待填充的字体选项
+     * @param name 字体名称
+     * @param style 字体风格
+     * @param size 字体大小
+     * @return 填充完成的字体选项
+     */
     public static FontOptions of(
         FontOptions options, FontNameEnum name, FontStyleEnum style, Integer size) {
       options.setName(name);
@@ -246,6 +297,14 @@ public class HutoolCaptchaProperties {
     /** 字符长度 */
     private Integer length;
 
+    /**
+     * 创建并填充码选项。
+     *
+     * @param options 待填充的码选项
+     * @param generator 码生成类型
+     * @param length 字符长度
+     * @return 填充完成的码选项
+     */
     public static CodeOptions of(CodeOptions options, CodeGeneratorType generator, int length) {
       options.setGenerator(generator);
       options.setLength(length);

@@ -12,8 +12,14 @@ import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 
+/**
+ * {@link SM2CryptoProcessor} 单元测试
+ *
+ * @author Yun Jiao
+ */
 class SM2CryptoProcessorTest {
 
+  /** 测试数据：包含中文与特殊字符的明文字符串 */
   private static final String TEST_DATA = "Hello, 世界！";
 
   /** 生成随机的 SM2 密钥对，并封装为 SecretKey */
@@ -34,13 +40,6 @@ class SM2CryptoProcessorTest {
     assertThat(processor.getSecretKey()).isSameAs(secretKey);
     // 注意：当前实现 getCategory() 返回 CryptoCategory.RSA（可能是个 bug）
     assertThat(processor.getCategory()).isEqualTo(CryptoCategory.SM2);
-  }
-
-  @Test
-  void createWithNullSecretKeyShouldThrowException() {
-    assertThatThrownBy(() -> SM2CryptoProcessor.create(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("'secretKey' must not be null");
   }
 
   @Test

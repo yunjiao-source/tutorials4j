@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * 统一验证码示例配置类。
+ *
+ * <p>在 {@code unified} profile 下启用，扫描并装配统一验证码示例包中的组件。
  *
  * @author Yun Jiao
  */

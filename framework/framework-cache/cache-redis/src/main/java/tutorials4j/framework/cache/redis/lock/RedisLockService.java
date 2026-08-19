@@ -52,6 +52,7 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
 @Slf4j
 @RequiredArgsConstructor
 public class RedisLockService {
+  /** 全局单例实例。 */
   public static final RedisLockService instance = new RedisLockService();
 
   /** 加锁 Lua 脚本：SET key value NX PX milliseconds */
@@ -86,6 +87,7 @@ public class RedisLockService {
       """,
           Boolean.class);
 
+  /** 加锁成功时 Redis 返回的标识。 */
   private static final String LOCK_SUCCESS = "OK";
 
   @Setter private RedisTemplateDecorator redisTemplateDecorator;
@@ -216,7 +218,10 @@ public class RedisLockService {
    */
   @RequiredArgsConstructor
   public class AutoRenewal {
+    /** 锁的默认过期时间。 */
     private static final Duration DEFAULT_EXPIRE_TIME = Duration.ofSeconds(30);
+
+    /** 锁的默认续期周期。 */
     private static final Duration DEFAULT_RENEWAL_PERIOD_TIME = Duration.ofSeconds(9);
 
     private final RedisTemplateDecorator redisTemplateDecorator;
@@ -229,7 +234,8 @@ public class RedisLockService {
     /**
      * 尝试获取锁（自动续期模式）。
      *
-     * @param lockKey 锁的 key * @return 成功返回唯一锁标识（lockId），失败返回 null
+     * @param lockKey 锁的 key
+     * @return 成功返回唯一锁标识（lockId），失败返回 null
      */
     private String lock(String lockKey) {
       String lockId = IdUtil.fastSimpleUUID();
@@ -282,6 +288,7 @@ public class RedisLockService {
       renewalTasks.put(lockKey, future);
     }
 
+    /** 根据配置初始化自动续期使用的调度线程池。 */
     public void initScheduler() {
       ExecutionOption option = redisLockOptions.getAutoRenewal();
       executorServiceHolder = ExecutorServiceHolder.buildScheduler(option);
@@ -332,10 +339,16 @@ public class RedisLockService {
       }
     }
 
+    /** 关闭调度线程池，释放续期调度资源。 */
     public void destory() {
       executorServiceHolder.shutdown();
     }
 
+    /**
+     * 取消指定锁 key 对应的续期定时任务。
+     *
+     * @param lockKey 锁的 key
+     */
     private void cancelLockTask(String lockKey) {
       ScheduledFuture<?> task = renewalTasks.remove(lockKey);
       if (task != null) task.cancel(true);
@@ -362,6 +375,7 @@ public class RedisLockService {
     }
   }
 
+  /** Bean 销毁前释放自动续期模式的调度资源。 */
   @PreDestroy
   public void preDestory() {
     if (autoRenewal != null) {

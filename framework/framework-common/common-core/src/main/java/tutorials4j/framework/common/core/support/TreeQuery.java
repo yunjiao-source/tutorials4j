@@ -6,7 +6,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * 通用树形结构查询工具 支持多棵树和任意节点
+ * 通用树形结构查询工具，支持多棵树和任意节点。
+ *
+ * <p>通过 {@code idGetter}、{@code parentIdGetter} 与根节点判断条件构建树的内存索引，
+ * 提供根节点、子节点、父路径、子树、深度等常用查询，以及节点的动态增删能力。
  *
  * @param <ID> 节点ID类型
  * @param <T> 节点对象类型
@@ -305,10 +308,10 @@ public class TreeQuery<ID, T> {
   }
 
   /**
-   * 树查询构建器
+   * 树查询构建器，用于便捷地配置节点列表、ID 获取器与根节点判断条件并构建 {@link TreeQuery}。
    *
-   * @param <ID>
-   * @param <T>
+   * @param <ID> 节点ID类型
+   * @param <T> 节点对象类型
    */
   public static class TreeQueryBuilder<ID, T> {
 
@@ -317,37 +320,69 @@ public class TreeQuery<ID, T> {
     private Function<T, ID> parentIdGetter;
     private Predicate<ID> rootIdPredicate;
 
-    /** 设置节点列表 */
+    /**
+     * 设置节点列表。
+     *
+     * @param nodes 节点列表，可为 null（视为空列表）
+     * @return 当前构建器实例
+     */
     public TreeQueryBuilder<ID, T> withNodes(List<T> nodes) {
       this.nodes = nodes != null ? new ArrayList<>(nodes) : new ArrayList<>();
       return this;
     }
 
-    /** 设置ID获取器 */
+    /**
+     * 设置 ID 获取器。
+     *
+     * @param idGetter 节点 ID 获取函数
+     * @return 当前构建器实例
+     */
     public TreeQueryBuilder<ID, T> withIdGetter(Function<T, ID> idGetter) {
       this.idGetter = idGetter;
       return this;
     }
 
-    /** 设置父ID获取器 */
+    /**
+     * 设置父 ID 获取器。
+     *
+     * @param parentIdGetter 父节点 ID 获取函数
+     * @return 当前构建器实例
+     */
     public TreeQueryBuilder<ID, T> withParentIdGetter(Function<T, ID> parentIdGetter) {
       this.parentIdGetter = parentIdGetter;
       return this;
     }
 
-    /** 设置根节点判断条件（ID为特定值） */
+    /**
+     * 设置根节点判断条件（ID 为特定值）。
+     *
+     * @param rootIdValue 根节点的 ID 值
+     * @return 当前构建器实例
+     */
     public TreeQueryBuilder<ID, T> withRootId(ID rootIdValue) {
       this.rootIdPredicate = id -> rootIdValue == null ? id == null : rootIdValue.equals(id);
       return this;
     }
 
-    /** 设置自定义根节点判断条件 */
+    /**
+     * 设置自定义根节点判断条件。
+     *
+     * @param rootIdPredicate 根节点判断谓词
+     * @return 当前构建器实例
+     */
     public TreeQueryBuilder<ID, T> withRootPredicate(Predicate<ID> rootIdPredicate) {
       this.rootIdPredicate = rootIdPredicate;
       return this;
     }
 
-    /** 构建树查询器 */
+    /**
+     * 构建树查询器。
+     *
+     * <p>若节点列表非空，则构建完成后立即初始化数据。
+     *
+     * @return 构建完成的 {@link TreeQuery} 实例
+     * @throws IllegalArgumentException 如果 ID 获取器、父 ID 获取器或根节点判断条件为空
+     */
     public TreeQuery<ID, T> build() {
       if (idGetter == null || parentIdGetter == null) {
         throw new IllegalArgumentException("ID获取器和父ID获取器不能为空");

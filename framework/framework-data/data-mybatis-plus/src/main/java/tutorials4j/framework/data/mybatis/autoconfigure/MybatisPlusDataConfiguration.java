@@ -21,7 +21,9 @@ import tutorials4j.framework.data.mybatis.customizer.PaginationInnerInterceptorC
 import tutorials4j.framework.data.mybatis.properties.MybatisPlusDataProperties;
 
 /**
- * MyBatis Plus 的自动配置类
+ * MyBatis Plus 自动配置类。
+ *
+ * <p>负责装配 MyBatis Plus 拦截器（分页、乐观锁、防全表更新/删除）以及审计字段填充处理器、 默认主键生成器等组件，可通过配置属性控制各拦截器的启用开关。
  *
  * @author Yun Jiao
  */
@@ -29,11 +31,18 @@ import tutorials4j.framework.data.mybatis.properties.MybatisPlusDataProperties;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({MybatisPlusDataProperties.class})
 public class MybatisPlusDataConfiguration {
+  /** 启动后打印初始化日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[DATA-MYBATIS-PLUS] Data Mybatis Plus Configuration");
   }
 
+  /**
+   * 装配 MyBatis Plus 拦截器，并按排序后的顺序应用所有自定义器。
+   *
+   * @param customizers 拦截器自定义器提供者，包含各拦截器自定义器 Bean
+   * @return 装配完成的 MyBatis Plus 拦截器
+   */
   @Bean
   @ConditionalOnMissingBean
   MybatisPlusInterceptor mybatisPlusInterceptor(
@@ -44,6 +53,12 @@ public class MybatisPlusDataConfiguration {
     return interceptor;
   }
 
+  /**
+   * 装配分页拦截器自定义器（默认开启，可通过配置关闭）。
+   *
+   * @param properties MyBatis Plus 数据访问配置属性，用于获取数据库类型
+   * @return 分页拦截器自定义器
+   */
   @Bean
   @ConditionalOnProperty(
       prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS,
@@ -56,6 +71,11 @@ public class MybatisPlusDataConfiguration {
     return new PaginationInnerInterceptorCustomizer(properties.getDbType());
   }
 
+  /**
+   * 装配乐观锁拦截器自定义器（默认开启，可通过配置关闭）。
+   *
+   * @return 乐观锁拦截器自定义器
+   */
   @Bean
   @ConditionalOnProperty(
       prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS,
@@ -67,6 +87,11 @@ public class MybatisPlusDataConfiguration {
     return new OptimisticLockerInterceptorCustomizer();
   }
 
+  /**
+   * 装配防全表更新/删除拦截器自定义器（默认开启，可通过配置关闭）。
+   *
+   * @return 防全表更新/删除拦截器自定义器
+   */
   @Bean
   @ConditionalOnProperty(
       prefix = PropertiesConsts.PROPERTY_PREFIX_DATA_MYBATIS_PLUS,
@@ -78,6 +103,11 @@ public class MybatisPlusDataConfiguration {
     return new BlockAttackInterceptorCustomizer();
   }
 
+  /**
+   * 装配默认主键生成器配置，将全局主键生成器设置为框架统一 UID 生成器。
+   *
+   * @return MyBatis Plus 属性自定义器
+   */
   @Bean
   MybatisPlusPropertiesCustomizer defaultIdentifierGeneratorMybatisPlusPropertiesCustomizer() {
     log.trace(
@@ -88,6 +118,11 @@ public class MybatisPlusDataConfiguration {
         plusProperties.getGlobalConfig().setIdentifierGenerator(new UidentifierGenerator());
   }
 
+  /**
+   * 装配审计字段自动填充处理器。
+   *
+   * @return 审计字段自动填充处理器
+   */
   @Bean
   @ConditionalOnMissingBean
   MetaObjectHandler auditMetaObjectHandler() {

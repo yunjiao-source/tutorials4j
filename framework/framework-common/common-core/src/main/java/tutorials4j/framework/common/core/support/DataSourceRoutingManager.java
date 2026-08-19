@@ -38,6 +38,6 @@ public interface DataSourceRoutingManager {
    */
   void addRoutingJdbcOptions(String name, JdbcOptions jdbcOptions);
 
-  /** 关闭 */
+  /** 关闭路由管理器，释放其持有的数据源等底层资源。 */
   void shutdown();
 }

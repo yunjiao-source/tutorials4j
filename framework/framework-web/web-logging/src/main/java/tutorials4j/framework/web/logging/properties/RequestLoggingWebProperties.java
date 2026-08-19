@@ -7,13 +7,16 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.spring.web.ServletFilterOptions;
 
 /**
- * TODO
+ * 请求日志功能配置属性。
+ *
+ * <p>包含请求日志的启用开关、Servlet 过滤器通用配置以及日志输出选项等。
  *
  * @author Yun Jiao
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_WEB_REQUEST_LOGGING)
 public class RequestLoggingWebProperties {
+  /** 是否启用请求日志功能。 */
   private boolean enabled = false;
 
   /** Servlet 过滤器通用配置，如过滤器名称、启用状态、URL 匹配模式等。 */

@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
  * public void processOrder(Long orderId) { ... }
  * }</pre>
  *
- * <p>阻塞锁会一直等待直到获取锁，不会超时。当 {@code expireTime > 0} 时使用固定租约模式， 否则使用自动续期模式。
+ * <p>阻塞锁使用 Redisson 的 {@code lock()} 方法，获取不到锁时会一直阻塞等待，不会因等待超时而失败。 当 {@code expireTime > 0}
+ * 时使用固定租约模式（锁到期自动释放），否则使用自动续期模式（看门狗自动续期）。
  *
  * @author Yun Jiao
  * @see RedissonBlockLockService
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 @Documented
 public @interface RedissonBlockLockable {
   /**
-   * 锁 key 的前缀。
+   * 锁 key 的前缀，直接拼接在 SpEL 表达式求值结果之前。
    *
    * @return 前缀字符串，默认为空
    */
@@ -44,7 +45,7 @@ public @interface RedissonBlockLockable {
   String key();
 
   /**
-   * 锁的持有时间（租约）。当值 ≤ 0 时表示使用自动续期模式。
+   * 锁的持有时间（租约），单位由 {@link #timeUnit()} 指定。当值 ≤ 0 时表示使用自动续期模式。
    *
    * @return 租约时长，默认 -1（自动续期）
    */
@@ -53,7 +54,7 @@ public @interface RedissonBlockLockable {
   /**
    * 租约时间的时间单位。
    *
-   * @return 时间单位，默认毫秒
+   * @return 时间单位，默认 {@link TimeUnit#MILLISECONDS}
    */
   TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
 }

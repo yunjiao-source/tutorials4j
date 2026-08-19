@@ -12,7 +12,10 @@ import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.spring.repository.TaskRepository;
 
 /**
- * TODO
+ * 定时任务操作服务。
+ *
+ * <p>基于 {@link TaskRepository} 与 {@link ScheduleTaskManager} 提供任务的启动、取消、 详情查询等对外操作能力，并将结果组装为 {@link
+ * TaskExecutionDetails}。
  *
  * @author Yun Jiao
  */
@@ -21,6 +24,12 @@ public class ScheduleService {
   private final ScheduleTaskManager scheduleTaskManager;
   private final TaskRepository<?> taskRepository;
 
+  /**
+   * 取消指定编码的任务。
+   *
+   * @param taskCode 任务编码
+   * @return 取消前任务执行详情；任务不存在时返回 {@code null}
+   */
   public TaskExecutionDetails cancelTask(String taskCode) {
     Optional<? extends Task> taskOpt = taskRepository.findByTaskCode(taskCode);
     if (taskOpt.isPresent()) {
@@ -32,6 +41,12 @@ public class ScheduleService {
     return null;
   }
 
+  /**
+   * 启动指定编码的任务。
+   *
+   * @param taskCode 任务编码
+   * @return 启动后任务执行详情；任务不存在时返回 {@code null}
+   */
   public TaskExecutionDetails startTask(String taskCode) {
     Optional<? extends Task> taskOpt = taskRepository.findByTaskCode(taskCode);
     if (taskOpt.isPresent()) {
@@ -43,10 +58,21 @@ public class ScheduleService {
     return null;
   }
 
+  /**
+   * 查询指定编码任务的执行详情。
+   *
+   * @param taskCode 任务编码
+   * @return 任务执行详情；任务不存在时返回 {@code null}
+   */
   public TaskExecutionDetails getTaskDetails(String taskCode) {
     return taskRepository.findByTaskCode(taskCode).map(this::buildDetails).orElse(null);
   }
 
+  /**
+   * 查询全部任务的执行详情。
+   *
+   * @return 全部任务执行详情列表
+   */
   public List<TaskExecutionDetails> getAllTaskDetails() {
     List<? extends Task> allTask = taskRepository.findAll();
     if (allTask.isEmpty()) {
@@ -62,6 +88,12 @@ public class ScheduleService {
     return detailsList;
   }
 
+  /**
+   * 组装任务执行详情：合并配置信息、当前运行信息与最近一次运行数据。
+   *
+   * @param task 任务对象
+   * @return 组装完成的任务执行详情
+   */
   private TaskExecutionDetails buildDetails(Task task) {
     TaskExecutionDetails.TaskExecutionDetailsBuilder builder =
         TaskExecutionDetails.builder()

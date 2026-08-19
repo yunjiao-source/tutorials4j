@@ -9,18 +9,34 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-/** GsonUtils 单元测试 */
+/**
+ * {@link GsonUtils} 工具类单元测试。
+ *
+ * <p>覆盖单例获取、JSON 解析、序列化与反序列化、类型转换等主要方法的正常及异常场景。
+ *
+ * @author Yun Jiao
+ */
 class GsonUtilsTest {
 
   // 测试用数据类
+  /** 测试用数据类，用于验证 Gson 的序列化与反序列化行为。 */
   static class Person {
     private String name;
     private int age;
     private Date birth; // 用于测试日期格式
     private String address; // 用于测试 null 序列化
 
+    /** 默认构造器。 */
     public Person() {}
 
+    /**
+     * 全参构造器。
+     *
+     * @param name 姓名
+     * @param age 年龄
+     * @param birth 出生日期
+     * @param address 地址
+     */
     public Person(String name, int age, Date birth, String address) {
       this.name = name;
       this.age = age;

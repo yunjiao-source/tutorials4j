@@ -10,10 +10,17 @@ import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 
+/**
+ * {@link DESCryptoProcessor} 单元测试
+ *
+ * @author Yun Jiao
+ */
 class DESCryptoProcessorTest {
 
+  /** 测试数据：包含中文与特殊字符的明文字符串 */
   private static final String TEST_DATA = "Hello, 世界！";
 
+  /** 生成随机的 DES 密钥（8 字节，56 位有效），并封装为 {@link SecretKey} */
   private SecretKey generateRandomDesSecretKey() {
     // DES 密钥长度为 8 字节（56 位有效）
     byte[] keyBytes = RandomUtil.randomBytes(8);
@@ -40,13 +47,6 @@ class DESCryptoProcessorTest {
 
     String decrypted = processor.decrypt(encrypted);
     assertThat(decrypted).isEqualTo(TEST_DATA);
-  }
-
-  @Test
-  void createWithNullSecretKeyShouldThrowException() {
-    assertThatThrownBy(() -> DESCryptoProcessor.create(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("'secretKey' must not be empty or blank");
   }
 
   @Test

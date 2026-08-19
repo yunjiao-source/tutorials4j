@@ -32,16 +32,31 @@ public enum DataStatusEnum implements BaseEnum<Integer> {
     this.label = label;
   }
 
+  /**
+   * 返回该状态对应的编码值。
+   *
+   * @return 编码值
+   */
   @Override
   public Integer getCode() {
     return code;
   }
 
+  /**
+   * 返回该状态的枚举名称。
+   *
+   * @return 枚举名称字符串
+   */
   @Override
   public String getName() {
     return name();
   }
 
+  /**
+   * 返回该状态的标签（可读的中文描述）。
+   *
+   * @return 状态标签字符串
+   */
   @Override
   public String getLabel() {
     return label;

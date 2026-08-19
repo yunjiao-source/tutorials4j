@@ -28,6 +28,14 @@ public class RedissonReentrantLockableAspect {
   private final SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator;
   private final RedissonReentrantLockService redissonReentrantLockService;
 
+  /**
+   * 环绕通知，在方法执行前尝试获取可重入锁，执行后释放锁。
+   *
+   * @param joinPoint 切点
+   * @param redissonReentrantLockable 锁注解
+   * @return 原方法的执行结果
+   * @throws Throwable 原方法抛出的异常或锁异常
+   */
   @Around("@annotation(redissonReentrantLockable)")
   public Object around(
       ProceedingJoinPoint joinPoint, RedissonReentrantLockable redissonReentrantLockable)

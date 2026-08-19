@@ -18,7 +18,7 @@ import tutorials4j.framework.cache.redis.util.RedisUtils;
  * {@link NamedCacheProperties} 中配置的命名缓存（named caches）为每个缓存独立设置 {@link RedisCacheConfiguration} 配置（如
  * TTL、是否允许缓存 null 值、键前缀等）。
  *
- * <p>如果未配置任何命名缓存，则不进行任何自定义操作。
+ * <p>如果未配置任何命名缓存，则不会生成任何命名缓存的独立配置，仅保留构建器原有的默认配置。
  *
  * @author Yun Jiao
  * @see RedisCacheManagerBuilderCustomizer
@@ -34,9 +34,11 @@ public class NamedRedisCacheManagerBuilderCustomizer implements RedisCacheManage
   /**
    * 自定义 {@link RedisCacheManager.RedisCacheManagerBuilder}。
    *
-   * <p>为每个配置的命名缓存生成独立的 {@link RedisCacheConfiguration}， 并将其添加到构建器中作为初始缓存配置。
+   * <p>遍历 {@link NamedCacheProperties#getCaches()} 中配置的每个命名缓存， 基于构建器上已有的默认配置， 通过 {@link
+   * RedisUtils#fillConfiguration} 生成独立的 {@link RedisCacheConfiguration} （包含 TTL、是否允许缓存 null
+   * 值、键前缀等），并注册为构建器的初始缓存配置。
    *
-   * <p>同时会设置全局默认配置，该默认配置由 {@code properties} 中的通用属性决定。
+   * <p>同时保留构建器原有的默认配置，作为未单独配置的缓存的兜底配置。
    *
    * @param builder 要自定义的 {@link RedisCacheManager.RedisCacheManagerBuilder} 实例
    */

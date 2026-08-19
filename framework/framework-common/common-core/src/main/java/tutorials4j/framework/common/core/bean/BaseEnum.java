@@ -23,5 +23,10 @@ public interface BaseEnum<T> {
    */
   String getName();
 
+  /**
+   * 获取枚举项的标签（通常为简短的可展示文本）。
+   *
+   * @return 标签字符串
+   */
   String getLabel();
 }

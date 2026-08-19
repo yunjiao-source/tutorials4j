@@ -12,6 +12,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+/**
+ * 演示控制器：分别使用 RestTemplate、RestClient 与 WebClient 三种 HTTP 客户端调用外部接口获取帖子数据。
+ *
+ * @author Yun Jiao
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/posts")

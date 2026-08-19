@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Import;
 import tutorials4j.framework.feature.schedule.autoconfigure.ScheduleFeatureConfiguration;
 
 /**
- * TODO
+ * 启用调度功能特性的注解。
+ *
+ * <p>标注在配置类上，通过 {@link Import} 导入调度功能的自动配置。
  *
  * @author Yun Jiao
  */

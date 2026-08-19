@@ -20,11 +20,23 @@ import tutorials4j.framework.cache.core.CacheNamePrefix;
 public class PrefixNameMapper implements NameMapper {
   private final String cacheName;
 
+  /**
+   * 为原始 Key 添加租户前缀后的映射结果。
+   *
+   * @param s 原始 Key
+   * @return 带租户前缀的 Key
+   */
   @Override
   public String map(String s) {
     return CacheNamePrefix.tenant().end().compute(cacheName) + s;
   }
 
+  /**
+   * 还原带前缀的 Key。当前实现直接返回原值，不剥离前缀。
+   *
+   * @param s 带前缀的 Key
+   * @return 原 Key
+   */
   @Override
   public String unmap(String s) {
     return s;

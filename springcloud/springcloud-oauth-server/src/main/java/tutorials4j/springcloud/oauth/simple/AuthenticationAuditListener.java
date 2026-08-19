@@ -7,13 +7,24 @@ import org.springframework.security.authentication.event.AbstractAuthenticationF
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 
-/** 登录增强：风控、审计、设备信息 */
+/**
+ * 登录增强监听器：监听认证成功与失败事件并记录审计信息。
+ *
+ * <p>认证成功时记录 LOGIN_SUCCESS 事件，认证失败时记录 LOGIN_FAILURE 事件（含异常类型）。
+ *
+ * @author Yun Jiao
+ */
 @Component
 @RequiredArgsConstructor
 public class AuthenticationAuditListener {
 
   private final AuditEventService auditEventService;
 
+  /**
+   * 监听认证成功事件并记录审计信息。
+   *
+   * @param event 认证成功事件
+   */
   @EventListener
   public void onSuccess(AuthenticationSuccessEvent event) {
     auditEventService.record(
@@ -25,6 +36,11 @@ public class AuthenticationAuditListener {
             .build());
   }
 
+  /**
+   * 监听认证失败事件并记录审计信息（含错误码）。
+   *
+   * @param event 认证失败事件
+   */
   @EventListener
   public void onFailure(AbstractAuthenticationFailureEvent event) {
     auditEventService.record(

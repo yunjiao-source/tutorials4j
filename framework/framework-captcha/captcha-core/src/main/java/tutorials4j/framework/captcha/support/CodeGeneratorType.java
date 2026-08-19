@@ -14,6 +14,7 @@ import java.util.function.Function;
 public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
   /** 算术验证码，如 2 + 3 = ？ */
   math {
+    /** 创建指定长度的算术验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new MathGenerator(length);
@@ -22,6 +23,7 @@ public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
 
   /** 数字+大小写字母 验证码 */
   numAndChar {
+    /** 创建指定长度的数字与大小写字母验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new RandomGenerator(length);
@@ -30,6 +32,7 @@ public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
 
   /** 数字+大写字母 验证码 */
   numAndUpperChar {
+    /** 创建指定长度的数字与大写字母验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new RandomGenerator(
@@ -39,6 +42,7 @@ public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
 
   /** 数字+小写字母 验证码 */
   numAndLowerChar {
+    /** 创建指定长度的数字与小写字母验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new RandomGenerator(RandomUtil.BASE_CHAR_NUMBER_LOWER, length);
@@ -47,6 +51,7 @@ public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
 
   /** 数字 验证码 */
   num {
+    /** 创建指定长度的纯数字验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new RandomGenerator(RandomUtil.BASE_NUMBER, length);
@@ -55,6 +60,7 @@ public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
 
   /** 大写字母 验证码 */
   upperChar {
+    /** 创建指定长度的纯大写字母验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new RandomGenerator(RandomUtil.BASE_CHAR.toUpperCase(), length);
@@ -63,6 +69,7 @@ public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
 
   /** 小写字母 验证码 */
   lowerChar {
+    /** 创建指定长度的纯小写字母验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new RandomGenerator(RandomUtil.BASE_CHAR, length);
@@ -71,6 +78,7 @@ public enum CodeGeneratorType implements Function<Integer, CodeGenerator> {
 
   /** 大小写字母 验证码 */
   upperAndLowerChar {
+    /** 创建指定长度的大小写字母验证码生成器。 */
     @Override
     public CodeGenerator apply(Integer length) {
       return new RandomGenerator(RandomUtil.BASE_CHAR + RandomUtil.BASE_CHAR.toUpperCase(), length);

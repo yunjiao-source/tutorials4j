@@ -4,6 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/**
+ * JSON 请求体校验请求
+ *
+ * <p>演示基于 {@code @RequestBody} 的 JSON 请求体校验（触发 {@code MethodArgumentNotValidException}）。
+ *
+ * @author Yun Jiao
+ */
 @Data
 public class JsonRequest {
   @NotBlank(message = "用户名不能为空")

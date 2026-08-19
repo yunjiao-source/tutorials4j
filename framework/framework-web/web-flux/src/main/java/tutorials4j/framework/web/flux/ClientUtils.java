@@ -16,12 +16,19 @@ import reactor.util.retry.RetryBackoffSpec;
 import tutorials4j.framework.web.core.exception.WebErrorCode;
 
 /**
- * 响应式客户端工具类
+ * 响应式 Web 客户端工具类，提供认证、重试、日志等 {@link ExchangeFilterFunction} 过滤器工厂方法。
  *
  * @author Yun Jiao
  */
 @Slf4j
 public class ClientUtils {
+  /**
+   * 创建自动携带当前 SecurityContext 中认证 Token 的请求过滤器。
+   *
+   * <p>若存在已认证且凭证非空的 Token，则为请求添加 {@code Authorization: Bearer <token>} 请求头； 否则记录告警日志并继续原始请求。
+   *
+   * @return 认证过滤器实例
+   */
   public static ExchangeFilterFunction ofAuth() {
     return (clientRequest, next) -> {
       return ReactiveSecurityContextHolder.getContext()
@@ -61,6 +68,14 @@ public class ClientUtils {
     };
   }
 
+  /**
+   * 创建带指数退避的重试过滤器。
+   *
+   * @param maxAttempts 最大重试次数
+   * @param minBackoff 最小退避间隔
+   * @param maxBackoff 最大退避间隔
+   * @return 重试过滤器实例
+   */
   public static ExchangeFilterFunction ofRetry(
       long maxAttempts, Duration minBackoff, Duration maxBackoff) {
     return (clientRequest, next) -> {

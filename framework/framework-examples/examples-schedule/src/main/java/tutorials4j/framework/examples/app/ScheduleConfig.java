@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * 配置
+ * Spring 定时任务示例配置，仅在 schedule 环境激活时生效， 开启异步支持与定时调度，并扫描定时任务示例相关组件。
  *
  * @author Yun Jiao
  */

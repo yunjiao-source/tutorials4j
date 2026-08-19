@@ -4,6 +4,13 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+/**
+ * 用户注册表单
+ *
+ * <p>包含用户名、邮箱、密码、确认密码、年龄、手机号、性别等字段及对应的校验规则， 配合 {@code @PasswordMatch} 注解实现确认密码一致性校验。
+ *
+ * @author Yun Jiao
+ */
 @Data
 public class UserForm {
 

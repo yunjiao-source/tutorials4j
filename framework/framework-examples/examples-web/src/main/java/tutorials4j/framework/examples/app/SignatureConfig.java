@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * 接口签名校验示例模块的配置类，仅在 signature profile 下生效，负责扫描签名校验示例相关组件。
  *
  * @author Yun Jiao
  */

@@ -25,11 +25,17 @@ import tutorials4j.framework.common.spring.web.GlobalExceptionHandler;
 @Configuration(proxyBeanMethods = false)
 @Import({SpringUtil.class})
 public class SpringCommonConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[COMMON-SPRING] Spring Common Configuration");
   }
 
+  /**
+   * 创建全局异常处理器。
+   *
+   * @return {@link GlobalExceptionHandler} 实例
+   */
   @Bean
   GlobalExceptionHandler globalExceptionHandler() {
     log.trace("[COMMON-SPRING] Global Exception Handler");
@@ -56,6 +62,12 @@ public class SpringCommonConfiguration {
     return new CompositeTaskDecoratorCreator(creators);
   }
 
+  /**
+   * 创建组合任务装饰器 Bean。
+   *
+   * @param creator 组合任务装饰器创建器
+   * @return {@link CompositeTaskDecorator} 实例
+   */
   @Bean
   @ConditionalOnMissingBean
   CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
@@ -63,6 +75,11 @@ public class SpringCommonConfiguration {
     return creator.getInstance();
   }
 
+  /**
+   * 创建基于方法的 SpEL 表达式求值器。
+   *
+   * @return {@link SpelMethodBasedExpressionEvaluator} 实例
+   */
   @Bean
   @ConditionalOnMissingBean
   SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator() {

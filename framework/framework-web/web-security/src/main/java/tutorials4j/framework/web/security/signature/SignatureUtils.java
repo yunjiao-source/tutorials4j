@@ -19,6 +19,7 @@ import tutorials4j.framework.web.core.exception.WebErrorCode;
  * @author Yun Jiao
  */
 public final class SignatureUtils {
+  /** HmacSHA256 算法的标准名称。 */
   private static final String HMAC_SHA256 = "HmacSHA256";
 
   /**

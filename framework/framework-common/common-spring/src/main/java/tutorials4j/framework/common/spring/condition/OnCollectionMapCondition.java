@@ -10,8 +10,8 @@ import org.springframework.core.annotation.AnnotationAttributes;
 /**
  * {@link ConditionalOnMapProperty} 的具体条件匹配逻辑实现。
  *
- * <p>尝试将指定配置键绑定为 {@link Map} 类型（键为 String，值为 Object），并根据注解的 {@code isEmpty} 和 {@code
- * matchIfMissing} 属性决定条件是否匹配。
+ * <p>通过 {@link Binder} 尝试将指定配置键绑定为 {@link Map} 类型（键为 String，值为 Object）， 并根据注解的 {@code isEmpty} 和
+ * {@code matchIfMissing} 属性决定条件是否匹配。
  *
  * @author Yun Jiao
  * @see ConditionalOnMapProperty
@@ -19,11 +19,13 @@ import org.springframework.core.annotation.AnnotationAttributes;
 public class OnCollectionMapCondition extends AbstractOnCollectionCondition {
 
   /**
-   * 实现抽象方法：根据 fullKey 绑定 Map 并做出决策。
+   * 实现抽象方法：根据 fullKey 将配置绑定为 Map 并做出决策。
+   *
+   * <p>绑定失败（配置缺失）时，匹配与否取决于 {@code matchIfMissing}；绑定成功时， 匹配与否取决于 {@code isEmpty} 与绑定结果是否为空是否一致。
    *
    * @param fullKey 完整的配置键
-   * @param context 条件上下文
-   * @param attributes 注解属性（包含 isEmpty, matchIfMissing）
+   * @param context 条件上下文，用于获取 Environment
+   * @param attributes 注解属性（包含 isEmpty、matchIfMissing）
    * @return 决策记录，包含是否缺失、绑定的 Map 是否为空、条件是否匹配
    */
   @Override

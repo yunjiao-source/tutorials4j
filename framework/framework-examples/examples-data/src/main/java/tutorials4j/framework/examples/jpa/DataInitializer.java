@@ -10,6 +10,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import tutorials4j.framework.examples.SexEnum;
 
+/**
+ * 应用启动时的示例数据初始化器。
+ *
+ * <p>当用户数量不足 100 时，使用 Faker 随机生成用户及其关联的订单数据， 用于演示 JPA 示例的数据访问功能。
+ *
+ * @author Yun Jiao
+ */
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
@@ -17,6 +24,11 @@ public class DataInitializer implements CommandLineRunner {
   private final UserRepository userRepository;
   private final Faker faker = new Faker();
 
+  /**
+   * 初始化示例数据：生成 100 个用户及其订单并保存到数据库。
+   *
+   * @param args 命令行参数（未使用）
+   */
   @Override
   public void run(String... args) {
     long count = userRepository.count();

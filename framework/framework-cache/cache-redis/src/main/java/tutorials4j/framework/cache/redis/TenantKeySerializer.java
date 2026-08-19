@@ -17,8 +17,16 @@ import tutorials4j.framework.cache.core.CacheNamePrefix;
  */
 @RequiredArgsConstructor
 public class TenantKeySerializer extends StringRedisSerializer {
+  /** 缓存名称，用于计算带租户的 Key 前缀。 */
   private final String cacheName;
 
+  /**
+   * 序列化字符串 Key，自动拼接租户与缓存名前缀后交给父类完成序列化。
+   *
+   * @param value 原始 Key 字符串
+   * @return 序列化后的字节数组
+   * @throws SerializationException 序列化失败时抛出
+   */
   @Override
   public byte[] serialize(String value) throws SerializationException {
     return super.serialize(CacheNamePrefix.tenant().end().compute(cacheName) + value);

@@ -20,7 +20,7 @@ import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEval
  * <p>等待时间的处理逻辑：
  *
  * <ul>
- *   <li>如果 {@link LocalLockable#waitTime()} > 0，则使用带超时的 tryLock 方式；
+ *   <li>如果 {@link LocalLockable#waitTime()} >= 0，则使用带超时的 tryLock 方式，超时未获取到锁将抛出异常；
  *   <li>否则使用无超时的 lock 方式（阻塞直到获取锁）。
  * </ul>
  *
@@ -39,9 +39,12 @@ public class LocalLockableAspect {
   /**
    * 环绕通知：为被 {@link LocalLockable} 标记的方法添加本地锁控制。
    *
-   * @param joinPoint 切点连接点
-   * @param localLockable 方法上的锁注解
+   * <p>根据 {@code waitTime} 选择加锁方式（不小于 0 使用带超时的 tryLock，否则阻塞等待）， 获取锁成功后执行原方法。
+   *
+   * @param joinPoint 切点连接点，用于获取方法签名与参数并执行原方法
+   * @param localLockable 方法上的 {@link LocalLockable} 注解
    * @return 原方法的执行结果
+   * @throws Throwable 原方法执行过程中抛出的任何异常，或等待超时未获取到锁时抛出的异常
    */
   @Around("@annotation(localLockable)")
   public Object around(ProceedingJoinPoint joinPoint, LocalLockable localLockable)
@@ -69,9 +72,12 @@ public class LocalLockableAspect {
   /**
    * 生成最终的锁 key，由前缀和 SpEL 表达式的求值结果拼接而成。
    *
-   * @param redissonBlockLockable 锁注解配置
+   * <p>若拼接后的 key 为空白字符串，则抛出 {@link IllegalStateException}。
+   *
+   * @param redissonBlockLockable 锁注解配置（即 {@link LocalLockable} 注解实例）
    * @param argValues SpEL 表达式求值结果
    * @return 完整的锁 key
+   * @throws IllegalStateException 拼接后的锁 key 为空白字符串时抛出
    */
   private String generateKey(LocalLockable redissonBlockLockable, String argValues) {
     String key = redissonBlockLockable.prefix() + argValues;

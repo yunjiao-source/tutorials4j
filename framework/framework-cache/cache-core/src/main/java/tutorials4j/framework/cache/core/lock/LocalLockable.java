@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
  * }
  * </pre>
  *
+ * <p>通过 {@link #waitTime()} 控制获取锁的方式：值不小于 0 时采用带超时的获取方式， 超时未获取到锁将抛出异常； 值小于 0 时采用阻塞方式，直到获取到锁为止。
+ *
  * @author Yun Jiao
  * @see LocalLockableAspect
  * @see LocalLockService
@@ -53,7 +55,9 @@ public @interface LocalLockable {
   String key();
 
   /**
-   * 尝试获取锁的最大等待时间（数值部分）。
+   * 尝试获取锁的最大等待时间（数值部分），单位由 {@link #timeUnit()} 指定。
+   *
+   * <p>当值不小于 0 时，使用带超时的 {@code tryLock} 方式获取锁；当值小于 0 时， 使用无超时的阻塞式加锁，直到获取到锁为止。
    *
    * @return 等待时间数值，默认 3000 毫秒
    * @see #timeUnit()

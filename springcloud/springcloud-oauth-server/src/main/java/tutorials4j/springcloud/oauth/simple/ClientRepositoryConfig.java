@@ -15,10 +15,23 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 
-/** 客户端仓库不要只用内存 */
+/**
+ * 客户端仓库配置：使用 JDBC 持久化 OAuth2 客户端信息，并在首次启动时初始化示例客户端。
+ *
+ * <p>预置 web-bff（授权码模式）与 internal-order-service（客户端凭证模式）两个客户端，避免仅依赖内存存储。
+ *
+ * @author Yun Jiao
+ */
 @Configuration
 public class ClientRepositoryConfig {
 
+  /**
+   * 构建基于 JDBC 的客户端仓库，并在客户端不存在时初始化示例客户端数据。
+   *
+   * @param jdbcTemplate JDBC 模板
+   * @param passwordEncoder 密码编码器
+   * @return 已注册的客户端仓库
+   */
   @Bean
   RegisteredClientRepository registeredClientRepository(
       JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {

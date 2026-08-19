@@ -10,7 +10,7 @@ import org.hibernate.annotations.IdGeneratorType;
  * Hibernate 自定义主键生成器注解。
  *
  * <p>标注在实体类的标识符字段（{@code @Id}）上，将使用 {@link UidentifierGenerator} 生成基于雪花算法的全局唯一 ID。支持 {@link
- * Long}（或基本类型 long）和 {@link String} 类型的主键。
+ * Long}（或基本类型 long）和 {@link String} 类型的主键，其中字符串类型主键生成字符串形式的 ID。
  *
  * <pre>{@code
  * @Entity

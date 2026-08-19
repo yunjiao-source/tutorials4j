@@ -10,9 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+/**
+ * Sentinel 网关流控降级处理器配置：注册统一的限流阻塞响应处理器，返回 429 状态码与包含路由、traceId 的 JSON 响应体。
+ *
+ * @author Yun Jiao
+ */
 @Configuration
 public class SentinelBlockHandlerConfiguration {
 
+  /** 初始化限流阻塞处理器，将其注册到 {@link GatewayCallbackManager}。 */
   @PostConstruct
   public void init() {
     BlockRequestHandler blockHandler =

@@ -24,9 +24,13 @@ import org.springframework.cache.Cache;
  */
 @RequiredArgsConstructor
 public class MultiLevelCache implements Cache {
+  /** 用于防止缓存击穿的按 Key 粒度的锁集合。 */
   protected final ConcurrentMap<Object, ReentrantLock> locks = new ConcurrentHashMap<>();
 
+  /** 本地缓存（如 Caffeine）。 */
   protected final Cache local;
+
+  /** 远程缓存（如 Redis）。 */
   protected final Cache remote;
 
   /**

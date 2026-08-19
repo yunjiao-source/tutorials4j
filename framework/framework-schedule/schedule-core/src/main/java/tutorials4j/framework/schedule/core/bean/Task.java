@@ -6,7 +6,10 @@ import java.util.Map;
 import org.springframework.util.Assert;
 
 /**
- * TODO
+ * 任务定义接口。
+ *
+ * <p>描述一个可被调度执行的任务所需的基本元信息，包括任务编码、执行类、Cron 表达式、启用状态、 描述、附加元数据、初始延迟、最大失败次数、最大执行次数以及截止时间等。实现类可通过该接口
+ * 暴露任务的配置信息，供调度框架统一管理。
  *
  * @author Yun Jiao
  */

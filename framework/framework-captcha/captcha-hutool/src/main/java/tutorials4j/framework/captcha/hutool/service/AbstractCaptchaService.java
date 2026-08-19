@@ -26,17 +26,18 @@ import tutorials4j.framework.common.core.util.GaussianBlur;
 @Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractCaptchaService implements CaptchaService {
+  /** 验证码缓存操作模板，用于存储与校验验证码 */
   protected final BehaviorCaptchaCacheTemplate captchaCacheTemplate;
 
   /**
-   * 获取参数
+   * 获取校验时是否忽略大小写的配置。
    *
    * @return 校验时是否忽略大小写
    */
   protected abstract Boolean getValidIgnoreCase();
 
   /**
-   * 获取参数
+   * 获取图片模糊度的配置。
    *
    * @return 模糊度
    */
@@ -79,6 +80,14 @@ public abstract class AbstractCaptchaService implements CaptchaService {
     }
   }
 
+  /**
+   * 校验用户输入的验证码是否正确，校验成功后立即删除缓存中的验证码（一次性使用）。
+   *
+   * @param key 验证码缓存 key
+   * @param userCode 用户输入的验证码
+   * @return 校验是否通过
+   * @throws IllegalArgumentException key 或 userCode 为空时抛出
+   */
   @Override
   public boolean verify(String key, String userCode) {
     Assert.hasText(key, "key must not be null or empty");

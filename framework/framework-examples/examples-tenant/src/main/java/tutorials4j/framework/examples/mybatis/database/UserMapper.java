@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * Mapper接口
+ * 用户 Mapper 接口。
+ *
+ * <p>继承 MyBatis-Plus 的 {@link BaseMapper}，提供用户表的基础 CRUD 能力。
  *
  * @author Yun Jiao
  */

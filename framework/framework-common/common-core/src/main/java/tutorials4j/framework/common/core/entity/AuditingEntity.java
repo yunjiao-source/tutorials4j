@@ -3,9 +3,9 @@ package tutorials4j.framework.common.core.entity;
 import java.time.Instant;
 
 /**
- * 审计实体接口，提供创建和修改信息的记录能力。
+ * 审计实体接口，提供创建与修改信息的记录能力。
  *
- * <p>实现了该接口的实体可以记录创建人、创建时间、最后修改人和最后修改时间。
+ * <p>实现该接口的实体可以记录创建人、创建时间、最后修改人及最后修改时间， 这些审计字段通常由持久层在插入或更新时自动填充。
  *
  * @author Yun Jiao
  */

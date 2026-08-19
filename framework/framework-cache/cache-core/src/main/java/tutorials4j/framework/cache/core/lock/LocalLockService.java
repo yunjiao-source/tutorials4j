@@ -136,6 +136,11 @@ public class LocalLockService implements InitializingBean {
     }
   }
 
+  /**
+   * 初始化锁池。
+   *
+   * <p>使用双重检查锁定创建 {@link Striped} 锁池实例，并校验初始化结果。
+   */
   @Override
   public void afterPropertiesSet() throws Exception {
     if (stripedLock == null) {

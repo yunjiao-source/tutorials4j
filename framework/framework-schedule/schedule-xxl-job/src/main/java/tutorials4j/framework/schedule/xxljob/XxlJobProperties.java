@@ -7,18 +7,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import tutorials4j.framework.common.core.PropertiesConsts;
 
 /**
- * TODO
+ * XXL-JOB 调度配置属性类。
+ *
+ * <p>通过 Spring Boot 配置文件绑定，配置前缀为 {@code tutorials4j.schedule.xxl-job}，
+ * 包含执行器总开关、调度中心（Admin）与执行器（Executor）相关的各项配置。
  *
  * @author Yun Jiao
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_SCHEDULE_XXL_JOB)
 public class XxlJobProperties {
+  /** 执行器总开关，默认关闭 */
   private boolean enabled = false;
 
   private AdminOptions admin = new AdminOptions();
   private ExecutorOptions executor = new ExecutorOptions();
 
+  /** 调度中心（Admin）相关配置。 */
   @Data
   public static class AdminOptions {
     // 调度中心部署根地址 [必填]：如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行"执行器心跳注册"和"任务结果回调"；为空则关闭自动注册；
@@ -28,6 +33,7 @@ public class XxlJobProperties {
     private Duration timeout = Duration.ofSeconds(3);
   }
 
+  /** 执行器（Executor）相关配置。 */
   @Data
   public static class ExecutorOptions {
     // 执行器启用开关 [必填]：默认开启，关闭时不进行执行器初始化；

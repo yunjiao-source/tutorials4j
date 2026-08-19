@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.data.jdbc.routing.DataSourceRoutingManagerCreator;
 
 /**
- * Jdbc配置
+ * JDBC 数据源配置类，在存在 DataSource Bean 时装配数据源路由管理器创建器。
  *
  * @author Yun Jiao
  */
@@ -18,11 +18,18 @@ import tutorials4j.framework.data.jdbc.routing.DataSourceRoutingManagerCreator;
 @ConditionalOnBean(DataSource.class)
 @Configuration(proxyBeanMethods = false)
 public class JdbcDataConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[DATA-JDBC] Data Jdbc Configuration");
   }
 
+  /**
+   * 创建数据源路由管理器创建器。
+   *
+   * @param dataSource 数据源
+   * @return 数据源路由管理器创建器
+   */
   @Bean
   @ConditionalOnMissingBean
   DataSourceRoutingManagerCreator dataSourceRoutingManagerCreator(DataSource dataSource) {

@@ -37,6 +37,7 @@ public abstract class AbstractCaptchaService implements CaptchaService {
     this.builder = builder;
   }
 
+  /** 生成验证码，返回验证码 ID、类型、背景图及模板图等数据。 */
   @Override
   public Map<String, Object> draw() {
     ApiResponse<ImageCaptchaVO> res =
@@ -62,6 +63,7 @@ public abstract class AbstractCaptchaService implements CaptchaService {
     return data;
   }
 
+  /** 校验用户提交的验证码轨迹，返回是否匹配成功。 */
   @Override
   public boolean verify(String key, String userCode) {
     Assert.hasText(key, "key must not be null or empty");

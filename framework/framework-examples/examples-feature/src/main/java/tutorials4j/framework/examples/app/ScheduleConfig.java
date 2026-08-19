@@ -8,7 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import tutorials4j.framework.feature.schedule.annotation.EnableScheduleFeature;
 
 /**
- * 配置
+ * 调度特性示例的配置类。
+ *
+ * <p>启用异步、定时调度与调度特性支持，并在 {@code schedule} Profile 下扫描 {@code
+ * tutorials4j.framework.examples.schedule} 包中的示例任务。
  *
  * @author Yun Jiao
  */

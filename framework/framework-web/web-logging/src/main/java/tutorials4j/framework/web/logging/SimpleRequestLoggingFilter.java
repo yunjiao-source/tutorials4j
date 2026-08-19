@@ -25,11 +25,25 @@ import tutorials4j.framework.web.logging.properties.RequestLoggingWebProperties.
  * @see RequestOptions
  */
 public class SimpleRequestLoggingFilter extends CommonsRequestLoggingFilter {
+  /**
+   * 创建日志消息，默认委托给父类实现。
+   *
+   * @param request HTTP 请求对象
+   * @param prefix 消息前缀
+   * @param suffix 消息后缀
+   * @return 格式化后的日志消息
+   */
   @Override
   protected String createMessage(HttpServletRequest request, String prefix, String suffix) {
     return super.createMessage(request, prefix, suffix);
   }
 
+  /**
+   * 始终返回 {@code true}，确保所有请求均被记录。
+   *
+   * @param request HTTP 请求对象
+   * @return 恒为 {@code true}
+   */
   @Override
   protected boolean shouldLog(HttpServletRequest request) {
     return true;

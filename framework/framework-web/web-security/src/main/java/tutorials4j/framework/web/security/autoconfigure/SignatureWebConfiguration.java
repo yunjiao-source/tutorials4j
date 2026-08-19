@@ -19,7 +19,7 @@ import tutorials4j.framework.web.security.signature.SignatureHandlerInterceptor;
 import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
 
 /**
- * TODO
+ * 接口签名校验功能自动配置类，在属性开启时注册签名密钥仓库与签名校验拦截器。
  *
  * @author Yun Jiao
  */
@@ -30,11 +30,13 @@ import tutorials4j.framework.web.security.signature.SignatureKeyRepository;
     name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties(SignatureWebProperties.class)
 public class SignatureWebConfiguration {
+  /** 配置初始化完成后输出跟踪日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[WEB-SECURITY] Signature Web Configuration");
   }
 
+  /** 注册基于内存 Map 的签名密钥仓库 Bean。 */
   @Bean
   @ConditionalOnMissingBean
   SignatureKeyRepository inMemerySignatureKeyRepository(SignatureWebProperties properties) {
@@ -42,6 +44,7 @@ public class SignatureWebConfiguration {
     return new InMemerySignatureKeyRepository(properties);
   }
 
+  /** 签名校验拦截器注册配置，按属性配置将签名校验拦截器添加到注册表。 */
   @Slf4j
   @Configuration(proxyBeanMethods = false)
   @RequiredArgsConstructor
@@ -49,6 +52,11 @@ public class SignatureWebConfiguration {
     private final SignatureKeyRepository signatureKeyRepository;
     private final SignatureWebProperties properties;
 
+    /**
+     * 注册签名校验拦截器，并应用配置中的排除与包含路径规则。
+     *
+     * @param registry 拦截器注册表
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
       SignatureHandlerInterceptor signatureHandlerInterceptor =

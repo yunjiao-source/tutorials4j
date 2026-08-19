@@ -10,7 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 字体缓存
+ * 字体缓存工具类（单例）。
+ *
+ * <p>负责注册并缓存 {@link Font} 对象：优先从缓存或系统字体中查找，未找到时回退到默认字体， 同时提供系统可用字体与已缓存字体的查询能力，适用于图片/PDF 等需要渲染文字的场景。
  *
  * @author Yun Jiao
  */

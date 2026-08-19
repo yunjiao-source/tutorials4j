@@ -24,17 +24,26 @@ import tutorials4j.framework.cache.core.exception.CounterOverflowException;
 @Getter
 public abstract class AbstractCounterCacheTemplate
     extends AbstractRedisCacheTemplate<String, Integer> {
+
+  /** 最大允许计数次数，超过后抛出 {@link CounterOverflowException} */
   private int maxTimes = 1;
 
+  /**
+   * 构造计数器缓存模板，指定缓存名称。
+   *
+   * @param cacheName 缓存名称
+   */
   public AbstractCounterCacheTemplate(String cacheName) {
     super(cacheName);
   }
 
+  /** 缓存值类型固定为 {@link Integer}。 */
   @Override
   public Class<Integer> getValueClass() {
     return Integer.class;
   }
 
+  /** 初始计数值为 1。 */
   @Override
   public Integer valueGenerator(String key) {
     return 1;
@@ -67,6 +76,16 @@ public abstract class AbstractCounterCacheTemplate
     return counting(key, maxTimes, false);
   }
 
+  /**
+   * 对指定键执行计数操作，使用构造时设置的 {@link #maxTimes} 作为上限，可选择是否对键进行 MD5 摘要处理。
+   *
+   * <p>等价于调用 {@link #counting(String, int, boolean) counting(key, maxTimes, shouldHashKey)}。
+   *
+   * @param key 待计数的键
+   * @param shouldHashKey 是否对键进行哈希处理
+   * @return 当前计数后的值（已自增后的次数）
+   * @throws CounterOverflowException 当计数达到或超过 {@code maxTimes} 时抛出
+   */
   public int counting(String key, boolean shouldHashKey) throws CounterOverflowException {
     return counting(key, maxTimes, shouldHashKey);
   }

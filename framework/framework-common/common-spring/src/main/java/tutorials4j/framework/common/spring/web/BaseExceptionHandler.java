@@ -20,20 +20,33 @@ import tutorials4j.framework.common.core.exception.ErrorCode;
 import tutorials4j.framework.common.core.exception.ErrorCodeException;
 
 /**
- * TODO
+ * 全局异常处理基类，负责将各类异常转换为统一的 {@link Result} 响应结构， 并根据错误码映射对应的 HTTP 状态码。
  *
  * @author Yun Jiao
  */
 @Slf4j
 public class BaseExceptionHandler {
+  /** 错误码到 HTTP 状态码的映射表。 */
   private static final Map<ErrorCode, HttpStatus> errorCodeMap = new HashMap<>();
 
+  /**
+   * 注册错误码与 HTTP 状态码的映射关系，已存在的映射不会被覆盖。
+   *
+   * @param tmpErrorCodeMap 待注册的错误码映射表
+   */
   public static void registeErrorCode(Map<ErrorCode, HttpStatus> tmpErrorCodeMap) {
     Assert.notNull(tmpErrorCodeMap, "tmpErrorCodeMap must not be null");
 
     tmpErrorCodeMap.forEach(errorCodeMap::putIfAbsent);
   }
 
+  /**
+   * 解析业务错误码异常，根据错误码映射 HTTP 状态码并构建响应结果。
+   *
+   * @param ex 业务错误码异常
+   * @param path 请求路径
+   * @return 包含错误信息的响应实体
+   */
   protected ResponseEntity<Result<Void>> resolveException(ErrorCodeException ex, String path) {
     HttpStatus status = errorCodeMap.get(ex.getErrorCode());
     if (status == null) {
@@ -43,6 +56,14 @@ public class BaseExceptionHandler {
     return resolveException(ex, path, ex.getResult(), status);
   }
 
+  /**
+   * 解析通用异常，根据错误码映射 HTTP 状态码并构建失败响应结果。
+   *
+   * @param ex 异常对象
+   * @param path 请求路径
+   * @param errorCode 错误码
+   * @return 包含错误信息的响应实体
+   */
   protected ResponseEntity<Result<Void>> resolveException(
       Exception ex, String path, ErrorCode errorCode) {
     HttpStatus status = errorCodeMap.get(errorCode);
@@ -53,6 +74,15 @@ public class BaseExceptionHandler {
     return resolveException(ex, path, result, status);
   }
 
+  /**
+   * 填充响应结果的路径、异常详情与追踪 ID，并补充字段校验错误信息，最后按状态码输出日志并返回响应。
+   *
+   * @param ex 异常对象
+   * @param path 请求路径
+   * @param result 待填充的响应结果
+   * @param status HTTP 状态码
+   * @return 包含错误信息的响应实体
+   */
   private ResponseEntity<Result<Void>> resolveException(
       Exception ex, String path, Result<Void> result, HttpStatus status) {
     result

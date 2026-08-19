@@ -38,6 +38,12 @@ public interface CacheTemplate<K, V> {
    */
   V putIfAbsent(K key, V value);
 
+  /**
+   * 若指定 key 不存在则创建并缓存值，否则返回已有缓存值。
+   *
+   * @param key 键
+   * @return 已存在的缓存值，或新创建并缓存的值
+   */
   default V createIfAbsent(K key) {
     if (!exists(key)) {
       return create(key);
@@ -93,10 +99,10 @@ public interface CacheTemplate<K, V> {
   boolean exists(K key);
 
   /**
-   * 若果key已存在，返回false；如果不存在，放入直，返回true
+   * 若指定 key 不存在，则通过 {@link #valueGenerator(Object)} 生成值并放入缓存，返回 true； 若 key 已存在，则不放入，返回 false。
    *
-   * @param key
-   * @return
+   * @param key 键
+   * @return key 不存在并成功放入时返回 true，key 已存在时返回 false
    */
   default boolean putIfAbsent(K key) {
     return putIfAbsent(key, valueGenerator(key)) == null;

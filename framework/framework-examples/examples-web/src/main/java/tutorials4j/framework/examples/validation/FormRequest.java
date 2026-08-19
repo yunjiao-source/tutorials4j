@@ -4,6 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/**
+ * 表单校验请求
+ *
+ * <p>演示基于 {@code @ModelAttribute} 表单提交的参数校验（触发 {@code BindException}）。
+ *
+ * @author Yun Jiao
+ */
 @Data
 public class FormRequest {
   @NotBlank(message = "姓名不能为空")

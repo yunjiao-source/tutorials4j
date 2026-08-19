@@ -20,6 +20,8 @@ import tutorials4j.framework.common.spring.util.QrCodeUtils;
 /**
  * Google Authenticator 管理接口，提供 TOTP 校验、二维码生成等 REST API。
  *
+ * <p>接口路径以 {@code api/totp} 为前缀，统一返回 {@link Result} 包装结构。
+ *
  * @author Yun Jiao
  */
 @RestController
@@ -35,7 +37,7 @@ public class TotpAuthEndpoint {
    *
    * @param username 用户名
    * @param code TOTP 验证码（6位数字）
-   * @return 包含校验结果文本的响应
+   * @return 校验结果，{@code true} 表示验证通过
    */
   @PostMapping("/check")
   @Operation(summary = "校验 TOTP 验证码", description = "根据用户名和动态验证码进行身份校验")
@@ -64,10 +66,10 @@ public class TotpAuthEndpoint {
   /**
    * 为指定用户生成 TOTP 二维码（PNG 格式），用于客户端扫描绑定。
    *
-   * <p>调用后会为该用户生成新的秘钥，并返回二维码图片。
+   * <p>调用后会为该用户生成新的密钥，并将二维码图片以 Base64 编码后返回。
    *
    * @param username 用户名
-   * @return PNG 格式的二维码图片字节数组
+   * @return 包含 Base64 编码后的 PNG 二维码图片的响应
    */
   @GetMapping("/generate/qr")
   @Operation(summary = "生成 TOTP 绑定二维码", description = "为指定用户生成新的秘钥并返回二维码图片（PNG格式）")

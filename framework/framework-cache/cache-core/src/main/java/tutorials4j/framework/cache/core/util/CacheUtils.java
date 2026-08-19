@@ -6,7 +6,7 @@ import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.lang.NonNull;
 
 /**
- * 缓存工具
+ * 缓存相关工具类，提供自定义缓存键生成器等辅助能力。
  *
  * @author Yun Jiao
  */

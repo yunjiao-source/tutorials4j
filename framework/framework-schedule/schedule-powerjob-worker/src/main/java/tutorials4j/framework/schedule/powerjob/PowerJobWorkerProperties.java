@@ -11,13 +11,17 @@ import tech.powerjob.worker.common.constants.StoreStrategy;
 import tutorials4j.framework.common.core.PropertiesConsts;
 
 /**
- * TODO
+ * PowerJob Worker 配置属性。
+ *
+ * <p>对应配置前缀 {@code PropertiesConsts.PROPERTY_PREFIX_SCHEDULE_POWERJOB_WORKER}， 包含 Worker
+ * 的应用名称、端口、调度中心地址、存储策略、通讯协议等启动参数。
  *
  * @author Yun Jiao
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_SCHEDULE_POWERJOB_WORKER)
 public class PowerJobWorkerProperties {
+  /** 是否启用 PowerJob Worker。 */
   private boolean enabled = false;
 
   // 宿主应用名称，需要提前在控制台完成注册	无，必填项，否则启动报错
@@ -45,5 +49,7 @@ public class PowerJobWorkerProperties {
   private int maxHeavyweightTaskNum = 64;
   // worker 健康状态上报的间隔（秒）	10
   private Duration healthReportInterval = Duration.ofSeconds(10);
+
+  /** Worker 标签，用于在控制台区分不同 Worker 分组。 */
   private String tag;
 }

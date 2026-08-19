@@ -15,7 +15,9 @@ import tutorials4j.framework.common.core.exception.BaseErrorCode;
 import tutorials4j.framework.common.spring.web.BaseExceptionHandler;
 
 /**
- * TODO
+ * Web MVC 全局异常处理器。
+ *
+ * <p>继承 {@link BaseExceptionHandler}，统一处理资源不存在、参数绑定校验等异常， 并转换为标准 {@link Result} 响应结构。
  *
  * @author Yun Jiao
  */
@@ -24,6 +26,13 @@ import tutorials4j.framework.common.spring.web.BaseExceptionHandler;
 @Order(1)
 public class GlobalWebExceptionHandler extends BaseExceptionHandler {
 
+  /**
+   * 处理资源不存在异常，返回 404 响应。
+   *
+   * @param ex 资源不存在异常
+   * @param request 当前请求，用于获取请求 URI
+   * @return 包含 NOT_FOUND 错误码的响应结果
+   */
   @ExceptionHandler(NoResourceFoundException.class)
   public ResponseEntity<Result<Void>> handleNoResourceFoundException(
       NoResourceFoundException ex, HttpServletRequest request) {

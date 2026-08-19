@@ -17,6 +17,12 @@ import org.springframework.core.task.TaskDecorator;
  */
 @Slf4j
 public class TraceTaskDecorator implements TaskDecorator {
+  /**
+   * 装饰异步任务，在任务执行前恢复父线程的 MDC 上下文，执行完成后清理 MDC。
+   *
+   * @param runnable 原始任务
+   * @return 带 MDC 上下文复制与清理逻辑的装饰任务
+   */
   @Override
   public Runnable decorate(Runnable runnable) {
     // 复制当前线程的MDC上下文

@@ -33,6 +33,16 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
   private final String onceRedisKeyPrefix;
   private final SignatureKeyRepository signatureKeyRepository;
 
+  /**
+   * 请求前置处理：对标注 {@link RequiredSignature} 且 required=true 的接口执行签名校验，
+   * 包括参数完整性检查、时间窗有效期验证、防重放攻击（Nonce）与签名一致性校验。
+   *
+   * @param request HTTP 请求对象
+   * @param response HTTP 响应对象
+   * @param handler 处理器对象
+   * @return 校验通过返回 true；无需校验或校验失败时抛出对应业务异常
+   * @throws Exception 校验过程中发生异常
+   */
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {

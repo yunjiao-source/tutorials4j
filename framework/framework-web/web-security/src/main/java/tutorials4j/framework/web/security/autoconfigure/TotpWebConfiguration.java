@@ -37,11 +37,20 @@ import tutorials4j.framework.web.security.totp.TotpAuthHandlerInterceptor;
     name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties(TotpWebProperties.class)
 public class TotpWebConfiguration {
+  /** 配置初始化完成后输出跟踪日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[WEB-SECURITY] Totp Web Configuration");
   }
 
+  /**
+   * 根据配置构建 GoogleAuthenticator Bean，并挂载自定义凭证仓库。
+   *
+   * @param properties TOTP 相关配置属性
+   * @param repository 凭证仓库
+   * @param customizers 配置定制器（可为空）
+   * @return GoogleAuthenticator 实例
+   */
   @Bean
   GoogleAuthenticator googleAuthenticator(
       TotpWebProperties properties,
@@ -67,6 +76,7 @@ public class TotpWebConfiguration {
     return authenticator;
   }
 
+  /** 注册基于 YAML 配置的凭证仓库 Bean。 */
   @Bean
   @ConditionalOnMissingBean
   ICredentialRepository yamlCredentialRepository(TotpWebProperties properties) {
@@ -74,6 +84,7 @@ public class TotpWebConfiguration {
     return new GoogleYamlCredentialRepository(properties.getCredentials());
   }
 
+  /** 注册 TOTP 认证服务 Bean。 */
   @Bean
   @ConditionalOnMissingBean
   GoogleAuthService googleAuthService(
@@ -82,6 +93,7 @@ public class TotpWebConfiguration {
     return new GoogleAuthService(authenticator, properties.getOtpAuthTotpURL());
   }
 
+  /** 注册 TOTP 认证拦截器 Bean。 */
   @Bean
   @ConditionalOnMissingBean
   TotpAuthHandlerInterceptor totpAuthHandlerInterceptor(GoogleAuthService googleAuthService) {
@@ -89,6 +101,7 @@ public class TotpWebConfiguration {
     return new TotpAuthHandlerInterceptor(googleAuthService);
   }
 
+  /** 注册 TOTP 认证端点 Bean。 */
   @Bean
   @ConditionalOnMissingBean
   TotpAuthEndpoint totpAuthEndpoint(GoogleAuthService googleAuthService) {
@@ -96,6 +109,7 @@ public class TotpWebConfiguration {
     return new TotpAuthEndpoint(googleAuthService);
   }
 
+  /** TOTP 认证拦截器注册配置，按属性配置将认证拦截器添加到注册表。 */
   @Slf4j
   @Configuration(proxyBeanMethods = false)
   @RequiredArgsConstructor
@@ -103,6 +117,11 @@ public class TotpWebConfiguration {
     private final GoogleAuthService googleAuthService;
     private final TotpWebProperties properties;
 
+    /**
+     * 注册 TOTP 认证拦截器，并应用配置中的排除与包含路径规则。
+     *
+     * @param registry 拦截器注册表
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
       TotpAuthHandlerInterceptor totpAuthHandlerInterceptor =

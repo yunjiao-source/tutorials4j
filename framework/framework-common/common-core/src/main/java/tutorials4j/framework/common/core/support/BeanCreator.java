@@ -3,8 +3,8 @@ package tutorials4j.framework.common.core.support;
 /**
  * 通用 Bean 创建器函数式接口。
  *
- * <p>定义了一个获取实例的核心方法，并提供了创建新实例及获取 Bean 类型的默认实现。 子类可以根据需要覆盖 {@link #newInstance()} 和 {@link
- * #getBeanClass()} 方法。
+ * <p>定义了获取 Bean 实例的核心方法 {@link #getInstance()}，并提供了创建新实例的 {@link #newInstance()} 与获取 Bean 类型的
+ * {@link #getBeanClass()} 默认实现，子类可根据需要覆盖这两个方法。
  *
  * @param <T> 创建的 Bean 类型
  * @author Yun Jiao
@@ -12,7 +12,7 @@ package tutorials4j.framework.common.core.support;
 @FunctionalInterface
 public interface BeanCreator<T> {
   /**
-   * 获取 Bean 实例（通常是从缓存中获取，若不存在则创建）。
+   * 获取 Bean 实例（通常从缓存中获取，若不存在则创建）。
    *
    * @return Bean 实例，不为 {@code null}
    */

@@ -26,6 +26,7 @@ public class GifCaptchaBuilder extends AbstractCaptchaBuilder<GifCaptcha> {
   /** 设置随机颜色时，最大的取色范围 */
   private Integer maxColor;
 
+  /** 创建 Gif 验证码实例，并应用量化、帧循环及随机取色范围等配置。 */
   @Override
   protected GifCaptcha createCaptcha() {
     GifCaptcha gifCaptcha = new GifCaptcha(width(), height(), generator(), interfereCount());

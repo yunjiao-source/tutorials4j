@@ -18,15 +18,34 @@ import tutorials4j.framework.captcha.tianai.properties.TianaiOptions;
 @Builder
 public class CaptchaGenerateParamBuilder {
 
+  /** 背景图片格式名称 */
   private String backgroundFormatName;
+
+  /** 模板图片格式名称 */
   private String templateFormatName;
+
+  /** 是否混淆干扰元素 */
   private Boolean obfuscate;
+
+  /** 验证码类型 */
   private String type;
+
+  /** 背景图片标签 */
   private String backgroundImageTag;
+
+  /** 模板图片标签 */
   private String templateImageTag;
+
+  /** 字体标签 */
   private String fontTag;
+
+  /** 容错率 */
   private Float tolerant;
+
+  /** 点击验证码干扰元素数量 */
   private Integer clickInterferenceCount;
+
+  /** 点击验证码需点击次数 */
   private Integer clickCheckClickCount;
 
   /**

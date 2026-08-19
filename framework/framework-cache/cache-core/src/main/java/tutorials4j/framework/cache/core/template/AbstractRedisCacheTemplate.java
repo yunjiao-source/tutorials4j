@@ -14,10 +14,17 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
  * @author Yun Jiao
  */
 public abstract class AbstractRedisCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
+
+  /**
+   * 构造 Redis 缓存模板，指定缓存名称。
+   *
+   * @param cacheName 缓存名称
+   */
   public AbstractRedisCacheTemplate(String cacheName) {
     super(cacheName);
   }
 
+  /** 通过缓存管理器工厂获取指定名称的 Redis 缓存实例。 */
   @Override
   protected Cache doGetCache(String cacheName) {
     return CacheManagerCreatorFactory.instance.findRedisCache(cacheName);

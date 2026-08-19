@@ -59,7 +59,7 @@ public class CryptoProcessorCacheTemplate
   private final CryptoProcessor symmetricProcessor;
 
   /**
-   * 构造一个新的 {@code CryptoExchangeCacheTemplate} 实例。
+   * 构造一个新的 {@code CryptoProcessorCacheTemplate} 实例。
    *
    * <p>构造过程中会从 {@link CryptoProcessorFactory} 中根据策略的 {@code category} 分别获取非对称和对称处理器。 缓存名称自动设为
    * {@link NamedCacheConsts#CRYPTO_PROCESSOR}。

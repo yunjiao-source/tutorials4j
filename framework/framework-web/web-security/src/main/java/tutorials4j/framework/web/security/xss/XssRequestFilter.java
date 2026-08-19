@@ -20,6 +20,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class XssRequestFilter extends OncePerRequestFilter {
 
+  /**
+   * 将请求包装为 XSS 防护包装器后放行过滤器链。
+   *
+   * @param request 原始请求
+   * @param response 响应
+   * @param filterChain 过滤器链
+   * @throws ServletException 过滤器处理异常时抛出
+   * @throws IOException 输入输出异常时抛出
+   */
   @Override
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

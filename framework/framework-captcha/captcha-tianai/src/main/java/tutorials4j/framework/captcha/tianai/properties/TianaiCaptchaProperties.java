@@ -8,7 +8,7 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 /**
  * 天意验证码配置属性类，支持通过 Spring Boot 配置文件进行配置。
  *
- * <p>配置前缀为 {@code tutorials4j.captcha.tianai}。
+ * <p>配置前缀为 {@code tutorials4j.captcha.tianai}，其中 {@code common} 为公共配置， 其余字段分别为各验证码类型的独立配置。
  *
  * @author Yun Jiao
  */
@@ -16,7 +16,7 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CAPTCHA_TIANAI)
 public class TianaiCaptchaProperties {
 
-  /** 公共配置，应用于所有验证码类型 */
+  /** 公共配置，应用于所有验证码类型，默认使用 jpeg 背景、png 模板且不混淆 */
   @NestedConfigurationProperty
   private TianaiOptions common = new TianaiOptions("jpeg", "png", false);
 

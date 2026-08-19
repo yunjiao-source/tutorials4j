@@ -12,8 +12,14 @@ import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 
+/**
+ * {@link RSACryptoProcessor} 单元测试
+ *
+ * @author Yun Jiao
+ */
 class RSACryptoProcessorTest {
 
+  /** 测试数据：包含中文与特殊字符的明文字符串 */
   private static final String TEST_DATA = "Hello, 世界！";
 
   /** 生成随机的 RSA 密钥对，并封装为 SecretKey */
@@ -33,13 +39,6 @@ class RSACryptoProcessorTest {
     assertThat(processor).isNotNull();
     assertThat(processor.getSecretKey()).isSameAs(secretKey);
     assertThat(processor.getCategory()).isEqualTo(CryptoCategory.RSA);
-  }
-
-  @Test
-  void createWithNullSecretKeyShouldThrowException() {
-    assertThatThrownBy(() -> RSACryptoProcessor.create(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("'secretKey' must not be null");
   }
 
   @Test

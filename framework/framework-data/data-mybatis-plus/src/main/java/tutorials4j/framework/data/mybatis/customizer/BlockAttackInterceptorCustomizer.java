@@ -15,11 +15,21 @@ import tutorials4j.framework.data.mybatis.MybatisPlusConsts;
  */
 public class BlockAttackInterceptorCustomizer implements MybatisPlusInterceptorCustomizer {
 
+  /**
+   * 向拦截器中添加防全表更新/删除拦截器。
+   *
+   * @param interceptor MyBatis Plus 拦截器实例
+   */
   @Override
   public void custom(MybatisPlusInterceptor interceptor) {
     interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
   }
 
+  /**
+   * 返回防全表更新/删除拦截器的执行顺序。
+   *
+   * @return 拦截器顺序值
+   */
   @Override
   public int getOrder() {
     return MybatisPlusConsts.INTERCEPTOR_ORDER_BLOCK_ATTACK;

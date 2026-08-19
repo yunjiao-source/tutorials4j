@@ -13,17 +13,19 @@ import tutorials4j.framework.web.security.properties.SignatureWebProperties;
  */
 public class InMemerySignatureKeyRepository implements SignatureKeyRepository {
   // key=appKey, value=appSecret
+  /** 签名密钥缓存表，key 为 appKey，value 为 appSecret。 */
   protected final Map<String, String> cacheMap = new ConcurrentHashMap<>();
 
   /**
-   * 从配置文件获取
+   * 从配置文件中加载签名密钥对到内存缓存。
    *
-   * @param properties
+   * @param properties 签名相关 Web 配置，包含 appKey 与 appSecret 的映射
    */
   public InMemerySignatureKeyRepository(SignatureWebProperties properties) {
     cacheMap.putAll(properties.getKeys());
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getSecretKey(String key) {
     return cacheMap.get(key);

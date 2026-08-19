@@ -31,6 +31,12 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
 
   private final Class<E> type;
 
+  /**
+   * 构造类型处理器。
+   *
+   * @param type 待处理的枚举类型，不能为 {@code null}
+   * @throws IllegalArgumentException 当 {@code type} 为 {@code null} 或不是枚举类型时抛出
+   */
   public BaseEnumTypeHandler(Class<E> type) {
     if (type == null) {
       throw new IllegalArgumentException("type is null");
@@ -39,6 +45,7 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
     initCache();
   }
 
+  /** 初始化枚举编码到枚举常量的缓存映射。 */
   private void initCache() {
     E[] enumConstants = type.getEnumConstants();
     if (enumConstants == null) {
@@ -47,6 +54,7 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
     EnumCache.registerByValue(type, enumConstants, BaseEnum::getCode);
   }
 
+  /** 将枚举参数的非空值写入预处理语句，根据枚举 code 的类型选择对应的 JDBC 设置方式。 */
   @Override
   public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType)
       throws SQLException {
@@ -59,24 +67,28 @@ public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum<?>> extends BaseTy
     }
   }
 
+  /** 按列名从结果集读取枚举 code 并转换为对应的枚举实例。 */
   @Override
   public E getNullableResult(ResultSet rs, String columnName) throws SQLException {
     Object code = rs.getObject(columnName);
     return code == null ? null : codeToEnum(code);
   }
 
+  /** 按列索引从结果集读取枚举 code 并转换为对应的枚举实例。 */
   @Override
   public E getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
     Object code = rs.getObject(columnIndex);
     return code == null ? null : codeToEnum(code);
   }
 
+  /** 按列索引从存储过程调用语句读取枚举 code 并转换为对应的枚举实例。 */
   @Override
   public E getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
     Object code = cs.getObject(columnIndex);
     return code == null ? null : codeToEnum(code);
   }
 
+  /** 根据枚举 code 从缓存中查找对应的枚举实例，不存在时抛出异常。 */
   private E codeToEnum(Object code) {
     E value = EnumCache.findByValue(type, code);
     if (value == null) {

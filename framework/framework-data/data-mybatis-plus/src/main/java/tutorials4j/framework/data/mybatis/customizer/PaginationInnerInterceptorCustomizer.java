@@ -18,11 +18,21 @@ import tutorials4j.framework.data.mybatis.MybatisPlusConsts;
 public class PaginationInnerInterceptorCustomizer implements MybatisPlusInterceptorCustomizer {
   private final DbType dbType;
 
+  /**
+   * 向拦截器中添加指定数据库类型的分页拦截器。
+   *
+   * @param interceptor MyBatis Plus 拦截器实例
+   */
   @Override
   public void custom(MybatisPlusInterceptor interceptor) {
     interceptor.addInnerInterceptor(new PaginationInnerInterceptor(dbType));
   }
 
+  /**
+   * 返回分页拦截器的执行顺序。
+   *
+   * @return 拦截器顺序值
+   */
   @Override
   public int getOrder() {
     return MybatisPlusConsts.INTERCEPTOR_ORDER_PAGINATION;

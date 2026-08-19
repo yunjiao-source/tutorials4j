@@ -8,20 +8,38 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 
 /**
- * 响应式客户端工具类
+ * Web 工具类，提供链路追踪标识生成与处理器方法注解获取等辅助方法。
  *
  * @author Yun Jiao
  */
 @Slf4j
 public class WebUtils {
+  /**
+   * 生成链路追踪 ID（Trace ID）。
+   *
+   * @return 简易 UUID 形式的追踪 ID
+   */
   public static String generateTraceId() {
     return IdUtil.fastSimpleUUID();
   }
 
+  /**
+   * 生成链路片段 ID（Span ID），取简易 UUID 前 8 位。
+   *
+   * @return 8 位片段 ID
+   */
   public static String generateSpanId() {
     return IdUtil.fastSimpleUUID().substring(0, 8);
   }
 
+  /**
+   * 获取处理器方法上指定类型的注解。
+   *
+   * @param <T> 注解类型
+   * @param handler 处理器对象
+   * @param clazz 注解类型
+   * @return 方法上的注解，若处理器非 HandlerMethod 或无对应注解则返回 {@code null}
+   */
   public static <T extends Annotation> T getHandlerMethodAnnotation(
       Object handler, Class<T> clazz) {
     Method method = null;

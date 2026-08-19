@@ -94,12 +94,14 @@ public class TianaiCaptchaEndpoint {
   @Schema(description = "验证码校验请求参数")
   public static class Data {
 
+    /** 验证码ID（由生成接口返回）。 */
     @Schema(
         description = "验证码ID（由生成接口返回）",
         requiredMode = Schema.RequiredMode.REQUIRED,
         example = "captcha_123456")
     private String id;
 
+    /** 用户交互轨迹数据。 */
     @Schema(description = "用户交互轨迹数据", requiredMode = Schema.RequiredMode.REQUIRED)
     private ImageCaptchaTrack data;
   }

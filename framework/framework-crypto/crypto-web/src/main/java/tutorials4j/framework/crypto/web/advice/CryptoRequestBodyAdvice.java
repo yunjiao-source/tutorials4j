@@ -23,7 +23,10 @@ import tutorials4j.framework.crypto.core.cache.CryptoProcessorCacheTemplate;
 import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 
 /**
- * TODO
+ * 请求体解密增强器。
+ *
+ * <p>针对标注了 {@link Crypto} 且 {@code request()} 为 true 的接口，在请求体反序列化前 读取加密的请求内容，从请求头获取加密后的会话密钥，并通过
+ * {@link CryptoProcessor} 解密后 替换为明文请求体，供后续消息转换器正常解析。
  *
  * @author Yun Jiao
  */
@@ -33,6 +36,14 @@ import tutorials4j.framework.crypto.core.processor.CryptoProcessor;
 public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
   private final CryptoProcessorCacheTemplate cryptoProcessorCacheTemplate;
 
+  /**
+   * 判断当前请求是否需要进行解密处理。
+   *
+   * @param methodParameter 处理方法参数
+   * @param targetType 目标类型
+   * @param converterType 消息转换器类型
+   * @return 若方法标注了 {@link Crypto} 且开启请求解密则返回 true
+   */
   @Override
   public boolean supports(
       MethodParameter methodParameter,
@@ -48,6 +59,18 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
     return supported;
   }
 
+  /**
+   * 在请求体读取前解密加密的请求内容。
+   *
+   * <p>若请求体为空或请求头中缺少加密密钥，则直接返回原始请求消息。
+   *
+   * @param inputMessage 原始请求消息
+   * @param parameter 处理方法参数
+   * @param targetType 目标类型
+   * @param converterType 消息转换器类型
+   * @return 解密后的请求消息；无需解密时返回原始消息
+   * @throws IOException 读取或解密过程中发生 I/O 异常
+   */
   @Override
   public HttpInputMessage beforeBodyRead(
       HttpInputMessage inputMessage,
@@ -88,6 +111,7 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
         inputMessage, decryptedBody.getBytes(StandardCharsets.UTF_8));
   }
 
+  /** 请求体读取完成后直接返回原对象，不做额外处理。 */
   @Override
   public Object afterBodyRead(
       Object body,
@@ -98,6 +122,7 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
     return body;
   }
 
+  /** 请求体为空时直接返回原对象，不做额外处理。 */
   @Override
   public Object handleEmptyBody(
       Object body,
@@ -108,21 +133,34 @@ public class CryptoRequestBodyAdvice implements RequestBodyAdvice {
     return body;
   }
 
+  /**
+   * 携带解密后请求体的 {@link HttpInputMessage} 实现。
+   *
+   * <p>包装原始请求消息，以解密后的字节数据作为请求体内容，同时透传原始请求头。
+   */
   public static class DecryptHttpInputMessage implements HttpInputMessage {
 
     private final HttpInputMessage httpInputMessage;
     private final byte[] data;
 
+    /**
+     * 构造解密后的请求消息。
+     *
+     * @param httpInputMessage 原始请求消息
+     * @param data 解密后的请求体字节数据
+     */
     public DecryptHttpInputMessage(HttpInputMessage httpInputMessage, byte[] data) {
       this.httpInputMessage = httpInputMessage;
       this.data = data;
     }
 
+    /** 返回解密后的请求体输入流。 */
     @Override
     public InputStream getBody() throws IOException {
       return new ByteArrayInputStream(this.data);
     }
 
+    /** 返回原始请求的头信息。 */
     @Override
     public HttpHeaders getHeaders() {
       return this.httpInputMessage.getHeaders();

@@ -18,7 +18,10 @@ import tutorials4j.framework.web.flux.properties.ClientWebProperties;
 import tutorials4j.framework.web.flux.properties.ClientWebProperties.RetryOptions;
 
 /**
- * TODO
+ * 客户端 Web 组件（RestTemplate / RestClient / WebClient）的自动配置类。
+ *
+ * <p>在配置属性 {@code PropertiesConsts.PROPERTY_PREFIX_WEB_CLIENT} 对应的 enabled 开关开启时生效， 为
+ * RestTemplate、RestClient 和 WebClient 注册请求/响应日志记录、默认请求头设置以及重试等定制器。
  *
  * @author Yun Jiao
  */
@@ -29,11 +32,17 @@ import tutorials4j.framework.web.flux.properties.ClientWebProperties.RetryOption
     name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties({ClientWebProperties.class})
 public class ClientWebConfiguration {
+  /** 初始化日志输出，应用启动后执行。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[WEB-CLIENT] Client Web Configuration");
   }
 
+  /**
+   * 注册 RestTemplate 请求/响应日志记录定制器。
+   *
+   * @return RestTemplate 定制器，用于添加日志记录拦截器
+   */
   @Bean
   RestTemplateCustomizer logHeadersRestTemplateCustomizer() {
     log.trace("[WEB-CLIENT] Log Headers Rest Template Builder Customizer");
@@ -42,6 +51,12 @@ public class ClientWebConfiguration {
     };
   }
 
+  /**
+   * 注册为 RestTemplate 请求设置默认请求头的定制器。
+   *
+   * @param properties 客户端 Web 配置属性，包含默认请求头信息
+   * @return RestTemplate 请求定制器
+   */
   @Bean
   RestTemplateRequestCustomizer<ClientHttpRequest> defaultHeadersRestTemplateRequestCustomizer(
       ClientWebProperties properties) {
@@ -51,13 +66,20 @@ public class ClientWebConfiguration {
     };
   }
 
+  /** RestClient 客户端定制器的自动配置类。 */
   @Configuration(proxyBeanMethods = false)
   public static class RestClientWebConfiguration {
+    /** 初始化日志输出，应用启动后执行。 */
     @PostConstruct
     public void postConstruct() {
       log.trace("[WEB-CLIENT] Rest Client Configuration");
     }
 
+    /**
+     * 注册 RestClient 请求/响应日志记录定制器。
+     *
+     * @return RestClient 定制器，用于添加日志记录拦截器
+     */
     @Bean
     RestClientCustomizer logHeadersRestClientCustomizer() {
       log.trace("[WEB-CLIENT] Log Headers Rest Client Customizer");
@@ -66,6 +88,12 @@ public class ClientWebConfiguration {
       };
     }
 
+    /**
+     * 注册为 RestClient 设置默认请求头的定制器。
+     *
+     * @param properties 客户端 Web 配置属性，包含默认请求头信息
+     * @return RestClient 定制器
+     */
     @Bean
     RestClientCustomizer defaultHeadersRestClientCustomizer(ClientWebProperties properties) {
       log.trace("[WEB-CLIENT] Default Headers Rest Client Customizer");
@@ -76,13 +104,21 @@ public class ClientWebConfiguration {
     }
   }
 
+  /** WebClient 客户端定制器的自动配置类。 */
   @Configuration(proxyBeanMethods = false)
   public static class WebClientWebConfiguration {
+    /** 初始化日志输出，应用启动后执行。 */
     @PostConstruct
     public void postConstruct() {
       log.trace("[WEB-CLIENT] Web Client Configuration");
     }
 
+    /**
+     * 注册为 WebClient 设置默认请求头的定制器。
+     *
+     * @param properties 客户端 Web 配置属性，包含默认请求头信息
+     * @return WebClient 定制器
+     */
     @Bean
     WebClientCustomizer defaultHeadersWebClientCustomizer(ClientWebProperties properties) {
       log.trace("[WEB-CLIENT] Default Headers Web Client Customizer");
@@ -92,6 +128,11 @@ public class ClientWebConfiguration {
       };
     }
 
+    /**
+     * 注册 WebClient 默认定制器，添加异常捕获日志过滤器。
+     *
+     * @return WebClient 定制器
+     */
     @Bean
     WebClientCustomizer defaultWebClientCustomizer() {
       log.trace("[WEB-CLIENT] Default Web Client Customizer");
@@ -100,6 +141,11 @@ public class ClientWebConfiguration {
       };
     }
 
+    /**
+     * 注册 WebClient 请求/响应日志记录定制器。
+     *
+     * @return WebClient 定制器
+     */
     @Bean
     WebClientCustomizer logHeadersWebClientCustomizer() {
       log.trace("[WEB-CLIENT] Log Headers Web Client Customizer");
@@ -109,6 +155,12 @@ public class ClientWebConfiguration {
       };
     }
 
+    /**
+     * 注册 WebClient 重试定制器，按配置的尝试次数与退避时间进行重试。
+     *
+     * @param properties 客户端 Web 配置属性，包含重试相关选项
+     * @return WebClient 定制器
+     */
     @Bean
     WebClientCustomizer retryWebClientCustomizer(ClientWebProperties properties) {
       log.trace("[WEB-CLIENT] Retry Web Client Customizer");

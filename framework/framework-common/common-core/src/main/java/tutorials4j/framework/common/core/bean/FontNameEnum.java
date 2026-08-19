@@ -5,7 +5,9 @@ import lombok.Getter;
 import tutorials4j.framework.common.core.support.FontCache;
 
 /**
- * 字体名称
+ * 字体名称枚举，定义了图片生成时可用的字体集合（阿里巴巴普惠体、思源黑体/宋体及通用系统字体）。
+ *
+ * <p>每个枚举项对应一个字体名称，可通过 {@link #getFont()} 系列方法获取缓存后的 {@link java.awt.Font} 实例。
  *
  * @author Yun Jiao
  */

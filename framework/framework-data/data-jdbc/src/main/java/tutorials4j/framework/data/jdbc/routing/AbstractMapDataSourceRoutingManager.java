@@ -24,6 +24,7 @@ import tutorials4j.framework.common.core.DefaultConsts;
  */
 @Slf4j
 public abstract class AbstractMapDataSourceRoutingManager extends AbstractDataSourceRoutingManager {
+  /** 已创建的目标数据源缓存，键为路由名称 */
   protected final Map<String, DataSource> targetDataSources = new ConcurrentHashMap<>();
 
   /**
@@ -54,6 +55,7 @@ public abstract class AbstractMapDataSourceRoutingManager extends AbstractDataSo
     return targetDataSources.computeIfAbsent(name, this::createDataSource);
   }
 
+  /** 关闭所有已创建的数据源并清空缓存。 */
   @Override
   public void shutdown() {
     Iterator<Map.Entry<String, DataSource>> it = targetDataSources.entrySet().iterator();
@@ -74,5 +76,11 @@ public abstract class AbstractMapDataSourceRoutingManager extends AbstractDataSo
     }
   }
 
+  /**
+   * 关闭单个数据源，由子类按连接池类型实现。
+   *
+   * @param dataSource 需要关闭的数据源
+   * @throws SQLException 关闭数据源发生异常时抛出
+   */
   protected abstract void doShutdown(DataSource dataSource) throws SQLException;
 }

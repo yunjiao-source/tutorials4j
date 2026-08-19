@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Import;
 import tutorials4j.framework.feature.signin.autoconfigure.SignInJpaFeatureConfiguration;
 
 /**
- * TODO
+ * 启用签到功能特性的注解。
+ *
+ * <p>标注在配置类上，通过 {@link Import} 导入签到功能的 JPA 自动配置。
  *
  * @author Yun Jiao
  */

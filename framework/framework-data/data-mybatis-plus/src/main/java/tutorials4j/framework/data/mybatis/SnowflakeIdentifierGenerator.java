@@ -17,11 +17,13 @@ import tutorials4j.framework.common.spring.util.SnowflakeUtils;
  */
 public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
 
+  /** 生成下一个雪花算法数字 ID。 */
   @Override
   public Number nextId(Object entity) {
     return SnowflakeUtils.nextId();
   }
 
+  /** 生成下一个字符串形式的雪花算法 ID。 */
   @Override
   public String nextUUID(Object entity) {
     return SnowflakeUtils.nextIdStr();

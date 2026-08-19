@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * XXL-Job 定时任务示例配置，仅在 xxl-job 环境激活时生效， 负责扫描并加载 XXL-Job 示例相关组件。
  *
  * @author Yun Jiao
  */

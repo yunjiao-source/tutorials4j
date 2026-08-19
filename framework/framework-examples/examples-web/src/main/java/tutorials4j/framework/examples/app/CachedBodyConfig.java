@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 请求体缓存配置
+ * 请求体缓存示例模块的配置类，仅在 cached-body profile 下生效，负责扫描请求体缓存示例相关组件。
  *
  * @author Yun Jiao
  */

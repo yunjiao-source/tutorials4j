@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Conditional;
 /**
  * 条件注解：当指定的配置属性存在且对应的 Map（映射）满足空/非空条件时，才创建 Bean。
  *
- * <p>该注解基于 Spring Boot 的 {@link Conditional} 机制，通过 {@link OnCollectionMapCondition} 实现具体匹配逻辑。
+ * <p>可标注在类或方法上，基于 Spring Boot 的 {@link Conditional} 机制，通过 {@link OnCollectionMapCondition}
+ * 实现具体匹配逻辑。
  *
  * <p><b>使用示例：</b>
  *
@@ -36,9 +37,9 @@ public @interface ConditionalOnMapProperty {
   String prefix() default "";
 
   /**
-   * 属性名称（与 prefix 拼接形成完整的配置键）。
+   * 属性名称，与 {@link #prefix()} 拼接形成完整的配置键。
    *
-   * <p>通常与 {@link #prefix()} 配合使用，也可单独使用（此时作为完整键）。
+   * <p>通常与 prefix 配合使用，也可单独使用（此时作为完整键）。
    *
    * @return 属性名称，默认为空字符串
    */
@@ -47,7 +48,7 @@ public @interface ConditionalOnMapProperty {
   /**
    * name 的别名，与 name 属性互斥，通常只使用其中一个。
    *
-   * <p>如果同时设置了 value 和 name，优先使用 name。
+   * <p>当 name 未指定而 value 有值时，value 会作为 name 使用；若两者同时指定，优先使用 name。
    *
    * @return 属性名称别名，默认为空字符串
    */

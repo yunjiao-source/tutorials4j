@@ -26,6 +26,11 @@ public class CaffeineCacheManagerCreator implements CacheManagerCreator<Caffeine
 
   private CaffeineCacheManager instance;
 
+  /**
+   * 获取 {@link CaffeineCacheManager} 单例实例，使用双重检查锁定保证线程安全。
+   *
+   * @return Caffeine 缓存管理器实例
+   */
   @Override
   public CaffeineCacheManager getInstance() {
     if (instance != null) {
@@ -43,6 +48,11 @@ public class CaffeineCacheManagerCreator implements CacheManagerCreator<Caffeine
     return instance;
   }
 
+  /**
+   * 创建一个新的 Caffeine 缓存管理器，并应用外部配置的 Caffeine 构建器。
+   *
+   * @return 新建的 {@link CaffeineCacheManager} 实例
+   */
   @Override
   public CaffeineCacheManager newInstance() {
     FlexibleCaffeineCacheManager caffeineCacheManager =
@@ -51,11 +61,21 @@ public class CaffeineCacheManagerCreator implements CacheManagerCreator<Caffeine
     return caffeineCacheManager;
   }
 
+  /**
+   * 返回该创建器生成的 Bean 类型。
+   *
+   * @return {@link CaffeineCacheManager} 类型
+   */
   @Override
   public Class<CaffeineCacheManager> getBeanClass() {
     return CaffeineCacheManager.class;
   }
 
+  /**
+   * 返回该创建器的缓存管理器类别。
+   *
+   * @return {@link CacheManagerCreatorCategory#CAFFEINE}
+   */
   @Override
   public CacheManagerCreatorCategory getCategory() {
     return CacheManagerCreatorCategory.CAFFEINE;

@@ -10,10 +10,11 @@ import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 
 /**
- * 灵活的Caffeine缓存管理器，扩展自{@link CaffeineCacheManager}。
+ * 灵活的 Caffeine 缓存管理器，扩展自 {@link CaffeineCacheManager}。
  *
- * <p>支持为每个缓存名称单独配置参数，通过{@link NamedCacheProperties#getCaches()}获取特定缓存的配置。
- * 如果某个缓存名称存在单独配置，则使用该配置创建对应的原生Caffeine缓存；否则回退到父类的默认创建逻辑。
+ * <p>支持为每个缓存名称单独配置参数，通过 {@link NamedCacheProperties#getCaches()} 获取特定缓存的配置。
+ * 如果某个缓存名称存在单独配置，则基于该配置创建对应的原生 Caffeine 缓存；否则回退使用 {@link NamedCacheProperties#getDefaults()}
+ * 中的全局默认配置。
  *
  * @author Yun Jiao
  * @see CaffeineCacheManager
@@ -26,7 +27,9 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
   /**
    * 使用给定的全局配置构造一个缓存管理器。
    *
-   * @param properties 全局Caffeine缓存配置属性
+   * <p>会根据全局默认配置中的 {@code cacheNullValues} 开关设置是否允许缓存 {@code null} 值。
+   *
+   * @param properties 全局 Caffeine 缓存配置属性
    */
   public FlexibleCaffeineCacheManager(NamedCacheProperties properties) {
     this.properties = properties;
@@ -37,7 +40,9 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
   /**
    * 使用给定的全局配置和一组缓存名称构造缓存管理器。
    *
-   * @param properties 全局Caffeine缓存配置属性
+   * <p>除初始化指定的缓存名称外，同样会根据全局默认配置中的 {@code cacheNullValues} 开关 设置是否允许缓存 {@code null} 值。
+   *
+   * @param properties 全局 Caffeine 缓存配置属性
    * @param cacheNames 初始化的缓存名称列表
    */
   public FlexibleCaffeineCacheManager(NamedCacheProperties properties, String... cacheNames) {
@@ -48,13 +53,14 @@ public class FlexibleCaffeineCacheManager extends CaffeineCacheManager {
   }
 
   /**
-   * 创建指定缓存名称的原生Caffeine缓存对象。
+   * 创建指定缓存名称的原生 Caffeine 缓存对象。
    *
-   * <p>若{@link NamedCacheProperties#getCaches()}中包含该缓存名称的单独配置， 则根据该配置新建一个{@link
-   * Caffeine}实例并构建缓存；否则调用父类方法创建默认缓存。
+   * <p>若 {@link NamedCacheProperties#getCaches()} 中包含该缓存名称的单独配置， 则基于该配置构建缓存；
+   * 否则记录一条告警日志并回退使用全局默认配置。无论哪种方式，都会先通过 {@code options.applyDefaults(...)} 将默认配置中未设置的属性合并进来， 再经
+   * {@link CaffeineUtils#copyOption} 复制到 {@link Caffeine} 构建器并创建缓存。
    *
    * @param name 缓存名称
-   * @return 原生Caffeine缓存实例
+   * @return 原生 Caffeine 缓存实例
    */
   @Override
   protected Cache<Object, Object> createNativeCaffeineCache(String name) {

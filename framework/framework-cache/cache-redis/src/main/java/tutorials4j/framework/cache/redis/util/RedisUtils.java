@@ -8,11 +8,20 @@ import tutorials4j.framework.cache.core.properties.NamedCacheOptions;
 import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 
 /**
- * 工具
+ * Redis 缓存工具接口。
+ *
+ * <p>提供将 {@link CacheNamePrefix} 转换为 Spring Data Redis 的 {@link CacheKeyPrefix}， 以及根据 {@link
+ * NamedCacheOptions} 属性填充 {@link RedisCacheConfiguration} 配置的静态工具方法。
  *
  * @author Yun Jiao
  */
 public interface RedisUtils {
+  /**
+   * 将 {@link CacheNamePrefix} 转换为 {@link CacheKeyPrefix}。
+   *
+   * @param cacheNamePrefix 自定义缓存名前缀计算器
+   * @return 适配后的 {@link CacheKeyPrefix}，其前缀计算逻辑为对原结果再次应用 Redis 默认前缀规则
+   */
   static CacheKeyPrefix convert(CacheNamePrefix cacheNamePrefix) {
     return name -> CacheKeyPrefix.simple().compute(cacheNamePrefix.compute(name));
   }
@@ -22,7 +31,7 @@ public interface RedisUtils {
    *
    * @param configuration 原始的 {@link RedisCacheConfiguration} 实例，将基于它进行修改
    * @param prop 包含具体缓存配置的 {@link NamedCacheOptions} 对象
-   * @param properties
+   * @param properties 全局命名缓存配置属性，用于提供默认配置与缓存名前缀
    * @return 填充后的 {@link RedisCacheConfiguration} 实例
    */
   static RedisCacheConfiguration fillConfiguration(

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import tutorials4j.framework.cache.core.lock.LocalLockable;
 
 /**
- * 订单
+ * 订单本地锁示例服务。
+ *
+ * <p>通过 {@code @LocalLockable} 注解演示基于本地锁（进程内锁）的互斥控制，包括不等待与等待两种加锁模式。
  *
  * @author Yun Jiao
  */
@@ -16,6 +18,11 @@ import tutorials4j.framework.cache.core.lock.LocalLockable;
 @Service
 @RequiredArgsConstructor
 public class OrderLocalService {
+  /**
+   * 不等待模式的本地锁示例：获取不到锁时立即失败，不做等待。
+   *
+   * @param orderId 订单编号
+   */
   @LocalLockable(key = "#root.args[0]", prefix = "order:", waitTime = -1)
   public void nonWaitTime(String orderId) {
     log.info("nonWaitTime - {} - {}", Thread.currentThread().getName(), orderId);
@@ -23,6 +30,11 @@ public class OrderLocalService {
     log.info("nonWaitTime - {} - {}, 时长：{}", Thread.currentThread().getName(), orderId, time);
   }
 
+  /**
+   * 等待模式的本地锁示例：获取不到锁时等待锁释放后再执行业务。
+   *
+   * @param orderId 订单编号
+   */
   @LocalLockable(key = "#root.args[0]", prefix = "order:")
   public void waitTime(String orderId) {
     log.info("waitTime - {} - {}", Thread.currentThread().getName(), orderId);
@@ -30,6 +42,11 @@ public class OrderLocalService {
     log.info("waitTime - {} - {}, 时长：{}", Thread.currentThread().getName(), orderId, time);
   }
 
+  /**
+   * 随机睡眠 0~9 秒以模拟业务处理耗时。
+   *
+   * @return 实际睡眠的秒数
+   */
   private int sleep() {
     try {
       int seconds = ThreadLocalRandom.current().nextInt(10);

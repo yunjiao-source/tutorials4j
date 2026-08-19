@@ -18,7 +18,7 @@ import tutorials4j.framework.tenant.core.TenantTaskDecorator;
 import tutorials4j.framework.tenant.core.properties.TenantProperties;
 
 /**
- * TODO
+ * 租户核心自动配置：注册租户任务装饰器与租户拦截器，并将租户拦截器注册到 Spring Web 拦截器链中。
  *
  * @author Yun Jiao
  */
@@ -29,11 +29,18 @@ import tutorials4j.framework.tenant.core.properties.TenantProperties;
 public class TenantConfiguration implements WebMvcConfigurer {
   private final TenantProperties properties;
 
+  /** 初始化日志输出 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[TENANT-CORE] Tenant Configuration");
   }
 
+  /**
+   * 注册组合任务装饰器 Bean（容器中不存在时生效），用于向异步任务传递租户上下文。
+   *
+   * @param creator 组合任务装饰器创建器
+   * @return 组合任务装饰器
+   */
   @Bean
   @ConditionalOnMissingBean
   CompositeTaskDecorator compositeTaskDecorator(CompositeTaskDecoratorCreator creator) {
@@ -41,6 +48,11 @@ public class TenantConfiguration implements WebMvcConfigurer {
     return creator.getInstance();
   }
 
+  /**
+   * 注册租户任务装饰器创建器 Bean（容器中不存在时生效），供异步任务传递租户上下文。
+   *
+   * @return 租户任务装饰器创建器
+   */
   @Bean
   @ConditionalOnMissingBean
   TaskDecoratorCreator tenantTaskDecoratorCreator() {
@@ -48,6 +60,11 @@ public class TenantConfiguration implements WebMvcConfigurer {
     return TenantTaskDecorator::new;
   }
 
+  /**
+   * 注册租户拦截器，并按配置的包含/排除路径进行拦截。
+   *
+   * @param registry 拦截器注册表
+   */
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     HandlerInterceptorOptions pathOptions = properties.getPath();

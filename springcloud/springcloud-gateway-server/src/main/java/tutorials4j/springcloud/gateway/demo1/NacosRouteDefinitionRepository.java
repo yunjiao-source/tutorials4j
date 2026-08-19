@@ -21,12 +21,20 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 // 基于 Nacos 的生产级动态路由实现
+/**
+ * 基于 Nacos 配置中心的动态路由仓库：启动时从 Nacos 加载路由配置，并监听配置变更实时刷新网关路由。
+ *
+ * @author Yun Jiao
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class NacosRouteDefinitionRepository implements RouteDefinitionRepository {
 
+  /** Nacos 中路由配置的 dataId。 */
   private static final String DATA_ID = "gateway-routes.json";
+
+  /** Nacos 中路由配置所属的 group。 */
   private static final String GROUP = "GATEWAY_GROUP";
 
   private final NacosConfigManager nacosConfigManager;
@@ -38,6 +46,11 @@ public class NacosRouteDefinitionRepository implements RouteDefinitionRepository
   // 本地快照，避免 getRouteDefinitions 时反复解析配置
   private final Map<String, RouteDefinition> routeCache = new ConcurrentHashMap<>();
 
+  /**
+   * 初始化：加载 Nacos 中的路由配置并注册配置监听器，配置变更时刷新本地缓存并发布路由刷新事件。
+   *
+   * @throws Exception 加载或解析配置失败时抛出
+   */
   @PostConstruct
   public void init() throws Exception {
     refreshRouteCache(loadConfigText());
@@ -65,21 +78,30 @@ public class NacosRouteDefinitionRepository implements RouteDefinitionRepository
             });
   }
 
+  /** 返回本地缓存中的所有路由定义。 */
   @Override
   public Flux<RouteDefinition> getRouteDefinitions() {
     return Flux.fromIterable(routeCache.values());
   }
 
+  /** 不支持通过代码写入路由，路由的写入统一由 Nacos 配置管理。 */
   @Override
   public Mono<Void> save(Mono<RouteDefinition> route) {
     return Mono.error(new UnsupportedOperationException("Route write is managed by Nacos"));
   }
 
+  /** 不支持通过代码删除路由，路由的删除统一由 Nacos 配置管理。 */
   @Override
   public Mono<Void> delete(Mono<String> routeId) {
     return Mono.error(new UnsupportedOperationException("Route delete is managed by Nacos"));
   }
 
+  /**
+   * 从 Nacos 拉取路由配置文件内容。
+   *
+   * @return 路由配置的 JSON 文本
+   * @throws Exception 配置为空或拉取失败时抛出
+   */
   private String loadConfigText() throws Exception {
     String configText =
         nacosConfigManager
@@ -91,6 +113,12 @@ public class NacosRouteDefinitionRepository implements RouteDefinitionRepository
     return configText;
   }
 
+  /**
+   * 解析路由配置文本，校验后转换为 RouteDefinition 并整体替换本地缓存。
+   *
+   * @param configText 路由配置的 JSON 文本
+   * @throws Exception 配置解析失败时抛出
+   */
   private void refreshRouteCache(String configText) throws Exception {
     log.info("刷新路由缓存:{}", configText);
     List<GatewayRouteConfig> configs =

@@ -11,7 +11,9 @@ import tutorials4j.framework.feature.signin.service.SignInResult;
 import tutorials4j.framework.feature.signin.service.SignInResultHandler;
 
 /**
- * TODO
+ * 基于数据库的签到结果处理器。
+ *
+ * <p>将 {@link SignInResult} 签到结果转换为 {@link SignInResultEntity} 并异步持久化到数据库。
  *
  * @author Yun Jiao
  */
@@ -21,6 +23,11 @@ import tutorials4j.framework.feature.signin.service.SignInResultHandler;
 public class DatabaseSignInResultHandler implements SignInResultHandler {
   private final SignInResultRepository signInResultRepository;
 
+  /**
+   * 将签到结果异步保存到数据库。
+   *
+   * @param signInResult 签到结果
+   */
   @Override
   @Async
   @Transactional(rollbackFor = Exception.class)
@@ -31,11 +38,21 @@ public class DatabaseSignInResultHandler implements SignInResultHandler {
     signInResultRepository.save(entity);
   }
 
+  /**
+   * 返回支持的签到数据来源（返回 null，表示不限制来源）。
+   *
+   * @return 数据来源
+   */
   @Override
   public String sourceSupported() {
     return null;
   }
 
+  /**
+   * 是否支持处理所有数据来源的签到结果。
+   *
+   * @return 始终返回 true
+   */
   @Override
   public boolean allSupported() {
     return true;

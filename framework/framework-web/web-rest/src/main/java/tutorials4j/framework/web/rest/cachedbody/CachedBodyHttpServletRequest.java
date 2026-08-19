@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  * <p>此类将原始请求体的内容缓存在内存中，使得后续可以通过 {@link #getInputStream()} 和 {@link #getReader()}
  * 方法重复读取请求体内容，适用于需要多次访问请求体数据的场景（如参数校验、日志记录、签名验证等）。
  *
- * <p>缓存操作在构造时完成，使用原始请求的字符编码（如果未指定则使用 UTF-8）将内容转换为字节数组。
+ * <p>缓存操作在构造时完成，使用原始请求的字符编码（未指定时默认 UTF-8）将内容转换为字节数组。
  *
  * @author Yun Jiao
  * @see HttpServletRequestWrapper
@@ -27,6 +27,8 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
   /**
    * 构造一个包装器，读取并缓存原始请求的请求体。
+   *
+   * <p>构造完成后原始请求体已被读取完毕，后续应通过本包装类读取缓存内容。
    *
    * @param request 原始的 HttpServletRequest 对象
    * @throws IOException 如果读取原始请求体时发生 I/O 错误

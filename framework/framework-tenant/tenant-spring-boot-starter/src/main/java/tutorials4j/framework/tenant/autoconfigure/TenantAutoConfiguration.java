@@ -10,7 +10,9 @@ import tutorials4j.framework.tenant.hibernate.autoconfigure.HibernateTenantConfi
 import tutorials4j.framework.tenant.mybatis.autoconfigure.MybatisPlusTenantConfiguration;
 
 /**
- * 租户（tenant）模块自动配置
+ * 租户（tenant）模块的 Spring Boot 自动配置入口。
+ *
+ * <p>导入核心租户配置、缓存租户配置、Hibernate 租户配置与 MyBatis Plus 租户配置， 统一装配多租户能力。
  *
  * @author Yun Jiao
  */
@@ -23,6 +25,7 @@ import tutorials4j.framework.tenant.mybatis.autoconfigure.MybatisPlusTenantConfi
   MybatisPlusTenantConfiguration.class
 })
 public class TenantAutoConfiguration {
+  /** 初始化日志记录。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[TENANT] Tenant Auto Configuration");

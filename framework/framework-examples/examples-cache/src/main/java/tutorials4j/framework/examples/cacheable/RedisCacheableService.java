@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import tutorials4j.framework.examples.Car;
 
 /**
- * 服务
+ * Redis 缓存示例服务，通过 {@link Cacheable} 注解演示基于 Redis 的方法级缓存。
  *
  * @author Yun Jiao
  */
@@ -16,6 +16,12 @@ import tutorials4j.framework.examples.Car;
 @Service
 public class RedisCacheableService {
 
+  /**
+   * 查询用户数据，结果按 "users" 缓存。
+   *
+   * @param userId 用户 ID
+   * @return 随机生成的用户数据
+   */
   @Cacheable("users")
   public String getUser(Long userId) {
     String data = "user-" + RandomStringUtils.insecure().nextAlphabetic(5);
@@ -23,6 +29,12 @@ public class RedisCacheableService {
     return data;
   }
 
+  /**
+   * 查询订单数据，结果按 "orders" 缓存。
+   *
+   * @param orderId 订单 ID
+   * @return 随机生成的订单数据
+   */
   @Cacheable("orders")
   public String getOrder(Long orderId) {
     String data = "order-" + RandomStringUtils.insecure().nextAlphabetic(5);
@@ -30,6 +42,12 @@ public class RedisCacheableService {
     return data;
   }
 
+  /**
+   * 查询汽车对象，结果按 "cars" 缓存。
+   *
+   * @param carId 汽车 ID
+   * @return 随机生成的汽车对象
+   */
   @Cacheable("cars")
   public Car getCar(Long carId) {
     Car car = new Car(carId, RandomStringUtils.insecure().nextAlphabetic(5), new Date());

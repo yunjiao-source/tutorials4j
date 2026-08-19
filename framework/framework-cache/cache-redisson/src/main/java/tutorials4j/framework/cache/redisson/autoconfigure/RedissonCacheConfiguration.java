@@ -16,18 +16,25 @@ import tutorials4j.framework.cache.redisson.lock.RedissonReentrantLockableAspect
 import tutorials4j.framework.common.spring.content.SpelMethodBasedExpressionEvaluator;
 
 /**
- * Redisson 配置
+ * Redisson 缓存配置类，装配缓存键前缀名称映射器、Redisson 分布式锁服务及锁切面。
  *
  * @author Yun Jiao
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class RedissonCacheConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CACHE-REDISSON] Redisson Configuration");
   }
 
+  /**
+   * 创建缓存键前缀名称映射器。
+   *
+   * @param properties 缓存配置属性
+   * @return 前缀名称映射器
+   */
   @Bean
   @ConditionalOnMissingBean
   PrefixNameMapper prefixNameMapper(CacheProperties properties) {
@@ -35,6 +42,12 @@ public class RedissonCacheConfiguration {
     return new PrefixNameMapper(properties.getRedissonCacheName());
   }
 
+  /**
+   * 创建 Redisson 自动配置定制器，为 Redisson 应用缓存键前缀名称映射。
+   *
+   * @param prefixNameMapper 前缀名称映射器
+   * @return Redisson 自动配置定制器
+   */
   @Bean
   @ConditionalOnMissingBean
   RedissonAutoConfigurationCustomizer prefixNameRedissonConfigCustomizer(
@@ -43,6 +56,12 @@ public class RedissonCacheConfiguration {
     return config -> config.setNameMapper(prefixNameMapper);
   }
 
+  /**
+   * 创建基于 Redisson 的阻塞式分布式锁服务（单例）。
+   *
+   * @param redissonClient Redisson 客户端
+   * @return 阻塞式分布式锁服务
+   */
   @Bean
   @ConditionalOnMissingBean
   RedissonBlockLockService blockRedissonLock(RedissonClient redissonClient) {
@@ -51,6 +70,12 @@ public class RedissonCacheConfiguration {
     return RedissonBlockLockService.instance;
   }
 
+  /**
+   * 创建基于 Redisson 的可重入分布式锁服务（单例）。
+   *
+   * @param redissonClient Redisson 客户端
+   * @return 可重入分布式锁服务
+   */
   @Bean
   @ConditionalOnMissingBean
   RedissonReentrantLockService reentrantRedissonLock(RedissonClient redissonClient) {
@@ -59,6 +84,13 @@ public class RedissonCacheConfiguration {
     return RedissonReentrantLockService.instance;
   }
 
+  /**
+   * 创建基于 Redisson 的阻塞式分布式锁切面。
+   *
+   * @param spelMethodBasedExpressionEvaluator SpEL 表达式求值器
+   * @param redissonBlockLockService 阻塞式分布式锁服务
+   * @return 阻塞式分布式锁切面
+   */
   @Bean
   @ConditionalOnMissingBean
   RedissonBlockLockableAspect blockRedissonLockableAspect(
@@ -69,6 +101,13 @@ public class RedissonCacheConfiguration {
         spelMethodBasedExpressionEvaluator, redissonBlockLockService);
   }
 
+  /**
+   * 创建基于 Redisson 的可重入分布式锁切面。
+   *
+   * @param spelMethodBasedExpressionEvaluator SpEL 表达式求值器
+   * @param redissonReentrantLockService 可重入分布式锁服务
+   * @return 可重入分布式锁切面
+   */
   @Bean
   @ConditionalOnMissingBean
   RedissonReentrantLockableAspect redissonReentrantLockableAspect(

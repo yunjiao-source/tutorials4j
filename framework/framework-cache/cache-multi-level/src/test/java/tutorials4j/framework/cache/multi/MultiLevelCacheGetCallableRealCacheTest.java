@@ -19,34 +19,52 @@ import org.junit.jupiter.api.Test;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 
-/** 针对 {@link MultiLevelCache#get(Object, Callable)} 的单元测试。 使用真实的缓存实现（基于内存 Map），避免 Mock。 */
+/**
+ * 针对 {@link MultiLevelCache#get(Object, Callable)} 的单元测试。
+ *
+ * <p>使用真实的缓存实现（基于内存 Map），避免 Mock，验证本地/远程缓存命中、Callable 加载、 异常传播及并发场景下的双重检查锁定等行为。
+ *
+ * @author Yun Jiao
+ */
 class MultiLevelCacheGetCallableRealCacheTest {
 
-  /** 简单的本地缓存实现（基于 ConcurrentHashMap）。 */
+  /** 简单的本地缓存实现（基于 ConcurrentHashMap），模拟真实缓存行为。 */
   static class SimpleMapCache implements Cache {
+    /** 缓存名称。 */
     private final String name;
+
+    /** 缓存存储容器。 */
     protected final ConcurrentHashMap<Object, Object> store = new ConcurrentHashMap<>();
 
+    /**
+     * 构造指定名称的缓存。
+     *
+     * @param name 缓存名称
+     */
     SimpleMapCache(String name) {
       this.name = name;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName() {
       return name;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Object getNativeCache() {
       return store;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ValueWrapper get(Object key) {
       Object value = store.get(key);
       return value != null ? new SimpleValueWrapper(value) : null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public <T> T get(Object key, Class<T> type) {
       Object value = store.get(key);
@@ -56,6 +74,7 @@ class MultiLevelCacheGetCallableRealCacheTest {
       return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
     public <T> T get(Object key, Callable<T> valueLoader) {
@@ -71,6 +90,7 @@ class MultiLevelCacheGetCallableRealCacheTest {
               });
     }
 
+    /** {@inheritDoc} */
     @Override
     public void put(Object key, Object value) {
       if (value != null) {
@@ -80,21 +100,29 @@ class MultiLevelCacheGetCallableRealCacheTest {
       }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void evict(Object key) {
       store.remove(key);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void clear() {
       store.clear();
     }
   }
 
+  /** 本地缓存。 */
   private SimpleMapCache localCache;
+
+  /** 远程缓存。 */
   private SimpleMapCache remoteCache;
+
+  /** 被测的多级缓存对象。 */
   private MultiLevelCache multiLevelCache;
 
+  /** 每个测试前初始化两级缓存与多级缓存对象。 */
   @BeforeEach
   void setUp() {
     localCache = new SimpleMapCache("local");
@@ -102,6 +130,7 @@ class MultiLevelCacheGetCallableRealCacheTest {
     multiLevelCache = new MultiLevelCache(localCache, remoteCache);
   }
 
+  /** 每个测试后清理可能残留的锁，避免影响后续测试。 */
   @AfterEach
   void tearDown() {
     // 清理可能残留的锁（避免影响后续测试）

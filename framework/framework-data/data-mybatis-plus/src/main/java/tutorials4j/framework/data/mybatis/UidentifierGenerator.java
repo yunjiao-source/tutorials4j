@@ -16,11 +16,13 @@ import tutorials4j.framework.common.uid.UidUtils;
  */
 public class UidentifierGenerator implements IdentifierGenerator {
 
+  /** 生成下一个全局唯一数字 ID。 */
   @Override
   public Number nextId(Object entity) {
     return UidUtils.DEFAULTED.nextUid();
   }
 
+  /** 生成下一个全局唯一字符串 ID。 */
   @Override
   public String nextUUID(Object entity) {
     return UidUtils.DEFAULTED.nextUidStr();

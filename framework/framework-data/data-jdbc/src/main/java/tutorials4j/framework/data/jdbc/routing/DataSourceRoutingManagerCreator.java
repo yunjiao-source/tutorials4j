@@ -100,10 +100,16 @@ public class DataSourceRoutingManagerCreator implements BeanCreator<DataSourceRo
     return DataSourceRoutingManager.class;
   }
 
+  /**
+   * 获取创建器持有的默认数据源。
+   *
+   * @return 默认数据源
+   */
   public DataSource getDefaultDataSource() {
     return this.dataSource;
   }
 
+  /** 容器销毁前关闭已创建的路由管理器实例。 */
   @PreDestroy
   public void shutdown() {
     if (instance != null) {

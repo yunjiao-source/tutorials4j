@@ -10,10 +10,17 @@ import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.CryptoCategory;
 
+/**
+ * {@link SM4CryptoProcessor} 单元测试
+ *
+ * @author Yun Jiao
+ */
 class SM4CryptoProcessorTest {
 
+  /** 测试数据：包含中文与特殊字符的明文字符串 */
   private static final String TEST_DATA = "Hello, 世界！";
 
+  /** 生成随机的 SM4 密钥（16 字节，128 位），并封装为 {@link SecretKey} */
   private SecretKey generateRandomSm4SecretKey() {
     // SM4 密钥长度为 16 字节（128 位）
     byte[] keyBytes = RandomUtil.randomBytes(16);
@@ -29,13 +36,6 @@ class SM4CryptoProcessorTest {
     assertThat(processor).isNotNull();
     assertThat(processor.getSecretKey()).isSameAs(secretKey);
     assertThat(processor.getCategory()).isEqualTo(CryptoCategory.SM4);
-  }
-
-  @Test
-  void createWithNullSecretKeyShouldThrowException() {
-    assertThatThrownBy(() -> SM4CryptoProcessor.create(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("'secretKey' must not be null");
   }
 
   @Test

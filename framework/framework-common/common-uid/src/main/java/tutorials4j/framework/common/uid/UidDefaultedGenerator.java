@@ -21,16 +21,28 @@ import tutorials4j.framework.common.uid.autoconfigure.UidCommonProperties;
 @Slf4j
 public class UidDefaultedGenerator extends AbstractUidGenerator {
 
+  /**
+   * 构造默认（实时计算）模式 UID 生成器。
+   *
+   * @param properties UID 生成器通用配置属性
+   * @param customizers 用户提供的生成器定制器列表
+   */
   public UidDefaultedGenerator(
       UidCommonProperties properties, List<DefaultUidGeneratorCustomizer> customizers) {
     super(properties, customizers);
   }
 
+  /**
+   * 创建默认模式 UID 生成器实例。
+   *
+   * @return {@link DefaultUidGenerator} 实例
+   */
   @Override
   protected DefaultUidGenerator createUidGenerator() {
     return new DefaultUidGenerator();
   }
 
+  /** 实时模式生成器无需额外资源，销毁操作为空实现。 */
   @Override
   public void destroy() {}
 }

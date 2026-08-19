@@ -7,13 +7,17 @@ import org.apache.commons.lang3.EnumUtils;
 import tutorials4j.framework.captcha.exception.CaptchaErrorCode;
 
 /**
- * 验证码服务工厂
+ * 验证码服务工厂。
+ *
+ * <p>持有各验证码类别对应的服务实现，支持按类别名称或类别枚举查找服务实例。
  *
  * @author Yun Jiao
  */
 public class CaptchaServiceFactory {
+  /** 单例实例。 */
   public static final CaptchaServiceFactory instance = new CaptchaServiceFactory();
 
+  /** 验证码类别到服务实现的映射。 */
   protected EnumMap<CaptchaCategory, CaptchaService> services =
       new EnumMap<>(CaptchaCategory.class);
 
@@ -46,10 +50,20 @@ public class CaptchaServiceFactory {
     return service;
   }
 
+  /**
+   * 返回所有验证码服务实例的不可变视图。
+   *
+   * @return 验证码类别到服务实现的映射
+   */
   public Map<CaptchaCategory, CaptchaService> getServices() {
     return Collections.unmodifiableMap(services);
   }
 
+  /**
+   * 注册验证码服务实现。
+   *
+   * @param services 验证码类别到服务实现的映射
+   */
   public void setServices(Map<CaptchaCategory, CaptchaService> services) {
     this.services.putAll(services);
   }

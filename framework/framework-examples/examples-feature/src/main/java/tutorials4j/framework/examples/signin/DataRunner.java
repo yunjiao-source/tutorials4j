@@ -9,16 +9,27 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.feature.signin.service.SignInTemplateFactory;
 
 /**
- * 测试数据
+ * 演示数据初始化器，应用启动时向签到服务写入示例签到数据。
+ *
+ * <p>为 demo_user 生成最近两天的签到记录，并为 demo_user1 生成当月每一天的签到记录。
  *
  * @author Yun Jiao
  */
 @Component
 @RequiredArgsConstructor
 public class DataRunner implements CommandLineRunner {
+  /** 演示数据的来源标识。 */
   private static final String SOURCE = "web_app";
+
+  /** 签到模板工厂，用于执行签到。 */
   private final SignInTemplateFactory signInTemplateFactory;
 
+  /**
+   * 应用启动时写入演示签到数据。
+   *
+   * @param args 命令行参数
+   * @throws Exception 签到失败时抛出
+   */
   @Override
   public void run(String... args) throws Exception {
     LocalDate now = LocalDate.now();

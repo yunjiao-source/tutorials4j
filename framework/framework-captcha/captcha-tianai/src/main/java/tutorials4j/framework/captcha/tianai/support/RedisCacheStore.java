@@ -17,8 +17,10 @@ import tutorials4j.framework.common.core.util.GsonUtils;
 @RequiredArgsConstructor
 public class RedisCacheStore implements CacheStore {
 
+  /** 图形验证码缓存操作模板 */
   protected final GraphicCaptchaCacheTemplate captchaCacheTemplate;
 
+  /** 根据 key 获取缓存数据，不存在时返回 null。 */
   @Override
   public AnyMap getCache(String key) {
     String jsonData = captchaCacheTemplate.get(key);
@@ -28,6 +30,7 @@ public class RedisCacheStore implements CacheStore {
     return GsonUtils.toObject(jsonData, new TypeToken<AnyMap>() {}.getType());
   }
 
+  /** 根据 key 获取并删除缓存数据，不存在时返回 null。 */
   @Override
   public AnyMap getAndRemoveCache(String key) {
     AnyMap data = getCache(key);
@@ -38,6 +41,7 @@ public class RedisCacheStore implements CacheStore {
     return data;
   }
 
+  /** 将数据写入缓存并返回是否成功。 */
   @Override
   public boolean setCache(String key, AnyMap data, Long expire, TimeUnit timeUnit) {
     String jsonData = GsonUtils.toJson(data);
@@ -45,16 +49,19 @@ public class RedisCacheStore implements CacheStore {
     return true;
   }
 
+  /** 不支持的自增操作，抛出 {@link UnsupportedOperationException}。 */
   @Override
   public Long incr(String key, long delta, Long expire, TimeUnit timeUnit) {
     throw new UnsupportedOperationException("incr");
   }
 
+  /** 不支持的数值获取操作，抛出 {@link UnsupportedOperationException}。 */
   @Override
   public Long getLong(String key) {
     throw new UnsupportedOperationException("getLong");
   }
 
+  /** 关闭缓存存储，当前实现为空操作。 */
   @Override
   public void close() throws Exception {}
 }

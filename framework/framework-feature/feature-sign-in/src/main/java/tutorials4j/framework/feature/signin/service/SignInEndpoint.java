@@ -13,7 +13,10 @@ import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.common.core.bean.Result;
 
 /**
- * TODO
+ * 签到 REST 接口
+ *
+ * <p>提供签到、签到状态查询、每日签到信息、签到日历以及日活/月活统计等 HTTP 接口， 通过 {@link SignInTemplateFactory} 按来源获取对应的 {@link
+ * SignInTemplate} 执行具体逻辑。
  *
  * @author Yun Jiao
  */
@@ -23,6 +26,13 @@ import tutorials4j.framework.common.core.bean.Result;
 public class SignInEndpoint {
   private final SignInTemplateFactory signInTemplateFactory;
 
+  /**
+   * 执行签到
+   *
+   * @param account 签到账号，通过请求头 {@code HTTP_HEADER_SIGN_IN_ACCOUNT} 传递
+   * @param source 签到来源标识
+   * @return 签到结果
+   */
   @PostMapping("do")
   public Result<SignInResult> sign(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
@@ -31,6 +41,14 @@ public class SignInEndpoint {
     return Result.success(result);
   }
 
+  /**
+   * 查询指定账号在指定日期是否已签到
+   *
+   * @param account 签到账号，通过请求头 {@code HTTP_HEADER_SIGN_IN_ACCOUNT} 传递
+   * @param source 签到来源标识
+   * @param date 查询日期（yyyy-MM-dd）
+   * @return 是否已签到
+   */
   @GetMapping("status")
   public Result<Boolean> status(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
@@ -40,6 +58,14 @@ public class SignInEndpoint {
     return Result.success(result);
   }
 
+  /**
+   * 查询指定账号在指定日期的签到详情
+   *
+   * @param account 签到账号，通过请求头 {@code HTTP_HEADER_SIGN_IN_ACCOUNT} 传递
+   * @param source 签到来源标识
+   * @param date 查询日期（yyyy-MM-dd）
+   * @return 签到详情
+   */
   @GetMapping("daily")
   public Result<SignInResult> info(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
@@ -49,6 +75,14 @@ public class SignInEndpoint {
     return Result.success(result);
   }
 
+  /**
+   * 查询指定账号在指定月份的签到日历
+   *
+   * @param account 签到账号，通过请求头 {@code HTTP_HEADER_SIGN_IN_ACCOUNT} 传递
+   * @param source 签到来源标识
+   * @param date 查询日期（yyyy-MM-dd），用于确定所属月份
+   * @return 签到日历数据
+   */
   @GetMapping("calendar")
   public Result<SignInCalendar> calendar(
       @RequestHeader(DefaultConsts.HTTP_HEADER_SIGN_IN_ACCOUNT) String account,
@@ -58,6 +92,13 @@ public class SignInEndpoint {
     return Result.success(result);
   }
 
+  /**
+   * 统计指定日期的日活（DAU）签到人数
+   *
+   * @param source 签到来源标识
+   * @param date 统计日期（yyyy-MM-dd）
+   * @return 日活签到人数
+   */
   @GetMapping("count-daily-active")
   public Result<Long> countDailyActive(
       @RequestParam(name = "source") String source,
@@ -66,6 +107,13 @@ public class SignInEndpoint {
     return Result.success(result);
   }
 
+  /**
+   * 统计指定日期的月活（MAU）签到人数
+   *
+   * @param source 签到来源标识
+   * @param date 统计日期（yyyy-MM-dd），用于确定所属月份
+   * @return 月活签到人数
+   */
   @GetMapping("count-month-active")
   public Result<Long> countMonthActive(
       @RequestParam(name = "source") String source,

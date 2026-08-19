@@ -31,11 +31,19 @@ import tutorials4j.framework.captcha.support.BehaviorCaptchaCacheTemplate;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(HutoolCaptchaProperties.class)
 public class HutoolCaptchaConfiguration {
+  /** 初始化：输出 Hutool 验证码配置已加载的跟踪日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CAPTCHA-HUTOOL] Hutool Captcha Configuration");
   }
 
+  /**
+   * 注册线段干扰验证码服务。
+   *
+   * @param properties Hutool 验证码属性
+   * @param behaviorCaptchaCacheTemplate 行为验证码缓存模板
+   * @return 线段验证码服务
+   */
   @Bean
   LineCaptchaService lineCaptchaService(
       HutoolCaptchaProperties properties,
@@ -51,6 +59,13 @@ public class HutoolCaptchaConfiguration {
     return new LineCaptchaService(behaviorCaptchaCacheTemplate, lcb);
   }
 
+  /**
+   * 注册圆圈干扰验证码服务。
+   *
+   * @param properties Hutool 验证码属性
+   * @param behaviorCaptchaCacheTemplate 行为验证码缓存模板
+   * @return 圆圈验证码服务
+   */
   @Bean
   CircleCaptchaService circleCaptchaService(
       HutoolCaptchaProperties properties,
@@ -65,6 +80,13 @@ public class HutoolCaptchaConfiguration {
     return new CircleCaptchaService(behaviorCaptchaCacheTemplate, ccb);
   }
 
+  /**
+   * 注册扭曲干扰验证码服务。
+   *
+   * @param properties Hutool 验证码属性
+   * @param behaviorCaptchaCacheTemplate 行为验证码缓存模板
+   * @return 扭曲验证码服务
+   */
   @Bean
   ShearCaptchaService sheareCaptchaService(
       HutoolCaptchaProperties properties,
@@ -79,6 +101,13 @@ public class HutoolCaptchaConfiguration {
     return new ShearCaptchaService(behaviorCaptchaCacheTemplate, scb);
   }
 
+  /**
+   * 注册 Gif 验证码服务。
+   *
+   * @param properties Hutool 验证码属性
+   * @param behaviorCaptchaCacheTemplate 行为验证码缓存模板
+   * @return Gif 验证码服务
+   */
   @Bean
   GifCaptchaService gifCaptchaService(
       HutoolCaptchaProperties properties,
@@ -105,6 +134,11 @@ public class HutoolCaptchaConfiguration {
     return new GifCaptchaService(behaviorCaptchaCacheTemplate, gcb);
   }
 
+  /**
+   * 校验绘图配置参数的有效性，非法值直接抛出断言异常。
+   *
+   * @param drawing 绘图配置
+   */
   private void validate(HutoolCaptchaProperties.DrawingOptions drawing) {
     Assert.isTrue(drawing.getWidth() > 0, "验证码配置属性‘width‘值必须大于0");
     Assert.isTrue(drawing.getHeight() > 0, "验证码配置属性‘height‘值必须大于0");
@@ -130,6 +164,12 @@ public class HutoolCaptchaConfiguration {
     Assert.isTrue(font.getSize() > 0, "验证码配置属性‘font.size‘值必须大于0");
   }
 
+  /**
+   * 将绘图配置填充到验证码构建器，包括尺寸、干扰元素、字体与验证码生成器等。
+   *
+   * @param builder 验证码构建器
+   * @param options 绘图配置
+   */
   private void fillBuilder(
       AbstractCaptchaBuilder<?> builder, HutoolCaptchaProperties.DrawingOptions options) {
     Font font = createFont(options.getFont());

@@ -32,6 +32,11 @@ public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheM
 
   private RedisCacheManager instance;
 
+  /**
+   * 获取 {@link RedisCacheManager} 单例实例，使用双重检查锁定保证线程安全。
+   *
+   * @return {@link RedisCacheManager} 实例
+   */
   @Override
   public RedisCacheManager getInstance() {
     if (instance != null) {
@@ -49,6 +54,11 @@ public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheM
     return instance;
   }
 
+  /**
+   * 创建一个新的 {@link RedisCacheManager} 实例，应用默认配置、统计开关及所有定制器。
+   *
+   * @return 新建的 {@link RedisCacheManager} 实例
+   */
   @Override
   public RedisCacheManager newInstance() {
     RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
@@ -68,11 +78,21 @@ public class RedisCacheManagerCreator implements CacheManagerCreator<RedisCacheM
     return redisCacheManager;
   }
 
+  /**
+   * 返回该创建器生成的 Bean 类型。
+   *
+   * @return {@link RedisCacheManager} 类型
+   */
   @Override
   public Class<RedisCacheManager> getBeanClass() {
     return RedisCacheManager.class;
   }
 
+  /**
+   * 返回该创建器的缓存管理器类别。
+   *
+   * @return {@link CacheManagerCreatorCategory#REDIS}
+   */
   @Override
   public CacheManagerCreatorCategory getCategory() {
     return CacheManagerCreatorCategory.REDIS;

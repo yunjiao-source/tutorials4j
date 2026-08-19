@@ -31,6 +31,15 @@ import tutorials4j.framework.web.core.util.WebUtils;
 public class AccessLimitedHandlerInterceptor implements HandlerInterceptor {
   private final AccessLimitedCacheTemplate accessLimitedCacheTemplate;
 
+  /**
+   * 请求前置处理：对标注 {@link AccessLimited} 的处理器方法进行访问次数计数， 超出允许的最大次数时抛出访问受限异常。
+   *
+   * @param request HTTP 请求对象
+   * @param response HTTP 响应对象
+   * @param handler 处理器对象
+   * @return 始终返回 true，允许请求继续执行
+   * @throws Exception 计数超限时抛出访问受限异常
+   */
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {

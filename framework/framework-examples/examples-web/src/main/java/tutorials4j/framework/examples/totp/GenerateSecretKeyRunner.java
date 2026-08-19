@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.web.security.totp.GoogleAuthService;
 
 /**
- * 生成 Secret Key
+ * 应用启动时生成并打印 TOTP 密钥的示例运行器。
+ *
+ * <p>利用 {@link GoogleAuthService#generateSecretKey()} 生成随机密钥并输出到日志， 用于演示如何获取 TOTP 注册所需的 Secret Key。
  *
  * @author Yun Jiao
  */
@@ -17,6 +19,7 @@ import tutorials4j.framework.web.security.totp.GoogleAuthService;
 public class GenerateSecretKeyRunner implements CommandLineRunner {
   private final GoogleAuthService googleAuthService;
 
+  /** 启动时生成两个随机 TOTP Secret Key 并打印到日志。 */
   @Override
   public void run(String... args) throws Exception {
     log.info("key1: {}", googleAuthService.generateSecretKey());

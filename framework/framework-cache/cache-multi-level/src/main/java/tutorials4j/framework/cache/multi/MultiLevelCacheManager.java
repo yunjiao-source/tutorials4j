@@ -14,7 +14,7 @@ import org.springframework.cache.support.AbstractCacheManager;
  *
  * <p>对于每个缓存名称，会尝试从两个底层管理器中分别获取对应的 {@link Cache} 实例， 然后包装成 {@link MultiLevelCache} 返回。
  *
- * <p>注意：如果一个缓存名称只存在于其中一个管理器，则 {@link #getCache(String)} 会返回 {@code null}， 这保证了多级缓存必须同时有本地和远程两端的配置。
+ * <p>注意：如果一个缓存名称只存在于其中一个管理器，则 {@link #getCache(String)} 会返回 {@code null}， 这保证了多级缓存必须同时具备本地和远程两端的配置。
  *
  * @author Yun Jiao
  * @see AbstractCacheManager
@@ -28,7 +28,8 @@ public class MultiLevelCacheManager extends AbstractCacheManager {
   /**
    * 加载所有缓存名称的并集，并返回对应的 {@link MultiLevelCache} 集合。
    *
-   * <p>该方法会遍历本地和远程管理器缓存名称的并集，对每个名称调用 {@link #getCache(String)} 获取缓存实例。
+   * <p>该方法会遍历本地和远程管理器缓存名称的并集，对每个名称调用 {@link #getCache(String)} 获取缓存实例；
+   * 仅当名称同时存在于本地与远程管理器中时，才会得到有效的多级缓存实例。
    *
    * @return 所有可用的多级缓存实例集合
    */

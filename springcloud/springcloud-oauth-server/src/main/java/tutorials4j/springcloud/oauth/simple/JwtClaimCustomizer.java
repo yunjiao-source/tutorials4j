@@ -9,10 +9,21 @@ import org.springframework.security.oauth2.server.authorization.token.JwtEncodin
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.stereotype.Component;
 
-/** 自定义 JWT Claims：只放必要信息 */
+/**
+ * 自定义 JWT Claims 的定制器，仅在 Access Token 中加入必要信息。
+ *
+ * <p>向 Token 声明中加入角色（roles）、租户 ID（tenant_id）与登录类型（login_type）等自定义声明。
+ *
+ * @author Yun Jiao
+ */
 @Component
 public class JwtClaimCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
 
+  /**
+   * 定制 JWT 编码上下文，向 Access Token 中加入自定义声明。
+   *
+   * @param context JWT 编码上下文
+   */
   @Override
   public void customize(JwtEncodingContext context) {
     Authentication principal = context.getPrincipal();

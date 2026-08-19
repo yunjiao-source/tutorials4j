@@ -24,6 +24,11 @@ public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiL
 
   private MultiLevelCacheManager instance;
 
+  /**
+   * 获取 {@link MultiLevelCacheManager} 单例实例，使用双重检查锁定保证线程安全。
+   *
+   * @return 多级缓存管理器实例
+   */
   @Override
   public MultiLevelCacheManager getInstance() {
     if (instance != null) {
@@ -41,17 +46,32 @@ public class MultiLevelCacheManagerCreator implements CacheManagerCreator<MultiL
     return instance;
   }
 
+  /**
+   * 创建一个新的多级缓存管理器，组合 Caffeine 与 Redis 缓存管理器。
+   *
+   * @return 新建的 {@link MultiLevelCacheManager} 实例
+   */
   @Override
   public MultiLevelCacheManager newInstance() {
     return new MultiLevelCacheManager(
         caffeineCacheManagerCreator.getInstance(), redisCacheManagerCreator.getInstance());
   }
 
+  /**
+   * 返回该创建器生成的 Bean 类型。
+   *
+   * @return {@link MultiLevelCacheManager} 类型
+   */
   @Override
   public Class<MultiLevelCacheManager> getBeanClass() {
     return MultiLevelCacheManager.class;
   }
 
+  /**
+   * 返回该创建器的缓存管理器类别。
+   *
+   * @return {@link CacheManagerCreatorCategory#MULTI_LEVEL}
+   */
   @Override
   public CacheManagerCreatorCategory getCategory() {
     return CacheManagerCreatorCategory.MULTI_LEVEL;

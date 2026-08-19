@@ -14,7 +14,7 @@ import cn.hutool.extra.spring.SpringUtil;
  *   <li>{@link #DEFAULTED} —— 默认实时模式
  * </ul>
  *
- * 内部通过 {@link SpringUtil} 获取 Spring 容器中对应的 Bean，因此需保证 Spring 环境已初始化。
+ * <p>内部通过 {@link SpringUtil} 获取 Spring 容器中对应的 Bean，因此需保证 Spring 环境已初始化。 该类不可实例化，仅通过静态常量访问生成器实例。
  *
  * <pre>{@code
  * long id = UidUtils.DEFAULTED.nextUid();
@@ -35,7 +35,7 @@ public final class UidUtils {
   public static final UidGenerator CACHED = CachedHolder.INSTANCE;
 
   /**
-   * 简单模式 UID 生成器。
+   * 默认实时模式 UID 生成器。
    *
    * <p>内部使用 {@link DefaultUidGenerator}，每次实时计算。
    */

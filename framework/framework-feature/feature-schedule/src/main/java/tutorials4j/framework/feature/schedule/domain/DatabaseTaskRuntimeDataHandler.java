@@ -11,7 +11,9 @@ import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.spring.handler.TaskRuntimeDataHandler;
 
 /**
- * TODO
+ * 数据库任务运行时数据处理处理器。
+ *
+ * <p>异步接收任务运行产生的数据，并落库保存为任务日志。
  *
  * @author Yun Jiao
  */
@@ -22,6 +24,13 @@ public class DatabaseTaskRuntimeDataHandler implements TaskRuntimeDataHandler {
   private final JobLogRepository jobLogRepository;
   private final JobRepository jobRepository;
 
+  /**
+   * 异步处理任务运行数据并保存任务日志。
+   *
+   * <p>当任务不存在时仅记录告警日志。
+   *
+   * @param data 任务运行数据
+   */
   @Async
   @Override
   public void handle(TaskRuntimeData data) {

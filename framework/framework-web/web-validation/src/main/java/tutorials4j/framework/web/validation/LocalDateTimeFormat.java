@@ -10,10 +10,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * 用于校验字符串是否符合指定的日期时间格式的注解。
+ * 用于校验字符串是否符合指定日期时间格式的 Bean Validation 约束注解。
  *
- * <p>该注解可应用于字段、方法参数等，配合 Jakarta Bean Validation 框架使用。 通过 {@link LocalDateTimeValidator}
- * 实现具体的校验逻辑，支持日期、时间或日期时间三种类型。
+ * <p>该注解可应用于字段、方法、方法参数及注解类型上，配合 Jakarta Bean Validation 框架使用。 通过 {@link LocalDateTimeValidator}
+ * 实现具体的校验逻辑，支持日期、时间或日期时间三种类型， 分别由 {@link #pattern()} 指定格式、{@link #dateTimeType()} 指定类型。
  *
  * <p>示例用法：
  *
@@ -41,9 +41,9 @@ import java.lang.annotation.Target;
 public @interface LocalDateTimeFormat {
 
   /**
-   * 校验失败时返回的默认错误消息键。
+   * 校验失败时返回的默认错误消息键，可在使用注解时通过该属性覆盖。
    *
-   * @return 消息键
+   * @return 默认错误消息键
    */
   String message() default
       "{tutorials4j.framework.common.core.validation.LocalDateTimeFormat.message}";

@@ -31,6 +31,11 @@ public abstract class AbstractRoutingCacheManager<T extends CacheManager> implem
     return this.determineTargetDataSource().getCache(name);
   }
 
+  /**
+   * 返回当前目标缓存管理器的全部缓存名称。
+   *
+   * @return 缓存名称集合
+   */
   @Override
   public Collection<String> getCacheNames() {
     return this.determineTargetDataSource().getCacheNames();

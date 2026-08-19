@@ -25,6 +25,15 @@ import tutorials4j.framework.web.core.util.WebUtils;
 @Slf4j
 public class TraceRequestFilter extends OncePerRequestFilter {
 
+  /**
+   * 从请求头获取或生成链路追踪标识，写入 MDC 与响应头，请求处理结束后清理 MDC。
+   *
+   * @param request HTTP 请求对象
+   * @param response HTTP 响应对象
+   * @param filterChain 过滤器链
+   * @throws ServletException 过滤链执行过程中发生 Servlet 异常
+   * @throws IOException 过滤链执行过程中发生 I/O 异常
+   */
   @Override
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

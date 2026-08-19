@@ -11,18 +11,26 @@ import tutorials4j.framework.tenant.cache.TenantCaffeineCacheManagerCreator;
 import tutorials4j.framework.tenant.cache.TenantMultiLevelCacheManagerCreator;
 
 /**
- * 租户缓存配置
+ * 租户缓存自动配置：注册租户级 Caffeine 缓存管理器创建器与租户级多级缓存管理器创建器 Bean（容器中不存在时生效）。
  *
  * @author Yun Jiao
  */
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class CacheTenantConfiguration {
+
+  /** 初始化日志输出 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[TENANT-CACHE] Cache Configuration");
   }
 
+  /**
+   * 注册租户级 Caffeine 缓存管理器创建器 Bean（容器中不存在时生效）。
+   *
+   * @param caffeineCacheManagerCreator 底层 Caffeine 缓存管理器创建器
+   * @return 租户级 Caffeine 缓存管理器创建器
+   */
   @Bean
   @ConditionalOnMissingBean
   TenantCaffeineCacheManagerCreator tenantCaffeineCacheManagerCreator(
@@ -32,6 +40,13 @@ public class CacheTenantConfiguration {
     return new TenantCaffeineCacheManagerCreator(caffeineCacheManagerCreator);
   }
 
+  /**
+   * 注册租户级多级缓存管理器创建器 Bean（容器中不存在时生效）。
+   *
+   * @param tenantCaffeineCacheManagerCreator 租户级 Caffeine 缓存管理器创建器
+   * @param redisCacheManagerCreator Redis 缓存管理器创建器
+   * @return 租户级多级缓存管理器创建器
+   */
   @Bean
   @ConditionalOnMissingBean
   TenantMultiLevelCacheManagerCreator tenantMultiLevelCacheManagerCreator(

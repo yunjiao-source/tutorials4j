@@ -23,6 +23,15 @@ import tutorials4j.framework.common.spring.util.HttpRequestUtils;
  */
 @Slf4j
 public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
+  /**
+   * 拦截客户端 HTTP 请求：请求执行前记录请求信息，收到响应后记录响应信息。
+   *
+   * @param request 待执行的 HTTP 请求
+   * @param body 请求体字节数组
+   * @param execution 请求执行器
+   * @return 服务端返回的响应
+   * @throws IOException 请求执行过程中发生 IO 异常时抛出
+   */
   @Override
   public ClientHttpResponse intercept(
       HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {

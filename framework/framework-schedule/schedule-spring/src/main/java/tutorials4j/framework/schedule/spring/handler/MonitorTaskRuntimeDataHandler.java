@@ -15,16 +15,25 @@ import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
 
 /**
- * TODO
+ * 将任务运行数据上报为 Micrometer 指标的任务处理器。
+ *
+ * <p>根据任务的运行状态（创建、启动、完成、停止、取消、异常）记录对应的计数器， 并在任务完成时通过 Timer 与 Gauge 统计执行耗时分布与最小时长。
  *
  * @author Yun Jiao
  */
 @RequiredArgsConstructor
 public class MonitorTaskRuntimeDataHandler implements TaskRuntimeDataHandler {
+  /** Micrometer 指标注册中心。 */
   private final MeterRegistry meterRegistry;
 
+  /** 任务编码到最小时长跟踪器的缓存。 */
   private final ConcurrentMap<String, AtomicLong> minDurationCache = new ConcurrentHashMap<>();
 
+  /**
+   * 异步处理任务运行数据：按状态记录计数指标与耗时指标。
+   *
+   * @param data 任务运行数据
+   */
   @Async
   @Override
   public void handle(TaskRuntimeData data) {

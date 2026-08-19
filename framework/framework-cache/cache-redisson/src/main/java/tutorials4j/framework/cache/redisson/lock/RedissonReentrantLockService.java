@@ -31,6 +31,8 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
 @Slf4j
 @RequiredArgsConstructor
 public class RedissonReentrantLockService {
+
+  /** 可重入锁服务单例实例 */
   public static final RedissonReentrantLockService instance = new RedissonReentrantLockService();
 
   /** 默认等待获取锁的时间（秒）。 */

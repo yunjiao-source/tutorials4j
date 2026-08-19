@@ -22,6 +22,8 @@ import tutorials4j.framework.common.core.support.ThrowingCallable;
 @Slf4j
 @RequiredArgsConstructor
 public class RedissonBlockLockService {
+
+  /** 阻塞锁服务单例实例 */
   public static final RedissonBlockLockService instance = new RedissonBlockLockService();
 
   @Setter private RedissonClient redissonClient;

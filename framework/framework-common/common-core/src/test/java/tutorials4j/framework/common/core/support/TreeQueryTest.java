@@ -18,14 +18,25 @@ import org.junit.jupiter.api.Test;
  */
 public class TreeQueryTest {
   // 测试节点类
+  /** 测试使用的树节点实体，包含节点 ID、父节点 ID 与名称。 */
   @Data
   static class Node {
 
+    /** 节点 ID。 */
     final Integer id;
+
+    /** 父节点 ID。 */
     final Integer parentId;
 
+    /** 节点名称。 */
     final String name;
 
+    /**
+     * 构造节点。
+     *
+     * @param id 节点 ID
+     * @param parentId 父节点 ID
+     */
     Node(Integer id, Integer parentId) {
       this.id = id;
       this.parentId = parentId;
@@ -35,6 +46,8 @@ public class TreeQueryTest {
 
   private TreeQuery<Integer, Node> treeQuery;
   private List<Node> allNodes;
+
+  /** 根节点 ID。 */
   private static final Integer ROOT_ID = 1;
 
   @BeforeEach

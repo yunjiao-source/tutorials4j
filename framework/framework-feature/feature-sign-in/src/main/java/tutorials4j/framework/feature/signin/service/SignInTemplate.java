@@ -14,7 +14,10 @@ import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 import tutorials4j.framework.cache.redis.util.RedisBitmapUtils;
 
 /**
- * TODO
+ * 签到模板
+ *
+ * <p>基于 Redis 位图（Bitmap）实现签到、签到状态查询、签到日历、日活/月活统计等核心功能， 每个来源（source）对应一个独立实例，签到完成后通过注册的 {@link
+ * SignInResultHandler} 进行后续处理。
  *
  * @author Yun Jiao
  */
@@ -24,6 +27,16 @@ public class SignInTemplate {
   private final List<SignInResultHandler> signInResultHandlers;
   private final SignInConfig config;
 
+  /**
+   * 执行签到
+   *
+   * <p>在当月位图上标记签到位，首次签到时会同步记录日活/月活信息，并通知注册的签到结果处理器。
+   *
+   * @param account 签到账号
+   * @param signDate 签到日期
+   * @return 签到结果
+   * @throws IllegalArgumentException 当 account 为空或 signDate 为 null 时
+   */
   public SignInResult signIn(String account, LocalDate signDate) {
     Assert.hasText(account, "account must not be null or empty");
     Assert.notNull(signDate, "date must not be null");
@@ -54,6 +67,14 @@ public class SignInTemplate {
     return signInResult;
   }
 
+  /**
+   * 查询指定账号在指定日期的签到详情
+   *
+   * @param account 签到账号
+   * @param date 查询日期
+   * @return 签到详情
+   * @throws IllegalArgumentException 当 account 为空或 date 为 null 时
+   */
   public SignInResult queryDaily(String account, LocalDate date) {
     Assert.hasText(account, "account must not be null or empty");
     Assert.notNull(date, "date must not be null");
@@ -71,6 +92,13 @@ public class SignInTemplate {
         .build();
   }
 
+  /**
+   * 查询指定账号在指定日期所属月份的签到日历
+   *
+   * @param account 签到账号
+   * @param date 查询日期，用于确定所属月份
+   * @return 签到日历数据
+   */
   public SignInCalendar queryCalendar(String account, LocalDate date) {
     YearMonth yearMonth = YearMonth.from(date);
     String monthKey = getMonthKey(account, date);
@@ -97,6 +125,14 @@ public class SignInTemplate {
         .build();
   }
 
+  /**
+   * 查询指定账号在指定日期是否已签到
+   *
+   * @param account 签到账号
+   * @param date 查询日期
+   * @return 是否已签到
+   * @throws IllegalArgumentException 当 account 为空或 date 为 null 时
+   */
   public boolean checkStatus(String account, LocalDate date) {
     Assert.hasText(account, "account must not be null or empty");
     Assert.notNull(date, "date must not be null");
@@ -106,6 +142,13 @@ public class SignInTemplate {
     return RedisBitmapUtils.instance.getBit(monthKey, offset);
   }
 
+  /**
+   * 统计指定日期的日活（DAU）签到人数
+   *
+   * @param date 统计日期
+   * @return 日活签到人数
+   * @throws IllegalArgumentException 当 date 为 null 时
+   */
   public long countDailyActive(LocalDate date) {
     Assert.notNull(date, "date must not be null");
     String dauKey = getDauKey(date);
@@ -113,6 +156,13 @@ public class SignInTemplate {
     return count == null ? 0L : count;
   }
 
+  /**
+   * 统计指定日期所属月份的月活（MAU）签到人数
+   *
+   * @param date 统计日期，用于确定所属月份
+   * @return 月活签到人数
+   * @throws IllegalArgumentException 当 date 为 null 时
+   */
   public long countMonthActive(LocalDate date) {
     Assert.notNull(date, "date must not be null");
     String dauKey = getDauKey(date);
@@ -121,6 +171,7 @@ public class SignInTemplate {
     return count == null ? 0L : count;
   }
 
+  /** 在月度签到位图上标记指定偏移量的签到位，返回是否为首次签到 */
   private boolean doSign(String key, long offset) {
     Boolean oldValue = RedisBitmapUtils.instance.setBit(key, offset, true);
     boolean success = Objects.equals(oldValue, Boolean.FALSE);
@@ -131,6 +182,7 @@ public class SignInTemplate {
     return success;
   }
 
+  /** 记录账号的日活（DAU）与月活（MAU）位图标记，首次标记时设置过期时间 */
   private void doActive(LocalDate date, String account) {
     long offset = Math.abs(RedisBitmapUtils.instance.hash(account) / config.maxBits());
     String dauKey = getDauKey(date);
@@ -166,6 +218,7 @@ public class SignInTemplate {
     return SignInUtils.mauKey(config.keyPrefix(), config.source(), date);
   }
 
+  /** 通过位域运算计算从签到日期起连续的签到天数 */
   private long calculateContinuousDays(String key, LocalDate date) {
     int day = date.getDayOfMonth();
 
@@ -194,6 +247,7 @@ public class SignInTemplate {
     return count;
   }
 
+  /** 通知所有已注册的签到结果处理器，单个处理器异常不影响其他处理器的执行 */
   private void notifySignInResultHandlers(SignInResult data) {
     if (signInResultHandlers == null || signInResultHandlers.isEmpty()) {
       log.warn("没有注册签到事件处理器'{}'，SignInResult={}", SignInResultHandler.class.getSimpleName(), data);

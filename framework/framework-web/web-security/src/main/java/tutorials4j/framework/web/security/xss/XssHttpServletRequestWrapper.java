@@ -22,6 +22,11 @@ import tutorials4j.framework.common.spring.util.XssUtils;
  * @since 1.0
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
+  /**
+   * 构造 XSS 防护请求包装器。
+   *
+   * @param request 原始请求对象
+   */
   public XssHttpServletRequestWrapper(HttpServletRequest request) {
     super(request);
   }
@@ -48,18 +53,21 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     return cleanParameters.toArray(results);
   }
 
+  /** 获取请求头并对非空值执行 XSS 清洗。 */
   @Override
   public String getHeader(String name) {
     String header = super.getHeader(name);
     return StringUtils.isBlank(header) ? header : cleaning(header);
   }
 
+  /** 获取请求参数并对非空值执行 XSS 清洗。 */
   @Override
   public String getParameter(String name) {
     String parameter = super.getParameter(name);
     return StringUtils.isBlank(parameter) ? parameter : cleaning(parameter);
   }
 
+  /** 获取请求参数值数组并对非空数组执行 XSS 清洗。 */
   @Override
   public String[] getParameterValues(String name) {
     String[] parameterValues = super.getParameterValues(name);
@@ -69,6 +77,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     return super.getParameterValues(name);
   }
 
+  /** 获取请求参数映射并对所有参数值执行 XSS 清洗。 */
   @Override
   public Map<String, String[]> getParameterMap() {
     Map<String, String[]> parameterMap = super.getParameterMap();

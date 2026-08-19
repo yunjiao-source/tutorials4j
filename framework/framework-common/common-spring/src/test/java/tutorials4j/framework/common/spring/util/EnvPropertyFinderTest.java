@@ -17,6 +17,7 @@ public class EnvPropertyFinderTest {
           // 模拟配置文件中的属性
           .withPropertyValues("test.string=hello", "test.bool=true", "test.number=42");
 
+  /** 验证从 {@link Environment} 中读取 String 与 Boolean 类型属性（含默认值场景）。 */
   @Test
   void testGetPropertyFromEnvironment() {
     runner.run(
@@ -38,6 +39,7 @@ public class EnvPropertyFinderTest {
         });
   }
 
+  /** 验证通过 {@code ApplicationContext} 路径读取 String 与 Boolean 类型属性。 */
   @Test
   void testGetStringPropertyViaConditionContext() {
     // 注意：ConditionContext 通常只在 @Conditional 内部使用，但这里为了演示，我们仍可模拟

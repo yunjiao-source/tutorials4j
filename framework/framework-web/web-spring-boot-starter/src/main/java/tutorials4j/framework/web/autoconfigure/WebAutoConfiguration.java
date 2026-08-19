@@ -18,7 +18,7 @@ import tutorials4j.framework.web.security.autoconfigure.XssWebConfiguration;
 import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfiguration;
 
 /**
- * 缓存请求体自动配置
+ * Web 模块自动配置入口，导入 Web 核心、客户端、日志、安全、校验等各子模块配置。
  *
  * @author Yun Jiao
  */
@@ -39,6 +39,7 @@ import tutorials4j.framework.web.validation.autoconfigure.ValidatorsWebConfigura
   ValidatorsWebConfiguration.class,
 })
 public class WebAutoConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[WEB] Web Auto Configuration");

@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 /**
- * TODO
+ * 用户业务服务，基于 MyBatis-Plus 提供用户数据操作。
+ *
+ * <p>在保存与更新时对密码进行 MD5 加密，并为新用户生成随机的 secretKey。
  *
  * @author Yun Jiao
  */
@@ -15,6 +17,12 @@ import org.springframework.util.DigestUtils;
 public class UserMybatisService extends ServiceImpl<UserMapper, User> {
 
   // 重写保存方法，加密密码并生成secretKey
+  /**
+   * 保存用户：加密密码并生成随机 secretKey。
+   *
+   * @param entity 用户实体
+   * @return 是否保存成功
+   */
   public boolean save(User entity) {
     // 密码加密（简单示例用MD5，实际推荐BCrypt）
     String encryptedPwd =
@@ -25,6 +33,12 @@ public class UserMybatisService extends ServiceImpl<UserMapper, User> {
   }
 
   // 重写更新方法，如果密码有变更则加密
+  /**
+   * 更新用户：若密码有变更则先加密再更新。
+   *
+   * @param entity 用户实体
+   * @return 是否更新成功
+   */
   public boolean updateById(User entity) {
     if (entity.getPassword() != null && !entity.getPassword().isEmpty()) {
       String encryptedPwd =

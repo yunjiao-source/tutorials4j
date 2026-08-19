@@ -44,6 +44,12 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
                     .param("id", id));
   }
 
+  /**
+   * 根据主键获取实体引用，不立即加载全部数据。
+   *
+   * @param id 主键
+   * @return 实体引用
+   */
   default E getReferenceById(ID id) {
     return getRepository().getReferenceById(id);
   }

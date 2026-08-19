@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * TODO
+ * 全局异常处理器，统一捕获各类异常并将其转换为标准错误响应（{@link Problem} 或 {@link ErrorMessage}）。
  *
  * @author Yun Jiao
  */
@@ -31,6 +31,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class GlobalControllerAdvice // extends ResponseEntityExceptionHandler
  {
+  /**
+   * 处理未捕获的异常，返回包含日志引用号的通用错误响应。
+   *
+   * @param e 捕获的异常
+   * @return 包含日志引用号的错误响应
+   */
   @ExceptionHandler(Throwable.class)
   @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
   public ResponseEntity<Problem> problem(final Throwable e) {
@@ -45,6 +51,12 @@ public class GlobalControllerAdvice // extends ResponseEntityExceptionHandler
         new Problem(logRef, message), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
+  /**
+   * 处理方法参数校验失败异常，返回字段错误与全局错误信息。
+   *
+   * @param ex 方法参数校验异常
+   * @return 包含错误信息的响应
+   */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorMessage> handleMethodArgumentNotValid(
@@ -68,6 +80,12 @@ public class GlobalControllerAdvice // extends ResponseEntityExceptionHandler
     return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * 处理约束违规异常，返回违规信息列表。
+   *
+   * @param ex 约束违规异常
+   * @return 包含错误信息的响应
+   */
   @ExceptionHandler(ConstraintViolationException.class)
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorMessage> handleConstraintViolatedException(
@@ -86,6 +104,12 @@ public class GlobalControllerAdvice // extends ResponseEntityExceptionHandler
     return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * 处理缺少请求参数异常，返回缺失参数名称及错误信息。
+   *
+   * @param ex 缺少请求参数异常
+   * @return 包含错误信息的响应
+   */
   @ExceptionHandler(MissingServletRequestParameterException.class)
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorMessage> handleMissingServletRequestParameterException(
@@ -98,6 +122,12 @@ public class GlobalControllerAdvice // extends ResponseEntityExceptionHandler
     return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * 处理不支持的媒体类型异常，返回不支持与支持的内容类型信息。
+   *
+   * @param ex 不支持的媒体类型异常
+   * @return 包含错误信息的响应
+   */
   @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
   @ResponseStatus(code = HttpStatus.UNSUPPORTED_MEDIA_TYPE)
   public ResponseEntity<ErrorMessage> handleHttpMediaTypeNotSupported(
@@ -109,6 +139,12 @@ public class GlobalControllerAdvice // extends ResponseEntityExceptionHandler
     return new ResponseEntity<>(errorMessage, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
   }
 
+  /**
+   * 处理请求体不可读异常，返回最具体的原因信息。
+   *
+   * @param ex 请求体不可读异常
+   * @return 包含错误信息的响应
+   */
   @ExceptionHandler(HttpMessageNotReadableException.class)
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorMessage> handleHttpMessageNotReadable(

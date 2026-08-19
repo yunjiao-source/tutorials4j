@@ -23,10 +23,21 @@ import tech.powerjob.worker.log.OmsLogger;
  * 并行处理器：MapReduceProcessor
  *
  * <p>MapReduce 是最复杂也是最强大的一种执行器，它允许开发者完成任务的拆分， 将子任务派发到集群中其他Worker 执行，是执行大批量处理任务的不二之选
+ *
+ * @author Yun Jiao
  */
 @Slf4j
 public class MapReduceProcessorDemo implements MapReduceProcessor {
 
+  /**
+   * 处理 MapReduce 任务：根任务负责按业务需求拆分子任务并通过 {@code map} 派发到集群，子任务执行实际业务逻辑。
+   *
+   * <p>示例中根任务模拟从文件中读取指定数量的 ID，并按批次组装成子任务派发；子任务模拟执行耗时业务处理， 并按成功率参数随机返回成功或失败结果。
+   *
+   * @param context 任务上下文，可获取是否为根任务、任务名、任务参数、实例参数及在线日志等
+   * @return 根任务返回 MAP 阶段的派发结果；子任务返回业务处理成功或失败的结果
+   * @throws Exception MAP 派发或业务处理过程中可能抛出的异常
+   */
   @Override
   public ProcessResult process(TaskContext context) throws Exception {
 
@@ -140,6 +151,13 @@ public class MapReduceProcessorDemo implements MapReduceProcessor {
     }
   }
 
+  /**
+   * 汇总所有子任务的执行结果：统计成功/失败数量与成功率，并作为任务的真正执行结果。
+   *
+   * @param context 任务上下文
+   * @param taskResults 所有子任务的执行结果列表
+   * @return 成功率大于 0.8 时返回成功，否则返回失败
+   */
   @Override
   public ProcessResult reduce(TaskContext context, List<TaskResult> taskResults) {
 
@@ -191,10 +209,13 @@ public class MapReduceProcessorDemo implements MapReduceProcessor {
     /** 再次强调，一定要有无参构造方法 */
     public SubTask() {}
 
+    /** 站点（任务）编号，模拟子任务的业务标识 */
     private Long siteId;
 
+    /** 一个分片内携带的文件 ID 列表 */
     private List<Long> idList;
 
+    /** 额外的自定义参数 */
     private String extra;
   }
 }

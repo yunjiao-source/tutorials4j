@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * 配置
+ * Redisson 定时任务示例配置，仅在 redisson 环境激活时生效， 开启定时调度并扫描 Redisson 示例相关组件。
  *
  * @author Yun Jiao
  */

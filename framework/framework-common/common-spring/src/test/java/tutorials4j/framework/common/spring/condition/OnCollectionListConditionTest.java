@@ -12,16 +12,20 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
 /**
- * {@link ConditionalOnListProperty} 单元测试
+ * {@link ConditionalOnListProperty} 单元测试。
+ *
+ * <p>使用 {@link ApplicationContextRunner} 模拟不同的配置环境，验证 List 属性条件的各种匹配场景。
  *
  * @author Yun Jiao
  */
 class OnCollectionListConditionTest {
 
+  /** 用于模拟 Spring 应用上下文的测试运行器。 */
   private final ApplicationContextRunner contextRunner = new ApplicationContextRunner();
 
   // ==================== 配置存在 & List为空 ====================
 
+  /** 配置存在且 List 为空、{@code isEmpty=true} 时，条件应匹配。 */
   @Test
   void shouldMatchWhenListIsEmptyAndIsEmptyTrue() {
     contextRunner
@@ -30,6 +34,7 @@ class OnCollectionListConditionTest {
         .run(context -> assertThat(context).hasBean("emptyListBean"));
   }
 
+  /** 配置存在且 List 为空、{@code isEmpty=false} 时，条件不应匹配。 */
   @Test
   void shouldNotMatchWhenListIsEmptyAndIsEmptyFalse() {
     contextRunner
@@ -40,6 +45,7 @@ class OnCollectionListConditionTest {
 
   // ==================== 配置存在 & List非空 ====================
 
+  /** 配置存在且 List 非空、{@code isEmpty=false} 时，条件应匹配。 */
   @Test
   void shouldMatchWhenListIsNotEmptyAndIsEmptyFalse() {
     contextRunner
@@ -48,6 +54,7 @@ class OnCollectionListConditionTest {
         .run(context -> assertThat(context).hasBean("nonEmptyListBean"));
   }
 
+  /** 配置存在且 List 非空、{@code isEmpty=true} 时，条件不应匹配。 */
   @Test
   void shouldNotMatchWhenListIsNotEmptyAndIsEmptyTrue() {
     contextRunner
@@ -58,6 +65,7 @@ class OnCollectionListConditionTest {
 
   // ==================== 配置缺失 ====================
 
+  /** 属性缺失且 {@code matchIfMissing=true} 时，条件应匹配。 */
   @Test
   void shouldMatchWhenPropertyMissingAndMatchIfMissingTrue() {
     contextRunner
@@ -65,6 +73,7 @@ class OnCollectionListConditionTest {
         .run(context -> assertThat(context).hasBean("missingMatchTrueBean"));
   }
 
+  /** 属性缺失且 {@code matchIfMissing=false} 时，条件不应匹配。 */
   @Test
   void shouldNotMatchWhenPropertyMissingAndMatchIfMissingFalse() {
     contextRunner
@@ -74,6 +83,7 @@ class OnCollectionListConditionTest {
 
   // ==================== prefix + name 组合 ====================
 
+  /** 同时指定 {@code prefix} 与 {@code name} 时，条件应匹配。 */
   @Test
   void shouldMatchWithPrefixAndName() {
     contextRunner
@@ -84,6 +94,7 @@ class OnCollectionListConditionTest {
 
   // ==================== value 别名 ====================
 
+  /** 使用 {@code value} 作为 {@code name} 的别名时，条件应匹配。 */
   @Test
   void shouldMatchWithValueAlias() {
     contextRunner
@@ -94,6 +105,7 @@ class OnCollectionListConditionTest {
 
   // ==================== 复杂类型（如Integer） ====================
 
+  /** 支持将属性值绑定为复杂类型（如 Integer）的 List。 */
   @Test
   void shouldBindToListOfIntegers() {
     contextRunner
@@ -104,6 +116,7 @@ class OnCollectionListConditionTest {
 
   // ==================== 边界情况：仅prefix ====================
 
+  /** 仅指定 {@code prefix} 时，条件应匹配该前缀下的子属性。 */
   @Test
   void shouldMatchWithOnlyPrefix() {
     contextRunner
@@ -114,6 +127,7 @@ class OnCollectionListConditionTest {
 
   // ==================== 边界情况：空name且无value ====================
 
+  /** 既不指定 {@code name} 也不指定 {@code value} 时，条件不应匹配。 */
   @Test
   void shouldNotMatchWhenNoNameNorValue() {
     contextRunner
@@ -123,6 +137,7 @@ class OnCollectionListConditionTest {
 
   // ==================== 测试配置类 ====================
 
+  /** 测试配置：空 List 且 {@code isEmpty=true} 的 Bean。 */
   @Configuration
   static class EmptyListConfig {
     @Bean
@@ -132,6 +147,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：非空 List 且 {@code isEmpty=false} 的 Bean。 */
   @Configuration
   static class NonEmptyListConfig {
     @Bean
@@ -141,6 +157,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：属性缺失且 {@code matchIfMissing=true} 的 Bean。 */
   @Configuration
   static class MissingMatchTrueConfig {
     @Bean
@@ -150,6 +167,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：属性缺失且 {@code matchIfMissing=false} 的 Bean。 */
   @Configuration
   static class MissingMatchFalseConfig {
     @Bean
@@ -159,6 +177,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：使用 {@code prefix + name} 组合的 Bean。 */
   @Configuration
   static class PrefixNameConfig {
     @Bean
@@ -168,6 +187,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：使用 {@code value} 别名的 Bean。 */
   @Configuration
   static class ValueAliasConfig {
     @Bean
@@ -177,6 +197,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：绑定复杂类型（Integer）List 的 Bean。 */
   @Configuration
   static class IntegerListConfig {
     @Bean
@@ -186,6 +207,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：仅指定 {@code prefix} 的 Bean。 */
   @Configuration
   static class OnlyPrefixConfig {
     @Bean
@@ -195,6 +217,7 @@ class OnCollectionListConditionTest {
     }
   }
 
+  /** 测试配置：既无 {@code name} 也无 {@code value} 的 Bean。 */
   @Configuration
   static class NoNameNoValueConfig {
     @Bean
@@ -205,6 +228,7 @@ class OnCollectionListConditionTest {
   }
 
   // ==================== 额外：测试不同表达形式的空List ====================
+  /** 演示不同表达形式的空 List（空字符串、空白字符串、空集合）在条件匹配时的差异。 */
   @Test
   void shouldRecognizeVariousEmptyListForms() {
     // YAML风格: 空列表

@@ -22,7 +22,8 @@ public class NamedCacheManagerCustomizer implements CacheManagerCustomizer<Redis
   /**
    * 对 {@link RedisCacheManager} 进行定制。
    *
-   * <p>调用 {@link RedisCacheManager#initializeCaches()} 方法， 强制初始化所有预定义的命名缓存（如果有配置），确保它们使用正确的配置。
+   * <p>调用 {@link RedisCacheManager#initializeCaches()} 方法， 强制初始化所有预定义的命名缓存（如果有配置），
+   * 确保命名缓存使用预定义的配置，而不是在运行时动态获取缓存时回退到默认配置。
    *
    * @param cacheManager 要定制的 {@link RedisCacheManager} 实例
    */

@@ -34,11 +34,19 @@ import tutorials4j.framework.captcha.tianai.support.SimpleImageCaptchaApplicatio
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(TianaiCaptchaProperties.class)
 public class TianaiCaptchaConfiguration {
+  /** 初始化：输出天意验证码配置已加载的跟踪日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CAPTCHA-TIANAI] Tianai Captcha Configuration");
   }
 
+  /**
+   * 注册旋转验证码服务。
+   *
+   * @param imageCaptchaApplication 图形验证码应用
+   * @param properties 天意验证码属性
+   * @return 旋转验证码服务
+   */
   @Bean
   @ConditionalOnMissingBean
   RotateCaptchaService rotateCaptchaService(
@@ -50,6 +58,13 @@ public class TianaiCaptchaConfiguration {
         imageCaptchaApplication, CaptchaGenerateParamBuilder.of(options, CaptchaType.ROTATE));
   }
 
+  /**
+   * 注册滑动验证码服务。
+   *
+   * @param imageCaptchaApplication 图形验证码应用
+   * @param properties 天意验证码属性
+   * @return 滑动验证码服务
+   */
   @Bean
   @ConditionalOnMissingBean
   SliderCaptchaService sliderCaptchaService(
@@ -61,6 +76,13 @@ public class TianaiCaptchaConfiguration {
         imageCaptchaApplication, CaptchaGenerateParamBuilder.of(options, CaptchaType.SLIDER));
   }
 
+  /**
+   * 注册文字点选验证码服务。
+   *
+   * @param imageCaptchaApplication 图形验证码应用
+   * @param properties 天意验证码属性
+   * @return 文字点选验证码服务
+   */
   @Bean
   @ConditionalOnMissingBean
   WordImageClickCaptchaService wordImageClickCaptchaService(
@@ -73,6 +95,13 @@ public class TianaiCaptchaConfiguration {
         CaptchaGenerateParamBuilder.of(options, CaptchaType.WORD_IMAGE_CLICK));
   }
 
+  /**
+   * 注册拼图验证码服务。
+   *
+   * @param imageCaptchaApplication 图形验证码应用
+   * @param properties 天意验证码属性
+   * @return 拼图验证码服务
+   */
   @Bean
   @ConditionalOnMissingBean
   ConcatCaptchaService concatCaptchaService(
@@ -84,6 +113,11 @@ public class TianaiCaptchaConfiguration {
         imageCaptchaApplication, CaptchaGenerateParamBuilder.of(options, CaptchaType.CONCAT));
   }
 
+  /**
+   * 注册默认的图片资源 TAC Builder 定制器。
+   *
+   * @return 图片资源定制器
+   */
   @Bean
   @ConditionalOnMissingBean
   ImageResourceTACBuilderCustomizer defaultResourceTACBuilderCustomizer() {
@@ -91,6 +125,12 @@ public class TianaiCaptchaConfiguration {
     return new ImageResourceTACBuilderCustomizer();
   }
 
+  /**
+   * 注册基于图形验证码缓存模板的 Redis 缓存存储器。
+   *
+   * @param captchaCacheTemplate 图形验证码缓存模板
+   * @return Redis 缓存存储器
+   */
   @Bean
   @ConditionalOnMissingBean
   RedisCacheStore redisCacheStore(GraphicCaptchaCacheTemplate captchaCacheTemplate) {
@@ -98,6 +138,15 @@ public class TianaiCaptchaConfiguration {
     return new RedisCacheStore(captchaCacheTemplate);
   }
 
+  /**
+   * 注册图形验证码应用。
+   *
+   * <p>构建默认模板与缓存存储的 {@link TACBuilder}，并依次应用所有定制的 {@link TACBuilderCustomizer}。
+   *
+   * @param redisCacheStore Redis 缓存存储器
+   * @param customizers TAC Builder 定制器提供者
+   * @return 图形验证码应用
+   */
   @Bean
   @ConditionalOnMissingBean
   ImageCaptchaApplication imageCaptchaApplication(

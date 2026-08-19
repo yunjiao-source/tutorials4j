@@ -16,7 +16,7 @@ import tutorials4j.framework.web.security.xss.XssJacksonSimpleModule;
 import tutorials4j.framework.web.security.xss.XssRequestFilter;
 
 /**
- * TODO
+ * XSS 防护功能自动配置类，在属性开启时注册 XSS 过滤器与 Jackson 序列化模块。
  *
  * @author Yun Jiao
  */
@@ -27,11 +27,13 @@ import tutorials4j.framework.web.security.xss.XssRequestFilter;
     name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties(XssWebProperties.class)
 public class XssWebConfiguration {
+  /** 配置初始化完成后输出跟踪日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[WEB-SECURITY] Xss Web Configuration");
   }
 
+  /** 注册用于 XSS 过滤的 Jackson 序列化模块 Bean。 */
   @Bean
   @Order(JacksonConsts.MODULE_ORDER_XSS)
   XssJacksonSimpleModule xssJacksonSimpleModule() {
@@ -39,6 +41,12 @@ public class XssWebConfiguration {
     return new XssJacksonSimpleModule();
   }
 
+  /**
+   * 注册 XSS 请求过滤器，并按配置填充过滤器的匹配规则。
+   *
+   * @param properties XSS 相关配置属性
+   * @return XSS 请求过滤器的注册对象
+   */
   @Bean
   FilterRegistrationBean<XssRequestFilter> xssRequestFilterRegistration(
       XssWebProperties properties) {

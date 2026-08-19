@@ -11,7 +11,9 @@ import tutorials4j.framework.common.core.entity.BaseVO;
 import tutorials4j.framework.examples.SexEnum;
 
 /**
- * TODO
+ * 订单视图对象。
+ *
+ * <p>用于向调用方返回订单及其关联用户的展示信息。
  *
  * @author Yun Jiao
  */
@@ -26,6 +28,12 @@ public class OrderVO extends BaseVO {
   private String email;
   private SexEnum sex;
 
+  /**
+   * 将订单实体转换为视图对象。
+   *
+   * @param order 订单实体
+   * @return 订单视图对象
+   */
   public static OrderVO of(Order order) {
     OrderVO dto = new OrderVO();
 
@@ -39,6 +47,12 @@ public class OrderVO extends BaseVO {
     return dto;
   }
 
+  /**
+   * 将订单实体列表批量转换为视图对象列表。
+   *
+   * @param orders 订单实体列表
+   * @return 订单视图对象列表
+   */
   public static List<OrderVO> of(List<Order> orders) {
     List<OrderVO> dtoList = new ArrayList<>();
     for (Order order : orders) {

@@ -22,11 +22,19 @@ import tutorials4j.framework.cache.redis.RedisCacheManagerCreator;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class MultiLevelCacheConfiguration {
+  /** 初始化日志记录。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CACHE-MULTI-LEVEL] Cache Multi Level Configuration");
   }
 
+  /**
+   * 注册多级缓存管理器创建器 Bean。
+   *
+   * @param caffeineCacheManagerCreator Caffeine 本地缓存管理器创建器
+   * @param redisCacheManagerCreator Redis 远程缓存管理器创建器
+   * @return 多级缓存管理器创建器实例
+   */
   @Bean
   @ConditionalOnMissingBean
   MultiLevelCacheManagerCreator multiLevelCacheManagerCreator(

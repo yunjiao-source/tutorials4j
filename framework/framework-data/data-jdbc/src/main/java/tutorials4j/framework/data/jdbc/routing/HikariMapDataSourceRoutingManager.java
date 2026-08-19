@@ -19,6 +19,13 @@ import tutorials4j.framework.data.core.exception.DataErrorCode;
  * @see HikariConfig
  */
 public class HikariMapDataSourceRoutingManager extends AbstractMapDataSourceRoutingManager {
+  /**
+   * 基于默认 Hikari 数据源复制配置并创建指定路由名称的新数据源。
+   *
+   * @param tenant 路由名称（租户标识）
+   * @param options JDBC 连接选项
+   * @return 新创建的数据源
+   */
   @Override
   protected DataSource createDataSource(String tenant, JdbcOptions options) {
     DataSource defaultDataSource = getDefaultDataSource();
@@ -40,6 +47,12 @@ public class HikariMapDataSourceRoutingManager extends AbstractMapDataSourceRout
     }
   }
 
+  /**
+   * 关闭 Hikari 数据源。
+   *
+   * @param dataSource 需要关闭的数据源
+   * @throws SQLException 关闭数据源发生异常时抛出
+   */
   @Override
   protected void doShutdown(DataSource dataSource) throws SQLException {
     if (dataSource instanceof HikariDataSource hikariDataSource) {

@@ -60,10 +60,24 @@ public class SimpleSwaggerModelResolver extends ModelResolver {
           "org.hibernate.validator.constraints",
           LocalDateTimeFormat.class.getPackage().getName());
 
+  /**
+   * 构造自定义的 Swagger 模型解析器。
+   *
+   * @param mapper Jackson 对象映射器
+   */
   public SimpleSwaggerModelResolver(ObjectMapper mapper) {
     super(mapper);
   }
 
+  /**
+   * 在父类处理 Bean Validation 注解的基础上，为 Swagger 未原生处理的校验注解添加 {@code x-validation-*} 扩展。
+   *
+   * @param property 当前处理的 Schema 属性
+   * @param annotations 属性上声明的注解数组
+   * @param parent 父级 Schema
+   * @param applyNotNullAnnotations 是否应用 {@code NotNull} 注解
+   * @return 父类处理后的结果
+   */
   @Override
   @SuppressWarnings("unchecked")
   protected boolean applyBeanValidatorAnnotations(

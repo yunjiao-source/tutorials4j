@@ -9,9 +9,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 /**
- * 对应的 KeyMaterialLoader 建议从以下来源读取：
+ * 密钥材料加载器：加载/生成 RSA 密钥对与密钥 ID，供 JWT 签发与校验使用。
  *
- * <p>• Kubernetes Secret 挂载文件 • HashiCorp Vault • 云厂商 KMS/HSM
+ * <p>当前实现于构造时一次性生成 RSA 密钥对；生产环境建议改为从 Kubernetes Secret、HashiCorp Vault 或云厂商 KMS/HSM 读取。
  *
  * @author Yun Jiao
  */
@@ -23,6 +23,7 @@ public class KeyMaterialLoader {
   private final RSAPrivateKey privateKey;
   private final String kid;
 
+  /** 构造加载器，并在初始化时生成 RSA 密钥对与唯一的密钥 ID。 */
   public KeyMaterialLoader() {
     // 初始化时一次性生成 RSA 密钥对
     KeyPairGenerator keyGen = null;
@@ -40,14 +41,17 @@ public class KeyMaterialLoader {
     this.kid = UUID.randomUUID().toString();
   }
 
+  /** 返回 RSA 公钥。 */
   public RSAPublicKey loadPublicKey() {
     return this.publicKey;
   }
 
+  /** 返回 RSA 私钥。 */
   public RSAPrivateKey loadPrivateKey() {
     return this.privateKey;
   }
 
+  /** 返回当前密钥 ID。 */
   public String currentKid() {
     return this.kid;
   }

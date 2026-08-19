@@ -10,7 +10,9 @@ import tutorials4j.framework.common.core.bean.YesNoEnum;
 import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
 
 /**
- * TODO
+ * 任务日志查询条件。
+ *
+ * <p>封装任务日志列表查询的各项过滤条件，并构建对应的查询 Specification。
  *
  * @author Yun Jiao
  */
@@ -27,6 +29,11 @@ public class JobLogQuery {
   private String taskCode;
   private String classSimpleName;
 
+  /**
+   * 构建任务日志查询条件。
+   *
+   * @return 组合后的查询 Specification
+   */
   public Specification<JobLogEntity> buildSpecification() {
     List<Specification<JobLogEntity>> specList = new ArrayList<>();
     specList.add(JobLogSpecification.jobIdEqual(jobId));

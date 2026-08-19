@@ -7,7 +7,9 @@ import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
- * TODO
+ * 任务查询条件。
+ *
+ * <p>封装任务列表查询的过滤条件，并构建对应的查询 Specification。
  *
  * @author Yun Jiao
  */
@@ -17,6 +19,11 @@ public class JobQuery {
   private String classSimpleName;
   private String description;
 
+  /**
+   * 构建任务查询条件。
+   *
+   * @return 组合后的查询 Specification
+   */
   public Specification<JobEntity> buildSpecification() {
     List<Specification<JobEntity>> specList = new ArrayList<>();
     specList.add(JobSpecification.taskCodeEqual(taskCode));

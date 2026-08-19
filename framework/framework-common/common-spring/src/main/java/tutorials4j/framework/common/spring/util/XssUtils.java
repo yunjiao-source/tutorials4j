@@ -22,9 +22,16 @@ import org.springframework.util.ResourceUtils;
  */
 @Slf4j
 public class XssUtils {
+  /** 单例实例。 */
   private static XssUtils INSTANCE;
+
+  /** AntiSamy 清洗引擎。 */
   private final AntiSamy antiSamy;
+
+  /** 清洗后 "&nbsp;" 对应的乱码占位符。 */
   private final String nbsp;
+
+  /** 清洗后双引号对应的乱码占位符。 */
   private final String quot;
 
   /**

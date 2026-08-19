@@ -12,12 +12,25 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 // 染色过滤器
+/**
+ * 流量染色全局过滤器：优先采用请求头中的灰度标签，否则按用户 ID 哈希概率打标，并将灰度标签写入 exchange 属性与请求头透传至下游。
+ *
+ * @author Yun Jiao
+ */
 @Slf4j
 @Component
 public class TrafficColoringGlobalFilter implements GlobalFilter, Ordered {
 
+  /** 灰度标签在 exchange 属性中的键名。 */
   public static final String GRAY_TAG = "grayTag";
 
+  /**
+   * 计算并写入灰度标签，同时将标签注入请求头后继续执行过滤链。
+   *
+   * @param exchange 当前请求的 {@link ServerWebExchange}
+   * @param chain 网关过滤器链
+   * @return 过滤链执行结果的 {@link Mono}
+   */
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
@@ -36,6 +49,13 @@ public class TrafficColoringGlobalFilter implements GlobalFilter, Ordered {
     return chain.filter(exchange.mutate().request(mutatedRequest).build());
   }
 
+  /**
+   * 按用户 ID 的 CRC32 哈希值判断是否命中灰度，命中概率由 grayPercent 控制。
+   *
+   * @param userId 用户 ID
+   * @param grayPercent 灰度命中百分比（0-100）
+   * @return 命中灰度返回 true，否则返回 false
+   */
   private boolean hitGrayByUserId(String userId, int grayPercent) {
     if (userId == null || userId.isBlank()) {
       return false;
@@ -46,6 +66,7 @@ public class TrafficColoringGlobalFilter implements GlobalFilter, Ordered {
     return bucket < grayPercent;
   }
 
+  /** 返回过滤器的执行顺序，取值为 -20。 */
   @Override
   public int getOrder() {
     return -20;

@@ -16,6 +16,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
  */
 @Data
 public class ServletFilterOptions {
+  /** 是否启用该过滤器，默认 false */
   private boolean enabled = false;
 
   /** 过滤器匹配的 URL 模式，默认为 "/*" 表示拦截所有请求。 */
@@ -35,6 +36,11 @@ public class ServletFilterOptions {
           DispatcherType.REQUEST,
           DispatcherType.FORWARD);
 
+  /**
+   * 将当前选项填充到过滤器注册对象中。
+   *
+   * @param registrationBean 过滤器注册对象
+   */
   public void fill(FilterRegistrationBean<?> registrationBean) {
     registrationBean.addUrlPatterns(this.getUrlPatterns());
     if (this.getOrder() != null) {

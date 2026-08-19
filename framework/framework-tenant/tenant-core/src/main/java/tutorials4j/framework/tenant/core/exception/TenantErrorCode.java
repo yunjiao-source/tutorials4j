@@ -5,7 +5,7 @@ import tutorials4j.framework.common.core.exception.ErrorCode;
 import tutorials4j.framework.common.core.exception.Feedback;
 
 /**
- * TODO
+ * 租户模块错误码枚举：定义租户模块相关的错误码与反馈信息（目前暂未定义具体错误码）。
  *
  * @author Yun Jiao
  */

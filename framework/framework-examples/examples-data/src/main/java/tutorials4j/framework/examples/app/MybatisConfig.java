@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * mybatis配置
+ * MyBatis 示例配置类。
+ *
+ * <p>在 {@code mybatis} profile 下启用，扫描并装配 MyBatis 示例的组件与 Mapper。
  *
  * @author Yun Jiao
  */

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * demo1 环境的网关配置：启用服务发现并扫描 demo1 示例包下的组件，同时注册带配置前缀的 NacosConfigProperties Bean。
  *
  * @author Yun Jiao
  */
@@ -20,9 +20,11 @@ import org.springframework.context.annotation.Profile;
 public class Demo1Profile {
 
   /**
-   * NacosConfigBootstrapConfiguration配置中创建的示例没有指定属性前缀，造成yml中的配置属性无法注入，如：namespace
+   * 注册绑定 {@code spring.cloud.nacos.config} 配置前缀的 NacosConfigProperties Bean。
    *
-   * @return
+   * <p>NacosConfigBootstrapConfiguration 配置中创建的示例没有指定属性前缀，造成 yml 中的配置属性无法注入，如：namespace。
+   *
+   * @return Nacos 配置属性实例
    */
   @Bean
   @ConfigurationProperties("spring.cloud.nacos.config")

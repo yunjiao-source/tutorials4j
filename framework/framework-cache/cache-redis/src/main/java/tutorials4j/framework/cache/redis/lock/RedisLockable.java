@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
  * }
  * }</pre>
  *
+ * <p>该注解仅可标注在方法上，需配合 {@link RedisLockableAspect} 切面生效。
+ *
  * @author Yun Jiao
  * @see RedisLockableAspect
  * @see RedisLockService
@@ -48,9 +50,9 @@ public @interface RedisLockable {
   /**
    * 锁 key 的动态部分，支持 Spring SpEL 表达式。
    *
-   * <p>表达式可以使用方法参数、参数属性等。例如 "#userId"、"#dto.id"。
+   * <p>表达式可以使用方法参数或参数的属性，例如 "#userId"、"#dto.id"。
    *
-   * @return SpEL 表达式，不可为空
+   * @return SpEL 表达式字符串，必填且不能为空
    */
   String key();
 

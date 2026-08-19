@@ -17,6 +17,8 @@ public interface MethodBasedExpressionEvaluator {
   /**
    * 在指定方法调用上下文中对表达式求值，并返回指定类型的值。
    *
+   * <p>表达式中可引用方法参数（如 {@code #paramName}）以及 {@code variables} 中提供的额外变量。
+   *
    * @param method 被执行的目标方法，用于获取参数名等元信息
    * @param arguments 方法调用时传入的实际参数数组
    * @param expression SpEL 表达式字符串
@@ -35,6 +37,8 @@ public interface MethodBasedExpressionEvaluator {
 
   /**
    * 在指定方法调用上下文中对表达式求值，不使用额外变量。
+   *
+   * <p>等价于以空变量映射调用 {@link #getValue(Method, Object[], String, Class, Map)}。
    *
    * @param method 被执行的目标方法
    * @param arguments 方法调用时传入的实际参数数组

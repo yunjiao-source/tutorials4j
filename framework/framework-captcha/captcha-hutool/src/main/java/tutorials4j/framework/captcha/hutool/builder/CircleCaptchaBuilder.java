@@ -9,6 +9,7 @@ import cn.hutool.captcha.CircleCaptcha;
  */
 public class CircleCaptchaBuilder extends AbstractCaptchaBuilder<CircleCaptcha> {
 
+  /** 创建圆圈干扰验证码实例。 */
   @Override
   protected CircleCaptcha createCaptcha() {
     return new CircleCaptcha(width(), height(), generator(), interfereCount());

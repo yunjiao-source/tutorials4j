@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 组合缓存应用配置
+ * 简单验证码示例配置类。
+ *
+ * <p>在 {@code simple} profile 下启用，扫描并装配简单验证码示例包中的组件。
  *
  * @author Yun Jiao
  */

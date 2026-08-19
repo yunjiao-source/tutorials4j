@@ -21,6 +21,7 @@ import tutorials4j.framework.cache.core.properties.NamedCacheProperties;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class CaffeineCacheConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CACHE-CAFFEINE] Cache Caffeine Configuration");

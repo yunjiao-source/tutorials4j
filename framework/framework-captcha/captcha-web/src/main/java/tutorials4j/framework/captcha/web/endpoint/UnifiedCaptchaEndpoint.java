@@ -21,7 +21,9 @@ import tutorials4j.framework.captcha.support.CaptchaServiceFactory;
 import tutorials4j.framework.common.core.bean.Result;
 
 /**
- * 验证码接口
+ * 统一验证码接口控制器。
+ *
+ * <p>提供统一的验证码生成与校验 REST API，根据 {@link CaptchaCategory} 分发到对应的 {@link CaptchaService} 实现。
  *
  * @author Yun Jiao
  */
@@ -33,6 +35,12 @@ public class UnifiedCaptchaEndpoint {
 
   private final CaptchaServiceFactory factory;
 
+  /**
+   * 生成验证码。
+   *
+   * @param category 验证码类型
+   * @return 包含验证码数据的生成结果
+   */
   @Operation(summary = "生成验证码", description = "根据验证码类型生成对应的验证码数据")
   @Parameter(
       name = "category",
@@ -51,6 +59,12 @@ public class UnifiedCaptchaEndpoint {
     return Result.success(service.draw());
   }
 
+  /**
+   * 校验用户输入的验证码是否正确。
+   *
+   * @param validate 验证码校验请求对象
+   * @return 校验结果，true 表示通过
+   */
   @Operation(summary = "校验验证码", description = "校验用户输入的验证码是否正确")
   @ApiResponse(responseCode = "200", description = "校验结果（true/false）")
   @PostMapping("check")

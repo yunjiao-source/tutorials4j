@@ -46,16 +46,31 @@ public class TenantCaffeineCacheManagerCreator
     return instance;
   }
 
+  /**
+   * 创建新的租户级 Caffeine 缓存管理器实例。
+   *
+   * @return 新的租户级 Caffeine 缓存管理器实例
+   */
   @Override
   public TenantCaffeineCacheManager newInstance() {
     return new TenantCaffeineCacheManager(caffeineCacheManagerCreator);
   }
 
+  /**
+   * 返回缓存管理器的 Bean 类型。
+   *
+   * @return {@link TenantCaffeineCacheManager} 类型
+   */
   @Override
   public Class<TenantCaffeineCacheManager> getBeanClass() {
     return TenantCaffeineCacheManager.class;
   }
 
+  /**
+   * 返回缓存管理器创建器的类别。
+   *
+   * @return {@link CacheManagerCreatorCategory#TENANT_CAFFEINE}
+   */
   @Override
   public CacheManagerCreatorCategory getCategory() {
     return CacheManagerCreatorCategory.TENANT_CAFFEINE;

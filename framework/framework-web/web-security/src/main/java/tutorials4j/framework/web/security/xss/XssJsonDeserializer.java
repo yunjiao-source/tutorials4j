@@ -18,13 +18,24 @@ import tutorials4j.framework.common.spring.util.XssUtils;
  * @see XssUtils
  */
 public class XssJsonDeserializer extends JsonDeserializer<String> {
+  /** 反序列化器单例实例 */
   public static final XssJsonDeserializer instance = new XssJsonDeserializer();
 
+  /** 声明该反序列化器处理的类型为 String。 */
   @Override
   public Class<String> handledType() {
     return String.class;
   }
 
+  /**
+   * 反序列化字符串值并执行 XSS 清洗。
+   *
+   * @param jsonParser JSON 解析器
+   * @param deserializationContext 反序列化上下文
+   * @return 清洗后的字符串值
+   * @throws IOException 读取 JSON 值失败时抛出
+   * @throws JsonProcessingException JSON 解析失败时抛出
+   */
   @Override
   public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
       throws IOException, JsonProcessingException {

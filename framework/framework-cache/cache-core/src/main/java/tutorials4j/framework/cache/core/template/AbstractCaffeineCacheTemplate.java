@@ -14,10 +14,17 @@ import tutorials4j.framework.cache.core.support.CacheManagerCreatorFactory;
  * @author Yun Jiao
  */
 public abstract class AbstractCaffeineCacheTemplate<K, V> extends AbstractCacheTemplate<K, V> {
+
+  /**
+   * 构造 Caffeine 缓存模板，指定缓存名称。
+   *
+   * @param cacheName 缓存名称
+   */
   protected AbstractCaffeineCacheTemplate(String cacheName) {
     super(cacheName);
   }
 
+  /** 通过缓存管理器工厂获取指定名称的 Caffeine 缓存实例。 */
   @Override
   protected Cache doGetCache(String cacheName) {
     return CacheManagerCreatorFactory.instance.findCaffeineCache(cacheName);

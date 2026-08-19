@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * 参数校验示例模块的配置类，仅在 validation profile 下生效，负责扫描参数校验示例相关组件。
  *
  * @author Yun Jiao
  */

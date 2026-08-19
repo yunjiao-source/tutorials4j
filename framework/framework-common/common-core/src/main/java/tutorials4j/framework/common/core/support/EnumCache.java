@@ -231,6 +231,12 @@ public class EnumCache {
    */
   @FunctionalInterface
   public interface EnumMapping<E extends Enum<?>> {
+    /**
+     * 从枚举常量中提取自定义值。
+     *
+     * @param e 枚举常量
+     * @return 提取的自定义值
+     */
     Object value(E e);
   }
 }

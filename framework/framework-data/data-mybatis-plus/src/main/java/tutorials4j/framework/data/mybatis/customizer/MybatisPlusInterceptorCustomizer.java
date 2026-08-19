@@ -6,10 +6,11 @@ import org.springframework.core.Ordered;
 /**
  * MyBatis Plus 拦截器自定义器接口。
  *
- * <p>用于向 {@link MybatisPlusInterceptor} 中添加内部拦截器（如分页、乐观锁、租户等）， 并控制这些拦截器的执行顺序。
+ * <p>用于向 {@link MybatisPlusInterceptor} 中添加内部拦截器（如分页、乐观锁、租户等）， 并通过 {@link Ordered} 控制各自定义器的执行顺序。
  *
  * @author Yun Jiao
  * @see Ordered
+ * @see MybatisPlusInterceptor
  */
 @FunctionalInterface
 public interface MybatisPlusInterceptorCustomizer extends Ordered {

@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO
+ * 签名示例的测试控制器。
+ *
+ * <p>提供一组用于演示 {@link SignatureClient} 调用签名接口的 REST 接口。
  *
  * @author Yun Jiao
  */

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * 示例
+ * {@link TreeQuery} 与 Hutool {@link TreeUtil} 构建部门树的对比示例测试。
  *
  * @author Yun Jiao
  */
@@ -56,13 +56,29 @@ public class TreeQueryVsHutoolTreeTest {
   }
 
   // 定义部门实体
+  /** 部门实体，用于树构建对比演示。 */
   @Data
   static class Department {
+    /** 部门 ID。 */
     private Long id;
+
+    /** 部门名称。 */
     private String name;
+
+    /** 父部门 ID。 */
     private Long parentId;
+
+    /** 排序值。 */
     private Integer order;
 
+    /**
+     * 构造部门。
+     *
+     * @param id 部门 ID
+     * @param name 部门名称
+     * @param parentId 父部门 ID
+     * @param order 排序值
+     */
     public Department(Long id, String name, Long parentId, Integer order) {
       this.id = id;
       this.name = name;
@@ -71,6 +87,12 @@ public class TreeQueryVsHutoolTreeTest {
     }
 
     // 使用TreeQuery
+    /**
+     * 使用 {@link TreeQuery} 构建部门树查询对象。
+     *
+     * @param departmentList 部门列表
+     * @return 部门树查询对象
+     */
     public static TreeQuery<Long, Department> buildTreeQuery(List<Department> departmentList) {
       return new TreeQuery.TreeQueryBuilder<Long, Department>()
           .withNodes(departmentList)
@@ -81,6 +103,12 @@ public class TreeQueryVsHutoolTreeTest {
     }
 
     // 使用Hutool True
+    /**
+     * 使用 Hutool {@link TreeUtil} 构建部门树。
+     *
+     * @param departmentList 部门列表
+     * @return 构建出的部门树节点列表
+     */
     public static List<Tree<Long>> buildHutoolTree(List<Department> departmentList) {
       return TreeUtil.<Department, Long>build(
           departmentList,

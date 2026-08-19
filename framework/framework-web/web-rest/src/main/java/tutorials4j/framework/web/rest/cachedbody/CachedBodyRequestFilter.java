@@ -14,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
  * 缓存请求体内容的过滤器。
  *
  * <p>该过滤器用于将原始的 {@link HttpServletRequest} 包装为 {@link CachedBodyHttpServletRequest}，
- * 从而支持后续对请求体的多次读取。包装前会检查请求体的 Content-Length 是否超过配置的最大允许长度， 若超过则放弃包装并记录警告日志，此时原始请求体将不可重复读取。
+ * 从而支持后续对请求体的多次读取。
  *
- * <p>过滤器会避免重复包装同一个请求（即如果请求已经是 {@code CachedHttpServletRequestWrapper} 实例， 则直接放行）。
+ * <p>过滤器会避免重复包装同一个请求：如果请求已经是 {@link CachedBodyHttpServletRequest} 实例则直接放行。
  *
  * @author Yun Jiao
  * @see CachedBodyHttpServletRequest
@@ -25,6 +25,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CachedBodyRequestFilter implements Filter {
 
+  /**
+   * 将 {@link HttpServletRequest} 包装为 {@link CachedBodyHttpServletRequest} 后继续传递给过滤器链。
+   *
+   * <p>仅当请求为 {@link HttpServletRequest} 且尚未被缓存包装时才会进行包装，否则直接放行。
+   *
+   * @param request 待过滤的请求
+   * @param response 响应对象
+   * @param chain 过滤器链
+   * @throws IOException 处理过程中发生 I/O 错误
+   * @throws ServletException 处理过程中发生 Servlet 异常
+   */
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {

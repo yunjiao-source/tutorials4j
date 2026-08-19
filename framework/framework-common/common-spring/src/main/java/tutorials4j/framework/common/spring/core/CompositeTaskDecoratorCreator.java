@@ -9,7 +9,14 @@ import org.springframework.core.task.support.CompositeTaskDecorator;
 import tutorials4j.framework.common.core.support.BeanCreator;
 
 /**
+ * 组合任务装饰器创建器。
+ *
+ * <p>收集容器中所有 {@link TaskDecoratorCreator} 提供的 {@link TaskDecorator}， 组合为一个 {@link
+ * CompositeTaskDecorator} 实例，并通过双重检查锁定保证单例。
+ *
  * @author Yun Jiao
+ * @see TaskDecoratorCreator
+ * @see CompositeTaskDecorator
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -42,6 +49,13 @@ public class CompositeTaskDecoratorCreator implements BeanCreator<CompositeTaskD
     return instance;
   }
 
+  /**
+   * 创建一个新的组合任务装饰器。
+   *
+   * <p>按顺序获取所有任务装饰器创建器的实例，构建 {@link CompositeTaskDecorator}。
+   *
+   * @return 包含所有已注册任务装饰器的组合装饰器
+   */
   @Override
   public CompositeTaskDecorator newInstance() {
     List<TaskDecorator> taskDecorators =
@@ -56,6 +70,11 @@ public class CompositeTaskDecoratorCreator implements BeanCreator<CompositeTaskD
     return new CompositeTaskDecorator(taskDecorators);
   }
 
+  /**
+   * 返回该创建器生成的 Bean 类型。
+   *
+   * @return {@link CompositeTaskDecorator} 类型
+   */
   @Override
   public Class<CompositeTaskDecorator> getBeanClass() {
     return CompositeTaskDecorator.class;

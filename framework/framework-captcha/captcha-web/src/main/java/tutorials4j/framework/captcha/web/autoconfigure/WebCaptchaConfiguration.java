@@ -21,7 +21,10 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 
 /**
- * Web配置
+ * 验证码 Web 自动配置类。
+ *
+ * <p>当 {@code tutorials4j.captcha.web.enabled} 配置为 {@code true} 时生效， 注册统一验证码端点与天意验证码端点，并通过 {@link
+ * CaptchaAuthWebMvcConfigurer} 注册验证码认证拦截器。
  *
  * @author Yun Jiao
  */
@@ -32,11 +35,18 @@ import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
     name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties(WebCaptchaProperties.class)
 public class WebCaptchaConfiguration {
+  /** 初始化：输出 Web 验证码配置已加载的跟踪日志。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CAPTCHA-WEB] Web Captcha Configuration");
   }
 
+  /**
+   * 注册统一验证码端点。
+   *
+   * @param factory 验证码服务工厂
+   * @return 统一验证码端点
+   */
   @Bean
   @ConditionalOnMissingBean
   UnifiedCaptchaEndpoint unifiedCaptchaEndpoint(CaptchaServiceFactory factory) {
@@ -44,6 +54,13 @@ public class WebCaptchaConfiguration {
     return new UnifiedCaptchaEndpoint(factory);
   }
 
+  /**
+   * 注册天意验证码端点。
+   *
+   * @param factory 验证码服务工厂
+   * @param imageCaptchaApplication 天意图形验证码应用
+   * @return 天意验证码端点
+   */
   @Bean
   @ConditionalOnMissingBean
   TianaiCaptchaEndpoint tianaiCaptchaEndpoint(
@@ -52,6 +69,11 @@ public class WebCaptchaConfiguration {
     return new TianaiCaptchaEndpoint(factory, imageCaptchaApplication);
   }
 
+  /**
+   * 验证码认证 WebMvc 配置。
+   *
+   * <p>注册 {@link CaptchaAuthHandlerInterceptor}，并应用配置的包含与排除路径。
+   */
   @Slf4j
   @Configuration(proxyBeanMethods = false)
   @RequiredArgsConstructor
@@ -59,6 +81,11 @@ public class WebCaptchaConfiguration {
     private final CaptchaServiceFactory captchaServiceFactory;
     private final WebCaptchaProperties properties;
 
+    /**
+     * 注册验证码认证拦截器并应用包含/排除路径配置。
+     *
+     * @param registry 拦截器注册表
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
       CaptchaAuthHandlerInterceptor captchaAuthHandlerInterceptor =

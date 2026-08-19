@@ -27,10 +27,16 @@ public class TenantContextHolder {
     return tenant.toUpperCase();
   }
 
+  /**
+   * 设置当前线程的租户代码。
+   *
+   * @param tenant 租户代码
+   */
   public static void set(final String tenant) {
     CURRENT_CONTEXT.set(tenant);
   }
 
+  /** 清除当前线程的租户信息。 */
   public static void clear() {
     CURRENT_CONTEXT.remove();
   }

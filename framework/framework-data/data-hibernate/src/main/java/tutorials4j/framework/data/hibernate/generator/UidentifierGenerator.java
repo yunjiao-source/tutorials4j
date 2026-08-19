@@ -22,6 +22,13 @@ import tutorials4j.framework.common.uid.UidUtils;
 public class UidentifierGenerator implements IdentifierGenerator, StandardGenerator {
   private final Class<?> propertyType;
 
+  /**
+   * 根据注解配置与主键成员构造生成器。
+   *
+   * @param config 主键生成器注解配置
+   * @param idMember 主键属性对应的字段或 getter 方法
+   * @param creationContext Hibernate 自定义生成器创建上下文
+   */
   public UidentifierGenerator(
       UidGenerator config, Member idMember, CustomIdGeneratorCreationContext creationContext) {
     if (idMember instanceof Method) {
@@ -31,6 +38,13 @@ public class UidentifierGenerator implements IdentifierGenerator, StandardGenera
     }
   }
 
+  /**
+   * 根据主键类型生成全局唯一 ID：字符串类型返回字符串，数值类型返回 {@code long} 值。
+   *
+   * @param session 当前 Hibernate 会话
+   * @param object 待持久化的实体对象
+   * @return 生成的全局唯一 ID
+   */
   @Override
   public Object generate(SharedSessionContractImplementor session, Object object) {
     if (String.class.isAssignableFrom(propertyType)) {

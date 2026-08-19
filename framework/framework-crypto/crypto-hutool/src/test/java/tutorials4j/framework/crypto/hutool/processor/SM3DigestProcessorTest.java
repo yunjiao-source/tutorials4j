@@ -6,8 +6,14 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 import tutorials4j.framework.crypto.core.bean.DigestCategory;
 
+/**
+ * {@link SM3DigestProcessor} 单元测试
+ *
+ * @author Yun Jiao
+ */
 class SM3DigestProcessorTest {
 
+  /** 测试数据：包含中文与特殊字符的明文字符串 */
   private static final String TEST_DATA = "Hello, 世界！";
 
   @Test

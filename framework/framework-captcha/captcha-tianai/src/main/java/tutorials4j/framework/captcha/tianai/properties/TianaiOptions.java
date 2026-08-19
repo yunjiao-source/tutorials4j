@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * 天意验证码的配置选项，支持不同验证码类型的独立配置及与公共配置的合并。
  *
+ * <p>各验证码类型的独立配置可通过 {@link #merge(TianaiOptions)} 与公共配置合并， 当前配置中为空的属性会回退使用公共配置的值。
+ *
  * @author Yun Jiao
  */
 @Data
@@ -38,7 +40,7 @@ public class TianaiOptions {
   /** 点选验证码需点击的正确数量 */
   private Integer clickCheckClickCount;
 
-  /** 默认构造器。 */
+  /** 默认构造器，创建一个所有属性均为空的配置实例。 */
   public TianaiOptions() {}
 
   /**
@@ -55,7 +57,9 @@ public class TianaiOptions {
   }
 
   /**
-   * 将公共配置合并到当前配置，如果当前配置的属性为空则使用公共配置的值。
+   * 将公共配置合并到当前配置，当前配置中为空的属性（null 或空白字符串）使用公共配置的值填充。
+   *
+   * <p>合并会直接修改当前实例。
    *
    * @param commonOptions 公共配置选项
    */

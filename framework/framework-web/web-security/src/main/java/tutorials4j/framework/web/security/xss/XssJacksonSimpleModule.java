@@ -19,11 +19,13 @@ import tutorials4j.framework.common.core.JacksonConsts;
  * @see JacksonConsts
  */
 public class XssJacksonSimpleModule extends SimpleModule implements Ordered {
+  /** 构造模块并注册 String 类型的 XSS 清洗反序列化器。 */
   public XssJacksonSimpleModule() {
     super(XssJacksonSimpleModule.class.getName(), JacksonConsts.JSON_VERSION);
     this.addDeserializer(String.class, XssJsonDeserializer.instance);
   }
 
+  /** 获取模块的执行顺序。 */
   @Override
   public int getOrder() {
     return MODULE_ORDER_XSS;

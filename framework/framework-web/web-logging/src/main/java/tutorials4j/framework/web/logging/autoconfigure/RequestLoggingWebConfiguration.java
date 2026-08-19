@@ -18,7 +18,10 @@ import tutorials4j.framework.web.logging.properties.RequestLoggingWebProperties;
 import tutorials4j.framework.web.logging.properties.RequestLoggingWebProperties.RequestOptions;
 
 /**
- * TODO
+ * 请求日志功能的自动配置类。
+ *
+ * <p>在配置属性 {@code PropertiesConsts.PROPERTY_PREFIX_WEB_REQUEST_LOGGING} 对应的 enabled 开关开启时生效， 注册
+ * {@link SimpleRequestLoggingFilter} 过滤器，用于记录每个 HTTP 请求的日志。
  *
  * @author Yun Jiao
  */
@@ -29,6 +32,7 @@ import tutorials4j.framework.web.logging.properties.RequestLoggingWebProperties.
     name = PropertiesConsts.PROPERTY_ENABLED)
 @EnableConfigurationProperties(RequestLoggingWebProperties.class)
 public class RequestLoggingWebConfiguration {
+  /** 初始化日志输出，应用启动后执行。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[WEB-LOGGING] Request Logging Configuration");

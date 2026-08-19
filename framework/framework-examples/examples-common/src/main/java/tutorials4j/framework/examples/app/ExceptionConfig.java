@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 组合任务装饰器配置
+ * 异常处理示例配置类。
+ *
+ * <p>在 {@code exception} profile 下启用，扫描并装配异常处理示例包中的组件。
  *
  * @author Yun Jiao
  */

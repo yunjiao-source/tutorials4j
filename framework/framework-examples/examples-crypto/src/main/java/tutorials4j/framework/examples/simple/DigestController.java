@@ -10,7 +10,10 @@ import tutorials4j.framework.crypto.core.processor.DigestProcessor;
 import tutorials4j.framework.crypto.core.processor.DigestProcessorFactory;
 
 /**
- * TODO
+ * 摘要（散列）计算示例控制器。
+ *
+ * <p>提供基于 {@link DigestProcessorFactory} 的摘要计算 REST 接口，根据指定的 {@link DigestCategory} 动态查找对应的 {@link
+ * DigestProcessor} 计算内容摘要。
  *
  * @author Yun Jiao
  */
@@ -20,6 +23,13 @@ import tutorials4j.framework.crypto.core.processor.DigestProcessorFactory;
 public class DigestController {
   private final DigestProcessorFactory factory;
 
+  /**
+   * 使用指定类别的摘要处理器计算内容摘要。
+   *
+   * @param category 摘要算法类别
+   * @param content 待计算摘要的内容
+   * @return 计算得到的摘要值
+   */
   @GetMapping("digest")
   public String digest(
       @RequestParam("category") DigestCategory category, @RequestParam("content") String content) {

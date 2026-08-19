@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * 配置
+ * XSS 防护示例模块的配置类，仅在 xss profile 下生效，负责扫描 XSS 防护示例相关组件。
  *
  * @author Yun Jiao
  */

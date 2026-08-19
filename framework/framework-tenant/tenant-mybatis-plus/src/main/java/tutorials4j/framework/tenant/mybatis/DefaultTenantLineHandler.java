@@ -19,11 +19,13 @@ import tutorials4j.framework.common.core.TenantContextHolder;
 public class DefaultTenantLineHandler implements TenantLineHandler {
   private final Set<String> ignoreTables;
 
+  /** 返回当前线程上下文中保存的租户 ID，作为 SQL 中租户列的值。 */
   @Override
   public Expression getTenantId() {
     return new StringValue(TenantContextHolder.get());
   }
 
+  /** 判断指定表是否需要忽略租户 SQL 注入。 */
   @Override
   public boolean ignoreTable(String tableName) {
     return ignoreTables.contains(tableName);

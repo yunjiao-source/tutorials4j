@@ -29,9 +29,20 @@ import tutorials4j.framework.web.core.util.WebUtils;
 @Slf4j
 @RequiredArgsConstructor
 public class IdempotentHandlerInterceptor implements HandlerInterceptor {
+  /** 用于在请求属性中存放幂等键的属性名。 */
   private static final String IDEMPOTENT_ATTRIBUTE = "Idempotent";
+
   private final IdempotentCacheTemplate idempotentCacheTemplate;
 
+  /**
+   * 请求前置处理：对标注 {@link Idempotent} 的处理器方法进行幂等计数， 同一请求键的重复访问将抛出幂等校验失败异常。
+   *
+   * @param request HTTP 请求对象
+   * @param response HTTP 响应对象
+   * @param handler 处理器对象
+   * @return 始终返回 true，允许请求继续执行
+   * @throws Exception 幂等计数超限时抛出幂等校验失败异常
+   */
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {

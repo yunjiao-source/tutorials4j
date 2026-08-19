@@ -15,7 +15,10 @@ import tutorials4j.framework.common.spring.util.HeaderUtils;
 import tutorials4j.framework.web.core.util.WebUtils;
 
 /**
- * TODO
+ * 验证码认证拦截器。
+ *
+ * <p>对标注了 {@link CaptchaAuth} 注解的处理器方法，从请求头中读取验证码键、类别与验证码值，
+ * 校验通过后在响应头标记认证成功；参数不完整或校验失败时抛出对应的验证码错误码异常。
  *
  * @author Yun Jiao
  */
@@ -24,6 +27,15 @@ import tutorials4j.framework.web.core.util.WebUtils;
 public class CaptchaAuthHandlerInterceptor implements HandlerInterceptor {
   private final CaptchaServiceFactory captchaServiceFactory;
 
+  /**
+   * 请求处理前执行验证码认证。
+   *
+   * @param request 当前请求
+   * @param response 当前响应
+   * @param handler 目标处理器
+   * @return 始终返回 {@code true}，认证通过后放行请求
+   * @throws Exception 验证码参数不完整或校验失败时抛出验证码错误码异常
+   */
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {

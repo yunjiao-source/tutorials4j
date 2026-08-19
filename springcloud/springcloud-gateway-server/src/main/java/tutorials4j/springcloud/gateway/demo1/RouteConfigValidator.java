@@ -6,9 +6,20 @@ import java.util.Set;
 import org.springframework.stereotype.Component;
 
 // 路由校验器
+/**
+ * 路由配置校验器：校验路由配置的合法性，包括 routeId 非空且唯一、serviceId 与 paths 非空。
+ *
+ * @author Yun Jiao
+ */
 @Component
 public class RouteConfigValidator {
 
+  /**
+   * 校验路由配置列表。
+   *
+   * @param configs 待校验的路由配置列表
+   * @throws IllegalArgumentException 当 routeId 为空或重复、serviceId 为空、paths 为空时抛出
+   */
   public void validate(List<GatewayRouteConfig> configs) {
     Set<String> routeIds = new HashSet<>();
     for (GatewayRouteConfig config : configs) {

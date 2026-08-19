@@ -40,6 +40,11 @@ public class MultipleRoutingDataSource extends AbstractRoutingDataSource {
     setTargetDataSources(Map.of(DefaultConsts.DEFAULT_TENTANT_CODE, defaultDataSource));
   }
 
+  /**
+   * 根据当前租户标识确定目标数据源。
+   *
+   * @return 当前租户对应的数据源
+   */
   @Override
   protected DataSource determineTargetDataSource() {
     Object lookupKey = determineCurrentLookupKey();
@@ -50,6 +55,11 @@ public class MultipleRoutingDataSource extends AbstractRoutingDataSource {
     throw new IllegalStateException("不支持的多数据源键：" + lookupKey);
   }
 
+  /**
+   * 从当前线程上下文中获取租户标识作为路由键。
+   *
+   * @return 当前租户代码
+   */
   @Override
   protected Object determineCurrentLookupKey() {
     return TenantContextHolder.get();

@@ -21,6 +21,15 @@ import tutorials4j.framework.common.spring.util.SnowflakeUtils;
 public class SnowflakeIdentifierGenerator implements IdentifierGenerator, StandardGenerator {
   private final Class<?> propertyType;
 
+  /**
+   * 根据注解配置与主键成员构造生成器。
+   *
+   * <p>通过反射确定主键属性类型，用于运行时决定返回字符串还是数值型 ID。
+   *
+   * @param config 主键生成器注解配置
+   * @param idMember 主键属性对应的字段或 getter 方法
+   * @param creationContext Hibernate 自定义生成器创建上下文
+   */
   public SnowflakeIdentifierGenerator(
       SnowflakeIdGenerator config,
       Member idMember,
@@ -33,6 +42,13 @@ public class SnowflakeIdentifierGenerator implements IdentifierGenerator, Standa
     }
   }
 
+  /**
+   * 根据主键类型生成雪花 ID：字符串类型返回 19 位十进制字符串，数值类型返回 {@code long} 值。
+   *
+   * @param session 当前 Hibernate 会话
+   * @param object 待持久化的实体对象
+   * @return 生成的分布式唯一 ID
+   */
   @Override
   public Object generate(SharedSessionContractImplementor session, Object object) {
     if (String.class.isAssignableFrom(propertyType)) {

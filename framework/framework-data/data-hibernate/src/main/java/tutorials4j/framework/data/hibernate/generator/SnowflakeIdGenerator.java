@@ -24,7 +24,7 @@ import org.hibernate.annotations.IdGeneratorType;
  * @Entity
  * public class User {
  *     @Id
- *     @SnowflakeIDGenerator
+ *     @SnowflakeIdGenerator
  *     private String id;
  *
  *     // other fields...

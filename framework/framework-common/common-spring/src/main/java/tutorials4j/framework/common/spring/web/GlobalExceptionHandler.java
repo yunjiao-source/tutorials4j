@@ -21,7 +21,7 @@ import tutorials4j.framework.common.core.exception.ErrorCode;
 import tutorials4j.framework.common.core.exception.ErrorCodeException;
 
 /**
- * TODO
+ * 全局异常处理器，通过 {@code @RestControllerAdvice} 统一捕获并转换各类异常为标准的响应结果。
  *
  * @author Yun Jiao
  */
@@ -29,12 +29,26 @@ import tutorials4j.framework.common.core.exception.ErrorCodeException;
 @RestControllerAdvice
 @Order
 public class GlobalExceptionHandler extends BaseExceptionHandler {
+  /**
+   * 处理业务错误码异常。
+   *
+   * @param ex 业务错误码异常
+   * @param request HTTP 请求对象
+   * @return 包含错误信息的响应实体
+   */
   @ExceptionHandler(ErrorCodeException.class)
   public ResponseEntity<Result<Void>> handleBaseException(
       ErrorCodeException ex, HttpServletRequest request) {
     return resolveException(ex, request.getRequestURI());
   }
 
+  /**
+   * 处理请求体不可读、缺少请求参数等客户端请求格式错误的异常。
+   *
+   * @param ex 异常对象
+   * @param request HTTP 请求对象
+   * @return 包含错误信息的响应实体
+   */
   @ExceptionHandler({
     HttpMessageNotReadableException.class,
     MissingServletRequestParameterException.class,
@@ -46,6 +60,13 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
     return resolveException(ex, request.getRequestURI(), BaseErrorCode.BAD_REQUEST);
   }
 
+  /**
+   * 处理请求方法不支持的异常。
+   *
+   * @param ex 异常对象
+   * @param request HTTP 请求对象
+   * @return 包含错误信息的响应实体
+   */
   @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
   public ResponseEntity<Result<Void>> handleMethodNotAllowed(
       Exception ex, HttpServletRequest request) {
@@ -53,12 +74,26 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
     return resolveException(ex, request.getRequestURI(), BaseErrorCode.METHOD_NOT_ALLOWED);
   }
 
+  /**
+   * 处理客户端不可接受的响应媒体类型异常。
+   *
+   * @param ex 异常对象
+   * @param request HTTP 请求对象
+   * @return 包含错误信息的响应实体
+   */
   @ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
   public ResponseEntity<Result<Void>> handleNotAcceptable(
       Exception ex, HttpServletRequest request) {
     return resolveException(ex, request.getRequestURI(), BaseErrorCode.NOT_ACCEPTABLE);
   }
 
+  /**
+   * 处理请求媒体类型不支持的异常。
+   *
+   * @param ex 异常对象
+   * @param request HTTP 请求对象
+   * @return 包含错误信息的响应实体
+   */
   @ExceptionHandler({HttpMediaTypeNotSupportedException.class})
   public ResponseEntity<Result<Void>> handleUnsupportedMediaType(
       Exception ex, HttpServletRequest request) {
@@ -66,6 +101,13 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
     return resolveException(ex, request.getRequestURI(), BaseErrorCode.UNSUPPORTED_MEDIA_TYPE);
   }
 
+  /**
+   * 处理非法参数异常。
+   *
+   * @param ex 异常对象
+   * @param request HTTP 请求对象
+   * @return 包含错误信息的响应实体
+   */
   @ExceptionHandler({IllegalArgumentException.class})
   public ResponseEntity<Result<Void>> handleUnprocessableEntity(
       Exception ex, HttpServletRequest request) {
@@ -73,6 +115,13 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
     return resolveException(ex, request.getRequestURI(), BaseErrorCode.INTERNAL_SERVER_ERROR);
   }
 
+  /**
+   * 处理未被其他处理器捕获的其余异常。
+   *
+   * @param ex 异常对象
+   * @param request HTTP 请求对象
+   * @return 包含错误信息的响应实体
+   */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Result<Void>> handleOtherException(
       Exception ex, HttpServletRequest request) {

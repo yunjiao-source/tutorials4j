@@ -13,17 +13,34 @@ import tutorials4j.framework.common.core.DefaultConsts;
 import tutorials4j.framework.web.security.signature.SignatureUtils;
 
 /**
- * 示例客户端
+ * 签名示例客户端。
+ *
+ * <p>封装基于 {@link SignatureUtils} 的签名生成逻辑，向目标接口发起携带签名请求头的 HTTP 调用。
  *
  * @author Yun Jiao
  */
 @Service
 public class SignatureClient {
+  /** 示例应用的应用标识。 */
   private static final String APP_KEY = "appkey1";
+
+  /** 示例应用的签名密钥。 */
   private static final String APP_SECRET = "appSecret1";
+
   private final RestTemplate restTemplate = new RestTemplate();
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  /**
+   * 向指定地址发送携带签名请求头的 POST 请求。
+   *
+   * @param baseUrl 服务基础地址
+   * @param path 请求路径
+   * @param body 请求体对象
+   * @param responseType 响应类型
+   * @param <T> 响应类型
+   * @return 响应结果
+   * @throws JsonProcessingException 请求体序列化失败时抛出
+   */
   private <T> T post(String baseUrl, String path, Object body, Class<T> responseType)
       throws JsonProcessingException {
     String timestamp = String.valueOf(System.currentTimeMillis());
@@ -47,6 +64,13 @@ public class SignatureClient {
     return restTemplate.postForObject(baseUrl + path, entity, responseType);
   }
 
+  /**
+   * 调用签名支付接口进行测试。
+   *
+   * @param userId 用户 ID
+   * @param amount 支付金额
+   * @return 接口返回结果
+   */
   public String test(String userId, Long amount) {
     Map<String, Object> params = Map.of("userId", userId, "amount", amount);
 

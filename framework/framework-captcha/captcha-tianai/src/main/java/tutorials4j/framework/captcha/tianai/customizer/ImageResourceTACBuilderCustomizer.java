@@ -11,6 +11,11 @@ import tutorials4j.framework.captcha.tianai.support.CaptchaType;
  */
 public class ImageResourceTACBuilderCustomizer implements TACBuilderCustomizer {
 
+  /**
+   * 为所有验证码类型添加默认的背景图片与模板图片资源。
+   *
+   * @param builder 待定制的 TAC 构建器
+   */
   @Override
   public void customiz(TACBuilder builder) {
     for (CaptchaType captchaType : CaptchaType.values()) {

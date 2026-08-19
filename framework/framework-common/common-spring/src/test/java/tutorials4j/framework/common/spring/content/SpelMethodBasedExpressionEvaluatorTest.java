@@ -46,23 +46,39 @@ class SpelMethodBasedExpressionEvaluatorTest {
   /** 测试用的服务类，用于验证 Bean 引用及普通方法参数 */
   @SuppressWarnings("unused")
   static class TestService {
+    /**
+     * 返回包含指定姓名的问候语。
+     *
+     * @param name 姓名
+     * @return 问候语字符串
+     */
     public String greet(String name) {
       return "Hello, " + name;
     }
 
+    /**
+     * 返回两个整数之和。
+     *
+     * @param a 第一个加数
+     * @param b 第二个加数
+     * @return 两数之和
+     */
     public int add(int a, int b) {
       return a + b;
     }
 
+    /** 返回固定的 Bean 消息。 */
     public String getMessage() {
       return "message from bean";
     }
 
+    /** 空方法，仅用于测试无参方法的求值。 */
     public void voidMethod() {
       // no-op
     }
   }
 
+  /** 初始化被测求值器，并 Mock BeanFactory 与嵌入式值解析器。 */
   @BeforeEach
   void setUp() {
     evaluator = new SpelMethodBasedExpressionEvaluator();
@@ -79,6 +95,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== 方法参数暴露测试 ====================
 
+  /** 验证可通过方法参数名（如 {@code #name}）访问方法参数。 */
   @Test
   void shouldAccessMethodParametersByArgumentName() throws Exception {
     // 准备测试方法及参数
@@ -92,6 +109,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
     assertThat(result).isEqualTo("Alice");
   }
 
+  /** 验证可通过 {@code #root.args} 数组访问方法参数。 */
   @Test
   void shouldAccessMethodParametersViaArgsArray() throws Exception {
     Method method = TestService.class.getMethod("add", int.class, int.class);
@@ -106,6 +124,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== 额外变量测试 ====================
 
+  /** 验证表达式可访问额外传入的变量。 */
   @Test
   void shouldAccessAdditionalVariables() throws Exception {
     Method method = TestService.class.getMethod("greet", String.class);
@@ -119,6 +138,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
     assertThat(result).isEqualTo("Alice!!!");
   }
 
+  /** 验证调用无 variables 参数的默认方法时使用空变量集合。 */
   @Test
   void shouldUseEmptyVariablesWhenUsingDefaultMethod() throws Exception {
     Method method = TestService.class.getMethod("add", int.class, int.class);
@@ -133,6 +153,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== Bean 引用测试 ====================
 
+  /** 验证表达式可通过 {@code @beanName.method()} 引用 Spring Bean 并调用其方法。 */
   @Test
   void shouldResolveBeanReferenceInExpression() throws Exception {
     // 准备一个真实的 Bean 实例
@@ -152,6 +173,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
     verify(mockBeanFactory, only()).getBean("testBean");
   }
 
+  /** 验证表达式可直接获取 Spring Bean 实例。 */
   @Test
   void shouldResolveBeanReferenceWithoutMethodCall() throws Exception {
     TestService testBean = new TestService();
@@ -169,6 +191,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== 嵌入式值解析器测试 ====================
 
+  /** 验证嵌入式值解析器可替换表达式中的多个占位符。 */
   @Test
   void shouldHandleMultiplePlaceholders() throws Exception {
     when(mockValueResolver.resolveStringValue("${a} + ${b}")).thenReturn("10 + 20");
@@ -183,6 +206,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== 表达式缓存测试 ====================
 
+  /** 验证相同的表达式字符串会被缓存，重复求值不重复解析。 */
   @Test
   void shouldCacheParsedExpressions() throws Exception {
     Method method = TestService.class.getMethod("add", int.class, int.class);
@@ -211,6 +235,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
     assertThat(cache).hasSize(1);
   }
 
+  /** 验证不同的表达式会分别缓存。 */
   @Test
   void differentExpressionsAreCachedSeparately() throws Exception {
     Method method = TestService.class.getMethod("add", int.class, int.class);
@@ -229,6 +254,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== Map 属性访问器测试 ====================
 
+  /** 验证可通过 Map 属性访问器直接访问 Map 中的 key。 */
   @Test
   void shouldAccessMapEntriesUsingPropertyAccessor() throws Exception {
     Method method = TestService.class.getMethod("voidMethod");
@@ -248,6 +274,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== 类型转换测试 ====================
 
+  /** 验证求值结果可自动转换为期望的目标类型。 */
   @Test
   void shouldConvertResultToExpectedType() throws Exception {
     Method method = TestService.class.getMethod("add", int.class, int.class);
@@ -262,6 +289,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
 
   // ==================== 异常情况测试 ====================
 
+  /** 验证无效表达式会抛出 {@link SpelParseException}。 */
   @Test
   void shouldThrowExceptionForInvalidExpression() throws Exception {
     Method method = TestService.class.getMethod("add", int.class, int.class);
@@ -273,6 +301,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
         .hasMessageContaining("EL1041E");
   }
 
+  /** 验证占位符解析为 {@code null} 时会抛出 {@link IllegalArgumentException}。 */
   @Test
   void shouldThrowExceptionWhenPlaceholderResolvesToNull() throws Exception {
     // 模拟解析器返回 null
@@ -287,6 +316,7 @@ class SpelMethodBasedExpressionEvaluatorTest {
         .hasMessage("Expression must not be null");
   }
 
+  /** 验证 BeanFactory 中不存在对应 Bean 时会抛出异常。 */
   @Test
   void shouldThrowExceptionWhenBeanNotFound() throws Exception {
     // 模拟 BeanFactory 找不到 Bean

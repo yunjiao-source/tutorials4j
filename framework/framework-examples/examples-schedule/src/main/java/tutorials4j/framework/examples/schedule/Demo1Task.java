@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 
 /**
- * TODO
+ * 定时任务演示 1：模拟执行耗时任务，随机休眠 0~3 秒后结束。
  *
  * @author Yun Jiao
  */
@@ -16,6 +16,7 @@ import tutorials4j.framework.schedule.core.bean.TaskRunner;
 @Component
 public class Demo1Task implements TaskRunner {
 
+  /** {@inheritDoc} */
   @Override
   public void run(Map<String, String> params) {
     log.info(

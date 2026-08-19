@@ -5,6 +5,8 @@ package tutorials4j.framework.web.security.signature;
  *
  * <p>根据应用标识（appKey）获取对应的密钥（appSecret）。实现类可对接数据库、配置文件或远程服务。
  *
+ * <p>该接口为函数式接口，仅包含一个抽象方法，可使用 Lambda 表达式或方法引用实现。
+ *
  * @author Yun Jiao
  */
 @FunctionalInterface

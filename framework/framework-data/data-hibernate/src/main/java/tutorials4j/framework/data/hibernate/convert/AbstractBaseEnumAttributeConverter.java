@@ -40,11 +40,17 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
 
   private final Class<E> enumClass;
 
+  /**
+   * 构造转换器并初始化枚举缓存。
+   *
+   * @param enumClass 待转换的枚举类型，必须实现 {@link BaseEnum}
+   */
   protected AbstractBaseEnumAttributeConverter(Class<E> enumClass) {
     this.enumClass = enumClass;
     initCache();
   }
 
+  /** 将枚举的全部常量按 code 注册到 {@link EnumCache}，供转换时快速查找。 */
   private void initCache() {
     E[] enumConstants = enumClass.getEnumConstants();
     if (enumConstants == null) {
@@ -53,11 +59,25 @@ public abstract class AbstractBaseEnumAttributeConverter<E extends Enum<E> & Bas
     EnumCache.registerByValue(enumClass, enumConstants, BaseEnum::getCode);
   }
 
+  /**
+   * 将枚举实例转换为其 code 值；入参为 {@code null} 时返回 {@code null}。
+   *
+   * @param attribute 待转换的枚举实例
+   * @return 数据库列对应的 code 值
+   */
   @Override
   public T convertToDatabaseColumn(E attribute) {
     return attribute == null ? null : attribute.getCode();
   }
 
+  /**
+   * 将数据库列中的 code 值还原为对应的枚举实例；入参为 {@code null} 时返回 {@code null}，code 无法匹配到枚举常量时抛出 {@link
+   * IllegalArgumentException}。
+   *
+   * @param dbData 数据库列中存储的 code 值
+   * @return 还原后的枚举实例
+   * @throws IllegalArgumentException 数据库值对应的枚举代码不存在时抛出
+   */
   @Override
   public E convertToEntityAttribute(T dbData) {
     if (dbData == null) {

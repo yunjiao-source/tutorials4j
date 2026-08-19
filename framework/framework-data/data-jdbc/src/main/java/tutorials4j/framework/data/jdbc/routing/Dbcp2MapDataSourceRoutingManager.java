@@ -17,6 +17,13 @@ import tutorials4j.framework.data.core.exception.DataErrorCode;
  * @see BasicDataSource
  */
 public class Dbcp2MapDataSourceRoutingManager extends AbstractMapDataSourceRoutingManager {
+  /**
+   * 基于默认 DBCP2 数据源复制配置并创建指定路由名称的新数据源。
+   *
+   * @param name 路由名称
+   * @param options JDBC 连接选项
+   * @return 新创建的数据源
+   */
   @Override
   protected DataSource createDataSource(String name, JdbcOptions options) {
     DataSource defaultDataSource = getDefaultDataSource();
@@ -37,6 +44,12 @@ public class Dbcp2MapDataSourceRoutingManager extends AbstractMapDataSourceRouti
   }
 
   // 创建数据源并复制属性
+  /**
+   * 复制默认数据源的连接池配置到新的 DBCP2 数据源。
+   *
+   * @param original 默认数据源
+   * @return 配置相同的新数据源，入参为 null 时返回 null
+   */
   private BasicDataSource copyDataSource(BasicDataSource original) {
     if (original == null) {
       return null;
@@ -67,6 +80,12 @@ public class Dbcp2MapDataSourceRoutingManager extends AbstractMapDataSourceRouti
     return copy;
   }
 
+  /**
+   * 关闭 DBCP2 数据源。
+   *
+   * @param dataSource 需要关闭的数据源
+   * @throws SQLException 关闭数据源发生异常时抛出
+   */
   @Override
   protected void doShutdown(DataSource dataSource) throws SQLException {
     if (dataSource instanceof BasicDataSource basicDataSource) {

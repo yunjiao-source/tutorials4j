@@ -280,74 +280,92 @@ public class SampleXxlJob {
     private Map<String, String> form; // 存储表单数据
     private String auth; // 鉴权信息
 
+    /** 获取请求 Url。 */
     public String getUrl() {
       return url;
     }
 
+    /** 设置请求 Url。 */
     public void setUrl(String url) {
       this.url = url;
     }
 
+    /** 获取请求方法。 */
     public String getMethod() {
       return method;
     }
 
+    /** 设置请求方法。 */
     public void setMethod(String method) {
       this.method = method;
     }
 
+    /** 获取 Content-Type。 */
     public String getContentType() {
       return contentType;
     }
 
+    /** 设置 Content-Type。 */
     public void setContentType(String contentType) {
       this.contentType = contentType;
     }
 
+    /** 获取请求头。 */
     public Map<String, String> getHeaders() {
       return headers;
     }
 
+    /** 设置请求头。 */
     public void setHeaders(Map<String, String> headers) {
       this.headers = headers;
     }
 
+    /** 获取 Cookie。 */
     public Map<String, String> getCookies() {
       return cookies;
     }
 
+    /** 设置 Cookie。 */
     public void setCookies(Map<String, String> cookies) {
       this.cookies = cookies;
     }
 
+    /** 获取请求超时时间。 */
     public int getTimeout() {
       return timeout;
     }
 
+    /** 设置请求超时时间。 */
     public void setTimeout(int timeout) {
       this.timeout = timeout;
     }
 
+    /** 获取请求体。 */
     public String getData() {
       return data;
     }
 
+    /** 设置请求体。 */
     public void setData(String data) {
       this.data = data;
     }
 
+    /** 获取表单数据。 */
     public Map<String, String> getForm() {
       return form;
     }
 
+    /** 设置表单数据。 */
     public void setForm(Map<String, String> form) {
       this.form = form;
     }
 
+    /** 获取鉴权信息。 */
     public String getAuth() {
       return auth;
     }
 
+    /** 设置鉴权信息。 */
     public void setAuth(String auth) {
       this.auth = auth;
     }
@@ -359,10 +377,12 @@ public class SampleXxlJob {
     XxlJobHelper.log("XXL-JOB, Hello World.");
   }
 
+  /** 任务初始化回调：任务 Handler 初始化时执行。 */
   public void init() {
     logger.info("init");
   }
 
+  /** 任务销毁回调：任务 Handler 销毁时执行。 */
   public void destroy() {
     logger.info("destroy");
   }

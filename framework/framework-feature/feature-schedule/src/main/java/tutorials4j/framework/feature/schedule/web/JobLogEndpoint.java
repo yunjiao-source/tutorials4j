@@ -13,7 +13,9 @@ import tutorials4j.framework.feature.schedule.domain.JobLogQuery;
 import tutorials4j.framework.feature.schedule.domain.JobLogService;
 
 /**
- * TODO
+ * 任务执行日志查询接口。
+ *
+ * <p>提供定时任务执行日志的分页查询能力。
  *
  * @author Yun Jiao
  */
@@ -23,6 +25,13 @@ import tutorials4j.framework.feature.schedule.domain.JobLogService;
 public class JobLogEndpoint {
   private final JobLogService jobLogService;
 
+  /**
+   * 分页查询任务执行日志。
+   *
+   * @param query 查询条件
+   * @param pageable 分页参数
+   * @return 任务执行日志视图对象分页结果
+   */
   @GetMapping("page")
   public Result<PagedModel<JobLogVO>> findPage(JobLogQuery query, Pageable pageable) {
     Page<JobLogEntity> page = jobLogService.find(query, pageable);

@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * p6spay配置
+ * P6Spy 示例配置类。
+ *
+ * <p>在 {@code p6spy} profile 下启用，同时装配 MyBatis 与 JPA 示例的组件、Mapper、仓库与实体， 用于演示 P6Spy 对 SQL 的打印与监控。
  *
  * @author Yun Jiao
  */

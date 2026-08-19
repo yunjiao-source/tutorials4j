@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * 租户配置
+ * JPA 示例配置类。
+ *
+ * <p>在 {@code jpa} profile 下启用，扫描并装配 JPA 示例的组件、仓库与实体，并在启动后向 Spring Security 安全上下文写入演示用户的认证信息。
  *
  * @author Yun Jiao
  */
@@ -23,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EnableJpaRepositories(basePackages = {"tutorials4j.framework.examples.jpa"})
 @EntityScan(basePackages = {"tutorials4j.framework.examples.jpa"})
 public class JpaConfig {
+  /** 启动后初始化，向安全上下文写入演示用户（zhangsan）的认证信息。 */
   @PostConstruct
   public void postConstruct() {
     // 1. 构建用户信息（UserDetails 是 Spring Security 标准用户对象）

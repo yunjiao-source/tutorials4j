@@ -49,9 +49,9 @@ public abstract class AbstractCaptchaBuilder<C extends AbstractCaptcha> {
   private Boolean validIgnoreCase;
 
   /**
-   * 创建验证码工具，子类实现
+   * 创建具体类型的验证码实例，由子类实现。
    *
-   * @return 实例
+   * @return 具体的验证码实例
    */
   protected abstract C createCaptcha();
 

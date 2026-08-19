@@ -13,17 +13,30 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
- * TODO
+ * OAuth2 授权服务器的基础配置。
+ *
+ * <p>提供密码编码器、基于公钥的 JWT 解码器，以及用于本地测试的内存用户。
  *
  * @author Yun Jiao
  */
 @Configuration
 public class Config {
+  /**
+   * 提供密码编码器（BCrypt）。
+   *
+   * @return 密码编码器
+   */
   @Bean
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   * 提供基于公钥的 JWT 解码器，用于校验授权服务器签发的令牌。
+   *
+   * @param keyMaterialLoader 密钥材料加载器
+   * @return JWT 解码器
+   */
   @Bean
   public JwtDecoder jwtDecoder(KeyMaterialLoader keyMaterialLoader) {
     RSAPublicKey publicKey = keyMaterialLoader.loadPublicKey();
@@ -31,6 +44,12 @@ public class Config {
   }
 
   // 新增：提供测试用户
+  /**
+   * 提供内存用户详情服务，用于本地测试登录。
+   *
+   * @param passwordEncoder 密码编码器
+   * @return 用户详情服务
+   */
   @Bean
   public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
     UserDetails user =

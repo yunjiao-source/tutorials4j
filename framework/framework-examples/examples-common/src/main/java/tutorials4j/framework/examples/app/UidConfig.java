@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Profile;
 import tutorials4j.framework.common.uid.DefaultUidGeneratorCustomizer;
 
 /**
- * 组合任务装饰器配置
+ * UID 生成器示例配置类。
+ *
+ * <p>在 {@code uid} profile 下启用，扫描并装配 UID 示例包中的组件，并自定义默认 UID 生成器的纪元时间。
  *
  * @author Yun Jiao
  */
@@ -18,6 +20,7 @@ import tutorials4j.framework.common.uid.DefaultUidGeneratorCustomizer;
 @ComponentScan(basePackages = {"tutorials4j.framework.examples.uid"})
 public class UidConfig {
 
+  /** 注册默认 UID 生成器自定义器，设置纪元时间为 2026-05-21。 */
   @Bean
   DefaultUidGeneratorCustomizer timestampDefaultedUidGeneratorCustomizer() {
     return defaultedUidGenerator -> defaultedUidGenerator.setEpochStr("2026-05-21");

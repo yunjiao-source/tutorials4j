@@ -18,11 +18,21 @@ import tutorials4j.framework.common.core.TenantContextHolder;
  */
 public class DefaultCurrentTenantIdentifierResolver
     implements CurrentTenantIdentifierResolver<String>, HibernatePropertiesCustomizer {
+  /**
+   * 从当前线程上下文中解析当前租户标识。
+   *
+   * @return 当前租户标识
+   */
   @Override
   public String resolveCurrentTenantIdentifier() {
     return TenantContextHolder.get();
   }
 
+  /**
+   * 是否校验已存在的会话，固定返回 true。
+   *
+   * @return true
+   */
   @Override
   public boolean validateExistingCurrentSessions() {
     return true;

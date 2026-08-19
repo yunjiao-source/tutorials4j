@@ -11,7 +11,7 @@ import tutorials4j.framework.cache.redis.autoconfigure.RedisCacheConfiguration;
 import tutorials4j.framework.cache.redisson.autoconfigure.RedissonCacheConfiguration;
 
 /**
- * 自动配置
+ * 缓存模块自动配置入口，导入缓存核心、Redis、Caffeine、多级缓存与 Redisson 配置。
  *
  * @author Yun Jiao
  */
@@ -25,6 +25,7 @@ import tutorials4j.framework.cache.redisson.autoconfigure.RedissonCacheConfigura
   RedissonCacheConfiguration.class
 })
 public class CacheAutoConfiguration {
+  /** 初始化日志输出。 */
   @PostConstruct
   public void postConstruct() {
     log.trace("[CACHE] Cache Auto Configuration");

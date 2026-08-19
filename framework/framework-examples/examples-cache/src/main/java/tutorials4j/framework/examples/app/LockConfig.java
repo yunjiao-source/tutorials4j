@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * redisson lock
+ * Redisson 分布式锁示例配置，仅在 {@code lock} Profile 下生效。
+ *
+ * <p>扫描分布式锁示例包 {@code tutorials4j.framework.examples.lock} 中的组件。
  *
  * @author Yun Jiao
  */

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import tutorials4j.framework.schedule.core.bean.TaskRunner;
 
 /**
- * TODO
+ * 定时任务演示 2：模拟执行耗时任务，随机休眠 0~4 秒，并按一定概率抛出异常， 用于演示任务执行失败时的处理逻辑。
  *
  * @author Yun Jiao
  */
@@ -16,6 +16,7 @@ import tutorials4j.framework.schedule.core.bean.TaskRunner;
 @Component
 public class Demo2Task implements TaskRunner {
 
+  /** {@inheritDoc} */
   @Override
   public void run(Map<String, String> params) {
     log.info(

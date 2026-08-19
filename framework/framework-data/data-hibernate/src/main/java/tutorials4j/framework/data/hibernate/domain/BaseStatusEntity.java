@@ -18,14 +18,17 @@ import tutorials4j.framework.data.core.exception.DataErrorCode;
 @MappedSuperclass
 public class BaseStatusEntity extends BaseEntity implements StatusEntity {
 
+  /** 数据状态，通过自定义转换器与数据库整数相互映射。 */
   @Convert(converter = DataStatusAttributeConverter.class)
   private DataStatusEnum dataStatus;
 
+  /** 获取数据状态。 */
   @Override
   public DataStatusEnum getDataStatus() {
     return dataStatus;
   }
 
+  /** 设置数据状态。 */
   @Override
   public void setDataStatus(DataStatusEnum status) {
     this.dataStatus = status;

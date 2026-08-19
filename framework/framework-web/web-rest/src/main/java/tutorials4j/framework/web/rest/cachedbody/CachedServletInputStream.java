@@ -20,13 +20,20 @@ import java.io.InputStream;
  */
 public class CachedServletInputStream extends ServletInputStream {
 
+  /** 底层的缓存字节数组输入流。 */
   private final InputStream cachedBodyInputStream;
 
+  /**
+   * 使用给定的字节数组创建输入流。
+   *
+   * @param cachedBody 缓存的请求体字节数组
+   */
   public CachedServletInputStream(byte[] cachedBody) {
     // 使用 ByteArrayInputStream 作为底层实现
     this.cachedBodyInputStream = new ByteArrayInputStream(cachedBody);
   }
 
+  /** 判断流是否已读取完毕，当底层可用字节数为 0 时返回 {@code true}。 */
   @Override
   public boolean isFinished() {
     try {
@@ -37,28 +44,33 @@ public class CachedServletInputStream extends ServletInputStream {
     }
   }
 
+  /** 数据全部缓存在内存中，因此流始终处于就绪状态。 */
   @Override
   public boolean isReady() {
     // 因为所有数据都在内存中，所以总是就绪
     return true;
   }
 
+  /** 当前实现不支持异步非阻塞读取，调用时抛出 {@link UnsupportedOperationException}。 */
   @Override
   public void setReadListener(ReadListener readListener) {
     // 本例不支持异步非阻塞读取，若需要可自行扩展
     throw new UnsupportedOperationException("不支持异步非阻塞读取");
   }
 
+  /** 从底层缓存流中读取下一个字节。 */
   @Override
   public int read() throws IOException {
     return cachedBodyInputStream.read();
   }
 
+  /** 从底层缓存流中读取最多 {@code len} 个字节存入给定数组。 */
   @Override
   public int read(byte[] b, int off, int len) throws IOException {
     return cachedBodyInputStream.read(b, off, len);
   }
 
+  /** 关闭底层缓存输入流。 */
   @Override
   public void close() throws IOException {
     cachedBodyInputStream.close();

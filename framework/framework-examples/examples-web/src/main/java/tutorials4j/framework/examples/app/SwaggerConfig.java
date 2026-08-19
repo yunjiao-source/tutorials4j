@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * Swagger配置
+ * Swagger 接口文档示例模块的配置类，仅在 swagger profile 下生效，负责扫描 Swagger 示例相关组件。
  *
  * @author Yun Jiao
  */

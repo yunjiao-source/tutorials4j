@@ -11,12 +11,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * XSS 清洗演示控制器。
+ *
+ * <p>演示表单参数与 JSON 请求体中的恶意内容分别由 XssHttpServletRequestWrapper 与 XssJsonDeserializer 自动清洗的过程。
+ *
+ * @author Yun Jiao
+ */
 @Slf4j
 @RestController
 @RequestMapping("/xss-demo")
 public class XssDemoController {
 
-  /** 演示表单参数清洗（由 XssHttpServletRequestWrapper 自动完成） 返回清洗后的结果 */
+  /**
+   * 演示表单参数清洗（由 XssHttpServletRequestWrapper 自动完成）。
+   *
+   * @param inputText 表单输入的原始文本，已自动清洗
+   * @return 包含清洗后结果的映射
+   */
   @PostMapping("/form")
   @ResponseBody
   public Map<String, String> testFormParam(@RequestParam("inputText") String inputText) {
@@ -27,7 +39,12 @@ public class XssDemoController {
     return result;
   }
 
-  /** 演示 JSON 请求体清洗（由 XssJsonDeserializer 自动完成） */
+  /**
+   * 演示 JSON 请求体清洗（由 XssJsonDeserializer 自动完成）。
+   *
+   * @param dto 请求体对象，其内容已在反序列化时被清洗
+   * @return 包含清洗后结果的映射
+   */
   @PostMapping("/json")
   @ResponseBody
   public Map<String, String> testJsonBody(@RequestBody XssRequestDto dto) {

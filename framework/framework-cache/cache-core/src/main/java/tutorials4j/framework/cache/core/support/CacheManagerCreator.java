@@ -13,5 +13,10 @@ import tutorials4j.framework.common.core.support.BeanCreator;
  * @author Yun Jiao
  */
 public interface CacheManagerCreator<T extends CacheManager> extends BeanCreator<T> {
+  /**
+   * 获取缓存管理器创建器的分类。
+   *
+   * @return 创建器分类
+   */
   CacheManagerCreatorCategory getCategory();
 }

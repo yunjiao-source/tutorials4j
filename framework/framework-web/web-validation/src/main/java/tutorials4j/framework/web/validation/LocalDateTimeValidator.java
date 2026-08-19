@@ -41,6 +41,11 @@ public class LocalDateTimeValidator implements ConstraintValidator<LocalDateTime
 
   private DateTimeFormatter formatter;
 
+  /**
+   * 初始化校验器：解析注解中配置的格式模式与时间类型，并构建对应的 {@link DateTimeFormatter}。
+   *
+   * @param constraintAnnotation 校验注解实例
+   */
   @Override
   public void initialize(LocalDateTimeFormat constraintAnnotation) {
     this.pattern = constraintAnnotation.pattern();
@@ -48,6 +53,13 @@ public class LocalDateTimeValidator implements ConstraintValidator<LocalDateTime
     this.formatter = DateTimeFormatter.ofPattern(pattern);
   }
 
+  /**
+   * 校验字符串是否符合配置的日期时间格式；空白或 null 视为合法（通过校验）。
+   *
+   * @param object 待校验的字符串
+   * @param constraintContext 校验上下文
+   * @return 格式合法返回 true，解析失败返回 false
+   */
   @Override
   public boolean isValid(String object, ConstraintValidatorContext constraintContext) {
     if (StringUtils.isBlank(object)) {

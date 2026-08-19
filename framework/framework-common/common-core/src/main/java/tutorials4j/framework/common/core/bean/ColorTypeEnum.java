@@ -4,7 +4,9 @@ import java.awt.Color;
 import lombok.Getter;
 
 /**
- * 颜色类型
+ * 颜色类型枚举，定义了常用颜色名称与 {@link java.awt.Color} 的映射关系。
+ *
+ * <p>常用于图片生成（如二维码）等场景的配色配置，通过枚举项即可获取对应的 AWT 颜色对象。
  *
  * @author Yun Jiao
  */

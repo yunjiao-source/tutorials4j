@@ -3,47 +3,55 @@ package tutorials4j.framework.common.core.util;
 import java.awt.image.BufferedImage;
 
 /**
- * 高斯模糊算法实现
+ * 高斯模糊算法工具类。
+ *
+ * <p>采用可分离的高斯核对图像进行水平、垂直两个方向的模糊处理， 并提供了轻度、中度、重度三种预设的模糊级别。
  *
  * @author Yun Jiao
  */
 public final class GaussianBlur {
   /**
-   * 轻度处理
+   * 对图像执行轻度高斯模糊（模糊半径为 5）。
    *
-   * @param image 原始图像
-   * @return 模糊后的图像
+   * @param image 原始图像，不能为 {@code null}
+   * @return 模糊后的新图像
+   * @throws NullPointerException 如果 {@code image} 为 {@code null}
    */
   public static BufferedImage gaussianBlurLight(BufferedImage image) {
     return execute(image, 5);
   }
 
   /**
-   * 中度处理
+   * 对图像执行中度高斯模糊（模糊半径为 8）。
    *
-   * @param image 原始图像
-   * @return 模糊后的图像
+   * @param image 原始图像，不能为 {@code null}
+   * @return 模糊后的新图像
+   * @throws NullPointerException 如果 {@code image} 为 {@code null}
    */
   public static BufferedImage gaussianBlurMedium(BufferedImage image) {
     return execute(image, 8);
   }
 
   /**
-   * 重度处理
+   * 对图像执行重度高斯模糊（模糊半径为 11）。
    *
-   * @param image 原始图像
-   * @return 模糊后的图像
+   * @param image 原始图像，不能为 {@code null}
+   * @return 模糊后的新图像
+   * @throws NullPointerException 如果 {@code image} 为 {@code null}
    */
   public static BufferedImage gaussianBlurHeavy(BufferedImage image) {
     return execute(image, 11);
   }
 
   /**
-   * 高斯模糊算法实现
+   * 执行高斯模糊。
    *
-   * @param image 原始图像
-   * @param radius 模糊半径
-   * @return 模糊后的图像
+   * <p>使用可分离高斯核先对图像进行水平方向模糊，再对垂直方向模糊； 边界像素采用就近取值（clamp）策略处理。模糊结果写入新建的图像并返回，原图像不会被修改。
+   *
+   * @param image 原始图像，不能为 {@code null}
+   * @param radius 模糊半径，值越大模糊程度越强
+   * @return 模糊后的新图像
+   * @throws NullPointerException 如果 {@code image} 为 {@code null}
    */
   public static BufferedImage execute(BufferedImage image, int radius) {
     int width = image.getWidth();
@@ -130,10 +138,12 @@ public final class GaussianBlur {
   }
 
   /**
-   * 创建高斯核
+   * 创建一维高斯核。
+   *
+   * <p>根据半径计算标准差（{@code sigma = radius / 3.0}），生成长度为 {@code radius * 2 + 1} 的高斯核，并进行归一化使权重之和为 1。
    *
    * @param radius 模糊半径
-   * @return 高斯核数组
+   * @return 归一化后的一维高斯核数组
    */
   public static double[] createGaussianKernel(int radius) {
     int size = radius * 2 + 1;

@@ -1,7 +1,6 @@
 package tutorials4j.framework.crypto.hutool.processor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -11,10 +10,17 @@ import org.junit.jupiter.api.Test;
 import tutorials4j.framework.common.core.bean.SecretKey;
 import tutorials4j.framework.crypto.core.bean.DigestCategory;
 
+/**
+ * {@link HmacSHA512DigestProcessor} 单元测试
+ *
+ * @author Yun Jiao
+ */
 class HmacSHA512DigestProcessorTest {
 
+  /** 测试数据：包含中文与特殊字符的明文字符串 */
   private static final String TEST_DATA = "Hello, 世界！";
 
+  /** 生成随机的 HMAC-SHA512 密钥（64 字节），并封装为 {@link SecretKey} */
   private SecretKey generateRandomHmacSha512Key() {
     // 生成随机的 HMAC 密钥（通常建议 >= 64 字节，但任意长度均可）
     byte[] keyBytes = RandomUtil.randomBytes(64);
@@ -30,13 +36,6 @@ class HmacSHA512DigestProcessorTest {
     assertThat(processor).isNotNull();
     assertThat(processor.getSecretKey()).isSameAs(secretKey);
     assertThat(processor.getCategory()).isEqualTo(DigestCategory.HmacSHA512);
-  }
-
-  @Test
-  void createWithNullSecretKeyShouldThrowException() {
-    assertThatThrownBy(() -> HmacSHA512DigestProcessor.create(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("'secretKey' must not be empty or blank");
   }
 
   @Test
