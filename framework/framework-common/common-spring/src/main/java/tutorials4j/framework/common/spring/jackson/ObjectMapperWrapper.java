@@ -2,6 +2,7 @@ package tutorials4j.framework.common.spring.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,6 +38,25 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
       return get().writeValueAsString(domain);
     } catch (JsonProcessingException e) {
       throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("对象转换字符串异常", e).param("domain", domain);
+    }
+  }
+
+  default <T> JsonNode toNode(T domain) {
+    return get().valueToTree(domain);
+  }
+
+  default <T> T convertValue(Object fromValue, Class<T> toValueType) {
+    return get().convertValue(fromValue, toValueType);
+  }
+
+  default <T> T treeToValue(TreeNode n, Class<T> valueType) {
+    try {
+      return get().treeToValue(n, valueType);
+    } catch (JsonProcessingException e) {
+      throw BaseErrorCode.WRAP_CHECK_EXCEPTION
+          .throwed("对象转换异常", e)
+          .param("domain", n)
+          .param("valueType", valueType);
     }
   }
 

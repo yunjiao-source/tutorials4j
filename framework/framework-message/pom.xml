@@ -16,11 +16,11 @@
 
     <modules>
         <module>message-core</module>
-        <module>message-amqp</module>
+        <module>message-rabbit</module>
         <module>message-websocket</module>
         <module>message-mqtt</module>
-        <module>message-redis</module>
-        <module>message-web</module>
+        <module>message-nats</module>
+        <module>message-kafka</module>
         <module>message-spring-boot-starter</module>
     </modules>
 

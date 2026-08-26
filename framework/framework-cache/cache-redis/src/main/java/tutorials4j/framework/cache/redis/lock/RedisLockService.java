@@ -3,7 +3,6 @@ package tutorials4j.framework.cache.redis.lock;
 import cn.hutool.core.util.IdUtil;
 import jakarta.annotation.PreDestroy;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
@@ -12,12 +11,10 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.data.redis.core.script.RedisScript;
 import tutorials4j.framework.cache.core.exception.CacheErrorCode;
 import tutorials4j.framework.cache.core.properties.RedisLockOptions;
-import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
-import tutorials4j.framework.common.core.ExecutionOption;
+import tutorials4j.framework.cache.redis.script.RedisScriptExecutor;
+import tutorials4j.framework.common.core.ExecutionOptions;
 import tutorials4j.framework.common.core.ExecutorServiceHolder;
 import tutorials4j.framework.common.core.support.ThrowingCallable;
 
@@ -55,42 +52,7 @@ public class RedisLockService {
   /** 全局单例实例。 */
   public static final RedisLockService instance = new RedisLockService();
 
-  /** 加锁 Lua 脚本：SET key value NX PX milliseconds */
-  private static final RedisScript<String> SCRIPT_LOCK =
-      new DefaultRedisScript<>(
-          """
-          return redis.call('set',KEYS[1],ARGV[1],'NX','PX',ARGV[2])
-      """,
-          String.class);
-
-  /** 解锁 Lua 脚本：仅当 value 匹配时才删除 key */
-  private static final RedisScript<String> SCRIPT_UNLOCK =
-      new DefaultRedisScript<>(
-          """
-          if redis.call('get',KEYS[1]) == ARGV[1] then
-            return tostring(redis.call('del', KEYS[1])==1)
-          else
-            return 'false'
-          end
-      """,
-          String.class);
-
-  /** 续期 Lua 脚本：仅当 value 匹配时才重新设置过期时间 */
-  private static final RedisScript<Boolean> SCRIPT_RENEWAL =
-      new DefaultRedisScript<>(
-          """
-          if redis.call('get', KEYS[1]) ==ARGV[1] then
-            return redis.call('pexpire', KEYS[1], ARGV[2])
-          else
-            return 0
-          end
-      """,
-          Boolean.class);
-
-  /** 加锁成功时 Redis 返回的标识。 */
-  private static final String LOCK_SUCCESS = "OK";
-
-  @Setter private RedisTemplateDecorator redisTemplateDecorator;
+  @Setter private RedisScriptExecutor redisScriptExecutor;
   @Setter private RedisLockOptions redisLockOptions;
   private volatile FixedLease fixedLease;
   private volatile AutoRenewal autoRenewal;
@@ -104,7 +66,7 @@ public class RedisLockService {
     if (fixedLease == null) {
       synchronized (this) {
         if (fixedLease == null) {
-          fixedLease = new FixedLease(redisTemplateDecorator);
+          fixedLease = new FixedLease(redisScriptExecutor);
         }
       }
     }
@@ -120,7 +82,7 @@ public class RedisLockService {
     if (autoRenewal == null) {
       synchronized (this) {
         if (autoRenewal == null) {
-          autoRenewal = new AutoRenewal(redisTemplateDecorator, redisLockOptions);
+          autoRenewal = new AutoRenewal(redisScriptExecutor, redisLockOptions);
           autoRenewal.initScheduler();
         }
       }
@@ -136,7 +98,7 @@ public class RedisLockService {
   @RequiredArgsConstructor
   public class FixedLease {
 
-    private final RedisTemplateDecorator redisTemplateDecorator;
+    private final RedisScriptExecutor redisScriptExecutor;
 
     /**
      * 尝试获取锁，内部使用 Lua 脚本保证原子性。
@@ -148,16 +110,10 @@ public class RedisLockService {
     private String lock(String lockKey, Duration expireTime) {
       String lockId = IdUtil.fastSimpleUUID();
 
-      String value =
-          redisTemplateDecorator
-              .getStringRedisTemplate()
-              .execute(
-                  SCRIPT_LOCK,
-                  Collections.singletonList(lockKey),
-                  lockId,
-                  String.valueOf(expireTime.toMillis()));
+      boolean lockAcquired =
+          redisScriptExecutor.setIfAbsent(lockKey, lockId, expireTime.toMillis());
 
-      if (LOCK_SUCCESS.equals(value)) {
+      if (lockAcquired) {
         return lockId;
       }
 
@@ -224,7 +180,7 @@ public class RedisLockService {
     /** 锁的默认续期周期。 */
     private static final Duration DEFAULT_RENEWAL_PERIOD_TIME = Duration.ofSeconds(9);
 
-    private final RedisTemplateDecorator redisTemplateDecorator;
+    private final RedisScriptExecutor redisScriptExecutor;
     private final RedisLockOptions redisLockOptions;
 
     private ExecutorServiceHolder<ScheduledThreadPoolExecutor> executorServiceHolder;
@@ -240,16 +196,10 @@ public class RedisLockService {
     private String lock(String lockKey) {
       String lockId = IdUtil.fastSimpleUUID();
 
-      String value =
-          redisTemplateDecorator
-              .getStringRedisTemplate()
-              .execute(
-                  SCRIPT_LOCK,
-                  Collections.singletonList(lockKey),
-                  lockId,
-                  String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
+      boolean lockAcquired =
+          redisScriptExecutor.setIfAbsent(lockKey, lockId, DEFAULT_EXPIRE_TIME.toMillis());
 
-      if (LOCK_SUCCESS.equals(value)) {
+      if (lockAcquired) {
         renewalLockTask(lockKey, lockId);
         return lockId;
       }
@@ -269,15 +219,10 @@ public class RedisLockService {
               .instance()
               .scheduleAtFixedRate(
                   () -> {
-                    Boolean renewed =
-                        redisTemplateDecorator
-                            .getStringRedisTemplate()
-                            .execute(
-                                SCRIPT_RENEWAL,
-                                Collections.singletonList(lockKey),
-                                lockId,
-                                String.valueOf(DEFAULT_EXPIRE_TIME.toMillis()));
-                    if (!Boolean.TRUE.equals(renewed)) {
+                    boolean renewed =
+                        redisScriptExecutor.checkAndResetExpire(
+                            lockKey, lockId, DEFAULT_EXPIRE_TIME.toMillis());
+                    if (!renewed) {
                       // 续期失败（锁已丢失），取消任务
                       cancelLockTask(lockKey);
                     }
@@ -290,7 +235,7 @@ public class RedisLockService {
 
     /** 根据配置初始化自动续期使用的调度线程池。 */
     public void initScheduler() {
-      ExecutionOption option = redisLockOptions.getAutoRenewal();
+      ExecutionOptions option = redisLockOptions.getAutoRenewal();
       executorServiceHolder = ExecutorServiceHolder.buildScheduler(option);
     }
 
@@ -366,11 +311,8 @@ public class RedisLockService {
       return;
     }
 
-    String value =
-        redisTemplateDecorator
-            .getStringRedisTemplate()
-            .execute(SCRIPT_UNLOCK, Collections.singletonList(lockKey), lockId);
-    if (!Boolean.parseBoolean(value) && log.isDebugEnabled()) {
+    boolean unlocked = redisScriptExecutor.deleteIfSame(lockKey, lockId);
+    if (!unlocked && log.isDebugEnabled()) {
       log.debug("释放分布式锁不存在，可能因为已过期，lockKey={}", lockKey);
     }
   }

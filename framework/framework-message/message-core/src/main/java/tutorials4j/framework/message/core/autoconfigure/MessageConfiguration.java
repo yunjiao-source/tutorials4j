@@ -2,9 +2,10 @@ package tutorials4j.framework.message.core.autoconfigure;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.message.core.properties.MessageProperties;
 
 /**
  * 消息模块核心自动配置类。
@@ -14,6 +15,7 @@ import tutorials4j.framework.message.core.properties.MessageProperties;
  * @author Yun Jiao
  */
 @Slf4j
+@ConditionalOnMissingBean({StreamBridge.class})
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({MessageProperties.class})
 public class MessageConfiguration {

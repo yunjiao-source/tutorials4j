@@ -1,4 +1,4 @@
-package tutorials4j.framework.message.core.properties;
+package tutorials4j.framework.message.core.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

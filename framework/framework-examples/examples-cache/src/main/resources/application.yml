@@ -4,6 +4,7 @@ spring:
     active: lock
 #    active: template
 #    active: multi-level
+#    active: idempotency
 
 
   data:

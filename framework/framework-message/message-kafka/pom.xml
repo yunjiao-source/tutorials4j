@@ -9,34 +9,21 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>message-web</artifactId>
+    <artifactId>message-kafka</artifactId>
     <packaging>jar</packaging>
-    <name>Message :: Web</name>
-    <description>消息Web模块</description>
+    <name>Message :: Kafka</name>
+    <description>消息Kafka模块</description>
 
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>message-amqp</artifactId>
+            <artifactId>message-core</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>message-redis</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>message-mqtt</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>message-websocket</artifactId>
-            <version>${revision}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
         </dependency>
     </dependencies>
 

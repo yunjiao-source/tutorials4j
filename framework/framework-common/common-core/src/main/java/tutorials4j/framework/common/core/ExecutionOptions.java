@@ -13,7 +13,7 @@ import lombok.Data;
  * @author Yun Jiao
  */
 @Data
-public class ExecutionOption {
+public class ExecutionOptions {
   /** 核心线程数，默认 4 */
   private int corePoolSize = 4;
 

@@ -13,6 +13,7 @@ import tutorials4j.framework.common.core.exception.Feedback;
  */
 @Getter
 public enum CacheErrorCode implements ErrorCode {
+  IDEMPOTENT_FAIL("幂等校验失败"),
   /** 缓存管理器创建者不存在 */
   CACHE_MANAGER_CREATOR_NOT_EXIST("缓存管理器创建者不存在"),
   /** 获取锁失败 */

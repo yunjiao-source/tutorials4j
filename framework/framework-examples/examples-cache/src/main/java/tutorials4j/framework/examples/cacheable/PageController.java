@@ -20,7 +20,7 @@ public class PageController {
    */
   @GetMapping("/cache-demo")
   public String cacheDemoPage() {
-    // 返回 templates 目录下的 cache-demo.html
+    // 返回 templates 目录下的 cache-order.html
     return "cacheable/cache-demo";
   }
 }

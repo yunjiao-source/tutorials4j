@@ -77,6 +77,9 @@ Java 教程
 > 本地（JVM） 锁
 ![本地（JVM） 锁](docs/images/005.jpg)
 
+> 幂等性演示
+![幂等性演示](docs/images/059.jpg)
+
 #### profile:template
 
 > 缓存模版

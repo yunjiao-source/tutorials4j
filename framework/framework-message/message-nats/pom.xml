@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>message-redis</artifactId>
+    <artifactId>message-nats</artifactId>
     <packaging>jar</packaging>
-    <name>Message :: Redis</name>
-    <description>消息Redis模块</description>
+    <name>Message :: Nats</name>
+    <description>消息Nats模块</description>
 
     <dependencies>
         <dependency>
@@ -22,18 +22,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
+            <groupId>io.nats</groupId>
+            <artifactId>nats-spring-cloud-stream-binder</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-core</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>

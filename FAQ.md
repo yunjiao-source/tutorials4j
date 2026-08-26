@@ -14,5 +14,5 @@ git config user.email "1290308475@qq.com"
 添加其他远程仓库，如：github，gitcode
 ```
 git remote add gitcode git@gitcode.com:yun-jiao/tutorials4j.git
-git remote add github <你的GitHub仓库地址>
+git remote add github git@github.com:yunjiao-source/tutorials4j.git
 

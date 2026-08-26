@@ -79,11 +79,11 @@ public class RedisLockableAspect {
   /**
    * 生成最终的锁 key，由前缀 {@link RedisLockable#prefix()} 和 SpEL 表达式求值结果拼接而成。
    *
-   * @param redissonBlockLockable 方法上标注的 {@link RedisLockable} 注解实例
+   * @param redisLockable 方法上标注的 {@link RedisLockable} 注解实例
    * @param argValues SpEL 表达式求值结果
    * @return 完整的锁 key（前缀 + 表达式求值结果）
    */
-  private String generateKey(RedisLockable redissonBlockLockable, String argValues) {
-    return redissonBlockLockable.prefix() + argValues;
+  private String generateKey(RedisLockable redisLockable, String argValues) {
+    return redisLockable.prefix() + argValues;
   }
 }

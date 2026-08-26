@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>message-amqp</artifactId>
+    <artifactId>message-rabbit</artifactId>
     <packaging>jar</packaging>
-    <name>Message :: AMQP</name>
-    <description>消息amqp模块</description>
+    <name>Message :: Rabbit</name>
+    <description>消息Rabbit模块</description>
 
     <dependencies>
         <dependency>
@@ -21,6 +21,10 @@
             <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

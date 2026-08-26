@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 线程池持有者，包装一个线程池实例及其执行配置。
  *
- * <p>提供基于 {@link ExecutionOption} 构建定时线程池与普通线程池的工厂方法，以及优雅关闭线程池的能力。
+ * <p>提供基于 {@link ExecutionOptions} 构建定时线程池与普通线程池的工厂方法，以及优雅关闭线程池的能力。
  *
  * @param <T> 持有的线程池类型
  * @author Yun Jiao
@@ -23,7 +23,7 @@ public class ExecutorServiceHolder<T extends ExecutorService> {
   private static final AtomicInteger THREAD_POOL_ID = new AtomicInteger(1);
 
   private final T instance;
-  private final ExecutionOption option;
+  private final ExecutionOptions option;
 
   /**
    * 使用线程池实例与执行配置构造持有者。
@@ -31,7 +31,7 @@ public class ExecutorServiceHolder<T extends ExecutorService> {
    * @param instance 线程池实例
    * @param option 执行配置
    */
-  protected ExecutorServiceHolder(T instance, ExecutionOption option) {
+  protected ExecutorServiceHolder(T instance, ExecutionOptions option) {
     this.instance = instance;
     this.option = option;
   }
@@ -52,7 +52,7 @@ public class ExecutorServiceHolder<T extends ExecutorService> {
    * @return 持有定时线程池的 {@link ExecutorServiceHolder}
    */
   public static ExecutorServiceHolder<ScheduledThreadPoolExecutor> buildScheduler(
-      ExecutionOption option) {
+      ExecutionOptions option) {
     NamedThreadFactory threadFactory =
         new NamedThreadFactory(option.getThreadNamePrefix(), option.isDaemon());
 
@@ -70,7 +70,7 @@ public class ExecutorServiceHolder<T extends ExecutorService> {
    * @param option 执行配置
    * @return 持有线程池的 {@link ExecutorServiceHolder}
    */
-  public static ExecutorServiceHolder<ThreadPoolExecutor> buildThreadPool(ExecutionOption option) {
+  public static ExecutorServiceHolder<ThreadPoolExecutor> buildThreadPool(ExecutionOptions option) {
     NamedThreadFactory threadFactory =
         new NamedThreadFactory(option.getThreadNamePrefix(), option.isDaemon());
 

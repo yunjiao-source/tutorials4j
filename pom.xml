@@ -89,6 +89,7 @@
         <xxl-job.version>3.4.2</xxl-job.version>
         <jquery.version>4.0.0</jquery.version>
         <bootstrap.version>5.3.8</bootstrap.version>
+        <nats.version>0.6.2+3.5</nats.version>
     </properties>
 
     <dependencyManagement>
@@ -118,14 +119,19 @@
             </dependency>
 
             <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>bootstrap</artifactId>
-                <version>${bootstrap.version}</version>
+                <groupId>io.nats</groupId>
+                <artifactId>nats-spring-cloud-stream-binder</artifactId>
+                <version>${nats.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.webjars</groupId>
                 <artifactId>jquery</artifactId>
                 <version>${jquery.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>bootstrap</artifactId>
+                <version>${bootstrap.version}</version>
             </dependency>
 
             <dependency>
