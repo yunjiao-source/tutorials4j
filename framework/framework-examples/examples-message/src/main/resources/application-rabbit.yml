@@ -1,0 +1,23 @@
+
+spring:
+  cloud:
+    function:
+      definition: sms
+    stream:
+      default-binder: rabbit
+      bindings:
+        # 消息发送通道配置
+        sms-out-0:                 # 输出通道名称
+          destination: sms-topic   # NATS 中的主题名称
+          content-type: application/json
+        # 消息接收通道配置
+        sms-in-0:                  # 输入通道名称
+          destination: sms-topic   # 需要监听的主题名称
+          content-type: application/json
+          group: sms-group         # 消费者组，用于实现负载均衡
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest

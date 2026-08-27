@@ -14,7 +14,7 @@ import tutorials4j.framework.common.core.exception.BaseErrorCode;
  *
  * <p>提供普通接口与 WebFlux（Mono）接口的链路追踪演示，覆盖正常调用、异常抛出及 异步服务调用等场景。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @Slf4j
 @RestController

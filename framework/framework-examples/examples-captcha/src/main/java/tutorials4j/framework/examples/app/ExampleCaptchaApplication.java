@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * <p>用于演示框架验证码（Captcha）模块的集成与使用。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @SpringBootApplication
 public class ExampleCaptchaApplication {

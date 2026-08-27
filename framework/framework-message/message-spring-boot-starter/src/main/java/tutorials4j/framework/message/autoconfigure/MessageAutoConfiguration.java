@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.message.core.autoconfigure.MessageConfiguration;
-import tutorials4j.framework.message.redis.autoconfigure.RedisMessageConfiguration;
 
 /**
  * 消息模块自动配置入口类。
@@ -16,7 +15,7 @@ import tutorials4j.framework.message.redis.autoconfigure.RedisMessageConfigurati
  */
 @Slf4j
 @AutoConfiguration
-@Import({MessageConfiguration.class, RedisMessageConfiguration.class})
+@Import({MessageConfiguration.class})
 public class MessageAutoConfiguration {
   /** 初始化：输出消息模块自动配置已加载的跟踪日志。 */
   @PostConstruct

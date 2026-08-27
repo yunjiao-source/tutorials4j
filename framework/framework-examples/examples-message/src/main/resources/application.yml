@@ -1,29 +1,9 @@
 spring:
   profiles:
-#    active: redis-list
-    active: redis-zset
-#    active: redis-stream
-#    active: redis-integration
+    active: nats
+#    active: rabbit
+#    active: kafka
 
-
-
-  data:
-    # Redis 配置
-    redis:
-      host: localhost # Redis服务器地址
-      port: 6379 # Redis端口
-      database: 2
-
-  task:
-    # 定时任务配置
-    scheduling:
-      # 全局线程池配置
-      pool:
-        size: 10
-      thread-name-prefix: "scheduled-"
-      shutdown:
-        await-termination: true
-        await-termination-period: "PT60S"
 
 logging:
   level:

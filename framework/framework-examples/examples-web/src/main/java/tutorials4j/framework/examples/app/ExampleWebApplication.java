@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * examples-web 示例模块的 Spring Boot 启动类。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @SpringBootApplication
 public class ExampleWebApplication {

@@ -15,7 +15,7 @@ import tutorials4j.framework.web.core.annotation.RequiredSignature;
  *
  * <p>提供签名测试与签名校验接口的演示。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @Slf4j
 @RestController

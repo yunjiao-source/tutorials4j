@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 加解密示例应用的主启动类。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @SpringBootApplication
 public class ExampleCryptoApplication {

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 缓存示例应用启动类。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @SpringBootApplication
 public class ExampleCacheApplication {

@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * <p>作为 Spring Boot 应用入口，通过 {@link SpringApplication#run} 启动整个应用， 并启用自动配置以装配租户相关的示例组件。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @SpringBootApplication
 public class ExampleTenantApplication {

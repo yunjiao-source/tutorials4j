@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * <p>通过 {@link SpringApplication} 启动 Spring Boot 应用，聚合特性（feature）相关的示例模块。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @SpringBootApplication
 public class ExampleFeatureApplication {

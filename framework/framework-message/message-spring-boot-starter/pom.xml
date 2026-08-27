@@ -17,7 +17,27 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>message-web</artifactId>
+            <artifactId>message-kafka</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-mqtt</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-nats</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-rabbit</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>message-websocket</artifactId>
             <version>${revision}</version>
         </dependency>
 
@@ -27,10 +47,6 @@
             <version>${revision}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

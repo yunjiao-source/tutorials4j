@@ -59,6 +59,14 @@ Java 教程
 > prometheus监控日志
 ![prometheus监控日志](docs/images/047.jpg)
 
+### 消息模块示例（framework/framework-examples/examples-message）
+
+#### profile:nats,rabbit,kafka
+
+> 短信发送
+![短信发送](docs/images/060.jpg )
+
+
 ### 缓存模块示例（framework/framework-examples/examples-cache）
 
 #### profile:cacheable

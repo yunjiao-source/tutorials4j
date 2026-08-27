@@ -13,7 +13,7 @@ import tutorials4j.framework.web.core.annotation.Idempotent;
  *
  * <p>演示 {@link Idempotent}（幂等）与 {@link AccessLimited}（访问限制）两个框架注解的用法。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @Slf4j
 @RestController

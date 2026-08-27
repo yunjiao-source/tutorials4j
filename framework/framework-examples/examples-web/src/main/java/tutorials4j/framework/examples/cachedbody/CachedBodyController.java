@@ -16,7 +16,7 @@ import tutorials4j.framework.web.rest.cachedbody.CachedBodyHttpServletRequest;
  *
  * <p>提供缓存与未缓存两组接口，用于演示 {@link CachedBodyHttpServletRequest} 包装后请求体可被多次读取，而未包装时第二次读取会失败的特性。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @Slf4j
 @RestController

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
  *
  * <p>提供 GET 与 POST 示例接口，用于演示请求日志过滤器对请求与响应的记录效果。
  *
- * @author yangyunjiao
+ * @author Yun Jiao
  */
 @Slf4j
 @RestController
