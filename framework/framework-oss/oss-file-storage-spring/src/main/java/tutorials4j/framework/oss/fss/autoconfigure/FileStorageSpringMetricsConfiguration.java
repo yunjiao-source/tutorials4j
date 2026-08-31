@@ -3,7 +3,7 @@ package tutorials4j.framework.oss.fss.autoconfigure;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +24,9 @@ import tutorials4j.framework.oss.fss.metrics.MetricsFileStorageAspect;
  */
 @Slf4j
 @Configuration
-@ConditionalOnClass(MeterRegistry.class)
+@ConditionalOnBean({MeterRegistry.class})
 @ConditionalOnProperty(
-    prefix = PropertiesConsts.PROPERTY_PREFIX_OSS + "metrics",
+    prefix = PropertiesConsts.PROPERTY_PREFIX_OSS + ".metrics",
     name = PropertiesConsts.PROPERTY_ENABLED,
     havingValue = "true",
     matchIfMissing = true)

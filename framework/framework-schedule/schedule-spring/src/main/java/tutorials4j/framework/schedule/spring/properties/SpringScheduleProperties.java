@@ -5,6 +5,7 @@ import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import tutorials4j.framework.common.core.MetricsOptions;
 import tutorials4j.framework.common.core.PropertiesConsts;
 
 /**
@@ -27,6 +28,8 @@ public class SpringScheduleProperties {
   /** 未单独配置时的默认任务执行选项。 */
   @NestedConfigurationProperty
   private TaskExecutionOptions defaultExecution = new TaskExecutionOptions();
+
+  @NestedConfigurationProperty private MetricsOptions metrics = new MetricsOptions();
 
   /** 按任务名称（类的简单名）配置的任务选项映射。 */
   private Map<String, TaskOptions> tasks = new HashMap<>();

@@ -3,6 +3,7 @@ package tutorials4j.framework.oss.core.autoconfigure;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import tutorials4j.framework.common.core.MetricsOptions;
 import tutorials4j.framework.common.core.PropertiesConsts;
 
 /**

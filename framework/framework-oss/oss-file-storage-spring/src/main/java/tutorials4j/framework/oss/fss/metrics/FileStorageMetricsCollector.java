@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
-import tutorials4j.framework.oss.core.autoconfigure.MetricsOptions;
+import tutorials4j.framework.common.core.MetricsOptions;
 
 /**
  * 文件存储指标收集器。
@@ -46,7 +46,6 @@ public class FileStorageMetricsCollector {
    */
   public void recordSuccess(
       String operation, String platform, String extension, long size, Timer.Sample sample) {
-    if (!options.isEnabled()) return;
 
     String baseKey = operation + "." + platform;
     // 成功计数器
@@ -99,7 +98,6 @@ public class FileStorageMetricsCollector {
    */
   public void recordFailure(
       String operation, String platform, String extension, Throwable error, Timer.Sample sample) {
-    if (!options.isEnabled()) return;
 
     String errorType = error != null ? error.getClass().getSimpleName() : "unknown";
     String baseKey = operation + "." + platform + "." + errorType;
@@ -130,7 +128,6 @@ public class FileStorageMetricsCollector {
 
   /** 活跃任务数 +1（Gauge） */
   public void activeTaskIncrement(String operation, String platform) {
-    if (!options.isEnabled()) return;
     String key = operation + "." + platform;
     AtomicLong gauge =
         activeGauges.computeIfAbsent(
@@ -145,7 +142,6 @@ public class FileStorageMetricsCollector {
 
   /** 活跃任务数 -1 */
   public void activeTaskDecrement(String operation, String platform) {
-    if (!options.isEnabled()) return;
     String key = operation + "." + platform;
     AtomicLong gauge = activeGauges.get(key);
     if (gauge != null) {
@@ -155,7 +151,7 @@ public class FileStorageMetricsCollector {
 
   /** 记录列举文件返回的数量 */
   public void recordListFilesCount(String platform, int count) {
-    if (!options.isEnabled() || count <= 0) return;
+    if (count <= 0) return;
     Counter counter =
         Counter.builder("file.storage.listFiles.count")
             .tags(getCommonTags(platform, null))
@@ -166,7 +162,7 @@ public class FileStorageMetricsCollector {
 
   /** 记录列举分片返回的分片数量 */
   public void recordListPartsCount(String platform, int count) {
-    if (!options.isEnabled() || count <= 0) return;
+    if (count <= 0) return;
     Counter counter =
         Counter.builder("file.storage.listParts.count")
             .tags(getCommonTags(platform, null))

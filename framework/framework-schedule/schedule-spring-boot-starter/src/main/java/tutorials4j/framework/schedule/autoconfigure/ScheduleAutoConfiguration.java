@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.schedule.powerjob.autoconfigure.PowerJobWorkerScheduleConfiguration;
-import tutorials4j.framework.schedule.spring.autoconfigure.MonitorScheduleConfiguration;
 import tutorials4j.framework.schedule.spring.autoconfigure.SpringScheduleConfiguration;
 import tutorials4j.framework.schedule.xxljob.autoconfigure.XxlJobScheduleConfiguration;
 
@@ -18,7 +17,6 @@ import tutorials4j.framework.schedule.xxljob.autoconfigure.XxlJobScheduleConfigu
 @AutoConfiguration
 @Import({
   SpringScheduleConfiguration.class,
-  MonitorScheduleConfiguration.class,
   PowerJobWorkerScheduleConfiguration.class,
   XxlJobScheduleConfiguration.class
 })

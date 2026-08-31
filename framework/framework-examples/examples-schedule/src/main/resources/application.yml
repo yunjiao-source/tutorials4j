@@ -13,6 +13,12 @@ spring:
       port: 6379 # Redis端口
       database: 2
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
 logging:
   level:
     tutorials4j: TRACE

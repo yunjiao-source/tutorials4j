@@ -1,4 +1,4 @@
-package tutorials4j.framework.oss.core.autoconfigure;
+package tutorials4j.framework.common.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,6 @@ public class MetricsOptions {
 
   /** 额外全局标签，如 application=myapp，会附加到所有指标上 */
   private List<String> tags = new ArrayList<>();
-
-  /** 是否记录百分位数，默认 true */
-  private boolean recordPercentiles = true;
 
   /** 百分位值，默认 50、95、99 分位，对应 p50、p95、p99 */
   private double[] percentiles = {0.5, 0.95, 0.99};

@@ -1,8 +1,10 @@
 package tutorials4j.framework.schedule.spring.autoconfigure;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +14,7 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.schedule.spring.component.ScheduleService;
 import tutorials4j.framework.schedule.spring.component.ScheduleTaskManager;
 import tutorials4j.framework.schedule.spring.handler.TaskRuntimeDataHandler;
+import tutorials4j.framework.schedule.spring.metrics.MicrometerTaskRuntimeDataHandler;
 import tutorials4j.framework.schedule.spring.properties.SpringScheduleProperties;
 import tutorials4j.framework.schedule.spring.repository.TaskRepository;
 import tutorials4j.framework.schedule.spring.repository.YamlTaskRepository;
@@ -83,5 +86,42 @@ public class SpringScheduleConfiguration {
       ScheduleTaskManager scheduleTaskManager, TaskRepository<?> taskRepository) {
     log.trace("[FEATURE-SPRING] Schedule Service");
     return new ScheduleService(scheduleTaskManager, taskRepository);
+  }
+
+  /**
+   * 定时任务监控的自动配置类。
+   *
+   * <p>在存在 {@link MeterRegistry} 与 {@link ScheduleTaskManager} Bean 时生效， 注册 {@link
+   * MicrometerTaskRuntimeDataHandler} 以将任务运行数据上报到 Micrometer 指标。
+   *
+   * @author Yun Jiao
+   */
+  @Slf4j
+  @Configuration(proxyBeanMethods = false)
+  @ConditionalOnBean({MeterRegistry.class})
+  @ConditionalOnProperty(
+      prefix = PropertiesConsts.PROPERTY_PREFIX_SCHEDULE_SPRING + ".metrics",
+      name = PropertiesConsts.PROPERTY_ENABLED,
+      havingValue = "true",
+      matchIfMissing = true)
+  public static class SpringScheduleMetricsConfiguration {
+    @PostConstruct
+    public void postConstruct() {
+      log.trace("[SCHEDULE-SPRING] Spring Schedule Metrics Configuration");
+    }
+
+    /**
+     * 注册任务监控指标处理器 Bean。
+     *
+     * @param meterRegistry Micrometer 指标注册中心
+     * @return 任务监控指标处理器实例
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    MicrometerTaskRuntimeDataHandler micrometerTaskRuntimeDataHandler(
+        MeterRegistry meterRegistry, SpringScheduleProperties properties) {
+      log.trace("[SCHEDULE-SPRING] Micrometer Task Runtime DataHandler");
+      return new MicrometerTaskRuntimeDataHandler(meterRegistry, properties.getMetrics());
+    }
   }
 }
