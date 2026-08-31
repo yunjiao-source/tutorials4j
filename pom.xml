@@ -90,6 +90,16 @@
         <jquery.version>4.0.0</jquery.version>
         <bootstrap.version>5.3.8</bootstrap.version>
         <nats.version>0.6.2+3.5</nats.version>
+        <esdk-obs-java.version>3.22.12</esdk-obs-java.version>
+        <aliyun-sdk-oss.version>3.16.1</aliyun-sdk-oss.version>
+        <qiniu-java-sdk.version>7.12.1</qiniu-java-sdk.version>
+        <cos_api.version>5.6.137</cos_api.version>
+        <bce-java-sdk>0.10.251</bce-java-sdk>
+        <upyun.version>4.2.3</upyun.version>
+        <minio.version>8.5.2</minio.version>
+        <aws-java-sdk-s3.version>1.12.429</aws-java-sdk-s3.version>
+        <sardine.version>5.10</sardine.version>
+        <x-file-storage-spring.version>2.3.0</x-file-storage-spring.version>
     </properties>
 
     <dependencyManagement>
@@ -118,6 +128,56 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.dromara.x-file-storage</groupId>
+                <artifactId>x-file-storage-spring</artifactId>
+                <version>${x-file-storage-spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.lookfirst</groupId>
+                <artifactId>sardine</artifactId>
+                <version>${sardine.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>${aws-java-sdk-s3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.upyun</groupId>
+                <artifactId>java-sdk</artifactId>
+                <version>${upyun.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baidubce</groupId>
+                <artifactId>bce-java-sdk</artifactId>
+                <version>${bce-java-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>${cos_api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>${qiniu-java-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun-sdk-oss.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.huaweicloud</groupId>
+                <artifactId>esdk-obs-java</artifactId>
+                <version>${esdk-obs-java.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.nats</groupId>
                 <artifactId>nats-spring-cloud-stream-binder</artifactId>

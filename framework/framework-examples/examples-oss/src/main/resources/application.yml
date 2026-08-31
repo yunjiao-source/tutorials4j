@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: fss
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+logging:
+  level:
+    tutorials4j: TRACE
+#    org.springframework: debug

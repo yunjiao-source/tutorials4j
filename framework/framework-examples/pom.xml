@@ -25,6 +25,7 @@
         <module>examples-feature</module>
         <module>examples-schedule</module>
         <module>examples-message</module>
+        <module>examples-oss</module>
     </modules>
 
     <dependencies>

@@ -105,6 +105,9 @@ public interface PropertiesConsts {
   /** tenant */
   String PROPERTY_PREFIX_TENANT = PROPERTY_PREFIX_TUTORIALS4J + ".tenant";
 
+  /** oss */
+  String PROPERTY_PREFIX_OSS = PROPERTY_PREFIX_TUTORIALS4J + ".oss";
+
   /** message */
   String PROPERTY_PREFIX_MESSAGE = PROPERTY_PREFIX_TUTORIALS4J + ".message";
 

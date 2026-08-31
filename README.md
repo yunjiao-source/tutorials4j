@@ -66,6 +66,16 @@ Java 教程
 > 短信发送
 ![短信发送](docs/images/060.jpg )
 
+### OSS对象存储模块示例（framework/framework-examples/examples-oss）
+
+#### profile:fss
+
+> 上传文件，使用x-file-storage-spring框架
+![上传文件，使用x-file-storage-spring框架](docs/images/061.jpg )
+
+> 上传文件监控
+![上传文件监控](docs/images/062.jpg )
+
 
 ### 缓存模块示例（framework/framework-examples/examples-cache）
 

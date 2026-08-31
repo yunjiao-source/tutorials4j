@@ -27,6 +27,7 @@
         <module>framework-schedule</module>
         <module>framework-message</module>
         <module>framework-oauth</module>
+        <module>framework-oss</module>
         <module>framework-feature</module>
 
         <module>framework-examples</module>
