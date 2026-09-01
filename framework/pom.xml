@@ -21,7 +21,6 @@
         <module>framework-cache</module>
         <module>framework-data</module>
         <module>framework-tenant</module>
-        <module>framework-payment</module>
         <module>framework-captcha</module>
         <module>framework-crypto</module>
         <module>framework-schedule</module>

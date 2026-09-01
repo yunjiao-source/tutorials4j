@@ -23,7 +23,7 @@ public class OrderVO extends BaseVO {
   private String orderNumber;
   private BigDecimal amount;
   private LocalDateTime orderTime;
-  private Long userId;
+  private String userId;
 
   private String email;
   private SexEnum sex;
