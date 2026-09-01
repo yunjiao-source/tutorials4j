@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import tutorials4j.framework.data.hibernate.domain.BaseRepository;
 import tutorials4j.framework.data.hibernate.domain.BaseService;
 
@@ -18,7 +17,7 @@ import tutorials4j.framework.data.hibernate.domain.BaseService;
  */
 @Service
 @RequiredArgsConstructor
-public class JobLogService implements BaseService<JobLogEntity, Long> {
+public class JobLogService implements BaseService<JobLogEntity, String> {
   private final JobLogRepository jobLogRepository;
 
   /**
@@ -27,7 +26,7 @@ public class JobLogService implements BaseService<JobLogEntity, Long> {
    * @return 任务日志数据仓库
    */
   @Override
-  public BaseRepository<JobLogEntity, Long> getRepository() {
+  public BaseRepository<JobLogEntity, String> getRepository() {
     return jobLogRepository;
   }
 
@@ -38,7 +37,6 @@ public class JobLogService implements BaseService<JobLogEntity, Long> {
    * @param pageable 分页参数
    * @return 任务日志分页结果
    */
-  @Transactional(readOnly = true, rollbackFor = Exception.class)
   public Page<JobLogEntity> find(JobLogQuery query, Pageable pageable) {
     return jobLogRepository.findAll(query.buildSpecification(), pageable);
   }
@@ -49,7 +47,6 @@ public class JobLogService implements BaseService<JobLogEntity, Long> {
    * @param query 查询条件
    * @return 任务日志列表
    */
-  @Transactional(readOnly = true, rollbackFor = Exception.class)
   public List<JobLogEntity> find(JobLogQuery query) {
     return this.findAll(query.buildSpecification());
   }

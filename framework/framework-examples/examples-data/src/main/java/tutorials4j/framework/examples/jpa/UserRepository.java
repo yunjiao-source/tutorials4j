@@ -11,4 +11,4 @@ import tutorials4j.framework.data.hibernate.domain.BaseRepository;
  * @author Yun Jiao
  */
 @Repository
-public interface UserRepository extends BaseRepository<User, Long> {}
+public interface UserRepository extends BaseRepository<User, String> {}

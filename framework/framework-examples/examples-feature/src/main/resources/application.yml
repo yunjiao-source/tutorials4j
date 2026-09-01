@@ -1,7 +1,8 @@
 spring:
   profiles:
 #    active: signin
-    active: schedule
+#    active: schedule
+    active: oss
 
   data:
     # Redis 配置

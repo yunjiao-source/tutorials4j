@@ -15,7 +15,7 @@ import tutorials4j.framework.data.hibernate.domain.BaseRepository;
  * @author Yun Jiao
  */
 @Repository
-public interface JobLogRepository extends BaseRepository<JobLogEntity, Long> {
+public interface JobLogRepository extends BaseRepository<JobLogEntity, String> {
 
   /**
    * 按条件分页查询任务日志，并预加载关联的任务。

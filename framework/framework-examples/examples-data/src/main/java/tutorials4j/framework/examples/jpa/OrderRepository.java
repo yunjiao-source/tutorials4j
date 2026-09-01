@@ -11,4 +11,4 @@ import tutorials4j.framework.data.hibernate.domain.BaseRepository;
  * @author Yun Jiao
  */
 @Repository
-public interface OrderRepository extends BaseRepository<Order, Long> {}
+public interface OrderRepository extends BaseRepository<Order, String> {}

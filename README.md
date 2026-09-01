@@ -35,7 +35,7 @@ Java 教程
 
 ### 功能模块示例（framework/framework-examples/examples-feature）
 
-#### profile:signin
+#### 签到功能 （profile:signin）
 
 > 签到示例
 ![签到示例](docs/images/001.jpg )
@@ -43,9 +43,7 @@ Java 教程
 > 签到记录查询示例
 ![签到记录查询示例](docs/images/023.jpg)
 
-
-
-#### profile:schedule
+#### 任务管理 （profile:schedule）
 
 > 任务调度管理
 ![任务调度管理](docs/images/041.jpg)
@@ -58,6 +56,18 @@ Java 教程
 
 > prometheus监控日志
 ![prometheus监控日志](docs/images/047.jpg)
+
+#### 对象存储oss（profile:oss）
+
+> 文件上传
+![文件上传](docs/images/065.jpg)
+
+> 上传文件列表
+![上传文件列表](docs/images/063.jpg)
+
+> 文件信息
+![文件信息](docs/images/064.jpg)
+
 
 ### 消息模块示例（framework/framework-examples/examples-message）
 

@@ -3,7 +3,6 @@ package tutorials4j.framework.oss.fss.autoconfigure;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.x.file.storage.spring.EnableFileStorage;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.oss.fss.component.LogFileStorageAspect;
@@ -18,7 +17,6 @@ import tutorials4j.framework.oss.fss.component.LogFileStorageAspect;
 @Slf4j
 @EnableFileStorage
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({})
 public class FileStorageSpringConfiguration {
 
   @PostConstruct

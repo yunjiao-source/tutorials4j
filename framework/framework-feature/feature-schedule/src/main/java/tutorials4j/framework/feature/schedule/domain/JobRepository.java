@@ -12,7 +12,7 @@ import tutorials4j.framework.data.hibernate.domain.BaseRepository;
  * @author Yun Jiao
  */
 @Repository
-public interface JobRepository extends BaseRepository<JobEntity, Long> {
+public interface JobRepository extends BaseRepository<JobEntity, String> {
 
   /**
    * 按任务编码查询任务。

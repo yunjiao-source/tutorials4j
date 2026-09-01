@@ -29,6 +29,12 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>feature-oss</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>data-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
@@ -63,6 +69,11 @@
             <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>oss-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
 </project>

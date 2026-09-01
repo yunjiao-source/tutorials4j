@@ -13,7 +13,7 @@ import tutorials4j.framework.common.core.exception.Feedback;
  */
 @Getter
 public enum FeatureErrorCode implements ErrorCode {
-  ;
+  FILE_UPLOAD_OSS_FAIL("文件上传OSS失败");
 
   private final Feedback feedback;
 

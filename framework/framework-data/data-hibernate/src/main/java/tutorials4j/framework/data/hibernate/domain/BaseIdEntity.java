@@ -7,24 +7,24 @@ import tutorials4j.framework.common.core.entity.IdEntity;
 import tutorials4j.framework.data.hibernate.generator.SnowflakeIdGenerator;
 
 /**
- * 使用雪花算法生成主键的基础实体类，提供 Long 类型主键以及基于主键的 equals/hashCode 实现。
+ * 使用雪花算法生成主键的基础实体类，提供 String 类型主键以及基于主键的 equals/hashCode 实现。
  *
  * @author Yun Jiao
  */
 @MappedSuperclass
-public class BaseIdEntity implements IdEntity<Long> {
+public class BaseIdEntity implements IdEntity<String> {
   /** 实体主键，由雪花算法生成。 */
-  @Id @SnowflakeIdGenerator private Long id;
+  @Id @SnowflakeIdGenerator private String id;
 
   /** 获取主键。 */
   @Override
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
   /** 设置主键。 */
   @Override
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 

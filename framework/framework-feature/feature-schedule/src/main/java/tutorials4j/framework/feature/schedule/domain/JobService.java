@@ -18,7 +18,7 @@ import tutorials4j.framework.data.hibernate.domain.BaseService;
  */
 @Service
 @RequiredArgsConstructor
-public class JobService implements BaseService<JobEntity, Long> {
+public class JobService implements BaseService<JobEntity, String> {
   private final JobRepository jobRepository;
 
   /**
@@ -27,7 +27,7 @@ public class JobService implements BaseService<JobEntity, Long> {
    * @return 任务数据仓库
    */
   @Override
-  public BaseRepository<JobEntity, Long> getRepository() {
+  public BaseRepository<JobEntity, String> getRepository() {
     return jobRepository;
   }
 

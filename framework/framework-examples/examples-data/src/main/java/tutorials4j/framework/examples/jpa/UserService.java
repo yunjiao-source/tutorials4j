@@ -14,7 +14,7 @@ import tutorials4j.framework.data.hibernate.domain.BaseService;
  */
 @Service
 @RequiredArgsConstructor
-public class UserService implements BaseService<User, Long> {
+public class UserService implements BaseService<User, String> {
 
   private final UserRepository userRepository;
 
@@ -24,7 +24,7 @@ public class UserService implements BaseService<User, Long> {
    * @return 用户数据仓库
    */
   @Override
-  public BaseRepository<User, Long> getRepository() {
+  public BaseRepository<User, String> getRepository() {
     return userRepository;
   }
 }

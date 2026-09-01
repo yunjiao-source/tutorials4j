@@ -5,17 +5,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tutorials4j.framework.common.core.MetricsOptions;
 import tutorials4j.framework.common.core.PropertiesConsts;
+import tutorials4j.framework.common.core.RandomFolderOptions;
 
 /**
- * OSS 模块配置属性类。
+ * OSS模块配置属性类，绑定前缀为 {@code PropertiesConsts.PROPERTY_PREFIX_OSS}。
  *
- * <p>绑定前缀为 {@code PropertiesConsts.PROPERTY_PREFIX_OSS} 的配置项。 包含嵌套的指标配置 {@link MetricsOptions}。
+ * <p>包含随机目录生成选项（{@link RandomFolderOptions}）和指标配置（{@link MetricsOptions}）。
  *
  * @author Yun Jiao
  */
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_OSS)
 public class OssProperties {
-  /** 指标相关配置，以 {@code metrics} 为前缀 */
+
+  /** 随机目录生成配置 */
+  @NestedConfigurationProperty
+  private final RandomFolderOptions randomFolder = new RandomFolderOptions();
+
+  /** 指标相关配置（如监控埋点） */
   @NestedConfigurationProperty private final MetricsOptions metrics = new MetricsOptions();
 }

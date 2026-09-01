@@ -18,7 +18,7 @@ import tutorials4j.framework.data.hibernate.domain.BaseService;
  */
 @Service
 @RequiredArgsConstructor
-public class OrderService implements BaseService<Order, Long> {
+public class OrderService implements BaseService<Order, String> {
 
   private final OrderRepository orderRepository;
 
@@ -68,7 +68,7 @@ public class OrderService implements BaseService<Order, Long> {
    * @return 订单数据仓库
    */
   @Override
-  public BaseRepository<Order, Long> getRepository() {
+  public BaseRepository<Order, String> getRepository() {
     return orderRepository;
   }
 }

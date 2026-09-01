@@ -16,7 +16,7 @@ import tutorials4j.framework.data.hibernate.domain.BaseService;
  */
 @Service
 @RequiredArgsConstructor
-public class SignInResultService implements BaseService<SignInResultEntity, Long> {
+public class SignInResultService implements BaseService<SignInResultEntity, String> {
   private final SignInResultRepository signInResultRepository;
 
   /**
@@ -25,7 +25,7 @@ public class SignInResultService implements BaseService<SignInResultEntity, Long
    * @return {@link SignInResultRepository} 实例
    */
   @Override
-  public BaseRepository<SignInResultEntity, Long> getRepository() {
+  public BaseRepository<SignInResultEntity, String> getRepository() {
     return signInResultRepository;
   }
 

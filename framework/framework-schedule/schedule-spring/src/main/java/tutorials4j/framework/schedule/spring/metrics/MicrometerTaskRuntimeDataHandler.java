@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import tutorials4j.framework.common.core.MetricsOptions;
 import tutorials4j.framework.schedule.spring.bean.TaskRuntimeData;
 import tutorials4j.framework.schedule.spring.bean.TaskStatusEnum;
@@ -46,6 +47,7 @@ public class MicrometerTaskRuntimeDataHandler implements TaskRuntimeDataHandler 
   // 已注册 Gauge 的任务编码集合，避免重复注册
   private final Map<String, Boolean> registeredGauges = new ConcurrentHashMap<>();
 
+  @Async
   @Override
   public void handle(TaskRuntimeData data) {
     TaskStatusEnum status = data.taskStatus();

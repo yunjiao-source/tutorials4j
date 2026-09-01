@@ -9,4 +9,4 @@ import tutorials4j.framework.data.hibernate.domain.BaseRepository;
  * @author Yun Jiao
  */
 @Repository
-public interface SignInResultRepository extends BaseRepository<SignInResultEntity, Long> {}
+public interface SignInResultRepository extends BaseRepository<SignInResultEntity, String> {}

@@ -44,7 +44,7 @@ public class JobEndpoint {
    */
   @PutMapping("/{id}")
   public Result<JobVO> updateJob(
-      @PathVariable("id") Long id, @Valid @RequestBody JobUpdateDTO dto) {
+      @PathVariable("id") String id, @Valid @RequestBody JobUpdateDTO dto) {
     JobEntity job = jobService.findById(id);
     checkJobIsRunning(job.getTaskCode());
 
@@ -74,7 +74,7 @@ public class JobEndpoint {
    * @return 无内容响应
    */
   @DeleteMapping("/{id}")
-  public Result<Void> delete(@PathVariable("id") Long id) {
+  public Result<Void> delete(@PathVariable("id") String id) {
     JobEntity job = jobService.findById(id);
     checkJobIsRunning(job.getTaskCode());
 
