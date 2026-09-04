@@ -24,6 +24,8 @@ public enum ScriptType {
   /** 仅当键当前值等于给定值时，删除该键，用于安全释放锁。 */
   DELETE_IF_SAME("scripts/delete_if_same.lua"),
 
+  INCR_AND_EXPIRE("scripts/incr_and_expire.lua"),
+
   /** 仅当键当前值等于给定值时，重置该键的过期时间（续期），用于锁续命。 */
   CHECK_AND_RESET_EXPIRE("scripts/check_and_reset_expire.lua");
 

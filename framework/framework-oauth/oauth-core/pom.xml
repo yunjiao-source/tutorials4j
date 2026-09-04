@@ -17,7 +17,12 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-spring</artifactId>
+            <artifactId>cache-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>web-core</artifactId>
             <version>${revision}</version>
         </dependency>
 

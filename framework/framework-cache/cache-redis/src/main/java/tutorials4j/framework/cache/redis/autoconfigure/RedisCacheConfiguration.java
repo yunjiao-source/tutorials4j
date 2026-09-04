@@ -215,7 +215,8 @@ public class RedisCacheConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  RedisScriptExecutor redisScriptExecutor(RedisTemplateDecorator redisTemplateDecorator) {
+  RedisScriptExecutor redisScriptExecutor(
+      RedisTemplateDecorator redisTemplateDecorator, CacheProperties properties) {
     log.trace("[CACHE-REDIS] Redis Script Executor");
     return new RedisScriptExecutor(redisTemplateDecorator);
   }

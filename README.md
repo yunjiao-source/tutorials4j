@@ -69,6 +69,11 @@ Java 教程
 ![文件信息](docs/images/064.jpg)
 
 
+### oauth模块示例（framework/framework-examples/examples-oauth） <span style="background-color: #FF6B6B; color: white; padding: 2px 8px; border-radius: 12px; font-size: 14px; font-weight: bold;">NEW</span>
+
+> API Key 限流示例
+![API Key 限流示例](docs/images/066.jpg)
+
 ### 消息模块示例（framework/framework-examples/examples-message）
 
 #### profile:nats,rabbit,kafka
@@ -76,7 +81,7 @@ Java 教程
 > 短信发送
 ![短信发送](docs/images/060.jpg )
 
-### OSS对象存储模块示例（framework/framework-examples/examples-oss）
+### OSS对象存储模块示例（framework/framework-examples/examples-oss） <span style="background-color: #FF6B6B; color: white; padding: 2px 8px; border-radius: 12px; font-size: 14px; font-weight: bold;">NEW</span>
 
 #### profile:fss
 

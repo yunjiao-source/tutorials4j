@@ -66,6 +66,9 @@ public interface PropertiesConsts {
   /** captcha.web 配置前缀 */
   String PROPERTY_PREFIX_CAPTCHA_WEB = PROPERTY_PREFIX_CAPTCHA + ".web";
 
+  /** oauth */
+  String PROPERTY_PREFIX_OAUTH = PROPERTY_PREFIX_TUTORIALS4J + ".oauth";
+
   /** web */
   String PROPERTY_PREFIX_WEB = PROPERTY_PREFIX_TUTORIALS4J + ".web";
 

@@ -131,6 +131,10 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
   static {
     Map<ErrorCode, HttpStatus> map =
         Map.of(
+            BaseErrorCode.TOO_MANY_REQUESTS,
+            HttpStatus.TOO_MANY_REQUESTS,
+            BaseErrorCode.UNAUTHORIZED,
+            HttpStatus.UNAUTHORIZED,
             BaseErrorCode.INTERNAL_SERVER_ERROR,
             HttpStatus.INTERNAL_SERVER_ERROR,
             BaseErrorCode.WRAP_CHECK_EXCEPTION,

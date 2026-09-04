@@ -96,6 +96,10 @@ public interface DefaultConsts {
   /** HTTP 头：加密传输的对称密钥（Hex 格式） */
   String HTTP_HEADER_CRYPTO_SECRET_KEY_HEX = "X-Crypto-Secret-Key-Hex";
 
+  String HTTP_HEADER_AUTHORIZATION = "Authorization";
+  String HTTP_HEADER_API_KEY = "X-Api-Key";
+  String HTTP_HEADER_API_KEY_LIMIT = "X-Api-Key-Limit";
+
   /** Class 名称定义 */
   String CLASS_HIKARI_DATA_SOURCE = "HikariDataSource";
 

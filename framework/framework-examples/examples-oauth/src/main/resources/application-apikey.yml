@@ -1,0 +1,12 @@
+tutorials4j:
+  oauth:
+    api-key:
+      default-limiter:
+        max-requests-per-day: 20
+        max-requests-per-minute: 10
+      named-limiter:
+        method1:
+          max-requests-per-minute: 5
+          max-requests-per-day: 10
+      interceptor:
+        include-path-patterns: /api-key

@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class HandlerInterceptorOptions {
   /** 需要拦截的 URL 路径模式。 */
-  private String[] includePathPatterns = new String[] {};
+  private String[] includePathPatterns = new String[] {"/demo/**"};
 
   /** 需要排除的 URL 路径模式。 */
   private String[] excludePathPatterns = new String[] {};

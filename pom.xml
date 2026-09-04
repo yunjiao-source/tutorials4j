@@ -100,6 +100,7 @@
         <aws-java-sdk-s3.version>1.12.429</aws-java-sdk-s3.version>
         <sardine.version>5.10</sardine.version>
         <x-file-storage-spring.version>2.3.0</x-file-storage-spring.version>
+        <sa-token.version>1.46.0</sa-token.version>
     </properties>
 
     <dependencyManagement>
@@ -126,6 +127,22 @@
                 <version>${alibaba-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-apikey</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-redis-jackson</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <dependency>
@@ -488,6 +505,12 @@
                             <phase>initialize</phase>
                         </execution>
                     </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${springboot.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

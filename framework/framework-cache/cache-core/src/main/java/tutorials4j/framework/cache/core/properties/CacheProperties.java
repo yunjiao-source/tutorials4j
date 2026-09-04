@@ -15,8 +15,8 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_CACHE)
 public class CacheProperties {
   /** Redisson 缓存名称，默认 {@code redisson:cache}。 */
-  private String redissonCacheName = "redisson:cache";
+  private String redissonCacheName = "redisson";
 
   /** 模板缓存名称，默认 {@code template:cache}。 */
-  private String templateCacheName = "template:cache";
+  private String templateCacheName = "template";
 }

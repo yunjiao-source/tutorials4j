@@ -3,9 +3,10 @@ package tutorials4j.framework.cache.redis.script;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.util.Assert;
 import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
 
 /**
@@ -17,8 +18,7 @@ import tutorials4j.framework.cache.redis.RedisTemplateDecorator;
  */
 @RequiredArgsConstructor
 public class RedisScriptExecutor {
-
-  private final RedisTemplateDecorator redisTemplateDecorator;
+  @Getter private final RedisTemplateDecorator redisTemplateDecorator;
 
   /** 缓存脚本类型与对应 RedisScript 实例的映射，提高执行效率。 */
   private final ConcurrentMap<ScriptType, RedisScript<Long>> scripts = new ConcurrentHashMap<>();
@@ -35,14 +35,14 @@ public class RedisScriptExecutor {
    * @throws IllegalArgumentException 如果任一参数为 null
    */
   public boolean checkAndSet(String key, String expectedValue, String newValue) {
-    assertNotNull(key, expectedValue, newValue);
+    String newKey = wrapKey(key);
     RedisScript<Long> script =
         scripts.computeIfAbsent(ScriptType.CHECK_AND_SET, ScriptType::getScript);
 
     Long result =
         redisTemplateDecorator
             .getStringRedisTemplate()
-            .execute(script, List.of(key), expectedValue, newValue);
+            .execute(script, List.of(newKey), expectedValue, newValue);
     return result != null && result >= 1;
   }
 
@@ -57,12 +57,12 @@ public class RedisScriptExecutor {
    * @throws IllegalArgumentException 如果任一参数为 null
    */
   public boolean deleteIfSame(String key, String value) {
-    assertNotNull(key, value);
+    String newKey = wrapKey(key);
     RedisScript<Long> script =
         scripts.computeIfAbsent(ScriptType.DELETE_IF_SAME, ScriptType::getScript);
 
     Long result =
-        redisTemplateDecorator.getStringRedisTemplate().execute(script, List.of(key), value);
+        redisTemplateDecorator.getStringRedisTemplate().execute(script, List.of(newKey), value);
     return result != null && result >= 1;
   }
 
@@ -78,14 +78,14 @@ public class RedisScriptExecutor {
    * @throws IllegalArgumentException 如果 key 或 value 为 null
    */
   public boolean setIfAbsent(String key, String value, long expireMills) {
-    assertNotNull(key, value);
+    String newKey = wrapKey(key);
     RedisScript<Long> script =
         scripts.computeIfAbsent(ScriptType.SET_IF_ABSENT, ScriptType::getScript);
 
     Long result =
         redisTemplateDecorator
             .getStringRedisTemplate()
-            .execute(script, List.of(key), value, String.valueOf(expireMills));
+            .execute(script, List.of(newKey), value, String.valueOf(expireMills));
     return result != null && result >= 1;
   }
 
@@ -101,26 +101,31 @@ public class RedisScriptExecutor {
    * @throws IllegalArgumentException 如果 key 或 value 为 null
    */
   public boolean checkAndResetExpire(String key, String value, long expireMills) {
-    assertNotNull(key, value);
+    String newKey = wrapKey(key);
     RedisScript<Long> script =
         scripts.computeIfAbsent(ScriptType.CHECK_AND_RESET_EXPIRE, ScriptType::getScript);
 
     Long result =
         redisTemplateDecorator
             .getStringRedisTemplate()
-            .execute(script, List.of(key), value, String.valueOf(expireMills));
+            .execute(script, List.of(newKey), value, String.valueOf(expireMills));
     return result != null && result >= 1;
   }
 
-  /**
-   * 断言传入的参数均不为 null，否则抛出 IllegalArgumentException。
-   *
-   * @param args 待检查的参数列表
-   * @throws IllegalArgumentException 如果任一参数为 null
-   */
-  private void assertNotNull(Object... args) {
-    if (ObjectUtils.anyNull(args)) {
-      throw new IllegalArgumentException("Arguments must not be null");
-    }
+  public long incrAndExpire(String key, long expireMills) {
+    String newKey = wrapKey(key);
+    RedisScript<Long> script =
+        scripts.computeIfAbsent(ScriptType.INCR_AND_EXPIRE, ScriptType::getScript);
+
+    Long result =
+        redisTemplateDecorator
+            .getStringRedisTemplate()
+            .execute(script, List.of(newKey), String.valueOf(expireMills));
+    return result == null ? 0 : result;
+  }
+
+  private String wrapKey(String key) {
+    Assert.notNull(key, "key must not be null");
+    return key;
   }
 }

@@ -16,6 +16,7 @@
 
     <modules>
         <module>oauth-core</module>
+        <module>oauth-so-token</module>
         <module>oauth-spring-boot-starter</module>
     </modules>
 

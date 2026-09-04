@@ -12,6 +12,8 @@ import lombok.Getter;
 @Getter
 public enum BaseErrorCode implements ErrorCode {
   CUSTOM_MESSAGE_EXCEPTION("自定义消息异常"),
+  TOO_MANY_REQUESTS("太多请求"),
+  UNAUTHORIZED("未登录"),
   /** 服务内部异常 */
   INTERNAL_SERVER_ERROR("服务内部异常"),
   /** 检查异常包装 */

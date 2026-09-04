@@ -17,13 +17,13 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>message-core</artifactId>
+            <artifactId>oauth-so-token</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>common-spring-boot-starter</artifactId>
+            <artifactId>cache-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
