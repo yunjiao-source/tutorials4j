@@ -1,5 +1,6 @@
 package tutorials4j.framework.auth.core.autoconfigure;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
@@ -12,18 +13,18 @@ import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
  * @author Yun Jiao
  */
 @Data
-public class ApiKeyOptions {
-  private String keyPrefix = "oauth:apikey:";
+public class ApiKeyRateLimiterOptions {
+  private String keyPrefix = "api_key_rate_limiter:";
 
   @NestedConfigurationProperty
   private HandlerInterceptorOptions interceptor = new HandlerInterceptorOptions();
 
-  private ApiKeyLimiterOptions defaultLimiter = new ApiKeyLimiterOptions();
-  private Map<String, ApiKeyLimiterOptions> namedLimiter = new HashMap<>();
+  private ApiKeyLimiterRequestOptions defaultLimiter = new ApiKeyLimiterRequestOptions();
+  private Map<String, ApiKeyLimiterRequestOptions> namedLimiter = new HashMap<>();
 
   @Data
-  public static class ApiKeyLimiterOptions {
-    private Integer maxRequestsPerMinute = 100;
-    private Integer maxRequestsPerDay = 10000;
+  public static class ApiKeyLimiterRequestOptions {
+    private Long maxRequestCount = 5L;
+    private Duration timeWindow = Duration.ofSeconds(1);
   }
 }

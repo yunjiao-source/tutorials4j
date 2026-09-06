@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tutorials4j.framework.auth.core.component.ApiKeyRateLimiterInterceptor;
-import tutorials4j.framework.auth.core.component.ApiKeyRateLimiterService;
+import tutorials4j.framework.auth.core.apikey.ApiKeyRateLimiterInterceptor;
+import tutorials4j.framework.auth.core.apikey.ApiKeyRateLimiterService;
 import tutorials4j.framework.common.core.bean.HandlerInterceptorOptions;
 
 /**
@@ -34,7 +34,7 @@ public class OAuthMvcConfiguration implements WebMvcConfigurer {
         new ApiKeyRateLimiterInterceptor(apiKeyRateLimiterService);
 
     InterceptorRegistration registration = registry.addInterceptor(apiKeyRateLimiterInterceptor);
-    HandlerInterceptorOptions options = properties.getApiKey().getInterceptor();
+    HandlerInterceptorOptions options = properties.getApiKeyRateLimiter().getInterceptor();
     registration.excludePathPatterns(options.getExcludePathPatterns());
     registration.addPathPatterns(options.getIncludePathPatterns());
 

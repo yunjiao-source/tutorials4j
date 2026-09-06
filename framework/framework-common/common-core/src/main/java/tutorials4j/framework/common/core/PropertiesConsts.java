@@ -122,4 +122,7 @@ public interface PropertiesConsts {
 
   /** feature.sign-in 配置前缀 */
   String PROPERTY_PREFIX_FEATURE_SIGN_IN = PROPERTY_PREFIX_FEATURE + ".sign-in";
+
+  String PROPERTY_PREFIX_FEATURE_API_KEY_RATE_LIMITER_EVENT =
+      PROPERTY_PREFIX_FEATURE + ".api-key-rate-limiter-event";
 }

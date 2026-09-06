@@ -99,6 +99,11 @@ public interface DefaultConsts {
   String HTTP_HEADER_AUTHORIZATION = "Authorization";
   String HTTP_HEADER_API_KEY = "X-Api-Key";
   String HTTP_HEADER_API_KEY_LIMIT = "X-Api-Key-Limit";
+  String HTTP_HEADER_API_KEY_LIMIT_REMAINING = "X-Api-Key-Limit-Remaining";
+  String HTTP_HEADER_API_KEY_LIMIT_TIME_WINDOW = "X-Api-Key-Limit-TimeWindow";
+
+  /** HTTP 查询参数名 */
+  String HTTP_QUERY_PARAM_API_KEY = "apiKey";
 
   /** Class 名称定义 */
   String CLASS_HIKARI_DATA_SOURCE = "HikariDataSource";

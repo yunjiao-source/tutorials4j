@@ -64,7 +64,7 @@ public class QueryEndpoint {
    */
   @GetMapping("page")
   public Result<PagedModel<FileInfo>> findPage(FileDetailQuery query, Pageable pageable) {
-    Page<FileDetailEntity> page = fileDetailService.find(query, pageable);
+    Page<FileDetailEntity> page = fileDetailService.findByPage(query, pageable);
     return Result.success(new PagedModel<>(page.map(fileStorageSpringEntityConvert::convert)));
   }
 }

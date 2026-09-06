@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.framework.auth.core.component.ApiKeyRateLimiterService;
+import tutorials4j.framework.auth.core.apikey.ApiKeyRateLimiterService;
 import tutorials4j.framework.cache.redis.script.RedisScriptExecutor;
 
 /**
@@ -28,6 +28,6 @@ public class OAuthConfiguration {
   ApiKeyRateLimiterService apiKeyRateLimiterService(
       RedisScriptExecutor redisScriptExecutor, OAuthProperties properties) {
     log.trace("[OAUTH-CORE] Api Key Rate Limiter Service");
-    return new ApiKeyRateLimiterService(redisScriptExecutor, properties.getApiKey());
+    return new ApiKeyRateLimiterService(redisScriptExecutor, properties.getApiKeyRateLimiter());
   }
 }

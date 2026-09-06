@@ -13,5 +13,6 @@ import tutorials4j.framework.common.core.PropertiesConsts;
 @Data
 @ConfigurationProperties(prefix = PropertiesConsts.PROPERTY_PREFIX_OAUTH)
 public class OAuthProperties {
-  @NestedConfigurationProperty private ApiKeyOptions apiKey = new ApiKeyOptions();
+  @NestedConfigurationProperty
+  private ApiKeyRateLimiterOptions apiKeyRateLimiter = new ApiKeyRateLimiterOptions();
 }

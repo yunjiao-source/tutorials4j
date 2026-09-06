@@ -32,7 +32,7 @@ public class FileDetailService implements BaseService<FileDetailEntity, String> 
    * @param pageable 分页信息
    * @return 文件实体分页结果
    */
-  public Page<FileDetailEntity> find(FileDetailQuery query, Pageable pageable) {
+  public Page<FileDetailEntity> findByPage(FileDetailQuery query, Pageable pageable) {
     return fileDetailRepository.findAll(query.buildSpecification(), pageable);
   }
 }

@@ -1,4 +1,4 @@
-package tutorials4j.framework.auth.core.annotation;
+package tutorials4j.framework.auth.core.apikey;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -16,4 +16,6 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ApiKeyRateLimiter {
   String name();
+
+  String description();
 }

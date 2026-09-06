@@ -47,6 +47,12 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>oauth-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>web-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>

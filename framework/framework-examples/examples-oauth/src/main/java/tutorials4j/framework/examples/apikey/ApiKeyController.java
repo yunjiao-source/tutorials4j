@@ -2,7 +2,7 @@ package tutorials4j.framework.examples.apikey;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.framework.auth.core.annotation.ApiKeyRateLimiter;
+import tutorials4j.framework.auth.core.apikey.ApiKeyRateLimiter;
 
 /**
  * TODO
@@ -13,8 +13,8 @@ import tutorials4j.framework.auth.core.annotation.ApiKeyRateLimiter;
 public class ApiKeyController {
 
   @GetMapping("api-key")
-  @ApiKeyRateLimiter(name = "method1")
-  public String method1() {
+  @ApiKeyRateLimiter(name = "demo", description = "测试API key限流")
+  public String demo() {
     return "ok";
   }
 }
