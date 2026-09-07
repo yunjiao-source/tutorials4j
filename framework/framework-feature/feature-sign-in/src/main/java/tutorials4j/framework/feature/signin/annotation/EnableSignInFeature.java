@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.springframework.context.annotation.Import;
-import tutorials4j.framework.feature.signin.autoconfigure.SignInJpaFeatureConfiguration;
+import tutorials4j.framework.feature.signin.autoconfigure.SignInFeatureConfiguration;
 
 /**
  * 启用签到功能特性的注解。
@@ -18,5 +18,5 @@ import tutorials4j.framework.feature.signin.autoconfigure.SignInJpaFeatureConfig
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(SignInJpaFeatureConfiguration.class)
+@Import(SignInFeatureConfiguration.class)
 public @interface EnableSignInFeature {}

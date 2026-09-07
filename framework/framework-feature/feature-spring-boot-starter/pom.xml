@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>feature-oss</artifactId>
+            <artifactId>feature-file-storage-spring</artifactId>
             <version>${revision}</version>
         </dependency>
 
