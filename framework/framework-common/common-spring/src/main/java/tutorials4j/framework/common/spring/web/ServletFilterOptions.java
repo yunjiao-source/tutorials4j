@@ -3,7 +3,6 @@ package tutorials4j.framework.common.spring.web;
 import jakarta.servlet.DispatcherType;
 import java.util.EnumSet;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
 /**
@@ -20,13 +19,10 @@ public class ServletFilterOptions {
   private boolean enabled = false;
 
   /** 过滤器匹配的 URL 模式，默认为 "/*" 表示拦截所有请求。 */
-  private String[] urlPatterns = new String[] {"/*"};
+  private String[] urlPatterns = new String[] {"/demo/*"};
 
   /** 过滤器执行顺序，数值越小优先级越高。 */
   private Integer order;
-
-  /** 过滤器的名称，用于在注册时标识该过滤器。 */
-  private String name;
 
   /** 过滤器适用的 Dispatcher 类型集合 */
   private EnumSet<DispatcherType> dispatcherTypes =
@@ -45,9 +41,6 @@ public class ServletFilterOptions {
     registrationBean.addUrlPatterns(this.getUrlPatterns());
     if (this.getOrder() != null) {
       registrationBean.setOrder(this.getOrder());
-    }
-    if (StringUtils.isNotBlank(this.getName())) {
-      registrationBean.setName(this.getName());
     }
     registrationBean.setDispatcherTypes(this.getDispatcherTypes());
   }

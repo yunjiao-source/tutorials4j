@@ -1,4 +1,4 @@
-package tutorials4j.framework.oauth.sotoken.component;
+package tutorials4j.framework.oauth.satoken.component;
 
 import cn.dev33.satoken.apikey.SaApiKeyManager;
 import cn.dev33.satoken.apikey.template.SaApiKeyTemplate;

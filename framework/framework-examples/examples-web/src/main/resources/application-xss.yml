@@ -4,5 +4,4 @@ tutorials4j:
       enabled: true
       filter:
         url-patterns: /xss-demo/*
-        name: xssFilter
 

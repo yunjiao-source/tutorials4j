@@ -11,6 +11,7 @@ import tutorials4j.framework.common.core.exception.Feedback;
  */
 @Getter
 public enum OAuthErrorCode implements ErrorCode {
+  SIGN_CHECK_FAIL("签名校验失败"),
   API_KEY_VALUE_NOT_EXIST("缺少 API Key");
   private final Feedback feedback;
 

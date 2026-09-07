@@ -4,4 +4,3 @@ tutorials4j:
       enabled: true
       filter:
         url-patterns: /cached-body/cached
-        name: cachedBodyFilter

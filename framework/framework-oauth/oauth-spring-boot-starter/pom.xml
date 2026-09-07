@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
-            <artifactId>oauth-so-token</artifactId>
+            <artifactId>oauth-sa-token</artifactId>
             <version>${revision}</version>
         </dependency>
 

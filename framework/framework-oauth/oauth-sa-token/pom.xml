@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>oauth-so-token</artifactId>
+    <artifactId>oauth-sa-token</artifactId>
     <packaging>jar</packaging>
     <name>OAuth :: So-Token</name>
     <description>So-Token集成模块</description>
@@ -33,6 +33,10 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-redis-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-sign</artifactId>
         </dependency>
     </dependencies>
 

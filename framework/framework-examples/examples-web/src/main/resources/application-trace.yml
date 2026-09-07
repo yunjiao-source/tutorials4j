@@ -6,4 +6,3 @@ tutorials4j.web:
     enabled: true
     filter:
       url-patterns: /trace/common/*,/trace/mono/*
-      name: traceFilter
