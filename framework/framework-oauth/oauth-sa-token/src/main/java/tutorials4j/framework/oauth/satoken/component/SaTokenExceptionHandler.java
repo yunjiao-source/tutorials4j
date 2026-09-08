@@ -30,21 +30,23 @@ public class SaTokenExceptionHandler extends BaseExceptionHandler {
   @ExceptionHandler(SaTokenException.class)
   public ResponseEntity<Result<Void>> handlerSaTokenException(
       SaTokenException e, HttpServletRequest request) {
-    BaseErrorCode errorCode = BaseErrorCode.INTERNAL_SERVER_ERROR;
-    HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    BaseErrorCode errorCode = BaseErrorCode.SYSTEM_EXCPEITON;
 
     if (e instanceof NotLoginException) { // 如果是未登录异常
       errorCode = BaseErrorCode.UNAUTHORIZED;
-      status = HttpStatus.UNAUTHORIZED;
     } else if (e instanceof NotRoleException
         || e instanceof NotPermissionException
         || e instanceof DisableServiceException) {
       errorCode = BaseErrorCode.FORBIDDEN;
-      status = HttpStatus.FORBIDDEN;
     }
 
     Result<Void> result = Result.failure(errorCode.getFeedback());
     result.errorParams(List.of(Pair.of("code", e.getCode())));
+
+    HttpStatus status = lookupErrorCode(errorCode);
+    if (status == null) {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
     return resolveException(e, request.getRequestURI(), result, status);
   }
 }

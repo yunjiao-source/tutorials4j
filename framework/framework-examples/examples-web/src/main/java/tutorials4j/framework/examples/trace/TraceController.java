@@ -40,7 +40,7 @@ public class TraceController {
   @GetMapping("common/exception")
   public String commonException() {
     log.info("commonException");
-    throw BaseErrorCode.INTERNAL_SERVER_ERROR.throwed();
+    throw BaseErrorCode.SYSTEM_EXCPEITON.throwed();
   }
 
   /** WebFlux 接口，内部调用 {@link TraceService#logger()} 后返回响应式结果。 */

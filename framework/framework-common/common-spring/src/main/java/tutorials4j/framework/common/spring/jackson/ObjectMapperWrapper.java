@@ -37,7 +37,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().writeValueAsString(domain);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("对象转换字符串异常", e).param("domain", domain);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("对象转换字符串异常", e).param("domain", domain);
     }
   }
 
@@ -53,7 +53,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().treeToValue(n, valueType);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION
+      throw BaseErrorCode.SYSTEM_EXCPEITON
           .throwed("对象转换异常", e)
           .param("domain", n)
           .param("valueType", valueType);
@@ -82,7 +82,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readValue(content, valueType);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("字符串转换对象异常", e).param("content", content);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("字符串转换对象异常", e).param("content", content);
     }
   }
 
@@ -99,7 +99,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().convertValue(content, valueType);
     } catch (IllegalArgumentException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("字符串转换对象异常", e).param("content", content);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("字符串转换对象异常", e).param("content", content);
     }
   }
 
@@ -116,7 +116,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readValue(content, typeReference);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("字符串转换对象异常", e).param("content", content);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("字符串转换对象异常", e).param("content", content);
     }
   }
 
@@ -133,7 +133,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readValue(content, javaType);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("字符串转换对象异常", e);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("字符串转换对象异常", e);
     }
   }
 
@@ -223,7 +223,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readTree(content);
     } catch (JsonProcessingException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("字符串转换对象异常", e).param("content", content);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("字符串转换对象异常", e).param("content", content);
     }
   }
 
@@ -238,7 +238,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().readTree(jsonParser);
     } catch (IOException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("读取树异常", e);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("读取树异常", e);
     }
   }
 
@@ -253,7 +253,7 @@ public interface ObjectMapperWrapper extends Supplier<ObjectMapper> {
     try {
       return get().createParser(content);
     } catch (IOException e) {
-      throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("创建解析器异常", e);
+      throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("创建解析器异常", e);
     }
   }
 }

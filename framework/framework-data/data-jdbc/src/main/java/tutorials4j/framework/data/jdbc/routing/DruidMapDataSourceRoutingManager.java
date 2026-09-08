@@ -39,7 +39,7 @@ public class DruidMapDataSourceRoutingManager extends AbstractMapDataSourceRouti
         newDataSource.init();
         return newDataSource;
       } catch (Exception e) {
-        throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed("创建数据源异常", e);
+        throw BaseErrorCode.SYSTEM_EXCPEITON.throwed("创建数据源异常", e);
       }
     } else {
       throw DataErrorCode.DATA_SOURCE_NOT_EXIST

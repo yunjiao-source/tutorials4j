@@ -1,7 +1,7 @@
 package tutorials4j.framework.examples.exception;
 
-import java.util.Map;
 import lombok.Getter;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.HttpStatus;
 import tutorials4j.framework.common.core.exception.ErrorCode;
 import tutorials4j.framework.common.core.exception.Feedback;
@@ -28,8 +28,7 @@ public enum CustomErrorCode implements ErrorCode {
   }
 
   static {
-    Map<ErrorCode, HttpStatus> map =
-        Map.of(CustomErrorCode.CUSTOM_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
-    BaseExceptionHandler.registeErrorCode(map);
+    BaseExceptionHandler.registerErrorCode(
+        Pair.of(CUSTOM_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR));
   }
 }

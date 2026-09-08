@@ -1,8 +1,8 @@
 spring:
   profiles:
 #    active: task
-    active: uid
-#    active: exception
+#    active: uid
+    active: exception
 
 logging:
   level:

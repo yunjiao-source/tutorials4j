@@ -148,7 +148,7 @@ public class RedissonReentrantLockService {
         return task.call();
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
-        throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed(e);
+        throw BaseErrorCode.SYSTEM_EXCPEITON.throwed(e);
       } finally {
         unlock(lock);
       }
@@ -175,7 +175,7 @@ public class RedissonReentrantLockService {
         task.run();
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
-        throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed(e);
+        throw BaseErrorCode.SYSTEM_EXCPEITON.throwed(e);
       } finally {
         unlock(lock);
       }
@@ -257,7 +257,7 @@ public class RedissonReentrantLockService {
         return task.call();
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
-        throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed(e);
+        throw BaseErrorCode.SYSTEM_EXCPEITON.throwed(e);
       } finally {
         unlock(lock);
       }
@@ -283,7 +283,7 @@ public class RedissonReentrantLockService {
         task.run();
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
-        throw BaseErrorCode.WRAP_CHECK_EXCEPTION.throwed(e);
+        throw BaseErrorCode.SYSTEM_EXCPEITON.throwed(e);
       } finally {
         unlock(lock);
       }
