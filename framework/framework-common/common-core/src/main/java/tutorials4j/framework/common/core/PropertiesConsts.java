@@ -69,6 +69,8 @@ public interface PropertiesConsts {
   /** oauth */
   String PROPERTY_PREFIX_OAUTH = PROPERTY_PREFIX_TUTORIALS4J + ".oauth";
 
+  String PROPERTY_PREFIX_OAUTH_SA_TOKEN = PROPERTY_PREFIX_OAUTH + ".sa-token";
+
   /** web */
   String PROPERTY_PREFIX_WEB = PROPERTY_PREFIX_TUTORIALS4J + ".web";
 

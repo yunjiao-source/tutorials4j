@@ -11,7 +11,6 @@ import lombok.Getter;
  */
 @Getter
 public enum BaseErrorCode implements ErrorCode {
-  CUSTOM_MESSAGE_EXCEPTION("自定义消息异常"),
   TOO_MANY_REQUESTS("太多请求"),
   UNAUTHORIZED("未登录"),
   /** 服务内部异常 */
@@ -28,6 +27,7 @@ public enum BaseErrorCode implements ErrorCode {
   METHOD_NOT_ALLOWED("服务器识别了请求方法，但目标资源不支持该方法"),
   /** 请求因语法错误或格式无效 */
   BAD_REQUEST("请求因语法错误或格式无效"),
+  FORBIDDEN("无权访问"),
   /** 服务器无法找到所请求的资源 */
   NOT_FOUND("服务器无法找到所请求的资源");
 

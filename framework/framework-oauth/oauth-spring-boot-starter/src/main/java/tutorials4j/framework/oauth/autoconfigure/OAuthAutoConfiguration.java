@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tutorials4j.framework.auth.core.autoconfigure.OAuthConfiguration;
 import tutorials4j.framework.auth.core.autoconfigure.OAuthMvcConfiguration;
+import tutorials4j.framework.oauth.satoken.autoconfigure.SaTokenMvcOAuthConfiguration;
 import tutorials4j.framework.oauth.satoken.autoconfigure.SaTokenOAuthConfiguration;
 
 /**
@@ -15,7 +16,12 @@ import tutorials4j.framework.oauth.satoken.autoconfigure.SaTokenOAuthConfigurati
  */
 @Slf4j
 @AutoConfiguration
-@Import({OAuthConfiguration.class, OAuthMvcConfiguration.class, SaTokenOAuthConfiguration.class})
+@Import({
+  OAuthConfiguration.class,
+  OAuthMvcConfiguration.class,
+  SaTokenOAuthConfiguration.class,
+  SaTokenMvcOAuthConfiguration.class
+})
 public class OAuthAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

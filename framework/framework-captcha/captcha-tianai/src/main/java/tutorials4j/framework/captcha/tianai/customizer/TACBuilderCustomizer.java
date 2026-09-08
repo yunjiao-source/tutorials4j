@@ -17,5 +17,5 @@ public interface TACBuilderCustomizer {
    *
    * @param builder 待定制的 TAC 构建器
    */
-  void customiz(TACBuilder builder);
+  void customize(TACBuilder builder);
 }

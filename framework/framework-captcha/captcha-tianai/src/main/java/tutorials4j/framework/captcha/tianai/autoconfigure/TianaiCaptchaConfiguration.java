@@ -153,7 +153,7 @@ public class TianaiCaptchaConfiguration {
       RedisCacheStore redisCacheStore, ObjectProvider<TACBuilderCustomizer> customizers) {
     log.trace("[CAPTCHA-TIANAI] Slider Image Captcha Application");
     TACBuilder builder = TACBuilder.builder().addDefaultTemplate().setCacheStore(redisCacheStore);
-    customizers.orderedStream().forEach(customizer -> customizer.customiz(builder));
+    customizers.orderedStream().forEach(customizer -> customizer.customize(builder));
 
     return SimpleImageCaptchaApplication.of(builder.build());
   }

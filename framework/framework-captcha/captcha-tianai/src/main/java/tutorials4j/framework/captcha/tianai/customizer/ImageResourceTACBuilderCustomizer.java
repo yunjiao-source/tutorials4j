@@ -17,7 +17,7 @@ public class ImageResourceTACBuilderCustomizer implements TACBuilderCustomizer {
    * @param builder 待定制的 TAC 构建器
    */
   @Override
-  public void customiz(TACBuilder builder) {
+  public void customize(TACBuilder builder) {
     for (CaptchaType captchaType : CaptchaType.values()) {
       builder.addResource(
           captchaType.name(), new Resource("classpath", "META-INF/cut-image/resource/1.jpg"));

@@ -1,6 +1,7 @@
 package tutorials4j.framework.common.spring.web;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
@@ -129,28 +130,18 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
   }
 
   static {
-    Map<ErrorCode, HttpStatus> map =
-        Map.of(
-            BaseErrorCode.TOO_MANY_REQUESTS,
-            HttpStatus.TOO_MANY_REQUESTS,
-            BaseErrorCode.UNAUTHORIZED,
-            HttpStatus.UNAUTHORIZED,
-            BaseErrorCode.INTERNAL_SERVER_ERROR,
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            BaseErrorCode.WRAP_CHECK_EXCEPTION,
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            BaseErrorCode.UNPROCESSABLE_ENTITY,
-            HttpStatus.UNPROCESSABLE_ENTITY,
-            BaseErrorCode.UNSUPPORTED_MEDIA_TYPE,
-            HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-            BaseErrorCode.NOT_ACCEPTABLE,
-            HttpStatus.NOT_ACCEPTABLE,
-            BaseErrorCode.METHOD_NOT_ALLOWED,
-            HttpStatus.METHOD_NOT_ALLOWED,
-            BaseErrorCode.BAD_REQUEST,
-            HttpStatus.BAD_REQUEST,
-            BaseErrorCode.NOT_FOUND,
-            HttpStatus.NOT_FOUND);
+    Map<ErrorCode, HttpStatus> map = new LinkedHashMap<>();
+    map.put(BaseErrorCode.FORBIDDEN, HttpStatus.FORBIDDEN);
+    map.put(BaseErrorCode.TOO_MANY_REQUESTS, HttpStatus.TOO_MANY_REQUESTS);
+    map.put(BaseErrorCode.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+    map.put(BaseErrorCode.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+    map.put(BaseErrorCode.WRAP_CHECK_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
+    map.put(BaseErrorCode.UNPROCESSABLE_ENTITY, HttpStatus.UNPROCESSABLE_ENTITY);
+    map.put(BaseErrorCode.UNSUPPORTED_MEDIA_TYPE, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    map.put(BaseErrorCode.NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
+    map.put(BaseErrorCode.METHOD_NOT_ALLOWED, HttpStatus.METHOD_NOT_ALLOWED);
+    map.put(BaseErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+    map.put(BaseErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND);
     BaseExceptionHandler.registeErrorCode(map);
   }
 }

@@ -71,7 +71,8 @@ public class BaseExceptionHandler {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
     Result<Void> result = Result.failure(errorCode.getFeedback());
-    return resolveException(ex, path, result, status);
+    handleResult(ex, path, result, status);
+    return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(result);
   }
 
   /**
@@ -83,10 +84,17 @@ public class BaseExceptionHandler {
    * @param status HTTP 状态码
    * @return 包含错误信息的响应实体
    */
-  private ResponseEntity<Result<Void>> resolveException(
+  protected ResponseEntity<Result<Void>> resolveException(
+      Exception ex, String path, Result<Void> result, HttpStatus status) {
+    handleResult(ex, path, result, status);
+    return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(result);
+  }
+
+  protected Result<Void> handleResult(
       Exception ex, String path, Result<Void> result, HttpStatus status) {
     result
         .path(path)
+        .errorClassName(ex.getClass().getName())
         .errorDetail(ex.getMessage())
         .traceId(MDC.get(DefaultConsts.HTTP_HEADER_TRACE_ID));
 
@@ -136,6 +144,6 @@ public class BaseExceptionHandler {
     } else {
       log.warn("其他异常: {}", result, ex);
     }
-    return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(result);
+    return result;
   }
 }

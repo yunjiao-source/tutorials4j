@@ -38,6 +38,7 @@
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-sign</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

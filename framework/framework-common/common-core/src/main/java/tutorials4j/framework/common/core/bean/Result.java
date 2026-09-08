@@ -108,6 +108,14 @@ public class Result<T> {
     return this;
   }
 
+  public Result<T> errorClassName(String className) {
+    if (this.error == null) {
+      this.error = new Error();
+    }
+    this.error.setClassName(className);
+    return this;
+  }
+
   /**
    * 链式设置错误详情。
    *
@@ -167,6 +175,8 @@ public class Result<T> {
   /** 响应结果中的错误详情信息。 */
   @Data
   public static class Error {
+    private String className;
+
     /** 错误详情描述。 */
     private String detail;
 

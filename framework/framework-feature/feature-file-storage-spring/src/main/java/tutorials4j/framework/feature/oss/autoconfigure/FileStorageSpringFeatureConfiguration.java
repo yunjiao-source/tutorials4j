@@ -32,6 +32,6 @@ public class FileStorageSpringFeatureConfiguration {
   /** 配置加载完成后输出日志，便于追踪特性是否被激活。 */
   @PostConstruct
   public void postConstruct() {
-    log.trace("[FEATURE-OSS] File Storage Spring Feature Configuration");
+    log.trace("[FEATURE-FILE-STORAGE-SPRING] File Storage Spring Feature Configuration");
   }
 }

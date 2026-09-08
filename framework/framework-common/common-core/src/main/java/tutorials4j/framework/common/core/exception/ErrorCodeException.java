@@ -109,7 +109,10 @@ public class ErrorCodeException extends BaseRuntimeException {
    */
   public Result<Void> getResult() {
     Result<Void> result = Result.failure(errorCode.getFeedback());
-    result.errorDetail(this.getDetail()).errorParams(this.getParams());
+    result
+        .errorClassName(this.getClass().getName())
+        .errorDetail(this.getDetail())
+        .errorParams(this.getParams());
     return result;
   }
 }
