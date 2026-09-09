@@ -35,6 +35,12 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.framework</groupId>
+            <artifactId>feature-sa-token</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.framework</groupId>
             <artifactId>data-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>

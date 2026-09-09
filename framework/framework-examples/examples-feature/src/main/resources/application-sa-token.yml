@@ -1,0 +1,8 @@
+tutorials4j:
+  oauth:
+    sa-token:
+      log-for-slf4j: true
+      interceptor:
+        include-path-patterns: /api/**
+      filter:
+        include-patterns: /api/**

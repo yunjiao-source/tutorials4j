@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔑 API Key 管理系统</title>
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js">
+  </script>
+  <style>
+    body {
+      background: #f0f2f5;
+      padding-top: 70px;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      margin-bottom: 24px;
+    }
+    .card-header {
+      background: transparent;
+      border-bottom: 1px solid #e9ecef;
+      font-weight: 600;
+      padding: 16px 20px;
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .nav-tabs .nav-link {
+      border: none;
+      color: #6c757d;
+      font-weight: 500;
+      padding: 12px 20px;
+      border-radius: 8px 8px 0 0;
+    }
+    .nav-tabs .nav-link:hover {
+      color: #0d6efd;
+      background: rgba(13, 110, 253, 0.04);
+    }
+    .nav-tabs .nav-link.active {
+      color: #0d6efd;
+      background: #fff;
+      border-bottom: 3px solid #0d6efd;
+    }
+    .tab-content {
+      background: #fff;
+      border-radius: 0 0 12px 12px;
+      padding: 24px 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+    .status-badge {
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+    .api-key-text {
+      font-family: 'Monaco', 'Menlo', monospace;
+      background: #f8f9fa;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+    .table-hover tbody tr:hover {
+      background-color: rgba(13, 110, 253, 0.04);
+    }
+    .pagination .page-link {
+      border-radius: 6px;
+      margin: 0 3px;
+      color: #0d6efd;
+    }
+    .pagination .page-item.active .page-link {
+      background: #0d6efd;
+      border-color: #0d6efd;
+    }
+    .toast-container {
+      z-index: 9999;
+    }
+    .login-section {
+      max-width: 420px;
+      margin: 40px auto 0;
+    }
+    .login-section .card {
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+    .login-section .card-header {
+      background: #0d6efd;
+      color: #fff;
+      border-radius: 16px 16px 0 0;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.3rem;
+    }
+    .login-section .card-body {
+      padding: 30px;
+    }
+    .form-label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .btn-sm {
+      border-radius: 6px;
+    }
+    .extra-data-editor {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+    .scope-tag {
+      display: inline-block;
+      background: #e9ecef;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin: 2px 4px 2px 0;
+    }
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+    }
+    .loading-overlay.show {
+      display: flex;
+    }
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+    }
+    @media (max-width: 768px) {
+      .nav-tabs .nav-link {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+      .tab-content {
+        padding: 16px 12px;
+      }
+      .login-section {
+        margin: 20px 12px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 全局 Loading -->
+<div class="loading-overlay" id="globalLoading">
+  <div class="spinner-border text-primary loading-spinner" role="status">
+    <span class="visually-hidden">加载中...</span>
+  </div>
+</div>
+
+<!-- Toast 容器 -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <i class="bi bi-info-circle-fill me-2" id="toastIcon" style="color:#0d6efd;"></i>
+      <strong class="me-auto" id="toastTitle">提示</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body" id="toastMessage">消息内容</div>
+  </div>
+</div>
+
+<!-- ==================== 导航栏 ==================== -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-key-fill me-2"></i>API Key 管理
+    </a>
+    <div class="d-flex align-items-center gap-3">
+                <span id="loginStatusBadge" class="status-badge bg-light text-dark">
+                    <i class="bi bi-circle-fill text-secondary me-1" style="font-size:0.6rem;"></i>未登录
+                </span>
+      <span id="userInfo" class="text-light-50 d-none" style="font-weight:500;"></span>
+      <button id="btnLogout" class="btn btn-outline-light btn-sm d-none" onclick="handleLogout()">
+        <i class="bi bi-box-arrow-right me-1"></i>登出
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid px-3 px-md-4">
+
+  <!-- ==================== 登录区域（未登录时显示） ==================== -->
+  <div id="loginSection" class="login-section">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-shield-lock-fill me-2"></i> 登录系统
+      </div>
+      <div class="card-body">
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+          <div class="mb-3">
+            <label class="form-label">用户名</label>
+            <input type="text" id="loginName" class="form-control" value="zhang" placeholder="请输入用户名" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">密码</label>
+            <input type="password" id="loginPwd" class="form-control" value="123456" placeholder="请输入密码" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-box-arrow-in-right me-2"></i>登 录
+          </button>
+        </form>
+        <div class="mt-3 text-center text-muted small">
+          默认账号: zhang / 123456
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 主功能区域（登录后显示） ==================== -->
+  <div id="mainSection" class="d-none">
+
+    <!-- Tabs 导航 -->
+    <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab-my" data-bs-toggle="tab" data-bs-target="#panel-my" type="button" role="tab">
+          <i class="bi bi-person-badge me-1"></i>我的 API Keys
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-admin" data-bs-toggle="tab" data-bs-target="#panel-admin" type="button" role="tab">
+          <i class="bi bi-people me-1"></i>管理所有
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-query" data-bs-toggle="tab" data-bs-target="#panel-query" type="button" role="tab">
+          <i class="bi bi-search me-1"></i>查询
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-token" data-bs-toggle="tab" data-bs-target="#panel-token" type="button" role="tab">
+          <i class="bi bi-info-circle me-1"></i>Token 信息
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="mainTabContent">
+
+      <!-- ============================================================ -->
+      <!-- PANEL: 我的 API Keys -->
+      <!-- ============================================================ -->
+      <div class="tab-pane fade show active" id="panel-my" role="tabpanel">
+        <!-- 创建 -->
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-plus-circle me-2 text-success"></i>创建 API Key</span>
+            <span class="badge bg-secondary">当前用户</span>
+          </div>
+          <div class="card-body">
+            <form id="myCreateForm" onsubmit="return handleMyCreate(event)">
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">Namespace</label>
+                  <input type="text" class="form-control" id="myCreateNamespace" value="default" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">标题 <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="myCreateTitle" placeholder="如: 我的应用" required />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">简介</label>
+                  <input type="text" class="form-control" id="myCreateIntro" placeholder="可选" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Scopes (逗号分隔)</label>
+                  <input type="text" class="form-control" id="myCreateScopes" placeholder="read,write" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Extra Data (JSON 对象)</label>
+                  <input type="text" class="form-control" id="myCreateExtra" placeholder='{"env":"test","region":"cn"}' />
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-success">
+                    <i class="bi bi-plus-lg me-1"></i>创建
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary ms-2">重置</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 列表 -->
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-list-ul me-2 text-primary"></i>我的 API Keys 列表</span>
+            <div>
+              <input type="text" class="form-control form-control-sm d-inline-block w-auto" id="myListNamespace" value="default" style="width:140px;" />
+              <button class="btn btn-primary btn-sm ms-2" onclick="loadMyList()">
+                <i class="bi bi-arrow-repeat me-1"></i>刷新
+              </button>
+              <button class="btn btn-danger btn-sm ms-1" onclick="handleMyDeleteAll()">
+                <i class="bi bi-trash3 me-1"></i>删除全部
+              </button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0" id="myListTable">
+                <thead class="table-light">
+                <tr>
+                  <th>API Key</th>
+                  <th>标题</th>
+                  <th>有效</th>
+                  <th>过期(ms)</th>
+                  <th>Scopes</th>
+                  <th style="width:180px;">操作</th>
+                </tr>
+                </thead>
+                <tbody id="myListBody">
+                <tr><td colspan="6" class="text-center text-muted py-3">暂无数据，请点击刷新</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 更新 Modal -->
+        <div class="modal fade" id="myUpdateModal" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>更新 API Key</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <form id="myUpdateForm">
+                  <input type="hidden" id="myUpdateApiKey" />
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label">Namespace</label>
+                      <input type="text" class="form-control" id="myUpdateNamespace" />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">标题 <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="myUpdateTitle" required />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">简介</label>
+                      <input type="text" class="form-control" id="myUpdateIntro" />
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">有效 <span class="text-danger">*</span></label>
+                      <select class="form-select" id="myUpdateIsValid">
+                        <option value="true">有效</option>
+                        <option value="false">无效</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">过期天数 <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="myUpdateExpiresDays" value="30" min="1" required />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Scopes (逗号分隔)</label>
+                      <input type="text" class="form-control" id="myUpdateScopes" placeholder="read,write" />
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">Extra Data (JSON 对象)</label>
+                      <input type="text" class="form-control" id="myUpdateExtra" placeholder='{"env":"prod"}' />
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="handleMyUpdateSubmit()">
+                  <i class="bi bi-check-lg me-1"></i>保存更新
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- PANEL: 管理所有 -->
+      <!-- ============================================================ -->
+      <div class="tab-pane fade" id="panel-admin" role="tabpanel">
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle me-2"></i>管理员功能：可管理任意用户的 API Key，需要指定 <strong>loginId</strong>
+        </div>
+
+        <!-- 创建 -->
+        <div class="card">
+          <div class="card-header"><i class="bi bi-plus-circle me-2 text-success"></i>创建 (指定用户)</div>
+          <div class="card-body">
+            <form id="adminCreateForm" onsubmit="return handleAdminCreate(event)">
+              <div class="row g-3">
+                <div class="col-md-2">
+                  <label class="form-label">Namespace</label>
+                  <input type="text" class="form-control" id="adminCreateNamespace" value="default" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">LoginId <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="adminCreateLoginId" placeholder="如: 10001" required />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">标题 <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="adminCreateTitle" placeholder="标题" required />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">简介</label>
+                  <input type="text" class="form-control" id="adminCreateIntro" placeholder="可选" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Scopes (逗号分隔)</label>
+                  <input type="text" class="form-control" id="adminCreateScopes" placeholder="read,write" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Extra Data (JSON)</label>
+                  <input type="text" class="form-control" id="adminCreateExtra" placeholder='{"env":"test"}' />
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>创建</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 更新 & 删除 -->
+        <div class="card">
+          <div class="card-header"><i class="bi bi-tools me-2 text-warning"></i>更新 / 删除 (指定用户)</div>
+          <div class="card-body">
+            <form id="adminUpdateForm" onsubmit="return handleAdminUpdate(event)">
+              <div class="row g-3">
+                <div class="col-md-2">
+                  <label class="form-label">Namespace</label>
+                  <input type="text" class="form-control" id="adminUpdateNamespace" value="default" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">LoginId <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="adminUpdateLoginId" placeholder="loginId" required />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">API Key <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="adminUpdateApiKey" placeholder="apiKey" required />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">标题 <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="adminUpdateTitle" placeholder="标题" required />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">简介</label>
+                  <input type="text" class="form-control" id="adminUpdateIntro" placeholder="可选" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">有效 <span class="text-danger">*</span></label>
+                  <select class="form-select" id="adminUpdateIsValid">
+                    <option value="true">有效</option>
+                    <option value="false">无效</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">过期天数 <span class="text-danger">*</span></label>
+                  <input type="number" class="form-control" id="adminUpdateExpiresDays" value="30" min="1" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Scopes (逗号分隔)</label>
+                  <input type="text" class="form-control" id="adminUpdateScopes" placeholder="read,write" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Extra Data (JSON)</label>
+                  <input type="text" class="form-control" id="adminUpdateExtra" placeholder='{"env":"prod"}' />
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>更新</button>
+                  <button type="button" class="btn btn-danger ms-2" onclick="handleAdminDelete()">
+                    <i class="bi bi-trash3 me-1"></i>删除
+                  </button>
+                  <button type="button" class="btn btn-danger ms-2" onclick="handleAdminDeleteAll()">
+                    <i class="bi bi-trash3 me-1"></i>删除全部
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- PANEL: 查询 -->
+      <!-- ============================================================ -->
+      <div class="tab-pane fade" id="panel-query" role="tabpanel">
+        <div class="card">
+          <div class="card-header"><i class="bi bi-search me-2 text-info"></i>分页查询</div>
+          <div class="card-body">
+            <form id="queryForm" onsubmit="return handleQueryPage(event)">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-2">
+                  <label class="form-label">Namespace</label>
+                  <input type="text" class="form-control" id="qNamespace" value="default" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">标题 (like)</label>
+                  <input type="text" class="form-control" id="qTitle" placeholder="模糊匹配" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">LoginId</label>
+                  <input type="text" class="form-control" id="qLoginId" placeholder="用户ID" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">有效</label>
+                  <select class="form-select" id="qIsValid">
+                    <option value="">全部</option>
+                    <option value="true">有效</option>
+                    <option value="false">无效</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">创建开始 (时间戳)</label>
+                  <input type="number" class="form-control" id="qCreateBegin" placeholder="毫秒时间戳" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">创建结束 (时间戳)</label>
+                  <input type="number" class="form-control" id="qCreateEnd" placeholder="毫秒时间戳" />
+                </div>
+                <div class="col-md-12 mt-2">
+                  <button type="submit" class="btn btn-info"><i class="bi bi-search me-1"></i>查询</button>
+                  <button type="reset" class="btn btn-outline-secondary ms-2">重置</button>
+                  <span class="ms-3 text-muted small">每页 10 条</span>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 查询结果 -->
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-table me-2 text-primary"></i>查询结果</span>
+            <span id="queryResultInfo" class="text-muted small"></span>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0" id="queryResultTable">
+                <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>API Key</th>
+                  <th>标题</th>
+                  <th>LoginId</th>
+                  <th>有效</th>
+                  <th>Scopes</th>
+                </tr>
+                </thead>
+                <tbody id="queryResultBody">
+                <tr><td colspan="6" class="text-center text-muted py-3">请执行查询</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- 分页 -->
+            <div class="d-flex justify-content-between align-items-center p-3 border-top">
+              <span id="queryPageInfo" class="text-muted small"></span>
+              <nav>
+                <ul class="pagination pagination-sm mb-0" id="queryPagination"></ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- 按ID查询 -->
+        <div class="card">
+          <div class="card-header"><i class="bi bi-hash me-2 text-warning"></i>按 ID 查询</div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="queryByIdInput" placeholder="输入 Entity ID" />
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-warning" onclick="handleQueryById()">
+                  <i class="bi bi-search me-1"></i>查询
+                </button>
+              </div>
+              <div class="col-md-6">
+                <div id="queryByIdResult" class="text-muted small" style="padding-top:8px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- PANEL: Token 信息 -->
+      <!-- ============================================================ -->
+      <div class="tab-pane fade" id="panel-token" role="tabpanel">
+        <div class="card">
+          <div class="card-header"><i class="bi bi-shield-check me-2 text-success"></i>当前 Token 信息</div>
+          <div class="card-body">
+            <pre id="tokenInfoDisplay" class="bg-light p-3 rounded" style="font-size:0.85rem; max-height:400px; overflow:auto;">点击下方按钮获取</pre>
+            <button class="btn btn-primary" onclick="fetchTokenInfo()">
+              <i class="bi bi-arrow-repeat me-1"></i>获取 Token 信息
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-content -->
+  </div><!-- /mainSection -->
+
+</div><!-- /container -->
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+  // ========================================================================
+  //  全局工具
+  // ========================================================================
+  const API_BASE = '';
+  const TOAST = new bootstrap.Toast(document.getElementById('liveToast'), { delay: 4000 });
+
+  function showToast(msg, title = '提示', type = 'info') {
+    const icon = document.getElementById('toastIcon');
+    const t = document.getElementById('toastTitle');
+    const m = document.getElementById('toastMessage');
+    const colors = { info: '#0d6efd', success: '#198754', danger: '#dc3545', warning: '#ffc107' };
+    icon.style.color = colors[type] || colors.info;
+    t.textContent = title;
+    m.textContent = msg;
+    TOAST.show();
+  }
+
+  function showLoading(show) {
+    document.getElementById('globalLoading').classList.toggle('show', show);
+  }
+
+  function getVal(id) { return document.getElementById(id).value.trim(); }
+
+  function setVal(id, v) { document.getElementById(id).value = v; }
+
+  function getJsonVal(id) {
+    const v = getVal(id);
+    if (!v) return null;
+    try { return JSON.parse(v); } catch (e) { return null; }
+  }
+
+  function parseScopes(v) {
+    if (!v) return [];
+    return v.split(',').map(s => s.trim()).filter(Boolean);
+  }
+
+  function msToDays(ms) { return Math.round(ms / (24 * 60 * 60 * 1000)); }
+
+  function daysToMs(days) { return days * 24 * 60 * 60 * 1000; }
+
+  function formatDate(ts) {
+    if (!ts) return '-';
+    const d = new Date(ts);
+    return d.toLocaleString('zh-CN');
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function ajax(method, url, data, success, error) {
+    showLoading(true);
+    const opts = {
+      url: API_BASE + url,
+      type: method,
+      contentType: 'application/json',
+      data: data ? JSON.stringify(data) : undefined,
+      dataType: 'json',
+      xhrFields: { withCredentials: true },
+      success: function(res) {
+        showLoading(false);
+        if (success) success(res);
+      },
+      error: function(xhr, status, err) {
+        showLoading(false);
+        let msg = '请求失败';
+        if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+        else if (xhr.responseText) msg = xhr.responseText;
+        showToast(msg, '错误', 'danger');
+        if (error) error(xhr, status, err);
+      }
+    };
+    if (method === 'GET' || method === 'DELETE') {
+      delete opts.contentType;
+      delete opts.data;
+      if (data) opts.url += '?' + $.param(data);
+    }
+    $.ajax(opts);
+  }
+
+  function get(m, url, data, success, error) { ajax('GET', url, data, success, error); }
+
+  function post(m, url, data, success, error) { ajax('POST', url, data, success, error); }
+
+  function put(m, url, data, success, error) { ajax('PUT', url, data, success, error); }
+
+  function del(m, url, data, success, error) { ajax('DELETE', url, data, success, error); }
+
+  // ========================================================================
+  //  登录 / 登出 / 状态
+  // ========================================================================
+  function handleLogin(e) {
+    e.preventDefault();
+    const name = getVal('loginName');
+    const pwd = getVal('loginPwd');
+    if (!name || !pwd) { showToast('请输入用户名和密码', '提示', 'warning'); return false; }
+    showLoading(true);
+    $.ajax({
+      url: API_BASE + '/acc/doLogin',
+      type: 'POST',
+      data: { name: name, pwd: pwd },
+      dataType: 'json',
+      xhrFields: { withCredentials: true },
+      success: function(res) {
+        showLoading(false);
+        if (res.code === 200 || res.code === '200' || res.message === '登录成功') {
+          showToast('登录成功！', '成功', 'success');
+          checkLoginStatus();
+        } else {
+          showToast(res.message || '登录失败', '错误', 'danger');
+        }
+      },
+      error: function(xhr) {
+        showLoading(false);
+        let msg = '登录请求失败';
+        if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+        showToast(msg, '错误', 'danger');
+      }
+    });
+    return false;
+  }
+
+  function handleLogout() {
+    showLoading(true);
+    $.ajax({
+      url: API_BASE + '/acc/logout',
+      type: 'GET',
+      xhrFields: { withCredentials: true },
+      success: function() {
+        showLoading(false);
+        showToast('已登出', '提示', 'info');
+        checkLoginStatus();
+      },
+      error: function() {
+        showLoading(false);
+        showToast('登出失败', '错误', 'danger');
+      }
+    });
+  }
+
+  function checkLoginStatus() {
+    showLoading(true);
+    $.ajax({
+      url: API_BASE + '/acc/isLogin',
+      type: 'GET',
+      xhrFields: { withCredentials: true },
+      dataType: 'json',
+      success: function(res) {
+        showLoading(false);
+        // SaResult 格式: {code, msg, data}
+        if (res && (res.code === 200 || res.code === '200') && res.data) {
+          const data = res.data;
+          const loginId = data.loginId || '未知';
+          document.getElementById('loginStatusBadge').innerHTML =
+              '<i class="bi bi-circle-fill text-success me-1" style="font-size:0.6rem;"></i>已登录';
+          document.getElementById('userInfo').textContent = '👤 ' + loginId;
+          document.getElementById('userInfo').classList.remove('d-none');
+          document.getElementById('btnLogout').classList.remove('d-none');
+          document.getElementById('loginSection').classList.add('d-none');
+          document.getElementById('mainSection').classList.remove('d-none');
+          // 默认加载我的列表
+          loadMyList();
+        } else {
+          showNotLogin();
+        }
+      },
+      error: function() {
+        showLoading(false);
+        showNotLogin();
+      }
+    });
+  }
+
+  function showNotLogin() {
+    document.getElementById('loginStatusBadge').innerHTML =
+        '<i class="bi bi-circle-fill text-secondary me-1" style="font-size:0.6rem;"></i>未登录';
+    document.getElementById('userInfo').classList.add('d-none');
+    document.getElementById('btnLogout').classList.add('d-none');
+    document.getElementById('loginSection').classList.remove('d-none');
+    document.getElementById('mainSection').classList.add('d-none');
+  }
+
+  function fetchTokenInfo() {
+    showLoading(true);
+    $.ajax({
+      url: API_BASE + '/acc/tokenInfo',
+      type: 'GET',
+      xhrFields: { withCredentials: true },
+      dataType: 'json',
+      success: function(res) {
+        showLoading(false);
+        document.getElementById('tokenInfoDisplay').textContent = JSON.stringify(res, null, 2);
+      },
+      error: function() {
+        showLoading(false);
+        document.getElementById('tokenInfoDisplay').textContent = '获取失败，请确认已登录';
+      }
+    });
+  }
+
+  // ========================================================================
+  //  我的 API Keys (Current)
+  // ========================================================================
+  let myUpdateModal = null;
+
+  function loadMyList() {
+    const ns = getVal('myListNamespace') || 'default';
+    showLoading(true);
+    get('GET', '/api/sa-token/api-key-current/list', { namespace: ns },
+        function(res) {
+          showLoading(false);
+          const body = document.getElementById('myListBody');
+
+            const list = res.data || [];
+            if (!list.length) {
+              body.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">暂无数据</td></tr>';
+              return;
+            }
+            let html = '';
+            list.forEach(item => {
+              const scopes = (item.scopes || []).map(s => '<span class="scope-tag">' + escHtml(s) +
+                  '</span>').join('');
+              html += `<tr>
+                                <td><span class="api-key-text">${escHtml(item.apiKey)}</span></td>
+                                <td>${escHtml(item.title)}</td>
+                                <td>${item.isValid ? '<span class="badge bg-success">有效</span>' : '<span class="badge bg-danger">无效</span>'}</td>
+                                <td>${item.expiresTime ? item.expiresTime : '-'}</td>
+                                <td>${scopes || '-'}</td>
+                                <td>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="openMyUpdate('${escHtml(item.apiKey)}')">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm ms-1" onclick="handleMyDelete('${escHtml(item.apiKey)}')">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </td>
+                            </tr>`;
+            });
+            body.innerHTML = html;
+        },
+        function() {
+          showLoading(false);
+          document.getElementById('myListBody').innerHTML =
+              '<tr><td colspan="6" class="text-center text-danger py-3">无记录</td></tr>';
+        }
+    );
+  }
+
+  function handleMyCreate(e) {
+    e.preventDefault();
+    const data = {
+      namespace: getVal('myCreateNamespace') || 'default',
+      title: getVal('myCreateTitle'),
+      intro: getVal('myCreateIntro'),
+      scopes: parseScopes(getVal('myCreateScopes')),
+      extraData: getJsonVal('myCreateExtra')
+    };
+    if (!data.title) { showToast('标题不能为空', '提示', 'warning'); return false; }
+    showLoading(true);
+    post('POST', '/api/sa-token/api-key-current/create', data,
+        function(res) {
+          showLoading(false);
+
+            showToast('创建成功！', '成功', 'success');
+            document.getElementById('myCreateForm').reset();
+            loadMyList();
+        },
+        function() {
+          showLoading(false);
+          showToast(res.message || '创建失败', '错误', 'danger');
+        }
+    );
+    return false;
+  }
+
+  function openMyUpdate(apiKey) {
+    if (!myUpdateModal) myUpdateModal = new bootstrap.Modal(document.getElementById('myUpdateModal'));
+    // 先获取当前数据
+    showLoading(true);
+    get('GET', '/api/sa-token/api-key-current/list', { namespace: getVal('myListNamespace') || 'default' },
+        function(res) {
+          showLoading(false);
+            const item = (res.data || []).find(it => it.apiKey === apiKey);
+            if (!item) { showToast('未找到该 API Key', '错误', 'danger'); return; }
+            document.getElementById('myUpdateApiKey').value = apiKey;
+            document.getElementById('myUpdateNamespace').value = item.namespace || 'default';
+            document.getElementById('myUpdateTitle').value = item.title || '';
+            document.getElementById('myUpdateIntro').value = item.intro || '';
+            document.getElementById('myUpdateIsValid').value = item.isValid ? 'true' : 'false';
+            document.getElementById('myUpdateExpiresDays').value = item.expiresTime ? msToDays(item
+                .expiresTime) : 30;
+            document.getElementById('myUpdateScopes').value = (item.scopes || []).join(',');
+            document.getElementById('myUpdateExtra').value = item.extraData ? JSON.stringify(item
+                .extraData) : '';
+            myUpdateModal.show();
+
+        },
+        function() {
+          showLoading(false);
+          showToast('获取数据失败', '错误', 'danger');
+        }
+    );
+  }
+
+  function handleMyUpdateSubmit() {
+    const apiKey = document.getElementById('myUpdateApiKey').value;
+    const data = {
+      namespace: getVal('myUpdateNamespace') || 'default',
+      apiKey: apiKey,
+      title: getVal('myUpdateTitle'),
+      intro: getVal('myUpdateIntro'),
+      isValid: getVal('myUpdateIsValid') === 'true',
+      expiresTime: daysToMs(parseInt(getVal('myUpdateExpiresDays')) || 30),
+      scopes: parseScopes(getVal('myUpdateScopes')),
+      extraData: getJsonVal('myUpdateExtra')
+    };
+    if (!data.title) { showToast('标题不能为空', '提示', 'warning'); return; }
+    showLoading(true);
+    put('PUT', '/api/sa-token/api-key-current/update', data,
+        function(res) {
+          showLoading(false);
+
+            showToast('更新成功！', '成功', 'success');
+            if (myUpdateModal) myUpdateModal.hide();
+            loadMyList();
+
+        },
+        function() {
+          showLoading(false);
+          showToast('更新失败', '错误', 'danger');
+        }
+    );
+  }
+
+  function handleMyDelete(apiKey) {
+    if (!confirm('确定要删除该 API Key 吗？')) return;
+    const ns = getVal('myListNamespace') || 'default';
+    showLoading(true);
+    del('DELETE', '/api/sa-token/api-key-current', { namespace: ns, apiKey: apiKey },
+        function(res) {
+          showLoading(false);
+            showToast('删除成功', '成功', 'success');
+            loadMyList();
+
+        },
+        function() {
+          showLoading(false);
+          showToast('删除失败', '错误', 'danger');
+        }
+    );
+  }
+
+  function handleMyDeleteAll() {
+    if (!confirm('确定要删除当前用户的所有 API Key 吗？')) return;
+    const ns = getVal('myListNamespace') || 'default';
+    showLoading(true);
+    del('DELETE', '/api/sa-token/api-key-current/all', { namespace: ns },
+        function(res) {
+          showLoading(false);
+
+            showToast('已删除全部', '成功', 'success');
+            loadMyList();
+
+        },
+        function() {
+          showLoading(false);
+          showToast('删除失败', '错误', 'danger');
+        }
+    );
+  }
+
+  // ========================================================================
+  //  管理所有 (Admin)
+  // ========================================================================
+  function handleAdminCreate(e) {
+    e.preventDefault();
+    const data = {
+      namespace: getVal('adminCreateNamespace') || 'default',
+      loginId: getVal('adminCreateLoginId'),
+      title: getVal('adminCreateTitle'),
+      intro: getVal('adminCreateIntro'),
+      scopes: parseScopes(getVal('adminCreateScopes')),
+      extraData: getJsonVal('adminCreateExtra')
+    };
+    if (!data.loginId) { showToast('loginId 不能为空', '提示', 'warning'); return false; }
+    if (!data.title) { showToast('标题不能为空', '提示', 'warning'); return false; }
+    showLoading(true);
+    post('POST', '/api/sa-token/api-key/create', data,
+        function(res) {
+          showLoading(false);
+            showToast('创建成功！', '成功', 'success');
+            document.getElementById('adminCreateForm').reset();
+
+        },
+        function() {
+          showLoading(false);
+          showToast('创建失败', '错误', 'danger');
+        }
+    );
+    return false;
+  }
+
+  function handleAdminUpdate(e) {
+    e.preventDefault();
+    const data = {
+      namespace: getVal('adminUpdateNamespace') || 'default',
+      loginId: getVal('adminUpdateLoginId'),
+      apiKey: getVal('adminUpdateApiKey'),
+      title: getVal('adminUpdateTitle'),
+      intro: getVal('adminUpdateIntro'),
+      isValid: getVal('adminUpdateIsValid') === 'true',
+      expiresTime: daysToMs(parseInt(getVal('adminUpdateExpiresDays')) || 30),
+      scopes: parseScopes(getVal('adminUpdateScopes')),
+      extraData: getJsonVal('adminUpdateExtra')
+    };
+    if (!data.loginId) { showToast('loginId 不能为空', '提示', 'warning'); return false; }
+    if (!data.apiKey) { showToast('apiKey 不能为空', '提示', 'warning'); return false; }
+    if (!data.title) { showToast('标题不能为空', '提示', 'warning'); return false; }
+    showLoading(true);
+    put('PUT', '/api/sa-token/api-key/update', data,
+        function(res) {
+          showLoading(false);
+            showToast('更新成功！', '成功', 'success');
+
+        },
+        function() {
+          showLoading(false);
+          showToast('更新失败', '错误', 'danger');
+        }
+    );
+    return false;
+  }
+
+  function handleAdminDelete() {
+    const ns = getVal('adminUpdateNamespace') || 'default';
+    const loginId = getVal('adminUpdateLoginId');
+    const apiKey = getVal('adminUpdateApiKey');
+    if (!loginId) { showToast('loginId 不能为空', '提示', 'warning'); return; }
+    if (!apiKey) { showToast('apiKey 不能为空', '提示', 'warning'); return; }
+    if (!confirm('确定要删除该 API Key 吗？')) return;
+    showLoading(true);
+    del('DELETE', '/api/sa-token/api-key', { namespace: ns, loginId: loginId, apiKey: apiKey },
+        function(res) {
+          showLoading(false);
+            showToast('删除成功', '成功', 'success');
+
+        },
+        function() {
+          showLoading(false);
+          showToast('删除失败', '错误', 'danger');
+        }
+    );
+  }
+
+  function handleAdminDeleteAll() {
+    const ns = getVal('adminUpdateNamespace') || 'default';
+    const loginId = getVal('adminUpdateLoginId');
+    if (!loginId) { showToast('loginId 不能为空', '提示', 'warning'); return; }
+    if (!confirm('确定要删除该用户的所有 API Key 吗？')) return;
+    showLoading(true);
+    del('DELETE', '/api/sa-token/api-key/all', { namespace: ns, loginId: loginId },
+        function(res) {
+          showLoading(false);
+            showToast('已删除全部', '成功', 'success');
+
+        },
+        function() {
+          showLoading(false);
+          showToast('删除失败', '错误', 'danger');
+        }
+    );
+  }
+
+  // ========================================================================
+  //  查询
+  // ========================================================================
+  let queryPageData = { page: 0, size: 10 };
+
+  function handleQueryPage(e) {
+    e.preventDefault();
+    queryPageData.page = 0;
+    doQuery();
+    return false;
+  }
+
+  function doQuery() {
+    const params = {
+      namespace: getVal('qNamespace') || undefined,
+      title: getVal('qTitle') || undefined,
+      loginId: getVal('qLoginId') || undefined,
+      isValid: getVal('qIsValid') || undefined,
+      createTimeBegin: getVal('qCreateBegin') || undefined,
+      createTimeEnd: getVal('qCreateEnd') || undefined,
+      page: queryPageData.page,
+      size: queryPageData.size
+    };
+    // 移除空值
+    Object.keys(params).forEach(k => { if (params[k] === '' || params[k] === null || params[k] === undefined)
+      delete params[k]; });
+
+    showLoading(true);
+    get('GET', '/api/sa-token/api-key-query/page', params,
+        function(res) {
+          showLoading(false);
+          const body = document.getElementById('queryResultBody');
+          const info = document.getElementById('queryResultInfo');
+          const pageInfo = document.getElementById('queryPageInfo');
+
+            const paged = res.data;
+            const content = paged?.content || [];
+            const total = paged?.page?.totalElements || 0;
+            const totalPages = paged?.page?.totalPages || 0;
+            const number = paged?.page?.number || 0;
+
+            info.textContent = `共 ${total} 条`;
+            pageInfo.textContent = `第 ${number+1} / ${totalPages || 1} 页`;
+
+            if (!content.length) {
+              body.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">没有匹配的记录</td></tr>';
+            } else {
+              let html = '';
+              content.forEach(item => {
+                const scopes = (item.scopes || []).map(s => '<span class="scope-tag">' + escHtml(
+                    s) + '</span>').join('');
+                html += `<tr>
+                                    <td><code>${escHtml(item.id)}</code></td>
+                                    <td><span class="api-key-text">${escHtml(item.apiKey)}</span></td>
+                                    <td>${escHtml(item.title)}</td>
+                                    <td>${escHtml(item.loginId)}</td>
+                                    <td>${item.isValid ? '<span class="badge bg-success">有效</span>' : '<span class="badge bg-danger">无效</span>'}</td>
+                                    <td>${scopes || '-'}</td>
+                                </tr>`;
+              });
+              body.innerHTML = html;
+            }
+
+            // 分页控件
+            renderPagination(number, totalPages);
+
+        },
+        function() {
+          showLoading(false);
+          const body = document.getElementById('queryResultBody');
+          const info = document.getElementById('queryResultInfo');
+          const pageInfo = document.getElementById('queryPageInfo');
+          body.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-3">' + (res.message ||
+              '查询失败') + '</td></tr>';
+          info.textContent = '';
+          pageInfo.textContent = '';
+          renderPagination(0, 0);
+        }
+    );
+  }
+
+  function renderPagination(current, total) {
+    const container = document.getElementById('queryPagination');
+    if (total <= 1) {
+      container.innerHTML =
+          '<li class="page-item disabled"><span class="page-link">1</span></li>';
+      return;
+    }
+    let html = '';
+    // 上一页
+    if (current > 0) {
+      html += `<li class="page-item"><a class="page-link" href="#" onclick="goQueryPage(${current-1});return false;">«</a></li>`;
+    } else {
+      html += `<li class="page-item disabled"><span class="page-link">«</span></li>`;
+    }
+    // 页码
+    const start = Math.max(0, current - 2);
+    const end = Math.min(total - 1, current + 2);
+    for (let i = start; i <= end; i++) {
+      if (i === current) {
+        html += `<li class="page-item active"><span class="page-link">${i+1}</span></li>`;
+      } else {
+        html += `<li class="page-item"><a class="page-link" href="#" onclick="goQueryPage(${i});return false;">${i+1}</a></li>`;
+      }
+    }
+    // 下一页
+    if (current < total - 1) {
+      html += `<li class="page-item"><a class="page-link" href="#" onclick="goQueryPage(${current+1});return false;">»</a></li>`;
+    } else {
+      html += `<li class="page-item disabled"><span class="page-link">»</span></li>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function goQueryPage(page) {
+    queryPageData.page = page;
+    doQuery();
+  }
+
+  function handleQueryById() {
+    const id = getVal('queryByIdInput');
+    if (!id) { showToast('请输入 ID', '提示', 'warning'); return; }
+    showLoading(true);
+    get('GET', '/api/sa-token/api-key-query/' + encodeURIComponent(id), null,
+        function(res) {
+          showLoading(false);
+          const div = document.getElementById('queryByIdResult');
+            const item = res.data;
+            if (!item) {
+              div.innerHTML = '<span class="text-warning">未找到该记录</span>';
+              return;
+            }
+            div.innerHTML = `
+                            <div class="bg-light p-2 rounded">
+                                <strong>ID:</strong> ${escHtml(item.id)} &nbsp;|&nbsp;
+                                <strong>API Key:</strong> <span class="api-key-text">${escHtml(item.apiKey)}</span> &nbsp;|&nbsp;
+                                <strong>标题:</strong> ${escHtml(item.title)} &nbsp;|&nbsp;
+                                <strong>LoginId:</strong> ${escHtml(item.loginId)} &nbsp;|&nbsp;
+                                <strong>有效:</strong> ${item.isValid ? '✅' : '❌'} &nbsp;|&nbsp;
+                                <strong>Scopes:</strong> ${(item.scopes||[]).join(', ') || '-'}
+                            </div>
+                        `;
+
+        },
+        function() {
+          showLoading(false);
+          const div = document.getElementById('queryByIdResult');
+          div.innerHTML = '<span class="text-danger">' + (res.message || '查询失败') + '</span>';
+        }
+    );
+  }
+
+  // ========================================================================
+  //  初始化
+  // ========================================================================
+  $(document).ready(function() {
+    checkLoginStatus();
+    // 回车触发登录
+    document.getElementById('loginForm').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') handleLogin(e);
+    });
+  });
+</script>
+
+</body>
+</html>

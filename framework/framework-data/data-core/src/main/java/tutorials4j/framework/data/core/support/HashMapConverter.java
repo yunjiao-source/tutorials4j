@@ -15,7 +15,7 @@ import tutorials4j.framework.common.core.util.GsonUtils;
  * @author Yun Jiao
  */
 @Converter
-public class HashMapConverter implements AttributeConverter<Map<String, Object>, String> {
+public class HashMapConverter implements AttributeConverter<Map<String, String>, String> {
 
   /**
    * 将 Map 转换为 JSON 字符串存入数据库。
@@ -24,7 +24,7 @@ public class HashMapConverter implements AttributeConverter<Map<String, Object>,
    * @return JSON 字符串；Map 为空时返回 null
    */
   @Override
-  public String convertToDatabaseColumn(Map<String, Object> object) {
+  public String convertToDatabaseColumn(Map<String, String> object) {
     if (ObjectUtils.isEmpty(object)) {
       return null;
     }
@@ -38,10 +38,10 @@ public class HashMapConverter implements AttributeConverter<Map<String, Object>,
    * @return 还原后的 Map；JSON 为空时返回空 Map
    */
   @Override
-  public Map<String, Object> convertToEntityAttribute(String json) {
+  public Map<String, String> convertToEntityAttribute(String json) {
     if (ObjectUtils.isEmpty(json)) {
       return Collections.emptyMap();
     }
-    return GsonUtils.toMaps(json, Object.class);
+    return GsonUtils.toMaps(json, String.class);
   }
 }

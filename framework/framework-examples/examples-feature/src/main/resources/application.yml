@@ -2,7 +2,8 @@ spring:
   profiles:
 #    active: signin
 #    active: schedule
-    active: file-storage-spring
+#    active: file-storage-spring
+    active: sa-token
 
   data:
     # Redis 配置

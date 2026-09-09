@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.oauth.satoken.autoconfigure.SaTokenOAuthProperties.SaServletFilterOptions;
 import tutorials4j.framework.oauth.satoken.common.SaServletFilterCustomizer;
-import tutorials4j.framework.oauth.satoken.component.SaApiKeyTemplateFactory;
 import tutorials4j.framework.oauth.satoken.component.SaLogForSlf4j;
 import tutorials4j.framework.oauth.satoken.component.SaTokenExceptionHandler;
 
@@ -45,13 +44,6 @@ public class SaTokenOAuthConfiguration {
   SaLogForSlf4j saLogForSlf4j() {
     log.trace("[OAUTH-SA-TOKEN] Sa Log For Slf4j");
     return new SaLogForSlf4j();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  SaApiKeyTemplateFactory saApiKeyTemplateFactory() {
-    log.trace("[OAUTH-SA-TOKEN] Sa Api Key Template Factory");
-    return new SaApiKeyTemplateFactory();
   }
 
   @Bean

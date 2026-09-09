@@ -283,6 +283,23 @@ java -jar framework/framework-examples/examples-oauth/target/examples-oauth-3.5.
 
 ### 功能模块示例（framework/framework-examples/examples-feature）
 
+#### ✨ Sa-Token集成功能 （profile:sa-token）
+
+> 登录示例
+![登录示例](docs/images/068.jpg )
+
+> API Key 用户CURD示例
+![API Key 用户CURD示例](docs/images/069.jpg )
+
+> API Key 管理CURD示例
+![API Key 管理CURD示例](docs/images/070.jpg )
+
+> API Key 查询示例
+![签到示例](docs/images/071.jpg )
+
+> 获取TokenInfo示例
+![获取TokenInfo示例](docs/images/072.jpg )
+> 
 #### 签到功能 （profile:signin）
 
 > 签到示例
@@ -321,6 +338,9 @@ java -jar framework/framework-examples/examples-oauth/target/examples-oauth-3.5.
 
 > API Key 限流示例
 ![API Key 限流示例](docs/images/066.jpg)
+
+> Sa-Token集成示例
+![Sa-Token集成](docs/images/067.jpg)
 
 ### 消息模块示例（framework/framework-examples/examples-message）
 
