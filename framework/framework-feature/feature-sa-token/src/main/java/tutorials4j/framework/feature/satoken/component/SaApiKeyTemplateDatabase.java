@@ -54,7 +54,9 @@ public class SaApiKeyTemplateDatabase extends SaApiKeyTemplate {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteApiKey(String apiKey) {
-    apiKeyRepository.findByApiKey(apiKey).ifPresent(e -> apiKeyRepository.deleteById(e.getId()));
+    apiKeyRepository
+        .findByNamespaceAndApiKey(namespace, apiKey)
+        .ifPresent(e -> apiKeyRepository.deleteById(e.getId()));
     super.deleteApiKey(apiKey);
   }
 

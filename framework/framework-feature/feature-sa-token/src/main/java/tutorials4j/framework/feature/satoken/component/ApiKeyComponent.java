@@ -20,7 +20,6 @@ import tutorials4j.framework.feature.satoken.model.ApiKeyUpdateModel;
 public class ApiKeyComponent {
   private final SaApiKeyTemplateFactory saApiKeyTemplateFactory;
 
-  @Transactional(rollbackFor = Exception.class)
   public ApiKeyModel create(ApiKeyCreateModel model) {
     SaApiKeyTemplate saApiKeyTemplate = saApiKeyTemplateFactory.getTemplate(model.getNamespace());
 
@@ -32,7 +31,6 @@ public class ApiKeyComponent {
     return apiKeyModel;
   }
 
-  @Transactional(rollbackFor = Exception.class)
   public ApiKeyModel update(ApiKeyUpdateModel model) {
     Assert.notNull(model, "model must not be null");
 
@@ -50,7 +48,6 @@ public class ApiKeyComponent {
     return saApiKeyTemplateFactory.getTemplate(namespace).getApiKeyList(loginId);
   }
 
-  @Transactional(rollbackFor = Exception.class)
   public void delete(String namespace, Object loginId, String apiKey) {
     Assert.notNull(loginId, "loginId must not be null");
     SaApiKeyTemplate saApiKeyTemplate = saApiKeyTemplateFactory.getTemplate(namespace);

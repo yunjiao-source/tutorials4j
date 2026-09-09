@@ -651,3 +651,5 @@ java -jar framework/framework-examples/examples-oauth/target/examples-oauth-3.5.
 * [088-OAuth模块-认证核心框架架构解析：oauth-core 的自动装配、配置模型与拦截器注册](docs/blog/088.md)
 * [089-OAuth模块-API Key 双窗口限流深度解析：Redis Lua 原子计数与请求拦截链路](docs/blog/089.md)
 * [090-OAuth模块-API Key 限流开箱即用：examples-oauth 接入实战与效果演示](docs/blog/090.md)
+* [091-功能模块-API Key 管理功能模块解析：feature-sa-token 架构设计与数据库持久化](docs/blog/091.md)
+* [092-功能模块-API Key 生命周期管理实战：创建、更新、查询与删除的完整实现](docs/blog/092.md)
