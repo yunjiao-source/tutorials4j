@@ -30,6 +30,7 @@
     <modules>
         <module>framework</module>
         <module>assembly</module>
+        <module>service</module>
         <module>springcloud</module>
     </modules>
 

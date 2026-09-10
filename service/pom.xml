@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>yunjiao-source.tutorials4j</groupId>
+        <artifactId>tutorials4j</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>yunjiao-source.tutorials4j.service</groupId>
+    <artifactId>service</artifactId>
+    <packaging>pom</packaging>
+    <name>Tutorials4j :: Service</name>
+    <description>微服务模块</description>
+
+    <modules>
+        <module>service-gateway</module>
+        <module>service-oauth</module>
+        <module>service-system</module>
+    </modules>
+
+</project>
