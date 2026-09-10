@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.framework.common.core.PropertiesConsts;
 import tutorials4j.framework.oauth.satoken.autoconfigure.SaTokenOAuthProperties.SaServletFilterOptions;
 import tutorials4j.framework.oauth.satoken.common.SaServletFilterCustomizer;
+import tutorials4j.framework.oauth.satoken.component.EnhanceSaInterceptor;
 import tutorials4j.framework.oauth.satoken.component.SaLogForSlf4j;
-import tutorials4j.framework.oauth.satoken.component.SaTokenExceptionHandler;
 
 /**
  * TODO
@@ -47,9 +47,9 @@ public class SaTokenOAuthConfiguration {
   }
 
   @Bean
-  SaTokenExceptionHandler saTokenExceptionHandler() {
-    log.trace("[OAUTH-SA-TOKEN] Sa Token Exception Handler");
-    return new SaTokenExceptionHandler();
+  EnhanceSaInterceptor enhanceSaInterceptor() {
+    log.trace("[OAUTH-SA-TOKEN] Enhance Sa Interceptor");
+    return new EnhanceSaInterceptor();
   }
 
   @Bean

@@ -46,6 +46,7 @@ public class ApiKeyRateLimiterInterceptor implements HandlerInterceptor {
         throw BaseErrorCode.TOO_MANY_REQUESTS.throwed("API Key 请求次数超限");
       }
 
+      response.setHeader(DefaultConsts.HTTP_HEADER_API_KEY_LIMIT_VERIFIED, "ok");
       response.setHeader(
           DefaultConsts.HTTP_HEADER_API_KEY_LIMIT, String.valueOf(rateLimiter.getMiddle()));
       response.setHeader(

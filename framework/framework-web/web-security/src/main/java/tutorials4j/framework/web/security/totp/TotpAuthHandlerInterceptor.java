@@ -60,7 +60,7 @@ public class TotpAuthHandlerInterceptor implements HandlerInterceptor {
         throw WebErrorCode.WEB_TOTP_VERIFY_FAILURE.throwed();
       }
 
-      response.setHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_AUTH, "SUCCESS");
+      response.setHeader(DefaultConsts.HTTP_HEADER_TOTP_VERIFIED, "ok");
     }
 
     return true;

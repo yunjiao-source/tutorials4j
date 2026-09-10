@@ -1,6 +1,7 @@
 package tutorials4j.framework.feature.satoken.model;
 
 import cn.dev33.satoken.apikey.model.ApiKeyModel;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class ApiKeyUpdateModel {
   private Boolean isValid;
 
   @NotNull(message = "过期时间是必须的")
+  @Min(value = 1, message = "过期时间必须大于0")
   private long expiresTime;
 
   @NotBlank(message = "标题是必须的")

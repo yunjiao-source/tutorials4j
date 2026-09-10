@@ -29,7 +29,7 @@ public class BlogController {
   @CaptchaAuth
   @PostMapping("post")
   public String post(@RequestBody String content, HttpServletResponse response) {
-    String auth = response.getHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_AUTH);
+    String auth = response.getHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_VERIFIED);
     if (StringUtils.isBlank(auth)) {
       throw CaptchaErrorCode.CAPTCHA_AUTH_FAILURE.throwed();
     }

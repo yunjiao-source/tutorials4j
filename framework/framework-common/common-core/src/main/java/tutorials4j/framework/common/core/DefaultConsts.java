@@ -69,6 +69,9 @@ public interface DefaultConsts {
   /** HTTP 头：签名随机数 */
   String HTTP_HEADER_SIGNATURE_NONCE = "X-Signature-Nonce";
 
+  /** HTTP 头：签名已校验 */
+  String HTTP_HEADER_SIGNATURE_VERIFIED = "X-Signature-Verified";
+
   /** HTTP 头：签名值 */
   String HTTP_HEADER_SIGNATURE = "X-Signature";
 
@@ -81,8 +84,8 @@ public interface DefaultConsts {
   /** HTTP 头：验证码 */
   String HTTP_HEADER_CAPTCHA_CODE = "X-Captcha-Code";
 
-  /** HTTP 头：验证码校验凭据 */
-  String HTTP_HEADER_CAPTCHA_AUTH = "X-Captcha-Auth";
+  /** HTTP 头：验证码已校验 */
+  String HTTP_HEADER_CAPTCHA_VERIFIED = "X-Captcha-Verified";
 
   /** HTTP 头：TOTP 校验用户名 */
   String HTTP_HEADER_TOTP_AUTH_USERNAME = "X-Totp-Auth-Username";
@@ -91,7 +94,7 @@ public interface DefaultConsts {
   String HTTP_HEADER_TOTP_AUTH_CODE = "X-Totp-Auth-Code";
 
   /** HTTP 头：TOTP 校验凭据 */
-  String HTTP_HEADER_TOTP_AUTH = "X-Totp-Auth";
+  String HTTP_HEADER_TOTP_VERIFIED = "X-Totp-Auth-Verified";
 
   /** HTTP 头：加密传输的对称密钥（Hex 格式） */
   String HTTP_HEADER_CRYPTO_SECRET_KEY_HEX = "X-Crypto-Secret-Key-Hex";
@@ -101,9 +104,10 @@ public interface DefaultConsts {
   String HTTP_HEADER_API_KEY_LIMIT = "X-Api-Key-Limit";
   String HTTP_HEADER_API_KEY_LIMIT_REMAINING = "X-Api-Key-Limit-Remaining";
   String HTTP_HEADER_API_KEY_LIMIT_TIME_WINDOW = "X-Api-Key-Limit-Time-Window";
+  String HTTP_HEADER_API_KEY_LIMIT_VERIFIED = "X-Api-Key-Limit-Verified";
 
   /** HTTP 查询参数名 */
-  String HTTP_QUERY_PARAM_API_KEY = "apiKey";
+  String HTTP_QUERY_PARAM_API_KEY = "apikey";
 
   /** Class 名称定义 */
   String CLASS_HIKARI_DATA_SOURCE = "HikariDataSource";

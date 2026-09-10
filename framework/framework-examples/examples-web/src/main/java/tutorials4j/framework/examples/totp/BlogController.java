@@ -30,7 +30,7 @@ public class BlogController {
   @TotpAuth
   @PostMapping("post")
   public String post(@RequestBody String content, HttpServletResponse response) {
-    String auth = response.getHeader(DefaultConsts.HTTP_HEADER_TOTP_AUTH);
+    String auth = response.getHeader(DefaultConsts.HTTP_HEADER_TOTP_VERIFIED);
     if (StringUtils.isBlank(auth)) {
       throw WebErrorCode.WEB_TOTP_AUTH_FAILURE.throwed();
     }

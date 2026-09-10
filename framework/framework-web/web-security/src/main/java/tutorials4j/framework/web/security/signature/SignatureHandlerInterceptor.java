@@ -114,6 +114,7 @@ public class SignatureHandlerInterceptor implements HandlerInterceptor {
           .param("appKey", CharSequenceUtil.maxLength(appKey, 4));
     }
 
+    response.setHeader(DefaultConsts.HTTP_HEADER_SIGNATURE_VERIFIED, "ok");
     return true;
   }
 

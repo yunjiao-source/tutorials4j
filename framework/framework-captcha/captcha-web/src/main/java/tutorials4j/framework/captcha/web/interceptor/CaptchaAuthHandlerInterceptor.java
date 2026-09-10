@@ -60,7 +60,7 @@ public class CaptchaAuthHandlerInterceptor implements HandlerInterceptor {
         throw CaptchaErrorCode.CAPTCHA_VERIFY_FAILURE.throwed();
       }
 
-      response.setHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_AUTH, "SUCCESS");
+      response.setHeader(DefaultConsts.HTTP_HEADER_CAPTCHA_VERIFIED, "ok");
     }
 
     return true;
