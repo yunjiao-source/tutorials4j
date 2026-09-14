@@ -15,7 +15,8 @@
     <name>Tutorials4j :: Assembly</name>
     <description>集成模块</description>
 
-    <modules />
+    <modules>
+        <module>assembly-resource-server-spring-boot-starter</module>
+    </modules>
 
-    <dependencies />
 </project>
