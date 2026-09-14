@@ -1,4 +1,4 @@
-package tutorials4j.microservice.demo.web.controller;
+package tutorials4j.microservice.demo.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

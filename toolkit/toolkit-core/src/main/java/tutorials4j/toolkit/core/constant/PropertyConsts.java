@@ -8,4 +8,6 @@ package tutorials4j.toolkit.core.constant;
 public interface PropertyConsts {
   String PROPERTY_TUTORIALS4J = "tutorials4j";
   String PROPERTY_TOOLKIT = PROPERTY_TUTORIALS4J + ".toolkit";
+
+  String PROPERTY_TOOLKIT_NAMED_CACHE = PROPERTY_TOOLKIT + ".toolkit.named-cache";
 }

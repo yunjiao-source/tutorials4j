@@ -19,6 +19,8 @@
         <module>toolkit-core</module>
         <module>toolkit-webmvc</module>
         <module>toolkit-webflux</module>
+        <module>toolkit-cache</module>
+        <module>toolkit-cache-caffeine</module>
     </modules>
 
 </project>

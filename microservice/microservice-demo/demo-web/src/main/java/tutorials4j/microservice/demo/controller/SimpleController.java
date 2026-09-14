@@ -1,4 +1,4 @@
-package tutorials4j.microservice.demo.web.controller;
+package tutorials4j.microservice.demo.controller;
 
 import java.time.Instant;
 import java.util.concurrent.ThreadLocalRandom;
