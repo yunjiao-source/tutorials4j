@@ -43,7 +43,7 @@
     .btn-outline-secondary {
       border-radius: 40px;
     }
-    .result-area {
+    .response-area {
       background: #f8fafc;
       border-radius: 16px;
       padding: 0.75rem 1rem;
@@ -150,7 +150,7 @@
             <div><strong>签到日期：</strong> <span id="todayDateDisplay" class="badge bg-secondary bg-opacity-25 text-dark p-2"></span></div>
             <button id="doSignBtn" class="btn btn-primary"><i class="bi bi-pen"></i> 立即签到</button>
           </div>
-          <div id="signResultArea" class="result-area mt-3">
+          <div id="signResultArea" class="response-area mt-3">
             点击签到，结果将显示在这里～
           </div>
         </div>
@@ -165,7 +165,7 @@
               <label class="form-label fw-semibold">选择日期</label>
               <input type="date" id="statusDate" class="form-control mb-2">
               <button id="checkStatusBtn" class="btn btn-outline-primary btn-sm w-100">查询是否签到</button>
-              <div id="statusResult" class="result-area mt-2 text-center">等待查询</div>
+              <div id="statusResult" class="response-area mt-2 text-center">等待查询</div>
             </div>
           </div>
         </div>
@@ -176,7 +176,7 @@
               <label class="form-label fw-semibold">选择日期</label>
               <input type="date" id="dailyDate" class="form-control mb-2">
               <button id="getDailyBtn" class="btn btn-outline-primary btn-sm w-100">获取详情</button>
-              <div id="dailyResult" class="result-area mt-2">详细签到数据展示</div>
+              <div id="dailyResult" class="response-area mt-2">详细签到数据展示</div>
             </div>
           </div>
         </div>
@@ -235,7 +235,7 @@
           <label class="form-label">日期</label>
           <input type="date" id="dailyActiveDate" class="form-control form-control-sm mb-2">
           <button id="countDailyActiveBtn" class="btn btn-sm btn-success w-100">统计日活</button>
-          <div id="dailyActiveResult" class="result-area mt-2 text-center">未查询</div>
+          <div id="dailyActiveResult" class="response-area mt-2 text-center">未查询</div>
         </div>
       </div>
     </div>
@@ -246,7 +246,7 @@
           <label class="form-label">月份 (YYYY-MM)</label>
           <input type="date" id="monthActivePicker" class="form-control form-control-sm mb-2">
           <button id="countMonthActiveBtn" class="btn btn-sm btn-success w-100">统计月活</button>
-          <div id="monthActiveResult" class="result-area mt-2 text-center">未查询</div>
+          <div id="monthActiveResult" class="response-area mt-2 text-center">未查询</div>
         </div>
       </div>
     </div>
@@ -369,17 +369,17 @@
       $signResult.html('<i class="bi bi-hourglass-split"></i> 签到中...');
       try {
         const res = await apiRequest('POST', '/api/sign-in/do', { source: source }, true, null);
-        const result = res.data;
-        // result 是 SignInResult
+        const response = res.data;
+        // response 是 SignInResult
         let msg = '';
-        if (result) {
+        if (response) {
           msg = `<i class="bi bi-info-circle"></i> <strong>签到结果</strong><br>
-                           账号: ${result.account || account}<br>
-                           签到日期: ${result.signDate || todayStr}<br>
-                           是否签到成功: ${result.signedIn === true ? '✅ 成功' : '❌ 失败'}<br>
-                           重复签到: ${result.repeatedSignIn === true ? '⚠️ 今日已签过' : '否'}<br>
-                           连续签到天数: ${result.continuousDays ?? '-'}<br>
-                           本月累计签到: ${result.monthlySignedDays ?? '-'} 天`;
+                           账号: ${response.account || account}<br>
+                           签到日期: ${response.signDate || todayStr}<br>
+                           是否签到成功: ${response.signedIn === true ? '✅ 成功' : '❌ 失败'}<br>
+                           重复签到: ${response.repeatedSignIn === true ? '⚠️ 今日已签过' : '否'}<br>
+                           连续签到天数: ${response.continuousDays ?? '-'}<br>
+                           本月累计签到: ${response.monthlySignedDays ?? '-'} 天`;
         } else {
           msg = '签到响应异常';
         }

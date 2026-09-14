@@ -8,7 +8,7 @@
   <style>
     .card { margin-bottom: 24px; }
     .field-error-area { margin-top: 4px; }
-    .result-box { margin-top: 12px; }
+    .response-box { margin-top: 12px; }
     .invalid-feedback { display: block; } /* 确保总是显示（配合 .is-invalid） */
   </style>
 </head>
@@ -37,7 +37,7 @@
         </div>
         <button type="button" class="btn btn-primary" id="btnJson">发送 JSON 请求</button>
       </form>
-      <div id="jsonResult" class="result-box"></div>
+      <div id="jsonResult" class="response-box"></div>
     </div>
   </div>
 
@@ -62,7 +62,7 @@
         </div>
         <button type="button" class="btn btn-success" id="btnForm">提交表单</button>
       </form>
-      <div id="formResult" class="result-box"></div>
+      <div id="formResult" class="response-box"></div>
     </div>
   </div>
 
@@ -81,7 +81,7 @@
         </div>
         <button type="button" class="btn btn-warning" id="btnParam">GET 请求带参数</button>
       </form>
-      <div id="paramResult" class="result-box"></div>
+      <div id="paramResult" class="response-box"></div>
     </div>
   </div>
 
@@ -93,7 +93,7 @@
     <div class="card-body">
       <p>点击下方链接将请求一个不存在的资源，触发 404 异常。</p>
       <a href="#" id="linkNotFound" class="btn btn-danger">请求 /nonexistent.js</a>
-      <div id="notFoundResult" class="result-box"></div>
+      <div id="notFoundResult" class="response-box"></div>
     </div>
   </div>
 </div>

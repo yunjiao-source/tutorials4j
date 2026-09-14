@@ -419,12 +419,12 @@
             </button>
           </div>
 
-          <div class="id-table-wrap" id="result-wrap-default">
+          <div class="id-table-wrap" id="response-wrap-default">
             <table class="table table-hover mb-0">
               <thead>
               <tr><th style="width:20%;">#</th><th>UID (Long)</th></tr>
               </thead>
-              <tbody id="result-body-default">
+              <tbody id="response-body-default">
               <tr><td colspan="2" class="empty-placeholder">
                 <i class="bi bi-inbox" style="font-size:2rem;display:block;opacity:0.3;"></i>
                 点击按钮生成
@@ -477,12 +477,12 @@
             </button>
           </div>
 
-          <div class="id-table-wrap" id="result-wrap-cache">
+          <div class="id-table-wrap" id="response-wrap-cache">
             <table class="table table-hover mb-0">
               <thead>
               <tr><th style="width:20%;">#</th><th>UID (Long)</th></tr>
               </thead>
-              <tbody id="result-body-cache">
+              <tbody id="response-body-cache">
               <tr><td colspan="2" class="empty-placeholder">
                 <i class="bi bi-inbox" style="font-size:2rem;display:block;opacity:0.3;"></i>
                 点击按钮生成
@@ -535,7 +535,7 @@
     }
 
     function renderIds(type, ids) {
-      const $tbody = $('#result-body-' + type);
+      const $tbody = $('#response-body-' + type);
       const $count = $('#count-' + type);
       if (!ids || ids.length === 0) {
         $tbody.html(
@@ -602,24 +602,24 @@
     }
 
     /** 更新 UI（包括性能指标） */
-    function updateUI(type, result, count) {
-      // result: { data, elapsed, success }
-      if (result.success) {
-        renderIds(type, result.data);
-        setStatus(type, 'success', '成功 ' + (result.data ? result.data.length : 0) + ' 个');
+    function updateUI(type, response, count) {
+      // response: { data, elapsed, success }
+      if (response.success) {
+        renderIds(type, response.data);
+        setStatus(type, 'success', '成功 ' + (response.data ? response.data.length : 0) + ' 个');
         $('#time-label-' + type).text(nowStr() + ' 完成');
         // 性能指标
-        const elapsedMs = result.elapsed.toFixed(1);
+        const elapsedMs = response.elapsed.toFixed(1);
         $('#time-' + type).text(elapsedMs);
         // 计算速率 (个/秒)
-        const len = result.data ? result.data.length : 0;
-        const rate = len > 0 && result.elapsed > 0 ? (len / (result.elapsed / 1000)) : 0;
+        const len = response.data ? response.data.length : 0;
+        const rate = len > 0 && response.elapsed > 0 ? (len / (response.elapsed / 1000)) : 0;
         $('#rate-' + type).text(rate > 0 ? rate.toFixed(1) : '0.0');
       } else {
         renderIds(type, []);
-        setStatus(type, 'error', result.message || '错误');
+        setStatus(type, 'error', response.message || '错误');
         $('#time-label-' + type).text(nowStr() + ' 失败');
-        $('#time-' + type).text(result.elapsed ? result.elapsed.toFixed(1) : '--');
+        $('#time-' + type).text(response.elapsed ? response.elapsed.toFixed(1) : '--');
         $('#rate-' + type).text('--');
       }
     }
@@ -640,9 +640,9 @@
       }
 
       return fetchUids(type, url, count)
-      .then(function(result) {
-        updateUI(type, result, count);
-        return result;
+      .then(function(response) {
+        updateUI(type, response, count);
+        return response;
       })
       .catch(function(err) {
         updateUI(type, { success: false, message: err.message, elapsed: err.elapsed }, count);

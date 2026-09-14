@@ -237,7 +237,7 @@
     }
 
     /* 结果反馈区域 */
-    .result-area {
+    .response-area {
       margin-top: 1.8rem;
       padding: 1rem;
       border-radius: 1rem;
@@ -252,19 +252,19 @@
       word-break: break-word;
     }
 
-    .result-success {
+    .response-success {
       background: #e0f2e9;
       color: #0b5e42;
       border-left: 4px solid #2b9b6e;
     }
 
-    .result-error {
+    .response-error {
       background: #ffe8e8;
       color: #bc1e2e;
       border-left: 4px solid #e5484d;
     }
 
-    .result-info {
+    .response-info {
       background: #eef2ff;
       color: #2c5282;
     }
@@ -357,7 +357,7 @@
     </div>
 
     <!-- 结果反馈区域 -->
-    <div id="resultMessage" class="result-area result-info">
+    <div id="resultMessage" class="response-area response-info">
       💡 选择不同类型，验证码风格会变化，输入后提交校验
     </div>
   </div>
@@ -383,13 +383,13 @@
   // 辅助函数：显示结果消息
   function showMessage(msg, type = 'info') {
     resultDiv.textContent = msg;
-    resultDiv.className = 'result-area';
+    resultDiv.className = 'response-area';
     if (type === 'success') {
-      resultDiv.classList.add('result-success');
+      resultDiv.classList.add('response-success');
     } else if (type === 'error') {
-      resultDiv.classList.add('result-error');
+      resultDiv.classList.add('response-error');
     } else {
-      resultDiv.classList.add('result-info');
+      resultDiv.classList.add('response-info');
     }
     // 4秒后若消息未被覆盖，可恢复中性样式（但不清除文字，仅为体验）
     setTimeout(() => {
@@ -397,8 +397,8 @@
         // 保留原文字但调整样式? 不做强制，避免闪烁，只是让样式不那么刺眼
         if (type !== 'info') {
           // 如果还是同一条消息且不是info，改为中性样式避免长时间红/绿
-          resultDiv.classList.remove('result-success', 'result-error');
-          resultDiv.classList.add('result-info');
+          resultDiv.classList.remove('response-success', 'response-error');
+          resultDiv.classList.add('response-info');
         }
       }
     }, 4000);

@@ -12,7 +12,7 @@
     <artifactId>springcloud-gateway-server</artifactId>
     <packaging>jar</packaging>
     <name>Spring Cloud :: Gateway Server</name>
-    <description>资源服务</description>
+    <description>网关服务</description>
 
     <dependencies>
         <!-- Spring Cloud Gateway 核心 -->

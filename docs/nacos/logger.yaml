@@ -1,0 +1,4 @@
+logging:
+  level:
+    tutorials4j: TRACE
+#    org.springframework: debug

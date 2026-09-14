@@ -257,7 +257,7 @@
       font-weight: 600;
     }
 
-    .api-card .api-result {
+    .api-card .api-response {
       margin-top: 10px;
       padding: 10px 12px;
       background: #1a1a2e;
@@ -273,39 +273,39 @@
       line-height: 1.5;
     }
 
-    .api-card .api-result.show {
+    .api-card .api-response.show {
       display: block;
     }
 
-    .api-card .api-result .result-success {
+    .api-card .api-response .response-success {
       color: #66bb6a;
     }
 
-    .api-card .api-result .result-error {
+    .api-card .api-response .response-error {
       color: #ef5350;
     }
 
-    .api-card .api-result .result-warning {
+    .api-card .api-response .response-warning {
       color: #ffca28;
     }
 
-    .api-card .api-result .result-info {
+    .api-card .api-response .response-info {
       color: #4fc3f7;
     }
 
-    .api-card .api-result .json-key {
+    .api-card .api-response .json-key {
       color: #ffcb6b;
     }
-    .api-card .api-result .json-string {
+    .api-card .api-response .json-string {
       color: #c3e88d;
     }
-    .api-card .api-result .json-number {
+    .api-card .api-response .json-number {
       color: #f78c6c;
     }
-    .api-card .api-result .json-boolean {
+    .api-card .api-response .json-boolean {
       color: #ffcb6b;
     }
-    .api-card .api-result .json-null {
+    .api-card .api-response .json-null {
       color: #78909c;
     }
 
@@ -372,19 +372,19 @@
     }
 
     /* 滚动条美化 */
-    .api-result::-webkit-scrollbar {
+    .api-response::-webkit-scrollbar {
       width: 5px;
       height: 5px;
     }
-    .api-result::-webkit-scrollbar-track {
+    .api-response::-webkit-scrollbar-track {
       background: #2d2d3d;
       border-radius: 4px;
     }
-    .api-result::-webkit-scrollbar-thumb {
+    .api-response::-webkit-scrollbar-thumb {
       background: #555;
       border-radius: 4px;
     }
-    .api-result::-webkit-scrollbar-thumb:hover {
+    .api-response::-webkit-scrollbar-thumb:hover {
       background: #777;
     }
 
@@ -534,7 +534,7 @@
                   </button>
                   <span class="text-muted small">登录后自动更新状态</span>
                 </div>
-                <div class="api-result" id="result-doLogin"></div>
+                <div class="api-response" id="response-doLogin"></div>
               </div>
             </div>
 
@@ -552,7 +552,7 @@
                     <i class="fas fa-search me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-isLogin"></div>
+                <div class="api-response" id="response-isLogin"></div>
               </div>
             </div>
 
@@ -570,7 +570,7 @@
                     <i class="fas fa-tag me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-tokenInfo"></div>
+                <div class="api-response" id="response-tokenInfo"></div>
               </div>
             </div>
 
@@ -589,7 +589,7 @@
                   </button>
                   <span class="text-muted small">注销后自动更新状态</span>
                 </div>
-                <div class="api-result" id="result-logout"></div>
+                <div class="api-response" id="response-logout"></div>
               </div>
             </div>
           </div>
@@ -623,7 +623,7 @@
                   </button>
                   <span class="text-muted small">需登录</span>
                 </div>
-                <div class="api-result" id="result-atCheckLogin"></div>
+                <div class="api-response" id="response-atCheckLogin"></div>
               </div>
             </div>
 
@@ -643,7 +643,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-atCheckPermission"></div>
+                <div class="api-response" id="response-atCheckPermission"></div>
               </div>
             </div>
 
@@ -663,7 +663,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-atCheckPermissionAnd"></div>
+                <div class="api-response" id="response-atCheckPermissionAnd"></div>
               </div>
             </div>
 
@@ -683,7 +683,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-atCheckPermissionOr"></div>
+                <div class="api-response" id="response-atCheckPermissionOr"></div>
               </div>
             </div>
 
@@ -703,7 +703,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-atCheckRole"></div>
+                <div class="api-response" id="response-atCheckRole"></div>
               </div>
             </div>
 
@@ -723,7 +723,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-atOpenSafe"></div>
+                <div class="api-response" id="response-atOpenSafe"></div>
               </div>
             </div>
 
@@ -743,7 +743,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-atCheckSafe"></div>
+                <div class="api-response" id="response-atCheckSafe"></div>
               </div>
             </div>
 
@@ -763,7 +763,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-atCheckBasic"></div>
+                <div class="api-response" id="response-atCheckBasic"></div>
               </div>
             </div>
           </div>
@@ -801,7 +801,7 @@
                     <i class="fas fa-paper-plane me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testLogin"></div>
+                <div class="api-response" id="response-testLogin"></div>
               </div>
             </div>
 
@@ -819,7 +819,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testLogout"></div>
+                <div class="api-response" id="response-testLogout"></div>
               </div>
             </div>
 
@@ -839,7 +839,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testRole"></div>
+                <div class="api-response" id="response-testRole"></div>
               </div>
             </div>
 
@@ -859,7 +859,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testJur"></div>
+                <div class="api-response" id="response-testJur"></div>
               </div>
             </div>
 
@@ -879,7 +879,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testSession"></div>
+                <div class="api-response" id="response-testSession"></div>
               </div>
             </div>
 
@@ -899,7 +899,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testSession2"></div>
+                <div class="api-response" id="response-testSession2"></div>
               </div>
             </div>
 
@@ -919,7 +919,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testGetTokenSession"></div>
+                <div class="api-response" id="response-testGetTokenSession"></div>
               </div>
             </div>
 
@@ -937,7 +937,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testTokenInfo"></div>
+                <div class="api-response" id="response-testTokenInfo"></div>
               </div>
             </div>
 
@@ -957,7 +957,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testAtCheck"></div>
+                <div class="api-response" id="response-testAtCheck"></div>
               </div>
             </div>
 
@@ -977,7 +977,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testAtJurOr"></div>
+                <div class="api-response" id="response-testAtJurOr"></div>
               </div>
             </div>
 
@@ -997,7 +997,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testRene"></div>
+                <div class="api-response" id="response-testRene"></div>
               </div>
             </div>
 
@@ -1017,7 +1017,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testKickOut"></div>
+                <div class="api-response" id="response-testKickOut"></div>
               </div>
             </div>
 
@@ -1044,7 +1044,7 @@
                     <i class="fas fa-paper-plane me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testLogin2"></div>
+                <div class="api-response" id="response-testLogin2"></div>
               </div>
             </div>
 
@@ -1064,7 +1064,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testSwitchTo"></div>
+                <div class="api-response" id="response-testSwitchTo"></div>
               </div>
             </div>
 
@@ -1084,7 +1084,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testSearch"></div>
+                <div class="api-response" id="response-testSearch"></div>
               </div>
             </div>
 
@@ -1104,7 +1104,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testLoginByDevice"></div>
+                <div class="api-response" id="response-testLoginByDevice"></div>
               </div>
             </div>
 
@@ -1122,7 +1122,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testTest"></div>
+                <div class="api-response" id="response-testTest"></div>
               </div>
             </div>
 
@@ -1140,7 +1140,7 @@
                     <i class="fas fa-play me-1"></i> 调用
                   </button>
                 </div>
-                <div class="api-result" id="result-testTest2"></div>
+                <div class="api-response" id="response-testTest2"></div>
               </div>
             </div>
           </div>
@@ -1216,12 +1216,12 @@
     var beforeSend = options.beforeSend || null;
     var isBasic = options.isBasic || false;
 
-    var $result = $('#' + resultId);
-    $result.removeClass('show').empty();
+    var $response = $('#' + resultId);
+    $response.removeClass('show').empty();
 
     // 显示加载状态
     var loadingHtml = '<div class="text-info"><span class="loading-spinner"></span> 请求中...</div>';
-    $result.html(loadingHtml).addClass('show');
+    $response.html(loadingHtml).addClass('show');
 
     var ajaxConfig = {
       url: url,
@@ -1235,21 +1235,21 @@
         var code = res.code !== undefined ? res.code : (res.statusCode !== undefined ? res.statusCode :
             0);
         var msg = res.msg || res.message || '';
-        var data = res.data !== undefined ? res.data : (res.result !== undefined ? res.result : null);
+        var data = res.data !== undefined ? res.data : (res.response !== undefined ? res.response : null);
 
         if (code === 200 || code === 0) {
-          html += '<div class="result-success">✓ ' + (msg || '请求成功') + '</div>';
+          html += '<div class="response-success">✓ ' + (msg || '请求成功') + '</div>';
         } else if (code === 401) {
-          html += '<div class="result-error">✗ 401 未登录</div>';
+          html += '<div class="response-error">✗ 401 未登录</div>';
           if (msg) html += '<div class="text-warning">' + msg + '</div>';
         } else if (code === 403) {
-          html += '<div class="result-error">✗ 403 无权限</div>';
+          html += '<div class="response-error">✗ 403 无权限</div>';
           if (msg) html += '<div class="text-warning">' + msg + '</div>';
         } else if (code === 500 || code === 501) {
-          html += '<div class="result-error">✗ ' + (code === 500 ? '500 服务错误' : '501 警告') + '</div>';
+          html += '<div class="response-error">✗ ' + (code === 500 ? '500 服务错误' : '501 警告') + '</div>';
           if (msg) html += '<div class="text-warning">' + msg + '</div>';
         } else {
-          html += '<div class="result-info">ℹ 状态码: ' + code + '</div>';
+          html += '<div class="response-info">ℹ 状态码: ' + code + '</div>';
           if (msg) html += '<div class="text-warning">' + msg + '</div>';
         }
 
@@ -1266,7 +1266,7 @@
           html += '<div class="text-info mt-1" style="font-size:0.7rem;">数据总数: ' + res.dataCount + '</div>';
         }
 
-        $result.html(html).addClass('show');
+        $response.html(html).addClass('show');
 
         // 如果是登录/注销相关，自动刷新状态
         if (url.indexOf('/acc/doLogin') >= 0 || url.indexOf('/acc/logout') >= 0 ||
@@ -1290,16 +1290,16 @@
         var html = '';
         var statusCode = xhr.status;
         if (statusCode === 401) {
-          html += '<div class="result-error">✗ 401 未登录 (请先登录)</div>';
+          html += '<div class="response-error">✗ 401 未登录 (请先登录)</div>';
           showToast('未登录，请先登录', 'warning');
         } else if (statusCode === 403) {
-          html += '<div class="result-error">✗ 403 无权限</div>';
+          html += '<div class="response-error">✗ 403 无权限</div>';
           showToast('无权限访问', 'error');
         } else if (statusCode === 0) {
-          html += '<div class="result-error">✗ 请求超时或网络错误</div>';
+          html += '<div class="response-error">✗ 请求超时或网络错误</div>';
           showToast('网络错误', 'error');
         } else {
-          html += '<div class="result-error">✗ ' + (statusCode || '错误') + ' ' + (error || '') + '</div>';
+          html += '<div class="response-error">✗ ' + (statusCode || '错误') + ' ' + (error || '') + '</div>';
           if (xhr.responseText) {
             try {
               var errJson = JSON.parse(xhr.responseText);
@@ -1308,7 +1308,7 @@
           }
           showToast('请求失败: ' + (error || '未知错误'), 'error');
         }
-        $result.html(html).addClass('show');
+        $response.html(html).addClass('show');
       }
     };
 
@@ -1440,19 +1440,19 @@
   function callDoLogin() {
     var name = $('#loginName').val().trim() || 'zhang';
     var pwd = $('#loginPwd').val().trim() || '123456';
-    callApi('/acc/doLogin', { name: name, pwd: pwd }, 'result-doLogin', { method: 'GET' });
+    callApi('/acc/doLogin', { name: name, pwd: pwd }, 'response-doLogin', { method: 'GET' });
   }
 
   function callIsLogin() {
-    callApi('/acc/isLogin', {}, 'result-isLogin', { method: 'GET' });
+    callApi('/acc/isLogin', {}, 'response-isLogin', { method: 'GET' });
   }
 
   function callTokenInfo() {
-    callApi('/acc/tokenInfo', {}, 'result-tokenInfo', { method: 'GET' });
+    callApi('/acc/tokenInfo', {}, 'response-tokenInfo', { method: 'GET' });
   }
 
   function callLogout() {
-    callApi('/acc/logout', {}, 'result-logout', { method: 'GET' });
+    callApi('/acc/logout', {}, 'response-logout', { method: 'GET' });
   }
 
   /**
@@ -1461,37 +1461,37 @@
    * ============================================================
    */
   function callAtCheckLogin() {
-    callApi('/at/checkLogin', {}, 'result-atCheckLogin', { method: 'GET' });
+    callApi('/at/checkLogin', {}, 'response-atCheckLogin', { method: 'GET' });
   }
 
   function callAtCheckPermission() {
-    callApi('/at/checkPermission', {}, 'result-atCheckPermission', { method: 'GET' });
+    callApi('/at/checkPermission', {}, 'response-atCheckPermission', { method: 'GET' });
   }
 
   function callAtCheckPermissionAnd() {
-    callApi('/at/checkPermissionAnd', {}, 'result-atCheckPermissionAnd', { method: 'GET' });
+    callApi('/at/checkPermissionAnd', {}, 'response-atCheckPermissionAnd', { method: 'GET' });
   }
 
   function callAtCheckPermissionOr() {
-    callApi('/at/checkPermissionOr', {}, 'result-atCheckPermissionOr', { method: 'GET' });
+    callApi('/at/checkPermissionOr', {}, 'response-atCheckPermissionOr', { method: 'GET' });
   }
 
   function callAtCheckRole() {
-    callApi('/at/checkRole', {}, 'result-atCheckRole', { method: 'GET' });
+    callApi('/at/checkRole', {}, 'response-atCheckRole', { method: 'GET' });
   }
 
   function callAtOpenSafe() {
-    callApi('/at/openSafe', {}, 'result-atOpenSafe', { method: 'GET' });
+    callApi('/at/openSafe', {}, 'response-atOpenSafe', { method: 'GET' });
   }
 
   function callAtCheckSafe() {
-    callApi('/at/checkSafe', {}, 'result-atCheckSafe', { method: 'GET' });
+    callApi('/at/checkSafe', {}, 'response-atCheckSafe', { method: 'GET' });
   }
 
   function callAtCheckBasic() {
     // Basic 认证： sa / 123456
     var credentials = btoa('sa:123456');
-    callApi('/at/checkBasic', {}, 'result-atCheckBasic', {
+    callApi('/at/checkBasic', {}, 'response-atCheckBasic', {
       method: 'GET',
       headers: { 'Authorization': 'Basic ' + credentials }
     });
@@ -1504,77 +1504,77 @@
    */
   function callTestLogin() {
     var id = $('#testLoginId').val().trim() || '10001';
-    callApi('/test/login', { id: id }, 'result-testLogin', { method: 'GET' });
+    callApi('/test/login', { id: id }, 'response-testLogin', { method: 'GET' });
   }
 
   function callTestLogout() {
-    callApi('/test/logout', {}, 'result-testLogout', { method: 'GET' });
+    callApi('/test/logout', {}, 'response-testLogout', { method: 'GET' });
   }
 
   function callTestRole() {
-    callApi('/test/testRole', {}, 'result-testRole', { method: 'GET' });
+    callApi('/test/testRole', {}, 'response-testRole', { method: 'GET' });
   }
 
   function callTestJur() {
-    callApi('/test/testJur', {}, 'result-testJur', { method: 'GET' });
+    callApi('/test/testJur', {}, 'response-testJur', { method: 'GET' });
   }
 
   function callTestSession() {
-    callApi('/test/session', {}, 'result-testSession', { method: 'GET' });
+    callApi('/test/session', {}, 'response-testSession', { method: 'GET' });
   }
 
   function callTestSession2() {
-    callApi('/test/session2', {}, 'result-testSession2', { method: 'GET' });
+    callApi('/test/session2', {}, 'response-testSession2', { method: 'GET' });
   }
 
   function callTestGetTokenSession() {
-    callApi('/test/getTokenSession', {}, 'result-testGetTokenSession', { method: 'GET' });
+    callApi('/test/getTokenSession', {}, 'response-testGetTokenSession', { method: 'GET' });
   }
 
   function callTestTokenInfo() {
-    callApi('/test/tokenInfo', {}, 'result-testTokenInfo', { method: 'GET' });
+    callApi('/test/tokenInfo', {}, 'response-testTokenInfo', { method: 'GET' });
   }
 
   function callTestAtCheck() {
-    callApi('/test/atCheck', {}, 'result-testAtCheck', { method: 'GET' });
+    callApi('/test/atCheck', {}, 'response-testAtCheck', { method: 'GET' });
   }
 
   function callTestAtJurOr() {
-    callApi('/test/atJurOr', {}, 'result-testAtJurOr', { method: 'GET' });
+    callApi('/test/atJurOr', {}, 'response-testAtJurOr', { method: 'GET' });
   }
 
   function callTestRene() {
-    callApi('/test/rene', {}, 'result-testRene', { method: 'GET' });
+    callApi('/test/rene', {}, 'response-testRene', { method: 'GET' });
   }
 
   function callTestKickOut() {
-    callApi('/test/kickOut', {}, 'result-testKickOut', { method: 'GET' });
+    callApi('/test/kickOut', {}, 'response-testKickOut', { method: 'GET' });
   }
 
   function callTestLogin2() {
     var id = $('#testLogin2Id').val().trim() || '10001';
     var device = $('#testLogin2Device').val().trim() || 'PC';
-    callApi('/test/login2', { id: id, device: device }, 'result-testLogin2', { method: 'GET' });
+    callApi('/test/login2', { id: id, device: device }, 'response-testLogin2', { method: 'GET' });
   }
 
   function callTestSwitchTo() {
-    callApi('/test/switchTo', {}, 'result-testSwitchTo', { method: 'GET' });
+    callApi('/test/switchTo', {}, 'response-testSwitchTo', { method: 'GET' });
   }
 
   function callTestSearch() {
-    callApi('/test/search', {}, 'result-testSearch', { method: 'GET' });
+    callApi('/test/search', {}, 'response-testSearch', { method: 'GET' });
   }
 
   function callTestLoginByDevice() {
-    callApi('/test/loginByDevice', {}, 'result-testLoginByDevice', { method: 'GET' });
+    callApi('/test/loginByDevice', {}, 'response-testLoginByDevice', { method: 'GET' });
   }
 
   function callTestTest() {
-    callApi('/test/test', {}, 'result-testTest', { method: 'GET' });
+    callApi('/test/test', {}, 'response-testTest', { method: 'GET' });
   }
 
   function callTestTest2() {
-    callApi('/test/test2', {}, 'result-testTest2', { method: 'GET' });
+    callApi('/test/test2', {}, 'response-testTest2', { method: 'GET' });
   }
 
   /**

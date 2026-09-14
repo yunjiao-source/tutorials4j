@@ -1,0 +1,44 @@
+@host = http://localhost:9899
+@baseUrl = {{host}}/validation
+
+### 1. JSON 校验通过：POST /validation/json
+POST {{baseUrl}}/json
+Content-Type: application/json
+
+{
+  "username": "tutorials4j",
+  "password": "123456"
+}
+
+### 2. JSON 校验失败：username 太短、password 太短
+POST {{baseUrl}}/json
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "password": "123"
+}
+
+### 3. 表单校验通过：POST /validation/form
+POST {{baseUrl}}/form
+Content-Type: application/x-www-form-urlencoded
+
+name=张三&email=zhangsan@example.com
+
+### 4. 表单校验失败：name 为空、email 为空
+POST {{baseUrl}}/form
+Content-Type: application/x-www-form-urlencoded
+
+name=&email=
+
+### 5. @RequestParam 校验通过：GET /validation/param?name=abc
+GET {{baseUrl}}/param?name=abc
+
+### 6. @RequestParam 校验失败：name 为空
+GET {{baseUrl}}/param?name=
+
+### 7. @RequestParam 校验失败：name 长度只有 1
+GET {{baseUrl}}/param?name=a
+
+### 8. 访问不存在的静态资源，触发 NoResourceFoundException
+GET {{host}}/not-exist.html

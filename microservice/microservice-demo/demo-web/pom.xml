@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>yunjiao-source.tutorials4j.microservice</groupId>
+        <artifactId>microservice-demo</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>demo-web</artifactId>
+    <name>Demo :: Web</name>
+    <description>示例Web</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.microservice</groupId>
+            <artifactId>demo-component</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-webmvc</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+    </dependencies>
+</project>

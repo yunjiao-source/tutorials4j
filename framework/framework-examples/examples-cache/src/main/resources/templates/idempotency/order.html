@@ -76,7 +76,7 @@
       transform: none;
       box-shadow: none;
     }
-    .result-card {
+    .response-card {
       border-radius: 16px;
       padding: 20px 24px;
       margin-top: 24px;
@@ -87,37 +87,37 @@
       display: flex;
       align-items: center;
     }
-    .result-card.success {
+    .response-card.success {
       border-left-color: #1cc88a;
       background: #f0fff4;
     }
-    .result-card.error {
+    .response-card.error {
       border-left-color: #e74a3b;
       background: #fff5f5;
     }
-    .result-card.idempotent {
+    .response-card.idempotent {
       border-left-color: #f6c23e;
       background: #fffbeb;
     }
-    .result-card .result-icon {
+    .response-card .response-icon {
       font-size: 2rem;
       margin-right: 18px;
       flex-shrink: 0;
     }
-    .result-card .result-content {
+    .response-card .response-content {
       flex: 1;
     }
-    .result-card .result-content .result-title {
+    .response-card .response-content .response-title {
       font-weight: 600;
       font-size: 1.05rem;
       margin-bottom: 4px;
     }
-    .result-card .result-content .result-detail {
+    .response-card .response-content .response-detail {
       color: #5a6a7e;
       font-size: 0.92rem;
       word-break: break-all;
     }
-    .result-card .result-content .result-detail code {
+    .response-card .response-content .response-detail code {
       background: #edf2f7;
       padding: 2px 10px;
       border-radius: 6px;
@@ -279,13 +279,13 @@
       <!-- 结果展示区 -->
       <div id="resultArea">
         <!-- 初始占位 -->
-        <div class="result-card" id="resultPlaceholder" style="border-left-color:#d1d9e6;background:#fafcff;">
-          <div class="result-icon" style="color:#b0c4de;">
+        <div class="response-card" id="resultPlaceholder" style="border-left-color:#d1d9e6;background:#fafcff;">
+          <div class="response-icon" style="color:#b0c4de;">
             <i class="fas fa-inbox"></i>
           </div>
-          <div class="result-content">
-            <div class="result-title" style="color:#8a9bb5;">等待提交</div>
-            <div class="result-detail">输入订单号后点击「提交订单」发起请求</div>
+          <div class="response-content">
+            <div class="response-title" style="color:#8a9bb5;">等待提交</div>
+            <div class="response-detail">输入订单号后点击「提交订单」发起请求</div>
           </div>
         </div>
         <!-- 动态结果 (默认隐藏) -->
@@ -440,11 +440,11 @@
       const iconHtml = iconSymbol ? `<i class="${iconSymbol}"></i>` : `<i class="fas ${iconClass}"></i>`;
 
       $resultDynamic.html(`
-                    <div class="result-card ${statusClass}">
-                        <div class="result-icon">${iconHtml}</div>
-                        <div class="result-content">
-                            <div class="result-title">${title}</div>
-                            <div class="result-detail">${detail}</div>
+                    <div class="response-card ${statusClass}">
+                        <div class="response-icon">${iconHtml}</div>
+                        <div class="response-content">
+                            <div class="response-title">${title}</div>
+                            <div class="response-detail">${detail}</div>
                         </div>
                     </div>
                 `).show();

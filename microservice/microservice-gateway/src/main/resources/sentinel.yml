@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: ${TUTORIALS4J_SENTINEL_DASHBOARD_ADDR:127.0.0.1:8080}
+      eager: true
+      datasource:
+        gw-flow:
+          nacos:
+            server-addr: ${TUTORIALS4J_NACOS_ADDR:127.0.0.1:8848}
+            namespace: ${TUTORIALS4J_NACOS_NAMESPACE:public}
+            username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
+            password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}
+            data-id: sentinel-gateway-flow-rules.json
+            group-id: sentinel
+            data-type: json
+            rule-type: gw-flow
+
+        gw-api-group:
+          nacos:
+            server-addr: ${TUTORIALS4J_NACOS_ADDR:127.0.0.1:8848}
+            namespace: ${TUTORIALS4J_NACOS_NAMESPACE:public}
+            username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
+            password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}
+            data-id: sentinel-gateway-api-groups.json
+            group-id: sentinel
+            data-type: json
+            rule-type: gw-api-group

@@ -1,0 +1,26 @@
+server:
+  port: 9899
+  shutdown: graceful
+
+spring:
+  application:
+    name: microservice-demo
+
+  config:
+    import:
+      - optional:nacos:environment.yaml?group=common
+      - optional:nacos:management.yaml?group=common
+      - optional:nacos:logger.yaml?group=common
+      - optional:nacos:datasource.yaml?group=common
+      - optional:nacos:jpa.yaml?group=common
+      - optional:nacos:${spring.application.name}.yaml?group=service
+
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${TUTORIALS4J_NACOS_ADDR:127.0.0.1:8848}
+        namespace: ${TUTORIALS4J_NACOS_NAMESPACE:public}
+        group: DEFAULT_GROUP
+        username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
+        password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}

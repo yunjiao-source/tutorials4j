@@ -148,7 +148,7 @@
     }
 
     /* ===== 结果区域 ===== */
-    .result-area {
+    .response-area {
       margin-top: 20px;
       border-radius: 12px;
       background: #f8f9fc;
@@ -162,7 +162,7 @@
       justify-content: center;
       flex-direction: column;
     }
-    .result-area .result-placeholder {
+    .response-area .response-placeholder {
       color: #adb5bd;
       font-size: 0.9rem;
       padding: 18px 0;
@@ -170,67 +170,67 @@
       align-items: center;
       gap: 8px;
     }
-    .result-area .result-placeholder i {
+    .response-area .response-placeholder i {
       font-size: 1.2rem;
     }
 
-    .result-area .result-content {
+    .response-area .response-content {
       width: 100%;
       padding: 18px 22px;
     }
-    .result-area .result-content .result-success {
+    .response-area .response-content .response-success {
       border-left: 4px solid #198754;
       background: #f0faf4;
       padding: 12px 16px;
       border-radius: 6px;
     }
-    .result-area .result-content .result-error {
+    .response-area .response-content .response-error {
       border-left: 4px solid #dc3545;
       background: #fdf0f0;
       padding: 12px 16px;
       border-radius: 6px;
       color: #b02a37;
     }
-    .result-area .result-content .result-info {
+    .response-area .response-content .response-info {
       border-left: 4px solid #0d6efd;
       background: #f0f5ff;
       padding: 12px 16px;
       border-radius: 6px;
     }
 
-    .result-area .result-content .file-url {
+    .response-area .response-content .file-url {
       word-break: break-all;
       color: #0d6efd;
       font-weight: 500;
     }
-    .result-area .result-content .file-url a {
+    .response-area .response-content .file-url a {
       color: #0d6efd;
       text-decoration: none;
     }
-    .result-area .result-content .file-url a:hover {
+    .response-area .response-content .file-url a:hover {
       text-decoration: underline;
     }
 
-    .result-area .result-content .detail-grid {
+    .response-area .response-content .detail-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 8px 16px;
       margin-top: 10px;
     }
-    .result-area .result-content .detail-grid .detail-item {
+    .response-area .response-content .detail-grid .detail-item {
       display: flex;
       align-items: baseline;
       font-size: 0.88rem;
       padding: 4px 0;
       border-bottom: 1px dashed #e9ecef;
     }
-    .result-area .result-content .detail-grid .detail-item .label {
+    .response-area .response-content .detail-grid .detail-item .label {
       color: #6c757d;
       width: 70px;
       flex-shrink: 0;
       font-weight: 500;
     }
-    .result-area .result-content .detail-grid .detail-item .value {
+    .response-area .response-content .detail-grid .detail-item .value {
       color: #212529;
       word-break: break-all;
     }
@@ -272,7 +272,7 @@
       .file-input-wrapper .btn-upload {
         width: 100%;
       }
-      .result-area .result-content .detail-grid {
+      .response-area .response-content .detail-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -329,8 +329,8 @@
           <i class="fas fa-upload me-1"></i> 上传
         </button>
       </div>
-      <div class="result-area" id="result1">
-        <div class="result-placeholder">
+      <div class="response-area" id="result1">
+        <div class="response-placeholder">
           <i class="fas fa-cloud-upload-alt"></i> 等待上传...
         </div>
       </div>
@@ -361,8 +361,8 @@
           <i class="fas fa-upload me-1"></i> 上传
         </button>
       </div>
-      <div class="result-area" id="result2">
-        <div class="result-placeholder">
+      <div class="response-area" id="result2">
+        <div class="response-placeholder">
           <i class="fas fa-cloud-upload-alt"></i> 等待上传...
         </div>
       </div>
@@ -393,8 +393,8 @@
           <i class="fas fa-upload me-1"></i> 上传图片
         </button>
       </div>
-      <div class="result-area" id="result3">
-        <div class="result-placeholder">
+      <div class="response-area" id="result3">
+        <div class="response-placeholder">
           <i class="fas fa-cloud-upload-alt"></i> 等待上传...
         </div>
       </div>
@@ -424,8 +424,8 @@
           <i class="fas fa-upload me-1"></i> 上传到指定平台
         </button>
       </div>
-      <div class="result-area" id="result4">
-        <div class="result-placeholder">
+      <div class="response-area" id="result4">
+        <div class="response-placeholder">
           <i class="fas fa-cloud-upload-alt"></i> 等待上传...
         </div>
       </div>
@@ -456,8 +456,8 @@
           <i class="fas fa-upload me-1"></i> 上传 (Request)
         </button>
       </div>
-      <div class="result-area" id="result5">
-        <div class="result-placeholder">
+      <div class="response-area" id="result5">
+        <div class="response-placeholder">
           <i class="fas fa-cloud-upload-alt"></i> 等待上传...
         </div>
       </div>
@@ -519,8 +519,8 @@
       // 校验文件
       if (!file) {
         resultEl.innerHTML = `
-                        <div class="result-content">
-                            <div class="result-error">
+                        <div class="response-content">
+                            <div class="response-error">
                                 <i class="fas fa-exclamation-circle me-2"></i> 请先选择文件！
                             </div>
                         </div>
@@ -536,8 +536,8 @@
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner-border spinner-border-sm-custom me-2" role="status" aria-hidden="true"></span> 上传中...';
       resultEl.innerHTML = `
-                    <div class="result-content">
-                        <div class="result-info text-center py-3">
+                    <div class="response-content">
+                        <div class="response-info text-center py-3">
                             <span class="spinner-border spinner-border-sm-custom me-2" role="status" aria-hidden="true"></span>
                             正在上传 <strong>${file.name}</strong> ...
                         </div>
@@ -579,8 +579,8 @@
             errMsg = '服务器错误：' + (error || status);
           }
           resultEl.innerHTML = `
-                            <div class="result-content">
-                                <div class="result-error">
+                            <div class="response-content">
+                                <div class="response-error">
                                     <i class="fas fa-times-circle me-2"></i> ${errMsg}
                                 </div>
                             </div>
@@ -593,8 +593,8 @@
     function renderTextResult(resultEl, text) {
       if (!text) {
         resultEl.innerHTML = `
-                        <div class="result-content">
-                            <div class="result-error">
+                        <div class="response-content">
+                            <div class="response-error">
                                 <i class="fas fa-times-circle me-2"></i> 服务器返回空响应
                             </div>
                         </div>
@@ -605,8 +605,8 @@
       const isUrl = /^https?:\/\/\S+/i.test(text.trim());
       if (isUrl) {
         resultEl.innerHTML = `
-                        <div class="result-content">
-                            <div class="result-success">
+                        <div class="response-content">
+                            <div class="response-success">
                                 <i class="fas fa-check-circle me-2 text-success"></i> 上传成功！
                                 <div class="mt-2">
                                     <strong>文件 URL：</strong>
@@ -622,8 +622,8 @@
       } else {
         // 非 URL，显示为文本（可能是错误信息）
         resultEl.innerHTML = `
-                        <div class="result-content">
-                            <div class="result-info">
+                        <div class="response-content">
+                            <div class="response-info">
                                 <i class="fas fa-info-circle me-2"></i> 响应内容：
                                 <pre class="mt-2 mb-0" style="white-space:pre-wrap;word-break:break-all;background:#f1f3f5;padding:10px;border-radius:6px;">${text}</pre>
                             </div>
@@ -636,8 +636,8 @@
     function renderFileInfoResult(resultEl, data) {
       if (!data) {
         resultEl.innerHTML = `
-                        <div class="result-content">
-                            <div class="result-error">
+                        <div class="response-content">
+                            <div class="response-error">
                                 <i class="fas fa-times-circle me-2"></i> 服务器返回空数据
                             </div>
                         </div>
@@ -695,8 +695,8 @@
                 ` : '';
 
       resultEl.innerHTML = `
-                    <div class="result-content">
-                        <div class="result-success">
+                    <div class="response-content">
+                        <div class="response-success">
                             <i class="fas fa-check-circle me-2 text-success"></i> 上传成功！
                             ${urlHtml}
                             ${detailHtml}

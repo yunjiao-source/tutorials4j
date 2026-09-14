@@ -48,7 +48,7 @@
       border-radius: 0.4rem;
       word-break: break-all;
     }
-    .result-area {
+    .response-area {
       margin-top: 1rem;
       padding: 0.75rem;
       border-radius: 0.5rem;
@@ -113,7 +113,7 @@
                 ✅ 验证验证码
               </button>
 
-              <div id="captchaResult" class="result-area">
+              <div id="captchaResult" class="response-area">
                 <span class="text-muted">等待验证...</span>
               </div>
             </div>
@@ -140,7 +140,7 @@
                 🧮 执行计数 (+1)
               </button>
 
-              <div id="counterResult" class="result-area">
+              <div id="counterResult" class="response-area">
                 <span class="text-muted">尚未计数，点击按钮开始</span>
               </div>
 
@@ -187,8 +187,8 @@
           key: key,
           input: inputValue
         },
-        success: function(result) {
-          if (result === true) {
+        success: function(response) {
+          if (response === true) {
             showCaptchaResult('✅ 验证成功！验证码正确', 'success');
             // 可选：验证成功后自动刷新验证码，防止重复使用（注释掉以保持简单，需要可取消注释）
             // refreshCaptcha();

@@ -1,0 +1,38 @@
+[
+  {
+    "apiName": "demo-simple-api",
+    "predicateItems": [
+      {
+        "pattern": "/api/demo/simple/**",
+        "matchStrategy": 1
+      }
+    ]
+  },
+  {
+    "apiName": "demo-api",
+    "predicateItems": [
+      {
+        "pattern": "/api/demo/**",
+        "matchStrategy": 1
+      }
+    ]
+  },
+  {
+    "apiName": "auth-api",
+    "predicateItems": [
+      {
+        "pattern": "/api/auth/**",
+        "matchStrategy": 1
+      }
+    ]
+  },
+  {
+    "apiName": "front-api",
+    "predicateItems": [
+      {
+        "pattern": "/api/**",
+        "matchStrategy": 1
+      }
+    ]
+  }
+]

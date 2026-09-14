@@ -166,7 +166,7 @@
     }
 
     /* ===== 结果区域 ===== */
-    .result-area {
+    .response-area {
       background: #f8faff;
       border-radius: 16px;
       border: 1.5px solid #e8edf6;
@@ -176,12 +176,12 @@
       transition: border-color 0.25s, background 0.25s;
     }
 
-    .result-area.has-result {
+    .response-area.has-response {
       background: #f2f8ff;
       border-color: #b8d0f0;
     }
 
-    .result-area .result-label {
+    .response-area .response-label {
       font-size: 0.8rem;
       font-weight: 600;
       color: #5b6f8c;
@@ -190,7 +190,7 @@
       margin-bottom: 0.5rem;
     }
 
-    .result-area .result-content {
+    .response-area .response-content {
       font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
       font-size: 0.9rem;
       word-break: break-all;
@@ -199,14 +199,14 @@
       min-height: 2.2rem;
     }
 
-    .result-area .result-content .placeholder-text {
+    .response-area .response-content .placeholder-text {
       color: #a9bcd6;
       font-style: italic;
       font-family: 'Segoe UI', system-ui, sans-serif;
       font-weight: 400;
     }
 
-    .result-meta {
+    .response-meta {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -216,17 +216,17 @@
       border-top: 1px dashed #dce4ef;
     }
 
-    .result-meta .meta-item {
+    .response-meta .meta-item {
       font-size: 0.78rem;
       color: #5b6f8c;
     }
 
-    .result-meta .meta-item strong {
+    .response-meta .meta-item strong {
       color: #2d3748;
       font-weight: 600;
     }
 
-    .btn-copy-result {
+    .btn-copy-response {
       border-radius: 40px;
       font-size: 0.78rem;
       padding: 0.3rem 1.1rem;
@@ -236,13 +236,13 @@
       transition: all 0.2s;
     }
 
-    .btn-copy-result:hover {
+    .btn-copy-response:hover {
       background: #2c7be5;
       color: #fff;
       border-color: #2c7be5;
     }
 
-    .btn-copy-result:active {
+    .btn-copy-response:active {
       transform: scale(0.95);
     }
 
@@ -403,21 +403,21 @@
             <label class="form-label mb-1">
               <i class="fas fa-check-circle me-1"></i>摘要结果
             </label>
-            <div id="resultArea" class="result-area">
-              <div class="result-label">
+            <div id="resultArea" class="response-area">
+              <div class="response-label">
                 <i class="far fa-clock me-1"></i>等待计算
               </div>
-              <div class="result-content" id="resultContent">
+              <div class="response-content" id="resultContent">
                 <span class="placeholder-text">输入内容后点击「计算摘要」</span>
               </div>
-              <div class="result-meta" id="resultMeta" style="display:none;">
+              <div class="response-meta" id="resultMeta" style="display:none;">
                                 <span class="meta-item">
                                     <i class="far fa-file me-1"></i>长度: <strong id="resultLen">0</strong> 字符
                                 </span>
                 <span class="meta-item">
                                     <i class="far fa-calendar-alt me-1"></i>算法: <strong id="resultAlgo">-</strong>
                                 </span>
-                <button id="copyBtn" class="btn btn-copy-result ms-auto">
+                <button id="copyBtn" class="btn btn-copy-response ms-auto">
                   <i class="far fa-copy me-1"></i>复制
                 </button>
               </div>
@@ -494,11 +494,11 @@
       updateCharCount();
       // 清空结果
       $resultContent.html('<span class="placeholder-text">输入内容后点击「计算摘要」</span>');
-      $resultArea.removeClass('has-result');
+      $resultArea.removeClass('has-response');
       $resultMeta.hide();
       // 移除复制按钮的临时状态
       $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
-      $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+      $copyBtn.removeClass('btn-success').addClass('btn-copy-response');
       // 聚焦输入框
       $content.focus();
     });
@@ -522,7 +522,7 @@
 
       // 清除旧结果
       $resultContent.html('<span style="color:#8a9bb8;"><i class="fas fa-spinner fa-spin me-2"></i>请求中…</span>');
-      $resultArea.removeClass('has-result');
+      $resultArea.removeClass('has-response');
       $resultMeta.hide();
 
       // ---------- 发起 AJAX 请求 ----------
@@ -538,7 +538,7 @@
         success: function(data) {
           // 结果显示
           $resultContent.text(data);
-          $resultArea.addClass('has-result');
+          $resultArea.addClass('has-response');
 
           const len = data.length;
           $resultLen.text(len);
@@ -551,7 +551,7 @@
 
           // 复制按钮复位
           $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
-          $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+          $copyBtn.removeClass('btn-success').addClass('btn-copy-response');
 
           showToast('✅ 摘要计算完成', 'success');
         },
@@ -586,7 +586,7 @@
           $resultContent.html(
               `<span style="color:#d9534f;"><i class="fas fa-exclamation-triangle me-2"></i>${msg}</span>`
           );
-          $resultArea.addClass('has-result');
+          $resultArea.addClass('has-response');
           $resultMeta.hide();
         }
       });
@@ -603,11 +603,11 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function() {
           $copyBtn.html('<i class="fas fa-check me-1"></i>已复制');
-          $copyBtn.removeClass('btn-copy-result').addClass('btn-success');
+          $copyBtn.removeClass('btn-copy-response').addClass('btn-success');
           showToast('📋 已复制到剪贴板', 'success');
           setTimeout(function() {
             $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
-            $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+            $copyBtn.removeClass('btn-success').addClass('btn-copy-response');
           }, 2000);
         }).catch(function() {
           fallbackCopy(text);
@@ -629,11 +629,11 @@
       try {
         document.execCommand('copy');
         $copyBtn.html('<i class="fas fa-check me-1"></i>已复制');
-        $copyBtn.removeClass('btn-copy-result').addClass('btn-success');
+        $copyBtn.removeClass('btn-copy-response').addClass('btn-success');
         showToast('📋 已复制到剪贴板', 'success');
         setTimeout(function() {
           $copyBtn.html('<i class="far fa-copy me-1"></i>复制');
-          $copyBtn.removeClass('btn-success').addClass('btn-copy-result');
+          $copyBtn.removeClass('btn-success').addClass('btn-copy-response');
         }, 2000);
       } catch (e) {
         showToast('❌ 复制失败，请手动选择复制', 'error');

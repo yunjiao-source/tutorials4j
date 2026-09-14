@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    gateway:
+      metrics:
+        enabled: true
+      server:
+        webflux:
+          routes:
+            - id: microservice-demo-route
+              uri: lb://microservice-demo
+              predicates:
+                - Path=/api/demo/**
+              filters:
+                - StripPrefix=2
+                - AddRequestHeader=X-Gateway-Source, api-gateway
+
+            - id: order-service-route
+              uri: lb://order-service
+              predicates:
+                - Path=/api/order/**
+              filters:
+                - StripPrefix=2
+
+

@@ -42,7 +42,7 @@
       transform: scale(0.98);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .result-area {
+    .response-area {
       background: #f8fafc;
       border-radius: 1rem;
       border-left: 5px solid #2c7da0;
@@ -139,7 +139,7 @@
             <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
             <span class="ms-2 text-secondary">正在请求后端接口，后端生成签名并调用支付...</span>
           </div>
-          <div id="resultContainer" class="result-area p-3" style="min-height: 120px;">
+          <div id="resultContainer" class="response-area p-3" style="min-height: 120px;">
             <div class="text-muted small fst-italic">
               👆 点击上方按钮，将调用 <code>/signature/test</code> 接口，后端通过 <strong>SignatureClient</strong> 自动完成签名并请求 <code>/signature/pay</code>，支付成功后返回结果。
             </div>

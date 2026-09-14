@@ -78,7 +78,7 @@
     .btn-trace:active {
       transform: scale(0.98);
     }
-    .result-area {
+    .response-area {
       background: #f8fafd;
       border-radius: 1rem;
       padding: 12px 15px;
@@ -90,15 +90,15 @@
       white-space: pre-wrap;
       transition: all 0.2s;
     }
-    .result-success {
+    .response-success {
       border-left-color: #2b9348;
       background: #edf7f0;
     }
-    .result-error {
+    .response-error {
       border-left-color: #e63946;
       background: #ffe9ec;
     }
-    .result-loading {
+    .response-loading {
       border-left-color: #ffb74d;
       background: #fff6e5;
     }
@@ -166,10 +166,10 @@
         <div class="card-body">
           <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/common/get</span></div>
           <p class="card-text text-muted small">调用 <code>TraceController.commonGet()</code>，内部会触发 <code>TraceService.logger()</code> 异步日志 + WebClient 调用第三方接口 (模拟外部调用)。</p>
-          <button class="btn btn-trace w-100" data-url="common/get" data-result-id="resultCommonGet" data-loading="loadingCommonGet">
+          <button class="btn btn-trace w-100" data-url="common/get" data-response-id="resultCommonGet" data-loading="loadingCommonGet">
             <i class="fas fa-paper-plane me-1"></i> 发起请求
           </button>
-          <div id="resultCommonGet" class="result-area mt-3">
+          <div id="resultCommonGet" class="response-area mt-3">
             <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
           </div>
         </div>
@@ -186,10 +186,10 @@
         <div class="card-body">
           <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/common/exception</span></div>
           <p class="card-text text-muted small">服务端直接抛出 RuntimeException，返回 500 错误。演示异常监控及前端错误捕获。</p>
-          <button class="btn btn-trace w-100" data-url="common/exception" data-result-id="resultCommonException" data-loading="loadingCommonException">
+          <button class="btn btn-trace w-100" data-url="common/exception" data-response-id="resultCommonException" data-loading="loadingCommonException">
             <i class="fas fa-bug me-1"></i> 触发异常
           </button>
-          <div id="resultCommonException" class="result-area mt-3">
+          <div id="resultCommonException" class="response-area mt-3">
             <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
           </div>
         </div>
@@ -206,10 +206,10 @@
         <div class="card-body">
           <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/mono/get1</span></div>
           <p class="card-text text-muted small">WebFlux 响应式接口，返回 Mono&lt;String&gt;，并调用 <code>traceService.logger()</code>（异步+外部请求）。</p>
-          <button class="btn btn-trace w-100" data-url="mono/get1" data-result-id="resultMonoGet1" data-loading="loadingMonoGet1">
+          <button class="btn btn-trace w-100" data-url="mono/get1" data-response-id="resultMonoGet1" data-loading="loadingMonoGet1">
             <i class="fas fa-dharmachakra me-1"></i> 响应式请求
           </button>
-          <div id="resultMonoGet1" class="result-area mt-3">
+          <div id="resultMonoGet1" class="response-area mt-3">
             <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
           </div>
         </div>
@@ -226,10 +226,10 @@
         <div class="card-body">
           <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/mono/get2</span></div>
           <p class="card-text text-muted small">仅返回 Mono.just("Hello, WebFlux!")，无日志服务调用，展示最简响应式端点。</p>
-          <button class="btn btn-trace w-100" data-url="mono/get2" data-result-id="resultMonoGet2" data-loading="loadingMonoGet2">
+          <button class="btn btn-trace w-100" data-url="mono/get2" data-response-id="resultMonoGet2" data-loading="loadingMonoGet2">
             <i class="fas fa-bolt me-1"></i> 响应式请求
           </button>
-          <div id="resultMonoGet2" class="result-area mt-3">
+          <div id="resultMonoGet2" class="response-area mt-3">
             <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
           </div>
         </div>
@@ -246,10 +246,10 @@
         <div class="card-body">
           <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/mono/exception</span></div>
           <p class="card-text text-muted small">在 WebFlux Controller 中直接抛出 RuntimeException，验证响应式异常处理机制。</p>
-          <button class="btn btn-trace w-100" data-url="mono/exception" data-result-id="resultMonoException" data-loading="loadingMonoException">
+          <button class="btn btn-trace w-100" data-url="mono/exception" data-response-id="resultMonoException" data-loading="loadingMonoException">
             <i class="fas fa-fire me-1"></i> 触发Mono异常
           </button>
-          <div id="resultMonoException" class="result-area mt-3">
+          <div id="resultMonoException" class="response-area mt-3">
             <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
           </div>
         </div>
@@ -266,10 +266,10 @@
         <div class="card-body">
           <div class="mb-2"><span class="url-path"><i class="fas fa-link me-1"></i>/trace/non-logger</span></div>
           <p class="card-text text-muted small">仅记录控制器日志并返回 "ok"，不调用 TraceService，用于对比测试。</p>
-          <button class="btn btn-trace w-100" data-url="non-logger" data-result-id="resultNonLogger" data-loading="loadingNonLogger">
+          <button class="btn btn-trace w-100" data-url="non-logger" data-response-id="resultNonLogger" data-loading="loadingNonLogger">
             <i class="fas fa-arrow-right me-1"></i> 普通调用
           </button>
-          <div id="resultNonLogger" class="result-area mt-3">
+          <div id="resultNonLogger" class="response-area mt-3">
             <span class="text-secondary"><i class="far fa-clock me-1"></i> 未请求</span>
           </div>
         </div>
@@ -324,7 +324,7 @@
     $btn.html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>请求中...');
 
     // 设置loading状态样式
-    $resultDiv.removeClass('result-success result-error').addClass('result-loading');
+    $resultDiv.removeClass('response-success response-error').addClass('response-loading');
     $resultDiv.html('<i class="fas fa-spinner fa-pulse me-1"></i> 发送请求中，请等待...<br><small class="text-muted">后端可能涉及外部调用，请稍等几秒</small>');
 
     var fullUrl = API_BASE + endpoint;
@@ -341,7 +341,7 @@
         var timestamp = new Date().toLocaleTimeString();
         var html = '<div class="d-flex justify-content-between mb-1"><span class="badge bg-success">HTTP ' + statusCode + ' ✓</span><small class="text-muted">' + timestamp + '</small></div>';
         html += '<div><i class="fas fa-reply-all me-1 text-success"></i><strong>响应内容：</strong><br><span class="text-break">' + escapeHtml(responseText) + '</span></div>';
-        $resultDiv.removeClass('result-loading result-error').addClass('result-success');
+        $resultDiv.removeClass('response-loading response-error').addClass('response-success');
         $resultDiv.html(html);
       },
       error: function(xhr, status, errorThrown) {
@@ -374,7 +374,7 @@
           html += '<span class="small">未返回具体实体，请查看后端日志</span>';
         }
         html += '</div>';
-        $resultDiv.removeClass('result-loading result-success').addClass('result-error');
+        $resultDiv.removeClass('response-loading response-success').addClass('response-error');
         $resultDiv.html(html);
       },
       complete: function() {
@@ -404,11 +404,11 @@
 
   // 页面加载完成后绑定事件
   $(document).ready(function() {
-    // 绑定所有按钮：采用 data-url 和 data-result-id
+    // 绑定所有按钮：采用 data-url 和 data-response-id
     $('.btn-trace').each(function() {
       var $btn = $(this);
       var endpoint = $btn.data('url');
-      var resultId = $btn.data('result-id');
+      var resultId = $btn.data('response-id');
       if (endpoint && resultId) {
         $btn.off('click.trace').on('click.trace', function(e) {
           e.preventDefault();
@@ -418,7 +418,7 @@
           callApi(endpoint, resultId, this);
         });
       } else {
-        console.warn('按钮缺少 data-url 或 data-result-id 属性', $btn);
+        console.warn('按钮缺少 data-url 或 data-response-id 属性', $btn);
       }
     });
 

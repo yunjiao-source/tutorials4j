@@ -1,0 +1,21 @@
+### demo服务simple/get接口
+GET http://localhost:9801/api/demo/simple/get
+Content-Type: application/json
+
+### JSON 校验失败：username 太短、password 太短
+POST http://localhost:9801/api/demo/validation/json
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "password": "123"
+}
+
+### 表单校验失败：name 为空、email 为空
+POST http://localhost:9801/api/demo/validation/form
+Content-Type: application/x-www-form-urlencoded
+
+name=&email=
+
+### @RequestParam 校验失败：name 为空
+GET http://localhost:9801/api/demo/validation/param?name=

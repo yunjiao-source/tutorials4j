@@ -1,0 +1,26 @@
+[
+  {
+    "resource": "demo-simple-api",
+    "resourceMode": 0,
+    "count": 10,
+    "intervalSec": 5
+  },
+  {
+    "resource": "demo-api",
+    "resourceMode": 0,
+    "count": 10,
+    "intervalSec": 1
+  },
+  {
+    "resource": "auth-api",
+    "resourceMode": 0,
+    "count": 10,
+    "intervalSec": 1
+  },
+  {
+    "resource": "front-api",
+    "resourceMode": 0,
+    "count": 100,
+    "intervalSec": 1
+  }
+]

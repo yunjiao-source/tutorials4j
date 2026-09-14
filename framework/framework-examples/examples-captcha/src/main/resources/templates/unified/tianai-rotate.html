@@ -217,7 +217,7 @@
       border-color: #94a3b8;
     }
 
-    .result-tip {
+    .response-tip {
       margin-top: 18px;
       text-align: center;
       padding: 12px;
@@ -287,7 +287,7 @@
       <button id="refreshBtn" class="secondary">🔄 刷新验证码</button>
       <button id="submitBtn" class="primary">✓ 提交验证</button>
     </div>
-    <div id="resultMessage" class="result-tip info">✨ 请旋转图片至合适角度后点击提交</div>
+    <div id="resultMessage" class="response-tip info">✨ 请旋转图片至合适角度后点击提交</div>
   </div>
   <footer>模拟旋转轨迹 | 后端校验角度与滑动轨迹</footer>
 </div>
@@ -328,13 +328,13 @@
   // ---------- 辅助函数 ----------
   function showMessage(msg, type = 'info') {
     resultDiv.innerHTML = msg;
-    resultDiv.className = `result-tip ${type}`;
+    resultDiv.className = `response-tip ${type}`;
     setTimeout(() => {
       if (resultDiv.className.includes('success') || resultDiv.className.includes('error')) {
         // 保留结果5秒后重置样式但不覆盖重要信息
         setTimeout(() => {
           if (resultDiv.innerHTML === msg) {
-            resultDiv.className = 'result-tip info';
+            resultDiv.className = 'response-tip info';
             resultDiv.innerHTML = '✨ 请旋转图片至合适角度后点击提交';
           }
         }, 3000);
@@ -425,7 +425,7 @@
     // 重置所有状态（清除轨迹与开始时间）
     resetTrackState(true);
     // 清空结果样式
-    resultDiv.className = 'result-tip info';
+    resultDiv.className = 'response-tip info';
     resultDiv.innerHTML = '🔄 正在加载新验证码...';
 
     try {
@@ -548,10 +548,10 @@
 
 
       const json = await response.json();
-      result = json.data;
+      response = json.data;
 
       // 返回布尔值 true/false
-      if (result === true || result === "true" || result === true) {
+      if (response === true || response === "true" || response === true) {
         showMessage('🎉 验证通过！ 旋转角度正确，轨迹有效', 'success');
         // 验证成功后可以重置状态，但建议保留成功信息，同时允许刷新再次验证
         // 重置部分标记防止反复提交同一个验证码重复验证（但也可以允许多次，后端应幂等）

@@ -122,7 +122,7 @@
       cursor: not-allowed;
     }
 
-    .result-box {
+    .response-box {
       background: #f8fafc;
       border-radius: 16px;
       padding: 1.5rem 1.8rem;
@@ -132,13 +132,13 @@
       position: relative;
     }
 
-    .result-box.has-result {
+    .response-box.has-response {
       border-color: #667eea;
       border-style: solid;
       background: #f0f4ff;
     }
 
-    .result-box .result-label {
+    .response-box .response-label {
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -147,14 +147,14 @@
       margin-bottom: 0.5rem;
     }
 
-    .result-box .result-content {
+    .response-box .response-content {
       font-size: 1.05rem;
       word-break: break-all;
       color: #2d3748;
       font-family: 'Courier New', monospace;
     }
 
-    .result-box .result-content.placeholder {
+    .response-box .response-content.placeholder {
       color: #a0aec0;
       font-family: inherit;
       font-style: italic;
@@ -179,7 +179,7 @@
       background: rgba(102, 126, 234, 0.25);
     }
 
-    .result-box.has-result .copy-btn {
+    .response-box.has-response .copy-btn {
       display: block;
     }
 
@@ -311,11 +311,11 @@
           </div>
 
           <!-- 结果展示 -->
-          <div class="result-box" id="resultBox">
-            <div class="result-label">
+          <div class="response-box" id="resultBox">
+            <div class="response-label">
               <i class="fas fa-arrow-right me-1"></i> 结果
             </div>
-            <div class="result-content placeholder" id="resultContent">
+            <div class="response-content placeholder" id="resultContent">
               等待操作…
             </div>
             <button class="copy-btn" id="copyBtn">
@@ -387,21 +387,21 @@
       if (text && text.trim().length > 0) {
         $resultContent.text(text);
         $resultContent.removeClass('placeholder');
-        $resultBox.addClass('has-result');
+        $resultBox.addClass('has-response');
       } else {
         $resultContent.text('（空结果）');
         $resultContent.addClass('placeholder');
-        $resultBox.removeClass('has-result');
+        $resultBox.removeClass('has-response');
       }
     }
 
     function clearAll() {
       $content.val('');
       displayResult('');
-      $resultBox.removeClass('has-result');
+      $resultBox.removeClass('has-response');
       $resultContent.text('等待操作…').addClass('placeholder');
       setStatus('<i class="fas fa-circle-info me-1"></i> 已清空');
-      $copyBtn.hide(); // 由 has-result 控制显示，但以防万一
+      $copyBtn.hide(); // 由 has-response 控制显示，但以防万一
     }
 
     // 更新算法标签
@@ -422,7 +422,7 @@
       if (!content) {
         setStatus('<i class="fas fa-exclamation-triangle me-1"></i> 请输入待处理内容', true);
         $resultContent.text('⚠️ 请输入内容').removeClass('placeholder');
-        $resultBox.addClass('has-result');
+        $resultBox.addClass('has-response');
         return;
       }
 
@@ -449,7 +449,7 @@
           const actionText = action === 'encrypt' ? '加密' : '解密';
           setStatus('<i class="fas fa-check-circle text-success me-1"></i> ' + actionText +
               '成功！');
-          $resultBox.addClass('has-result');
+          $resultBox.addClass('has-response');
         },
         error: function(xhr, status, error) {
           setLoading(false);
@@ -468,7 +468,7 @@
           }
           setStatus('<i class="fas fa-xmark-circle text-danger me-1"></i> ' + errMsg, true);
           $resultContent.text('❌ ' + errMsg).removeClass('placeholder');
-          $resultBox.addClass('has-result');
+          $resultBox.addClass('has-response');
           console.error('API Error:', xhr, status, error);
         }
       });

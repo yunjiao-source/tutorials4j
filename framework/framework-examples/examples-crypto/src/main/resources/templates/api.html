@@ -525,8 +525,8 @@
       fetchCryptoConfig().then(() => manualRegenerateKey());
       return;
     }
-    const result = generateAndEncryptSymmetricKey();
-    if (result) {
+    const response = generateAndEncryptSymmetricKey();
+    if (response) {
       showToast("已重新生成对称密钥并使用RSA公钥加密", "success");
     } else {
       showToast("密钥生成失败，请确认公钥格式", "danger");

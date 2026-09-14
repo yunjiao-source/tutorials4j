@@ -1,0 +1,27 @@
+server:
+  port: 9801
+
+spring:
+  application:
+    name: microservice-gateway
+
+  config:
+    import:
+      - optional:nacos:environment.yaml?group=common
+      - optional:nacos:logger.yaml?group=common
+      - optional:nacos:management.yaml?group=common
+      - optional:nacos:${spring.application.name}.yaml?group=service
+      - sentinel.yml
+
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${TUTORIALS4J_NACOS_ADDR:127.0.0.1:8848}
+        namespace: ${TUTORIALS4J_NACOS_NAMESPACE:public}
+        group: DEFAULT_GROUP
+        username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
+        password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}
+
+
+

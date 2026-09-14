@@ -457,9 +457,9 @@
       }
 
       const json = await response.json(); // 预期返回布尔值 true/false
-      const result = json.data;
+      const response = json.data;
 
-      if (result === true || result === "true" || result === true) {
+      if (response === true || response === "true" || response === true) {
         setStatus("✅ 验证通过！", "success");
         // 验证成功后禁用拖动，避免重复提交；可刷新重置时启用
         sliderImg.style.pointerEvents = 'none';

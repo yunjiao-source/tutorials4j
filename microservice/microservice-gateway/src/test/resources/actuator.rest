@@ -1,0 +1,15 @@
+### 路由列表
+GET http://localhost:9801/actuator/gateway/routes
+Content-Type: application/json
+
+### 全局过滤器
+GET http://localhost:9801/actuator/gateway/globalfilters
+Content-Type: application/json
+
+### 路由过滤器
+GET http://localhost:9801/actuator/gateway/routefilters
+Content-Type: application/json
+
+### prometheus
+GET http://localhost:9801/actuator/prometheus
+Content-Type: application/json
