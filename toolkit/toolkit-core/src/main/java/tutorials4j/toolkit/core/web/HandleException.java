@@ -1,15 +1,11 @@
 package tutorials4j.toolkit.core.web;
 
 import io.micrometer.tracing.Tracer;
-import jakarta.validation.ConstraintViolationException;
 import java.time.Instant;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatus.Series;
 import org.springframework.http.ProblemDetail;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
 import tutorials4j.toolkit.core.exception.ErrorCodeException;
 import tutorials4j.toolkit.core.exception.ErrorDetail;
 
@@ -19,10 +15,6 @@ import tutorials4j.toolkit.core.exception.ErrorDetail;
  * @author Yun Jiao
  */
 public interface HandleException {
-
-  default ProblemDetail handleErrorCodeException(ErrorCodeException e) {
-    return handleErrorCodeException(e, ErrorDetailCustomizer.EMPTY);
-  }
 
   default ProblemDetail handleErrorCodeException(
       ErrorCodeException e, ErrorDetailCustomizer customizer) {
@@ -49,60 +41,6 @@ public interface HandleException {
 
     customizer.customize(errorDetail);
     resoveException(e, pd, errorDetail, status);
-    return pd;
-  }
-
-  default ProblemDetail handleBindException(BindException e) {
-    return handleBindException(e, ErrorDetailCustomizer.EMPTY);
-  }
-
-  default ProblemDetail handleBindException(BindException e, ErrorDetailCustomizer customizer) {
-    var defaultHttpStatus = HttpStatus.BAD_REQUEST;
-    var pd = ProblemDetail.forStatusAndDetail(defaultHttpStatus, e.getMessage());
-    pd.setTitle("校验异常");
-
-    var fieldErrors =
-        e.getBindingResult().getFieldErrors().stream()
-            .collect(
-                Collectors.toMap(
-                    FieldError::getField,
-                    fieldError ->
-                        fieldError.getDefaultMessage() == null
-                            ? "无效值"
-                            : fieldError.getDefaultMessage(),
-                    (msg1, msg2) -> msg1));
-
-    var errorDetail =
-        createErrorDetail(e).setCode(defaultHttpStatus.name()).setFieldErrors(fieldErrors);
-
-    customizer.customize(errorDetail);
-    resoveException(e, pd, errorDetail, defaultHttpStatus);
-    return pd;
-  }
-
-  default ProblemDetail handleConstraintViolationException(ConstraintViolationException e) {
-    return handleConstraintViolationException(e, ErrorDetailCustomizer.EMPTY);
-  }
-
-  default ProblemDetail handleConstraintViolationException(
-      ConstraintViolationException e, ErrorDetailCustomizer customizer) {
-    var defaultHttpStatus = HttpStatus.BAD_REQUEST;
-    var pd = ProblemDetail.forStatusAndDetail(defaultHttpStatus, e.getMessage());
-    pd.setTitle("校验异常");
-
-    var fieldErrors =
-        e.getConstraintViolations().stream()
-            .collect(
-                Collectors.toMap(
-                    violation -> violation.getPropertyPath().toString(),
-                    violation -> violation.getMessage() == null ? "无效值" : violation.getMessage(),
-                    (msg1, msg2) -> msg1 + "; " + msg2));
-
-    var errorDetail =
-        createErrorDetail(e).setCode(defaultHttpStatus.name()).setFieldErrors(fieldErrors);
-
-    customizer.customize(errorDetail);
-    resoveException(e, pd, errorDetail, defaultHttpStatus);
     return pd;
   }
 

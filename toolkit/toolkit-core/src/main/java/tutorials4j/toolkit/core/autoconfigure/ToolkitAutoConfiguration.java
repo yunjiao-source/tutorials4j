@@ -1,6 +1,7 @@
 package tutorials4j.toolkit.core.autoconfigure;
 
 import cn.hutool.extra.spring.SpringUtil;
+import io.micrometer.tracing.Tracer;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import tutorials4j.toolkit.core.concurrent.ScheduledThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.concurrent.ThreadPoolExecutorHolder;
+import tutorials4j.toolkit.core.web.GlobalWebExceptionHandler;
 
 /**
  * TODO
@@ -41,5 +43,11 @@ public class ToolkitAutoConfiguration {
     log.trace("[TOOLKIT] Thread Pool Executor Holder");
     ThreadPoolExecutorHolder.instance.initExecutor(properties.getThreadPoolExecutor());
     return ThreadPoolExecutorHolder.instance;
+  }
+
+  @Bean
+  GlobalWebExceptionHandler GlobalWebExceptionHandler(Tracer tracer) {
+    log.trace("[TOOLKIT - WEB] Global Web Exception Handler");
+    return new GlobalWebExceptionHandler(tracer);
   }
 }

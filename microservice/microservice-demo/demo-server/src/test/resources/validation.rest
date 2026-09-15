@@ -40,4 +40,4 @@ GET {{baseUrl}}/param?name=
 GET {{baseUrl}}/param?name=a
 
 ### 8. 访问不存在的静态资源，触发 NoResourceFoundException
-GET {{host}}/not-exist.html
+GET {{baseUrl}}/not-exist.html
