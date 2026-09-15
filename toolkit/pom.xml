@@ -21,6 +21,10 @@
         <module>toolkit-webflux</module>
         <module>toolkit-cache</module>
         <module>toolkit-cache-caffeine</module>
+        <module>toolkit-p6spy</module>
+        <module>toolkit-data</module>
+        <module>toolkit-data-hibernate</module>
+        <module>toolkit-data-mybatis-plus</module>
     </modules>
 
 </project>

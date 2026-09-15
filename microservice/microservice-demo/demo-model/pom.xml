@@ -13,4 +13,11 @@
     <name>Demo :: Model</name>
     <description>示例实体</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-data-hibernate</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 </project>

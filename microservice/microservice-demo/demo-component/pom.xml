@@ -15,8 +15,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
-            <artifactId>toolkit-core</artifactId>
+            <groupId>yunjiao-source.tutorials4j.microservice</groupId>
+            <artifactId>demo-model</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

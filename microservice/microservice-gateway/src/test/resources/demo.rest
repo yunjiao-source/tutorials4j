@@ -19,3 +19,8 @@ name=&email=
 
 ### @RequestParam 校验失败：name 为空
 GET http://localhost:9801/api/demo/validation/param?name=
+
+
+### IP黑名单
+GET http://127.0.0.1:9801/api/demo/ip-authority/get
+Content-Type: application/json

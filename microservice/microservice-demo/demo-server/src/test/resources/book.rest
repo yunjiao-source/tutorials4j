@@ -1,0 +1,54 @@
+@host = http://localhost:9899
+
+### 查询全部图书
+GET {{host}}/books
+Accept: application/json
+
+### 按 ID 查询
+GET {{host}}/books/1
+Accept: application/json
+
+### 按作者查询
+GET {{host}}/books/by-author?author=周志明
+Accept: application/json
+
+### 书名模糊搜索
+GET {{host}}/books/search?keyword=Java
+Accept: application/json
+
+### 价格大于 100 的图书
+GET {{host}}/books/expensive?price=100
+Accept: application/json
+
+### 新增图书
+POST {{host}}/books
+Content-Type: application/json
+
+{
+  "title": "重构",
+  "author": "Martin Fowler",
+  "price": 79.00,
+  "publishDate": "2019-05-01"
+}
+
+> {%
+  client.global.set("newBookId", response.body.id);
+%}
+
+### 更新图书（使用新增时提取的 ID）
+PUT {{host}}/books/2099731025625223168
+Content-Type: application/json
+
+{
+  "title": "重构（第2版）",
+  "author": "Martin Fowler",
+  "price": 89.00,
+  "publishDate": "2019-05-01"
+}
+
+### 删除图书（使用新增时提取的 ID）
+DELETE {{host}}/books/2099731025625223168
+
+### 再次查询全部，确认删除
+GET {{host}}/books
+Accept: application/json

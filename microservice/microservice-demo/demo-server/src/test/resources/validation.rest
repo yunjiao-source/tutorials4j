@@ -1,5 +1,4 @@
-@host = http://localhost:9899
-@baseUrl = {{host}}/validation
+@baseUrl = http://localhost:9899/validation
 
 ### 1. JSON 校验通过：POST /validation/json
 POST {{baseUrl}}/json

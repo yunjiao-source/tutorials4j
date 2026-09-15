@@ -29,6 +29,6 @@ public class SimpleController {
     if (ThreadLocalRandom.current().nextInt(100) < 30) {
       throw DemoErrorCode.DEMO_FAIL.throwed("30%机率异常").param("count", failCount.incrementAndGet());
     }
-    return "返回请求数据：" + Instant.now().toString();
+    return "simple/get接口返回请求数据：" + Instant.now().toString();
   }
 }

@@ -1,0 +1,26 @@
+package tutorials4j.toolkit.data.mybatisplus;
+
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import java.time.Instant;
+import org.apache.ibatis.reflection.MetaObject;
+import tutorials4j.toolkit.core.util.SecurityUtils;
+
+/**
+ * TODO
+ *
+ * @author Yun Jiao
+ */
+public class AuditMetaObjectHandler implements MetaObjectHandler {
+  @Override
+  public void insertFill(MetaObject metaObject) {
+    this.strictInsertFill(metaObject, "createdBy", String.class, SecurityUtils.getAccount());
+    this.strictInsertFill(metaObject, "createdDate", Instant.class, Instant.now());
+    this.strictUpdateFill(metaObject, "lastModifiedDate", Instant.class, Instant.now());
+  }
+
+  @Override
+  public void updateFill(MetaObject metaObject) {
+    this.strictInsertFill(metaObject, "lastModifiedBy", String.class, SecurityUtils.getAccount());
+    this.strictUpdateFill(metaObject, "lastModifiedDate", Instant.class, Instant.now());
+  }
+}

@@ -1,5 +1,14 @@
 [
   {
+    "apiName": "demo-ip-authority-api",
+    "predicateItems": [
+      {
+        "pattern": "/api/demo/ip-authority/**",
+        "matchStrategy": 1
+      }
+    ]
+  },
+  {
     "apiName": "demo-simple-api",
     "predicateItems": [
       {

@@ -26,3 +26,14 @@ spring:
             group-id: sentinel
             data-type: json
             rule-type: gw-api-group
+
+        authority:
+          nacos:
+            server-addr: ${TUTORIALS4J_NACOS_ADDR:127.0.0.1:8848}
+            namespace: ${TUTORIALS4J_NACOS_NAMESPACE:public}
+            username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
+            password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}
+            data-id: sentinel-gateway-authority-rules.json
+            group-id: sentinel
+            data-type: json
+            rule-type: authority
