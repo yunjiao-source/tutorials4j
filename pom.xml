@@ -103,7 +103,7 @@
         <aws-java-sdk-s3.version>1.12.429</aws-java-sdk-s3.version>
         <sardine.version>5.10</sardine.version>
         <x-file-storage-spring.version>2.3.0</x-file-storage-spring.version>
-        <sa-token.version>1.45.0</sa-token.version>
+        <sa-token.version>1.46.0</sa-token.version>
     </properties>
 
     <dependencyManagement>

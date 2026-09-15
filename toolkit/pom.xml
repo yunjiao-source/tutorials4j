@@ -25,6 +25,8 @@
         <module>toolkit-data</module>
         <module>toolkit-data-hibernate</module>
         <module>toolkit-data-mybatis-plus</module>
+        <module>toolkit-oauth</module>
+        <module>toolkit-oauth-sa-token</module>
     </modules>
 
 </project>
