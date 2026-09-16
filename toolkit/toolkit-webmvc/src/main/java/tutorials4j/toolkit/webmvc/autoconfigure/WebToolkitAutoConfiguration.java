@@ -17,12 +17,12 @@ import tutorials4j.toolkit.webmvc.GlobalWebmvcExceptionHandler;
 public class WebToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT - WEB] Web Toolkit Auto Configuration");
+    log.trace("[TOOLKIT-WEB] Web Toolkit Auto Configuration");
   }
 
   @Bean
   GlobalWebmvcExceptionHandler globalWebmvcExceptionHandler(Tracer tracer) {
-    log.trace("[TOOLKIT - WEB] Global Webmvc Exception Handler");
+    log.trace("[TOOLKIT-WEB] Global Webmvc Exception Handler");
     return new GlobalWebmvcExceptionHandler(tracer);
   }
 }

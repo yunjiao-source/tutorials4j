@@ -22,7 +22,7 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.assembly</groupId>
-            <artifactId>assembly-resource-server-spring-boot-starter</artifactId>
+            <artifactId>assembly-resource-microservice-starter</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

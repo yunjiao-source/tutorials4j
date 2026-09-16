@@ -18,6 +18,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 public class CacheToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT - CACHE] Cache Toolkit Auto Configuration");
+    log.trace("[TOOLKIT-CACHE] Cache Toolkit Auto Configuration");
   }
 }

@@ -17,12 +17,12 @@ import tutorials4j.toolkit.webflux.GlobalWebfluxExceptionHandler;
 public class WebfluxToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT - WEBFLUX] Webflux Toolkit Auto Configuration");
+    log.trace("[TOOLKIT-WEBFLUX] Webflux Toolkit Auto Configuration");
   }
 
   @Bean
   GlobalWebfluxExceptionHandler globalWebfluxExceptionHandler(Tracer tracer) {
-    log.trace("[TOOLKIT - WEBFLUX] Global Webflux Exception Handler");
+    log.trace("[TOOLKIT-WEBFLUX] Global Webflux Exception Handler");
     return new GlobalWebfluxExceptionHandler(tracer);
   }
 }

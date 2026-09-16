@@ -19,12 +19,12 @@ import tutorials4j.toolkit.core.util.SecurityUtils;
 public class HibernateDataToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT - DATA - HIBERNATE] Hibernate Data Toolkit Auto Configuration");
+    log.trace("[TOOLKIT-DATA-HIBERNATE] Hibernate Data Toolkit Auto Configuration");
   }
 
   @Bean
   AuditorAware<String> simpleAuditorAware() {
-    log.trace("[TOOLKIT - DATA - HIBERNATE] Simple Auditor Aware");
+    log.trace("[TOOLKIT-DATA-HIBERNATE] Simple Auditor Aware");
     return SecurityUtils::getAccountOptional;
   }
 }

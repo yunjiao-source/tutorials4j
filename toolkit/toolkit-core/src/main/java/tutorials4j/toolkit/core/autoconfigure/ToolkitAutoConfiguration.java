@@ -47,7 +47,7 @@ public class ToolkitAutoConfiguration {
 
   @Bean
   GlobalWebExceptionHandler GlobalWebExceptionHandler(Tracer tracer) {
-    log.trace("[TOOLKIT - WEB] Global Web Exception Handler");
+    log.trace("[TOOLKIT-WEB] Global Web Exception Handler");
     return new GlobalWebExceptionHandler(tracer);
   }
 }

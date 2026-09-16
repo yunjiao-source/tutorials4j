@@ -1,10 +1,14 @@
 package tutorials4j.toolkit.core.autoconfigure;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import cn.hutool.extra.spring.SpringUtil;
+import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import tutorials4j.toolkit.core.concurrent.ScheduledThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.concurrent.ThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
@@ -19,6 +23,7 @@ class ToolkitAutoConfigurationTest {
   private final ApplicationContextRunner contextRunner =
       new ApplicationContextRunner()
           .withUserConfiguration(ToolkitAutoConfiguration.class)
+          .withUserConfiguration(TracerTestConfig.class)
           .withPropertyValues(minimalProperties());
 
   private static String[] minimalProperties() {
@@ -74,5 +79,13 @@ class ToolkitAutoConfigurationTest {
 
           // 如果 Holder 提供了查询执行器内部状态的方法，可在此进一步断言
         });
+  }
+
+  @Configuration(proxyBeanMethods = false)
+  static class TracerTestConfig {
+    @Bean
+    Tracer tracer() {
+      return mock(Tracer.class);
+    }
   }
 }

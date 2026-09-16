@@ -16,7 +16,7 @@
     <description>集成模块</description>
 
     <modules>
-        <module>assembly-resource-server-spring-boot-starter</module>
+        <module>assembly-resource-microservice-starter</module>
     </modules>
 
 </project>

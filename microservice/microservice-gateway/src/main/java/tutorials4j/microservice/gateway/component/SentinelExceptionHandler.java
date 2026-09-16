@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ServerWebExchange;
 import tutorials4j.toolkit.core.web.HandleException;
 
 /**
@@ -28,12 +27,12 @@ public class SentinelExceptionHandler implements HandleException {
   private final Tracer tracer;
 
   @ExceptionHandler(BlockException.class)
-  public ProblemDetail handleBlockException(BlockException e, ServerWebExchange exchange) {
+  public ProblemDetail handleBlockException(BlockException e) {
     return handleException(e, HttpStatus.TOO_MANY_REQUESTS);
   }
 
   @ExceptionHandler(NotFoundException.class)
-  public ProblemDetail handleNotFoundException(NotFoundException e, ServerWebExchange exchange) {
+  public ProblemDetail handleNotFoundException(NotFoundException e) {
     return handleException(e, HttpStatus.SERVICE_UNAVAILABLE);
   }
 

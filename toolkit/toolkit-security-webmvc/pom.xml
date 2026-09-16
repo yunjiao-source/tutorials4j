@@ -3,28 +3,33 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>yunjiao-source.tutorials4j.microservice</groupId>
-        <artifactId>microservice-demo</artifactId>
+        <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+        <artifactId>toolkit</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>demo-web</artifactId>
-    <name>Demo :: Web</name>
-    <description>示例Web</description>
+    <artifactId>toolkit-security-webmvc</artifactId>
+    <name>Toolkit :: Security Webmvc</name>
+    <description>工具箱安全 Webmvc模块</description>
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.microservice</groupId>
-            <artifactId>demo-component</artifactId>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-webmvc</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
-            <artifactId>toolkit-security-webmvc</artifactId>
+            <artifactId>toolkit-security-sa-token</artifactId>
             <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
+        </dependency>
     </dependencies>
+
 </project>

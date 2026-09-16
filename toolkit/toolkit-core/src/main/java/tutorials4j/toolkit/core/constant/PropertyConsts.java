@@ -9,7 +9,9 @@ public interface PropertyConsts {
   String PROPERTY_TUTORIALS4J = "tutorials4j";
   String PROPERTY_TOOLKIT = PROPERTY_TUTORIALS4J + ".toolkit";
 
-  String PROPERTY_TOOLKIT_OAUTH = PROPERTY_TOOLKIT + ".oau";
+  String PROPERTY_TOOLKIT_SECURITY = PROPERTY_TOOLKIT + ".security";
+
+  String PROPERTY_TOOLKIT_SECURITY_SA_TOKEN = PROPERTY_TOOLKIT_SECURITY + ".sa-token";
 
   String PROPERTY_TOOLKIT_DATA = PROPERTY_TOOLKIT + ".data";
 
