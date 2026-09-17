@@ -27,6 +27,7 @@
         <module>toolkit-data-mybatis-plus</module>
         <module>toolkit-security-sa-token</module>
         <module>toolkit-security-webmvc</module>
+        <module>toolkit-security-reactor</module>
     </modules>
 
 </project>

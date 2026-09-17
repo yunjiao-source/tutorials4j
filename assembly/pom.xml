@@ -17,6 +17,8 @@
 
     <modules>
         <module>assembly-resource-microservice-starter</module>
+        <module>assembly-security-webmvc-starter</module>
+        <module>assembly-security-reactor-starter</module>
     </modules>
 
 </project>

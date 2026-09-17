@@ -1,4 +1,4 @@
-package tutorials4j.microservice.gateway.component;
+package tutorials4j.microservice.gateway.sentinel;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import io.micrometer.tracing.Tracer;

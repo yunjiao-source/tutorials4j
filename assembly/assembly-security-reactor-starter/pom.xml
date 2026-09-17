@@ -3,22 +3,21 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>yunjiao-source.tutorials4j.microservice</groupId>
-        <artifactId>microservice-demo</artifactId>
+        <groupId>yunjiao-source.tutorials4j.assembly</groupId>
+        <artifactId>assembly</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>demo-web</artifactId>
-    <name>Demo :: Web</name>
-    <description>示例Web</description>
+    <artifactId>assembly-security-reactor-starter</artifactId>
+    <name>Assembly :: Security Reactor Starter</name>
+    <description>响应式安全启动器</description>
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.microservice</groupId>
-            <artifactId>demo-component</artifactId>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-security-reactor</artifactId>
             <version>${revision}</version>
         </dependency>
-
     </dependencies>
 </project>

@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
 import tutorials4j.toolkit.satoken.SaLogForSlf4j;
-import tutorials4j.toolkit.satoken.SaTokenHandleException;
 import tutorials4j.toolkit.satoken.func.CheckLoginSaParamFunction;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.func.OrderedSaParamFunction;
@@ -21,6 +20,7 @@ import tutorials4j.toolkit.satoken.strategy.CheckLoginSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CompositeFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.LoggingSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.PointcutSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.SimpleSaFilterErrorStrategy;
 import tutorials4j.toolkit.satoken.strategy.WhiteUrlsSaFilterAuthStrategy;
 
 /**
@@ -46,9 +46,9 @@ public class SaTokenSecurityToolkitAutoConfiguration {
   }
 
   @Bean
-  SaTokenHandleException saTokenHandleException(Tracer tracer) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Sa-Token Handle Exception");
-    return new SaTokenHandleException(tracer);
+  SimpleSaFilterErrorStrategy simpleSaFilterErrorStrategy(Tracer tracer) {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Simple Sa Filter Error Strategy");
+    return new SimpleSaFilterErrorStrategy(tracer);
   }
 
   @Bean
@@ -89,33 +89,33 @@ public class SaTokenSecurityToolkitAutoConfiguration {
       name = "interceptor.check-login",
       havingValue = "true")
   CheckLoginSaParamFunction checkLoginSaParamFunction() {
-    log.trace("[TOOLKIT-SECURITY-WEBMVC] Check Login Sa Param Function");
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Check Login Sa Param Function");
     return new CheckLoginSaParamFunction();
   }
 
   @Bean
   BlockUrlsSaFilterAuthStrategy blockUrlsSaFilterAuthStrategy(
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SECURITY-WEBMVC] Block Urls Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Block Urls Sa Filter Auth Strategy");
     return new BlockUrlsSaFilterAuthStrategy(properties.getFilter().getBlockUrls());
   }
 
   @Bean
   CheckLoginSaFilterAuthStrategy checkLoginSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-WEBMVC] Check Login Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Check Login Sa Filter Auth Strategy");
     return new CheckLoginSaFilterAuthStrategy();
   }
 
   @Bean
   LoggingSaFilterAuthStrategy loggingSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-WEBMVC] Logging Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Logging Sa Filter Auth Strategy");
     return new LoggingSaFilterAuthStrategy();
   }
 
   @Bean
   WhiteUrlsSaFilterAuthStrategy whiteUrlsSaFilterAuthStrategy(
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SECURITY-WEBMVC] White Urls Sa Filter AuthS trategy");
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] White Urls Sa Filter Auth Strategy");
     return new WhiteUrlsSaFilterAuthStrategy(properties.getFilter().getWhiteUrls());
   }
 }

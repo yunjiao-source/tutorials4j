@@ -6,6 +6,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.router.SaRouter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import tutorials4j.toolkit.satoken.exception.BlockUrlException;
 
 /**
  * TODO
@@ -18,7 +19,11 @@ public class BlockUrlsSaFilterAuthStrategy implements PointcutSaFilterAuthStrate
 
   @Override
   public void run(Object obj) {
-    SaRouter.match(blockUrls).back("禁止访问：" + SaHolder.getRequest().getRequestPath());
+    SaRouter.match(blockUrls)
+        .check(
+            () -> {
+              throw new BlockUrlException(SaHolder.getRequest().getRequestPath());
+            });
   }
 
   @Override

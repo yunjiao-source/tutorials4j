@@ -28,23 +28,23 @@ public interface HandleException {
     return pd;
   }
 
-  default ProblemDetail handleException(Exception e, HttpStatus status) {
-    return handleException(e, status, ErrorDetailCustomizer.EMPTY);
+  default ProblemDetail handleException(Throwable t, HttpStatus status) {
+    return handleException(t, status, ErrorDetailCustomizer.EMPTY);
   }
 
   default ProblemDetail handleException(
-      Exception e, HttpStatus status, ErrorDetailCustomizer customizer) {
-    var pd = ProblemDetail.forStatusAndDetail(status, e.getMessage());
+      Throwable t, HttpStatus status, ErrorDetailCustomizer customizer) {
+    var pd = ProblemDetail.forStatusAndDetail(status, t.getMessage());
     pd.setTitle("系统异常");
 
-    var errorDetail = createErrorDetail(e).setCode(status.name());
+    var errorDetail = createErrorDetail(t).setCode(status.name());
 
     customizer.customize(errorDetail);
-    resoveException(e, pd, errorDetail, status);
+    resoveException(t, pd, errorDetail, status);
     return pd;
   }
 
-  default ErrorDetail createErrorDetail(Exception e) {
+  default ErrorDetail createErrorDetail(Throwable e) {
     return new ErrorDetail()
         .setTimestamp(Instant.now())
         .setTraceId(getTraceId())
@@ -61,15 +61,15 @@ public interface HandleException {
   }
 
   default void resoveException(
-      Exception e, ProblemDetail problemDetail, ErrorDetail errorDetail, HttpStatus httpStatus) {
+      Throwable t, ProblemDetail problemDetail, ErrorDetail errorDetail, HttpStatus httpStatus) {
     problemDetail.setProperty("errors", errorDetail);
     if (httpStatus.series() == Series.SERVER_ERROR) {
-      errorDetail.setStackTrace(e.getStackTrace());
-      getLog().error("服务器异常", e);
+      errorDetail.setStackTrace(t.getStackTrace());
+      getLog().error("服务器异常", t);
     } else if (httpStatus.series() == Series.CLIENT_ERROR) {
-      getLog().warn("客户端异常", e);
+      getLog().warn("客户端异常", t);
     } else {
-      getLog().warn("其他异常", e);
+      getLog().warn("其他异常", t);
     }
   }
 

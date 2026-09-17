@@ -14,6 +14,7 @@ import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitPropertie
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.AuthFilterPointcutEnum;
 import tutorials4j.toolkit.satoken.strategy.CompositeFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.SimpleSaFilterErrorStrategy;
 
 /**
  * TODO
@@ -30,14 +31,18 @@ public class WebmvcSecurityToolkitAutoConfiguration {
 
   @Bean
   SaServletFilter saServletFilter(
-      CompositeFilterAuthStrategy strategy, SaTokenSecurityToolkitProperties properties) {
+      SimpleSaFilterErrorStrategy simpleSaFilterErrorStrategy,
+      CompositeFilterAuthStrategy compositeFilterAuthStrategy,
+      SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SECURITY-WEBMVC] Sa Servlet Filter");
     var options = properties.getFilter();
     return new SaServletFilter()
-        .addExclude(options.getIncludeUrls().toArray(new String[] {}))
+        .addInclude(options.getIncludeUrls().toArray(new String[] {}))
         .addExclude(options.getExcludeUrls().toArray(new String[] {}))
-        .setAuth(strategy.copyAndSetPointcut(AuthFilterPointcutEnum.auth))
-        .setBeforeAuth(strategy.copyAndSetPointcut(AuthFilterPointcutEnum.beforeAuth));
+        .setAuth(compositeFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.auth))
+        .setBeforeAuth(
+            compositeFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.beforeAuth))
+        .setError(simpleSaFilterErrorStrategy);
   }
 
   @Configuration

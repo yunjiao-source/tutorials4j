@@ -22,3 +22,22 @@ spring:
                 - StripPrefix=2
 
 
+tutorials4j:
+  toolkit:
+    security:
+      sa-token:
+        filter:
+          include-urls: /**
+          exclude-urls:
+            - /actuator/**
+          white-urls:
+            - /api/demo/simple/**
+          block-urls:
+            - /api/demo/ip-authority/**
+
+management:
+  endpoint:
+    gateway:
+      access: read-only
+
+
