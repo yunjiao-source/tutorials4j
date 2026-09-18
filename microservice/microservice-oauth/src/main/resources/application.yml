@@ -26,3 +26,4 @@ spring:
         group: DEFAULT_GROUP
         username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
         password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}
+

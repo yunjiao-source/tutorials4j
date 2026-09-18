@@ -1,1 +1,3 @@
 tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitAutoConfiguration
+tutorials4j.toolkit.satoken.autoconfigure.WebmvcSaTokenSecurityToolkitAutoConfiguration
+tutorials4j.toolkit.satoken.autoconfigure.ReactorSaTokenSecurityToolkitAutoConfiguration

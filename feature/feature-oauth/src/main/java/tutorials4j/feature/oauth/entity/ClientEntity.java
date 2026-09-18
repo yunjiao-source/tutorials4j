@@ -35,6 +35,9 @@ public class ClientEntity extends BaseEntity<String> {
   /** 应用秘钥 */
   @Column private String clientSecret;
 
+  @Column(nullable = false)
+  private String clientName;
+
   /** 应用签约的所有权限 */
   @Column(length = 2000)
   @Convert(converter = ListAttributeConverter.class)

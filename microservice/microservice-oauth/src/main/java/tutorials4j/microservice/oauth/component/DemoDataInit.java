@@ -27,7 +27,7 @@ public class DemoDataInit implements CommandLineRunner {
       client1.setAllowRedirectUris(List.of("*"));
       client1.setContractScopes(List.of("openid", "unionid", "userid", "userinfo", "oidc"));
       client1.setSubjectId("1000001");
-      client1.setContractScopes(
+      client1.setAllowGrantTypes(
           List.of(
               GrantType.authorization_code, // 授权码式
               GrantType.implicit, // 隐藏式
@@ -44,7 +44,7 @@ public class DemoDataInit implements CommandLineRunner {
       client2.setAllowRedirectUris(List.of("*"));
       client2.setContractScopes(List.of("openid", "unionid", "userid", "userinfo", "oidc"));
       client2.setSubjectId("1000001");
-      client2.setContractScopes(
+      client2.setAllowGrantTypes(
           List.of(
               GrantType.authorization_code,
               GrantType.implicit,

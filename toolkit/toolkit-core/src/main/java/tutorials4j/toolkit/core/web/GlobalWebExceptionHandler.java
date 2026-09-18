@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tutorials4j.toolkit.core.exception.ErrorCodeException;
 import tutorials4j.toolkit.core.exception.TooManyRequestException;
+import tutorials4j.toolkit.core.exception.UnauthorizedException;
 
 /**
  * TODO
@@ -36,6 +37,11 @@ public class GlobalWebExceptionHandler implements HandleException {
   @ExceptionHandler(TooManyRequestException.class)
   public ProblemDetail handleTooManyRequestException(TooManyRequestException e) {
     return handleException(e, HttpStatus.TOO_MANY_REQUESTS);
+  }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ProblemDetail handleUnauthorizedException(UnauthorizedException e) {
+    return handleException(e, HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(ConstraintViolationException.class)

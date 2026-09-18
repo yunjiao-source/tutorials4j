@@ -1,5 +1,6 @@
 package tutorials4j.feature.oauth.service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseService;
  *
  * @author Yun Jiao
  */
+@Getter
 @Service
 @RequiredArgsConstructor
 public class ClientService implements BaseService<ClientEntity, String> {

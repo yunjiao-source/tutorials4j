@@ -17,8 +17,8 @@
 
     <modules>
         <module>assembly-resource-microservice-starter</module>
-        <module>assembly-security-webmvc-starter</module>
-        <module>assembly-security-reactor-starter</module>
+        <module>assembly-security-sa-token-webmvc-starter</module>
+        <module>assembly-security-sa-token-reactor-starter</module>
     </modules>
 
 </project>

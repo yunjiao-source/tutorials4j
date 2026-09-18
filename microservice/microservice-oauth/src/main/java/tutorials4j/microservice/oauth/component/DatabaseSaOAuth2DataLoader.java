@@ -6,12 +6,11 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.oauth.entity.OpenUserEntity;
-import tutorials4j.feature.oauth.model.OpenIdCreateModel;
-import tutorials4j.feature.oauth.model.UnionIdCreateModel;
-import tutorials4j.feature.oauth.repository.ClientRepository;
-import tutorials4j.feature.oauth.repository.OpenUserRepository;
-import tutorials4j.feature.oauth.service.OpenUserService;
+import tutorials4j.feature.oauth.entity.OidcUserIdentityEntity;
+import tutorials4j.feature.oauth.model.OidcUserOpenIdCreateModel;
+import tutorials4j.feature.oauth.model.OidcUserUnionIdCreateModel;
+import tutorials4j.feature.oauth.service.ClientService;
+import tutorials4j.feature.oauth.service.OidcUserIdentityService;
 import tutorials4j.microservice.oauth.util.ConverterUtils;
 
 /**
@@ -22,13 +21,13 @@ import tutorials4j.microservice.oauth.util.ConverterUtils;
 @Component
 @RequiredArgsConstructor
 public class DatabaseSaOAuth2DataLoader implements SaOAuth2DataLoader {
-  private final ClientRepository clientRepository;
-  private final OpenUserService openUserService;
-  private final OpenUserRepository openUserRepository;
+  private final ClientService clientService;
+  private final OidcUserIdentityService oidcUserIdentityService;
 
   @Override
   public SaClientModel getClientModel(String clientId) {
-    return clientRepository
+    return clientService
+        .getClientRepository()
         .findByClientId(clientId)
         .map(e -> ConverterUtils.getInstance().convertClientEntity2Model.apply(e))
         .orElse(null);
@@ -36,43 +35,45 @@ public class DatabaseSaOAuth2DataLoader implements SaOAuth2DataLoader {
 
   @Override
   public String getOpenid(String clientId, Object loginId) {
-    OpenUserEntity openUserEntity =
-        openUserRepository
+    OidcUserIdentityEntity oidcUserIdentityEntity =
+        oidcUserIdentityService
+            .getOidcUserIdentityRepository()
             .findByUserIdAndClientId(loginId.toString(), clientId)
             .orElseGet(
                 () -> {
                   String prefix = IdUtil.fastSimpleUUID();
                   String openId = SaSecureUtil.md5(prefix + "_" + clientId + "_" + loginId);
-                  OpenIdCreateModel model =
-                      OpenIdCreateModel.builder()
+                  OidcUserOpenIdCreateModel model =
+                      OidcUserOpenIdCreateModel.builder()
                           .userId(loginId.toString())
                           .clientId(clientId)
                           .prefix(prefix)
                           .openId(openId)
                           .build();
-                  return openUserService.createOpenId(model);
+                  return oidcUserIdentityService.createOpenId(model);
                 });
-    return openUserEntity.getOpenId();
+    return oidcUserIdentityEntity.getOpenId();
   }
 
   @Override
   public String getUnionid(String subjectId, Object loginId) {
-    OpenUserEntity openUserEntity =
-        openUserRepository
+    OidcUserIdentityEntity oidcUserIdentityEntity =
+        oidcUserIdentityService
+            .getOidcUserIdentityRepository()
             .findByUserIdAndSubjectId(loginId.toString(), subjectId)
             .orElseGet(
                 () -> {
                   String prefix = IdUtil.fastSimpleUUID();
                   String unionId = SaSecureUtil.md5(prefix + "_" + subjectId + "_" + loginId);
-                  UnionIdCreateModel model =
-                      UnionIdCreateModel.builder()
+                  OidcUserUnionIdCreateModel model =
+                      OidcUserUnionIdCreateModel.builder()
                           .userId(loginId.toString())
                           .subjectId(subjectId)
                           .prefix(prefix)
                           .unionId(unionId)
                           .build();
-                  return openUserService.createUnionId(model);
+                  return oidcUserIdentityService.createUnionId(model);
                 });
-    return openUserEntity.getUnionId();
+    return oidcUserIdentityEntity.getUnionId();
   }
 }

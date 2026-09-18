@@ -15,8 +15,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
-            <artifactId>toolkit-security-reactor</artifactId>
+            <groupId>yunjiao-source.tutorials4j.assembly</groupId>
+            <artifactId>assembly-security-sa-token-reactor-starter</artifactId>
             <version>${revision}</version>
         </dependency>
 

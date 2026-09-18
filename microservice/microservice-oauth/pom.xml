@@ -15,14 +15,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
-            <artifactId>toolkit-security-webmvc</artifactId>
+            <groupId>yunjiao-source.tutorials4j.feature</groupId>
+            <artifactId>feature-oauth-web</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>yunjiao-source.tutorials4j.feature</groupId>
-            <artifactId>feature-oauth-web</artifactId>
+            <groupId>yunjiao-source.tutorials4j.assembly</groupId>
+            <artifactId>assembly-security-sa-token-webmvc-starter</artifactId>
             <version>${revision}</version>
         </dependency>
 
@@ -32,18 +32,15 @@
             <version>${revision}</version>
         </dependency>
 
-        <!-- Sa-Token 权限认证, 在线文档：https://sa-token.com -->
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot4-starter</artifactId>
-        </dependency>
-
         <!-- Sa-Token OAuth2.0 模块 -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-oauth2</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-jwt</artifactId>
+        </dependency>
         <!-- Sa-Token 整合 RedisTemplate (可选) -->
         <dependency>
             <groupId>cn.dev33</groupId>
@@ -61,7 +58,7 @@
 
         <dependency>
             <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator-core</artifactId>
+            <artifactId>webjars-locator-lite</artifactId>
         </dependency>
 
         <dependency>

@@ -22,7 +22,7 @@
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.assembly</groupId>
-            <artifactId>assembly-security-webmvc-starter</artifactId>
+            <artifactId>assembly-security-sa-token-webmvc-starter</artifactId>
             <version>${revision}</version>
         </dependency>
 

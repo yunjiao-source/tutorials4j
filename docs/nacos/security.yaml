@@ -3,5 +3,11 @@ tutorials4j:
     security:
       sa-token:
         filter:
-          include-urls: /**
-          exclude-urls: /favicon.ico
+          include-urls:
+            - /**
+          exclude-urls:
+            - /favicon.ico
+            - /.well-known/**
+            - /webjars/**
+            - /sa-res/**
+            - /oauth2/**
