@@ -1,6 +1,6 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.strategy.StrageyOrderd.BLOCK_URL;
+import static tutorials4j.toolkit.satoken.strategy.StrategyOrderd.AUTH_BLOCK_URL;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.router.SaRouter;
@@ -28,6 +28,6 @@ public class BlockUrlsSaFilterAuthStrategy implements PointcutSaFilterAuthStrate
 
   @Override
   public int getOrder() {
-    return BLOCK_URL;
+    return AUTH_BLOCK_URL;
   }
 }

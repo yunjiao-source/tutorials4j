@@ -1,0 +1,7 @@
+tutorials4j:
+  toolkit:
+    security:
+      sa-token:
+        filter:
+          include-urls: /**
+          exclude-urls: /favicon.ico

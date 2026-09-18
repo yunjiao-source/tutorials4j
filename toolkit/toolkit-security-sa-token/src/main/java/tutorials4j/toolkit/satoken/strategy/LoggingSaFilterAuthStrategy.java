@@ -1,6 +1,6 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.strategy.StrageyOrderd.LOGGING;
+import static tutorials4j.toolkit.satoken.strategy.StrategyOrderd.AUTH_LOGGING;
 
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.context.SaHolder;
@@ -24,6 +24,6 @@ public class LoggingSaFilterAuthStrategy implements PointcutSaFilterAuthStrategy
 
   @Override
   public int getOrder() {
-    return LOGGING;
+    return AUTH_LOGGING;
   }
 }

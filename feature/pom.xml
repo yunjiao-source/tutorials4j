@@ -15,6 +15,9 @@
     <name>Tutorials4j :: Feature</name>
     <description>功能模块</description>
 
-    <modules />
+    <modules>
+        <module>feature-oauth</module>
+        <module>feature-oauth-web</module>
+    </modules>
 
 </project>

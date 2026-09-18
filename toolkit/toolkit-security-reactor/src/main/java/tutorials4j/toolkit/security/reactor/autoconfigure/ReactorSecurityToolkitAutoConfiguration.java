@@ -7,8 +7,8 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties;
 import tutorials4j.toolkit.satoken.strategy.AuthFilterPointcutEnum;
-import tutorials4j.toolkit.satoken.strategy.CompositeFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.SimpleSaFilterErrorStrategy;
+import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 
 /**
  * TODO
@@ -25,8 +25,8 @@ public class ReactorSecurityToolkitAutoConfiguration {
 
   @Bean
   SaReactorFilter saReactorFilter(
-      SimpleSaFilterErrorStrategy simpleSaFilterErrorStrategy,
-      CompositeFilterAuthStrategy strategy,
+      ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy,
+      CompositeSaFilterAuthStrategy strategy,
       SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SECURITY-REACTOR] Sa Reactor Filter");
     var options = properties.getFilter();
@@ -35,6 +35,6 @@ public class ReactorSecurityToolkitAutoConfiguration {
         .addExclude(options.getExcludeUrls().toArray(new String[] {}))
         .setAuth(strategy.copyAndSetPointcut(AuthFilterPointcutEnum.auth))
         .setBeforeAuth(strategy.copyAndSetPointcut(AuthFilterPointcutEnum.beforeAuth))
-        .setError(simpleSaFilterErrorStrategy);
+        .setError(toolkitSaFilterErrorStrategy);
   }
 }

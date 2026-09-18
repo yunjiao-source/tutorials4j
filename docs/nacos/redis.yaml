@@ -1,0 +1,8 @@
+spring:
+  data:
+    redis:
+      host: ${env.redis.host}
+      port: ${env.redis.port}
+      database: ${env.redis.database}
+      username: ${env.redis.username}
+      password: ${env.redis.password}

@@ -17,10 +17,12 @@ import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.func.OrderedSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.BlockUrlsSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CheckLoginSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.CompositeFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.CorsBeforeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.LoggingSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.OptionsBeforeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.PointcutSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.SimpleSaFilterErrorStrategy;
+import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 import tutorials4j.toolkit.satoken.strategy.WhiteUrlsSaFilterAuthStrategy;
 
 /**
@@ -46,15 +48,15 @@ public class SaTokenSecurityToolkitAutoConfiguration {
   }
 
   @Bean
-  SimpleSaFilterErrorStrategy simpleSaFilterErrorStrategy(Tracer tracer) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Simple Sa Filter Error Strategy");
-    return new SimpleSaFilterErrorStrategy(tracer);
+  ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy(Tracer tracer) {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Toolkit Sa Filter Error Strategy");
+    return new ToolkitSaFilterErrorStrategy(tracer);
   }
 
   @Bean
-  CompositeFilterAuthStrategy compositeFilterAuthStrategy(
+  CompositeSaFilterAuthStrategy compositeSaFilterAuthStrategy(
       ObjectProvider<PointcutSaFilterAuthStrategy> strategies) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Composite Filter Auth Strategy");
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Composite Sa Filter Auth Strategy");
     List<PointcutSaFilterAuthStrategy> list = strategies.orderedStream().toList();
     if (!list.isEmpty()) {
       log.trace(
@@ -64,7 +66,7 @@ public class SaTokenSecurityToolkitAutoConfiguration {
               .map(Class::getName)
               .collect(Collectors.joining(";")));
     }
-    return new CompositeFilterAuthStrategy(list);
+    return new CompositeSaFilterAuthStrategy(list);
   }
 
   @Bean
@@ -117,5 +119,17 @@ public class SaTokenSecurityToolkitAutoConfiguration {
       SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SECURITY-SA-TOKEN] White Urls Sa Filter Auth Strategy");
     return new WhiteUrlsSaFilterAuthStrategy(properties.getFilter().getWhiteUrls());
+  }
+
+  @Bean
+  CorsBeforeSaFilterAuthStrategy corsBeforeSaFilterAuthStrategy() {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Cors Before Sa Filter Auth Strategy");
+    return new CorsBeforeSaFilterAuthStrategy();
+  }
+
+  @Bean
+  OptionsBeforeSaFilterAuthStrategy optionsBeforeSaFilterAuthStrategy() {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Options Before Sa Filter Auth Strategy");
+    return new OptionsBeforeSaFilterAuthStrategy();
   }
 }

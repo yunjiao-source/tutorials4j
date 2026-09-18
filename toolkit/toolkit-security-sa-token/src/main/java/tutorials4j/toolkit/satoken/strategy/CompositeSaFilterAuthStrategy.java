@@ -15,11 +15,11 @@ import org.springframework.util.Assert;
  * @author Yun Jiao
  */
 @Slf4j
-public class CompositeFilterAuthStrategy implements SaFilterAuthStrategy {
+public class CompositeSaFilterAuthStrategy implements SaFilterAuthStrategy {
   @Getter private final List<PointcutSaFilterAuthStrategy> strategies;
   private AuthFilterPointcutEnum pointcut;
 
-  public CompositeFilterAuthStrategy(
+  public CompositeSaFilterAuthStrategy(
       Collection<? extends PointcutSaFilterAuthStrategy> pointcutSaFilterAuthStrategies) {
     Assert.notNull(
         pointcutSaFilterAuthStrategies, "pointcutSaFilterAuthStrategies must not be null");
@@ -27,11 +27,11 @@ public class CompositeFilterAuthStrategy implements SaFilterAuthStrategy {
     this.strategies = new ArrayList<>(pointcutSaFilterAuthStrategies);
   }
 
-  public CompositeFilterAuthStrategy copyAndSetPointcut(
+  public CompositeSaFilterAuthStrategy copyAndSetPointcut(
       AuthFilterPointcutEnum authFilterPointcutEnum) {
     Assert.notNull(authFilterPointcutEnum, "authFilterPointcutEnum must not be null");
 
-    var copyInstant = new CompositeFilterAuthStrategy(this.strategies);
+    var copyInstant = new CompositeSaFilterAuthStrategy(this.strategies);
     copyInstant.pointcut = authFilterPointcutEnum;
     return copyInstant;
   }

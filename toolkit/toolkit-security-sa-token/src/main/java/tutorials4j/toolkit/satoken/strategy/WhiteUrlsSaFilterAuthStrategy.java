@@ -1,6 +1,6 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.strategy.StrageyOrderd.WHITE_URL;
+import static tutorials4j.toolkit.satoken.strategy.StrategyOrderd.AUTH_WHITE_URL;
 
 import cn.dev33.satoken.router.SaRouter;
 import java.util.List;
@@ -17,7 +17,7 @@ public class WhiteUrlsSaFilterAuthStrategy implements PointcutSaFilterAuthStrate
 
   @Override
   public int getOrder() {
-    return WHITE_URL;
+    return AUTH_WHITE_URL;
   }
 
   @Override

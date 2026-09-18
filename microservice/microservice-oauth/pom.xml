@@ -10,10 +10,68 @@
     </parent>
 
     <artifactId>microservice-oauth</artifactId>
-    <packaging>pom</packaging>
     <name>MicroService :: OAuth</name>
     <description>鉴权与认证微服务</description>
 
-    <modules />
+    <dependencies>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-security-webmvc</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.feature</groupId>
+            <artifactId>feature-oauth-web</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.assembly</groupId>
+            <artifactId>assembly-resource-microservice-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- Sa-Token 权限认证, 在线文档：https://sa-token.com -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
+        </dependency>
+
+        <!-- Sa-Token OAuth2.0 模块 -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-oauth2</artifactId>
+        </dependency>
+
+        <!-- Sa-Token 整合 RedisTemplate (可选) -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-template</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

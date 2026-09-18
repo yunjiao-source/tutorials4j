@@ -17,6 +17,7 @@
 
     <modules>
         <module>toolkit-core</module>
+        <module>toolkit-json</module>
         <module>toolkit-webmvc</module>
         <module>toolkit-webflux</module>
         <module>toolkit-cache</module>

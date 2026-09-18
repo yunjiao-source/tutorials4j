@@ -30,42 +30,12 @@ import tutorials4j.toolkit.satoken.exception.BlockUrlException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class SimpleSaFilterErrorStrategy implements SaFilterErrorStrategy, HandleException {
+public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, HandleException {
   private final Tracer tracer;
-
-  @ExceptionHandler(NotLoginException.class)
-  public ProblemDetail handlerUnauthorized(NotLoginException e) {
-    return handleException(
-        e,
-        HttpStatus.UNAUTHORIZED,
-        (errorDetail -> {
-          errorDetail.addParam("code", e.getCode());
-        }));
-  }
-
-  @ExceptionHandler({
-    NotRoleException.class,
-    NotPermissionException.class,
-    DisableServiceException.class,
-    BlockUrlException.class
-  })
-  public ProblemDetail handlerForbidden(SaTokenException e) {
-    return handleException(
-        e,
-        HttpStatus.FORBIDDEN,
-        (errorDetail -> {
-          errorDetail.addParam("code", e.getCode());
-        }));
-  }
 
   @ExceptionHandler(SaTokenException.class)
   public ProblemDetail handlerSaTokenException(SaTokenException e) {
-    return handleException(
-        e,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        (errorDetail -> {
-          errorDetail.addParam("code", e.getCode());
-        }));
+    return handleThrowable(e);
   }
 
   @Override
@@ -74,6 +44,13 @@ public class SimpleSaFilterErrorStrategy implements SaFilterErrorStrategy, Handl
     var response = SaHolder.getResponse();
     response.setHeader("Content-Type", "application/json;charset=UTF-8");
 
+    var problemDetail = handleThrowable(t);
+    response.setStatus(problemDetail.getStatus());
+    return SaManager.getSaJsonTemplate().objectToJson(problemDetail);
+  }
+
+  private ProblemDetail handleThrowable(Throwable t) {
+    // 获取响应对象，用于设置状态码和响应头
     if (t instanceof SaTokenException saTokenException) {
       var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
       if (t instanceof NotLoginException) {
@@ -85,21 +62,15 @@ public class SimpleSaFilterErrorStrategy implements SaFilterErrorStrategy, Handl
         httpStatus = HttpStatus.FORBIDDEN;
       }
 
-      var problemDetail =
-          handleException(
-              saTokenException,
-              httpStatus,
-              (errorDetail -> {
-                errorDetail.addParam("code", saTokenException.getCode());
-              }));
-
-      response.setStatus(problemDetail.getStatus());
-      return SaManager.getSaJsonTemplate().objectToJson(problemDetail);
+      return handleException(
+          saTokenException,
+          httpStatus,
+          (errorDetail -> {
+            errorDetail.addParam("code", saTokenException.getCode());
+          }));
     }
 
-    var problemDetail = handleException(t, HttpStatus.INTERNAL_SERVER_ERROR);
-    response.setStatus(problemDetail.getStatus());
-    return SaManager.getSaJsonTemplate().objectToJson(problemDetail);
+    return handleException(t, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @Override

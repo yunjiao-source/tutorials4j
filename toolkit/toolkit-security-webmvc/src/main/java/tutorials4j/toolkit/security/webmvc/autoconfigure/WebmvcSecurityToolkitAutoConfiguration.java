@@ -13,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.AuthFilterPointcutEnum;
-import tutorials4j.toolkit.satoken.strategy.CompositeFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.SimpleSaFilterErrorStrategy;
+import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 
 /**
  * TODO
@@ -31,18 +31,18 @@ public class WebmvcSecurityToolkitAutoConfiguration {
 
   @Bean
   SaServletFilter saServletFilter(
-      SimpleSaFilterErrorStrategy simpleSaFilterErrorStrategy,
-      CompositeFilterAuthStrategy compositeFilterAuthStrategy,
+      ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy,
+      CompositeSaFilterAuthStrategy compositeSaFilterAuthStrategy,
       SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SECURITY-WEBMVC] Sa Servlet Filter");
     var options = properties.getFilter();
     return new SaServletFilter()
         .addInclude(options.getIncludeUrls().toArray(new String[] {}))
         .addExclude(options.getExcludeUrls().toArray(new String[] {}))
-        .setAuth(compositeFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.auth))
+        .setAuth(compositeSaFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.auth))
         .setBeforeAuth(
-            compositeFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.beforeAuth))
-        .setError(simpleSaFilterErrorStrategy);
+            compositeSaFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.beforeAuth))
+        .setError(toolkitSaFilterErrorStrategy);
   }
 
   @Configuration
