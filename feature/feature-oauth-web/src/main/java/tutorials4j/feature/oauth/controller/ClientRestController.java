@@ -26,7 +26,7 @@ import tutorials4j.feature.oauth.service.ClientService;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("/feature-oauth")
+@RequestMapping("/client")
 @RequiredArgsConstructor
 public class ClientRestController {
   private final ClientService clientService;
