@@ -6,10 +6,9 @@ import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.IdUtil;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.stereotype.Component;
@@ -23,13 +22,18 @@ import tutorials4j.toolkit.core.enums.YesNoEnum;
  * @author Yun Jiao
  */
 @Component
+@RequiredArgsConstructor
 public class OAuthInstanceInitializing implements SmartInitializingSingleton {
+  private final DefaultSaOAuth2ConfirmViewFunction defaultSaOAuth2ConfirmViewFunction;
 
   private void initOAuthFeatureManager() {
     OAuthFeatureManager.getInstance().setClientEntityDefaultValue =
         (clientEntity) -> {
           if (StringUtils.isBlank(clientEntity.getClientId())) {
             clientEntity.setClientId(IdUtil.fastUUID());
+          }
+          if (StringUtils.isBlank(clientEntity.getClientSecret())) {
+            clientEntity.setClientSecret(IdUtil.fastUUID());
           }
           if (clientEntity.getIsAutoConfirm() == null) {
             clientEntity.setIsAutoConfirm(YesNoEnum.no);
@@ -91,13 +95,7 @@ public class OAuthInstanceInitializing implements SmartInitializingSingleton {
         };
 
     // 授权确认视图
-    SaOAuth2Strategy.instance.confirmView =
-        (clientId, scopes) -> {
-          Map<String, Object> map = new HashMap<>();
-          map.put("clientId", clientId);
-          map.put("scope", scopes);
-          return new ModelAndView("confirm.html", map);
-        };
+    SaOAuth2Strategy.instance.confirmView = defaultSaOAuth2ConfirmViewFunction;
   }
 
   @Override

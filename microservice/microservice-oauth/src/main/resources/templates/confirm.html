@@ -9,6 +9,8 @@
 			*{margin: 0px; padding: 0px;}
 			.login-box{width: 400px; margin: 20vh auto; padding: 70px; border: 1px #000 solid;}
 			.login-box button{padding: 5px 15px; cursor: pointer; }
+			.scope-list{margin-top: 5px; padding-left: 30px;}
+			.scope-list li{line-height: 22px;}
 		</style>
 		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 		<script th:src="@{/sa-res/layer/layer.js}"></script>
@@ -17,8 +19,21 @@
 		<div class="login-box">
 			<h2>认证中心-确认授权页</h2> <br>
 			<div>
-				<div><b>应用ID：</b><span th:utext="${clientId}"></span></div>
-				<div><b>请求授权：</b><span th:utext="${scope}"></span></div>
+				<div><b>应用ID：</b><span th:text="${view.clientId}"></span></div>
+				<div><b>应用名称：</b><span th:text="${view.clientName}"></span></div>
+				<div>
+					<div><b>请求授权：</b></div>
+					<div th:if="${view.scopeNames == null or #lists.isEmpty(view.scopeNames)}">该应用未申请任何权限</div>
+
+					<ul class="scope-list"
+							th:unless="${view.scopeNames == null or #lists.isEmpty(view.scopeNames)}">
+						<li
+								th:each="scopeName : ${view.scopeNames}"
+								th:attr="data-scope=${scopeName}">
+							<span class="scope-name" th:text="${scopeName}"></span>
+						</li>
+					</ul>
+				</div>
 				<br><div>------------- 是否同意授权 -------------</div><br>
 				<div>
 					<button onclick="yes()">同意</button>

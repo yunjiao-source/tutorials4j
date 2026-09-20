@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import tutorials4j.feature.oauth.OAuthFeatureManager;
 import tutorials4j.feature.oauth.entity.ClientEntity;
+import tutorials4j.feature.oauth.exception.OAuthFeatureErrorCode;
 import tutorials4j.feature.oauth.model.ClientCreateModel;
 import tutorials4j.feature.oauth.model.ClientUpdateModel;
 import tutorials4j.feature.oauth.repository.ClientRepository;
@@ -57,5 +58,12 @@ public class ClientService implements BaseService<ClientEntity, String> {
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
     clientRepository.findById(id).ifPresent(clientRepository::delete);
+  }
+
+  public ClientEntity findByClientId(String clientId) {
+    return clientRepository
+        .findByClientId(clientId)
+        .orElseThrow(
+            () -> OAuthFeatureErrorCode.CLIENT_NOT_FOUND.throwed().param("clientId", clientId));
   }
 }

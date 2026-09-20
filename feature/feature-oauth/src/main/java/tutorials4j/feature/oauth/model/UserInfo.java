@@ -1,4 +1,4 @@
-package tutorials4j.microservice.oauth.common;
+package tutorials4j.feature.oauth.model;
 
 import lombok.Builder;
 import lombok.Data;
