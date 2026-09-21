@@ -3,8 +3,6 @@ package tutorials4j.microservice.oauth.component;
 import cn.dev33.satoken.oauth2.SaOAuth2Manager;
 import cn.dev33.satoken.oauth2.config.SaOAuth2ServerConfig;
 import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
-import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.IdUtil;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +23,7 @@ import tutorials4j.toolkit.core.enums.YesNoEnum;
 @RequiredArgsConstructor
 public class OAuthInstanceInitializing implements SmartInitializingSingleton {
   private final DefaultSaOAuth2ConfirmViewFunction defaultSaOAuth2ConfirmViewFunction;
+  private final DefaultSaOAuth2DoLoginHandleFunction defaultSaOAuth2DoLoginHandleFunction;
 
   private void initOAuthFeatureManager() {
     OAuthFeatureManager.getInstance().setClientEntityDefaultValue =
@@ -85,14 +84,7 @@ public class OAuthInstanceInitializing implements SmartInitializingSingleton {
         };
 
     // 登录处理函数
-    SaOAuth2Strategy.instance.doLoginHandle =
-        (name, pwd) -> {
-          if ("sa".equals(name) && "123456".equals(pwd)) {
-            StpUtil.login(10001);
-            return SaResult.ok().set("satoken", StpUtil.getTokenValue());
-          }
-          return SaResult.error("账号名或密码错误");
-        };
+    SaOAuth2Strategy.instance.doLoginHandle = defaultSaOAuth2DoLoginHandleFunction;
 
     // 授权确认视图
     SaOAuth2Strategy.instance.confirmView = defaultSaOAuth2ConfirmViewFunction;

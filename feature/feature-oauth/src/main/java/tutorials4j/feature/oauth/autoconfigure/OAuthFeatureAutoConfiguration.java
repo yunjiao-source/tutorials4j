@@ -14,7 +14,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Slf4j
 @AutoConfiguration
-@ComponentScan(basePackages = {"tutorials4j.feature.oauth.service"})
+@ComponentScan(
+    basePackages = {"tutorials4j.feature.oauth.service", "tutorials4j.feature.oauth.component"})
 @EnableJpaRepositories(basePackages = {"tutorials4j.feature.oauth.repository"})
 @EntityScan(basePackages = {"tutorials4j.feature.oauth.entity"})
 public class OAuthFeatureAutoConfiguration {

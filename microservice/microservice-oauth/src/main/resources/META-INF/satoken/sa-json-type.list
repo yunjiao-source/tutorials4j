@@ -1,0 +1,4 @@
+# 允许参与多态 JSON 反序列化的业务类型
+tutorials4j.feature.oauth.model.UserInfo
+tutorials4j.feature.oauth.model.UserModel
+java.time.ZoneId

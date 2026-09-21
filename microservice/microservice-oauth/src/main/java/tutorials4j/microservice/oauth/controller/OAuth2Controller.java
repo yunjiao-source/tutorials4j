@@ -17,11 +17,14 @@ import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
 import cn.dev33.satoken.oauth2.template.SaOAuth2Template;
 import cn.dev33.satoken.oauth2.template.SaOAuth2Util;
 import cn.dev33.satoken.util.SaResult;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.feature.oauth.entity.UserEntity;
+import tutorials4j.feature.oauth.model.DefaultScopes;
+import tutorials4j.feature.oauth.model.UserInfo;
+import tutorials4j.feature.oauth.service.UserService;
 import tutorials4j.toolkit.core.exception.UnauthorizedException;
 
 /**
@@ -31,26 +34,34 @@ import tutorials4j.toolkit.core.exception.UnauthorizedException;
  */
 @RestController
 @RequestMapping("oauth2")
+@RequiredArgsConstructor
 public class OAuth2Controller {
+  private final UserService userService;
 
   @RequestMapping("userinfo")
-  public SaResult userinfo() {
+  public UserInfo userinfo() {
     // 获取 Access-Token 对应的账号id
     String accessToken = SaOAuth2Manager.getDataResolver().readAccessToken(SaHolder.getRequest());
     Object loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
 
-    // 校验 Access-Token 是否具有权限: userinfo
-    SaOAuth2Util.checkAccessTokenScope(accessToken, "userinfo");
+    UserEntity entity = userService.findByUsername(loginId.toString());
+    UserInfo userInfo = new UserInfo();
+    userInfo.setSub(entity.getId());
 
-    // 模拟账号信息 （真实环境需要查询数据库获取信息）
-    Map<String, Object> map = new LinkedHashMap<>();
-    // map.put("userId", loginId);  一般原则下，oauth2-server 不能把 userId 返回给 oauth2-client
-    map.put("nickname", "林小林");
-    map.put("avatar", "http://xxx.com/1.jpg");
-    map.put("age", "18");
-    map.put("sex", "男");
-    map.put("address", "山东省 青岛市 城阳区");
-    return SaResult.ok().setMap(map);
+    AccessTokenModel accessTokenModel = SaOAuth2Util.getAccessToken(accessToken);
+    if (accessTokenModel.getScopes().contains(DefaultScopes.profile.name())) {
+      userInfo.fillByProfile(entity);
+    }
+
+    if (accessTokenModel.getScopes().contains(DefaultScopes.email.name())) {
+      userInfo.setEmail(entity.getEmail());
+    }
+
+    if (accessTokenModel.getScopes().contains(DefaultScopes.phone.name())) {
+      userInfo.setPhoneNumber(entity.getPhoneNumber());
+    }
+
+    return userInfo;
   }
 
   @RequestMapping("*")

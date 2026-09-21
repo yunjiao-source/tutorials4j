@@ -20,3 +20,8 @@ sa-token:
     # higher-scope: openid,userid
     # 定义哪些 scope 是低级权限，多个用逗号隔开
     # lower-scope: userinfo
+
+tutorials4j:
+  microservice:
+    oauth:
+      enable-default-scope-handler-interface: false

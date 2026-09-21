@@ -52,23 +52,17 @@
 					data: location.search.substring(1) + '&build_redirect_uri=true',
 					dataType: 'json',
 					success: function(res) {
-						console.log('res：', res);
-						if(res.code === 200) {
-							layer.msg('授权成功！');
-							setTimeout(function() {
-								if (res.redirect_uri) {
-									location.href = res.redirect_uri;
-								} else {
-									location.reload();
-								}
-							}, 800);
-						} else {
-							// 重定向至授权失败URL 
-							layer.alert('授权失败:' + res.msg);
-						}
+						layer.msg('授权成功！');
+						setTimeout(function() {
+							if (res.redirect_uri) {
+								location.href = res.redirect_uri;
+							} else {
+								location.reload();
+							}
+						}, 800);
 					},
 					error: function(e) {
-						console.log('error');
+						layer.alert(e.responseJSON.title);
 					}
 				});
 			}

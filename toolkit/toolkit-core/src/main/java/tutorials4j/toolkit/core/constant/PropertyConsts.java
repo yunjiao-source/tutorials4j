@@ -18,4 +18,8 @@ public interface PropertyConsts {
   String PROPERTY_TOOLKIT_DATA_MYBATIS_PLUS = PROPERTY_TOOLKIT_DATA + ".mybatis-plus";
 
   String PROPERTY_TOOLKIT_NAMED_CACHE = PROPERTY_TOOLKIT + ".toolkit.named-cache";
+
+  String PROPERTY_MICROSERVICE = PROPERTY_TUTORIALS4J + ".microservice";
+
+  String PROPERTY_MICROSERVICE_OAUTH = PROPERTY_MICROSERVICE + ".oauth";
 }

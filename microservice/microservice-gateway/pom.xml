@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>yunjiao-source.tutorials4j.feature</groupId>
+            <artifactId>feature-oauth</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
             <groupId>yunjiao-source.tutorials4j.assembly</groupId>
             <artifactId>assembly-security-sa-token-reactor-starter</artifactId>
             <version>${revision}</version>

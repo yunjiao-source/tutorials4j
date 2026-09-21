@@ -20,13 +20,11 @@
 			账号：<input name="name" /> <br>
 			密码：<input name="pwd" type="password" /> <br>
 			<button onclick="doLogin()">登录</button>
-			<span style="color: #666;">（测试账号： sa / 123456）</span>
 		</div>
 		<script type="text/javascript">
 			
 			// 登录方法 
 			function doLogin() {
-				console.log('-----------');
 				$.ajax({
 					url: '/oauth2/doLogin',
 					data: {
@@ -35,17 +33,13 @@
 					},
 					dataType: 'json', 
 					success: function(res) {
-						if(res.code == 200) {
-							layer.msg('登录成功！');
-							setTimeout(function() {
-								location.reload(true);
-							}, 800);
-						} else {
-							layer.alert(res.msg);
-						}
+						layer.msg('登录成功！');
+						setTimeout(function() {
+							location.reload(true);
+						}, 800);
 					},
 					error: function(e) {
-						console.log('error');
+						layer.alert(e.responseJSON.title);
 					}
 				});
 			}
