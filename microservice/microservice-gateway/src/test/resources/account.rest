@@ -1,0 +1,18 @@
+### 获取token
+POST http://localhost:9801/api/oauth/accounts/token
+Content-Type: application/json
+
+{"selectAccount":"admin","username":"admin","password":"123456","captcha":true,"grant_type":"password","client_id":"1001","client_secret":"aaaa-bbbb-cccc-dddd-eeee","scope":"profile,email,phone"}
+
+
+### 获取token
+POST http://127.0.0.1:9802/common/userinfo
+Content-Type: application/json
+satoken: 04nwXSsio6bBM4sTARqvqYyTfIhhaq93FWfzXL2urOk6HHiNOylwhsFRwKHM
+Authorization: Bearer 04nwXSsio6bBM4sTARqvqYyTfIhhaq93FWfzXL2urOk6HHiNOylwhsFRwKHM
+
+### 获取token
+POST http://127.0.0.1:9802/test/checkAccessToken
+Content-Type: application/json
+satoken: 04nwXSsio6bBM4sTARqvqYyTfIhhaq93FWfzXL2urOk6HHiNOylwhsFRwKHM
+Authorization: Bearer 04nwXSsio6bBM4sTARqvqYyTfIhhaq93FWfzXL2urOk6HHiNOylwhsFRwKHM

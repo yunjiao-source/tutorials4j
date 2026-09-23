@@ -1,0 +1,9 @@
+tutorials4j:
+  toolkit:
+    security:
+      sa-token:
+        permission:
+          role-key-prefix: 'satoken:role-find-permission:'
+          role-key-expired: 30m
+          user-key-prefix: 'satoken:user-find-role:'
+          user-key-duration: 30m

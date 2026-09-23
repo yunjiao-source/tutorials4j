@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.satoken;
+package tutorials4j.toolkit.satoken.component;
 
 import cn.dev33.satoken.log.SaLog;
 import lombok.extern.slf4j.Slf4j;

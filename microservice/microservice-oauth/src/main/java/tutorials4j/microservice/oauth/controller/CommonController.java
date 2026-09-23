@@ -33,9 +33,9 @@ import tutorials4j.toolkit.core.exception.UnauthorizedException;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("oauth2")
+@RequestMapping("common")
 @RequiredArgsConstructor
-public class OAuth2Controller {
+public class CommonController {
   private final UserService userService;
 
   @RequestMapping("userinfo")
@@ -62,11 +62,6 @@ public class OAuth2Controller {
     }
 
     return userInfo;
-  }
-
-  @RequestMapping("*")
-  public Object request() {
-    return SaOAuth2ServerProcessor.instance.dister();
   }
 
   @RequestMapping("redirect-uri-and-code")

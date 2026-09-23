@@ -19,6 +19,10 @@ public interface PropertyConsts {
 
   String PROPERTY_TOOLKIT_NAMED_CACHE = PROPERTY_TOOLKIT + ".toolkit.named-cache";
 
+  String PROPERTY_FEATURE = PROPERTY_TUTORIALS4J + ".feature";
+
+  String PROPERTY_FEATURE_OAUTH = PROPERTY_FEATURE + ".oauth";
+
   String PROPERTY_MICROSERVICE = PROPERTY_TUTORIALS4J + ".microservice";
 
   String PROPERTY_MICROSERVICE_OAUTH = PROPERTY_MICROSERVICE + ".oauth";

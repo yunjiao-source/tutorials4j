@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import tutorials4j.feature.oauth.model.UserModel;
 import tutorials4j.feature.oauth.service.UserService;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
 /**
  * TODO
@@ -19,14 +20,14 @@ import tutorials4j.feature.oauth.service.UserService;
 @Component
 @RequiredArgsConstructor
 public class DefaultSaOAuth2DoLoginHandleFunction implements SaOAuth2DoLoginHandleFunction {
-  public static final String REMEMBER_ME_VALUE = "remember-me";
+
   private final UserService userService;
 
   @Override
   public Object apply(String username, String password) {
     var entity = userService.authenticate(username, password);
 
-    boolean rememberMe = extractRememberMe();
+    boolean rememberMe = SaTokenUtils.extractRememberMe();
     StpUtil.login(entity.getUsername(), rememberMe);
 
     UserModel model = new UserModel();
@@ -35,18 +36,4 @@ public class DefaultSaOAuth2DoLoginHandleFunction implements SaOAuth2DoLoginHand
     return SaResult.ok("登录成功");
   }
 
-  private boolean extractRememberMe() {
-    var saRequest = SaHolder.getRequest();
-    var value = saRequest.getParam(REMEMBER_ME_VALUE);
-    if (StringUtils.isNotBlank(value)) {
-      return Boolean.parseBoolean(value.trim());
-    }
-
-    value = saRequest.getHeader(REMEMBER_ME_VALUE);
-    if (StringUtils.isNotBlank(value)) {
-      return Boolean.parseBoolean(value.trim());
-    }
-
-    return false;
-  }
 }

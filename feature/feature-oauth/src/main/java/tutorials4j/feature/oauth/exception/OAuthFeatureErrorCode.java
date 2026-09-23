@@ -8,6 +8,7 @@ import tutorials4j.toolkit.core.exception.ErrorCode;
  * @author Yun Jiao
  */
 public enum OAuthFeatureErrorCode implements ErrorCode {
+  USER_VALIDATE_FAIL("用户信息校验失败"),
   ACCOUNT_NOT_FOUND("账户不存在"),
   ACCOUNT_PASSWORD_EXPIRED("账户密码已过期"),
   ACCOUNT_EXPIRED("账户已过期"),

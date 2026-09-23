@@ -47,7 +47,7 @@
 			// 同意授权
 			function yes() {
 				$.ajax({
-					url: '/oauth2/doConfirm',
+					url: '/accounts/doConfirm',
 					method: "POST",
 					data: location.search.substring(1) + '&build_redirect_uri=true',
 					dataType: 'json',

@@ -8,6 +8,7 @@ spring:
   config:
     import:
       - optional:nacos:environment.yaml?group=common
+      - optional:nacos:base.yaml?group=common
       - optional:nacos:logger.yaml?group=common
       - optional:nacos:management.yaml?group=common
       - optional:nacos:datasource.yaml?group=common
@@ -25,6 +26,9 @@ spring:
         group: DEFAULT_GROUP
         username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
         password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}
+
+
+
 
 
 

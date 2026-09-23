@@ -20,7 +20,7 @@ import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 @Slf4j
 @AutoConfiguration
 @ConditionalOnClass(SaReactorFilter.class)
-@ConditionalOnWebApplication(type = Type.SERVLET)
+@ConditionalOnWebApplication(type = Type.REACTIVE)
 public class ReactorSaTokenSecurityToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

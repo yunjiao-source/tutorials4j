@@ -1,6 +1,8 @@
 package tutorials4j.toolkit.satoken.util;
 
+import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
+import org.apache.commons.lang3.StringUtils;
 import tutorials4j.toolkit.core.exception.UnauthorizedException;
 
 /**
@@ -9,6 +11,8 @@ import tutorials4j.toolkit.core.exception.UnauthorizedException;
  * @author Yun Jiao
  */
 public interface SaTokenUtils {
+  String REMEMBER_ME_VALUE = "remember-me";
+
   static <T> T getLoginId(Class<T> clazz) {
     var o = StpUtil.getLoginId();
 
@@ -56,5 +60,20 @@ public interface SaTokenUtils {
             + clazz.getName()
             + ", 实际: "
             + o.getClass().getName());
+  }
+
+  static boolean extractRememberMe() {
+    var saRequest = SaHolder.getRequest();
+    var value = saRequest.getParam(REMEMBER_ME_VALUE);
+    if (StringUtils.isNotBlank(value)) {
+      return Boolean.parseBoolean(value.trim());
+    }
+
+    value = saRequest.getHeader(REMEMBER_ME_VALUE);
+    if (StringUtils.isNotBlank(value)) {
+      return Boolean.parseBoolean(value.trim());
+    }
+
+    return false;
   }
 }

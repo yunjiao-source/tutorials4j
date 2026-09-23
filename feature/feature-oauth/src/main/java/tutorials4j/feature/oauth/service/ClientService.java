@@ -1,5 +1,6 @@
 package tutorials4j.feature.oauth.service;
 
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 import tutorials4j.feature.oauth.OAuthFeatureManager;
 import tutorials4j.feature.oauth.entity.ClientEntity;
 import tutorials4j.feature.oauth.exception.OAuthFeatureErrorCode;
@@ -24,6 +26,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseService;
  */
 @Getter
 @Service
+@Validated
 @RequiredArgsConstructor
 public class ClientService implements BaseService<ClientEntity, String> {
   private final ClientRepository clientRepository;
@@ -37,7 +40,7 @@ public class ClientService implements BaseService<ClientEntity, String> {
     return clientRepository.findAll(query.buildSpecification(), pageable);
   }
 
-  public ClientEntity create(ClientCreateModel model) {
+  public ClientEntity create(@Valid ClientCreateModel model) {
     Assert.notNull(model, "model must not be null");
     var entity = new ClientEntity();
     BeanUtils.copyProperties(model, entity);
@@ -46,7 +49,7 @@ public class ClientService implements BaseService<ClientEntity, String> {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public ClientEntity update(String id, ClientUpdateModel model) {
+  public ClientEntity update(String id, @Valid ClientUpdateModel model) {
     Assert.notNull(model, "model must not be null");
 
     var entity = findById(id);

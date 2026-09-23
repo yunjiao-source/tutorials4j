@@ -179,15 +179,15 @@
 			
 			// 默认配置 
 			var defaultCfg = {
-				oauth2_server_url: 'http://127.0.0.1:9802',  // OAuth2 服务端主机地址 
-				oauth2_server_auth_url: 'http://127.0.0.1:9802/accounts/authorize', // OAuth2 授权页地址 
-				oauth2_server_token_url: 'http://127.0.0.1:9802/accounts/token', // OAuth2 获取 token 地址 
-				oauth2_server_refresh_token_url: 'http://127.0.0.1:9802/accounts/refresh', // OAuth2 刷新 token 地址 
-				oauth2_server_userinfo_url: 'http://127.0.0.1:9802/common/userinfo', // OAuth2 获取 userinfo 地址
+				oauth2_server_url: 'http://127.0.0.1:9801/api/oauth',  // OAuth2 服务端主机地址 
+				oauth2_server_auth_url: 'http://127.0.0.1:9801/api/oauth/accounts/authorize', // OAuth2 授权页地址 
+				oauth2_server_token_url: 'http://127.0.0.1:9801/api/oauth/accounts/token', // OAuth2 获取 token 地址 
+				oauth2_server_refresh_token_url: 'http://127.0.0.1:9801/api/oauth/accounts/refresh', // OAuth2 刷新 token 地址 
+				oauth2_server_userinfo_url: 'http://127.0.0.1:9801/api/oauth/common/userinfo', // OAuth2 获取 userinfo 地址
 				client_id: '1002',
 				client_secret: 'aaaa-bbbb-cccc-dddd-eeee',
 				redirect_uri: location.href.split('?')[0].split('#')[0],
-				scope: 'oidc,openid,unionid,profile,email,address,phone,offline_access',
+				scope: 'profile,email,address,phone',
 				username: 'admin',
 				password: '123456'
 			}
@@ -315,7 +315,7 @@
 						dataType: 'json',
 						headers: {
 							'X-Requested-With': 'XMLHttpRequest',
-							'satoken': localStorage.getItem('satoken')
+							//'satoken': localStorage.getItem('satoken')
 						},
 						success: function(res){
 							console.log('返回数据：', res);

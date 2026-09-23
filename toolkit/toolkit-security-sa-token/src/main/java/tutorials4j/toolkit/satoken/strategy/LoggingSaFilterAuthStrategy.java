@@ -17,9 +17,8 @@ public class LoggingSaFilterAuthStrategy implements PointcutSaFilterAuthStrategy
   public void run(Object obj) {
     SaManager.getLog()
         .debug(
-            "开始认证，path={}, token={}",
-            SaHolder.getRequest().getRequestPath(),
-            StpUtil.getTokenValue());
+            "开始认证，path={}",
+            SaHolder.getRequest().getRequestPath());
   }
 
   @Override

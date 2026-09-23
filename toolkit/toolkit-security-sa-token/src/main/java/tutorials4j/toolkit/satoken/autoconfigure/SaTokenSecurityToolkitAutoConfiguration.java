@@ -11,14 +11,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
-import tutorials4j.toolkit.satoken.SaLogForSlf4j;
+import tutorials4j.toolkit.satoken.component.SaLogForSlf4j;
 import tutorials4j.toolkit.satoken.func.CheckLoginSaParamFunction;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.func.OrderedSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.BlockUrlsSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CheckLoginSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.CorsBeforeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.LoggingSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.OptionsBeforeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.PointcutSaFilterAuthStrategy;
@@ -119,12 +118,6 @@ public class SaTokenSecurityToolkitAutoConfiguration {
       SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SECURITY-SA-TOKEN] White Urls Sa Filter Auth Strategy");
     return new WhiteUrlsSaFilterAuthStrategy(properties.getFilter().getWhiteUrls());
-  }
-
-  @Bean
-  CorsBeforeSaFilterAuthStrategy corsBeforeSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Cors Before Sa Filter Auth Strategy");
-    return new CorsBeforeSaFilterAuthStrategy();
   }
 
   @Bean

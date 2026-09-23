@@ -11,6 +11,7 @@ import cn.dev33.satoken.filter.SaFilterErrorStrategy;
 import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -50,24 +51,37 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
   }
 
   private ProblemDetail handleThrowable(Throwable t) {
+    var deltail = "";
     // 获取响应对象，用于设置状态码和响应头
     if (t instanceof SaTokenException saTokenException) {
       var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-      if (t instanceof NotLoginException) {
+      if (t instanceof NotLoginException notLoginException) {
         httpStatus = HttpStatus.UNAUTHORIZED;
+        deltail = switch (notLoginException.getType()) {
+          case NotLoginException.TOKEN_TIMEOUT,
+              NotLoginException.TOKEN_FREEZE -> "登录已过期，请重新登录";
+          case NotLoginException.BE_REPLACED -> "当前账号已在其他设备登录，您已被强制下线";
+          case NotLoginException.KICK_OUT -> "账号已被管理员强制下线";
+          default -> "登录状态异常，请重新登录";
+        };
       } else if (t instanceof NotPermissionException
           || t instanceof NotRoleException
           || t instanceof DisableServiceException
           || t instanceof BlockUrlException) {
         httpStatus = HttpStatus.FORBIDDEN;
+        deltail = "没有访问权限，请联系管理员授权";
       }
 
-      return handleException(
+      var problemDetail = handleException(
           saTokenException,
           httpStatus,
           (errorDetail -> {
             errorDetail.addParam("code", saTokenException.getCode());
           }));
+      if (StringUtils.isNotBlank(deltail)) {
+        problemDetail.setDetail(deltail);
+      }
+      return problemDetail;
     }
 
     return handleException(t, HttpStatus.INTERNAL_SERVER_ERROR);

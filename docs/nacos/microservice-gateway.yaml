@@ -14,13 +14,25 @@ spring:
                 - StripPrefix=2
                 - AddRequestHeader=X-Gateway-Source, api-gateway
 
-            - id: order-service-route
-              uri: lb://order-service
+            - id: microservice-gateway-route
+              uri: lb://microservice-gateway
               predicates:
-                - Path=/api/order/**
+                - Path=/api/gateway/**
               filters:
                 - StripPrefix=2
 
+            - id: microservice-oauth-route
+              uri: lb://microservice-oauth
+              predicates:
+                - Path=/api/oauth/**
+              filters:
+                - StripPrefix=2
+
+
+# sa-token配置
+sa-token:
+  # 是否打印操作日志
+  is-log: true
 
 tutorials4j:
   toolkit:
@@ -31,7 +43,9 @@ tutorials4j:
           exclude-urls:
             - /actuator/**
           white-urls:
+            - /api/oauth/accounts/**
             - /api/demo/simple/**
+
           block-urls:
             - /api/demo/ip-authority/**
 

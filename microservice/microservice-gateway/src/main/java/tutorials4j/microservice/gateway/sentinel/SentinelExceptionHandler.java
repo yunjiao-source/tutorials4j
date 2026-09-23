@@ -28,12 +28,16 @@ public class SentinelExceptionHandler implements HandleException {
 
   @ExceptionHandler(BlockException.class)
   public ProblemDetail handleBlockException(BlockException e) {
-    return handleException(e, HttpStatus.TOO_MANY_REQUESTS);
+    var problemDetail = handleException(e, HttpStatus.TOO_MANY_REQUESTS);
+    problemDetail.setDetail("操作太频繁，请稍后再试");
+    return problemDetail;
   }
 
   @ExceptionHandler(NotFoundException.class)
   public ProblemDetail handleNotFoundException(NotFoundException e) {
-    return handleException(e, HttpStatus.SERVICE_UNAVAILABLE);
+    var problemDetail =  handleException(e, HttpStatus.SERVICE_UNAVAILABLE);
+    problemDetail.setDetail("无效服务");
+    return problemDetail;
   }
 
   @Override
