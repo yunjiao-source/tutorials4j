@@ -1,11 +1,9 @@
 package tutorials4j.microservice.oauth.component;
 
-import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.oauth2.function.SaOAuth2DoLoginHandleFunction;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import tutorials4j.feature.oauth.model.UserModel;
@@ -35,5 +33,4 @@ public class DefaultSaOAuth2DoLoginHandleFunction implements SaOAuth2DoLoginHand
     StpUtil.getSession().set("userinfo", model);
     return SaResult.ok("登录成功");
   }
-
 }

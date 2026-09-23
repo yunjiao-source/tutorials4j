@@ -57,13 +57,13 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
       var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
       if (t instanceof NotLoginException notLoginException) {
         httpStatus = HttpStatus.UNAUTHORIZED;
-        deltail = switch (notLoginException.getType()) {
-          case NotLoginException.TOKEN_TIMEOUT,
-              NotLoginException.TOKEN_FREEZE -> "登录已过期，请重新登录";
-          case NotLoginException.BE_REPLACED -> "当前账号已在其他设备登录，您已被强制下线";
-          case NotLoginException.KICK_OUT -> "账号已被管理员强制下线";
-          default -> "登录状态异常，请重新登录";
-        };
+        deltail =
+            switch (notLoginException.getType()) {
+              case NotLoginException.TOKEN_TIMEOUT, NotLoginException.TOKEN_FREEZE -> "登录已过期，请重新登录";
+              case NotLoginException.BE_REPLACED -> "当前账号已在其他设备登录，您已被强制下线";
+              case NotLoginException.KICK_OUT -> "账号已被管理员强制下线";
+              default -> "登录状态异常，请重新登录";
+            };
       } else if (t instanceof NotPermissionException
           || t instanceof NotRoleException
           || t instanceof DisableServiceException
@@ -72,12 +72,13 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
         deltail = "没有访问权限，请联系管理员授权";
       }
 
-      var problemDetail = handleException(
-          saTokenException,
-          httpStatus,
-          (errorDetail -> {
-            errorDetail.addParam("code", saTokenException.getCode());
-          }));
+      var problemDetail =
+          handleException(
+              saTokenException,
+              httpStatus,
+              (errorDetail -> {
+                errorDetail.addParam("code", saTokenException.getCode());
+              }));
       if (StringUtils.isNotBlank(deltail)) {
         problemDetail.setDetail(deltail);
       }

@@ -5,6 +5,4 @@ package tutorials4j.feature.oauth;
  *
  * @author Yun Jiao
  */
-public interface OAuthFeatureConsts {
-
-}
+public interface OAuthFeatureConsts {}

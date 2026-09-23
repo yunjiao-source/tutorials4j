@@ -1,21 +1,14 @@
 package tutorials4j.microservice.gateway.satoken;
 
-import cn.dev33.satoken.SaManager;
-import cn.dev33.satoken.stp.StpInterface;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.oauth.OAuthFeatureConsts;
 import tutorials4j.feature.oauth.entity.PermissionEntity;
 import tutorials4j.feature.oauth.entity.RoleEntity;
 import tutorials4j.feature.oauth.service.PermissionService;
 import tutorials4j.feature.oauth.service.RoleService;
 import tutorials4j.feature.oauth.service.UserService;
 import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties;
-import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties.PermissionOptions;
 import tutorials4j.toolkit.satoken.component.ToolkitStpInterface;
 
 /**
@@ -28,8 +21,11 @@ public class DefaultStpInterface extends ToolkitStpInterface {
   private final UserService userService;
   private final RoleService roleService;
   private final PermissionService permissionService;
+
   public DefaultStpInterface(
-      SaTokenSecurityToolkitProperties properties, UserService userService, RoleService roleService,
+      SaTokenSecurityToolkitProperties properties,
+      UserService userService,
+      RoleService roleService,
       PermissionService permissionService) {
     super(properties.getPermission());
     this.userService = userService;
@@ -39,10 +35,7 @@ public class DefaultStpInterface extends ToolkitStpInterface {
 
   @Override
   protected List<String> getAllPermissions() {
-    return permissionService.findAll()
-        .stream()
-        .map(PermissionEntity::getCode)
-        .toList();
+    return permissionService.findAll().stream().map(PermissionEntity::getCode).toList();
   }
 
   @Override

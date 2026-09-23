@@ -35,7 +35,7 @@ public class SentinelExceptionHandler implements HandleException {
 
   @ExceptionHandler(NotFoundException.class)
   public ProblemDetail handleNotFoundException(NotFoundException e) {
-    var problemDetail =  handleException(e, HttpStatus.SERVICE_UNAVAILABLE);
+    var problemDetail = handleException(e, HttpStatus.SERVICE_UNAVAILABLE);
     problemDetail.setDetail("无效服务");
     return problemDetail;
   }

@@ -21,8 +21,11 @@ public class DefaultStpInterface extends ToolkitStpInterface {
   private final UserService userService;
   private final RoleService roleService;
   private final PermissionService permissionService;
+
   public DefaultStpInterface(
-      SaTokenSecurityToolkitProperties properties, UserService userService, RoleService roleService,
+      SaTokenSecurityToolkitProperties properties,
+      UserService userService,
+      RoleService roleService,
       PermissionService permissionService) {
     super(properties.getPermission());
     this.userService = userService;
@@ -32,10 +35,7 @@ public class DefaultStpInterface extends ToolkitStpInterface {
 
   @Override
   protected List<String> getAllPermissions() {
-    return permissionService.findAll()
-        .stream()
-        .map(PermissionEntity::getCode)
-        .toList();
+    return permissionService.findAll().stream().map(PermissionEntity::getCode).toList();
   }
 
   @Override

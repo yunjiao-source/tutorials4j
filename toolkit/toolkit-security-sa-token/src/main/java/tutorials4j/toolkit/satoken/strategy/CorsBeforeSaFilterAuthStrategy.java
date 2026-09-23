@@ -15,7 +15,8 @@ public class CorsBeforeSaFilterAuthStrategy implements PointcutSaFilterAuthStrat
   @Override
   public void run(Object obj) {
     SaResponse response = SaHolder.getResponse();
-    response.setHeader("Access-Control-Allow-Origin", "*")
+    response
+        .setHeader("Access-Control-Allow-Origin", "*")
         .setHeader("Access-Control-Allow-Methods", "*")
         .setHeader("Access-Control-Allow-Headers", "*")
         .setHeader("Access-Control-Max-Age", "3600");

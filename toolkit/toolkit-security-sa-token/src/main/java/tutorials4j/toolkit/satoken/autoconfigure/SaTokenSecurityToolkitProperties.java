@@ -27,6 +27,7 @@ public class SaTokenSecurityToolkitProperties {
     private String userKeyPrefix = "satoken:user-find-role:";
     private Duration userKeyDuration = Duration.ofMinutes(30);
   }
+
   @Data
   public static class FilterOptions {
     private List<String> includeUrls = List.of("/this-attribute-must-be-configured-manually/**");
