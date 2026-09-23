@@ -1,9 +1,0 @@
-
-
-tutorials4j:
-  schedule:
-    powerjob:
-      worker:
-        enabled: true
-        app-name: tutorials4j
-        server-address: 127.0.0.1:7700

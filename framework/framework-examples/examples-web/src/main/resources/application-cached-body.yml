@@ -1,6 +1,0 @@
-tutorials4j:
-  web:
-    cached-body:
-      enabled: true
-      filter:
-        url-patterns: /cached-body/cached

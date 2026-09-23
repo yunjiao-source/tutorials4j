@@ -1,7 +1,0 @@
-###
-GET http://localhost:8080/composite-task-decorator/async-exec
-Content-Type: application/json
-
-
-
-

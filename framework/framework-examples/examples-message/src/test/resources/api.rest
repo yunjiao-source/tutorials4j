@@ -1,5 +1,0 @@
-###
-POST http://localhost:8080/sms/send
-Content-Type: application/json
-
-"短信消息"

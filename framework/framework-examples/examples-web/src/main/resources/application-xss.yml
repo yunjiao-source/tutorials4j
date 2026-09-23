@@ -1,7 +1,0 @@
-tutorials4j:
-  web:
-    xss:
-      enabled: true
-      filter:
-        url-patterns: /xss-demo/*
-
