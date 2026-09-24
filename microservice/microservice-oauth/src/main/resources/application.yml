@@ -15,7 +15,7 @@ spring:
       - optional:nacos:datasource.yaml?group=common
       - optional:nacos:jpa.yaml?group=common
       - optional:nacos:redis.yaml?group=common
-      #- optional:nacos:security.yaml?group=common
+      - optional:nacos:security.yaml?group=common
       - optional:nacos:${spring.application.name}.yaml?group=service
 
 

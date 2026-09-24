@@ -41,13 +41,12 @@ tutorials4j:
         filter:
           include-urls: /**
           exclude-urls:
-            - /actuator/**
+            - /xxxx/**
           white-urls:
             - /api/oauth/accounts/**
-            - /api/demo/simple/**
 
           block-urls:
-            - /api/demo/ip-authority/**
+            - /xxxx/**
 
 management:
   endpoint:
