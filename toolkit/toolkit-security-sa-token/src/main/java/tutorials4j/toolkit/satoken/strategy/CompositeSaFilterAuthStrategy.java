@@ -14,42 +14,43 @@ import org.springframework.util.Assert;
  *
  * @author Yun Jiao
  */
+@Getter
 @Slf4j
 public class CompositeSaFilterAuthStrategy implements SaFilterAuthStrategy {
-  @Getter private final List<PointcutSaFilterAuthStrategy> strategies;
-  private AuthFilterPointcutEnum pointcut;
+  private final List<NamedSaFilterAuthStrategy> strategies;
 
   public CompositeSaFilterAuthStrategy(
-      Collection<? extends PointcutSaFilterAuthStrategy> pointcutSaFilterAuthStrategies) {
+      Collection<? extends NamedSaFilterAuthStrategy> pointcutSaFilterAuthStrategies) {
     Assert.notNull(
         pointcutSaFilterAuthStrategies, "pointcutSaFilterAuthStrategies must not be null");
 
     this.strategies = new ArrayList<>(pointcutSaFilterAuthStrategies);
   }
 
-  public CompositeSaFilterAuthStrategy copyAndSetPointcut(
-      AuthFilterPointcutEnum authFilterPointcutEnum) {
-    Assert.notNull(authFilterPointcutEnum, "authFilterPointcutEnum must not be null");
+  public CompositeSaFilterAuthStrategy newInstanceBy(List<String> authStrategyNames) {
+    Assert.notNull(authStrategyNames, "authStrategyNames must not be null");
 
-    var copyInstant = new CompositeSaFilterAuthStrategy(this.strategies);
-    copyInstant.pointcut = authFilterPointcutEnum;
-    return copyInstant;
+    var newStrategies = new ArrayList<NamedSaFilterAuthStrategy>();
+    authStrategyNames.forEach(
+        name -> {
+          for (NamedSaFilterAuthStrategy strategy : this.strategies) {
+            if (Objects.equals(strategy.getName(), name)) {
+              newStrategies.add(strategy);
+              break;
+            }
+          }
+        });
+    return new CompositeSaFilterAuthStrategy(newStrategies);
   }
 
   @Override
   public void run(Object o) {
-    if (pointcut == null) {
-      log.warn("pointcut属性是null，请确认配置是否正确");
-    }
-
-    strategies.stream()
-        .filter(e -> Objects.equals(this.pointcut, e.getPointcut()))
-        .forEach(
-            e -> {
-              if (log.isDebugEnabled()) {
-                log.debug("执行[{}]认证策略：{}", pointcut.name(), e.getClass().getName());
-              }
-              e.run(o);
-            });
+    strategies.forEach(
+        e -> {
+          if (log.isDebugEnabled()) {
+            log.debug("执行SaFilterAuthStrategy：{}", e.getClass().getSimpleName());
+          }
+          e.run(o);
+        });
   }
 }

@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
-import tutorials4j.toolkit.satoken.strategy.AuthFilterPointcutEnum;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 
@@ -43,9 +42,9 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
     return new SaServletFilter()
         .addInclude(options.getIncludeUrls().toArray(new String[] {}))
         .addExclude(options.getExcludeUrls().toArray(new String[] {}))
-        .setAuth(compositeSaFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.auth))
+        .setAuth(compositeSaFilterAuthStrategy.newInstanceBy(options.getAuthStrategies()))
         .setBeforeAuth(
-            compositeSaFilterAuthStrategy.copyAndSetPointcut(AuthFilterPointcutEnum.beforeAuth))
+            compositeSaFilterAuthStrategy.newInstanceBy(options.getBeforeAuthStrategies()))
         .setError(toolkitSaFilterErrorStrategy);
   }
 
@@ -60,7 +59,8 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
       var options = properties.getInterceptor();
       registry
           .addInterceptor(
-              new SaInterceptor(compositeSaParamFunction).isAnnotation(options.isAnnotation()))
+              new SaInterceptor(compositeSaParamFunction)
+                  .isAnnotation(options.isHandleAnnotation()))
           .addPathPatterns(options.getIncludePathPatterns())
           .excludePathPatterns(options.getExcludePathPatterns());
     }

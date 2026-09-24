@@ -16,9 +16,9 @@ import org.springframework.util.Assert;
 @Getter
 @Slf4j
 public class CompositeSaParamFunction implements SaParamFunction<Object> {
-  private final List<OrderedSaParamFunction> functions;
+  private final List<NamedSaParamFunction> functions;
 
-  public CompositeSaParamFunction(Collection<? extends OrderedSaParamFunction> saParamFunctions) {
+  public CompositeSaParamFunction(Collection<? extends NamedSaParamFunction> saParamFunctions) {
     Assert.notNull(saParamFunctions, "saParamFunctions must not be null");
     this.functions = new ArrayList<>(saParamFunctions);
   }

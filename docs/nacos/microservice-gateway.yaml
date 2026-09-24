@@ -39,11 +39,22 @@ tutorials4j:
     security:
       sa-token:
         filter:
+          auth-strategies:
+            - logging
+            - blockUrls
+            - whiteUrls
+            - checkLogin
+          before-auth-strategies:
+            - cors
+            - optionsMethod
+
           include-urls: /**
+
           exclude-urls:
-            - /xxxx/**
+            - /api/oauth/openapi/**
+
           white-urls:
-            - /api/oauth/accounts/**
+            - /xxxx/**
 
           block-urls:
             - /xxxx/**

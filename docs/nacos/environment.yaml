@@ -12,3 +12,7 @@ env:
     database: 4
     username: admin
     password: admin
+
+  include-urls: /**
+  exclude-urls: /favicon.ico,/.well-known/**,/webjars/**,/swagger-ui/*,/v3/api-docs,/v3/api-docs/swagger-config,/css/*,/js/*,/images/*,/openapi/*
+

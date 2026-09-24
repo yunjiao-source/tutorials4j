@@ -1,16 +1,15 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.strategy.StrategyOrderd.AUTH_CHECK_LOGIN;
-
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class CheckLoginSaFilterAuthStrategy implements PointcutSaFilterAuthStrategy {
+public class CheckLoginSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
 
   @Override
   public void run(Object obj) {
@@ -23,7 +22,7 @@ public class CheckLoginSaFilterAuthStrategy implements PointcutSaFilterAuthStrat
   }
 
   @Override
-  public int getOrder() {
-    return AUTH_CHECK_LOGIN;
+  public String getName() {
+    return SaTokenUtils.CHECK_LOGIN_AUTH_STRATEGY;
   }
 }

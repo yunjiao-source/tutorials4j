@@ -7,20 +7,19 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import tutorials4j.toolkit.core.constant.PropertyConsts;
 import tutorials4j.toolkit.satoken.component.SaLogForSlf4j;
 import tutorials4j.toolkit.satoken.func.CheckLoginSaParamFunction;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
-import tutorials4j.toolkit.satoken.func.OrderedSaParamFunction;
+import tutorials4j.toolkit.satoken.func.NamedSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.BlockUrlsSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CheckLoginSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.CorsSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.LoggingSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.OptionsBeforeSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.PointcutSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.NamedSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.OptionsMethodSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 import tutorials4j.toolkit.satoken.strategy.WhiteUrlsSaFilterAuthStrategy;
 
@@ -54,41 +53,37 @@ public class SaTokenSecurityToolkitAutoConfiguration {
 
   @Bean
   CompositeSaFilterAuthStrategy compositeSaFilterAuthStrategy(
-      ObjectProvider<PointcutSaFilterAuthStrategy> strategies) {
+      ObjectProvider<NamedSaFilterAuthStrategy> strategies) {
     log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Composite Sa Filter Auth Strategy");
-    List<PointcutSaFilterAuthStrategy> list = strategies.orderedStream().toList();
+    List<NamedSaFilterAuthStrategy> list = strategies.orderedStream().toList();
     if (!list.isEmpty()) {
       log.trace(
-          "[TOOLKIT-SECURITY-SA-TOKEN] 认证策略注入：{}",
+          "[TOOLKIT-SECURITY-SA-TOKEN] SaFilterAuthStrategy注入：{}",
           list.stream()
-              .map(PointcutSaFilterAuthStrategy::getClass)
-              .map(Class::getName)
-              .collect(Collectors.joining(";")));
+              .map(NamedSaFilterAuthStrategy::getClass)
+              .map(Class::getSimpleName)
+              .collect(Collectors.joining(",")));
     }
     return new CompositeSaFilterAuthStrategy(list);
   }
 
   @Bean
   CompositeSaParamFunction compositeSaParamFunction(
-      ObjectProvider<OrderedSaParamFunction> functions) {
+      ObjectProvider<NamedSaParamFunction> functions) {
     log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Composite Sa Param Function");
-    List<OrderedSaParamFunction> list = functions.orderedStream().toList();
+    List<NamedSaParamFunction> list = functions.orderedStream().toList();
     if (!list.isEmpty()) {
       log.trace(
-          "[TOOLKIT-SECURITY-SA-TOKEN] 认证函数注入：{}",
+          "[TOOLKIT-SECURITY-SA-TOKEN] SaParamFunction注入：{}",
           list.stream()
-              .map(OrderedSaParamFunction::getClass)
-              .map(Class::getName)
-              .collect(Collectors.joining(";")));
+              .map(NamedSaParamFunction::getClass)
+              .map(Class::getSimpleName)
+              .collect(Collectors.joining(",")));
     }
     return new CompositeSaParamFunction(list);
   }
 
   @Bean
-  @ConditionalOnProperty(
-      prefix = PropertyConsts.PROPERTY_TOOLKIT_SECURITY_SA_TOKEN,
-      name = "interceptor.check-login",
-      havingValue = "true")
   CheckLoginSaParamFunction checkLoginSaParamFunction() {
     log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Check Login Sa Param Function");
     return new CheckLoginSaParamFunction();
@@ -121,8 +116,14 @@ public class SaTokenSecurityToolkitAutoConfiguration {
   }
 
   @Bean
-  OptionsBeforeSaFilterAuthStrategy optionsBeforeSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Options Before Sa Filter Auth Strategy");
-    return new OptionsBeforeSaFilterAuthStrategy();
+  OptionsMethodSaFilterAuthStrategy optionsBeforeSaFilterAuthStrategy() {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Options Method Before Sa Filter Auth Strategy");
+    return new OptionsMethodSaFilterAuthStrategy();
+  }
+
+  @Bean
+  CorsSaFilterAuthStrategy corsBeforeSaFilterAuthStrategy() {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Cors Before Sa Filter Auth Strategy");
+    return new CorsSaFilterAuthStrategy();
   }
 }

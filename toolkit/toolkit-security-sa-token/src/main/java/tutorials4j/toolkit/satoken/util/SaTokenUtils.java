@@ -1,5 +1,7 @@
 package tutorials4j.toolkit.satoken.util;
 
+import static tutorials4j.toolkit.core.constant.HttpConsts.REMEMBER_ME;
+
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +13,14 @@ import tutorials4j.toolkit.core.exception.UnauthorizedException;
  * @author Yun Jiao
  */
 public interface SaTokenUtils {
-  String REMEMBER_ME_VALUE = "remember-me";
+  String BLOCK_URLS_AUTH_STRATEGY = "blockUrls";
+  String CHECK_LOGIN_AUTH_STRATEGY = "checkLogin";
+  String LOGGING_AUTH_STRATEGY = "logging";
+  String WHITE_URL_AUTH_STRATEGY = "whiteUrls";
+  String CORS_AUTH_STRATEGY = "cors";
+  String OPTIONS_METHOD_AUTH_STRATEGY = "optionsMethod";
+
+  String CHECK_LOGIN_PARAM_FUNCTION = "checkLogin";
 
   static <T> T getLoginId(Class<T> clazz) {
     var o = StpUtil.getLoginId();
@@ -64,12 +73,12 @@ public interface SaTokenUtils {
 
   static boolean extractRememberMe() {
     var saRequest = SaHolder.getRequest();
-    var value = saRequest.getParam(REMEMBER_ME_VALUE);
+    var value = saRequest.getParam(REMEMBER_ME);
     if (StringUtils.isNotBlank(value)) {
       return Boolean.parseBoolean(value.trim());
     }
 
-    value = saRequest.getHeader(REMEMBER_ME_VALUE);
+    value = saRequest.getHeader(REMEMBER_ME);
     if (StringUtils.isNotBlank(value)) {
       return Boolean.parseBoolean(value.trim());
     }

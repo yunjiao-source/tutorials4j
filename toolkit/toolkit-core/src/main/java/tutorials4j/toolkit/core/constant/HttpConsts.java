@@ -7,4 +7,6 @@ package tutorials4j.toolkit.core.constant;
  */
 public interface HttpConsts {
   String HEADER_TRACE_ID = "X-Trace-Id";
+
+  String REMEMBER_ME = "remember-me";
 }

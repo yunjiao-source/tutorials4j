@@ -1,15 +1,14 @@
 package tutorials4j.toolkit.satoken.func;
 
-import static tutorials4j.toolkit.satoken.func.FuncOrdered.CHECK_LOGIN;
-
 import cn.dev33.satoken.stp.StpUtil;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class CheckLoginSaParamFunction implements OrderedSaParamFunction {
+public class CheckLoginSaParamFunction implements NamedSaParamFunction {
 
   @Override
   public void run(Object r) {
@@ -17,7 +16,7 @@ public class CheckLoginSaParamFunction implements OrderedSaParamFunction {
   }
 
   @Override
-  public int getOrder() {
-    return CHECK_LOGIN;
+  public String getName() {
+    return SaTokenUtils.CHECK_LOGIN_PARAM_FUNCTION;
   }
 }

@@ -1,16 +1,15 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.strategy.StrategyOrderd.AUTH_LOGGING;
-
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.context.SaHolder;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class LoggingSaFilterAuthStrategy implements PointcutSaFilterAuthStrategy {
+public class LoggingSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
 
   @Override
   public void run(Object obj) {
@@ -18,7 +17,7 @@ public class LoggingSaFilterAuthStrategy implements PointcutSaFilterAuthStrategy
   }
 
   @Override
-  public int getOrder() {
-    return AUTH_LOGGING;
+  public String getName() {
+    return SaTokenUtils.LOGGING_AUTH_STRATEGY;
   }
 }

@@ -10,7 +10,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import tutorials4j.microservice.gateway.sentinel.SentinelExceptionHandler;
-import tutorials4j.toolkit.satoken.strategy.CorsBeforeSaFilterAuthStrategy;
 
 /**
  * TODO
@@ -36,11 +35,5 @@ public class GatewayMicroserviceConfiguration {
   PasswordEncoder bcryptPasswordEncoder() {
     log.trace("[MICROSERVICE-GATEWAY] BCrypt Password Encoder");
     return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  CorsBeforeSaFilterAuthStrategy corsBeforeSaFilterAuthStrategy() {
-    log.trace("[MICROSERVICE-GATEWAY] Cors Before Sa Filter Auth Strategy");
-    return new CorsBeforeSaFilterAuthStrategy();
   }
 }

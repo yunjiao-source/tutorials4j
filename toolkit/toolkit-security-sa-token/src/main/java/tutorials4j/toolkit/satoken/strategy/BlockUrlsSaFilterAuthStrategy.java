@@ -1,12 +1,11 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.strategy.StrategyOrderd.AUTH_BLOCK_URL;
-
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.router.SaRouter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.toolkit.satoken.exception.BlockUrlException;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
 /**
  * TODO
@@ -14,7 +13,7 @@ import tutorials4j.toolkit.satoken.exception.BlockUrlException;
  * @author Yun Jiao
  */
 @RequiredArgsConstructor
-public class BlockUrlsSaFilterAuthStrategy implements PointcutSaFilterAuthStrategy {
+public class BlockUrlsSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
   private final List<String> blockUrls;
 
   @Override
@@ -27,7 +26,7 @@ public class BlockUrlsSaFilterAuthStrategy implements PointcutSaFilterAuthStrate
   }
 
   @Override
-  public int getOrder() {
-    return AUTH_BLOCK_URL;
+  public String getName() {
+    return SaTokenUtils.BLOCK_URLS_AUTH_STRATEGY;
   }
 }

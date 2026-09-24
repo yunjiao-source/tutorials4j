@@ -1,16 +1,15 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.strategy.StrategyOrderd.BEFORE_AUTH_CORS;
-
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.context.model.SaResponse;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class CorsBeforeSaFilterAuthStrategy implements PointcutSaFilterAuthStrategy {
+public class CorsSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
 
   @Override
   public void run(Object obj) {
@@ -23,12 +22,7 @@ public class CorsBeforeSaFilterAuthStrategy implements PointcutSaFilterAuthStrat
   }
 
   @Override
-  public AuthFilterPointcutEnum getPointcut() {
-    return AuthFilterPointcutEnum.beforeAuth;
-  }
-
-  @Override
-  public int getOrder() {
-    return BEFORE_AUTH_CORS;
+  public String getName() {
+    return SaTokenUtils.CORS_AUTH_STRATEGY;
   }
 }

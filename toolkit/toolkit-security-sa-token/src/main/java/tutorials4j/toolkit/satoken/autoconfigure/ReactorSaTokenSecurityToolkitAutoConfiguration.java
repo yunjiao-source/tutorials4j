@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.context.annotation.Bean;
-import tutorials4j.toolkit.satoken.strategy.AuthFilterPointcutEnum;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 
@@ -37,8 +36,8 @@ public class ReactorSaTokenSecurityToolkitAutoConfiguration {
     return new SaReactorFilter()
         .addInclude(options.getIncludeUrls().toArray(new String[] {}))
         .addExclude(options.getExcludeUrls().toArray(new String[] {}))
-        .setAuth(strategy.copyAndSetPointcut(AuthFilterPointcutEnum.auth))
-        .setBeforeAuth(strategy.copyAndSetPointcut(AuthFilterPointcutEnum.beforeAuth))
+        .setAuth(strategy.newInstanceBy(options.getAuthStrategies()))
+        .setBeforeAuth(strategy.newInstanceBy(options.getBeforeAuthStrategies()))
         .setError(toolkitSaFilterErrorStrategy);
   }
 }

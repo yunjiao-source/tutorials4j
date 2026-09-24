@@ -36,7 +36,7 @@ export async function loginApi(data: AuthApi.LoginParams) {
     scope: 'profile,email,phone',
   };
   return requestClient.post<AuthApi.LoginResult>(
-    '/oauth/accounts/token',
+    '/oauth/openapi/token',
     undefined,
     { params },
   );
@@ -46,7 +46,7 @@ export async function loginApi(data: AuthApi.LoginParams) {
  * 刷新accessToken
  */
 export async function refreshTokenApi() {
-  return baseRequestClient.post<AuthApi.RefreshTokenResult>('/oauth/accounts/refresh', {
+  return baseRequestClient.post<AuthApi.RefreshTokenResult>('/oauth/openapi/refresh', {
     withCredentials: true,
   });
 }
@@ -55,7 +55,7 @@ export async function refreshTokenApi() {
  * 退出登录
  */
 export async function logoutApi() {
-  return baseRequestClient.post('/oauth/accounts/logout', {
+  return baseRequestClient.post('/oauth/openapi/logout', {
     withCredentials: true,
   });
 }

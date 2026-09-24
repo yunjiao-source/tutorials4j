@@ -3,15 +3,20 @@ tutorials4j:
     security:
       sa-token:
         filter:
-          include-urls:
-            - /**
-          exclude-urls:
-            - /favicon.ico
-            - /.well-known/**
-            - /webjars/**
-            - /swagger-ui/*
-            - /v3/api-docs
-            - /v3/api-docs/swagger-config
-            - /css/*
-            - /js/*
-            - /accounts/*
+          include-urls: ${env.include-urls}
+          exclude-urls: ${env.exclude-urls}
+          auth-strategies:
+            - logging
+            - blockUrls
+            - whiteUrls
+            - checkLogin
+          before-auth-strategies:
+#            - cors
+            - optionsMethod
+
+        interceptor:
+          #          include-path-patterns: ${env.exclude-urls}
+          exclude-path-patterns: ${env.include-urls}
+          handle-annotation: false
+          param-functions:
+            - checkLogin
