@@ -1,48 +1,225 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<meta charset="utf-8">
-		<base th:href="@{/}" />
-		<title>认证中心-登录页</title>
-		<style type="text/css">
-			body{background-color: #F5F5D5;}
-			*{margin: 0px; padding: 0px;}
-			.login-box{width: 400px; margin: 20vh auto;}
-			.login-box input{line-height: 25px; margin-bottom: 10px;}
-			.login-box button{padding: 5px 15px; cursor: pointer; }
-		</style>
-		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-		<script th:src="@{/sa-res/layer/layer.js}"></script>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+		<meta name="robots" content="noindex, nofollow">
+		<meta name="theme-color" content="#4f46e5">
+		<title>登录 · 统一认证中心</title>
+		<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%234f46e5'/%3E%3Cpath%20d='M16%206.5l7.5%203v6.1c0%204.3-3%208.2-7.5%209.3-4.5-1.1-7.5-5-7.5-9.3V9.5l7.5-3z'%20fill='white'/%3E%3C/svg%3E">
+		<link rel="stylesheet" th:href="@{/css/auth.css}">
 	</head>
 	<body>
-		<div class="login-box">
-			<h2>认证中心-登录页</h2> <br>
-			账号：<input name="name" /> <br>
-			密码：<input name="pwd" type="password" /> <br>
-			<button onclick="doLogin()">登录</button>
-		</div>
-		<script type="text/javascript">
-			
-			// 登录方法 
-			function doLogin() {
-				$.ajax({
-					url: '/accounts/doLogin',
-					data: {
-						name: $('[name=name]').val(),
-						pwd: $('[name=pwd]').val()
-					},
-					dataType: 'json', 
-					success: function(res) {
-						layer.msg('登录成功！');
-						setTimeout(function() {
-							location.reload(true);
-						}, 800);
-					},
-					error: function(e) {
-						layer.alert(e.responseJSON.title);
+
+		<main class="auth-card">
+			<header class="auth-brand">
+				<span class="auth-brand__mark" aria-hidden="true">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+							stroke-linecap="round" stroke-linejoin="round">
+						<path d="M12 2.6 4.6 5.5v6.2c0 4.6 3 8.7 7.4 9.8 4.4-1.1 7.4-5.2 7.4-9.8V5.5L12 2.6Z"/>
+						<path d="m8.9 12.1 2.2 2.2 4.1-4.4"/>
+					</svg>
+				</span>
+				<div>
+					<h1 class="auth-brand__title">统一认证中心</h1>
+					<p class="auth-brand__subtitle">登录后继续完成授权</p>
+				</div>
+			</header>
+
+			<!-- 发起授权请求的应用信息（由 DefaultSaOAuth2NotLoginViewFunction 注入） -->
+			<p class="auth-context" th:if="${view != null and !#strings.isEmpty(view.clientId)}">
+				<span class="auth-context__icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+						<rect x="3" y="4" width="18" height="16" rx="3"/>
+						<path d="M8 10h8M8 14h5"/>
+					</svg>
+				</span>
+				<span>
+					<span class="auth-context__name"
+							th:if="${!#strings.isEmpty(view.clientName)}"
+							th:text="${view.clientName}">应用名称</span>
+					<span class="auth-context__name"
+							th:unless="${!#strings.isEmpty(view.clientName)}"
+							th:text="${view.clientId}">应用</span>
+					正在申请使用你的账号登录
+					<span class="auth-context__id" th:text="|应用 ID：${view.clientId}|"></span>
+				</span>
+			</p>
+
+			<div class="auth-alert" id="loginAlert" data-type="error" role="alert" aria-live="polite">
+				<svg class="auth-alert__icon auth-alert__icon--error" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						aria-hidden="true">
+					<circle cx="12" cy="12" r="9"/>
+					<path d="M12 7.6v5.2M12 16.3h.01"/>
+				</svg>
+				<svg class="auth-alert__icon auth-alert__icon--success" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						aria-hidden="true">
+					<circle cx="12" cy="12" r="9"/>
+					<path d="m8.4 12.3 2.4 2.4 4.8-5"/>
+				</svg>
+				<span class="auth-alert__text"></span>
+			</div>
+
+			<form class="auth-form" id="loginForm" method="post" th:action="@{/accounts/doLogin}" novalidate>
+				<div class="auth-field">
+					<div class="auth-field__head">
+						<label class="auth-label" for="loginName">账号</label>
+					</div>
+					<div class="auth-control">
+						<input class="auth-input" id="loginName" name="name" type="text"
+								autocomplete="username" spellcheck="false" autocapitalize="none"
+								placeholder="请输入账号" required autofocus>
+					</div>
+				</div>
+
+				<div class="auth-field">
+					<div class="auth-field__head">
+						<label class="auth-label" for="loginPassword">密码</label>
+						<span class="auth-hint" id="capsHint" hidden>已开启大写锁定</span>
+					</div>
+					<div class="auth-control">
+						<input class="auth-input auth-input--with-action" id="loginPassword" name="pwd"
+								type="password" autocomplete="current-password"
+								placeholder="请输入密码" required>
+						<button class="auth-input-action" id="togglePassword" type="button"
+								aria-controls="loginPassword" aria-pressed="false"
+								aria-label="显示密码" title="显示密码">
+							<svg class="auth-icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+									aria-hidden="true">
+								<path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z"/>
+								<circle cx="12" cy="12" r="3.1"/>
+							</svg>
+							<svg class="auth-icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+									aria-hidden="true">
+								<path d="M10.7 6.1A9.6 9.6 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3.3 4"/>
+								<path d="M6.5 7.1A17 17 0 0 0 2.5 12S6 18 12 18a9.7 9.7 0 0 0 3.9-.8"/>
+								<path d="M9.9 9.9a3.1 3.1 0 0 0 4.2 4.2"/>
+								<path d="M3.5 3.5l17 17"/>
+							</svg>
+						</button>
+					</div>
+				</div>
+
+				<div class="auth-row">
+					<label class="auth-switch">
+						<input type="checkbox" id="rememberMe" name="remember-me" value="true">
+						<span class="auth-switch__box" aria-hidden="true"></span>
+						<span>记住我（保持登录状态）</span>
+					</label>
+				</div>
+
+				<button class="auth-btn auth-btn--primary auth-btn--block" id="loginSubmit" type="submit">登录</button>
+			</form>
+		</main>
+
+		<p class="auth-footnote">统一认证中心 · 请在确认访问地址可信后再输入账号与密码</p>
+
+		<noscript>
+			<p class="auth-noscript">当前浏览器已禁用 JavaScript，登录结果将无法以友好方式提示，建议开启后重试。</p>
+		</noscript>
+
+		<script th:src="@{/js/auth.js}"></script>
+		<script>
+			(function () {
+				"use strict";
+
+				var form = document.getElementById("loginForm");
+				var alertBox = document.getElementById("loginAlert");
+				var submitBtn = document.getElementById("loginSubmit");
+				var nameInput = document.getElementById("loginName");
+				var pwdInput = document.getElementById("loginPassword");
+				var rememberInput = document.getElementById("rememberMe");
+				var toggleBtn = document.getElementById("togglePassword");
+				var capsHint = document.getElementById("capsHint");
+				var fields = [nameInput, pwdInput];
+				var endpoint = form.getAttribute("action");
+
+				// 展示错误并聚焦到出错的输入框
+				function showError(message, focusEl) {
+					window.Auth.alert(alertBox, "error", message);
+					if (focusEl) {
+						focusEl.setAttribute("aria-invalid", "true");
+						focusEl.focus();
 					}
+				}
+
+				// 用户重新输入时清除上一次的错误状态
+				function resetState() {
+					fields.forEach(function (el) {
+						el.removeAttribute("aria-invalid");
+					});
+					window.Auth.clearAlert(alertBox);
+				}
+
+				fields.forEach(function (el) {
+					el.addEventListener("input", resetState);
 				});
-			}
+
+				// 密码明文切换
+				toggleBtn.addEventListener("click", function () {
+					var reveal = pwdInput.type === "password";
+					var label = reveal ? "隐藏密码" : "显示密码";
+
+					pwdInput.type = reveal ? "text" : "password";
+					toggleBtn.classList.toggle("is-on", reveal);
+					toggleBtn.setAttribute("aria-pressed", reveal ? "true" : "false");
+					toggleBtn.setAttribute("aria-label", label);
+					toggleBtn.setAttribute("title", label);
+					pwdInput.focus();
+				});
+
+				// 大写锁定提示
+				pwdInput.addEventListener("keyup", function (event) {
+					var on = typeof event.getModifierState === "function"
+							&& event.getModifierState("CapsLock");
+					capsHint.hidden = !on;
+				});
+
+				form.addEventListener("submit", function (event) {
+					event.preventDefault();
+					resetState();
+
+					var name = nameInput.value.trim();
+					var pwd = pwdInput.value;
+
+					if (!name) {
+						showError("请输入账号", nameInput);
+						return;
+					}
+					if (!pwd) {
+						showError("请输入密码", pwdInput);
+						return;
+					}
+
+					// Sa-Token 的 doLogin 固定读取 name / pwd 两个参数
+					var body = new URLSearchParams();
+					body.set("name", name);
+					body.set("pwd", pwd);
+					body.set("remember-me", rememberInput.checked ? "true" : "false");
+
+					window.Auth.loading(submitBtn, true, "登录中");
+					window.Auth.submit(endpoint, { method: "POST", body: body })
+							.then(function () {
+								window.Auth.loading(submitBtn, false);
+								window.Auth.alert(alertBox, "success", "登录成功，正在继续…");
+								// 当前地址仍是授权地址（/accounts/authorize?...），
+								// 重新载入即可带着已登录的会话继续授权流程
+								setTimeout(function () {
+									window.location.reload();
+								}, 600);
+							})
+							.catch(function (error) {
+								window.Auth.loading(submitBtn, false);
+								showError(error && error.message ? error.message : "登录失败，请稍后重试", pwdInput);
+								pwdInput.select();
+							});
+				});
+			})();
 		</script>
 	</body>
 </html>

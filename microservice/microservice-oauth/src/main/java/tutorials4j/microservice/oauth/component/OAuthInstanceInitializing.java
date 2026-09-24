@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ModelAndView;
 import tutorials4j.feature.oauth.OAuthFeatureManager;
 import tutorials4j.toolkit.core.enums.YesNoEnum;
 
@@ -23,6 +22,7 @@ import tutorials4j.toolkit.core.enums.YesNoEnum;
 @RequiredArgsConstructor
 public class OAuthInstanceInitializing implements SmartInitializingSingleton {
   private final DefaultSaOAuth2ConfirmViewFunction defaultSaOAuth2ConfirmViewFunction;
+  private final DefaultSaOAuth2NotLoginViewFunction defaultSaOAuth2NotLoginViewFunction;
   private final DefaultSaOAuth2DoLoginHandleFunction defaultSaOAuth2DoLoginHandleFunction;
 
   private void initOAuthFeatureManager() {
@@ -78,10 +78,7 @@ public class OAuthInstanceInitializing implements SmartInitializingSingleton {
 
   private void initSaOAuth2Server() {
     // 未登录的视图
-    SaOAuth2Strategy.instance.notLoginView =
-        () -> {
-          return new ModelAndView("login.html");
-        };
+    SaOAuth2Strategy.instance.notLoginView = defaultSaOAuth2NotLoginViewFunction;
 
     // 登录处理函数
     SaOAuth2Strategy.instance.doLoginHandle = defaultSaOAuth2DoLoginHandleFunction;
