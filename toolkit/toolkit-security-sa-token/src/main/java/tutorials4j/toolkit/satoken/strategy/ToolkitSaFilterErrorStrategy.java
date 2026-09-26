@@ -41,11 +41,9 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
 
   @Override
   public Object run(Throwable t) {
+    var problemDetail = handleThrowable(t);
     // 获取响应对象，用于设置状态码和响应头
     var response = SaHolder.getResponse();
-    response.setHeader("Content-Type", "application/json;charset=UTF-8");
-
-    var problemDetail = handleThrowable(t);
     response.setStatus(problemDetail.getStatus());
     return SaManager.getSaJsonTemplate().objectToJson(problemDetail);
   }

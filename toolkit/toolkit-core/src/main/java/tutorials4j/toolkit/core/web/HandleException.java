@@ -20,7 +20,6 @@ public interface HandleException {
       ErrorCodeException e, ErrorDetailCustomizer customizer) {
     var defaultHttpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
     var pd = ProblemDetail.forStatusAndDetail(defaultHttpStatus, e.getDetail());
-    pd.setTitle(e.getMessage());
 
     var errorDetail = e.getErrorDetail().setTraceId(getTraceId());
     customizer.customize(errorDetail);
@@ -35,7 +34,6 @@ public interface HandleException {
   default ProblemDetail handleException(
       Throwable t, HttpStatus status, ErrorDetailCustomizer customizer) {
     var pd = ProblemDetail.forStatusAndDetail(status, t.getMessage());
-    pd.setTitle("系统异常");
 
     var errorDetail = createErrorDetail(t).setCode(status.name());
 
@@ -62,15 +60,20 @@ public interface HandleException {
 
   default void resoveException(
       Throwable t, ProblemDetail problemDetail, ErrorDetail errorDetail, HttpStatus httpStatus) {
+    var title = "";
     problemDetail.setProperty("errors", errorDetail);
     if (httpStatus.series() == Series.SERVER_ERROR) {
       errorDetail.setStackTrace(t.getStackTrace());
-      getLog().error("服务器异常", t);
+      title = "系统端异常";
+      getLog().error(title, t);
     } else if (httpStatus.series() == Series.CLIENT_ERROR) {
-      getLog().warn("客户端异常", t);
+      title = "客户端异常";
+      getLog().warn(title, t);
     } else {
-      getLog().warn("其他异常", t);
+      title = "其他异常";
+      getLog().warn("title", t);
     }
+    problemDetail.setTitle(title);
   }
 
   @FunctionalInterface
