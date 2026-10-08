@@ -5,8 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
-import tutorials4j.toolkit.json.ObjectMapperCreator;
-import tutorials4j.toolkit.json.module.ToolkitSimpleModule;
+import tutorials4j.toolkit.json.component.JsonTypeWhiteListLoader;
+import tutorials4j.toolkit.json.component.ObjectMapperCreator;
+import tutorials4j.toolkit.json.component.ToolkitSimpleModule;
 import tutorials4j.toolkit.json.util.JacksonUtils;
 
 /**
@@ -39,5 +40,11 @@ public class JsonToolkitAutoConfiguration {
     log.trace("[TOOLKIT-JSON] Jackson2 Utils");
     JacksonUtils.instance.setObjectMapper(objectMapperCreator.getInstance());
     return JacksonUtils.instance;
+  }
+
+  @Bean
+  JsonTypeWhiteListLoader jsonTypeWhiteListLoader() {
+    log.trace("[TOOLKIT-JSON] Json Type White List Loader");
+    return new JsonTypeWhiteListLoader();
   }
 }

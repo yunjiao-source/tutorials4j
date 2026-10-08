@@ -4,7 +4,6 @@ import cn.dev33.satoken.oauth2.data.model.AccessTokenModel;
 import cn.dev33.satoken.oauth2.data.model.ClientTokenModel;
 import cn.dev33.satoken.oauth2.scope.handler.SaOAuth2ScopeHandlerInterface;
 import lombok.RequiredArgsConstructor;
-import tutorials4j.feature.oauth.entity.UserEntity;
 import tutorials4j.feature.oauth.model.DefaultScopes;
 import tutorials4j.feature.oauth.model.UserInfo;
 import tutorials4j.feature.oauth.service.UserService;
@@ -25,10 +24,10 @@ public class DefaultSaOAuth2ScopeHandlerInterface implements SaOAuth2ScopeHandle
 
   @Override
   public void workAccessToken(AccessTokenModel at) {
-    Object loginId = at.getLoginId();
-    UserEntity entity = userService.findByUsername(loginId.toString());
-    UserInfo userInfo = new UserInfo();
-    userInfo.fillByProfile(entity);
+    var loginId = at.getLoginId();
+    var userModel = userService.findModelByUserName(loginId.toString());
+    var userInfo = new UserInfo();
+    userInfo.fillByProfile(userModel);
 
     at.extraData.put("profile", userInfo);
   }

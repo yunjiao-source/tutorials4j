@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Locale;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
+import tutorials4j.feature.oauth.entity.UserEntity;
 
 /**
  * TODO
@@ -16,6 +18,8 @@ public class UserModel {
   private String id;
 
   private String username;
+
+  private String password;
 
   private String name;
 
@@ -48,4 +52,10 @@ public class UserModel {
   private Instant createDate;
 
   private Instant lastModifiedDate;
+
+  public static UserModel of(UserEntity entity) {
+    var userModel = new UserModel();
+    BeanUtils.copyProperties(entity, userModel);
+    return userModel;
+  }
 }

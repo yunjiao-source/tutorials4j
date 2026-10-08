@@ -6,6 +6,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import tutorials4j.feature.oauth.autoconfigure.OAuthFeatureProperties;
 import tutorials4j.feature.oauth.entity.UserEntity;
 import tutorials4j.feature.oauth.exception.OAuthFeatureErrorCode;
 import tutorials4j.feature.oauth.model.UserCreateModel;
+import tutorials4j.feature.oauth.model.UserModel;
 import tutorials4j.feature.oauth.model.UserStatus;
 import tutorials4j.feature.oauth.model.UserUpdateModel;
 import tutorials4j.feature.oauth.repository.UserRepository;
@@ -80,31 +82,34 @@ public class UserService implements BaseService<UserEntity, String> {
         .orElseThrow(OAuthFeatureErrorCode.ACCOUNT_NOT_FOUND::throwed);
   }
 
-  public UserEntity authenticate(String username, String password) {
-    Assert.hasText("username", "username must not be null or empty");
+  public void authenticate(UserModel userModel, String password) {
+    Assert.hasText("userModel", "userModel must not be null or empty");
     Assert.hasText("password", "password must not be null or empty");
 
-    UserEntity entity =
-        userRepository
-            .findByUsername(username)
-            .orElseThrow(OAuthFeatureErrorCode.LOGIN_FAIL::throwed);
-
-    if (!Objects.equals(UserStatus.active, entity.getStatus())) {
+    if (!Objects.equals(UserStatus.active, userModel.getStatus())) {
       throw OAuthFeatureErrorCode.ACCOUNT_NOT_ACTIVE.throwed();
     }
 
     Instant now = Instant.now();
-    if (entity.getAccountExpireAt() != null
-        && entity.getAccountExpireAt().getEpochSecond() < now.getEpochSecond()) {
+    if (userModel.getAccountExpireAt() != null
+        && userModel.getAccountExpireAt().getEpochSecond() < now.getEpochSecond()) {
       throw OAuthFeatureErrorCode.ACCOUNT_EXPIRED.throwed();
     }
-    if (entity.getCredentialsExpireAt() != null
-        && entity.getCredentialsExpireAt().getEpochSecond() < now.getEpochSecond()) {
+    if (userModel.getCredentialsExpireAt() != null
+        && userModel.getCredentialsExpireAt().getEpochSecond() < now.getEpochSecond()) {
       throw OAuthFeatureErrorCode.ACCOUNT_PASSWORD_EXPIRED.throwed();
     }
-    if (!passwordEncoder.matches(password, entity.getPassword())) {
+    if (!passwordEncoder.matches(password, userModel.getPassword())) {
       throw OAuthFeatureErrorCode.LOGIN_FAIL.throwed();
     }
-    return entity;
+  }
+
+  @Cacheable(value = "oauth-users", key = "#username")
+  public UserModel findModelByUserName(String username) {
+    Assert.hasText("username", "username must not be null or empty");
+    return userRepository
+        .findByUsername(username)
+        .map(UserModel::of)
+        .orElseThrow(OAuthFeatureErrorCode.ACCOUNT_NOT_FOUND::throwed);
   }
 }

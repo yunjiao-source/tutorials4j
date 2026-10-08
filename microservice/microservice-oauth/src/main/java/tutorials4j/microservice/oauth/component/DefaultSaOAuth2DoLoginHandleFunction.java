@@ -4,9 +4,7 @@ import cn.dev33.satoken.oauth2.function.SaOAuth2DoLoginHandleFunction;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.oauth.model.UserModel;
 import tutorials4j.feature.oauth.service.UserService;
 import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
@@ -23,14 +21,13 @@ public class DefaultSaOAuth2DoLoginHandleFunction implements SaOAuth2DoLoginHand
 
   @Override
   public Object apply(String username, String password) {
-    var entity = userService.authenticate(username, password);
+    var userModel = userService.findModelByUserName(username);
+    userService.authenticate(userModel, password);
 
     boolean rememberMe = SaTokenUtils.extractRememberMe();
-    StpUtil.login(entity.getUsername(), rememberMe);
+    StpUtil.login(userModel.getUsername(), rememberMe);
 
-    UserModel model = new UserModel();
-    BeanUtils.copyProperties(entity, model);
-    StpUtil.getSession().set("userinfo", model);
+    StpUtil.getSession().set("userinfo", userModel);
     return SaResult.ok("登录成功");
   }
 }

@@ -1,0 +1,23 @@
+tutorials4j:
+  toolkit:
+    cache:
+      caffeine:
+        caches:
+          oauth-clients:
+            expire-after-write: 30m
+            maximum-size: 1000
+            initial-capacity: 100
+          oauth-users:
+            expire-after-write: 30m
+            maximum-size: 1000
+            initial-capacity: 100
+      redis:
+        caches:
+          oauth-clients:
+            time-to-live: 30m
+            caching-null-values: true
+            key-prefix: 'cacheable:'
+          oauth-users:
+            time-to-live: 30m
+            caching-null-values: true
+            key-prefix: 'cacheable:'

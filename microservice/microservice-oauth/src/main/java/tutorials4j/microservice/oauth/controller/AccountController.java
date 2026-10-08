@@ -1,20 +1,12 @@
 package tutorials4j.microservice.oauth.controller;
 
 import cn.dev33.satoken.context.SaHolder;
-import cn.dev33.satoken.context.model.SaRequest;
 import cn.dev33.satoken.oauth2.SaOAuth2Manager;
-import cn.dev33.satoken.oauth2.config.SaOAuth2ServerConfig;
 import cn.dev33.satoken.oauth2.consts.SaOAuth2Consts;
-import cn.dev33.satoken.oauth2.data.generate.SaOAuth2DataGenerate;
-import cn.dev33.satoken.oauth2.data.model.AccessTokenModel;
-import cn.dev33.satoken.oauth2.data.model.CodeModel;
-import cn.dev33.satoken.oauth2.data.model.loader.SaClientModel;
-import cn.dev33.satoken.oauth2.data.model.request.RequestAuthModel;
 import cn.dev33.satoken.oauth2.error.SaOAuth2ErrorCode;
 import cn.dev33.satoken.oauth2.exception.SaOAuth2Exception;
 import cn.dev33.satoken.oauth2.processor.SaOAuth2ServerProcessor;
 import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
-import cn.dev33.satoken.oauth2.template.SaOAuth2Template;
 import cn.dev33.satoken.oauth2.template.SaOAuth2Util;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
@@ -23,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.feature.oauth.entity.UserEntity;
 import tutorials4j.feature.oauth.model.DefaultScopes;
 import tutorials4j.feature.oauth.model.UserInfo;
 import tutorials4j.feature.oauth.service.UserService;
@@ -48,24 +39,24 @@ public class AccountController {
   @RequestMapping("userinfo")
   public UserInfo userinfo() {
     // 获取 Access-Token 对应的账号id
-    String accessToken = SaOAuth2Manager.getDataResolver().readAccessToken(SaHolder.getRequest());
-    Object loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
+    var accessToken = SaOAuth2Manager.getDataResolver().readAccessToken(SaHolder.getRequest());
+    var loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
 
-    UserEntity entity = userService.findByUsername(loginId.toString());
-    UserInfo userInfo = new UserInfo();
-    userInfo.setSub(entity.getId());
+    var userModel = userService.findModelByUserName(loginId.toString());
+    var userInfo = new UserInfo();
+    userInfo.setSub(userModel.getId());
 
-    AccessTokenModel accessTokenModel = SaOAuth2Util.getAccessToken(accessToken);
+    var accessTokenModel = SaOAuth2Util.getAccessToken(accessToken);
     if (accessTokenModel.getScopes().contains(DefaultScopes.profile.name())) {
-      userInfo.fillByProfile(entity);
+      userInfo.fillByProfile(userModel);
     }
 
     if (accessTokenModel.getScopes().contains(DefaultScopes.email.name())) {
-      userInfo.setEmail(entity.getEmail());
+      userInfo.setEmail(userModel.getEmail());
     }
 
     if (accessTokenModel.getScopes().contains(DefaultScopes.phone.name())) {
-      userInfo.setPhoneNumber(entity.getPhoneNumber());
+      userInfo.setPhoneNumber(userModel.getPhoneNumber());
     }
 
     return userInfo;
@@ -74,23 +65,23 @@ public class AccountController {
   @RequestMapping("redirect-uri-and-code")
   public SaResult getRedirectUriAndCode() {
     // 获取变量
-    SaRequest req = SaHolder.getRequest();
-    SaOAuth2ServerConfig cfg = SaOAuth2Manager.getServerConfig();
-    SaOAuth2DataGenerate dataGenerate = SaOAuth2Manager.getDataGenerate();
-    SaOAuth2Template oauth2Template = SaOAuth2Manager.getTemplate();
-    String responseType = req.getParamNotNull(SaOAuth2Consts.Param.response_type);
+    var req = SaHolder.getRequest();
+    var cfg = SaOAuth2Manager.getServerConfig();
+    var dataGenerate = SaOAuth2Manager.getDataGenerate();
+    var oauth2Template = SaOAuth2Manager.getTemplate();
+    var responseType = req.getParamNotNull(SaOAuth2Consts.Param.response_type);
 
     // 1、先判断是否开启了指定的授权模式
     SaOAuth2ServerProcessor.instance.checkAuthorizeResponseType(responseType, req, cfg);
 
     // 2、如果尚未登录, 则先去登录
-    String loginId = SaOAuth2Manager.getStpLogic().getLoginId("");
+    var loginId = SaOAuth2Manager.getStpLogic().getLoginId("");
     if (StringUtils.isBlank(loginId)) {
       throw new UnauthorizedException();
     }
 
     // 3、构建请求 Model
-    RequestAuthModel ra = SaOAuth2Manager.getDataResolver().readRequestAuthModel(req, loginId);
+    var ra = SaOAuth2Manager.getDataResolver().readRequestAuthModel(req, loginId);
 
     // 4、开发者自定义的授权前置检查
     SaOAuth2Strategy.instance.userAuthorizeClientCheck.run(ra.loginId, ra.clientId);
@@ -102,10 +93,10 @@ public class AccountController {
     oauth2Template.checkContractScope(ra.clientId, ra.scopes);
 
     // 7、判断：如果此次申请的Scope，该用户尚未授权，则转到授权页面
-    boolean isNeedCarefulConfirm =
+    var isNeedCarefulConfirm =
         oauth2Template.isNeedCarefulConfirm(ra.loginId, ra.clientId, ra.scopes);
     if (isNeedCarefulConfirm) {
-      SaClientModel cm = oauth2Template.checkClientModel(ra.clientId);
+      var cm = oauth2Template.checkClientModel(ra.clientId);
       if (!cm.getIsAutoConfirm()) {
         // code=411，需要用户手动确认授权
         return SaResult.get(411, "need confirm", null);
@@ -115,15 +106,15 @@ public class AccountController {
     // 8、判断授权类型，重定向到不同地址
     // 		如果是 授权码式，则：开始重定向授权，下放code
     if (SaOAuth2Consts.ResponseType.code.equals(ra.responseType)) {
-      CodeModel codeModel = dataGenerate.generateCode(ra);
-      String redirectUri = dataGenerate.buildRedirectUri(ra.redirectUri, codeModel.code, ra.state);
+      var codeModel = dataGenerate.generateCode(ra);
+      var redirectUri = dataGenerate.buildRedirectUri(ra.redirectUri, codeModel.code, ra.state);
       return SaResult.ok().set("redirect_uri", redirectUri);
     }
 
     // 		如果是 隐藏式，则：开始重定向授权，下放 token
     if (SaOAuth2Consts.ResponseType.token.equals(ra.responseType)) {
-      AccessTokenModel at = dataGenerate.generateAccessToken(ra, false, null);
-      String redirectUri =
+      var at = dataGenerate.generateAccessToken(ra, false, null);
+      var redirectUri =
           dataGenerate.buildImplicitRedirectUri(ra.redirectUri, at.accessToken, ra.state);
       return SaResult.ok().set("redirect_uri", redirectUri);
     }

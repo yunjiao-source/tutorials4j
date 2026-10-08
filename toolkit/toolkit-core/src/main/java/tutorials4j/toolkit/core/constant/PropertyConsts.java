@@ -6,23 +6,33 @@ package tutorials4j.toolkit.core.constant;
  * @author Yun Jiao
  */
 public interface PropertyConsts {
+  /** toolkit */
   String PROPERTY_TUTORIALS4J = "tutorials4j";
+
   String PROPERTY_TOOLKIT = PROPERTY_TUTORIALS4J + ".toolkit";
 
+  /** security */
   String PROPERTY_TOOLKIT_SECURITY = PROPERTY_TOOLKIT + ".security";
 
   String PROPERTY_TOOLKIT_SECURITY_SA_TOKEN = PROPERTY_TOOLKIT_SECURITY + ".sa-token";
 
+  /** data */
   String PROPERTY_TOOLKIT_DATA = PROPERTY_TOOLKIT + ".data";
 
   String PROPERTY_TOOLKIT_DATA_MYBATIS_PLUS = PROPERTY_TOOLKIT_DATA + ".mybatis-plus";
 
-  String PROPERTY_TOOLKIT_NAMED_CACHE = PROPERTY_TOOLKIT + ".toolkit.named-cache";
+  /** cache */
+  String PROPERTY_TOOLKIT_CACHE = PROPERTY_TOOLKIT + ".cache";
 
+  String PROPERTY_TOOLKIT_CACHE_CAFFEINE = PROPERTY_TOOLKIT_CACHE + ".caffeine";
+  String PROPERTY_TOOLKIT_CACHE_REDIS = PROPERTY_TOOLKIT_CACHE + ".redis";
+
+  /** feature */
   String PROPERTY_FEATURE = PROPERTY_TUTORIALS4J + ".feature";
 
   String PROPERTY_FEATURE_OAUTH = PROPERTY_FEATURE + ".oauth";
 
+  /** microservice */
   String PROPERTY_MICROSERVICE = PROPERTY_TUTORIALS4J + ".microservice";
 
   String PROPERTY_MICROSERVICE_OAUTH = PROPERTY_MICROSERVICE + ".oauth";

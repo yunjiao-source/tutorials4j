@@ -1,5 +1,0 @@
-@host = http://localhost:9899
-
-### 有机率抛出异常：系统异常或自定义异常
-GET {{host}}/simple/get
-Content-Type: application/json

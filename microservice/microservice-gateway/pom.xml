@@ -15,6 +15,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-cache-caffeine</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-cache-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
             <groupId>yunjiao-source.tutorials4j.feature</groupId>
             <artifactId>feature-oauth</artifactId>
             <version>${revision}</version>

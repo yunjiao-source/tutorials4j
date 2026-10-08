@@ -1,0 +1,63 @@
+package tutorials4j.toolkit.json.component;
+
+import static tutorials4j.toolkit.core.constant.ToolkitConsts.META_TUTORIALS4J_DIR;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
+import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+
+/**
+ * TODO
+ *
+ * @author Yun Jiao
+ */
+public class JsonTypeWhiteListLoader implements SmartInitializingSingleton {
+  private static final String FILE_NAME = "json-type-white-list.conf";
+  private static final String LOCATION_PATTERN =
+      "classpath*:/" + META_TUTORIALS4J_DIR + "/" + FILE_NAME;
+
+  private final Set<String> classNames = new HashSet<>();
+
+  public boolean contains(String className) {
+    return classNames.contains(className);
+  }
+
+  public Set<String> load() throws IOException {
+    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    Resource[] resources = resolver.getResources(LOCATION_PATTERN);
+
+    Set<String> result = new HashSet<>();
+    for (Resource resource : resources) {
+      loadFromResource(resource, result);
+    }
+    return result;
+  }
+
+  private static void loadFromResource(Resource resource, Set<String> result) throws IOException {
+    try (BufferedReader reader =
+        new BufferedReader(
+            new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+      reader
+          .lines()
+          .map(String::trim)
+          .filter(line -> !line.isEmpty() && !line.startsWith("#"))
+          .forEach(result::add);
+    }
+  }
+
+  @Override
+  public void afterSingletonsInstantiated() {
+    try {
+      classNames.addAll(load());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+}
