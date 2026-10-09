@@ -16,7 +16,7 @@ public interface FixedLeaseReentrantLockTaskRunner extends TaskRunner, Lockable 
     try {
       RedissonReentrantLockService.instance
           .fixedLease()
-          .doInLock(prefix() + key(params), waitTime(), waitTime(), () -> doRun(params));
+          .doInLock(prefix() + key(params), waitTime(), expireTime(), () -> doRun(params));
     } catch (Exception e) {
       handleException(e);
     }

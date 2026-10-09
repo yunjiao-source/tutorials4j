@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import tutorials4j.toolkit.core.exception.CommonErrorCode;
 import tutorials4j.toolkit.core.function.ThrowingCallable;
 
 /**
@@ -116,7 +115,8 @@ public class RedissonBlockLockService {
         lock.unlock();
       }
     } catch (Exception e) {
-      throw CommonErrorCode.LOCK_RELEASE_FAIL.throwed(e).param("name", lock.getName());
+      // 记录日志，不抛出异常，避免解锁失败会吞掉业务异常
+      log.error("释放锁失败", e);
     }
   }
 }

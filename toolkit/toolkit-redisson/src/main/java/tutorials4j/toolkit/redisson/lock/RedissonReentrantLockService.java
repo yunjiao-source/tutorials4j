@@ -58,7 +58,8 @@ public class RedissonReentrantLockService {
         lock.unlock();
       }
     } catch (Exception e) {
-      throw CommonErrorCode.LOCK_RELEASE_FAIL.throwed(e).param("name", lock.getName());
+      // 记录日志，不抛出异常，避免解锁失败会吞掉业务异常
+      log.error("释放锁失败", e);
     }
   }
 
