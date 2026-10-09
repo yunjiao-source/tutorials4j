@@ -7,12 +7,20 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
 import tutorials4j.toolkit.cache.redis.component.RedisCacheManagerCreator;
 import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheConfigurationCustomizer;
 import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManagerCustomizer;
+import tutorials4j.toolkit.cache.redis.component.RedisTemplateDecorator;
+import tutorials4j.toolkit.cache.redis.component.ToolkitKeySerializer;
+import tutorials4j.toolkit.cache.redis.lock.RedisLockService;
+import tutorials4j.toolkit.cache.redis.lock.RedisLockableAspect;
+import tutorials4j.toolkit.cache.redis.script.RedisScriptExecutor;
+import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.toolkit.json.component.JsonTypeWhiteListLoader;
 
 /**
@@ -61,5 +69,46 @@ public class RedisCacheToolkitAutoConfiguration {
         .enableDefaultTyping(typeValidator)
         .typePropertyName("@class")
         .build();
+  }
+
+  @Bean
+  RedisTemplateDecorator redisTemplateDecorator(
+      RedisConnectionFactory redisConnectionFactory, RedisCacheToolkitProperties properties) {
+    log.trace("[TOOLKIT-CACHE-REDIS] Redis Template Decorator");
+
+    ToolkitKeySerializer serializer = new ToolkitKeySerializer(properties.getTemplateKeyPrefix());
+    StringRedisTemplate stringRedisTemplate = new StringRedisTemplate(redisConnectionFactory);
+    stringRedisTemplate.setKeySerializer(serializer);
+    stringRedisTemplate.setHashKeySerializer(serializer);
+
+    RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setConnectionFactory(redisConnectionFactory);
+    redisTemplate.setKeySerializer(serializer);
+    redisTemplate.setHashKeySerializer(serializer);
+
+    RedisTemplateDecorator.instance.setRedisTemplate(redisTemplate);
+    RedisTemplateDecorator.instance.setStringRedisTemplate(stringRedisTemplate);
+    return RedisTemplateDecorator.instance;
+  }
+
+  @Bean
+  RedisScriptExecutor redisScriptExecutor(RedisTemplateDecorator redisTemplateDecorator) {
+    log.trace("[TOOLKIT-CACHE-REDIS] Redis Script Executor");
+    return new RedisScriptExecutor(redisTemplateDecorator);
+  }
+
+  @Bean
+  RedisLockService redisLockService(RedisScriptExecutor redisScriptExecutor) {
+    log.trace("[TOOLKIT-CACHE-REDIS] Redis Lock Service");
+    RedisLockService.instance.setRedisScriptExecutor(redisScriptExecutor);
+    return RedisLockService.instance;
+  }
+
+  @Bean
+  RedisLockableAspect redisLockableAspect(
+      SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator,
+      RedisLockService redisLockService) {
+    log.trace("[TOOLKIT-CACHE-REDIS] Redis Lockable Aspect");
+    return new RedisLockableAspect(spelMethodBasedExpressionEvaluator, redisLockService);
   }
 }

@@ -1,8 +1,5 @@
 package tutorials4j.toolkit.core.concurrent;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import java.time.Duration;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -10,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
-import tutorials4j.toolkit.core.autoconfigure.ToolkitProperties.ThreadExecutionOptions;
+import tutorials4j.toolkit.core.autoconfigure.ThreadExecutionOptions;
 
 /**
  * TODO
@@ -30,20 +27,7 @@ public class ThreadPoolExecutorHolder {
       return;
     }
 
-    int core = Runtime.getRuntime().availableProcessors() + 1;
-    ThreadExecutionOptions mergeOptions =
-        new ThreadExecutionOptions(
-            false,
-            core,
-            "thread-pool-",
-            true,
-            Duration.ofSeconds(30),
-            core * 2,
-            1000,
-            true,
-            Duration.ofHours(1));
-    BeanUtil.copyProperties(options, mergeOptions, CopyOptions.create().setIgnoreNullValue(true));
-    this.options = mergeOptions;
+    this.options = ThreadExecutionOptions.withDefaults(options);
 
     executor =
         new ThreadPoolExecutor(
@@ -56,8 +40,7 @@ public class ThreadPoolExecutorHolder {
                 this.options.getThreadNamePrefix(), this.options.getDaemon()),
             (r, e) -> {
               log.warn(
-                  "Thread task rejected. options={}, poolSize={}, activeCount={}, queueSize={}, isShutdown={}, task={}",
-                  mergeOptions,
+                  "Thread task rejected. poolSize={}, activeCount={}, queueSize={}, isShutdown={}, task={}",
                   e.getPoolSize(),
                   e.getActiveCount(),
                   e.getQueue().size(),

@@ -9,4 +9,6 @@ public interface ToolkitConsts {
   String SUPER_ROLE_NAME = "admin";
 
   String META_TUTORIALS4J_DIR = "META-INF/tutorials4j";
+
+  String LOCKABLE_REDIS_KEY_PREFIX = "lockable:";
 }

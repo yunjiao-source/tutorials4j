@@ -1,15 +1,12 @@
 package tutorials4j.toolkit.core.concurrent;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import java.time.Duration;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
-import tutorials4j.toolkit.core.autoconfigure.ToolkitProperties.ScheduledExecutionOptions;
+import tutorials4j.toolkit.core.autoconfigure.ScheduledExecutionOptions;
 
 /**
  * TODO
@@ -30,11 +27,7 @@ public class ScheduledThreadPoolExecutorHolder {
       return;
     }
 
-    int core = Runtime.getRuntime().availableProcessors() + 1;
-    ScheduledExecutionOptions mergeOptions =
-        new ScheduledExecutionOptions(false, core, "schedule-pool-", true, Duration.ofSeconds(30));
-    BeanUtil.copyProperties(options, mergeOptions, CopyOptions.create().setIgnoreNullValue(true));
-    this.options = mergeOptions;
+    this.options = ScheduledExecutionOptions.withDefaults(options);
 
     executor =
         new ScheduledThreadPoolExecutor(
@@ -43,8 +36,7 @@ public class ScheduledThreadPoolExecutorHolder {
                 this.options.getThreadNamePrefix(), this.options.getDaemon()),
             (r, e) -> {
               log.warn(
-                  "Scheduled task rejected. options={}, poolSize={}, activeCount={}, queueSize={}, isShutdown={}, task={}",
-                  mergeOptions,
+                  "Scheduled task rejected. poolSize={}, activeCount={}, queueSize={}, isShutdown={}, task={}",
                   e.getPoolSize(),
                   e.getActiveCount(),
                   e.getQueue().size(),

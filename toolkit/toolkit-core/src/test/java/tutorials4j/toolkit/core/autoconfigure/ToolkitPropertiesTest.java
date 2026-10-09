@@ -45,8 +45,7 @@ public class ToolkitPropertiesTest {
         .run(
             context -> {
               ToolkitProperties properties = context.getBean(ToolkitProperties.class);
-              ToolkitProperties.ScheduledExecutionOptions options =
-                  properties.getScheduledThreadPoolExecutor();
+              ScheduledExecutionOptions options = properties.getScheduledThreadPoolExecutor();
 
               assertThat(options.getDaemon()).isTrue();
               assertThat(options.getCorePoolSize()).isEqualTo(2);
@@ -73,7 +72,7 @@ public class ToolkitPropertiesTest {
         .run(
             context -> {
               ToolkitProperties properties = context.getBean(ToolkitProperties.class);
-              ToolkitProperties.ThreadExecutionOptions options = properties.getThreadPoolExecutor();
+              ThreadExecutionOptions options = properties.getThreadPoolExecutor();
 
               assertThat(options.getDaemon()).isFalse();
               assertThat(options.getCorePoolSize()).isEqualTo(3);

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import tutorials4j.toolkit.core.concurrent.ScheduledThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.concurrent.ThreadPoolExecutorHolder;
+import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.toolkit.core.web.GlobalWebExceptionHandler;
 
 /**
@@ -47,7 +48,13 @@ public class ToolkitAutoConfiguration {
 
   @Bean
   GlobalWebExceptionHandler GlobalWebExceptionHandler(Tracer tracer) {
-    log.trace("[TOOLKIT-WEB] Global Web Exception Handler");
+    log.trace("[TOOLKIT] Global Web Exception Handler");
     return new GlobalWebExceptionHandler(tracer);
+  }
+
+  @Bean
+  SpelMethodBasedExpressionEvaluator spelMethodBasedExpressionEvaluator() {
+    log.trace("[TOOLKIT] Spel Method Based Expression Evaluator");
+    return new SpelMethodBasedExpressionEvaluator();
   }
 }

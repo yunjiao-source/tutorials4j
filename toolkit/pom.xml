@@ -23,6 +23,7 @@
         <module>toolkit-cache</module>
         <module>toolkit-cache-caffeine</module>
         <module>toolkit-cache-redis</module>
+        <module>toolkit-redisson</module>
         <module>toolkit-p6spy</module>
         <module>toolkit-springdoc</module>
         <module>toolkit-data</module>
