@@ -1,1 +1,1 @@
-tutorials4j.toolkit.webflux.GlobalWebfluxExceptionHandler
+tutorials4j.toolkit.webflux.autoconfigure.WebfluxToolkitAutoConfiguration

@@ -5,6 +5,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.context.annotation.Bean;
 import tutorials4j.toolkit.webmvc.GlobalWebmvcExceptionHandler;
 
@@ -15,6 +17,7 @@ import tutorials4j.toolkit.webmvc.GlobalWebmvcExceptionHandler;
  */
 @Slf4j
 @AutoConfiguration
+@ConditionalOnWebApplication(type = Type.SERVLET)
 public class WebmvcToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

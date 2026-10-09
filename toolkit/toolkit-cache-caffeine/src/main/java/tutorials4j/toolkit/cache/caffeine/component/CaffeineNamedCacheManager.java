@@ -2,6 +2,7 @@ package tutorials4j.toolkit.cache.caffeine.component;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import tutorials4j.toolkit.cache.NamedCacheMissingException;
@@ -23,9 +24,10 @@ public class CaffeineNamedCacheManager extends CaffeineCacheManager {
 
   public CaffeineNamedCacheManager(
       CaffeineCacheToolkitProperties properties, String... cacheNames) {
-    super(cacheNames);
     this.properties = properties;
     this.setAllowNullValues(properties.isCacheNullValues());
+    // 必须在 properties 赋值之后调用：setCacheNames 会立即创建其中所有的命名缓存
+    this.setCacheNames(Arrays.asList(cacheNames));
   }
 
   @Override
