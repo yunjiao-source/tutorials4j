@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
 import tutorials4j.toolkit.core.exception.CommonErrorCode;
 import tutorials4j.toolkit.core.exception.ErrorCodeException;
 import tutorials4j.toolkit.core.exception.UnauthorizedException;
@@ -67,11 +66,9 @@ class LockableTest {
   }
 
   @Test
-  @DisplayName("默认前缀为 lockable:")
+  @DisplayName("默认前缀")
   void shouldUseDefaultPrefix() {
-    assertThat(lockable().prefix())
-        .isEqualTo(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX)
-        .isEqualTo("lockable:");
+    assertThat(lockable().prefix()).isEqualTo("");
   }
 
   @Test

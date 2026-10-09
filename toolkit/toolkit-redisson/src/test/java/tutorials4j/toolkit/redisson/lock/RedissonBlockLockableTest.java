@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
 
 /**
  * {@link RedissonBlockLockable} 注解元数据测试。
@@ -43,9 +42,7 @@ class RedissonBlockLockableTest {
     RedissonBlockLockable lockable = annotationOf("defaultAnnotated", Long.class);
 
     assertThat(lockable).isNotNull();
-    assertThat(lockable.prefix())
-        .isEqualTo(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX)
-        .isEqualTo("lockable:");
+    assertThat(lockable.prefix()).isEqualTo("");
     assertThat(lockable.key()).isEqualTo("#id");
     assertThat(lockable.expireTime()).isEqualTo(-1);
     assertThat(lockable.timeUnit()).isEqualTo(TimeUnit.MILLISECONDS);

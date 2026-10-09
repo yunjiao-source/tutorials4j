@@ -31,7 +31,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
  * @author Yun Jiao
  */
 class RedissonReentrantLockServiceTest {
-  private static final String LOCK_KEY = "lockable:job:1";
+  private static final String LOCK_KEY = "job:1";
 
   private final RedissonReentrantLockService lockService = RedissonReentrantLockService.instance;
   private final RedissonClient redissonClient = mock(RedissonClient.class);

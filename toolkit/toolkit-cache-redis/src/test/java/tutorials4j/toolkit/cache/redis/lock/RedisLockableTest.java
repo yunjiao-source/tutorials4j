@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
 
 /**
  * {@link RedisLockable} 注解元数据测试。
@@ -39,9 +38,7 @@ class RedisLockableTest {
     RedisLockable redisLockable = annotationOf("defaultAnnotated", Long.class);
 
     assertThat(redisLockable).isNotNull();
-    assertThat(redisLockable.prefix())
-        .isEqualTo(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX)
-        .isEqualTo("lockable:");
+    assertThat(redisLockable.prefix()).isEqualTo("");
     assertThat(redisLockable.key()).isEqualTo("#id");
     assertThat(redisLockable.expireTime()).isEqualTo(-1);
     assertThat(redisLockable.timeUnit()).isEqualTo(TimeUnit.MILLISECONDS);

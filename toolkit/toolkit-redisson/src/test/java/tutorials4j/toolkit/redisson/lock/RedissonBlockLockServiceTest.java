@@ -28,7 +28,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
  * @author Yun Jiao
  */
 class RedissonBlockLockServiceTest {
-  private static final String LOCK_KEY = "lockable:job:1";
+  private static final String LOCK_KEY = "job:1";
 
   private final RedissonBlockLockService lockService = RedissonBlockLockService.instance;
   private final RedissonClient redissonClient = mock(RedissonClient.class);

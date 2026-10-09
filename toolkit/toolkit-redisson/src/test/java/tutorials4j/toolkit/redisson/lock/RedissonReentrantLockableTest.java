@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
 
 /**
  * {@link RedissonReentrantLockable} 注解元数据测试。
@@ -39,14 +38,12 @@ class RedissonReentrantLockableTest {
   }
 
   @Test
-  @DisplayName("默认前缀 lockable:、默认等待 3000 毫秒、默认不过期（-1）")
+  @DisplayName("默认等待 3000 毫秒、默认不过期（-1）")
   void shouldUseDefaultAttributes() throws NoSuchMethodException {
     RedissonReentrantLockable lockable = annotationOf("defaultAnnotated", Long.class);
 
     assertThat(lockable).isNotNull();
-    assertThat(lockable.prefix())
-        .isEqualTo(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX)
-        .isEqualTo("lockable:");
+    assertThat(lockable.prefix()).isEqualTo("");
     assertThat(lockable.key()).isEqualTo("#id");
     assertThat(lockable.waitTime()).isEqualTo(3000);
     assertThat(lockable.expireTime()).isEqualTo(-1);

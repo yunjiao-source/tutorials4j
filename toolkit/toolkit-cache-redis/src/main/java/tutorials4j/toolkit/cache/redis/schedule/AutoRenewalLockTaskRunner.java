@@ -3,6 +3,7 @@ package tutorials4j.toolkit.cache.redis.schedule;
 import java.time.Duration;
 import java.util.Map;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockService;
+import tutorials4j.toolkit.core.constant.ToolkitConsts;
 import tutorials4j.toolkit.core.function.Lockable;
 import tutorials4j.toolkit.core.function.TaskRunner;
 
@@ -15,7 +16,11 @@ public interface AutoRenewalLockTaskRunner extends TaskRunner, Lockable {
   @Override
   default void run(Map<String, String> params) {
     try {
-      RedisLockService.instance.autoRenewal().doInLock(prefix() + key(params), () -> doRun(params));
+      RedisLockService.instance
+          .autoRenewal()
+          .doInLock(
+              ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + prefix() + key(params),
+              () -> doRun(params));
     } catch (Exception e) {
       handleException(e);
     }

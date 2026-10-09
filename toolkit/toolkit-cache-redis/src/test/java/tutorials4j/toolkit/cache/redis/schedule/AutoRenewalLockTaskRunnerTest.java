@@ -19,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockServiceTestFixture;
 import tutorials4j.toolkit.cache.redis.script.RedisScriptExecutor;
+import tutorials4j.toolkit.core.constant.ToolkitConsts;
 
 /**
  * {@link AutoRenewalLockTaskRunner} 单元测试：自动续期锁下的任务执行与异常处理。
@@ -26,7 +27,7 @@ import tutorials4j.toolkit.cache.redis.script.RedisScriptExecutor;
  * @author Yun Jiao
  */
 class AutoRenewalLockTaskRunnerTest {
-  private static final String LOCK_KEY = "lockable:job:1";
+  private static final String LOCK_KEY = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";
   private static final long EXPIRE_MILLIS = 30_000L;
 
   private final RedisScriptExecutor scriptExecutor = mock(RedisScriptExecutor.class);
@@ -109,7 +110,7 @@ class AutoRenewalLockTaskRunnerTest {
 
     assertThat(runner.expireTime()).isNull();
     assertThat(runner.waitTime()).isNull();
-    assertThat(runner.prefix()).isEqualTo("lockable:");
+    assertThat(runner.prefix()).isEqualTo("");
     assertThat(runner.key(Map.of("id", "9"))).isEqualTo("job:9");
   }
 }

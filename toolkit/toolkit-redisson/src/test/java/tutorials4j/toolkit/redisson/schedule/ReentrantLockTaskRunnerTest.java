@@ -20,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import tutorials4j.toolkit.core.constant.ToolkitConsts;
 import tutorials4j.toolkit.redisson.lock.RedissonLockServiceTestFixture;
 
 /**
@@ -29,7 +30,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonLockServiceTestFixture;
  * @author Yun Jiao
  */
 class ReentrantLockTaskRunnerTest {
-  private static final String LOCK_KEY = "lockable:job:1";
+  private static final String LOCK_KEY = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";
 
   private final RedissonClient redissonClient = mock(RedissonClient.class);
   private final RLock lock = mock(RLock.class);
@@ -155,12 +156,12 @@ class ReentrantLockTaskRunnerTest {
   }
 
   @Test
-  @DisplayName("默认锁属性：前缀 lockable:，自动续期运行器的过期时间为 null")
+  @DisplayName("默认锁属性：前缀，自动续期运行器的过期时间为 null")
   void shouldExposeDefaultLockableAttributes() {
     AutoRenewalRunner autoRenewalRunner = new AutoRenewalRunner();
     FixedLeaseRunner fixedLeaseRunner = new FixedLeaseRunner();
 
-    assertThat(autoRenewalRunner.prefix()).isEqualTo("lockable:");
+    assertThat(autoRenewalRunner.prefix()).isEqualTo("");
     assertThat(autoRenewalRunner.expireTime()).isNull();
     assertThat(autoRenewalRunner.waitTime()).isEqualTo(Duration.ofSeconds(1));
 

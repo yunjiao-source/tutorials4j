@@ -1,7 +1,5 @@
 package tutorials4j.toolkit.core.function;
 
-import static tutorials4j.toolkit.core.constant.ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX;
-
 import java.time.Duration;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +14,7 @@ import tutorials4j.toolkit.core.exception.ErrorCodeException;
  */
 public interface Lockable {
   default String prefix() {
-    return LOCKABLE_REDIS_KEY_PREFIX;
+    return "";
   }
   ;
 

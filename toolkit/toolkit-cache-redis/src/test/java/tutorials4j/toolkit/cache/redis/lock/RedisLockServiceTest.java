@@ -33,7 +33,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
  * @author Yun Jiao
  */
 class RedisLockServiceTest {
-  private static final String LOCK_KEY = "lockable:job:1";
+  private static final String LOCK_KEY = "job:1";
   private static final long AUTO_RENEWAL_EXPIRE_MILLIS = 30_000L;
 
   private final RedisLockService lockService = RedisLockService.instance;

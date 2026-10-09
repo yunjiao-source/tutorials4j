@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import tutorials4j.toolkit.core.constant.ToolkitConsts;
 import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.toolkit.core.function.ThrowingCallable;
 
@@ -80,27 +81,30 @@ class RedisLockableAspectTest {
   @Test
   @DisplayName("未配置过期时间时使用自动续期锁，密钥由注解前缀 + SpEL 结果拼接")
   void shouldUseAutoRenewalWhenExpireTimeNotConfigured() throws Throwable {
+    String key = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "user:7";
     ProceedingJoinPoint joinPoint = joinPointOf("autoRenewalMethod", 7L);
-    when(autoRenewal.doInLock(eq("lockable:user:7"), anyCallable())).thenReturn("result");
+    when(autoRenewal.doInLock(eq(key), anyCallable())).thenReturn("result");
 
     Object result = aspect.around(joinPoint, annotationOf("autoRenewalMethod"));
 
     assertThat(result).isEqualTo("result");
-    verify(autoRenewal).doInLock(eq("lockable:user:7"), anyCallable());
+    verify(autoRenewal).doInLock(eq(key), anyCallable());
     verify(lockService, never()).fixedLease();
   }
 
   @Test
   @DisplayName("配置过期时间时使用固定租期锁，并按 timeUnit 换算")
   void shouldUseFixedLeaseWhenExpireTimeConfigured() throws Throwable {
+    String key = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:7";
+
     ProceedingJoinPoint joinPoint = joinPointOf("fixedLeaseMethod", 7L);
-    when(fixedLease.doInLock(eq("biz:7"), eq(Duration.ofSeconds(5)), anyCallable()))
+    when(fixedLease.doInLock(eq(key), eq(Duration.ofSeconds(5)), anyCallable()))
         .thenReturn("result");
 
     Object result = aspect.around(joinPoint, annotationOf("fixedLeaseMethod"));
 
     assertThat(result).isEqualTo("result");
-    verify(fixedLease).doInLock(eq("biz:7"), eq(Duration.ofSeconds(5)), anyCallable());
+    verify(fixedLease).doInLock(eq(key), eq(Duration.ofSeconds(5)), anyCallable());
     verify(lockService, never()).autoRenewal();
   }
 
@@ -114,7 +118,8 @@ class RedisLockableAspectTest {
     Object[] args = joinPoint.getArgs();
     RedisLockable annotation = annotationOf("autoRenewalMethod");
     when(evaluator.getValue(method, args, annotation.key(), String.class)).thenReturn("value");
-    when(autoRenewal.doInLock(eq("lockable:value"), anyCallable())).thenReturn("result");
+    when(autoRenewal.doInLock(eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "value"), anyCallable()))
+        .thenReturn("result");
 
     Object result = mockedAspect.around(joinPoint, annotation);
 
@@ -127,7 +132,10 @@ class RedisLockableAspectTest {
   void shouldReturnResultOfProceed() throws Throwable {
     ProceedingJoinPoint joinPoint = joinPointOf("fixedLeaseMethod", 3L);
     when(joinPoint.proceed()).thenReturn("proceeded");
-    when(fixedLease.doInLock(eq("biz:3"), any(Duration.class), anyCallable()))
+    when(fixedLease.doInLock(
+            eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:3"),
+            any(Duration.class),
+            anyCallable()))
         .thenAnswer(invocation -> ((ThrowingCallable<?>) invocation.getArgument(2)).call());
 
     Object result = aspect.around(joinPoint, annotationOf("fixedLeaseMethod"));
@@ -141,7 +149,10 @@ class RedisLockableAspectTest {
   void shouldPropagateExceptionFromProceed() throws Throwable {
     ProceedingJoinPoint joinPoint = joinPointOf("fixedLeaseMethod", 3L);
     when(joinPoint.proceed()).thenThrow(new IllegalStateException("boom"));
-    when(fixedLease.doInLock(eq("biz:3"), any(Duration.class), anyCallable()))
+    when(fixedLease.doInLock(
+            eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:3"),
+            any(Duration.class),
+            anyCallable()))
         .thenAnswer(invocation -> ((ThrowingCallable<?>) invocation.getArgument(2)).call());
 
     assertThatThrownBy(() -> aspect.around(joinPoint, annotationOf("fixedLeaseMethod")))
@@ -154,7 +165,8 @@ class RedisLockableAspectTest {
   void shouldPropagateExceptionFromProceedInAutoRenewal() throws Throwable {
     ProceedingJoinPoint joinPoint = joinPointOf("autoRenewalMethod", 3L);
     when(joinPoint.proceed()).thenThrow(new IllegalStateException("boom"));
-    when(autoRenewal.doInLock(eq("lockable:user:3"), anyCallable()))
+    when(autoRenewal.doInLock(
+            eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "user:3"), anyCallable()))
         .thenAnswer(invocation -> ((ThrowingCallable<?>) invocation.getArgument(1)).call());
 
     assertThatThrownBy(() -> aspect.around(joinPoint, annotationOf("autoRenewalMethod")))

@@ -1,7 +1,5 @@
 package tutorials4j.toolkit.cache.redis.lock;
 
-import static tutorials4j.toolkit.core.constant.ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RedisLockable {
-  String prefix() default LOCKABLE_REDIS_KEY_PREFIX;
+  String prefix() default "";
 
   String key();
 

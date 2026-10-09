@@ -1,7 +1,6 @@
 package tutorials4j.feature.oauth.service;
 
 import java.time.Instant;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,7 @@ import tutorials4j.feature.oauth.entity.OidcUserIdentityEntity;
 import tutorials4j.feature.oauth.model.OidcUserOpenIdCreateModel;
 import tutorials4j.feature.oauth.model.OidcUserUnionIdCreateModel;
 import tutorials4j.feature.oauth.repository.OidcUserIdentityRepository;
+import tutorials4j.toolkit.cache.redis.lock.RedisLockable;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseService;
 
@@ -30,16 +30,14 @@ public class OidcUserIdentityService implements BaseService<OidcUserIdentityEnti
     return oidcUserIdentityRepository;
   }
 
+  @RedisLockable(
+      prefix = "openid:",
+      key = "#model.userId + '-' + #model.clientId",
+      expireTime = 5000L)
   @Transactional(rollbackFor = Exception.class)
   public synchronized OidcUserIdentityEntity createOpenId(OidcUserOpenIdCreateModel model) {
     Assert.notNull(model, "model must not be null");
     model.validate();
-
-    Optional<OidcUserIdentityEntity> openUserEntityOptional =
-        oidcUserIdentityRepository.findByUserIdAndClientId(model.getUserId(), model.getClientId());
-    if (openUserEntityOptional.isPresent()) {
-      return openUserEntityOptional.get();
-    }
 
     OidcUserIdentityEntity entity = new OidcUserIdentityEntity();
     entity.setUserId(model.getUserId());
@@ -51,17 +49,14 @@ public class OidcUserIdentityService implements BaseService<OidcUserIdentityEnti
     return oidcUserIdentityRepository.save(entity);
   }
 
+  @RedisLockable(
+      prefix = "unionid:",
+      key = "#model.userId + '-' + #model.subjectId",
+      expireTime = 5000L)
   @Transactional(rollbackFor = Exception.class)
   public synchronized OidcUserIdentityEntity createUnionId(OidcUserUnionIdCreateModel model) {
     Assert.notNull(model, "model must not be null");
     model.validate();
-
-    Optional<OidcUserIdentityEntity> openUserEntityOptional =
-        oidcUserIdentityRepository.findByUserIdAndSubjectId(
-            model.getUserId(), model.getSubjectId());
-    if (openUserEntityOptional.isPresent()) {
-      return openUserEntityOptional.get();
-    }
 
     OidcUserIdentityEntity entity = new OidcUserIdentityEntity();
     entity.setUserId(model.getUserId());

@@ -2,6 +2,7 @@ package tutorials4j.toolkit.redisson.schedule;
 
 import java.time.Duration;
 import java.util.Map;
+import tutorials4j.toolkit.core.constant.ToolkitConsts;
 import tutorials4j.toolkit.core.function.Lockable;
 import tutorials4j.toolkit.core.function.TaskRunner;
 import tutorials4j.toolkit.redisson.lock.RedissonBlockLockService;
@@ -17,7 +18,9 @@ public interface AutoRenewalBlockLockTaskRunner extends TaskRunner, Lockable {
     try {
       RedissonBlockLockService.instance
           .autoRenewal()
-          .doInLock(prefix() + key(params), () -> doRun(params));
+          .doInLock(
+              ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + prefix() + key(params),
+              () -> doRun(params));
     } catch (Exception e) {
       handleException(e);
     }
