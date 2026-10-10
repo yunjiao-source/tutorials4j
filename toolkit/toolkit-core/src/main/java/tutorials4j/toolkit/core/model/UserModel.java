@@ -1,12 +1,12 @@
-package tutorials4j.feature.oauth.model;
+package tutorials4j.toolkit.core.model;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Set;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
-import tutorials4j.feature.oauth.entity.UserEntity;
+import lombok.EqualsAndHashCode;
 
 /**
  * TODO
@@ -14,12 +14,15 @@ import tutorials4j.feature.oauth.entity.UserEntity;
  * @author Yun Jiao
  */
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserModel {
-  private String id;
+  @EqualsAndHashCode.Include private String id;
 
   private String username;
 
   private String password;
+
+  private Set<String> authorities;
 
   private String name;
 
@@ -52,10 +55,4 @@ public class UserModel {
   private Instant createDate;
 
   private Instant lastModifiedDate;
-
-  public static UserModel of(UserEntity entity) {
-    var userModel = new UserModel();
-    BeanUtils.copyProperties(entity, userModel);
-    return userModel;
-  }
 }
