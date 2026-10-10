@@ -31,7 +31,7 @@ public class SaTokenSecurityToolkitProperties {
 
   @Data
   public static class FilterOptions {
-    private List<String> includeUrls = List.of("/this-attribute-must-be-configured-manually/**");
+    private List<String> includeUrls = List.of("/**");
     private List<String> excludeUrls = new ArrayList<>();
     private List<String> whiteUrls = new ArrayList<>();
     private List<String> blockUrls = new ArrayList<>();
@@ -49,8 +49,7 @@ public class SaTokenSecurityToolkitProperties {
   public static class InterceptorOptions {
     private List<String> paramFunctions = List.of(SaTokenUtils.CHECK_LOGIN_PARAM_FUNCTION);
     private boolean handleAnnotation = true;
-    private List<String> includePathPatterns =
-        List.of("/this-attribute-must-be-configured-manually/**");
+    private List<String> includePathPatterns = List.of("/**");
     private List<String> excludePathPatterns = new ArrayList<>();
   }
 }

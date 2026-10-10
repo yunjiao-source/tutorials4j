@@ -35,6 +35,11 @@
             <artifactId>sa-token-spring-boot-reactor-v3v4-common</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>cn.dev33</groupId>

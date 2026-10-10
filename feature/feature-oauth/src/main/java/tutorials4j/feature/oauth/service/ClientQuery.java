@@ -5,7 +5,7 @@ import java.util.Objects;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.feature.oauth.entity.ClientEntity;
-import tutorials4j.toolkit.core.enums.YesNoEnum;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO

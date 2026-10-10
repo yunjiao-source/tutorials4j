@@ -5,7 +5,9 @@ import static tutorials4j.toolkit.core.constant.HttpConsts.REMEMBER_ME;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
 import org.apache.commons.lang3.StringUtils;
+import tutorials4j.toolkit.core.constant.ToolkitConsts;
 import tutorials4j.toolkit.core.exception.UnauthorizedException;
+import tutorials4j.toolkit.core.model.UserModel;
 
 /**
  * TODO
@@ -51,11 +53,11 @@ public interface SaTokenUtils {
     return getLoginId(String.class);
   }
 
-  static <T> T getSession(String name, Class<T> clazz) {
+  static <T> T getFromSession(String name, Class<T> clazz) {
     var o = StpUtil.getSession().get(name);
 
     if (o == null) {
-      throw new UnauthorizedException();
+      return null;
     }
 
     if (clazz.isInstance(o)) {
@@ -69,6 +71,10 @@ public interface SaTokenUtils {
             + clazz.getName()
             + ", 实际: "
             + o.getClass().getName());
+  }
+
+  static UserModel getUserFromSession() {
+    return getFromSession(ToolkitConsts.SESSION_NAME_USER_INFO, UserModel.class);
   }
 
   static boolean extractRememberMe() {

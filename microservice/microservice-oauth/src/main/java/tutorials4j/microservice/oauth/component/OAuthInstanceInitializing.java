@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.stereotype.Component;
 import tutorials4j.feature.oauth.OAuthFeatureManager;
-import tutorials4j.toolkit.core.enums.YesNoEnum;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO

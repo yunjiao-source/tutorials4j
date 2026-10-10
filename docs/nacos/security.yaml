@@ -7,16 +7,16 @@ tutorials4j:
           exclude-urls: ${env.exclude-urls}
           auth-strategies:
             - logging
-            - blockUrls
-            - whiteUrls
+#            - blockUrls
+#            - whiteUrls
             - checkLogin
           before-auth-strategies:
 #            - cors
             - optionsMethod
 
         interceptor:
-          #          include-path-patterns: ${env.exclude-urls}
+          include-path-patterns: ${env.exclude-urls}
           exclude-path-patterns: ${env.include-urls}
           handle-annotation: false
-          param-functions:
-            - checkLogin
+#          param-functions:
+#            - checkLogin

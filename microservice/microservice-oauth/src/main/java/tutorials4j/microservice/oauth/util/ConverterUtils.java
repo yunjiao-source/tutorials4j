@@ -21,7 +21,7 @@ public class ConverterUtils {
     return ConverterUtils.Holder.INSTANCE;
   }
 
-  public Function<ClientEntity, SaClientModel> convertClientEntity2Model =
+  public Function<ClientEntity, SaClientModel> convertClientEntity =
       (clientEntity) -> {
         SaClientModel model = new SaClientModel();
         BeanUtils.copyProperties(clientEntity, model);

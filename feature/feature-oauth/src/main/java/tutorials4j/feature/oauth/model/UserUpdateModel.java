@@ -7,6 +7,8 @@ import java.time.ZoneId;
 import java.util.Locale;
 import lombok.Getter;
 import lombok.Setter;
+import tutorials4j.toolkit.core.model.GenderEnum;
+import tutorials4j.toolkit.core.model.UserStatus;
 
 /**
  * TODO

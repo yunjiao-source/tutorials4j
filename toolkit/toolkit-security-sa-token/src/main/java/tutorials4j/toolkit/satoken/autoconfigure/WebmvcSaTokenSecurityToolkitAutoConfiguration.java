@@ -13,6 +13,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties.FilterOptions;
+import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties.InterceptorOptions;
+import tutorials4j.toolkit.satoken.filter.SecurityContextServletFilter;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
@@ -38,14 +41,24 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
       CompositeSaFilterAuthStrategy compositeSaFilterAuthStrategy,
       SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Sa Servlet Filter");
-    var options = properties.getFilter();
+    FilterOptions options = properties.getFilter();
     return new SaServletFilter()
-        .addInclude(options.getIncludeUrls().toArray(new String[] {}))
-        .addExclude(options.getExcludeUrls().toArray(new String[] {}))
+        .addInclude(options.getIncludeUrls().toArray(new String[0]))
+        .addExclude(options.getExcludeUrls().toArray(new String[0]))
         .setAuth(compositeSaFilterAuthStrategy.newInstanceBy(options.getAuthStrategies()))
         .setBeforeAuth(
             compositeSaFilterAuthStrategy.newInstanceBy(options.getBeforeAuthStrategies()))
         .setError(toolkitSaFilterErrorStrategy);
+  }
+
+  @Bean
+  SecurityContextServletFilter securityContextServletFilter(
+      SaTokenSecurityToolkitProperties properties) {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] SecurityContextServletFilter");
+    FilterOptions options = properties.getFilter();
+    return new SecurityContextServletFilter()
+        .addInclude(options.getIncludeUrls().toArray(new String[0]))
+        .addExclude(options.getExcludeUrls().toArray(new String[0]));
   }
 
   @Configuration
@@ -56,7 +69,7 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-      var options = properties.getInterceptor();
+      InterceptorOptions options = properties.getInterceptor();
       registry
           .addInterceptor(
               new SaInterceptor(compositeSaParamFunction)

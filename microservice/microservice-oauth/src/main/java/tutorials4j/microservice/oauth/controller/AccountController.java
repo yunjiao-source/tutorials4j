@@ -42,21 +42,21 @@ public class AccountController {
     var accessToken = SaOAuth2Manager.getDataResolver().readAccessToken(SaHolder.getRequest());
     var loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
 
-    var userModel = userService.findModelByUserName(loginId.toString());
+    var userEntity = userService.findByUsername(loginId.toString());
     var userInfo = new UserInfo();
-    userInfo.setSub(userModel.getId());
+    userInfo.setSub(userEntity.getId());
 
     var accessTokenModel = SaOAuth2Util.getAccessToken(accessToken);
     if (accessTokenModel.getScopes().contains(DefaultScopes.profile.name())) {
-      userInfo.fillByProfile(userModel);
+      userInfo.fillByProfile(userEntity);
     }
 
     if (accessTokenModel.getScopes().contains(DefaultScopes.email.name())) {
-      userInfo.setEmail(userModel.getEmail());
+      userInfo.setEmail(userEntity.getEmail());
     }
 
     if (accessTokenModel.getScopes().contains(DefaultScopes.phone.name())) {
-      userInfo.setPhoneNumber(userModel.getPhoneNumber());
+      userInfo.setPhoneNumber(userEntity.getPhoneNumber());
     }
 
     return userInfo;

@@ -3,7 +3,7 @@ package tutorials4j.feature.oauth.model;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import tutorials4j.toolkit.core.enums.YesNoEnum;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO

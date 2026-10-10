@@ -1,4 +1,4 @@
-package tutorials4j.feature.oauth.model;
+package tutorials4j.toolkit.core.model;
 
 /**
  * TODO

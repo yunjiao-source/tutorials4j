@@ -8,8 +8,8 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import tutorials4j.toolkit.data.convert.MapAttributeConverter;
 import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
 
@@ -18,7 +18,8 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
  *
  * @author Yun Jiao
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(
     name = "oauth_oidc_user_identity",
@@ -26,7 +27,6 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
       @UniqueConstraint(name = "oauth_oidc_user_identity_idx0", columnNames = "user_id,client_id"),
       @UniqueConstraint(name = "oauth_oidc_user_identity_idx1", columnNames = "user_id,subject_id")
     })
-@EqualsAndHashCode(callSuper = false)
 public class OidcUserIdentityEntity extends BaseIdEntity<String> {
   @Column(nullable = false)
   private String userId;

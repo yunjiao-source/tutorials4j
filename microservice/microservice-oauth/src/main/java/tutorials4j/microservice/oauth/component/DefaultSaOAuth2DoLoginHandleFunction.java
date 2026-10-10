@@ -1,5 +1,7 @@
 package tutorials4j.microservice.oauth.component;
 
+import static tutorials4j.toolkit.core.constant.ToolkitConsts.SESSION_NAME_USER_INFO;
+
 import cn.dev33.satoken.oauth2.function.SaOAuth2DoLoginHandleFunction;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
@@ -21,13 +23,13 @@ public class DefaultSaOAuth2DoLoginHandleFunction implements SaOAuth2DoLoginHand
 
   @Override
   public Object apply(String username, String password) {
-    var userModel = userService.findModelByUserName(username);
+    var userModel = userService.findUserModelByUserName(username);
     userService.authenticate(userModel, password);
 
     boolean rememberMe = SaTokenUtils.extractRememberMe();
     StpUtil.login(userModel.getUsername(), rememberMe);
 
-    StpUtil.getSession().set("userinfo", userModel);
+    StpUtil.getSession().set(SESSION_NAME_USER_INFO, userModel);
     return SaResult.ok("登录成功");
   }
 }

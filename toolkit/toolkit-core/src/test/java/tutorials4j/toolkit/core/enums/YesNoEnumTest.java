@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * {@link YesNoEnum} 单元测试。

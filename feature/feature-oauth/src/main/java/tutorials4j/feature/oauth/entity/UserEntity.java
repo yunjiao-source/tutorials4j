@@ -21,13 +21,13 @@ import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import tutorials4j.feature.oauth.component.ZoneIdConverter;
-import tutorials4j.feature.oauth.model.GenderEnum;
-import tutorials4j.feature.oauth.model.UserStatus;
+import tutorials4j.toolkit.core.model.GenderEnum;
+import tutorials4j.toolkit.core.model.UserStatus;
 import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 
 /**
@@ -35,9 +35,9 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
  *
  * @author Yun Jiao
  */
-@Data
+@Getter
+@Setter
 @Entity
-@EqualsAndHashCode(callSuper = false)
 @Table(
     name = "oauth_user",
     indexes = {@Index(name = "oauth_user_idx0", columnList = "status")},

@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Locale;
 import lombok.Data;
+import tutorials4j.feature.oauth.entity.UserEntity;
+import tutorials4j.toolkit.core.model.GenderEnum;
 
 /**
  * TODO
@@ -28,17 +30,17 @@ public class UserInfo {
   private Locale locale;
   private Instant updated_at;
 
-  public void fillByProfile(UserModel userModel) {
-    this.name = userModel.getName();
-    this.nickname = userModel.getNickname();
-    this.preferred_username = userModel.getUsername();
-    this.profile = userModel.getProfile();
-    this.picture = userModel.getAvatar();
-    this.website = userModel.getWebsite();
-    this.gender = userModel.getGender();
-    this.birthdate = userModel.getBirthdate();
-    this.zoneInfo = userModel.getZoneInfo();
-    this.locale = userModel.getLocaleInfo();
-    this.updated_at = userModel.getLastModifiedDate();
+  public void fillByProfile(UserEntity user) {
+    this.name = user.getName();
+    this.nickname = user.getNickname();
+    this.preferred_username = user.getUsername();
+    this.profile = user.getProfile();
+    this.picture = user.getAvatar();
+    this.website = user.getWebsite();
+    this.gender = user.getGender();
+    this.birthdate = user.getBirthdate();
+    this.zoneInfo = user.getZoneInfo();
+    this.locale = user.getLocaleInfo();
+    this.updated_at = user.getLastModifiedDate();
   }
 }

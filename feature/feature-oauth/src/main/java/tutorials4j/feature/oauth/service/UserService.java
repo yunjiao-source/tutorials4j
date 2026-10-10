@@ -16,10 +16,11 @@ import tutorials4j.feature.oauth.autoconfigure.OAuthFeatureProperties;
 import tutorials4j.feature.oauth.entity.UserEntity;
 import tutorials4j.feature.oauth.exception.OAuthFeatureErrorCode;
 import tutorials4j.feature.oauth.model.UserCreateModel;
-import tutorials4j.feature.oauth.model.UserModel;
-import tutorials4j.feature.oauth.model.UserStatus;
 import tutorials4j.feature.oauth.model.UserUpdateModel;
 import tutorials4j.feature.oauth.repository.UserRepository;
+import tutorials4j.feature.oauth.util.ConverterUtils;
+import tutorials4j.toolkit.core.model.UserModel;
+import tutorials4j.toolkit.core.model.UserStatus;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseService;
 
@@ -105,11 +106,11 @@ public class UserService implements BaseService<UserEntity, String> {
   }
 
   @Cacheable(value = "oauth-users", key = "#username")
-  public UserModel findModelByUserName(String username) {
+  public UserModel findUserModelByUserName(String username) {
     Assert.hasText("username", "username must not be null or empty");
     return userRepository
-        .findByUsername(username)
-        .map(UserModel::of)
+        .findWithRolesAndPermissionsByUsername(username)
+        .map(e -> ConverterUtils.getInstance().convertUserEntity.apply(e))
         .orElseThrow(OAuthFeatureErrorCode.ACCOUNT_NOT_FOUND::throwed);
   }
 }

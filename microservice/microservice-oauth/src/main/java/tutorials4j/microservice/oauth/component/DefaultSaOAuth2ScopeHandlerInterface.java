@@ -25,7 +25,7 @@ public class DefaultSaOAuth2ScopeHandlerInterface implements SaOAuth2ScopeHandle
   @Override
   public void workAccessToken(AccessTokenModel at) {
     var loginId = at.getLoginId();
-    var userModel = userService.findModelByUserName(loginId.toString());
+    var userModel = userService.findByUsername(loginId.toString());
     var userInfo = new UserInfo();
     userInfo.fillByProfile(userModel);
 

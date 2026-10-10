@@ -1,0 +1,95 @@
+package tutorials4j.toolkit.satoken.filter;
+
+import cn.dev33.satoken.router.SaRouter;
+import cn.dev33.satoken.router.SaRouterStaff;
+import cn.dev33.satoken.util.SaTokenConsts;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+import tutorials4j.toolkit.core.model.UserModel;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+
+/**
+ * TODO
+ *
+ * @author Yun Jiao
+ */
+@Order(SaTokenConsts.ASSEMBLY_ORDER + 1)
+public class SecurityContextServletFilter extends OncePerRequestFilter {
+  /** 拦截路由 */
+  private List<String> includeList = new ArrayList<>();
+
+  /** 放行路由 */
+  private List<String> excludeList = new ArrayList<>();
+
+  public SecurityContextServletFilter addInclude(String... paths) {
+    includeList.addAll(Arrays.asList(paths));
+    return this;
+  }
+
+  public SecurityContextServletFilter addExclude(String... paths) {
+    excludeList.addAll(Arrays.asList(paths));
+    return this;
+  }
+
+  public SecurityContextServletFilter setIncludeList(List<String> pathList) {
+    includeList = pathList;
+    return this;
+  }
+
+  public SecurityContextServletFilter setExcludeList(List<String> pathList) {
+    excludeList = pathList;
+    return this;
+  }
+
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    boolean isContextSet = false;
+    try {
+      SaRouterStaff saRouterStaff = SaRouter.match(includeList).notMatch(excludeList);
+      if (saRouterStaff.isHit) {
+        isContextSet = setContext();
+      }
+      filterChain.doFilter(request, response);
+    } finally {
+      if (isContextSet) {
+        SecurityContextHolder.clearContext();
+      }
+    }
+  }
+
+  private boolean setContext() {
+    UserModel userModel = SaTokenUtils.getUserFromSession();
+    if (userModel != null) {
+      List<SimpleGrantedAuthority> authorities =
+          Optional.ofNullable(userModel.getAuthorities()).stream()
+              .flatMap(Collection::stream)
+              .map(SimpleGrantedAuthority::new)
+              .toList();
+
+      SecurityContext context = SecurityContextHolder.createEmptyContext();
+      context.setAuthentication(
+          new UsernamePasswordAuthenticationToken(
+              userModel.getUsername(), userModel.getPassword(), authorities));
+      SecurityContextHolder.setContext(context);
+      return true;
+    }
+
+    return false;
+  }
+}

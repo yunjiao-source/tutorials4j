@@ -28,7 +28,7 @@ public class DatabaseSaOAuth2DataLoader implements SaOAuth2DataLoader {
     return clientService
         .getClientRepository()
         .findByClientId(clientId)
-        .map(e -> ConverterUtils.getInstance().convertClientEntity2Model.apply(e))
+        .map(e -> ConverterUtils.getInstance().convertClientEntity.apply(e))
         .orElse(null);
   }
 

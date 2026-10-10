@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.core.enums;
+package tutorials4j.toolkit.core.model;
 
 import java.util.Objects;
 

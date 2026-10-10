@@ -11,7 +11,7 @@ import tutorials4j.feature.oauth.entity.RoleEntity;
 import tutorials4j.feature.oauth.model.RoleCreateModel;
 import tutorials4j.feature.oauth.model.RoleUpdateModel;
 import tutorials4j.feature.oauth.repository.RoleRepository;
-import tutorials4j.toolkit.core.enums.YesNoEnum;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseService;
 

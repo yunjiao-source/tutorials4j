@@ -15,11 +15,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import tutorials4j.toolkit.core.enums.YesNoEnum;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 
 /**
@@ -27,9 +27,9 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
  *
  * @author Yun Jiao
  */
-@Data
+@Getter
+@Setter
 @Entity
-@EqualsAndHashCode(callSuper = false)
 @Table(
     name = "oauth_role",
     indexes = {@Index(name = "oauth_role_idx0", columnList = "status")},
@@ -55,7 +55,6 @@ public class RoleEntity extends BaseEntity<String> {
   @Column private String description;
 
   @ManyToMany(mappedBy = "roles")
-  @Fetch(FetchMode.SUBSELECT)
   private Set<UserEntity> users = new HashSet<>();
 
   @ManyToMany

@@ -5,7 +5,7 @@ import static tutorials4j.toolkit.data.util.JPAUtils.like;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.feature.oauth.entity.ClientEntity;
-import tutorials4j.toolkit.core.enums.YesNoEnum;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO

@@ -9,9 +9,9 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.List;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import tutorials4j.toolkit.core.enums.YesNoEnum;
+import lombok.Getter;
+import lombok.Setter;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.convert.ListAttributeConverter;
 import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 
@@ -20,13 +20,13 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
  *
  * @author Yun Jiao
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(
     name = "oauth_client",
     indexes = {@Index(name = "oauth_client_idx0", columnList = "subject_id")},
     uniqueConstraints = {@UniqueConstraint(name = "oauth_client_idx1", columnNames = "client_id")})
-@EqualsAndHashCode(callSuper = false)
 public class ClientEntity extends BaseEntity<String> {
   /** 应用id，应该全局唯一 */
   @Column(nullable = false)
