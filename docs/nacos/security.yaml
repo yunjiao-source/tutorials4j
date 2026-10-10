@@ -10,6 +10,7 @@ tutorials4j:
 #            - blockUrls
 #            - whiteUrls
             - checkLogin
+            - sameToken
           before-auth-strategies:
 #            - cors
             - optionsMethod

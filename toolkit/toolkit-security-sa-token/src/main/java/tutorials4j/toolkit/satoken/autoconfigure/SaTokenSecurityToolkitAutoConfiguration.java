@@ -20,6 +20,7 @@ import tutorials4j.toolkit.satoken.strategy.CorsSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.LoggingSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.NamedSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.OptionsMethodSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.SameTokenSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 import tutorials4j.toolkit.satoken.strategy.WhiteUrlsSaFilterAuthStrategy;
 
@@ -106,6 +107,12 @@ public class SaTokenSecurityToolkitAutoConfiguration {
   LoggingSaFilterAuthStrategy loggingSaFilterAuthStrategy() {
     log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Logging Sa Filter Auth Strategy");
     return new LoggingSaFilterAuthStrategy();
+  }
+
+  @Bean
+  SameTokenSaFilterAuthStrategy sameTokenSaFilterAuthStrategy() {
+    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Same Token Sa Filter Auth Strategy");
+    return new SameTokenSaFilterAuthStrategy();
   }
 
   @Bean

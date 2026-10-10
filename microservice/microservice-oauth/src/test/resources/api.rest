@@ -1,0 +1,6 @@
+###
+GET http://localhost:9802/clients/page
+Content-Type: application/json
+satoken: fb6c536c-4cbe-4d83-86b3-2b23cc2e1a55
+Authorization: Bearer iwiy0BwCVEhPtq34pRcSiAjsjW0kf9YN9QWTJFy4p2slrvjYEau7Z72tou10
+

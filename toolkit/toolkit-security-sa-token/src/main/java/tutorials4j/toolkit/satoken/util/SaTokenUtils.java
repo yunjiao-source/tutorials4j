@@ -18,6 +18,7 @@ public interface SaTokenUtils {
   String BLOCK_URLS_AUTH_STRATEGY = "blockUrls";
   String CHECK_LOGIN_AUTH_STRATEGY = "checkLogin";
   String LOGGING_AUTH_STRATEGY = "logging";
+  String SAME_TOKEN_AUTH_STRATEGY = "sameToken";
   String WHITE_URL_AUTH_STRATEGY = "whiteUrls";
   String CORS_AUTH_STRATEGY = "cors";
   String OPTIONS_METHOD_AUTH_STRATEGY = "optionsMethod";
