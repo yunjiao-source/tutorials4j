@@ -13,10 +13,10 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cache.caffeine.CaffeineCache;
 import tutorials4j.toolkit.cache.CacheType;
-import tutorials4j.toolkit.cache.NamedCacheMissingException;
 import tutorials4j.toolkit.cache.caffeine.component.CaffeineCacheManagerCreator;
 import tutorials4j.toolkit.cache.caffeine.component.CaffeineNamedCacheManager;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
+import tutorials4j.toolkit.core.exception.ErrorCodeException;
 
 /**
  * {@link CaffeineCacheToolkitAutoConfiguration} 自动装配测试。
@@ -97,7 +97,7 @@ class CaffeineCacheToolkitAutoConfigurationTest {
   }
 
   @Test
-  @DisplayName("未配置命名缓存时，获取缓存会抛出 NamedCacheMissingException")
+  @DisplayName("未配置命名缓存时，获取缓存会抛出异常")
   void shouldFailWhenNamedCacheNotConfigured() {
     contextRunner.run(
         context -> {
@@ -106,7 +106,7 @@ class CaffeineCacheToolkitAutoConfigurationTest {
 
           assertThat(cacheManager.getCacheNames()).isEmpty();
           assertThat(catchThrowable(() -> cacheManager.getCache("users")))
-              .isInstanceOf(NamedCacheMissingException.class);
+              .isInstanceOf(ErrorCodeException.class);
         });
   }
 

@@ -6,7 +6,7 @@ import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
-import tutorials4j.toolkit.cache.NamedCacheMissingException;
+import tutorials4j.toolkit.cache.CacheErrorCode;
 import tutorials4j.toolkit.cache.redis.autoconfigure.NamedCacheOptions;
 import tutorials4j.toolkit.cache.redis.autoconfigure.RedisCacheToolkitProperties;
 
@@ -48,7 +48,7 @@ public class RedisNamedCacheManager extends RedisCacheManager {
   protected RedisCache createRedisCache(String name, RedisCacheConfiguration cacheConfig) {
     Map<String, NamedCacheOptions> caches = properties.getCaches();
     if (caches == null || !caches.containsKey(name)) {
-      throw new NamedCacheMissingException(name);
+      throw CacheErrorCode.NAMED_CACHE_NOT_CONFIG.throwed().param("name", name);
     }
 
     NamedCacheOptions options = caches.get(name);

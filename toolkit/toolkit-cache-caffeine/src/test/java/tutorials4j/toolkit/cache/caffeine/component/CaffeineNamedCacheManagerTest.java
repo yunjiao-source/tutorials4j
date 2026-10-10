@@ -8,9 +8,9 @@ import java.time.Duration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.cache.caffeine.CaffeineCache;
-import tutorials4j.toolkit.cache.NamedCacheMissingException;
 import tutorials4j.toolkit.cache.caffeine.autoconfigure.CaffeineCacheToolkitProperties;
 import tutorials4j.toolkit.cache.caffeine.autoconfigure.NamedCacheOptions;
+import tutorials4j.toolkit.core.exception.ErrorCodeException;
 
 /**
  * {@link CaffeineNamedCacheManager} 单元测试：命名缓存的创建、参数落地与 Spring Cache 适配。
@@ -163,23 +163,23 @@ class CaffeineNamedCacheManagerTest {
   }
 
   @Test
-  @DisplayName("通过 createNativeCaffeineCache 请求未配置的命名缓存时抛出 NamedCacheMissingException")
+  @DisplayName("通过 createNativeCaffeineCache 请求未配置的命名缓存时抛出异常")
   void shouldThrowWhenNativeCacheNotConfigured() {
     CaffeineNamedCacheManager manager = manager(new NamedCacheOptions());
 
     assertThatThrownBy(() -> manager.createNativeCaffeineCache("missing"))
-        .isInstanceOf(NamedCacheMissingException.class)
-        .hasMessageContaining("missing");
+        .isInstanceOf(ErrorCodeException.class)
+        .hasMessageContaining("命名缓存未配置");
   }
 
   @Test
-  @DisplayName("通过 getCache 请求未配置的命名缓存时同样抛出 NamedCacheMissingException")
+  @DisplayName("通过 getCache 请求未配置的命名缓存时同样抛出异常")
   void shouldThrowWhenGettingUnconfiguredCache() {
     CaffeineNamedCacheManager manager = manager(new NamedCacheOptions());
 
     assertThatThrownBy(() -> manager.getCache("missing"))
-        .isInstanceOf(NamedCacheMissingException.class)
-        .hasMessageContaining("missing");
+        .isInstanceOf(ErrorCodeException.class)
+        .hasMessageContaining("命名缓存未配置");
   }
 
   @Test
@@ -191,8 +191,7 @@ class CaffeineNamedCacheManagerTest {
 
     CaffeineNamedCacheManager manager = new CaffeineNamedCacheManager(properties);
 
-    assertThatThrownBy(() -> manager.getCache(CACHE_NAME))
-        .isInstanceOf(NamedCacheMissingException.class);
+    assertThatThrownBy(() -> manager.getCache(CACHE_NAME)).isInstanceOf(ErrorCodeException.class);
   }
 
   @Test
@@ -250,13 +249,13 @@ class CaffeineNamedCacheManagerTest {
   }
 
   @Test
-  @DisplayName("构造时传入未配置的缓存名称会立即抛出 NamedCacheMissingException")
+  @DisplayName("构造时传入未配置的缓存名称会立即抛出异常")
   void shouldFailFastWhenConstructorCacheNameNotConfigured() {
     CaffeineCacheToolkitProperties properties = properties(new NamedCacheOptions());
 
     assertThatThrownBy(() -> new CaffeineNamedCacheManager(properties, "missing"))
-        .isInstanceOf(NamedCacheMissingException.class)
-        .hasMessageContaining("missing");
+        .isInstanceOf(ErrorCodeException.class)
+        .hasMessageContaining("命名缓存未配置");
   }
 
   @Test

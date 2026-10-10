@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 携带错误码的运行时异常。
@@ -103,5 +104,14 @@ public class ErrorCodeException extends BaseRuntimeException {
         .setParams(getParams())
         .setClassName(this.getClass().getName())
         .setCode(getErrorCode().getCode());
+  }
+
+  @Override
+  public String getMessage() {
+    String message = super.getMessage();
+    if (StringUtils.isNotBlank(detail)) {
+      message += "-" + detail;
+    }
+    return message;
   }
 }

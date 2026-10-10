@@ -5,7 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
-import tutorials4j.toolkit.cache.NamedCacheMissingException;
+import tutorials4j.toolkit.cache.CacheErrorCode;
 import tutorials4j.toolkit.cache.caffeine.autoconfigure.CaffeineCacheToolkitProperties;
 
 /**
@@ -37,7 +37,7 @@ public class CaffeineNamedCacheManager extends CaffeineCacheManager {
     // 获取独立配置
     var options = optionsMap.get(name);
     if (options == null) {
-      throw new NamedCacheMissingException(name);
+      throw CacheErrorCode.NAMED_CACHE_NOT_CONFIG.throwed().param("name", name);
     }
 
     var caffeine =

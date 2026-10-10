@@ -8,11 +8,10 @@ import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
 import cn.dev33.satoken.exception.SaTokenException;
 import cn.dev33.satoken.filter.SaFilterErrorStrategy;
+import cn.dev33.satoken.oauth2.exception.SaOAuth2AccessTokenException;
 import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,6 @@ import tutorials4j.toolkit.satoken.exception.BlockUrlException;
  *
  * @author Yun Jiao
  */
-@Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -62,6 +60,9 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
               case NotLoginException.KICK_OUT -> "账号已被管理员强制下线";
               default -> "登录状态异常，请重新登录";
             };
+      } else if (t instanceof SaOAuth2AccessTokenException) {
+        httpStatus = HttpStatus.UNAUTHORIZED;
+        deltail = "登录已失效，请重新登录";
       } else if (t instanceof NotPermissionException
           || t instanceof NotRoleException
           || t instanceof DisableServiceException
@@ -89,10 +90,5 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
   @Override
   public Tracer getTrace() {
     return tracer;
-  }
-
-  @Override
-  public Logger getLog() {
-    return log;
   }
 }

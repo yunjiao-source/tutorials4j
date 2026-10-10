@@ -110,10 +110,9 @@ class GlobalWebmvcExceptionHandlerTest {
   }
 
   @Test
-  @DisplayName("暴露 Tracer 与 Logger 供 HandleException 使用")
+  @DisplayName("暴露 Tracer 供 HandleException 使用")
   void shouldExposeTracerAndLogger() {
     assertThat(handler.getTrace()).isSameAs(tracer);
-    assertThat(handler.getLog()).isNotNull();
   }
 
   @Test

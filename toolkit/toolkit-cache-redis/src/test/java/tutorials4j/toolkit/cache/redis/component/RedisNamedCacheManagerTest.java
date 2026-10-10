@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
-import tutorials4j.toolkit.cache.NamedCacheMissingException;
 import tutorials4j.toolkit.cache.redis.autoconfigure.NamedCacheOptions;
 import tutorials4j.toolkit.cache.redis.autoconfigure.RedisCacheToolkitProperties;
+import tutorials4j.toolkit.core.exception.ErrorCodeException;
 
 /**
  * {@link RedisNamedCacheManager} 单元测试：命名缓存的独立配置与占位。
@@ -40,24 +40,23 @@ class RedisNamedCacheManagerTest {
   }
 
   @Test
-  @DisplayName("缓存未配置时抛出 NamedCacheMissingException")
+  @DisplayName("缓存未配置时抛出常异常")
   void shouldThrowWhenCacheNotConfigured() {
     RedisNamedCacheManager manager = manager(properties(new NamedCacheOptions()));
 
     assertThatThrownBy(() -> manager.getCache("missing"))
-        .isInstanceOf(NamedCacheMissingException.class)
-        .hasMessageContaining("missing");
+        .isInstanceOf(ErrorCodeException.class)
+        .hasMessageContaining("命名缓存未配置");
   }
 
   @Test
-  @DisplayName("caches 为 null 时同样抛出 NamedCacheMissingException")
+  @DisplayName("caches 为 null 时同样抛出异常")
   void shouldThrowWhenCachesIsNull() {
     RedisCacheToolkitProperties properties = properties(new NamedCacheOptions());
     properties.setCaches(null);
     RedisNamedCacheManager manager = manager(properties);
 
-    assertThatThrownBy(() -> manager.getCache(CACHE_NAME))
-        .isInstanceOf(NamedCacheMissingException.class);
+    assertThatThrownBy(() -> manager.getCache(CACHE_NAME)).isInstanceOf(ErrorCodeException.class);
   }
 
   @Test

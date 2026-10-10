@@ -8,8 +8,8 @@ import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
-import tutorials4j.toolkit.cache.CacheManagerCreator;
 import tutorials4j.toolkit.cache.CacheType;
+import tutorials4j.toolkit.cache.component.CacheManagerCreator;
 import tutorials4j.toolkit.cache.redis.autoconfigure.RedisCacheToolkitProperties;
 
 /**

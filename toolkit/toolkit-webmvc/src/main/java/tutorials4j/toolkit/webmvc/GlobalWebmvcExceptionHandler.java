@@ -2,8 +2,6 @@ package tutorials4j.toolkit.webmvc;
 
 import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,6 @@ import tutorials4j.toolkit.core.web.HandleException;
  *
  * @author Yun Jiao
  */
-@Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -33,10 +30,5 @@ public class GlobalWebmvcExceptionHandler implements HandleException {
   @Override
   public Tracer getTrace() {
     return tracer;
-  }
-
-  @Override
-  public Logger getLog() {
-    return log;
   }
 }

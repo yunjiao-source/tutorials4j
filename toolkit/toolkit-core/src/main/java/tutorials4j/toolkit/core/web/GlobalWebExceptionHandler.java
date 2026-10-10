@@ -4,8 +4,6 @@ import io.micrometer.tracing.Tracer;
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -22,7 +20,6 @@ import tutorials4j.toolkit.core.exception.UnauthorizedException;
  *
  * @author Yun Jiao
  */
-@Slf4j
 @Order
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -96,10 +93,5 @@ public class GlobalWebExceptionHandler implements HandleException {
   @Override
   public Tracer getTrace() {
     return tracer;
-  }
-
-  @Override
-  public Logger getLog() {
-    return log;
   }
 }

@@ -217,10 +217,9 @@ class GlobalWebExceptionHandlerTest {
   }
 
   @Test
-  @DisplayName("暴露 Tracer 与 Logger 供子类使用")
+  @DisplayName("暴露 Tracer 供子类使用")
   void shouldExposeTracerAndLogger() {
     assertThat(handler.getTrace()).isSameAs(tracer);
-    assertThat(handler.getLog()).isNotNull();
   }
 
   static class SampleForm {

@@ -1,10 +1,10 @@
 package tutorials4j.toolkit.core.web;
 
+import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
 import java.time.Instant;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatus.Series;
 import org.springframework.http.ProblemDetail;
 import tutorials4j.toolkit.core.exception.ErrorCodeException;
 import tutorials4j.toolkit.core.exception.ErrorDetail;
@@ -18,10 +18,10 @@ public interface HandleException {
 
   default ProblemDetail handleErrorCodeException(
       ErrorCodeException e, ErrorDetailCustomizer customizer) {
-    var defaultHttpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
-    var pd = ProblemDetail.forStatusAndDetail(defaultHttpStatus, e.getDetail());
+    HttpStatus defaultHttpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
+    ProblemDetail pd = ProblemDetail.forStatusAndDetail(defaultHttpStatus, e.getMessage());
 
-    var errorDetail = e.getErrorDetail().setTraceId(getTraceId());
+    ErrorDetail errorDetail = e.getErrorDetail().setTraceId(getTraceId());
     customizer.customize(errorDetail);
     resoveException(e, pd, errorDetail, defaultHttpStatus);
     return pd;
@@ -33,9 +33,9 @@ public interface HandleException {
 
   default ProblemDetail handleException(
       Throwable t, HttpStatus status, ErrorDetailCustomizer customizer) {
-    var pd = ProblemDetail.forStatusAndDetail(status, t.getMessage());
+    ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, t.getMessage());
 
-    var errorDetail = createErrorDetail(t).setCode(status.name());
+    ErrorDetail errorDetail = createErrorDetail(t).setCode(status.name());
 
     customizer.customize(errorDetail);
     resoveException(t, pd, errorDetail, status);
@@ -51,29 +51,27 @@ public interface HandleException {
 
   Tracer getTrace();
 
-  Logger getLog();
-
   default String getTraceId() {
-    var span = getTrace().currentSpan();
+    Span span = getTrace().currentSpan();
     return span != null ? span.context().traceId() : null;
   }
 
   default void resoveException(
       Throwable t, ProblemDetail problemDetail, ErrorDetail errorDetail, HttpStatus httpStatus) {
-    var title = "";
     problemDetail.setProperty("errors", errorDetail);
-    if (httpStatus.series() == Series.SERVER_ERROR) {
+
+    ErrorCategory category = ErrorCategory.of(httpStatus.series());
+    if (category.serverSide) {
       errorDetail.setStackTrace(t.getStackTrace());
-      title = "系统端异常";
-      getLog().error(title, t);
-    } else if (httpStatus.series() == Series.CLIENT_ERROR) {
-      title = "客户端异常";
-      getLog().warn(title, t);
-    } else {
-      title = "其他异常";
-      getLog().warn("title", t);
     }
-    problemDetail.setTitle(title);
+
+    if (category.serverSide) {
+      LogHolder.log.error("{} : {}", category.title, problemDetail, t);
+    } else {
+      LogHolder.log.warn("{} : {}", category.title, problemDetail);
+    }
+
+    problemDetail.setTitle(category.title);
   }
 
   @FunctionalInterface
@@ -82,4 +80,7 @@ public interface HandleException {
 
     void customize(ErrorDetail errorDetail);
   }
+
+  @Slf4j
+  final class LogHolder {}
 }

@@ -1,5 +1,7 @@
 package tutorials4j.feature.oauth.service;
 
+import static tutorials4j.feature.oauth.OAuthFeatureConsts.CACHE_NAME_USERS;
+
 import jakarta.validation.Valid;
 import java.time.Instant;
 import java.util.Objects;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import tutorials4j.feature.oauth.autoconfigure.OAuthFeatureProperties;
+import tutorials4j.feature.oauth.component.LoginCounterCacheTemplate;
 import tutorials4j.feature.oauth.entity.UserEntity;
 import tutorials4j.feature.oauth.exception.OAuthFeatureErrorCode;
 import tutorials4j.feature.oauth.model.UserCreateModel;
@@ -37,6 +40,7 @@ public class UserService implements BaseService<UserEntity, String> {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final OAuthFeatureProperties properties;
+  private final LoginCounterCacheTemplate loginCounterCacheTemplate;
 
   @Override
   public BaseRepository<UserEntity, String> getRepository() {
@@ -88,24 +92,31 @@ public class UserService implements BaseService<UserEntity, String> {
     Assert.hasText("password", "password must not be null or empty");
 
     if (!Objects.equals(UserStatus.active, userModel.getStatus())) {
-      throw OAuthFeatureErrorCode.ACCOUNT_NOT_ACTIVE.throwed();
+      throw OAuthFeatureErrorCode.LOGIN_FAIL.throwed("账户非活动状态");
     }
 
     Instant now = Instant.now();
     if (userModel.getAccountExpireAt() != null
         && userModel.getAccountExpireAt().getEpochSecond() < now.getEpochSecond()) {
-      throw OAuthFeatureErrorCode.ACCOUNT_EXPIRED.throwed();
+      throw OAuthFeatureErrorCode.LOGIN_FAIL.throwed("账户已过期");
     }
     if (userModel.getCredentialsExpireAt() != null
         && userModel.getCredentialsExpireAt().getEpochSecond() < now.getEpochSecond()) {
-      throw OAuthFeatureErrorCode.ACCOUNT_PASSWORD_EXPIRED.throwed();
+      throw OAuthFeatureErrorCode.LOGIN_FAIL.throwed("密码已过期");
     }
+
+    if (loginCounterCacheTemplate.check(userModel.getUsername())) {
+      // 超过失败次数
+      throw OAuthFeatureErrorCode.TOO_MANY_LOGIN_FAIL.throwed();
+    }
+
     if (!passwordEncoder.matches(password, userModel.getPassword())) {
-      throw OAuthFeatureErrorCode.LOGIN_FAIL.throwed();
+      loginCounterCacheTemplate.counting(userModel.getUsername());
+      throw OAuthFeatureErrorCode.LOGIN_FAIL.throwed("用户名或密码错误");
     }
   }
 
-  @Cacheable(value = "oauth-users", key = "#username")
+  @Cacheable(value = CACHE_NAME_USERS, key = "#username")
   public UserModel findUserModelByUserName(String username) {
     Assert.hasText("username", "username must not be null or empty");
     return userRepository

@@ -1,9 +1,9 @@
 package tutorials4j.toolkit.cache.caffeine.component;
 
 import lombok.RequiredArgsConstructor;
-import tutorials4j.toolkit.cache.CacheManagerCreator;
 import tutorials4j.toolkit.cache.CacheType;
 import tutorials4j.toolkit.cache.caffeine.autoconfigure.CaffeineCacheToolkitProperties;
+import tutorials4j.toolkit.cache.component.CacheManagerCreator;
 
 /**
  * TODO
