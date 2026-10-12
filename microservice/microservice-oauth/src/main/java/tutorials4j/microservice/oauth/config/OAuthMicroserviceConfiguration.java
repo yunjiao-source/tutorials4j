@@ -10,8 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import tutorials4j.feature.oauth.service.UserService;
 import tutorials4j.microservice.oauth.component.DefaultSaOAuth2ScopeHandlerInterface;
-import tutorials4j.toolkit.cache.redis.component.RedisCacheManagerCreator;
-import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManager;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
 
 /**
@@ -44,18 +42,5 @@ public class OAuthMicroserviceConfiguration {
       UserService userService) {
     log.trace("[MICROSERVICE-OAUTH] Default Sa OAuth2 Scope Handler Interface");
     return new DefaultSaOAuth2ScopeHandlerInterface(userService);
-  }
-
-  //  @Bean
-  //  CaffeineNamedCacheManager caffeineNamedCacheManager(
-  //      CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
-  //    log.trace("[MICROSERVICE-GATEWAY] Caffeine Named Cache Manager");
-  //    return caffeineCacheManagerCreator.getInstance();
-  //  }
-
-  @Bean
-  RedisNamedCacheManager redisNamedCacheManager(RedisCacheManagerCreator redisCacheManagerCreator) {
-    log.trace("[MICROSERVICE-GATEWAY] Redis Named Cache Manager");
-    return redisCacheManagerCreator.getInstance();
   }
 }

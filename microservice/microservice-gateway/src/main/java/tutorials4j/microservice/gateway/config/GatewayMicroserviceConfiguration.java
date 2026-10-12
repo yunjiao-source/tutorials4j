@@ -10,8 +10,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import tutorials4j.microservice.gateway.sentinel.SentinelExceptionHandler;
-import tutorials4j.toolkit.cache.redis.component.RedisCacheManagerCreator;
-import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManager;
 
 /**
  * TODO
@@ -37,18 +35,5 @@ public class GatewayMicroserviceConfiguration {
   PasswordEncoder bcryptPasswordEncoder() {
     log.trace("[MICROSERVICE-GATEWAY] BCrypt Password Encoder");
     return new BCryptPasswordEncoder();
-  }
-
-  //  @Bean
-  //  CaffeineNamedCacheManager caffeineNamedCacheManager(
-  //      CaffeineCacheManagerCreator caffeineCacheManagerCreator) {
-  //    log.trace("[MICROSERVICE-GATEWAY] Caffeine Named Cache Manager");
-  //    return caffeineCacheManagerCreator.getInstance();
-  //  }
-
-  @Bean
-  RedisNamedCacheManager redisNamedCacheManager(RedisCacheManagerCreator redisCacheManagerCreator) {
-    log.trace("[MICROSERVICE-GATEWAY] Redis Named Cache Manager");
-    return redisCacheManagerCreator.getInstance();
   }
 }

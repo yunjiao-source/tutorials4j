@@ -1,31 +1,32 @@
 tutorials4j:
   toolkit:
     cache:
+      type: redis
       caffeine:
         caches:
-          oauth-clients:
+          clients:
             expire-after-write: 10m
             maximum-size: 1000
             initial-capacity: 100
-          oauth-users:
+          users:
             expire-after-write: 30m
             maximum-size: 1000
             initial-capacity: 100
-          oauth-login-fail-counter:
+          login-fail-counter:
             expire-after-write: 10m
             maximum-size: 1000
             initial-capacity: 100
       redis:
         caches:
-          oauth-clients:
+          clients:
             time-to-live: 10m
             caching-null-values: true
-            key-prefix: 'cacheable:'
-          oauth-users:
+            key-prefix: 'cacheable:oauth:'
+          users:
             time-to-live: 10m
             caching-null-values: true
-            key-prefix: 'cacheable:'
-          oauth-login-fail-counter:
+            key-prefix: 'cacheable:oauth:'
+          login-fail-counter:
             time-to-live: 10m
             caching-null-values: true
-            key-prefix: 'cache:'
+            key-prefix: 'cache:oauth:'

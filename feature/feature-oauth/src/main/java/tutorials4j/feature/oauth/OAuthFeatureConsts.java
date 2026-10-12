@@ -6,9 +6,9 @@ package tutorials4j.feature.oauth;
  * @author Yun Jiao
  */
 public interface OAuthFeatureConsts {
-  String CACHE_NAME_USERS = "oauth-users";
+  String CACHE_NAME_USERS = "users";
 
-  String CACHE_NAME_CLIENTS = "oauth-clients";
+  String CACHE_NAME_CLIENTS = "clients";
 
-  String CACHE_NAME_LOGIN_FAIL_COUNTER = "oauth-login-fail-counter";
+  String CACHE_NAME_LOGIN_FAIL_COUNTER = "login-fail-counter";
 }

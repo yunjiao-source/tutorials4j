@@ -12,8 +12,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
+import tutorials4j.toolkit.cache.context.ConditionalOnRedisCacheType;
 import tutorials4j.toolkit.cache.redis.component.RedisCacheManagerCreator;
 import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheConfigurationCustomizer;
+import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManager;
 import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManagerCustomizer;
 import tutorials4j.toolkit.cache.redis.component.RedisTemplateDecorator;
 import tutorials4j.toolkit.cache.redis.component.ToolkitKeySerializer;
@@ -110,5 +112,12 @@ public class RedisCacheToolkitAutoConfiguration {
       RedisLockService redisLockService) {
     log.trace("[TOOLKIT-CACHE-REDIS] Redis Lockable Aspect");
     return new RedisLockableAspect(spelMethodBasedExpressionEvaluator, redisLockService);
+  }
+
+  @Bean
+  @ConditionalOnRedisCacheType
+  RedisNamedCacheManager redisNamedCacheManager(RedisCacheManagerCreator redisCacheManagerCreator) {
+    log.trace("[TOOLKIT-CACHE-REDIS] Redis Named Cache Manager");
+    return redisCacheManagerCreator.getInstance();
   }
 }
