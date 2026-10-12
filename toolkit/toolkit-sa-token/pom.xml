@@ -9,9 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>toolkit-security-sa-token</artifactId>
-    <name>Toolkit :: Security Sa-Token</name>
-    <description>工具箱安全Sa-Token模块</description>
+    <artifactId>toolkit-sa-token</artifactId>
+    <name>Toolkit :: Sa-Token</name>
+    <description>工具箱Sa-Token模块</description>
 
     <dependencies>
         <dependency>

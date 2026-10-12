@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
-            <artifactId>toolkit-security-sa-token</artifactId>
+            <artifactId>toolkit-sa-token</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

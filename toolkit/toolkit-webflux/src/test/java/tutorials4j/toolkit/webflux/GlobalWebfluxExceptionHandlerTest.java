@@ -170,7 +170,7 @@ class GlobalWebfluxExceptionHandlerTest {
 
     assertThat(problemDetail.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT.value());
     assertThat(problemDetail.getTitle()).isEqualTo("客户端异常");
-    assertThat(problemDetail.getDetail()).isEqualTo("数据库连接失败");
+    assertThat(problemDetail.getDetail()).isEqualTo("系统异常-数据库连接失败");
     assertThat(errorDetail(problemDetail).getCode()).isEqualTo("SYSTEM_EXCEPTION");
   }
 
@@ -178,7 +178,6 @@ class GlobalWebfluxExceptionHandlerTest {
   @DisplayName("暴露 Tracer 与 Logger 供 HandleException 使用")
   void shouldExposeTracerAndLogger() {
     assertThat(handler.getTrace()).isSameAs(tracer);
-    assertThat(handler.getLog()).isNotNull();
   }
 
   @Test

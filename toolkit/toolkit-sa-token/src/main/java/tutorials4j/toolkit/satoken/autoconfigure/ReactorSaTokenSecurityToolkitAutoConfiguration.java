@@ -23,7 +23,7 @@ import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 public class ReactorSaTokenSecurityToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Reactor Sa-Token Security Toolkit Auto Configuration");
+    log.trace("[TOOLKIT-SA-TOKEN] Reactor Sa-Token Security Toolkit Auto Configuration");
   }
 
   @Bean
@@ -31,7 +31,7 @@ public class ReactorSaTokenSecurityToolkitAutoConfiguration {
       ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy,
       CompositeSaFilterAuthStrategy strategy,
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Sa Reactor Filter");
+    log.trace("[TOOLKIT-SA-TOKEN] Sa Reactor Filter");
     var options = properties.getFilter();
     return new SaReactorFilter()
         .addInclude(options.getIncludeUrls().toArray(new String[] {}))

@@ -4,7 +4,6 @@ import com.alibaba.csp.sentinel.slots.block.BlockException;
 import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -43,10 +42,5 @@ public class SentinelExceptionHandler implements HandleException {
   @Override
   public Tracer getTrace() {
     return tracer;
-  }
-
-  @Override
-  public Logger getLog() {
-    return log;
   }
 }

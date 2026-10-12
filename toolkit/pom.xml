@@ -29,7 +29,7 @@
         <module>toolkit-data</module>
         <module>toolkit-data-hibernate</module>
         <module>toolkit-data-mybatis-plus</module>
-        <module>toolkit-security-sa-token</module>
+        <module>toolkit-sa-token</module>
     </modules>
 
 </project>

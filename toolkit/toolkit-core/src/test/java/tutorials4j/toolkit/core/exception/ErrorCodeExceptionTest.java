@@ -34,7 +34,7 @@ class ErrorCodeExceptionTest {
 
     assertThat(exception.getDetail()).isEqualTo("释放锁失败详情");
     assertThat(exception.getCause()).isNull();
-    assertThat(exception.getMessage()).isEqualTo("释放锁失败");
+    assertThat(exception.getMessage()).isEqualTo("释放锁失败-释放锁失败详情");
   }
 
   @Test

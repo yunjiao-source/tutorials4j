@@ -4,7 +4,6 @@ import io.micrometer.tracing.Tracer;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -62,10 +61,5 @@ public class GlobalWebfluxExceptionHandler implements HandleException {
   @Override
   public Tracer getTrace() {
     return tracer;
-  }
-
-  @Override
-  public Logger getLog() {
-    return log;
   }
 }

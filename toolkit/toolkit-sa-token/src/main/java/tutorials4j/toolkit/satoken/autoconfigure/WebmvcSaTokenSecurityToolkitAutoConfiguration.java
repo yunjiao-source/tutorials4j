@@ -32,7 +32,7 @@ import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Webmvc Sa-Token Security Toolkit Auto Configuration");
+    log.trace("[TOOLKIT-SA-TOKEN] Webmvc Sa-Token Security Toolkit Auto Configuration");
   }
 
   @Bean
@@ -40,7 +40,7 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
       ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy,
       CompositeSaFilterAuthStrategy compositeSaFilterAuthStrategy,
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Sa Servlet Filter");
+    log.trace("[TOOLKIT-SA-TOKEN] Sa Servlet Filter");
     FilterOptions options = properties.getFilter();
     return new SaServletFilter()
         .addInclude(options.getIncludeUrls().toArray(new String[0]))
@@ -54,7 +54,7 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
   @Bean
   SecurityContextServletFilter securityContextServletFilter(
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] SecurityContextServletFilter");
+    log.trace("[TOOLKIT-SA-TOKEN] SecurityContextServletFilter");
     FilterOptions options = properties.getFilter();
     return new SecurityContextServletFilter()
         .addInclude(options.getIncludeUrls().toArray(new String[0]))

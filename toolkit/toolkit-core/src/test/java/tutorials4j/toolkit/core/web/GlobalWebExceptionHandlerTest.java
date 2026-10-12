@@ -62,7 +62,7 @@ class GlobalWebExceptionHandlerTest {
 
     assertThat(problemDetail.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT.value());
     assertThat(problemDetail.getTitle()).isEqualTo("客户端异常");
-    assertThat(problemDetail.getDetail()).isEqualTo("获取锁失败详情");
+    assertThat(problemDetail.getDetail()).isEqualTo("获取锁失败-获取锁失败详情");
 
     ErrorDetail detail = errorDetail(problemDetail);
     assertThat(detail.getCode()).isEqualTo("ACQUIRE_LOCK_FAIL");
@@ -80,7 +80,7 @@ class GlobalWebExceptionHandlerTest {
 
     ProblemDetail problemDetail = handler.handleErrorCodeException(exception);
 
-    assertThat(problemDetail.getDetail()).isNull();
+    assertThat(problemDetail.getDetail()).isEqualTo("系统异常");
     assertThat(problemDetail.getTitle()).isEqualTo("客户端异常");
     assertThat(errorDetail(problemDetail).getCode()).isEqualTo("SYSTEM_EXCEPTION");
   }

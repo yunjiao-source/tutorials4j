@@ -37,29 +37,29 @@ import tutorials4j.toolkit.satoken.strategy.WhiteUrlsSaFilterAuthStrategy;
 public class SaTokenSecurityToolkitAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Sa-Token Security Toolkit Auto Configuration");
+    log.trace("[TOOLKIT-SA-TOKEN] Sa-Token Security Toolkit Auto Configuration");
   }
 
   @Bean
   SaLogForSlf4j saLogForSlf4j() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Sa Log For Slf4j");
+    log.trace("[TOOLKIT-SA-TOKEN] Sa Log For Slf4j");
     return new SaLogForSlf4j();
   }
 
   @Bean
   ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy(Tracer tracer) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Toolkit Sa Filter Error Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Toolkit Sa Filter Error Strategy");
     return new ToolkitSaFilterErrorStrategy(tracer);
   }
 
   @Bean
   CompositeSaFilterAuthStrategy compositeSaFilterAuthStrategy(
       ObjectProvider<NamedSaFilterAuthStrategy> strategies) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Composite Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Composite Sa Filter Auth Strategy");
     List<NamedSaFilterAuthStrategy> list = strategies.orderedStream().toList();
     if (!list.isEmpty()) {
       log.trace(
-          "[TOOLKIT-SECURITY-SA-TOKEN] SaFilterAuthStrategy注入：{}",
+          "[TOOLKIT-SA-TOKEN] SaFilterAuthStrategy注入：{}",
           list.stream()
               .map(NamedSaFilterAuthStrategy::getClass)
               .map(Class::getSimpleName)
@@ -71,11 +71,11 @@ public class SaTokenSecurityToolkitAutoConfiguration {
   @Bean
   CompositeSaParamFunction compositeSaParamFunction(
       ObjectProvider<NamedSaParamFunction> functions) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Composite Sa Param Function");
+    log.trace("[TOOLKIT-SA-TOKEN] Composite Sa Param Function");
     List<NamedSaParamFunction> list = functions.orderedStream().toList();
     if (!list.isEmpty()) {
       log.trace(
-          "[TOOLKIT-SECURITY-SA-TOKEN] SaParamFunction注入：{}",
+          "[TOOLKIT-SA-TOKEN] SaParamFunction注入：{}",
           list.stream()
               .map(NamedSaParamFunction::getClass)
               .map(Class::getSimpleName)
@@ -86,51 +86,51 @@ public class SaTokenSecurityToolkitAutoConfiguration {
 
   @Bean
   CheckLoginSaParamFunction checkLoginSaParamFunction() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Check Login Sa Param Function");
+    log.trace("[TOOLKIT-SA-TOKEN] Check Login Sa Param Function");
     return new CheckLoginSaParamFunction();
   }
 
   @Bean
   BlockUrlsSaFilterAuthStrategy blockUrlsSaFilterAuthStrategy(
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Block Urls Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Block Urls Sa Filter Auth Strategy");
     return new BlockUrlsSaFilterAuthStrategy(properties.getFilter().getBlockUrls());
   }
 
   @Bean
   CheckLoginSaFilterAuthStrategy checkLoginSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Check Login Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Check Login Sa Filter Auth Strategy");
     return new CheckLoginSaFilterAuthStrategy();
   }
 
   @Bean
   LoggingSaFilterAuthStrategy loggingSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Logging Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Logging Sa Filter Auth Strategy");
     return new LoggingSaFilterAuthStrategy();
   }
 
   @Bean
   SameTokenSaFilterAuthStrategy sameTokenSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Same Token Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Same Token Sa Filter Auth Strategy");
     return new SameTokenSaFilterAuthStrategy();
   }
 
   @Bean
   WhiteUrlsSaFilterAuthStrategy whiteUrlsSaFilterAuthStrategy(
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] White Urls Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] White Urls Sa Filter Auth Strategy");
     return new WhiteUrlsSaFilterAuthStrategy(properties.getFilter().getWhiteUrls());
   }
 
   @Bean
   OptionsMethodSaFilterAuthStrategy optionsBeforeSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Options Method Before Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Options Method Before Sa Filter Auth Strategy");
     return new OptionsMethodSaFilterAuthStrategy();
   }
 
   @Bean
   CorsSaFilterAuthStrategy corsBeforeSaFilterAuthStrategy() {
-    log.trace("[TOOLKIT-SECURITY-SA-TOKEN] Cors Before Sa Filter Auth Strategy");
+    log.trace("[TOOLKIT-SA-TOKEN] Cors Before Sa Filter Auth Strategy");
     return new CorsSaFilterAuthStrategy();
   }
 }

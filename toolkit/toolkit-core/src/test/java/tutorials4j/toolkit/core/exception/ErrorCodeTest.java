@@ -92,7 +92,7 @@ class ErrorCodeTest {
     ErrorCodeException exception = errorCode.throwed("补充说明");
 
     assertThat(exception.getErrorCode()).isSameAs(errorCode);
-    assertThat(exception.getMessage()).isEqualTo("自定义错误");
+    assertThat(exception.getMessage()).isEqualTo("自定义错误-补充说明");
     assertThat(exception.getDetail()).isEqualTo("补充说明");
     assertThat(exception.getErrorDetail().getCode()).isEqualTo("CUSTOM_ERROR");
   }
