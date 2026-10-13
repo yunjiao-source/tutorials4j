@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 /**
  * {@link SpringUtils} 单元测试：继承自 Hutool {@code SpringUtil} 的静态容器访问能力。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SpringUtilsTest {
   private final ApplicationContextRunner contextRunner =

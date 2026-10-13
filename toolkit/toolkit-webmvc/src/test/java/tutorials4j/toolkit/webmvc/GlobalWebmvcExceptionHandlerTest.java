@@ -23,7 +23,7 @@ import tutorials4j.toolkit.core.web.HandleException;
 /**
  * {@link GlobalWebmvcExceptionHandler} 单元测试：Servlet MVC 场景下异常到 {@link ProblemDetail} 的转换。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class GlobalWebmvcExceptionHandlerTest {
   private static final String TRACE_ID = "0123456789abcdef0123456789abcdef";

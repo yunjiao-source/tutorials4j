@@ -5,7 +5,7 @@ import cn.dev33.satoken.filter.SaFilterAuthStrategy;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @FunctionalInterface
 public interface NamedSaFilterAuthStrategy extends SaFilterAuthStrategy {

@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.feature</groupId>
-            <artifactId>feature-oauth</artifactId>
+            <artifactId>feature-oauth-service</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
@@ -32,6 +32,11 @@
         <dependency>
             <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
             <artifactId>toolkit-sa-token</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.assembly</groupId>
+            <artifactId>assembly-bus-amqp-starter</artifactId>
             <version>${revision}</version>
         </dependency>
 

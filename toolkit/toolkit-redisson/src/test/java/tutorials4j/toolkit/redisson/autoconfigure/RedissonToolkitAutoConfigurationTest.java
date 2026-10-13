@@ -30,7 +30,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonReentrantLockableAspect;
 /**
  * {@link RedissonToolkitAutoConfiguration} 自动装配测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedissonToolkitAutoConfigurationTest {
   private static final String LOCK_KEY = "job:1";

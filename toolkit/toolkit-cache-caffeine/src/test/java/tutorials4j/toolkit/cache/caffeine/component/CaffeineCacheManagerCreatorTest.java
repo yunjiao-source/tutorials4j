@@ -14,7 +14,7 @@ import tutorials4j.toolkit.cache.caffeine.autoconfigure.CaffeineCacheToolkitProp
 /**
  * {@link CaffeineCacheManagerCreator} 单元测试：类型声明与实例创建策略。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class CaffeineCacheManagerCreatorTest {
 

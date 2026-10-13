@@ -3,7 +3,7 @@ package tutorials4j.toolkit.core.function;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @FunctionalInterface
 public interface ThrowingCallable<V> {

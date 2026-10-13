@@ -8,7 +8,7 @@ import tutorials4j.feature.oauth.entity.ClientEntity;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class ConverterUtils {
   private ConverterUtils() {}

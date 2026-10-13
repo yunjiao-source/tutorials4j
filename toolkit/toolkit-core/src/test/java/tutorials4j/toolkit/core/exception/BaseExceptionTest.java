@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link BaseException} 单元测试：受检异常基类的构造方式。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class BaseExceptionTest {
 

@@ -17,7 +17,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @RequiredArgsConstructor

@@ -22,7 +22,7 @@ import tutorials4j.toolkit.json.util.JacksonUtils;
 /**
  * {@link JsonToolkitAutoConfiguration} 自动装配测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class JsonToolkitAutoConfigurationTest {
   private static final String AUTO_CONFIGURATION_IMPORTS =

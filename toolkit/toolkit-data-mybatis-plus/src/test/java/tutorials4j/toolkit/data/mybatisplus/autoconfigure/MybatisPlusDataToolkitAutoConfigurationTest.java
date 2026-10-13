@@ -32,7 +32,7 @@ import tutorials4j.toolkit.data.mybatisplus.interceptor.PaginationInnerIntercept
 /**
  * {@link MybatisPlusDataToolkitAutoConfiguration} 自动装配测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class MybatisPlusDataToolkitAutoConfigurationTest {
   private static final String PREFIX = PropertyConsts.PROPERTY_TOOLKIT_DATA_MYBATIS_PLUS;

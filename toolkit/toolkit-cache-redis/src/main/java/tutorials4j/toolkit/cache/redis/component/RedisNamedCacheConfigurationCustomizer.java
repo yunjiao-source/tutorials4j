@@ -5,7 +5,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @FunctionalInterface
 public interface RedisNamedCacheConfigurationCustomizer {

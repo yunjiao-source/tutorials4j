@@ -3,13 +3,15 @@ package tutorials4j.toolkit.core.constant;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface PropertyConsts {
   /** toolkit */
   String PROPERTY_TUTORIALS4J = "tutorials4j";
 
   String PROPERTY_TOOLKIT = PROPERTY_TUTORIALS4J + ".toolkit";
+
+  String PROPERTY_TOOLKIT_IP2REGION = PROPERTY_TOOLKIT + ".ip2region";
 
   /** security */
   String PROPERTY_TOOLKIT_SECURITY = PROPERTY_TOOLKIT + ".security";

@@ -12,7 +12,7 @@ import tutorials4j.toolkit.core.util.SnowflakeUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
   private Class<?> javaIdType;

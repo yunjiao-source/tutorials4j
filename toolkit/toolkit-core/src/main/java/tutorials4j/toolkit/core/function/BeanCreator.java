@@ -7,7 +7,7 @@ package tutorials4j.toolkit.core.function;
  * {@link #getBeanClass()} 默认实现，子类可根据需要覆盖这两个方法。
  *
  * @param <T> 创建的 Bean 类型
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @FunctionalInterface
 public interface BeanCreator<T> {

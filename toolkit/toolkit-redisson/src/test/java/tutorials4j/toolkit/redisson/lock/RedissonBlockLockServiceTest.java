@@ -25,7 +25,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
 /**
  * {@link RedissonBlockLockService} 单元测试：阻塞式固定租期锁与看门狗续期锁。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedissonBlockLockServiceTest {
   private static final String LOCK_KEY = "job:1";

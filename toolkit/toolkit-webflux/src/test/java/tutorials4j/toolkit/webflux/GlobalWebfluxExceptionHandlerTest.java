@@ -28,7 +28,7 @@ import tutorials4j.toolkit.core.web.HandleException;
 /**
  * {@link GlobalWebfluxExceptionHandler} 单元测试：WebFlux 场景下异常到 {@link ProblemDetail} 的转换。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class GlobalWebfluxExceptionHandlerTest {
   private static final String TRACE_ID = "0123456789abcdef0123456789abcdef";

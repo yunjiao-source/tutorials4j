@@ -23,7 +23,7 @@ import tutorials4j.toolkit.webmvc.GlobalWebmvcExceptionHandler;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class WebmvcToolkitAutoConfigurationTest {
   private static final String TOOLKIT_PACKAGE = "tutorials4j.toolkit.webmvc";

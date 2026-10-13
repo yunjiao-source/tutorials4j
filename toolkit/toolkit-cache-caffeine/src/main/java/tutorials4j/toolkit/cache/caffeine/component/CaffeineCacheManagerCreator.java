@@ -8,7 +8,7 @@ import tutorials4j.toolkit.cache.component.CacheManagerCreator;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @RequiredArgsConstructor
 public class CaffeineCacheManagerCreator implements CacheManagerCreator<CaffeineNamedCacheManager> {

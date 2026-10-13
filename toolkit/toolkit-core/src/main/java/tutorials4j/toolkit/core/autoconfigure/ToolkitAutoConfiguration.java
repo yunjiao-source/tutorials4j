@@ -1,6 +1,5 @@
 package tutorials4j.toolkit.core.autoconfigure;
 
-import cn.hutool.extra.spring.SpringUtil;
 import io.micrometer.tracing.Tracer;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -11,16 +10,17 @@ import org.springframework.context.annotation.Import;
 import tutorials4j.toolkit.core.concurrent.ScheduledThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.concurrent.ThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
+import tutorials4j.toolkit.core.util.SpringUtils;
 import tutorials4j.toolkit.core.web.GlobalWebExceptionHandler;
 
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration
-@Import({SpringUtil.class})
+@Import({SpringUtils.class})
 @EnableConfigurationProperties({
   ToolkitProperties.class,
 })

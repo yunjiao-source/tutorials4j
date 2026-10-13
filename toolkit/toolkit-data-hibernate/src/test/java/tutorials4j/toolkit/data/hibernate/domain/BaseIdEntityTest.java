@@ -12,7 +12,7 @@ import tutorials4j.toolkit.data.hibernate.generator.SnowflakeIdGenerator;
 /**
  * {@link BaseIdEntity} 单元测试：主键映射与基于主键的相等性语义。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class BaseIdEntityTest {
 

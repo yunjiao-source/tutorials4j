@@ -8,7 +8,7 @@ import tutorials4j.toolkit.core.function.BeanCreator;
  *
  * <p>实现 {@link BeanCreator} 接口，通过拷贝传入的 ObjectMapper 为不同使用者 提供相互独立的实例，避免共享同一配置状态。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class ObjectMapperCreator implements BeanCreator<ObjectMapper> {
   private final ObjectMapper defaultObjectMapper;

@@ -3,7 +3,7 @@ package tutorials4j.toolkit.core.model;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public enum GenderEnum {
   male,

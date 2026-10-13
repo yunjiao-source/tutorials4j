@@ -14,7 +14,7 @@ import tutorials4j.toolkit.data.exception.DataErrorCode;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface ReadableService<E extends Entity, ID extends Serializable> {
 

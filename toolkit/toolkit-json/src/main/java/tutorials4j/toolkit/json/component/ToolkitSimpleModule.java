@@ -7,7 +7,7 @@ import tools.jackson.databind.ser.std.ToStringSerializer;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class ToolkitSimpleModule extends SimpleModule implements Ordered {
   public ToolkitSimpleModule() {

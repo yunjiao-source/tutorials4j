@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link NamedCacheOptions} 单元测试：默认值与值对象语义。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class NamedCacheOptionsTest {
 

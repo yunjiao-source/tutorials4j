@@ -28,7 +28,7 @@ import tutorials4j.toolkit.core.exception.UnauthorizedException;
 /**
  * {@link GlobalWebExceptionHandler} 单元测试：各类异常到 {@link ProblemDetail} 的转换。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class GlobalWebExceptionHandlerTest {
   private static final String TRACE_ID = "0123456789abcdef0123456789abcdef";

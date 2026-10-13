@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class GsonUtils {
   private final Gson gson;

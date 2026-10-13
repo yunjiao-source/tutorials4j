@@ -11,7 +11,7 @@ import tutorials4j.toolkit.core.util.SecurityUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration

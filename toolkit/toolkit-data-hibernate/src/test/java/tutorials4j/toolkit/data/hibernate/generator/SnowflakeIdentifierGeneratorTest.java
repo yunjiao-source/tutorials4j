@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link SnowflakeIdentifierGenerator} 单元测试：主键类型校验与 ID 生成。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SnowflakeIdentifierGeneratorTest {
 

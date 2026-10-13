@@ -7,7 +7,7 @@ import org.redisson.api.RedissonClient;
  * 测试辅助：Redisson 锁服务是进程内单例，其内部的 {@code FixedLease}/{@code AutoRenewal} 在首次访问时捕获 当时的 {@link
  * RedissonClient}，测试需要通过反射清空缓存并替换客户端，保证用例之间互不影响。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public final class RedissonLockServiceTestFixture {
 

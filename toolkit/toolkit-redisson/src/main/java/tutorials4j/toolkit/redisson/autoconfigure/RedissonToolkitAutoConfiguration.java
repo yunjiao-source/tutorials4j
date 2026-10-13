@@ -14,7 +14,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonReentrantLockableAspect;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration

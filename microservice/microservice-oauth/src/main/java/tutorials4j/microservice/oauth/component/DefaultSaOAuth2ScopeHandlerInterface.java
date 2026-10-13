@@ -11,7 +11,7 @@ import tutorials4j.feature.oauth.service.UserService;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @RequiredArgsConstructor
 public class DefaultSaOAuth2ScopeHandlerInterface implements SaOAuth2ScopeHandlerInterface {

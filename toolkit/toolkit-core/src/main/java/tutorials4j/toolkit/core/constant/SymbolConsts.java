@@ -5,7 +5,7 @@ package tutorials4j.toolkit.core.constant;
  *
  * <p>集中定义标点符号、空白字符、SQL 关键字、文件后缀及 XML/HTML 片段等常用字符串常量，供项目内统一引用。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface SymbolConsts {
   /** 与号 */

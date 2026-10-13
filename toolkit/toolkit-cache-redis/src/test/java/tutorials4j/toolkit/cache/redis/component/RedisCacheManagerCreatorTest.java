@@ -19,7 +19,7 @@ import tutorials4j.toolkit.cache.redis.autoconfigure.RedisCacheToolkitProperties
 /**
  * {@link RedisCacheManagerCreator} 单元测试：缓存管理器创建与各类自定义扩展点。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedisCacheManagerCreatorTest {
   private static final String CACHE_NAME = "users";

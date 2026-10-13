@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link ErrorCodeException} 单元测试：错误码、详情、参数与 ErrorDetail 转换。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ErrorCodeExceptionTest {
 

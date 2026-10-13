@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link WriteableService} 单元测试：默认写操作到 Repository 的委托。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @SuppressWarnings("unchecked")
 class WriteableServiceTest {

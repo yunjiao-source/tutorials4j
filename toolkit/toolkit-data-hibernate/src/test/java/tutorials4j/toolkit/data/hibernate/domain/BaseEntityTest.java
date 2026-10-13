@@ -22,7 +22,7 @@ import tutorials4j.toolkit.data.domain.VersionEntity;
 /**
  * {@link BaseEntity} 单元测试：乐观锁、审计字段默认值与 JPA 注解映射。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class BaseEntityTest {
 

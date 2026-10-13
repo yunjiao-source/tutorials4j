@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface IdEntity<ID extends Serializable> extends Entity {
   ID getId();

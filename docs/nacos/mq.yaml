@@ -1,0 +1,6 @@
+spring:
+  rabbitmq:
+    host: ${env.rabbitmq.host}
+    port: ${env.rabbitmq.port}
+    username: ${env.rabbitmq.username}
+    password: ${env.rabbitmq.password}

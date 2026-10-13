@@ -24,7 +24,7 @@ import tutorials4j.toolkit.core.constant.ToolkitConsts;
 /**
  * {@link FixedLeaseLockTaskRunner} 单元测试：固定租期锁下的任务执行与异常处理。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class FixedLeaseLockTaskRunnerTest {
   private static final String LOCK_KEY = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";

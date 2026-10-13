@@ -5,7 +5,7 @@ import tutorials4j.toolkit.core.exception.ErrorCode;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public enum DataErrorCode implements ErrorCode {
   FIND_ENTITY_BY_ID_NOT_EXISTS("查询实体不存在"),

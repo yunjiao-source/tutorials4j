@@ -28,7 +28,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
 /**
  * {@link RedissonReentrantLockService} 单元测试：带等待时间的可重入锁。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedissonReentrantLockServiceTest {
   private static final String LOCK_KEY = "job:1";

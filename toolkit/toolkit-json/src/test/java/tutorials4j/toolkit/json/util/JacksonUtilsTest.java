@@ -21,7 +21,7 @@ import tutorials4j.toolkit.json.component.ToolkitSimpleModule;
 /**
  * {@link JacksonUtils} 单元测试：静态单例上的读写、类型转换与异常行为。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class JacksonUtilsTest {
   private final JacksonUtils jacksonUtils = JacksonUtils.instance;

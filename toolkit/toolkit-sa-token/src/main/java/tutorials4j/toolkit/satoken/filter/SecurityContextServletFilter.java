@@ -25,7 +25,7 @@ import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Order(SaTokenConsts.ASSEMBLY_ORDER + 1)
 public class SecurityContextServletFilter extends OncePerRequestFilter {

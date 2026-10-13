@@ -7,7 +7,7 @@ import tutorials4j.toolkit.core.function.BeanCreator;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface CacheManagerCreator<T extends CacheManager> extends BeanCreator<T> {
   CacheType getCacheType();

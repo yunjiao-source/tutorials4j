@@ -7,7 +7,7 @@ import cn.dev33.satoken.same.SaSameUtil;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class SameTokenSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
 

@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.script.RedisScript;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public enum ScriptType {
   SET_IF_ABSENT("lua/set_if_absent.lua"),

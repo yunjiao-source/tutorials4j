@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link RedissonBlockLockable} 注解元数据测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedissonBlockLockableTest {
 

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
  * <p>测试资源中包含额外的 {@code META-INF/tutorials4j/json-type-white-list.conf}（含注释、空白行
  * 与首尾带空格的条目），用于验证多资源合并与解析规则。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class JsonTypeWhiteListLoaderTest {
   private static final String MAIN_RESOURCE_ENTRY = "java.util.ArrayList";

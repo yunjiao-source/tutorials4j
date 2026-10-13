@@ -16,7 +16,8 @@
     <description>功能模块</description>
 
     <modules>
-        <module>feature-oauth</module>
+        <module>feature-oauth-entity</module>
+        <module>feature-oauth-service</module>
         <module>feature-oauth-web</module>
     </modules>
 

@@ -3,7 +3,7 @@ package tutorials4j.toolkit.data.domain;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface VersionEntity extends Entity {
   /**

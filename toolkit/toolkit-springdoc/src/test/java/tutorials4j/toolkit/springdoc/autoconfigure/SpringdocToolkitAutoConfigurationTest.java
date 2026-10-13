@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * {@link SpringdocToolkitAutoConfiguration} 自动装配测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SpringdocToolkitAutoConfigurationTest {
   private static final String AUTO_CONFIGURATION_IMPORTS =

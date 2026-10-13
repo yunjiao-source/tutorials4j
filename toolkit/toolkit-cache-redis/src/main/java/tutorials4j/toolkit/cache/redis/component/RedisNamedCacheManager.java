@@ -13,7 +13,7 @@ import tutorials4j.toolkit.cache.redis.autoconfigure.RedisCacheToolkitProperties
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class RedisNamedCacheManager extends RedisCacheManager {
   private final RedisCacheToolkitProperties properties;

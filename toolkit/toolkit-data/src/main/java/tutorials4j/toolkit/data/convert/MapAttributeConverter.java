@@ -12,7 +12,7 @@ import tutorials4j.toolkit.json.util.GsonUtils;
  *
  * <p>用于将实体的 {@code Map<String, Object>} 字段以 JSON 字符串形式持久化到数据库， 读取时再反序列化还原，空值场景下分别返回 null 与空 Map。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Converter
 public class MapAttributeConverter implements AttributeConverter<Map<String, String>, String> {

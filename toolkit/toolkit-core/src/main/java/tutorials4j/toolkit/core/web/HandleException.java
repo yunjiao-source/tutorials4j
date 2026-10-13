@@ -12,7 +12,7 @@ import tutorials4j.toolkit.core.exception.ErrorDetail;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface HandleException {
 

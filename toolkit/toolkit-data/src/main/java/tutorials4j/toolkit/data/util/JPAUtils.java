@@ -10,7 +10,7 @@ import tutorials4j.toolkit.core.constant.SymbolConsts;
  *
  * <p>所有方法均为静态方法，无需实例化即可直接调用。连接方法会优先复用实体根上已存在的同属性、同类型连接， 避免查询中产生重复的连接。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface JPAUtils {
   /**

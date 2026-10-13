@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration

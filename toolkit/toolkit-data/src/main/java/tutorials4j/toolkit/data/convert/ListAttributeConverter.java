@@ -10,7 +10,7 @@ import tutorials4j.toolkit.json.util.GsonUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Converter
 public class ListAttributeConverter implements AttributeConverter<List<String>, String> {

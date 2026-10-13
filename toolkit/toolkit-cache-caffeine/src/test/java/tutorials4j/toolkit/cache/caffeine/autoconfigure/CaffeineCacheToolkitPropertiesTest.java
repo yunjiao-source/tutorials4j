@@ -13,7 +13,7 @@ import tutorials4j.toolkit.core.constant.PropertyConsts;
 /**
  * {@link CaffeineCacheToolkitProperties} 配置绑定测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class CaffeineCacheToolkitPropertiesTest {
   private static final String PREFIX = PropertyConsts.PROPERTY_TOOLKIT_CACHE_CAFFEINE;

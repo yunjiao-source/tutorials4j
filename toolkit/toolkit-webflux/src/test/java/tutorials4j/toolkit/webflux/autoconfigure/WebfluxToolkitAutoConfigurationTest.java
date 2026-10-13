@@ -22,7 +22,7 @@ import tutorials4j.toolkit.webflux.GlobalWebfluxExceptionHandler;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class WebfluxToolkitAutoConfigurationTest {
   private static final String TOOLKIT_PACKAGE = "tutorials4j.toolkit.webflux";

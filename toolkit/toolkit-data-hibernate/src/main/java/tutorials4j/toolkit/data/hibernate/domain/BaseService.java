@@ -6,7 +6,7 @@ import tutorials4j.toolkit.data.domain.Entity;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface BaseService<E extends Entity, ID extends Serializable>
     extends WriteableService<E, ID> {}

@@ -10,7 +10,7 @@ import tutorials4j.toolkit.cache.CacheType;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Setter
 public class CacheManagerFactory {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link ToolkitKeySerializer} 单元测试：统一 key 前缀。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ToolkitKeySerializerTest {
   private final ToolkitKeySerializer serializer = new ToolkitKeySerializer("template:");

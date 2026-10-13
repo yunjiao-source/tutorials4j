@@ -5,7 +5,7 @@ package tutorials4j.toolkit.core.exception;
  *
  * <p>提供与 {@link Exception} 一致的多种构造方式，业务层可通过继承该类 定义自己的受检异常。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class BaseException extends Exception {
 

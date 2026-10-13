@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public enum ErrorCategory {
   SERVER("系统端异常", true),

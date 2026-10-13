@@ -8,7 +8,7 @@ import tutorials4j.toolkit.core.util.SecurityUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class AuditMetaObjectHandler implements MetaObjectHandler {
   @Override

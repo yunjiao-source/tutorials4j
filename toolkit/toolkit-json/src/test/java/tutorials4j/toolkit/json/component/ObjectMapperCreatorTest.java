@@ -11,7 +11,7 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * {@link ObjectMapperCreator} 单元测试：默认实例复用、拷贝实例独立性与配置继承。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ObjectMapperCreatorTest {
   private static final String NAME_KEY = "\"name\"";

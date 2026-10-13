@@ -13,6 +13,12 @@ env:
     username: admin
     password: admin
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
   include-urls: /**
   exclude-urls: /favicon.ico,/.well-known/**,/webjars/**,/swagger-ui/*,/v3/api-docs,/v3/api-docs/swagger-config,/css/*,/js/*,/images/*,/openapi/*
 

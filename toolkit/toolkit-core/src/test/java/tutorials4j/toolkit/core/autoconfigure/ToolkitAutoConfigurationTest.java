@@ -3,7 +3,6 @@ package tutorials4j.toolkit.core.autoconfigure;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import cn.hutool.extra.spring.SpringUtil;
 import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -12,11 +11,12 @@ import org.springframework.context.annotation.Configuration;
 import tutorials4j.toolkit.core.concurrent.ScheduledThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.concurrent.ThreadPoolExecutorHolder;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
+import tutorials4j.toolkit.core.util.SpringUtils;
 
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ToolkitAutoConfigurationTest {
 
@@ -51,7 +51,7 @@ class ToolkitAutoConfigurationTest {
     contextRunner.run(
         context -> {
           assertThat(context.getBean(ToolkitProperties.class)).isNotNull();
-          assertThat(context.getBean(SpringUtil.class)).isNotNull();
+          assertThat(context.getBean(SpringUtils.class)).isNotNull();
           assertThat(context.getBean(ScheduledThreadPoolExecutorHolder.class)).isNotNull();
           assertThat(context.getBean(ThreadPoolExecutorHolder.class)).isNotNull();
         });

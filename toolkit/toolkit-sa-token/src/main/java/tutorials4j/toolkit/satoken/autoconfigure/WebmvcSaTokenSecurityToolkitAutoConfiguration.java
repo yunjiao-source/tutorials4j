@@ -23,7 +23,7 @@ import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration
@@ -54,7 +54,7 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
   @Bean
   SecurityContextServletFilter securityContextServletFilter(
       SaTokenSecurityToolkitProperties properties) {
-    log.trace("[TOOLKIT-SA-TOKEN] SecurityContextServletFilter");
+    log.trace("[TOOLKIT-SA-TOKEN] Security Context Servlet Filter");
     FilterOptions options = properties.getFilter();
     return new SecurityContextServletFilter()
         .addInclude(options.getIncludeUrls().toArray(new String[0]))

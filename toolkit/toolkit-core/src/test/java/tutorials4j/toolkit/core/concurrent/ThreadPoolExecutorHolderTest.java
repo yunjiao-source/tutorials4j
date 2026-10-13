@@ -24,7 +24,7 @@ import tutorials4j.toolkit.core.autoconfigure.ThreadExecutionOptions;
  *
  * <p>Holder 是进程内单例（{@link ThreadPoolExecutorHolder#instance}），每个用例前后通过反射清空 其内部状态，保证用例之间互不影响。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ThreadPoolExecutorHolderTest {
   private final ThreadPoolExecutorHolder holder = ThreadPoolExecutorHolder.instance;

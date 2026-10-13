@@ -10,7 +10,7 @@ import tutorials4j.toolkit.core.exception.ErrorCodeException;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface Lockable {
   default String prefix() {

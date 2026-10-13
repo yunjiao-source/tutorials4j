@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link OptimisticLockerInterceptorCustomizer} 单元测试：乐观锁拦截器装配。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class OptimisticLockerInterceptorCustomizerTest {
   private final OptimisticLockerInterceptorCustomizer customizer =

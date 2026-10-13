@@ -9,7 +9,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonReentrantLockService;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface FixedLeaseReentrantLockTaskRunner extends TaskRunner, Lockable {
   @Override

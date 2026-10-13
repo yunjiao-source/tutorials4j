@@ -5,6 +5,6 @@ import java.io.Serializable;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface Entity extends Serializable {}

@@ -1,6 +1,6 @@
 package tutorials4j.toolkit.satoken.util;
 
-import static tutorials4j.toolkit.core.constant.HttpConsts.REMEMBER_ME;
+import static tutorials4j.toolkit.core.constant.DefaultConsts.REMEMBER_ME;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
@@ -12,7 +12,7 @@ import tutorials4j.toolkit.core.model.UserModel;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface SaTokenUtils {
   String BLOCK_URLS_AUTH_STRATEGY = "blockUrls";

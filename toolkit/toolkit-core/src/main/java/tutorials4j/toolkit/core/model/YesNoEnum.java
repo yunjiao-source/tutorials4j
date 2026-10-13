@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public enum YesNoEnum {
   yes,

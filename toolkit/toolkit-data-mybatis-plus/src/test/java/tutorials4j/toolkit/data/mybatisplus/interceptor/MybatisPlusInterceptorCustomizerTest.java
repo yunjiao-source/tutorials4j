@@ -12,7 +12,7 @@ import org.springframework.core.Ordered;
 /**
  * {@link MybatisPlusInterceptorCustomizer} 单元测试：接口默认契约。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class MybatisPlusInterceptorCustomizerTest {
 

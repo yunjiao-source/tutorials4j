@@ -12,7 +12,7 @@ import tutorials4j.toolkit.core.constant.PropertyConsts;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class ToolkitPropertiesTest {
   private final ApplicationContextRunner contextRunner =

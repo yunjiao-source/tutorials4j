@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
  *
  * <p>工具类内部持有静态 {@link Snowflake} 实例，每个用例前后通过反射清空该字段并清理系统属性， 使 worker/datacenter 的初始化逻辑可重复验证。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SnowflakeUtilsTest {
 

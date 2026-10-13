@@ -27,7 +27,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonLockServiceTestFixture;
 /**
  * 阻塞式锁任务运行器测试：{@link AutoRenewalBlockLockTaskRunner} 与 {@link FixedLeaseBlockLockTaskRunner}。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class BlockLockTaskRunnerTest {
   private static final String LOCK_KEY = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";

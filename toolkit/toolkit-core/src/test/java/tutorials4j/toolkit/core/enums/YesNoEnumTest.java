@@ -11,7 +11,7 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
 /**
  * {@link YesNoEnum} 单元测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class YesNoEnumTest {
 

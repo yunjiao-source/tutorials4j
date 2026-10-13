@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
  *
  * <p>向 MyBatis Plus 拦截器中添加 {@link OptimisticLockerInnerInterceptor}， 用于实现基于版本号的乐观锁机制。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  * @see OptimisticLockerInnerInterceptor
  */
 public class OptimisticLockerInterceptorCustomizer implements MybatisPlusInterceptorCustomizer {

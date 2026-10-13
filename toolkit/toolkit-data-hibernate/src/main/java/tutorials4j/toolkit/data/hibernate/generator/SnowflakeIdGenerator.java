@@ -9,7 +9,7 @@ import org.hibernate.annotations.IdGeneratorType;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @IdGeneratorType(SnowflakeIdentifierGenerator.class)
 @Retention(RetentionPolicy.RUNTIME)

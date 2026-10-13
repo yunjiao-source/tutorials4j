@@ -5,7 +5,7 @@ import java.time.Instant;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface AuditingEntity extends Entity {
   String getCreatedBy();

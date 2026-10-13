@@ -22,7 +22,7 @@
 
     <developers>
         <developer>
-            <name>杨运交(Yun Jiao)</name>
+            <name>杨运交(YunJiao Yang)</name>
             <email>1290308475@qq.com</email>
         </developer>
     </developers>
@@ -107,6 +107,7 @@
         <sardine.version>5.10</sardine.version>
         <x-file-storage-spring.version>2.3.0</x-file-storage-spring.version>
         <sa-token.version>1.46.0</sa-token.version>
+        <ip2region.version>3.3.7</ip2region.version>
     </properties>
 
     <dependencyManagement>
@@ -149,6 +150,12 @@
                 <version>${hutool.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
             </dependency>
 
             <dependency>

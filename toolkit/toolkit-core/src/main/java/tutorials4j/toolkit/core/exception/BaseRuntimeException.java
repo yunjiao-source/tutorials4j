@@ -7,7 +7,7 @@ import lombok.Getter;
  *
  * <p>提供与 {@link RuntimeException} 一致的多种构造方式，业务层可通过继承该类 定义自己的运行时异常。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Getter
 public class BaseRuntimeException extends RuntimeException {

@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface CacheTemplate<K, V> {
   Class<V> getValueClass();

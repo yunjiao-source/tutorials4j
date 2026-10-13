@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link ErrorCode} 与 {@link CommonErrorCode} 单元测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ErrorCodeTest {
 

@@ -14,7 +14,7 @@ import tutorials4j.toolkit.satoken.component.ToolkitStpInterface;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Component
 public class DefaultStpInterface extends ToolkitStpInterface {

@@ -14,7 +14,7 @@ import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration

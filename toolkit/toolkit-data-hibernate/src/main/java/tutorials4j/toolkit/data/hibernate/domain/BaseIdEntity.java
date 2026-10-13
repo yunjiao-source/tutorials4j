@@ -10,7 +10,7 @@ import tutorials4j.toolkit.data.hibernate.generator.SnowflakeIdGenerator;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @MappedSuperclass
 public class BaseIdEntity<ID extends Serializable> implements IdEntity<ID> {

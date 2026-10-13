@@ -11,7 +11,7 @@ import tutorials4j.toolkit.core.constant.PropertyConsts;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class OnCaffeineCacheTypeCondition implements Condition {
   private final CacheType expected = CacheType.caffeine;

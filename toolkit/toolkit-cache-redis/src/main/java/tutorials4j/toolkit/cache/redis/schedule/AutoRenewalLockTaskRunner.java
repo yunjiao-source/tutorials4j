@@ -10,7 +10,7 @@ import tutorials4j.toolkit.core.function.TaskRunner;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface AutoRenewalLockTaskRunner extends TaskRunner, Lockable {
   @Override

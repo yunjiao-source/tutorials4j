@@ -10,7 +10,7 @@ import tutorials4j.toolkit.core.concurrent.ScheduledThreadPoolExecutorHolder;
  * 测试辅助：{@link RedisLockService} 是进程内单例，其内部的 {@code FixedLease}/{@code AutoRenewal} 在首次访问时 捕获当时的
  * {@link RedisScriptExecutor}，测试需要通过反射清空缓存并替换执行器，保证用例之间互不影响。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public final class RedisLockServiceTestFixture {
 

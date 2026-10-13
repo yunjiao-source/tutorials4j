@@ -15,7 +15,7 @@ import tutorials4j.toolkit.cache.redis.autoconfigure.RedisCacheToolkitProperties
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @RequiredArgsConstructor
 public class RedisCacheManagerCreator implements CacheManagerCreator<RedisNamedCacheManager> {

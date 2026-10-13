@@ -27,7 +27,7 @@ import tutorials4j.toolkit.satoken.strategy.WhiteUrlsSaFilterAuthStrategy;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration

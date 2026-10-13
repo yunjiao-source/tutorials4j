@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link BeanCreator} 单元测试：函数式接口与默认实现契约。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class BeanCreatorTest {
 

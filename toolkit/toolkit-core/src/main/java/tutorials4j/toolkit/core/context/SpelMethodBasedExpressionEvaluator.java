@@ -23,7 +23,7 @@ import org.springframework.util.StringValueResolver;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class SpelMethodBasedExpressionEvaluator
     implements MethodBasedExpressionEvaluator, EmbeddedValueResolverAware, BeanFactoryAware {

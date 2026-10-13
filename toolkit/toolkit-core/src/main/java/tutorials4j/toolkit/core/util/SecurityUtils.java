@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface SecurityUtils {
   /**

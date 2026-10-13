@@ -11,7 +11,7 @@ import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Data
 @ConfigurationProperties(prefix = PropertyConsts.PROPERTY_TOOLKIT_SECURITY_SA_TOKEN)

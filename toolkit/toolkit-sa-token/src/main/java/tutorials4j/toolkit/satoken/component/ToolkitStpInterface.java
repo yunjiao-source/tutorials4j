@@ -12,7 +12,7 @@ import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitPropertie
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @RequiredArgsConstructor
 public abstract class ToolkitStpInterface implements StpInterface {

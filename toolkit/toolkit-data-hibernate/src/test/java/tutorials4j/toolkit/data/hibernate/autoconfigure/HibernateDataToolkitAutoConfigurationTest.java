@@ -27,7 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * <p>{@code @EnableJpaAuditing} 需要 JPA 元模型，测试中以 mock 的 {@code jpaMappingContext} 替代 真实的
  * EntityManagerFactory。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class HibernateDataToolkitAutoConfigurationTest {
   private static final String AUTO_CONFIGURATION_IMPORTS =

@@ -14,7 +14,7 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * {@link ToolkitSimpleModule} 单元测试：Long 序列化为字符串的定制行为。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ToolkitSimpleModuleTest {
   private final ToolkitSimpleModule module = new ToolkitSimpleModule();

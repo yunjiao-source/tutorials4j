@@ -21,7 +21,7 @@ import tutorials4j.toolkit.core.exception.ErrorCodeException;
 /**
  * {@link CaffeineCacheToolkitAutoConfiguration} 自动装配测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class CaffeineCacheToolkitAutoConfigurationTest {
   private static final String PREFIX = PropertyConsts.PROPERTY_TOOLKIT_CACHE_CAFFEINE;

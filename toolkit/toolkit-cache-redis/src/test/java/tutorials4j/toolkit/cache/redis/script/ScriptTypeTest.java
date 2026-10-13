@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.script.RedisScript;
 /**
  * {@link ScriptType} 单元测试：Lua 脚本资源加载与类型声明。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ScriptTypeTest {
 

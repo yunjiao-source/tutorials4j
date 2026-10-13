@@ -19,7 +19,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 /**
  * {@link SpelMethodBasedExpressionEvaluator} 单元测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SpelMethodBasedExpressionEvaluatorTest {
   private static final String METHOD_NAME = "greet";

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link SnowflakeIdentifierGenerator} 单元测试：雪花算法 ID/UUID 生成。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SnowflakeIdentifierGeneratorTest {
 

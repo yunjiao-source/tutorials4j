@@ -7,7 +7,7 @@ import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class CorsSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
 

@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class LoggingMessageFormattingStrategy implements MessageFormattingStrategy {
   private static final DateTimeFormatter FORMATTER =

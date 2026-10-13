@@ -17,7 +17,7 @@ import tutorials4j.toolkit.data.domain.VersionEntity;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)

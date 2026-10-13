@@ -12,7 +12,7 @@ import tutorials4j.toolkit.cache.component.CacheManagerFactory;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @AutoConfiguration

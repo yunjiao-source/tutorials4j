@@ -14,7 +14,7 @@ import tutorials4j.microservice.gateway.sentinel.SentinelExceptionHandler;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Slf4j
 @Configuration

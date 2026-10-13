@@ -26,7 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * <p>MyBatis-Plus 的 strict 填充依赖实体上的 {@code @TableField(fill = ...)} 与 已初始化的 {@code TableInfo}，测试中用
  * {@link TableInfoHelper} 手动完成实体元数据初始化。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class AuditMetaObjectHandlerTest {
   private final AuditMetaObjectHandler handler = new AuditMetaObjectHandler();

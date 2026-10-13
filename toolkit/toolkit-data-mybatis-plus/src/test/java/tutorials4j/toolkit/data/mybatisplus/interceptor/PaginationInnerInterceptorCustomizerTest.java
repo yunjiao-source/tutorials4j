@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link PaginationInnerInterceptorCustomizer} 单元测试：分页拦截器装配。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class PaginationInnerInterceptorCustomizerTest {
 

@@ -15,7 +15,7 @@ import tutorials4j.microservice.oauth.util.ConverterUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Component
 @RequiredArgsConstructor

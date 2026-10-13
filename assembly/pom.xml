@@ -17,6 +17,7 @@
 
     <modules>
         <module>assembly-resource-microservice-starter</module>
+        <module>assembly-bus-amqp-starter</module>
     </modules>
 
 </project>

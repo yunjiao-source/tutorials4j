@@ -10,7 +10,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonBlockLockService;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface FixedLeaseBlockLockTaskRunner extends TaskRunner, Lockable {
   @Override

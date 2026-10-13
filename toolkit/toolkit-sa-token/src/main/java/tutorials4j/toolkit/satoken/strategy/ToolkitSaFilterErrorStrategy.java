@@ -24,7 +24,7 @@ import tutorials4j.toolkit.satoken.exception.BlockUrlException;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice

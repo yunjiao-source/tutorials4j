@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link IdentifierMybatisPlusPropertiesCustomizer} 单元测试：向全局配置注入雪花 ID 生成器。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class IdentifierMybatisPlusPropertiesCustomizerTest {
 

@@ -22,7 +22,7 @@ import tutorials4j.toolkit.core.exception.UnauthorizedException;
 /**
  * {@link Lockable} 单元测试：默认前缀、键与时间配置、异常处理策略。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class LockableTest {
   private Logger logger;

@@ -17,7 +17,7 @@ import tutorials4j.feature.oauth.service.UserService;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Component
 @RequiredArgsConstructor

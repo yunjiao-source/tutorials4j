@@ -15,7 +15,7 @@ import tutorials4j.toolkit.core.exception.ErrorCodeException;
 /**
  * {@link CaffeineNamedCacheManager} 单元测试：命名缓存的创建、参数落地与 Spring Cache 适配。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class CaffeineNamedCacheManagerTest {
   private static final String CACHE_NAME = "users";

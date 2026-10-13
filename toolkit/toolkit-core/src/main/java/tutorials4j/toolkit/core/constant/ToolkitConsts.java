@@ -3,7 +3,7 @@ package tutorials4j.toolkit.core.constant;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface ToolkitConsts {
   String SUPER_ROLE_NAME = "admin";

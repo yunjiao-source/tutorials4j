@@ -19,7 +19,7 @@
         <module>microservice-gateway</module>
         <module>microservice-oauth</module>
         <module>microservice-system</module>
-
+        <module>microservice-test</module>
     </modules>
 
     <build>

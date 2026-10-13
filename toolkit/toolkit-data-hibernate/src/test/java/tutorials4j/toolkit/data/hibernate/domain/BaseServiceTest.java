@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link BaseService} 单元测试：接口层次与读写委托。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @SuppressWarnings("unchecked")
 class BaseServiceTest {

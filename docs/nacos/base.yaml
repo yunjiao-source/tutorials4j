@@ -7,3 +7,42 @@ tutorials4j:
           role-key-expired: 30m
           user-key-prefix: 'satoken:user-find-role:'
           user-key-duration: 30m
+
+    ip2region:
+      v4xdb: classpath:/ip2region/ip2region_v4.xdb
+      v6xdb: classpath:/ip2region/ip2region_v6.xdb
+      warm-up: false
+      close-timeout: 10s
+      v4:
+        cache-policy: vindexcache
+        searchers: 20
+        fair-lock: false
+        cache-slice-bytes: 50MB
+      v6:
+        cache-policy: vindexcache
+        searchers: 20
+        fair-lock: false
+        cache-slice-bytes: 50MB
+
+spring:
+  cloud:
+    bus:
+      id: ${spring.application.name}:${server.port}:${random.value}
+      base-packages: tutorials4j.**.event.remote
+      enabled: true
+      trace:
+        enabled: true
+
+  # 默认线程池配置
+  task:
+    execution:
+      pool:
+        core-size: 8           # 核心线程数（常驻）
+        max-size: 32           # 最大线程数（应对突发）
+        queue-capacity: 200    # 任务队列容量（必须有限）
+        keep-alive: 60s        # 空闲线程存活时间
+        allow-core-thread-timeout: false # 是否允许核心线程超时
+      thread-name-prefix: async-  # 线程名前缀，便于日志追踪
+      shutdown:
+        await-termination: true   # 优雅关闭，等待任务完成
+        await-termination-period: 30s # 等待超时

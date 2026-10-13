@@ -25,7 +25,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
 /**
  * {@link RedissonBlockLockableAspect} 单元测试：注解解析、密钥生成与锁路径选择（阻塞式）。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedissonBlockLockableAspectTest {
   private final RedissonBlockLockService lockService = mock(RedissonBlockLockService.class);

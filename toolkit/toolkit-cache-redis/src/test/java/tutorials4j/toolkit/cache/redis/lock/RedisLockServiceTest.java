@@ -30,7 +30,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
 /**
  * {@link RedisLockService} 单元测试：固定租期锁与自动续期锁的加锁/释放流程。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedisLockServiceTest {
   private static final String LOCK_KEY = "job:1";

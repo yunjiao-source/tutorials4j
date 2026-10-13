@@ -25,7 +25,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
 /**
  * {@link RedisLockableAspect} 单元测试：注解解析、密钥生成与锁路径选择。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedisLockableAspectTest {
   private final RedisLockService lockService = mock(RedisLockService.class);

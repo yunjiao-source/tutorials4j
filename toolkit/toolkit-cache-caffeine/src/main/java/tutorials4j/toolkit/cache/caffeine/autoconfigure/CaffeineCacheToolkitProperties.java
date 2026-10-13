@@ -10,7 +10,7 @@ import tutorials4j.toolkit.core.constant.PropertyConsts;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Getter
 @Setter

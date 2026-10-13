@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link BlockAttackInterceptorCustomizer} 单元测试：防全表更新/删除拦截器装配。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class BlockAttackInterceptorCustomizerTest {
   private final BlockAttackInterceptorCustomizer customizer =

@@ -16,7 +16,7 @@ import tutorials4j.toolkit.data.domain.Entity;
 /**
  * {@link BaseRepository} 单元测试：仓储接口契约。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class BaseRepositoryTest {
 

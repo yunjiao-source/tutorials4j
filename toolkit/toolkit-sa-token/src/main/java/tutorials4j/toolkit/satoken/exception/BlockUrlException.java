@@ -5,7 +5,7 @@ import cn.dev33.satoken.exception.SaTokenException;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class BlockUrlException extends SaTokenException {
   /** 异常提示语 */

@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * {@link SecurityUtils} 单元测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SecurityUtilsTest {
 

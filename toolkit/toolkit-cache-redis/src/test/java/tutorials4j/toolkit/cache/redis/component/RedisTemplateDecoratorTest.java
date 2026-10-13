@@ -12,7 +12,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 /**
  * {@link RedisTemplateDecorator} 单元测试：静态单例与模板持有。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @SuppressWarnings("unchecked")
 class RedisTemplateDecoratorTest {

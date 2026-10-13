@@ -23,7 +23,7 @@ import tutorials4j.feature.oauth.service.ClientService;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @RestController
 @RequestMapping("/clients")

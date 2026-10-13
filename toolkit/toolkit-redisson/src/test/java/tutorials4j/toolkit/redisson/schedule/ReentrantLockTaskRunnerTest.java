@@ -27,7 +27,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonLockServiceTestFixture;
  * 带等待时间的可重入锁任务运行器测试：{@link AutoRenewalReentrantLockTaskRunner} 与 {@link
  * FixedLeaseReentrantLockTaskRunner}。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class ReentrantLockTaskRunnerTest {
   private static final String LOCK_KEY = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";

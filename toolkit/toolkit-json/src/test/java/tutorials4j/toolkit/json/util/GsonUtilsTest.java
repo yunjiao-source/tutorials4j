@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link GsonUtils} 单元测试：单例配置、序列化/反序列化与异常行为。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class GsonUtilsTest {
   private static final GsonUtils GSON = GsonUtils.getInstance();

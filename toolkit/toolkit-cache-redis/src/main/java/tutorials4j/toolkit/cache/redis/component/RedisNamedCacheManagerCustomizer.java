@@ -3,7 +3,7 @@ package tutorials4j.toolkit.cache.redis.component;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @FunctionalInterface
 public interface RedisNamedCacheManagerCustomizer {

@@ -16,7 +16,7 @@ import tutorials4j.feature.oauth.service.ClientService;
  *
  * <p>client_id 缺失或应用不存在时同样渲染登录页，仅不展示应用信息，不影响正常登录流程。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Component
 @RequiredArgsConstructor

@@ -17,7 +17,7 @@ import tutorials4j.toolkit.core.exception.ErrorCodeException;
 /**
  * {@link RedisNamedCacheManager} 单元测试：命名缓存的独立配置与占位。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedisNamedCacheManagerTest {
   private static final String CACHE_NAME = "users";

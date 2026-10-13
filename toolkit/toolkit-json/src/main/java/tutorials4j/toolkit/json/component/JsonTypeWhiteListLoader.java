@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -16,8 +17,9 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
+@Slf4j
 public class JsonTypeWhiteListLoader implements SmartInitializingSingleton {
   private static final String FILE_NAME = "json-type-white-list.conf";
   private static final String LOCATION_PATTERN =
@@ -36,6 +38,9 @@ public class JsonTypeWhiteListLoader implements SmartInitializingSingleton {
     Set<String> result = new HashSet<>();
     for (Resource resource : resources) {
       loadFromResource(resource, result);
+    }
+    if (log.isDebugEnabled()) {
+      log.debug("加载Json类型白名单完成：{}", result);
     }
     return result;
   }

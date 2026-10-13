@@ -30,7 +30,7 @@ import tutorials4j.toolkit.json.component.JsonTypeWhiteListLoader;
 /**
  * {@link RedisCacheToolkitAutoConfiguration} 自动装配测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedisCacheToolkitAutoConfigurationTest {
   private static final String PREFIX = PropertyConsts.PROPERTY_TOOLKIT_CACHE_REDIS;

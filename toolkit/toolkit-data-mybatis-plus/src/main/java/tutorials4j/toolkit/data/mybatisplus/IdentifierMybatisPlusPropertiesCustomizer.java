@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class IdentifierMybatisPlusPropertiesCustomizer implements MybatisPlusPropertiesCustomizer {
 

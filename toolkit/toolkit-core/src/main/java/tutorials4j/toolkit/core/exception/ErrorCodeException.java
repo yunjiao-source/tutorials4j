@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
  * <p>在 {@link BaseRuntimeException} 基础上关联一个 {@link ErrorCode}，并支持携带 详情信息（detail）和键值对参数（params），可通过
  * {@link #getErrorDetail()} 快速转换为 统一的失败结果对象。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @Getter
 public class ErrorCodeException extends BaseRuntimeException {

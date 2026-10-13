@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
  *
  * <p>向 MyBatis Plus 拦截器中添加 {@link PaginationInnerInterceptor}， 用于实现数据库物理分页功能，并指定数据库类型。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  * @see PaginationInnerInterceptor
  */
 @RequiredArgsConstructor

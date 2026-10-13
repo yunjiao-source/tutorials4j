@@ -25,7 +25,7 @@ import tutorials4j.toolkit.data.exception.DataErrorCode;
 /**
  * {@link ReadableService} 单元测试：默认方法到 Repository 的委托与分页参数组装。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @SuppressWarnings("unchecked")
 class ReadableServiceTest {

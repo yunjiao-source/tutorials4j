@@ -3,7 +3,7 @@ package tutorials4j.toolkit.core.exception;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public class UnauthorizedException extends BaseRuntimeException {
 

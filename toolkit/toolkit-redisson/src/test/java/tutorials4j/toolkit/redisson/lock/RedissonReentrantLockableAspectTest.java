@@ -25,7 +25,7 @@ import tutorials4j.toolkit.core.function.ThrowingCallable;
 /**
  * {@link RedissonReentrantLockableAspect} 单元测试：等待时间与过期时间的解析及锁路径选择。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class RedissonReentrantLockableAspectTest {
   private final RedissonReentrantLockService lockService = mock(RedissonReentrantLockService.class);

@@ -1,7 +1,7 @@
 package tutorials4j.toolkit.core.exception;
 
 /**
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 public interface ErrorCode {
   String getCode();

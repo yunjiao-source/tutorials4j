@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link SimpleNamedThreadFactory} 单元测试。
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 class SimpleNamedThreadFactoryTest {
 

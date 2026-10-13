@@ -7,7 +7,7 @@ import org.springframework.core.Ordered;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @FunctionalInterface
 public interface MybatisPlusInterceptorCustomizer extends Ordered {

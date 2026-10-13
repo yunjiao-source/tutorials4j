@@ -8,7 +8,7 @@ import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @RequiredArgsConstructor
 public class WhiteUrlsSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {

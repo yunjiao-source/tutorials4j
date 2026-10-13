@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @RequiredArgsConstructor
 public class SimpleNamedThreadFactory implements ThreadFactory {

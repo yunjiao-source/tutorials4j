@@ -9,7 +9,7 @@ import tutorials4j.toolkit.data.domain.Entity;
 /**
  * TODO
  *
- * @author Yun Jiao
+ * @author YunJiao Yang
  */
 @NoRepositoryBean
 public interface BaseRepository<E extends Entity, ID extends Serializable>
