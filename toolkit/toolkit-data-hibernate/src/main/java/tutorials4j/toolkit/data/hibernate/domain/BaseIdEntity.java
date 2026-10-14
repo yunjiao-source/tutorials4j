@@ -36,12 +36,12 @@ public class BaseIdEntity<ID extends Serializable> implements IdEntity<ID> {
       return false;
     }
     BaseIdEntity<?> that = (BaseIdEntity<?>) o;
-    return Objects.equal(id, that.id);
+    return id != null && Objects.equal(id, that.id);
   }
 
   /** 基于主键计算哈希值。 */
   @Override
   public int hashCode() {
-    return Objects.hashCode(id);
+    return id != null ? Objects.hashCode(id) : System.identityHashCode(this);
   }
 }

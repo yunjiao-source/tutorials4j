@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserModel {
-  @EqualsAndHashCode.Include private String id;
+  @EqualsAndHashCode.Include private String userId;
 
   private String username;
 

@@ -98,11 +98,11 @@ class BaseIdEntityTest {
   }
 
   @Test
-  @DisplayName("主键为 null 时两个新实体相等且 hashCode 一致")
+  @DisplayName("主键为 null 时两个新实体不相等且 hashCode 不一致")
   void shouldHandleNullIdInHashCode() {
     TestIdEntity first = entity(null);
     TestIdEntity second = entity(null);
 
-    assertThat(first).isEqualTo(second).hasSameHashCodeAs(second);
+    assertThat(first).isNotEqualTo(second).doesNotHaveSameHashCodeAs(second);
   }
 }

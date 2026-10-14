@@ -25,7 +25,7 @@ public class LoginEventCreatorComponent {
   public AuthEvent create(UserModel userModel) {
     AuthEvent authEvent = new AuthEvent();
     BeanUtils.copyProperties(userModel, authEvent);
-    authEvent.setUserId(userModel.getId());
+    authEvent.setUserId(userModel.getUserId());
 
     HttpServletRequest request = WebmvcUtils.getRequest();
 

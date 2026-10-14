@@ -41,6 +41,7 @@ public class ConverterUtils {
 
         UserModel userModel = new UserModel();
         BeanUtils.copyProperties(userEntity, userModel);
+        userModel.setUserId(userEntity.getId());
         userModel.setAuthorities(authorities);
 
         return userModel;
