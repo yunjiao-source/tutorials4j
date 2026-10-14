@@ -1,8 +1,0 @@
-tutorials4j:
-  toolkit:
-    security:
-      sa-token:
-        interceptor:
-          annotation: false
-          check-login: true
-          include-path-patterns: /**

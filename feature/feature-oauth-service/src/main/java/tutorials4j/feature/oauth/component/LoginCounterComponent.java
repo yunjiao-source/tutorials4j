@@ -5,7 +5,6 @@ import static tutorials4j.feature.oauth.OAuthFeatureConsts.CACHE_NAME_LOGIN_FAIL
 import org.springframework.stereotype.Component;
 import tutorials4j.toolkit.cache.CacheType;
 import tutorials4j.toolkit.cache.template.AbstractCounterCacheTemplate;
-import tutorials4j.toolkit.core.model.UserModel;
 
 /**
  * TODO
@@ -23,8 +22,4 @@ public class LoginCounterComponent extends AbstractCounterCacheTemplate<String> 
 
     return super.check(key, maxTimes);
   }
-
-  public void fail(UserModel userModel) {}
-
-  public void success(UserModel userModel) {}
 }

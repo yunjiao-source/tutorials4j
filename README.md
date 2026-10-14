@@ -15,13 +15,20 @@
 
 ## 项目运行图
 
+### vue前端
 > 登录界面
 ![登录界面](docs/images/001.jpg )
 
 > 登录成功
 ![登录成功](docs/images/002.jpg )
 
+### OAuth2统一登录
 
+> 统一登录
+![登录界面](docs/images/003.jpg )
+
+> 登录授权
+![登录界面](docs/images/004.jpg )
 
 ## 博客文章
 

@@ -55,10 +55,10 @@ public class UserService implements BaseService<UserEntity, String> {
     Instant now = Instant.now();
     entity.setPassword(passwordEncoder.encode(model.getPassword()));
     if (entity.getCredentialsExpireAt() == null) {
-      entity.setCredentialsExpireAt(now.plus(properties.getDefaultCredentialsExpire()));
+      entity.setCredentialsExpireAt(now.plus(properties.getCredentialsExpire()));
     }
     if (entity.getAccountExpireAt() == null) {
-      entity.setAccountExpireAt(now.plus(properties.getDefaultAccountExpire()));
+      entity.setAccountExpireAt(now.plus(properties.getAccountExpire()));
     }
     if (entity.getStatus() == null) {
       entity.setStatus(UserStatus.active);

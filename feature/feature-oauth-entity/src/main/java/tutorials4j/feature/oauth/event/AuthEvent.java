@@ -1,6 +1,7 @@
 package tutorials4j.feature.oauth.event;
 
 import lombok.Data;
+import tutorials4j.feature.oauth.entity.AuthStatus;
 
 /**
  * TODO
@@ -8,7 +9,9 @@ import lombok.Data;
  * @author YunJiao Yang
  */
 @Data
-public class UserSessionEvent {
+public class AuthEvent {
+  private String userId;
+
   private String username;
 
   private String name;
@@ -25,11 +28,5 @@ public class UserSessionEvent {
 
   private String browser;
 
-  private SessionType type;
-
-  public static enum SessionType {
-    logout,
-    loginSuccess,
-    loginFailure
-  }
+  private AuthStatus status;
 }

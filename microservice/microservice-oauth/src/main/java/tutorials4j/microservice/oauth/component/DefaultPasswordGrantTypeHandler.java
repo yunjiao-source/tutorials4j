@@ -7,8 +7,8 @@ import cn.dev33.satoken.oauth2.granttype.handler.model.PasswordAuthResult;
 import cn.dev33.satoken.stp.StpUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.oauth.event.UserSessionEvent;
-import tutorials4j.feature.oauth.event.UserSessionEvent.SessionType;
+import tutorials4j.feature.oauth.entity.AuthStatus;
+import tutorials4j.feature.oauth.event.AuthEvent;
 import tutorials4j.feature.oauth.service.UserService;
 import tutorials4j.toolkit.core.model.UserModel;
 import tutorials4j.toolkit.core.util.SpringUtils;
@@ -28,15 +28,15 @@ public class DefaultPasswordGrantTypeHandler extends PasswordGrantTypeHandler {
   @Override
   public PasswordAuthResult loginByUsernamePassword(String username, String password) {
     UserModel userModel = userService.findUserModelByUserName(username);
-    UserSessionEvent userSessionEvent = loginEventCreatorComponent.create(userModel);
+    AuthEvent authEvent = loginEventCreatorComponent.create(userModel);
 
     try {
       userService.authenticate(userModel, password);
-      userSessionEvent.setType(SessionType.loginSuccess);
-      SpringUtils.getApplicationContext().publishEvent(userSessionEvent);
+      authEvent.setStatus(AuthStatus.success);
+      SpringUtils.getApplicationContext().publishEvent(authEvent);
     } catch (Exception e) {
-      userSessionEvent.setType(SessionType.loginFailure);
-      SpringUtils.getApplicationContext().publishEvent(userSessionEvent);
+      authEvent.setStatus(AuthStatus.fail);
+      SpringUtils.getApplicationContext().publishEvent(authEvent);
       throw e;
     }
 

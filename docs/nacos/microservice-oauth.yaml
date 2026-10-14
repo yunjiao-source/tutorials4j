@@ -24,3 +24,12 @@ tutorials4j:
   microservice:
     oauth:
       enable-default-scope-handler-interface: false
+
+  feature:
+    oauth:
+      account-expire: 90d
+      credentials-expire: 90d
+      clear-auth-history:
+        data-expired: 90d
+        max-loop-count: 10
+        max-size-pre-loop: 999
