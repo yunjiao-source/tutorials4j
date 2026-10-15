@@ -10,9 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -76,16 +76,16 @@ public class SecurityContextServletFilter extends OncePerRequestFilter {
   private boolean setContext() {
     UserModel userModel = SaTokenUtils.getUserFromSession();
     if (userModel != null) {
-      List<SimpleGrantedAuthority> authorities =
-          Optional.ofNullable(userModel.getAuthorities()).stream()
-              .flatMap(Collection::stream)
+
+      Set<SimpleGrantedAuthority> grantedAuthorities =
+          SaTokenUtils.getGrantedAuthorities().stream()
               .map(SimpleGrantedAuthority::new)
-              .toList();
+              .collect(Collectors.toSet());
 
       SecurityContext context = SecurityContextHolder.createEmptyContext();
       context.setAuthentication(
           new UsernamePasswordAuthenticationToken(
-              userModel.getUsername(), userModel.getPassword(), authorities));
+              userModel.getUsername(), userModel.getPassword(), grantedAuthorities));
       SecurityContextHolder.setContext(context);
       return true;
     }

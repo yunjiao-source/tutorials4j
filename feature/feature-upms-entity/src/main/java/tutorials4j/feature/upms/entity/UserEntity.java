@@ -9,10 +9,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedEntityGraphs;
-import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
@@ -20,13 +16,16 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
 import tutorials4j.toolkit.core.model.GenderEnum;
 import tutorials4j.toolkit.core.model.UserStatus;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 
 /**
@@ -41,19 +40,6 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
     name = "upms_user",
     indexes = {@Index(name = "upms_user_idx0", columnList = "status")},
     uniqueConstraints = {@UniqueConstraint(name = "upms_user_id10", columnNames = "username")})
-@NamedEntityGraphs({
-  @NamedEntityGraph(
-      name = EntityGraphConsts.USER_WITH_ROLE,
-      attributeNodes = @NamedAttributeNode("roles")),
-  @NamedEntityGraph(
-      name = EntityGraphConsts.USER_WITH_ROLE_PERMISSION,
-      attributeNodes = {@NamedAttributeNode(value = "roles", subgraph = "role.permissions")},
-      subgraphs = {
-        @NamedSubgraph(
-            name = "role.permissions",
-            attributeNodes = @NamedAttributeNode("permissions"))
-      })
-})
 public class UserEntity extends BaseEntity<String> {
 
   /** 用户名 */
@@ -111,6 +97,10 @@ public class UserEntity extends BaseEntity<String> {
   @Enumerated(EnumType.STRING)
   private UserStatus status;
 
+  @Column
+  @Enumerated(EnumType.STRING)
+  private YesNoEnum isDefault;
+
   @ManyToMany
   @Fetch(FetchMode.SUBSELECT)
   @JoinTable(
@@ -123,4 +113,26 @@ public class UserEntity extends BaseEntity<String> {
         @Index(name = "upms_user_role_idx2", columnList = "role_id")
       })
   private Set<RoleEntity> roles = new HashSet<>();
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+
+    if (status == null) {
+      status = UserStatus.active;
+    }
+
+    if (isDefault == null) {
+      isDefault = YesNoEnum.no;
+    }
+  }
+
+  @Override
+  protected void preRemove() {
+    super.preRemove();
+
+    if (Objects.equals(isDefault, YesNoEnum.yes)) {
+      throw UpmsFeatureErrorCode.DEFAULT_DATA_CAN_NOT_REMOVE.throwed().param("username", username);
+    }
+  }
 }

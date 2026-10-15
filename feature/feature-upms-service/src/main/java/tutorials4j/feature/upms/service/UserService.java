@@ -21,7 +21,6 @@ import tutorials4j.feature.upms.model.UserUpdateModel;
 import tutorials4j.feature.upms.repository.UserRepository;
 import tutorials4j.feature.upms.util.ConverterUtils;
 import tutorials4j.toolkit.core.model.UserModel;
-import tutorials4j.toolkit.core.model.UserStatus;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseService;
 
@@ -57,9 +56,7 @@ public class UserService implements BaseService<UserEntity, String> {
     if (entity.getAccountExpireAt() == null) {
       entity.setAccountExpireAt(now.plus(properties.getAccountExpire()));
     }
-    if (entity.getStatus() == null) {
-      entity.setStatus(UserStatus.active);
-    }
+
     return userRepository.save(entity);
   }
 
@@ -86,10 +83,7 @@ public class UserService implements BaseService<UserEntity, String> {
 
   @Cacheable(value = CACHE_NAME_USERS, key = "#username")
   public UserModel findUserModelByUserName(String username) {
-    Assert.hasText("username", "username must not be null or empty");
-    return userRepository
-        .findWithRolesAndPermissionsByUsername(username)
-        .map(e -> ConverterUtils.getInstance().convertUserEntity.apply(e))
-        .orElseThrow(UpmsFeatureErrorCode.ACCOUNT_NOT_FOUND::throwed);
+    UserEntity userEntity = findByUsername(username);
+    return ConverterUtils.getInstance().convertUserEntity.apply(userEntity);
   }
 }

@@ -11,7 +11,6 @@ import tutorials4j.feature.upms.entity.RoleEntity;
 import tutorials4j.feature.upms.model.RoleCreateModel;
 import tutorials4j.feature.upms.model.RoleUpdateModel;
 import tutorials4j.feature.upms.repository.RoleRepository;
-import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseService;
 
@@ -36,9 +35,6 @@ public class RoleService implements BaseService<RoleEntity, String> {
     var entity = new RoleEntity();
     BeanUtils.copyProperties(model, entity);
 
-    if (entity.getStatus() == null) {
-      entity.setStatus(YesNoEnum.yes);
-    }
     return roleRepository.save(entity);
   }
 

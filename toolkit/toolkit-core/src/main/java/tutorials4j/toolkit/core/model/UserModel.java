@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Locale;
-import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,8 +20,6 @@ public class UserModel {
   private String username;
 
   private String password;
-
-  private Set<String> authorities;
 
   private String name;
 

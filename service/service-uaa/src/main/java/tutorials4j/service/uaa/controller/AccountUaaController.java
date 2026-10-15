@@ -8,9 +8,8 @@ import cn.dev33.satoken.oauth2.exception.SaOAuth2Exception;
 import cn.dev33.satoken.oauth2.processor.SaOAuth2ServerProcessor;
 import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
 import cn.dev33.satoken.oauth2.template.SaOAuth2Util;
-import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
-import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +18,8 @@ import tutorials4j.feature.upms.model.DefaultScopes;
 import tutorials4j.feature.upms.model.UserInfo;
 import tutorials4j.feature.upms.service.UserService;
 import tutorials4j.toolkit.core.exception.UnauthorizedException;
+import tutorials4j.toolkit.core.model.UserModel;
+import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 
 /**
  * TODO
@@ -32,31 +33,31 @@ public class AccountUaaController {
   private final UserService userService;
 
   @RequestMapping("/codes")
-  public List<String> codes() {
-    return StpUtil.getPermissionList();
+  public Set<String> codes() {
+    return SaTokenUtils.getGrantedAuthorities();
   }
 
   @RequestMapping("userinfo")
   public UserInfo userinfo() {
     // 获取 Access-Token 对应的账号id
-    var accessToken = SaOAuth2Manager.getDataResolver().readAccessToken(SaHolder.getRequest());
-    var loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
+    String accessToken = SaOAuth2Manager.getDataResolver().readAccessToken(SaHolder.getRequest());
+    Object loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
 
-    var userEntity = userService.findByUsername(loginId.toString());
-    var userInfo = new UserInfo();
-    userInfo.setSub(userEntity.getId());
+    UserModel userModel = userService.findUserModelByUserName(loginId.toString());
+    UserInfo userInfo = new UserInfo();
+    userInfo.setSub(userModel.getUserId());
 
     var accessTokenModel = SaOAuth2Util.getAccessToken(accessToken);
     if (accessTokenModel.getScopes().contains(DefaultScopes.profile.name())) {
-      userInfo.fillByProfile(userEntity);
+      userInfo.fillByProfile(userModel);
     }
 
     if (accessTokenModel.getScopes().contains(DefaultScopes.email.name())) {
-      userInfo.setEmail(userEntity.getEmail());
+      userInfo.setEmail(userModel.getEmail());
     }
 
     if (accessTokenModel.getScopes().contains(DefaultScopes.phone.name())) {
-      userInfo.setPhoneNumber(userEntity.getPhoneNumber());
+      userInfo.setPhoneNumber(userModel.getPhoneNumber());
     }
 
     return userInfo;

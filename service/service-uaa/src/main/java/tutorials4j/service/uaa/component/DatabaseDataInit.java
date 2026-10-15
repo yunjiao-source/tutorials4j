@@ -6,6 +6,8 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import tutorials4j.feature.upms.entity.RoleEntity;
+import tutorials4j.feature.upms.entity.UserEntity;
 import tutorials4j.feature.upms.model.ClientCreateModel;
 import tutorials4j.feature.upms.model.DefaultScopes;
 import tutorials4j.feature.upms.model.RoleCreateModel;
@@ -13,6 +15,7 @@ import tutorials4j.feature.upms.model.UserCreateModel;
 import tutorials4j.feature.upms.service.ClientService;
 import tutorials4j.feature.upms.service.RoleService;
 import tutorials4j.feature.upms.service.UserService;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -53,6 +56,7 @@ public class DatabaseDataInit implements CommandLineRunner {
               GrantType.password, // 密码式
               GrantType.client_credentials // 客户端模式
               ));
+      client1.setIsDefault(YesNoEnum.yes);
       clientService.create(client1);
 
       ClientCreateModel client2 = new ClientCreateModel();
@@ -75,23 +79,24 @@ public class DatabaseDataInit implements CommandLineRunner {
   }
 
   private void initUser() {
-    var role = roleService.getRoleRepository().findByCode("admin").orElse(null);
+    RoleEntity role = roleService.getRoleRepository().findByCode("admin").orElse(null);
     if (role == null) {
-      var roleCreateModel = new RoleCreateModel();
+      RoleCreateModel roleCreateModel = new RoleCreateModel();
       roleCreateModel.setCode("admin");
       roleCreateModel.setName("管理员");
       roleCreateModel.setDescription("包含所有权限");
+      roleCreateModel.setIsDefault(YesNoEnum.yes);
       role = roleService.create(roleCreateModel);
     }
 
-    var user = userService.getUserRepository().findByUsername("admin").orElse(null);
+    UserEntity user = userService.getUserRepository().findByUsername("admin").orElse(null);
     if (user == null) {
-      var userModel = new UserCreateModel();
-      userModel.setUsername("admin");
-      userModel.setName("系统管理员");
-      userModel.setEmail("admin@example.com");
-      userModel.setPassword("123456");
-      user = userService.create(userModel);
+      UserCreateModel userCreateModel = new UserCreateModel();
+      userCreateModel.setUsername("admin");
+      userCreateModel.setName("系统管理员");
+      userCreateModel.setEmail("admin@example.com");
+      userCreateModel.setPassword("123456");
+      user = userService.create(userCreateModel);
 
       user.setRoles(Set.of(role));
       userService.save(user);

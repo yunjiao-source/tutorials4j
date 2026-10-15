@@ -6,6 +6,7 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 import java.io.Serializable;
 import java.time.Instant;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -19,6 +20,7 @@ import tutorials4j.toolkit.data.domain.VersionEntity;
  *
  * @author YunJiao Yang
  */
+@ToString(callSuper = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity<ID extends Serializable> extends BaseIdEntity<ID>

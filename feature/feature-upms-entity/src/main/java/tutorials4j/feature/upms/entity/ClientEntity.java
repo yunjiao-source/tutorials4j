@@ -9,11 +9,12 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.List;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
 import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.convert.ListAttributeConverter;
-import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 
 /**
  * TODO
@@ -27,7 +28,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
     name = "upms_client",
     indexes = {@Index(name = "upms_client_idx0", columnList = "subject_id")},
     uniqueConstraints = {@UniqueConstraint(name = "upms_client_idx1", columnNames = "client_id")})
-public class ClientEntity extends BaseEntity<String> {
+public class ClientEntity extends UpmsEntity {
   /** 应用id，应该全局唯一 */
   @Column(nullable = false)
   private String clientId;
@@ -83,4 +84,26 @@ public class ClientEntity extends BaseEntity<String> {
   @Column
   @Enumerated(EnumType.STRING)
   private YesNoEnum isAutoConfirm;
+
+  @Column
+  @Enumerated(EnumType.STRING)
+  private YesNoEnum isDefault;
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+
+    if (isDefault == null) {
+      isDefault = YesNoEnum.no;
+    }
+  }
+
+  @Override
+  protected void preRemove() {
+    super.preRemove();
+
+    if (Objects.equals(isDefault, YesNoEnum.yes)) {
+      throw UpmsFeatureErrorCode.DEFAULT_DATA_CAN_NOT_REMOVE.throwed().param("clientId", clientId);
+    }
+  }
 }

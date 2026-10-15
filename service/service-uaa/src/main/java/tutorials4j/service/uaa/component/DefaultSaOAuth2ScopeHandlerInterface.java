@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import tutorials4j.feature.upms.model.DefaultScopes;
 import tutorials4j.feature.upms.model.UserInfo;
 import tutorials4j.feature.upms.service.UserService;
+import tutorials4j.toolkit.core.model.UserModel;
 
 /**
  * TODO
@@ -24,9 +25,9 @@ public class DefaultSaOAuth2ScopeHandlerInterface implements SaOAuth2ScopeHandle
 
   @Override
   public void workAccessToken(AccessTokenModel at) {
-    var loginId = at.getLoginId();
-    var userModel = userService.findByUsername(loginId.toString());
-    var userInfo = new UserInfo();
+    Object loginId = at.getLoginId();
+    UserModel userModel = userService.findUserModelByUserName(loginId.toString());
+    UserInfo userInfo = new UserInfo();
     userInfo.fillByProfile(userModel);
 
     at.extraData.put("profile", userInfo);

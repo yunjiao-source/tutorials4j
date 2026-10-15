@@ -8,19 +8,17 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
 import tutorials4j.toolkit.core.model.YesNoEnum;
-import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 
 /**
  * TODO
@@ -32,27 +30,19 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 @Entity
 @Table(
     name = "upms_role",
-    indexes = {@Index(name = "upms_role_idx0", columnList = "status")},
+    indexes = {@Index(name = "upms_role_idx0", columnList = "code,enabled")},
     uniqueConstraints = {@UniqueConstraint(name = "upms_role_id10", columnNames = "code")})
-@NamedEntityGraphs({
-  @NamedEntityGraph(
-      name = EntityGraphConsts.ROLE_WITH_USER,
-      attributeNodes = @NamedAttributeNode("users")),
-  @NamedEntityGraph(
-      name = EntityGraphConsts.ROLE_WITH_PERMISSION,
-      attributeNodes = @NamedAttributeNode("permissions"))
-})
-public class RoleEntity extends BaseEntity<String> {
+public class RoleEntity extends UpmsEntity {
   @Column(nullable = false)
   private String code;
 
   @Column private String name;
 
+  @Column private String description;
+
   @Column
   @Enumerated(EnumType.STRING)
-  private YesNoEnum status;
-
-  @Column private String description;
+  private YesNoEnum isDefault;
 
   @ManyToMany(mappedBy = "roles")
   private Set<UserEntity> users = new HashSet<>();
@@ -69,4 +59,22 @@ public class RoleEntity extends BaseEntity<String> {
         @Index(name = "upms_role_permission_idx2", columnList = "permission_id")
       })
   private Set<PermissionEntity> permissions = new HashSet<>();
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+
+    if (isDefault == null) {
+      isDefault = YesNoEnum.no;
+    }
+  }
+
+  @Override
+  protected void preRemove() {
+    super.preRemove();
+
+    if (Objects.equals(isDefault, YesNoEnum.yes)) {
+      throw UpmsFeatureErrorCode.DEFAULT_DATA_CAN_NOT_REMOVE.throwed().param("code", code);
+    }
+  }
 }

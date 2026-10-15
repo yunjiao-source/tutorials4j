@@ -1,9 +1,13 @@
 package tutorials4j.toolkit.satoken.util;
 
 import static tutorials4j.toolkit.core.constant.DefaultConsts.REMEMBER_ME;
+import static tutorials4j.toolkit.core.constant.ToolkitConsts.AUTHORITY_ROLE_PREFIX;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import tutorials4j.toolkit.core.constant.ToolkitConsts;
 import tutorials4j.toolkit.core.exception.UnauthorizedException;
@@ -91,5 +95,16 @@ public interface SaTokenUtils {
     }
 
     return false;
+  }
+
+  static Set<String> getGrantedAuthorities() {
+    List<String> roleAuthorities =
+        StpUtil.getRoleList().stream().map(e -> AUTHORITY_ROLE_PREFIX + e).toList();
+    Set<String> grantedAuthorities = new HashSet<>(roleAuthorities);
+
+    List<String> permissionAuthorities = StpUtil.getPermissionList().stream().toList();
+    grantedAuthorities.addAll(permissionAuthorities);
+
+    return grantedAuthorities;
   }
 }
