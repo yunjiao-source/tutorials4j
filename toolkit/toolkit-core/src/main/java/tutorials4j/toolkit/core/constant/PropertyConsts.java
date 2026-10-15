@@ -13,6 +13,8 @@ public interface PropertyConsts {
 
   String PROPERTY_TOOLKIT_IP2REGION = PROPERTY_TOOLKIT + ".ip2region";
 
+  String PROPERTY_TOOLKIT_XXL_JOB = PROPERTY_TOOLKIT + ".xxl-job";
+
   /** security */
   String PROPERTY_TOOLKIT_SECURITY = PROPERTY_TOOLKIT + ".security";
 

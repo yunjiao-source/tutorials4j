@@ -1,0 +1,15 @@
+tutorials4j:
+  toolkit:
+    xxl-job:
+      admin:
+        addresses: http://127.0.0.1:8081
+        timeout: 5s
+      executor:
+        enabled: true
+        appName: ${spring.application.name}
+        accessToken: default_token
+        port: 9999
+        logPath: xxl-job-logs
+        log-retention-days: 30d
+        excludedPackage: org.springframework
+        glue-enabled: true

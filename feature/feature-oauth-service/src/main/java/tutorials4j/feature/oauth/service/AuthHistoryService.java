@@ -62,12 +62,12 @@ public class AuthHistoryService implements BaseService<AuthHistoryEntity, String
   @Transactional(rollbackFor = Exception.class)
   public int clearExpireData() {
     ClearAuthHistoryOptions options = properties.getClearAuthHistory();
-    Instant createTimeEnd = Instant.now().plus(options.getDataExpired());
+    Instant createTimeEnd = Instant.now().minus(options.getDataExpired());
     AuthHistoryQuery query = new AuthHistoryQuery();
-    query.setCreateTimeEnd(createTimeEnd);
+    query.setCreatedTimeEnd(createTimeEnd);
 
     Pageable pageable =
-        PageRequest.of(0, options.getMaxSizePreLoop(), Sort.by("createTime").descending());
+        PageRequest.of(0, options.getMaxSizePreLoop(), Sort.by("createdTime").descending());
 
     Page<StringIdOnly> page =
         authHistoryRepository.findBy(

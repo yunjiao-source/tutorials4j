@@ -32,6 +32,7 @@
         <module>toolkit-data-mybatis-plus</module>
         <module>toolkit-sa-token</module>
         <module>toolkit-bus</module>
+        <module>toolkit-xxl-job</module>
     </modules>
 
 </project>

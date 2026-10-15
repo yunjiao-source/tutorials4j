@@ -18,6 +18,7 @@ spring:
       - optional:nacos:mq.yaml?group=common
       - optional:nacos:cache.yaml?group=common
       - optional:nacos:security.yaml?group=common
+      - optional:nacos:xxl-job.yaml?group=common
       - optional:nacos:${spring.application.name}.yaml?group=service
 
 
@@ -29,6 +30,3 @@ spring:
         group: DEFAULT_GROUP
         username: ${TUTORIALS4J_NACOS_USERNAME:nacos}
         password: ${TUTORIALS4J_NACOS_PASSWORD:nacos}
-
-
-

@@ -17,16 +17,16 @@ import tutorials4j.feature.oauth.entity.AuthStatus;
 public class AuthHistoryQuery {
   private String userId;
   private AuthStatus authStatus;
-  private Instant createTimeBegin;
-  private Instant createTimeEnd;
+  private Instant createdTimeBegin;
+  private Instant createdTimeEnd;
 
   public Specification<AuthHistoryEntity> buildSpecification() {
     var specList =
         List.of(
             AuthHistorySpecification.userIdEqual(userId),
             AuthHistorySpecification.authStatusEqual(authStatus),
-            AuthHistorySpecification.createdTimeGte(createTimeBegin),
-            AuthHistorySpecification.createdTimeLte(createTimeEnd));
+            AuthHistorySpecification.createdTimeGte(createdTimeBegin),
+            AuthHistorySpecification.createdTimeLte(createdTimeEnd));
 
     return specList.stream()
         .filter(Objects::nonNull)

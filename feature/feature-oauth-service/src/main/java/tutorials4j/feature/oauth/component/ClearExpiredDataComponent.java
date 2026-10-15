@@ -1,6 +1,8 @@
 package tutorials4j.feature.oauth.component;
 
+import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tutorials4j.feature.oauth.autoconfigure.OAuthFeatureProperties;
 import tutorials4j.feature.oauth.service.AuthHistoryService;
@@ -10,13 +12,18 @@ import tutorials4j.feature.oauth.service.AuthHistoryService;
  *
  * @author Yun Jiao
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ClearExpiredDataComponent {
   private final OAuthFeatureProperties properties;
   private final AuthHistoryService authHistoryService;
 
+  @XxlJob("clearAuthHistoryExpiredData")
   public void clearAuthHistoryExpiredData() {
+    if (log.isDebugEnabled()) {
+      log.debug("执行XxlJob任务：{}", properties.getClearAuthHistory());
+    }
     int loopCount = properties.getClearAuthHistory().getMaxLoopCount();
     for (int i = 0; i <= loopCount; i++) {
       int rows = authHistoryService.clearExpireData();
