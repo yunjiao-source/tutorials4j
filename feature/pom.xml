@@ -16,9 +16,12 @@
     <description>功能模块</description>
 
     <modules>
-        <module>feature-oauth-entity</module>
-        <module>feature-oauth-service</module>
-        <module>feature-oauth-web</module>
+        <module>feature-core</module>
+        <module>feature-bus-event</module>
+        <module>feature-upms-entity</module>
+        <module>feature-upms-service</module>
+        <module>feature-upms-component</module>
+        <module>feature-upms-web</module>
     </modules>
 
 </project>

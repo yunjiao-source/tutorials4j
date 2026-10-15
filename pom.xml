@@ -31,7 +31,7 @@
         <module>toolkit</module>
         <module>feature</module>
         <module>assembly</module>
-        <module>microservice</module>
+        <module>service</module>
 
     </modules>
 

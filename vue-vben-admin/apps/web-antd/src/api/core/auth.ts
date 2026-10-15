@@ -36,7 +36,7 @@ export async function loginApi(data: AuthApi.LoginParams) {
     scope: 'profile,email,phone',
   };
   return requestClient.post<AuthApi.LoginResult>(
-    '/oauth/openapi/token',
+    '/uaa/openapi/token',
     undefined,
     { params },
   );
@@ -46,7 +46,7 @@ export async function loginApi(data: AuthApi.LoginParams) {
  * 刷新accessToken
  */
 export async function refreshTokenApi() {
-  return baseRequestClient.post<AuthApi.RefreshTokenResult>('/oauth/openapi/refresh', {
+  return baseRequestClient.post<AuthApi.RefreshTokenResult>('/uaa/openapi/refresh', {
     withCredentials: true,
   });
 }
@@ -55,7 +55,7 @@ export async function refreshTokenApi() {
  * 退出登录
  */
 export async function logoutApi() {
-  return baseRequestClient.post('/oauth/openapi/logout', {
+  return baseRequestClient.post('/uaa/openapi/logout', {
     withCredentials: true,
   });
 }
@@ -64,5 +64,5 @@ export async function logoutApi() {
  * 获取用户权限码
  */
 export async function getAccessCodesApi() {
-  return requestClient.get<string[]>('/oauth/accounts/codes');
+  return requestClient.get<string[]>('/uaa/accounts/codes');
 }

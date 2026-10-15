@@ -1,0 +1,30 @@
+package tutorials4j.service.uaa.util;
+
+import cn.dev33.satoken.oauth2.data.model.loader.SaClientModel;
+import java.util.function.Function;
+import org.springframework.beans.BeanUtils;
+import tutorials4j.feature.upms.entity.ClientEntity;
+
+/**
+ * TODO
+ *
+ * @author YunJiao Yang
+ */
+public class ConverterUtils {
+  private ConverterUtils() {}
+
+  private static class Holder {
+    private static final ConverterUtils INSTANCE = new ConverterUtils();
+  }
+
+  public static ConverterUtils getInstance() {
+    return ConverterUtils.Holder.INSTANCE;
+  }
+
+  public Function<ClientEntity, SaClientModel> convertClientEntity =
+      (clientEntity) -> {
+        SaClientModel model = new SaClientModel();
+        BeanUtils.copyProperties(clientEntity, model);
+        return model;
+      };
+}

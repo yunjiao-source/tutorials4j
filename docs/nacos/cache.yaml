@@ -21,12 +21,12 @@ tutorials4j:
           clients:
             time-to-live: 10m
             caching-null-values: true
-            key-prefix: 'cacheable:oauth:'
+            key-prefix: 'cacheable:upms:'
           users:
             time-to-live: 10m
             caching-null-values: true
-            key-prefix: 'cacheable:oauth:'
+            key-prefix: 'cacheable:upms:'
           login-fail-counter:
             time-to-live: 10m
             caching-null-values: true
-            key-prefix: 'cache:oauth:'
+            key-prefix: 'cache:upms:'

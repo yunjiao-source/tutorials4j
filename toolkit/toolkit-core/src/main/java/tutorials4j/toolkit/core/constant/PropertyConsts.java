@@ -34,10 +34,10 @@ public interface PropertyConsts {
   /** feature */
   String PROPERTY_FEATURE = PROPERTY_TUTORIALS4J + ".feature";
 
-  String PROPERTY_FEATURE_OAUTH = PROPERTY_FEATURE + ".oauth";
+  String PROPERTY_FEATURE_UPMS = PROPERTY_FEATURE + ".upms";
 
-  /** microservice */
-  String PROPERTY_MICROSERVICE = PROPERTY_TUTORIALS4J + ".microservice";
+  /** service */
+  String PROPERTY_SERVICE = PROPERTY_TUTORIALS4J + ".service";
 
-  String PROPERTY_MICROSERVICE_OAUTH = PROPERTY_MICROSERVICE + ".oauth";
+  String PROPERTY_SERVICE_UPMS = PROPERTY_SERVICE + ".upms";
 }

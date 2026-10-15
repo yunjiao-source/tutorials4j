@@ -17,8 +17,8 @@
       "grafana.app/saved-from-ui": "Grafana v13.0.2 (3fcdbc5a6e)",
       "grafana.app/updatedBy": "user:ffpy27226s6wwb",
       "grafana.app/updatedTimestamp": "2026-09-14T07:22:05Z",
-      "grafana.app/folderTitle": "tutorials4j.microservice",
-      "grafana.app/folderUrl": "/dashboards/f/dfy7e2wxwwglca/tutorials4j-microservice"
+      "grafana.app/folderTitle": "tutorials4j.service",
+      "grafana.app/folderUrl": "/dashboards/f/dfy7e2wxwwglca/tutorials4j-service"
     }
   },
   "spec": {
@@ -3332,7 +3332,7 @@
             "text": "",
             "value": ""
           },
-          "label": "microservice-gateway",
+          "label": "service-gateway",
           "hide": "dontHide",
           "refresh": "onDashboardLoad",
           "skipUrlSync": false,

@@ -1,18 +1,18 @@
 scrape_configs:
-  - job_name: 'microservice-gateway'
+  - job_name: 'service-gateway'
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets:
           - 'localhost:9801'
         labels:
-          service: 'microservice-gateway'
+          service: 'service-gateway'
           env: 'prod'
 
-  - job_name: 'microservice-demo'
+  - job_name: 'service-demo'
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets:
           - 'localhost:9899'
         labels:
-          service: 'microservice-demo'
+          service: 'service-demo'
           env: 'prod'

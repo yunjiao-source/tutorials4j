@@ -6,7 +6,7 @@ import { requestClient } from '#/api/request';
  * 获取用户信息
  */
 export async function getUserInfoApi():Promise<UserInfo> {
-  const raw = await requestClient.get<any>('/oauth/accounts/userinfo');
+  const raw = await requestClient.get<any>('/uaa/accounts/userinfo');
 
   return {
     token: '',

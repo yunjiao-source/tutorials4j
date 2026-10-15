@@ -1,0 +1,67 @@
+spring:
+  cloud:
+    gateway:
+      metrics:
+        enabled: true
+      server:
+        webflux:
+          routes:
+            - id: service-demo-route
+              uri: lb://service-demo
+              predicates:
+                - Path=/api/demo/**
+              filters:
+                - StripPrefix=2
+                - AddRequestHeader=X-Gateway-Source, api-gateway
+
+            - id: service-gateway-route
+              uri: lb://service-gateway
+              predicates:
+                - Path=/api/gateway/**
+              filters:
+                - StripPrefix=2
+
+            - id: service-uaa-route
+              uri: lb://service-uaa
+              predicates:
+                - Path=/api/uaa/**
+              filters:
+                - StripPrefix=2
+
+
+# sa-token配置
+sa-token:
+  # 是否打印操作日志
+  is-log: true
+
+tutorials4j:
+  toolkit:
+    security:
+      sa-token:
+        filter:
+          auth-strategies:
+            - logging
+            - blockUrls
+            - whiteUrls
+            - checkLogin
+          before-auth-strategies:
+            - cors
+            - optionsMethod
+
+          include-urls: /**
+
+          exclude-urls:
+            - /api/uaa/openapi/**
+
+          white-urls:
+            - /xxxx/**
+
+          block-urls:
+            - /xxxx/**
+
+management:
+  endpoint:
+    gateway:
+      access: read-only
+
+
