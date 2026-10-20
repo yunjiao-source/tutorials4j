@@ -4,20 +4,28 @@ import static tutorials4j.feature.upms.UpmsFeatureConsts.CACHE_NAME_USERS;
 
 import jakarta.validation.Valid;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import tutorials4j.feature.upms.autoconfigure.UpmsFeatureProperties;
+import tutorials4j.feature.upms.entity.RoleEntity;
 import tutorials4j.feature.upms.entity.UserEntity;
 import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
-import tutorials4j.feature.upms.model.UserCreateModel;
-import tutorials4j.feature.upms.model.UserUpdateModel;
+import tutorials4j.feature.upms.model.UserCreateDTO;
+import tutorials4j.feature.upms.model.UserUpdateDTO;
+import tutorials4j.feature.upms.repository.RoleRepository;
 import tutorials4j.feature.upms.repository.UserRepository;
 import tutorials4j.feature.upms.util.ConverterUtils;
 import tutorials4j.toolkit.core.model.UserModel;
@@ -35,6 +43,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseService;
 @RequiredArgsConstructor
 public class UserService implements BaseService<UserEntity, String> {
   private final UserRepository userRepository;
+  private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
   private final UpmsFeatureProperties properties;
 
@@ -43,13 +52,21 @@ public class UserService implements BaseService<UserEntity, String> {
     return userRepository;
   }
 
-  public UserEntity create(@Valid UserCreateModel model) {
+  public Page<UserEntity> findByPage(UserQuery query, Pageable pageable) {
+    return userRepository.findAll(query.buildSpecification(), pageable);
+  }
+
+  public UserEntity create(@Valid UserCreateDTO model) {
     Assert.notNull(model, "model must not be null");
-    var entity = new UserEntity();
+    UserEntity entity = new UserEntity();
     BeanUtils.copyProperties(model, entity);
 
     Instant now = Instant.now();
-    entity.setPassword(passwordEncoder.encode(model.getPassword()));
+    String password = model.getPassword();
+    if (StringUtils.isBlank(password)) {
+      password = RandomStringUtils.secure().nextAlphabetic(6);
+    }
+    entity.setPassword(passwordEncoder.encode(password));
     if (entity.getCredentialsExpireAt() == null) {
       entity.setCredentialsExpireAt(now.plus(properties.getCredentialsExpire()));
     }
@@ -61,11 +78,11 @@ public class UserService implements BaseService<UserEntity, String> {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public UserEntity update(String id, @Valid UserUpdateModel model) {
-    Assert.notNull(model, "model must not be null");
+  public UserEntity update(String id, @Valid UserUpdateDTO dto) {
+    Assert.notNull(dto, "dto must not be null");
 
-    var entity = findById(id);
-    BeanUtils.copyProperties(model, entity);
+    UserEntity entity = findById(id);
+    BeanUtils.copyProperties(dto, entity);
     return userRepository.save(entity);
   }
 
@@ -83,7 +100,16 @@ public class UserService implements BaseService<UserEntity, String> {
 
   @Cacheable(value = CACHE_NAME_USERS, key = "#username")
   public UserModel findUserModelByUserName(String username) {
-    UserEntity userEntity = findByUsername(username);
-    return ConverterUtils.getInstance().convertUserEntity.apply(userEntity);
+    UserEntity entity = findByUsername(username);
+    return ConverterUtils.getInstance().convertUserEntity.apply(entity);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public UserEntity addRoles(String id, Collection<String> roles) {
+    UserEntity entity = findById(id);
+
+    Set<RoleEntity> roleEntities = roleRepository.findByCodeIn(roles);
+    entity.setRoles(roleEntities);
+    return userRepository.save(entity);
   }
 }

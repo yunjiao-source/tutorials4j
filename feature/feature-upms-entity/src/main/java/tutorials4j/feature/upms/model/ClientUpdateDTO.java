@@ -14,7 +14,7 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
  */
 @Getter
 @Setter
-public class ClientUpdateModel {
+public class ClientUpdateDTO {
 
   @NotBlank(message = "名称是必须的")
   private String clientName;

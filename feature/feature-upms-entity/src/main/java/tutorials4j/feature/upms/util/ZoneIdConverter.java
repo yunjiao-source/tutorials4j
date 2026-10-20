@@ -1,4 +1,4 @@
-package tutorials4j.feature.upms.entity;
+package tutorials4j.feature.upms.util;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

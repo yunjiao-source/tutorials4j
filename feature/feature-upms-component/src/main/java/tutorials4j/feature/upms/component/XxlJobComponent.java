@@ -15,7 +15,7 @@ import tutorials4j.feature.upms.service.AuthHistoryService;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ClearExpiredDataComponent {
+public class XxlJobComponent {
   private final UpmsFeatureProperties properties;
   private final AuthHistoryService authHistoryService;
 

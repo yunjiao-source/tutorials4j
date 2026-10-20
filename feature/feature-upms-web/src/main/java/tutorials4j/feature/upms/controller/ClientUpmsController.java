@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.feature.upms.entity.ClientEntity;
-import tutorials4j.feature.upms.model.ClientCreateModel;
-import tutorials4j.feature.upms.model.ClientUpdateModel;
+import tutorials4j.feature.upms.model.ClientCreateDTO;
+import tutorials4j.feature.upms.model.ClientUpdateDTO;
 import tutorials4j.feature.upms.service.ClientQuery;
 import tutorials4j.feature.upms.service.ClientService;
 
@@ -26,21 +26,21 @@ import tutorials4j.feature.upms.service.ClientService;
  * @author YunJiao Yang
  */
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/upms/clients")
 @RequiredArgsConstructor
 public class ClientUpmsController {
   private final ClientService clientService;
 
   @PostMapping("create")
   @ResponseStatus(HttpStatus.CREATED)
-  public ClientEntity create(@Valid @RequestBody ClientCreateModel model) {
-    return clientService.create(model);
+  public ClientEntity create(@Valid @RequestBody ClientCreateDTO dto) {
+    return clientService.create(dto);
   }
 
   @PutMapping("{id}")
   public ClientEntity update(
-      @PathVariable("id") String id, @Valid @RequestBody ClientUpdateModel model) {
-    return clientService.update(id, model);
+      @PathVariable("id") String id, @Valid @RequestBody ClientUpdateDTO dto) {
+    return clientService.update(id, dto);
   }
 
   @DeleteMapping("{id}")

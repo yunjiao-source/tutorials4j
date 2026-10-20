@@ -30,7 +30,7 @@ public class AuthHistoryEntity extends BaseIdEntity<String> {
   @Enumerated(EnumType.STRING)
   private AuthStatus authStatus;
 
-  private Instant createdTime;
+  @Column private Instant createdTime;
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)

@@ -1,6 +1,19 @@
 ###
-GET http://localhost:9802/clients/page
+GET http://localhost:9802/upms/clients/page
 Content-Type: application/json
 satoken: fb6c536c-4cbe-4d83-86b3-2b23cc2e1a55
 Authorization: Bearer iwiy0BwCVEhPtq34pRcSiAjsjW0kf9YN9QWTJFy4p2slrvjYEau7Z72tou10
+
+
+###
+GET http://localhost:9801/api/uaa/upms/users/page
+Content-Type: application/json
+satoken: 14f30b95-5777-4a18-b39c-870d4bc0c04f
+Authorization: Bearer 3ikVIwPWFV1raWJBN2JjCc9nOUtYcWaKR3jAfIj0sG4cZ0TPBDnTwJ4hRkfe
+
+###
+GET http://localhost:9801/api/uaa/upms/auth-histories/page
+Content-Type: application/json
+satoken: 14f30b95-5777-4a18-b39c-870d4bc0c04f
+Authorization: Bearer 3ikVIwPWFV1raWJBN2JjCc9nOUtYcWaKR3jAfIj0sG4cZ0TPBDnTwJ4hRkfe
 

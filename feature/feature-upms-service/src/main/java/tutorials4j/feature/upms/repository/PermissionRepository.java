@@ -1,6 +1,8 @@
 package tutorials4j.feature.upms.repository;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +20,6 @@ public interface PermissionRepository extends BaseRepository<PermissionEntity, S
   Optional<PermissionEntity> findWithRolesById(@Param("id") String id);
 
   Optional<PermissionEntity> findByCode(String code);
+
+  Set<PermissionEntity> findByCodeIn(Collection<String> codes);
 }

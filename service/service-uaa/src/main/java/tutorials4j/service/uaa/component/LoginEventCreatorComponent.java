@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.core.event.AuthEvent;
+import tutorials4j.feature.core.event.local.AuthEvent;
 import tutorials4j.toolkit.core.model.UserModel;
 import tutorials4j.toolkit.ip2region.Ip2RegionSearcher;
 import tutorials4j.toolkit.webmvc.util.HeaderUtils;

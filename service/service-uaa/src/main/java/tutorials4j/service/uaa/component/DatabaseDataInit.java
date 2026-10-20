@@ -8,10 +8,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import tutorials4j.feature.upms.entity.RoleEntity;
 import tutorials4j.feature.upms.entity.UserEntity;
-import tutorials4j.feature.upms.model.ClientCreateModel;
+import tutorials4j.feature.upms.model.ClientCreateDTO;
 import tutorials4j.feature.upms.model.DefaultScopes;
-import tutorials4j.feature.upms.model.RoleCreateModel;
-import tutorials4j.feature.upms.model.UserCreateModel;
+import tutorials4j.feature.upms.model.RoleCreateDTO;
+import tutorials4j.feature.upms.model.UserCreateDTO;
 import tutorials4j.feature.upms.service.ClientService;
 import tutorials4j.feature.upms.service.RoleService;
 import tutorials4j.feature.upms.service.UserService;
@@ -37,7 +37,7 @@ public class DatabaseDataInit implements CommandLineRunner {
 
   private void initClient() {
     if (clientService.count() <= 0) {
-      ClientCreateModel client1 = new ClientCreateModel();
+      ClientCreateDTO client1 = new ClientCreateDTO();
       client1.setClientId("1001");
       client1.setClientName("vue-vben-admin系统");
       client1.setClientSecret("aaaa-bbbb-cccc-dddd-eeee");
@@ -56,10 +56,10 @@ public class DatabaseDataInit implements CommandLineRunner {
               GrantType.password, // 密码式
               GrantType.client_credentials // 客户端模式
               ));
-      client1.setIsDefault(YesNoEnum.yes);
+      client1.setIsReserved(YesNoEnum.yes);
       clientService.create(client1);
 
-      ClientCreateModel client2 = new ClientCreateModel();
+      ClientCreateDTO client2 = new ClientCreateDTO();
       client2.setClientId("1002");
       client2.setClientName("DEMO系统");
       client2.setClientSecret("aaaa-bbbb-cccc-dddd-eeee");
@@ -81,22 +81,23 @@ public class DatabaseDataInit implements CommandLineRunner {
   private void initUser() {
     RoleEntity role = roleService.getRoleRepository().findByCode("admin").orElse(null);
     if (role == null) {
-      RoleCreateModel roleCreateModel = new RoleCreateModel();
-      roleCreateModel.setCode("admin");
-      roleCreateModel.setName("管理员");
-      roleCreateModel.setDescription("包含所有权限");
-      roleCreateModel.setIsDefault(YesNoEnum.yes);
-      role = roleService.create(roleCreateModel);
+      RoleCreateDTO roleCreateDTO = new RoleCreateDTO();
+      roleCreateDTO.setCode("admin");
+      roleCreateDTO.setName("管理员");
+      roleCreateDTO.setDescription("包含所有权限");
+      roleCreateDTO.setIsReserved(YesNoEnum.yes);
+      role = roleService.create(roleCreateDTO);
     }
 
     UserEntity user = userService.getUserRepository().findByUsername("admin").orElse(null);
     if (user == null) {
-      UserCreateModel userCreateModel = new UserCreateModel();
-      userCreateModel.setUsername("admin");
-      userCreateModel.setName("系统管理员");
-      userCreateModel.setEmail("admin@example.com");
-      userCreateModel.setPassword("123456");
-      user = userService.create(userCreateModel);
+      UserCreateDTO userCreateDTO = new UserCreateDTO();
+      userCreateDTO.setUsername("admin");
+      userCreateDTO.setName("系统管理员");
+      userCreateDTO.setEmail("admin@example.com");
+      userCreateDTO.setPassword("123456");
+      userCreateDTO.setIsReserved(YesNoEnum.yes);
+      user = userService.create(userCreateDTO);
 
       user.setRoles(Set.of(role));
       userService.save(user);

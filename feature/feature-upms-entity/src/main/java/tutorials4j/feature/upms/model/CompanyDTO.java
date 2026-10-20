@@ -1,0 +1,54 @@
+package tutorials4j.feature.upms.model;
+
+import java.time.Instant;
+import lombok.Data;
+
+/**
+ * TODO
+ *
+ * @author Yun Jiao
+ */
+@Data
+public class CompanyDTO {
+  // 公司性质
+  private String companyType;
+
+  // 所属行业
+  private String industry;
+
+  // 成立时间
+  private Instant establishmentDate;
+
+  // 公司电话
+  private String phone;
+
+  // 公司传真
+  private String fax;
+
+  // 公司主页
+  private String website;
+
+  // 公司地址
+  private String address;
+
+  // 公司法人
+  private String legalRepresentative;
+
+  // 联系电话
+  private String contactPhone;
+
+  // 联系手机
+  private String contactMobile;
+
+  // 联系邮箱
+  private String contactEmail;
+
+  // 开户银行
+  private String openingBank;
+
+  // 银行账户
+  private String bankAccount;
+
+  // 经营范围
+  private String businessScope;
+}

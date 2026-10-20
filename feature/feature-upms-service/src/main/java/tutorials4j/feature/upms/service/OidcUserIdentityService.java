@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import tutorials4j.feature.upms.entity.OidcUserIdentityEntity;
-import tutorials4j.feature.upms.model.OidcUserOpenIdCreateModel;
-import tutorials4j.feature.upms.model.OidcUserUnionIdCreateModel;
+import tutorials4j.feature.upms.model.OidcUserOpenIdCreateDTO;
+import tutorials4j.feature.upms.model.OidcUserUnionIdCreateDTO;
 import tutorials4j.feature.upms.repository.OidcUserIdentityRepository;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockable;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
@@ -35,7 +35,7 @@ public class OidcUserIdentityService implements BaseService<OidcUserIdentityEnti
       key = "#model.userId + '-' + #model.clientId",
       expireTime = 5000L)
   @Transactional(rollbackFor = Exception.class)
-  public synchronized OidcUserIdentityEntity createOpenId(OidcUserOpenIdCreateModel model) {
+  public synchronized OidcUserIdentityEntity createOpenId(OidcUserOpenIdCreateDTO model) {
     Assert.notNull(model, "model must not be null");
     model.validate();
 
@@ -54,7 +54,7 @@ public class OidcUserIdentityService implements BaseService<OidcUserIdentityEnti
       key = "#model.userId + '-' + #model.subjectId",
       expireTime = 5000L)
   @Transactional(rollbackFor = Exception.class)
-  public synchronized OidcUserIdentityEntity createUnionId(OidcUserUnionIdCreateModel model) {
+  public synchronized OidcUserIdentityEntity createUnionId(OidcUserUnionIdCreateDTO model) {
     Assert.notNull(model, "model must not be null");
     model.validate();
 

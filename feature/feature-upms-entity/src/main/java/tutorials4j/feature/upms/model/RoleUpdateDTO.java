@@ -12,7 +12,7 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
  */
 @Getter
 @Setter
-public class RoleUpdateModel {
+public class RoleUpdateDTO {
 
   @NotBlank(message = "名称是必须的")
   private String name;

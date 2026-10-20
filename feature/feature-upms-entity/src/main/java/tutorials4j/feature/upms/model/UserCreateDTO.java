@@ -3,6 +3,7 @@ package tutorials4j.feature.upms.model;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -11,10 +12,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserCreateModel extends UserUpdateModel {
+public class UserCreateDTO extends UserUpdateDTO {
   @NotBlank(message = "账号名是必须的")
   private String username;
 
-  @NotBlank(message = "密码是必须的")
   private String password;
+
+  private YesNoEnum isReserved;
 }

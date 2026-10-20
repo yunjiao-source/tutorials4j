@@ -5,7 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.feature.core.event.AuthEvent;
+import tutorials4j.feature.core.event.local.AuthEvent;
 import tutorials4j.feature.core.model.AuthStatus;
 import tutorials4j.service.uaa.component.LoginEventCreatorComponent;
 import tutorials4j.toolkit.core.model.UserModel;

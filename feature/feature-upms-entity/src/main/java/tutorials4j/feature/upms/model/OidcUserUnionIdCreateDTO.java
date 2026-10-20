@@ -13,7 +13,7 @@ import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
  */
 @Data
 @Builder
-public class OidcUserUnionIdCreateModel {
+public class OidcUserUnionIdCreateDTO {
   private String userId;
   private String subjectId;
 

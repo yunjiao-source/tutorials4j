@@ -87,14 +87,14 @@ public class ClientEntity extends UpmsEntity {
 
   @Column
   @Enumerated(EnumType.STRING)
-  private YesNoEnum isDefault;
+  private YesNoEnum isReserved;
 
   @Override
   protected void prePersist() {
     super.prePersist();
 
-    if (isDefault == null) {
-      isDefault = YesNoEnum.no;
+    if (isReserved == null) {
+      isReserved = YesNoEnum.no;
     }
   }
 
@@ -102,8 +102,8 @@ public class ClientEntity extends UpmsEntity {
   protected void preRemove() {
     super.preRemove();
 
-    if (Objects.equals(isDefault, YesNoEnum.yes)) {
-      throw UpmsFeatureErrorCode.DEFAULT_DATA_CAN_NOT_REMOVE.throwed().param("clientId", clientId);
+    if (Objects.equals(isReserved, YesNoEnum.yes)) {
+      throw UpmsFeatureErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("clientId", clientId);
     }
   }
 }

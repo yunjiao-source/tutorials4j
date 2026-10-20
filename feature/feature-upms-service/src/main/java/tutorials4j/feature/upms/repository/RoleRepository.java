@@ -1,6 +1,8 @@
 package tutorials4j.feature.upms.repository;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -24,4 +26,6 @@ public interface RoleRepository extends BaseRepository<RoleEntity, String> {
       @Param("code") String code, @Param("enabled") YesNoEnum enabled);
 
   Optional<RoleEntity> findByCode(String code);
+
+  Set<RoleEntity> findByCodeIn(Collection<String> codes);
 }

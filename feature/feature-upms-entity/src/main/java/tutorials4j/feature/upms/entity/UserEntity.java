@@ -23,6 +23,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
+import tutorials4j.feature.upms.util.ZoneIdConverter;
 import tutorials4j.toolkit.core.model.GenderEnum;
 import tutorials4j.toolkit.core.model.UserStatus;
 import tutorials4j.toolkit.core.model.YesNoEnum;
@@ -99,7 +100,7 @@ public class UserEntity extends BaseEntity<String> {
 
   @Column
   @Enumerated(EnumType.STRING)
-  private YesNoEnum isDefault;
+  private YesNoEnum isReserved;
 
   @ManyToMany
   @Fetch(FetchMode.SUBSELECT)
@@ -122,8 +123,8 @@ public class UserEntity extends BaseEntity<String> {
       status = UserStatus.active;
     }
 
-    if (isDefault == null) {
-      isDefault = YesNoEnum.no;
+    if (isReserved == null) {
+      isReserved = YesNoEnum.no;
     }
   }
 
@@ -131,8 +132,8 @@ public class UserEntity extends BaseEntity<String> {
   protected void preRemove() {
     super.preRemove();
 
-    if (Objects.equals(isDefault, YesNoEnum.yes)) {
-      throw UpmsFeatureErrorCode.DEFAULT_DATA_CAN_NOT_REMOVE.throwed().param("username", username);
+    if (Objects.equals(isReserved, YesNoEnum.yes)) {
+      throw UpmsFeatureErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("username", username);
     }
   }
 }

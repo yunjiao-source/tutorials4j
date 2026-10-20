@@ -1,4 +1,4 @@
-package tutorials4j.feature.core.event;
+package tutorials4j.feature.core.event.local;
 
 import lombok.Data;
 import tutorials4j.feature.core.model.AuthStatus;

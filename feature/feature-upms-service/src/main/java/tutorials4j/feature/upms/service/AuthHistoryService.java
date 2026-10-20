@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tutorials4j.feature.core.event.AuthEvent;
+import tutorials4j.feature.core.event.local.AuthEvent;
 import tutorials4j.feature.upms.autoconfigure.UpmsFeatureProperties;
 import tutorials4j.feature.upms.autoconfigure.UpmsFeatureProperties.ClearAuthHistoryOptions;
 import tutorials4j.feature.upms.entity.AuthHistoryEntity;

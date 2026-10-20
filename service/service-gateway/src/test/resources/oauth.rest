@@ -1,15 +1,15 @@
 ### 获取token
-POST http://localhost:9801/api/oauth/openapi/token?selectAccount=vben&username=admin&password=123456&captcha=true&grant_type=password&client_id=1001&client_secret=aaaa-bbbb-cccc-dddd-eeee&scope=profile,email,phone
+POST http://localhost:9801/api/uaa/openapi/token?selectAccount=vben&username=admin&password=123456&captcha=true&grant_type=password&client_id=1001&client_secret=aaaa-bbbb-cccc-dddd-eeee&scope=profile,email,phone
 Content-Type: application/json
 
 ### 获取登录用户信息
-POST http://127.0.0.1:9801/api/oauth/accounts/userinfo
+POST http://127.0.0.1:9801/api/uaa/accounts/userinfo
 Content-Type: application/json
 satoken: 961fc781-d01e-4760-b4f9-0b1c626b27e4
 Authorization: Bearer pVX8K1bkkOspCaCRrcs5wVltPMkYLAoar8y4OKXOpF9XCJImch9Bd96SOIQB
 
 ### 插入client信息
-POST http://127.0.0.1:9801/api/oauth/clients/create
+POST http://127.0.0.1:9801/api/uaa/clients/create
 Content-Type: application/json
 satoken: fb6c536c-4cbe-4d83-86b3-2b23cc2e1a55
 Authorization: Bearer iwiy0BwCVEhPtq34pRcSiAjsjW0kf9YN9QWTJFy4p2slrvjYEau7Z72tou10

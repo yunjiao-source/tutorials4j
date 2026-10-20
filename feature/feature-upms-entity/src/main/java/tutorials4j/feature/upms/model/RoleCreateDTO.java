@@ -12,9 +12,9 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
  */
 @Getter
 @Setter
-public class RoleCreateModel extends RoleUpdateModel {
+public class RoleCreateDTO extends RoleUpdateDTO {
   @NotBlank(message = "代码是必须的")
   private String code;
 
-  private YesNoEnum isDefault;
+  private YesNoEnum isReserved;
 }

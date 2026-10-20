@@ -10,7 +10,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
@@ -42,7 +44,7 @@ public class RoleEntity extends UpmsEntity {
 
   @Column
   @Enumerated(EnumType.STRING)
-  private YesNoEnum isDefault;
+  private YesNoEnum isReserved;
 
   @ManyToMany(mappedBy = "roles")
   private Set<UserEntity> users = new HashSet<>();
@@ -60,12 +62,38 @@ public class RoleEntity extends UpmsEntity {
       })
   private Set<PermissionEntity> permissions = new HashSet<>();
 
+  @ManyToMany
+  @Fetch(FetchMode.SUBSELECT)
+  @JoinTable(
+      name = "upms_role_menu",
+      joinColumns = {@JoinColumn(name = "role_id")},
+      inverseJoinColumns = {@JoinColumn(name = "meun_id")},
+      uniqueConstraints = {@UniqueConstraint(columnNames = {"role_id", "role_meun_idid"})},
+      indexes = {
+        @Index(name = "upms_role_menu_idx1", columnList = "menu_id"),
+        @Index(name = "upms_role_menu_idx2", columnList = "role_id")
+      })
+  private Set<MenuEntity> menus = new HashSet<>();
+
+  @ManyToMany
+  @Fetch(FetchMode.SUBSELECT)
+  @JoinTable(
+      name = "upms_role_organize",
+      joinColumns = {@JoinColumn(name = "role_id")},
+      inverseJoinColumns = {@JoinColumn(name = "organize_id")},
+      uniqueConstraints = {@UniqueConstraint(columnNames = {"role_id", "organize_id"})},
+      indexes = {
+        @Index(name = "upms_role_organize_idx1", columnList = "organize_id"),
+        @Index(name = "upms_role_organize_idx2", columnList = "role_id")
+      })
+  private List<OrganizeEntity> organizes = new ArrayList<>();
+
   @Override
   protected void prePersist() {
     super.prePersist();
 
-    if (isDefault == null) {
-      isDefault = YesNoEnum.no;
+    if (isReserved == null) {
+      isReserved = YesNoEnum.no;
     }
   }
 
@@ -73,8 +101,8 @@ public class RoleEntity extends UpmsEntity {
   protected void preRemove() {
     super.preRemove();
 
-    if (Objects.equals(isDefault, YesNoEnum.yes)) {
-      throw UpmsFeatureErrorCode.DEFAULT_DATA_CAN_NOT_REMOVE.throwed().param("code", code);
+    if (Objects.equals(isReserved, YesNoEnum.yes)) {
+      throw UpmsFeatureErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("code", code);
     }
   }
 }

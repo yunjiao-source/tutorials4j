@@ -13,8 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import tutorials4j.feature.upms.UpmsFeatureManager;
 import tutorials4j.feature.upms.entity.ClientEntity;
 import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
-import tutorials4j.feature.upms.model.ClientCreateModel;
-import tutorials4j.feature.upms.model.ClientUpdateModel;
+import tutorials4j.feature.upms.model.ClientCreateDTO;
+import tutorials4j.feature.upms.model.ClientUpdateDTO;
 import tutorials4j.feature.upms.repository.ClientRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseService;
@@ -40,7 +40,7 @@ public class ClientService implements BaseService<ClientEntity, String> {
     return clientRepository.findAll(query.buildSpecification(), pageable);
   }
 
-  public ClientEntity create(@Valid ClientCreateModel model) {
+  public ClientEntity create(@Valid ClientCreateDTO model) {
     Assert.notNull(model, "model must not be null");
     var entity = new ClientEntity();
     BeanUtils.copyProperties(model, entity);
@@ -49,7 +49,7 @@ public class ClientService implements BaseService<ClientEntity, String> {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public ClientEntity update(String id, @Valid ClientUpdateModel model) {
+  public ClientEntity update(String id, @Valid ClientUpdateDTO model) {
     Assert.notNull(model, "model must not be null");
 
     var entity = findById(id);

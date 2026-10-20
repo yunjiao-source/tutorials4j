@@ -1,6 +1,6 @@
 package tutorials4j.feature.bus.event.remote;
 
-import tutorials4j.feature.core.event.AuthEvent;
+import tutorials4j.feature.core.event.local.AuthEvent;
 import tutorials4j.toolkit.bus.event.BaseRemoteEvent;
 import tutorials4j.toolkit.core.util.SecurityUtils;
 import tutorials4j.toolkit.json.util.JacksonUtils;

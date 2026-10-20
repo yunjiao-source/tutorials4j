@@ -7,7 +7,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.core.event.AuthEvent;
+import tutorials4j.feature.core.event.local.AuthEvent;
 import tutorials4j.feature.core.model.AuthStatus;
 import tutorials4j.feature.upms.component.AuthComponent;
 import tutorials4j.feature.upms.service.UserService;

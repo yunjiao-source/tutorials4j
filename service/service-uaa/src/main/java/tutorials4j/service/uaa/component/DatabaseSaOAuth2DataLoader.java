@@ -6,8 +6,8 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.upms.model.OidcUserOpenIdCreateModel;
-import tutorials4j.feature.upms.model.OidcUserUnionIdCreateModel;
+import tutorials4j.feature.upms.model.OidcUserOpenIdCreateDTO;
+import tutorials4j.feature.upms.model.OidcUserUnionIdCreateDTO;
 import tutorials4j.feature.upms.service.ClientService;
 import tutorials4j.feature.upms.service.OidcUserIdentityService;
 import tutorials4j.service.uaa.util.ConverterUtils;
@@ -42,8 +42,8 @@ public class DatabaseSaOAuth2DataLoader implements SaOAuth2DataLoader {
                 () -> {
                   String prefix = IdUtil.fastSimpleUUID();
                   String openId = SaSecureUtil.md5(prefix + "_" + clientId + "_" + loginId);
-                  OidcUserOpenIdCreateModel model =
-                      OidcUserOpenIdCreateModel.builder()
+                  OidcUserOpenIdCreateDTO model =
+                      OidcUserOpenIdCreateDTO.builder()
                           .userId(loginId.toString())
                           .clientId(clientId)
                           .prefix(prefix)
@@ -64,8 +64,8 @@ public class DatabaseSaOAuth2DataLoader implements SaOAuth2DataLoader {
                 () -> {
                   String prefix = IdUtil.fastSimpleUUID();
                   String unionId = SaSecureUtil.md5(prefix + "_" + subjectId + "_" + loginId);
-                  OidcUserUnionIdCreateModel model =
-                      OidcUserUnionIdCreateModel.builder()
+                  OidcUserUnionIdCreateDTO model =
+                      OidcUserUnionIdCreateDTO.builder()
                           .userId(loginId.toString())
                           .subjectId(subjectId)
                           .prefix(prefix)

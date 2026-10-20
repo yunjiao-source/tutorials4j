@@ -7,7 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import tutorials4j.feature.bus.event.remote.AuthRemoteEvent;
-import tutorials4j.feature.core.event.AuthEvent;
+import tutorials4j.feature.core.event.local.AuthEvent;
 import tutorials4j.feature.upms.service.AuthHistoryService;
 import tutorials4j.toolkit.core.util.SpringUtils;
 
