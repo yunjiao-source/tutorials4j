@@ -19,6 +19,7 @@ spring:
       - optional:nacos:cache.yaml?group=common
       - optional:nacos:security.yaml?group=common
       - optional:nacos:xxl-job.yaml?group=common
+      - optional:nacos:ip2region.yaml?group=common
       - optional:nacos:${spring.application.name}.yaml?group=service
 
 

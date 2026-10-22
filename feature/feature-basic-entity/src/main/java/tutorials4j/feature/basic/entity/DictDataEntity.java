@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,9 @@ import tutorials4j.toolkit.data.convert.MapAttributeConverter;
       @Index(name = "basic_dict_data_idx1", columnList = "code"),
       @Index(name = "basic_dict_data_idx2", columnList = "parent_id"),
       @Index(name = "basic_dict_data_idx3", columnList = "dict_type_id")
+    },
+    uniqueConstraints = {
+      @UniqueConstraint(name = "basic_dict_data_uni1", columnNames = "dict_type_id, code")
     })
 public class DictDataEntity extends BasicEntity {
   @Column(name = "parent_id", insertable = false, updatable = false)

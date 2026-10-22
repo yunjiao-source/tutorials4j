@@ -23,7 +23,6 @@ import tutorials4j.feature.basic.entity.DictTypeEntity;
 import tutorials4j.feature.basic.model.DictDataVO;
 import tutorials4j.feature.basic.model.DictTypeDTO;
 import tutorials4j.feature.basic.model.DictTypeVO;
-import tutorials4j.feature.basic.service.DictDataQuery;
 import tutorials4j.feature.basic.service.DictDataService;
 import tutorials4j.feature.basic.service.DictTypeQuery;
 import tutorials4j.feature.basic.service.DictTypeService;
@@ -100,8 +99,7 @@ public class DictTypeBasicController {
   public List<DictDataVO> getDictDataById(
       @PathVariable("id") String id,
       @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
-    DictDataQuery query = DictDataQuery.builder().dictTypeId(id).allEnabled(allEnabled).build();
-    return dictDataService.findByQuery(query).stream().map(DictDataVO::of).toList();
+    return dictDataService.findByDictTypeIdAndEnabledIn(id, allEnabled);
   }
 
   @GetMapping("/by-code/{code}/dict-data")

@@ -5,8 +5,8 @@ import cn.dev33.satoken.oauth2.data.model.ClientTokenModel;
 import cn.dev33.satoken.oauth2.scope.handler.SaOAuth2ScopeHandlerInterface;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.feature.upms.model.DefaultScopes;
-import tutorials4j.feature.upms.model.UserInfo;
 import tutorials4j.feature.upms.service.UserService;
+import tutorials4j.toolkit.core.model.UserInfo;
 import tutorials4j.toolkit.core.model.UserModel;
 
 /**

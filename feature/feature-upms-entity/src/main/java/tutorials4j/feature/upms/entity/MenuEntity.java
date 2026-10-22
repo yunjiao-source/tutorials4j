@@ -54,6 +54,8 @@ public class MenuEntity extends UpmsEntity {
 
   @Column private String icon;
 
+  @Column private String queryParam;
+
   @Column
   @Enumerated(EnumType.STRING)
   private YesNoEnum haveChild;

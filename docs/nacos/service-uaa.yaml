@@ -1,9 +1,18 @@
 # sa-token配置
 sa-token:
-  # 是否打印操作日志
-  is-log: true
   # jwt 秘钥
   jwt-secret-key: 6a966f64471325ff784b85de
+  # Token 有效期，单位秒，-1 代表永久有效
+  timeout: 86400
+  # Token 临时有效期 (指定时间内无操作就视为 Token 过期) 单位: 秒
+  active-timeout: 1800
+  # 是否允许同一账号并发登录 (为 true 时允许一起登录, 为 false 时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个 Token (为 true 时所有登录共用一个 Token, 为 false 时每次登录新建一个 Token)
+  is-share: false
+  # Token 风格
+  token-style: uuid
+
   # OAuth2.0 配置
   oauth2-server:
     # 是否全局开启授权码模式

@@ -10,6 +10,11 @@ import tutorials4j.toolkit.core.exception.ErrorCode;
 public enum UpmsFeatureErrorCode implements ErrorCode {
   TOO_MANY_LOGIN_FAIL("频繁登录失败，请稍后重试"),
   USER_VALIDATE_FAIL("用户信息校验失败"),
+
+  ROLE_NOT_FOUND("角色不存在"),
+
+  PERMISSION_NOT_FOUND("权限不存在"),
+
   ACCOUNT_NOT_FOUND("账户不存在"),
 
   AUTH_FAIL("认证失败"),

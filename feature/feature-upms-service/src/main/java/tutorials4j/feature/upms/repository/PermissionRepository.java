@@ -21,5 +21,7 @@ public interface PermissionRepository extends BaseRepository<PermissionEntity, S
 
   Optional<PermissionEntity> findByCode(String code);
 
+  long countByCode(String code);
+
   Set<PermissionEntity> findByCodeIn(Collection<String> codes);
 }

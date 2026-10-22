@@ -1,0 +1,12 @@
+###
+GET http://localhost:9801/api/system/basic/dict-type/page
+Content-Type: application/json
+satoken: 2828f0ef-b27f-4cf0-bb3e-53136a9dd36c
+Authorization: Bearer xKJYqFTtnOqvMY57pYJriSkEfpkycAqQ4tFH61epvAD8OIgJ4wzCtAVhC25e
+
+###
+GET http://localhost:9801/api/system/basic/dict-type/by-code/xingzqy/dict-data/tree
+Content-Type: application/json
+satoken: 2828f0ef-b27f-4cf0-bb3e-53136a9dd36c
+Authorization: Bearer xKJYqFTtnOqvMY57pYJriSkEfpkycAqQ4tFH61epvAD8OIgJ4wzCtAVhC25e
+

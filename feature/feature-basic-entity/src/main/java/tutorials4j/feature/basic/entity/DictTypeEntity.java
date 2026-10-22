@@ -2,6 +2,8 @@ package tutorials4j.feature.basic.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
@@ -41,7 +43,9 @@ public class DictTypeEntity extends BasicEntity {
 
   @Column private String code;
 
-  @Column private YesNoEnum isTree;
+  @Column
+  @Enumerated(EnumType.STRING)
+  private YesNoEnum isTree;
 
   @Column private String description;
 

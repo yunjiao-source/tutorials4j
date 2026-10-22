@@ -27,5 +27,7 @@ public interface RoleRepository extends BaseRepository<RoleEntity, String> {
 
   Optional<RoleEntity> findByCode(String code);
 
+  long countByCode(String code);
+
   Set<RoleEntity> findByCodeIn(Collection<String> codes);
 }

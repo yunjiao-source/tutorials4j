@@ -1,3 +1,9 @@
+sa-token:
+  # Token 名称 (同时也是 Cookie 名称)
+  token-name: satoken
+  # 是否打印操作日志
+  is-log: true
+
 tutorials4j:
   toolkit:
     security:
@@ -7,22 +13,6 @@ tutorials4j:
           role-key-expired: 30m
           user-key-prefix: 'satoken:user-find-role:'
           user-key-duration: 30m
-
-    ip2region:
-      v4xdb: classpath:/ip2region/ip2region_v4.xdb
-      v6xdb: classpath:/ip2region/ip2region_v6.xdb
-      warm-up: false
-      close-timeout: 10s
-      v4:
-        cache-policy: vindexcache
-        searchers: 20
-        fair-lock: false
-        cache-slice-bytes: 50MB
-      v6:
-        cache-policy: vindexcache
-        searchers: 20
-        fair-lock: false
-        cache-slice-bytes: 50MB
 
 spring:
   cloud:

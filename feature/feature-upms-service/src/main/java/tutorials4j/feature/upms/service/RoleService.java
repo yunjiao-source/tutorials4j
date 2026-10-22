@@ -16,6 +16,7 @@ import tutorials4j.feature.upms.entity.MenuEntity;
 import tutorials4j.feature.upms.entity.OrganizeEntity;
 import tutorials4j.feature.upms.entity.PermissionEntity;
 import tutorials4j.feature.upms.entity.RoleEntity;
+import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
 import tutorials4j.feature.upms.model.RoleCreateDTO;
 import tutorials4j.feature.upms.model.RoleUpdateDTO;
 import tutorials4j.feature.upms.repository.MenuRepository;
@@ -90,5 +91,12 @@ public class RoleService implements BaseService<RoleEntity, String> {
     List<OrganizeEntity> entities = organizeRepository.findAllById(organizes);
     roleEntity.setOrganizes(entities);
     return roleRepository.save(roleEntity);
+  }
+
+  public RoleEntity findByCode(String code) {
+    Assert.hasText("code", "code must not be null or empty");
+    return roleRepository
+        .findByCode(code)
+        .orElseThrow(() -> UpmsFeatureErrorCode.ROLE_NOT_FOUND.throwed().param("code", code));
   }
 }

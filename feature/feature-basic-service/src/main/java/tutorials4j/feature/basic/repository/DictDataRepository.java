@@ -1,10 +1,7 @@
 package tutorials4j.feature.basic.repository;
 
-import static tutorials4j.feature.basic.BasicFeatureConsts.CACHEABLE_DICT_DATA;
-
 import java.util.List;
 import java.util.Set;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,7 +23,6 @@ public interface DictDataRepository extends BaseRepository<DictDataEntity, Strin
   @EntityGraph(attributePaths = {"dictType"})
   Page<DictDataEntity> findAll(Specification<DictDataEntity> spec, Pageable pageable);
 
-  @Cacheable(value = CACHEABLE_DICT_DATA, key = "#dictTypeId")
   List<DictDataEntity> findByDictTypeIdAndEnabledIn(String dictTypeId, Set<YesNoEnum> allEnabled);
 
   long countByDictTypeId(String dictTypeId);

@@ -20,4 +20,6 @@ public interface UserRepository extends BaseRepository<UserEntity, String> {
   Optional<UserEntity> findWithRolesByUsername(@Param("username") String username);
 
   Optional<UserEntity> findByUsername(String username);
+
+  long countByUsername(String key);
 }

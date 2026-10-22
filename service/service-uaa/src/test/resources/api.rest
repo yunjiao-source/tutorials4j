@@ -8,12 +8,12 @@ Authorization: Bearer iwiy0BwCVEhPtq34pRcSiAjsjW0kf9YN9QWTJFy4p2slrvjYEau7Z72tou
 ###
 GET http://localhost:9801/api/uaa/upms/users/page
 Content-Type: application/json
-satoken: 14f30b95-5777-4a18-b39c-870d4bc0c04f
-Authorization: Bearer 3ikVIwPWFV1raWJBN2JjCc9nOUtYcWaKR3jAfIj0sG4cZ0TPBDnTwJ4hRkfe
+satoken: 015befa6-3d41-4417-8501-99ddf53389b3
+Authorization: Bearer SysvrKkQY0DSjGSv4i2VbQqrrPh9ajRCy3Tyii1Nv7V2khsd1IsQr3Ow0dlS
 
 ###
 GET http://localhost:9801/api/uaa/upms/auth-histories/page
 Content-Type: application/json
-satoken: 14f30b95-5777-4a18-b39c-870d4bc0c04f
-Authorization: Bearer 3ikVIwPWFV1raWJBN2JjCc9nOUtYcWaKR3jAfIj0sG4cZ0TPBDnTwJ4hRkfe
+satoken: f50c3329-e43b-46ac-abb3-ae91b9a82540
+Authorization: Bearer xVCSqDAQVbJneG7sxNkjZ9uVEj1NZroNxIO0A8JBBMOXdtIPhZHUJAUxdroB
 

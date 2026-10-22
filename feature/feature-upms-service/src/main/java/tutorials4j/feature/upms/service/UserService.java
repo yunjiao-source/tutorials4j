@@ -89,7 +89,8 @@ public class UserService implements BaseService<UserEntity, String> {
     Assert.hasText("username", "username must not be null or empty");
     return userRepository
         .findByUsername(username)
-        .orElseThrow(UpmsFeatureErrorCode.ACCOUNT_NOT_FOUND::throwed);
+        .orElseThrow(
+            () -> UpmsFeatureErrorCode.ACCOUNT_NOT_FOUND.throwed().param("username", username));
   }
 
   @Cacheable(value = CACHEABLE_USER, key = "#username")

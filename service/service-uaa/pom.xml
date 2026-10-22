@@ -40,15 +40,6 @@
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-jwt</artifactId>
         </dependency>
-        <!-- Sa-Token 整合 RedisTemplate (可选) -->
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-redis-template</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>

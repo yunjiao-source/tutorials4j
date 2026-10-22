@@ -4,7 +4,6 @@ import cn.dev33.satoken.oauth2.SaOAuth2Manager;
 import cn.dev33.satoken.oauth2.config.SaOAuth2ServerConfig;
 import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
 import cn.hutool.core.util.IdUtil;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -30,21 +29,6 @@ public class OAuthInstanceInitializing implements SmartInitializingSingleton {
         (clientEntity) -> {
           if (StringUtils.isBlank(clientEntity.getClientId())) {
             clientEntity.setClientId(IdUtil.fastUUID());
-          }
-          if (StringUtils.isBlank(clientEntity.getClientSecret())) {
-            clientEntity.setClientSecret(IdUtil.fastUUID());
-          }
-          if (clientEntity.getIsAutoConfirm() == null) {
-            clientEntity.setIsAutoConfirm(YesNoEnum.no);
-          }
-          if (clientEntity.getAllowGrantTypes() == null) {
-            clientEntity.setAllowGrantTypes(List.of());
-          }
-          if (clientEntity.getAllowRedirectUris() == null) {
-            clientEntity.setAllowRedirectUris(List.of());
-          }
-          if (clientEntity.getContractScopes() == null) {
-            clientEntity.setContractScopes(List.of());
           }
 
           SaOAuth2ServerConfig config = SaOAuth2Manager.getServerConfig();

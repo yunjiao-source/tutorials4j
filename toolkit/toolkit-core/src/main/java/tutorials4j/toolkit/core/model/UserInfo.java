@@ -1,12 +1,10 @@
-package tutorials4j.feature.upms.model;
+package tutorials4j.toolkit.core.model;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Locale;
 import lombok.Data;
-import tutorials4j.toolkit.core.model.GenderEnum;
-import tutorials4j.toolkit.core.model.UserModel;
 
 /**
  * TODO

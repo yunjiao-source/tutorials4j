@@ -36,7 +36,7 @@ public abstract class ToolkitStpInterface implements StpInterface {
       var permissionList = (List<String>) SaManager.getSaTokenDao().getObject(roleKey);
       if (permissionList == null) {
         // 从数据库查询这个角色 id 所拥有的权限列表
-        if (ToolkitConsts.SUPER_ROLE_NAME.equals(roleId)) {
+        if (ToolkitConsts.ADMIN_NAME.equals(roleId)) {
           // 超级角色
           permissionList = getAllPermissions();
         } else {

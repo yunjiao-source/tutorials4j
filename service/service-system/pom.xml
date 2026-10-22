@@ -25,6 +25,7 @@
             <artifactId>assembly-resource-service-starter</artifactId>
             <version>${revision}</version>
         </dependency>
+
     </dependencies>
 
 </project>

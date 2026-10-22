@@ -22,7 +22,7 @@ tutorials4j:
             time-to-live: 30m
             caching-null-values: true
             key-prefix: 'cacheable:'
-          upms-users:
+          upms-user:
             time-to-live: 30m
             caching-null-values: true
             key-prefix: 'cacheable:'

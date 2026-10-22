@@ -1,5 +1,6 @@
 package tutorials4j.feature.upms.entity;
 
+import cn.hutool.core.util.IdUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.convert.ListAttributeConverter;
 import tutorials4j.toolkit.data.exception.DataErrorCode;
@@ -93,6 +95,21 @@ public class ClientEntity extends UpmsEntity {
   protected void prePersist() {
     super.prePersist();
 
+    if (StringUtils.isBlank(clientSecret)) {
+      clientSecret = IdUtil.fastUUID();
+    }
+    if (isAutoConfirm == null) {
+      isAutoConfirm = YesNoEnum.no;
+    }
+    if (allowGrantTypes == null) {
+      allowGrantTypes = List.of();
+    }
+    if (allowRedirectUris == null) {
+      allowRedirectUris = List.of();
+    }
+    if (contractScopes == null) {
+      contractScopes = List.of();
+    }
     if (isReserved == null) {
       isReserved = YesNoEnum.no;
     }

@@ -35,12 +35,6 @@ spring:
               filters:
                 - StripPrefix=2
 
-
-# sa-token配置
-sa-token:
-  # 是否打印操作日志
-  is-log: true
-
 tutorials4j:
   toolkit:
     security:

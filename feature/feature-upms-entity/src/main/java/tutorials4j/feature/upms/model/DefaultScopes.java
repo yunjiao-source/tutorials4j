@@ -16,7 +16,6 @@ import lombok.Getter;
  */
 @Getter
 public enum DefaultScopes {
-  oidc("默认", true),
   openid("默认", true),
   unionid("默认", true),
   profile("个人资料信息, 包括：姓名，账户，邮箱等", false),

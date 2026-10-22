@@ -1,0 +1,12 @@
+### 获取token
+POST http://localhost:9801/api/uaa/openapi/token?selectAccount=vben&username=admin&password=123456&captcha=true&grant_type=password&client_id=1001&client_secret=aaaa-bbbb-cccc-dddd-eeee&scope=profile,email,phone
+Content-Type: application/json
+
+### 获取登录用户信息
+POST http://127.0.0.1:9801/api/uaa/accounts/userinfo
+Content-Type: application/json
+satoken: 2828f0ef-b27f-4cf0-bb3e-53136a9dd36c
+Authorization: Bearer xKJYqFTtnOqvMY57pYJriSkEfpkycAqQ4tFH61epvAD8OIgJ4wzCtAVhC25e
+
+
+

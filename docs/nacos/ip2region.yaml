@@ -1,0 +1,17 @@
+tutorials4j:
+  toolkit:
+    ip2region:
+      v4xdb: classpath:/ip2region/ip2region_v4.xdb
+      v6xdb: classpath:/ip2region/ip2region_v6.xdb
+      warm-up: false
+      close-timeout: 10s
+      v4:
+        cache-policy: vindexcache
+        searchers: 20
+        fair-lock: false
+        cache-slice-bytes: 50MB
+      v6:
+        cache-policy: vindexcache
+        searchers: 20
+        fair-lock: false
+        cache-slice-bytes: 50MB

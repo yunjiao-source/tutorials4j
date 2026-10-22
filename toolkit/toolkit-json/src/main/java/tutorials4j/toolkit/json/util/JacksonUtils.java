@@ -1,5 +1,6 @@
 package tutorials4j.toolkit.json.util;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,8 +56,16 @@ public class JacksonUtils {
     return objectMapper.readValue(content, typeReference);
   }
 
+  public <T> T toObject(InputStream inputStream, TypeReference<T> typeReference) {
+    return objectMapper.readValue(inputStream, typeReference);
+  }
+
   public <T> T toObject(String content, JavaType javaType) {
     return objectMapper.readValue(content, javaType);
+  }
+
+  public <T> T toObject(InputStream inputStream, JavaType javaType) {
+    return objectMapper.readValue(inputStream, javaType);
   }
 
   public <T> List<T> toList(String content, Class<T> clazz) {
@@ -72,6 +81,16 @@ public class JacksonUtils {
 
   public Map<String, Object> toMap(String content) {
     return toMap(content, String.class, Object.class);
+  }
+
+  public <K, V> Map<K, V> toMap(InputStream inputStream, Class<K> keyClass, Class<V> valueClass) {
+    JavaType javaType =
+        objectMapper.getTypeFactory().constructMapType(Map.class, keyClass, valueClass);
+    return toObject(inputStream, javaType);
+  }
+
+  public Map<String, Object> toMap(InputStream inputStream) {
+    return toMap(inputStream, String.class, Object.class);
   }
 
   public <T> Set<T> toSet(String content, Class<T> clazz) {

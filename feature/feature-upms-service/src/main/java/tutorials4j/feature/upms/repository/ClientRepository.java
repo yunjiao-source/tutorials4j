@@ -17,4 +17,6 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 public interface ClientRepository extends BaseRepository<ClientEntity, String> {
   @Cacheable(value = CACHEABLE_CLIENT, key = "#clientId")
   Optional<ClientEntity> findByClientId(String clientId);
+
+  long countByClientId(String clientId);
 }
