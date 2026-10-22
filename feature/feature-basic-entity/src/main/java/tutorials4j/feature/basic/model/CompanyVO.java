@@ -1,15 +1,22 @@
-package tutorials4j.feature.upms.model;
+package tutorials4j.feature.basic.model;
 
 import java.time.Instant;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
+import tutorials4j.feature.basic.entity.CompanyEntity;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-@Data
-public class CompanyDTO {
+@Getter
+@Setter
+public class CompanyVO extends BasicVO {
+  private String organizeId;
+
   // 公司性质
   private String companyType;
 
@@ -51,4 +58,12 @@ public class CompanyDTO {
 
   // 经营范围
   private String businessScope;
+
+  public static CompanyVO of(CompanyEntity entity) {
+    Assert.notNull(entity, "entity must not be null");
+
+    CompanyVO vo = new CompanyVO();
+    BeanUtils.copyProperties(entity, vo);
+    return vo;
+  }
 }

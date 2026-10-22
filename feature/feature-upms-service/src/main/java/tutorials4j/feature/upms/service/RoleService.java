@@ -8,8 +8,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -45,10 +43,6 @@ public class RoleService implements BaseService<RoleEntity, String> {
   @Override
   public BaseRepository<RoleEntity, String> getRepository() {
     return roleRepository;
-  }
-
-  public Page<RoleEntity> findByPage(RoleQuery query, Pageable pageable) {
-    return roleRepository.findAll(query.buildSpecification(), pageable);
   }
 
   public RoleEntity create(@Valid RoleCreateDTO dto) {

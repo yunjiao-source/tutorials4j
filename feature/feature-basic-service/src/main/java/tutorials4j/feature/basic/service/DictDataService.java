@@ -1,0 +1,55 @@
+package tutorials4j.feature.basic.service;
+
+import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
+import tutorials4j.feature.basic.entity.DictDataEntity;
+import tutorials4j.feature.basic.model.DictDataDTO;
+import tutorials4j.feature.basic.repository.DictDataRepository;
+import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
+import tutorials4j.toolkit.data.hibernate.domain.BaseService;
+
+/**
+ * TODO
+ *
+ * @author Yun Jiao
+ */
+@Getter
+@Service
+@Validated
+@RequiredArgsConstructor
+public class DictDataService implements BaseService<DictDataEntity, String> {
+  private final DictDataRepository dictDataRepository;
+
+  @Override
+  public BaseRepository<DictDataEntity, String> getRepository() {
+    return dictDataRepository;
+  }
+
+  public DictDataEntity create(@Valid DictDataDTO dto) {
+    Assert.notNull(dto, "dto must not be null");
+    DictDataEntity entity = new DictDataEntity();
+    BeanUtils.copyProperties(dto, entity);
+
+    return dictDataRepository.save(entity);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public DictDataEntity update(String id, @Valid DictDataDTO dto) {
+    Assert.notNull(dto, "dto must not be null");
+
+    DictDataEntity entity = findById(id);
+    BeanUtils.copyProperties(dto, entity);
+    return dictDataRepository.save(entity);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public void delete(String id) {
+    dictDataRepository.findById(id).ifPresent(dictDataRepository::delete);
+  }
+}

@@ -1,27 +1,32 @@
 package tutorials4j.feature.upms.service;
 
-import java.util.List;
-import java.util.Objects;
-import lombok.Data;
-import org.springframework.data.jpa.domain.Specification;
+import static tutorials4j.feature.upms.service.RoleSpecification.codeLike;
+import static tutorials4j.feature.upms.service.RoleSpecification.nameLike;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tutorials4j.feature.upms.entity.RoleEntity;
+import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 
 /**
  * TODO
  *
  * @author YunJiao Yang
  */
-@Data
-public class RoleQuery {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoleQuery extends BaseQuery<RoleEntity> {
   private String code;
   private String name;
 
-  public Specification<RoleEntity> buildSpecification() {
-    var specList = List.of(RoleSpecification.codeLike(code), RoleSpecification.nameLike(name));
-
-    return specList.stream()
-        .filter(Objects::nonNull)
-        .reduce(Specification::and)
-        .orElse((root, query, cb) -> cb.conjunction());
+  @Override
+  protected void addSpec() {
+    addSpec(codeLike(code)).addSpec(nameLike(name));
   }
 }

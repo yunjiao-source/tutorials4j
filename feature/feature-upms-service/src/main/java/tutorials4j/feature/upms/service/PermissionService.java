@@ -5,8 +5,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -32,10 +30,6 @@ public class PermissionService implements BaseService<PermissionEntity, String> 
   @Override
   public BaseRepository<PermissionEntity, String> getRepository() {
     return permissionRepository;
-  }
-
-  public Page<PermissionEntity> findByPage(PermissionQuery query, Pageable pageable) {
-    return permissionRepository.findAll(query.buildSpecification(), pageable);
   }
 
   @Transactional(rollbackFor = Exception.class)

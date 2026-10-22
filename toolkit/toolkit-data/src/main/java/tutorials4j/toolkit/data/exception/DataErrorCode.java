@@ -8,7 +8,8 @@ import tutorials4j.toolkit.core.exception.ErrorCode;
  * @author YunJiao Yang
  */
 public enum DataErrorCode implements ErrorCode {
-  FIND_ENTITY_BY_ID_NOT_EXISTS("查询实体不存在"),
+  RESERVED_DATA_CAN_NOT_REMOVE("保留数据，不能删除"),
+  FIND_ENTITY_NOT_EXISTS("查询实体不存在"),
   ;
 
   private final String message;

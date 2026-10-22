@@ -36,7 +36,7 @@ public class JacksonUtils {
   }
 
   public <T> T treeToValue(TreeNode n, Class<T> valueType) {
-    return objectMapper.treeToValue(n, valueType);
+    return objectMapper.convertValue(n, valueType);
   }
 
   public TypeFactory getTypeFactory() {

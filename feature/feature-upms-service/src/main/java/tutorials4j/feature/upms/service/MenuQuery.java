@@ -1,34 +1,39 @@
 package tutorials4j.feature.upms.service;
 
-import java.util.List;
-import java.util.Objects;
-import lombok.Data;
-import org.springframework.data.jpa.domain.Specification;
+import static tutorials4j.feature.upms.service.MenuSpecification.nameLike;
+import static tutorials4j.feature.upms.service.MenuSpecification.parentIdEqual;
+import static tutorials4j.feature.upms.service.MenuSpecification.pathLike;
+import static tutorials4j.feature.upms.service.MenuSpecification.titleLike;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tutorials4j.feature.upms.entity.MenuEntity;
+import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 
 /**
  * TODO
  *
  * @author YunJiao Yang
  */
-@Data
-public class MenuQuery {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class MenuQuery extends BaseQuery<MenuEntity> {
   private String parentId;
   private String name;
   private String path;
   private String title;
 
-  public Specification<MenuEntity> buildSpecification() {
-    var specList =
-        List.of(
-            MenuSpecification.parentIdEqual(parentId),
-            MenuSpecification.nameLike(name),
-            MenuSpecification.pathLike(path),
-            MenuSpecification.titleLike(title));
-
-    return specList.stream()
-        .filter(Objects::nonNull)
-        .reduce(Specification::and)
-        .orElse((root, query, cb) -> cb.conjunction());
+  @Override
+  protected void addSpec() {
+    addSpec(parentIdEqual(parentId))
+        .addSpec(nameLike(name))
+        .addSpec(pathLike(path))
+        .addSpec(titleLike(title));
   }
 }

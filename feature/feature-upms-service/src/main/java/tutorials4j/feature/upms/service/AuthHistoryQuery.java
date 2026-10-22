@@ -1,36 +1,41 @@
 package tutorials4j.feature.upms.service;
 
+import static tutorials4j.feature.upms.service.AuthHistorySpecification.authStatusEqual;
+import static tutorials4j.feature.upms.service.AuthHistorySpecification.createdTimeGte;
+import static tutorials4j.feature.upms.service.AuthHistorySpecification.createdTimeLte;
+import static tutorials4j.feature.upms.service.AuthHistorySpecification.userIdEqual;
+
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-import lombok.Data;
-import org.springframework.data.jpa.domain.Specification;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tutorials4j.feature.core.model.AuthStatus;
 import tutorials4j.feature.upms.entity.AuthHistoryEntity;
+import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 
 /**
  * TODO
  *
  * @author YunJiao Yang
  */
-@Data
-public class AuthHistoryQuery {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthHistoryQuery extends BaseQuery<AuthHistoryEntity> {
   private String userId;
   private AuthStatus authStatus;
   private Instant createdTimeBegin;
   private Instant createdTimeEnd;
 
-  public Specification<AuthHistoryEntity> buildSpecification() {
-    var specList =
-        List.of(
-            AuthHistorySpecification.userIdEqual(userId),
-            AuthHistorySpecification.authStatusEqual(authStatus),
-            AuthHistorySpecification.createdTimeGte(createdTimeBegin),
-            AuthHistorySpecification.createdTimeLte(createdTimeEnd));
-
-    return specList.stream()
-        .filter(Objects::nonNull)
-        .reduce(Specification::and)
-        .orElse((root, query, cb) -> cb.conjunction());
+  @Override
+  protected void addSpec() {
+    addSpec(userIdEqual(userId))
+        .addSpec(authStatusEqual(authStatus))
+        .addSpec(createdTimeGte(createdTimeBegin))
+        .addSpec(createdTimeLte(createdTimeEnd));
   }
 }

@@ -27,6 +27,4 @@ public class OrganizeDTO {
 
   @NotNull(message = "分类是必须的")
   private OrganizeCategory category;
-
-  private CompanyDTO company;
 }

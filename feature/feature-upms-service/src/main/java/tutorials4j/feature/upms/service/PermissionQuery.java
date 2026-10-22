@@ -1,29 +1,33 @@
 package tutorials4j.feature.upms.service;
 
-import java.util.List;
-import java.util.Objects;
-import lombok.Data;
-import org.springframework.data.jpa.domain.Specification;
+import static tutorials4j.feature.upms.service.PermissionSpecification.codeLike;
+import static tutorials4j.feature.upms.service.PermissionSpecification.nameLike;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tutorials4j.feature.upms.entity.PermissionEntity;
+import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-@Data
-public class PermissionQuery {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PermissionQuery extends BaseQuery<PermissionEntity> {
   private String code;
 
   private String name;
 
-  public Specification<PermissionEntity> buildSpecification() {
-    var specList =
-        List.of(PermissionSpecification.codeLike(code), PermissionSpecification.nameLike(name));
-
-    return specList.stream()
-        .filter(Objects::nonNull)
-        .reduce(Specification::and)
-        .orElse((root, query, cb) -> cb.conjunction());
+  @Override
+  protected void addSpec() {
+    addSpec(codeLike(code)).addSpec(nameLike(name));
   }
 }

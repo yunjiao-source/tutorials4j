@@ -1,20 +1,34 @@
 package tutorials4j.feature.upms.service;
 
+import static tutorials4j.feature.upms.service.UserSpecification.accountExpireAt;
+import static tutorials4j.feature.upms.service.UserSpecification.credentialsExpireAt;
+import static tutorials4j.feature.upms.service.UserSpecification.genderEqual;
+import static tutorials4j.feature.upms.service.UserSpecification.nameLike;
+import static tutorials4j.feature.upms.service.UserSpecification.statusIn;
+
 import java.time.Duration;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import org.springframework.data.jpa.domain.Specification;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tutorials4j.feature.upms.entity.UserEntity;
 import tutorials4j.toolkit.core.model.GenderEnum;
 import tutorials4j.toolkit.core.model.UserStatus;
+import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class UserQuery {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserQuery extends BaseQuery<UserEntity> {
   private String name;
 
   private GenderEnum gender;
@@ -25,18 +39,12 @@ public class UserQuery {
 
   private Duration credentialsExpire;
 
-  public Specification<UserEntity> buildSpecification() {
-    var specList =
-        List.of(
-            UserSpecification.nameLike(name),
-            UserSpecification.genderEqual(gender),
-            UserSpecification.statusIn(statuses),
-            UserSpecification.accountExpireAt(accountExpire),
-            UserSpecification.credentialsExpireAt(credentialsExpire));
-
-    return specList.stream()
-        .filter(Objects::nonNull)
-        .reduce(Specification::and)
-        .orElse((root, query, cb) -> cb.conjunction());
+  @Override
+  protected void addSpec() {
+    addSpec(nameLike(name))
+        .addSpec(genderEqual(gender))
+        .addSpec(statusIn(statuses))
+        .addSpec(accountExpireAt(accountExpire))
+        .addSpec(credentialsExpireAt(credentialsExpire));
   }
 }

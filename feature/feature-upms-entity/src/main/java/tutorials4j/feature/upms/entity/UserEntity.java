@@ -5,6 +5,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -20,13 +21,11 @@ import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
 import tutorials4j.feature.upms.util.ZoneIdConverter;
 import tutorials4j.toolkit.core.model.GenderEnum;
 import tutorials4j.toolkit.core.model.UserStatus;
 import tutorials4j.toolkit.core.model.YesNoEnum;
+import tutorials4j.toolkit.data.exception.DataErrorCode;
 import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 
 /**
@@ -39,8 +38,8 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseEntity;
 @Entity
 @Table(
     name = "upms_user",
-    indexes = {@Index(name = "upms_user_idx0", columnList = "status")},
-    uniqueConstraints = {@UniqueConstraint(name = "upms_user_id10", columnNames = "username")})
+    indexes = {@Index(name = "upms_user_idx1", columnList = "status")},
+    uniqueConstraints = {@UniqueConstraint(name = "upms_user_uni1", columnNames = "username")})
 public class UserEntity extends BaseEntity<String> {
 
   /** 用户名 */
@@ -103,12 +102,19 @@ public class UserEntity extends BaseEntity<String> {
   private YesNoEnum isReserved;
 
   @ManyToMany
-  @Fetch(FetchMode.SUBSELECT)
   @JoinTable(
       name = "upms_user_role",
-      joinColumns = {@JoinColumn(name = "user_id")},
-      inverseJoinColumns = {@JoinColumn(name = "role_id")},
-      uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})},
+      joinColumns = {
+        @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "upms_user_role_fk1"))
+      },
+      inverseJoinColumns = {
+        @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "upms_user_role_fk2"))
+      },
+      uniqueConstraints = {
+        @UniqueConstraint(
+            name = "upms_user_role_uni1",
+            columnNames = {"user_id", "role_id"})
+      },
       indexes = {
         @Index(name = "upms_user_role_idx1", columnList = "user_id"),
         @Index(name = "upms_user_role_idx2", columnList = "role_id")
@@ -133,7 +139,7 @@ public class UserEntity extends BaseEntity<String> {
     super.preRemove();
 
     if (Objects.equals(isReserved, YesNoEnum.yes)) {
-      throw UpmsFeatureErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("username", username);
+      throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("username", username);
     }
   }
 }

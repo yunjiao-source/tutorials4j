@@ -1,12 +1,13 @@
-package tutorials4j.feature.upms.entity;
+package tutorials4j.feature.basic.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
-import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -16,8 +17,14 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
 @Getter
 @Setter
 @Entity
-@Table(name = "upms_company")
-public class CompanyEntity extends BaseIdEntity<String> {
+@Table(
+    name = "basic_company",
+    uniqueConstraints = {
+      @UniqueConstraint(name = "basic_company_uni1", columnNames = "organize_id")
+    })
+public class CompanyEntity extends BasicEntity {
+  @Column private String organizeId;
+
   // 公司性质
   @Column private String companyType;
 
@@ -59,4 +66,12 @@ public class CompanyEntity extends BaseIdEntity<String> {
 
   // 经营范围
   @Column private String businessScope;
+
+  @Override
+  protected void prePersist() {
+    if (this.getIsReserved() == null) {
+      this.setIsReserved(YesNoEnum.yes);
+    }
+    super.prePersist();
+  }
 }

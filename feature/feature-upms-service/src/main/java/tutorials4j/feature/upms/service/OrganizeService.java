@@ -7,16 +7,12 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import tutorials4j.feature.upms.entity.CompanyEntity;
 import tutorials4j.feature.upms.entity.OrganizeEntity;
 import tutorials4j.feature.upms.entity.RoleEntity;
-import tutorials4j.feature.upms.model.CompanyDTO;
 import tutorials4j.feature.upms.model.OrganizeDTO;
 import tutorials4j.feature.upms.repository.OrganizeRepository;
 import tutorials4j.toolkit.core.model.YesNoEnum;
@@ -40,10 +36,6 @@ public class OrganizeService implements BaseService<OrganizeEntity, String> {
     return organizeRepository;
   }
 
-  public Page<OrganizeEntity> findByPage(OrganizeQuery query, Pageable pageable) {
-    return organizeRepository.findAll(query.buildSpecification(), pageable);
-  }
-
   public List<OrganizeEntity> findAllRoot(Collection<YesNoEnum> allEnabled) {
     return organizeRepository.findAll(
         OrganizeSpecification.allRoot().and(OrganizeSpecification.enabledIn(allEnabled)));
@@ -59,13 +51,6 @@ public class OrganizeService implements BaseService<OrganizeEntity, String> {
     Assert.notNull(dto, "dto must not be null");
     OrganizeEntity entity = new OrganizeEntity();
     BeanUtils.copyProperties(dto, entity);
-
-    CompanyDTO companyDTO = dto.getCompany();
-    if (companyDTO == null) {
-      entity.setCompany(new CompanyEntity());
-    } else {
-      BeanUtils.copyProperties(companyDTO, entity.getCompany());
-    }
     return organizeRepository.save(entity);
   }
 
@@ -75,10 +60,6 @@ public class OrganizeService implements BaseService<OrganizeEntity, String> {
 
     OrganizeEntity entity = findById(id);
     BeanUtils.copyProperties(dto, entity);
-    CompanyDTO companyDTO = dto.getCompany();
-    if (companyDTO != null) {
-      BeanUtils.copyProperties(companyDTO, entity.getCompany());
-    }
     return organizeRepository.save(entity);
   }
 

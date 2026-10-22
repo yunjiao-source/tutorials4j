@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -29,10 +31,13 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
 @Entity
 @Table(
     name = "upms_menu",
-    indexes = {@Index(name = "upms_menu_idx0", columnList = "parent_id")})
+    indexes = {@Index(name = "upms_menu_idx1", columnList = "parent_id")})
 public class MenuEntity extends UpmsEntity {
-  @ManyToOne
-  @JoinColumn(name = "parent_id", nullable = true)
+  @Column(name = "parent_id", insertable = false, updatable = false)
+  private String parentId;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "upms_menu_fk1"))
   private MenuEntity parent;
 
   @Column private String path;

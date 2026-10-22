@@ -24,8 +24,8 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
 @Table(
     name = "upms_oidc_user_identity",
     uniqueConstraints = {
-      @UniqueConstraint(name = "upms_oidc_user_identity_idx0", columnNames = "user_id,client_id"),
-      @UniqueConstraint(name = "upms_oidc_user_identity_idx1", columnNames = "user_id,subject_id")
+      @UniqueConstraint(name = "upms_oidc_user_identity_uni0", columnNames = "user_id,client_id"),
+      @UniqueConstraint(name = "upms_oidc_user_identity_uni1", columnNames = "user_id,subject_id")
     })
 public class OidcUserIdentityEntity extends BaseIdEntity<String> {
   @Column(nullable = false)

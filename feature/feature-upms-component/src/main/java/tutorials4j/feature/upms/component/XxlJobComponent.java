@@ -4,7 +4,7 @@ import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tutorials4j.feature.upms.autoconfigure.UpmsFeatureProperties;
+import tutorials4j.feature.core.properties.UpmsFeatureProperties;
 import tutorials4j.feature.upms.service.AuthHistoryService;
 
 /**

@@ -6,9 +6,9 @@ package tutorials4j.feature.upms;
  * @author YunJiao Yang
  */
 public interface UpmsFeatureConsts {
-  String CACHE_NAME_USERS = "users";
+  String CACHEABLE_USER = "upms-user";
 
-  String CACHE_NAME_CLIENTS = "clients";
+  String CACHEABLE_CLIENT = "upms-client";
 
-  String CACHE_NAME_LOGIN_FAIL_COUNTER = "login-fail-counter";
+  String CACHE_LOGIN_FAIL_COUNTER = "upms-login-fail-counter";
 }

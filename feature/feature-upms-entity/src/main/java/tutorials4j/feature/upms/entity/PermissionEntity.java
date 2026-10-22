@@ -21,8 +21,8 @@ import lombok.Setter;
 @Entity
 @Table(
     name = "upms_permission",
-    indexes = {@Index(name = "upms_permission_idx0", columnList = "code,enabled")},
-    uniqueConstraints = {@UniqueConstraint(name = "upms_permission_id10", columnNames = "code")})
+    indexes = {@Index(name = "upms_permission_idx1", columnList = "code,enabled")},
+    uniqueConstraints = {@UniqueConstraint(name = "upms_permission_uni0", columnNames = "code")})
 public class PermissionEntity extends UpmsEntity {
   @Column(nullable = false)
   private String code;

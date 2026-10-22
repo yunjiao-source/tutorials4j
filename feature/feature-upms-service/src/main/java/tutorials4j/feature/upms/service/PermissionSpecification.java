@@ -13,20 +13,12 @@ import tutorials4j.feature.upms.entity.PermissionEntity;
  */
 public class PermissionSpecification {
   public static Specification<PermissionEntity> nameLike(String name) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(name)) {
-        return cb.conjunction();
-      }
-      return cb.like(root.get("name"), like(name));
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(name) ? null : cb.like(root.get("name"), like(name));
   }
 
   public static Specification<PermissionEntity> codeLike(String code) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(code)) {
-        return cb.conjunction();
-      }
-      return cb.like(root.get("code"), like(code));
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(code) ? null : cb.like(root.get("code"), like(code));
   }
 }

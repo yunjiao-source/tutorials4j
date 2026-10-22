@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
-import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
 import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.convert.ListAttributeConverter;
+import tutorials4j.toolkit.data.exception.DataErrorCode;
 
 /**
  * TODO
@@ -26,8 +26,8 @@ import tutorials4j.toolkit.data.convert.ListAttributeConverter;
 @Entity
 @Table(
     name = "upms_client",
-    indexes = {@Index(name = "upms_client_idx0", columnList = "subject_id")},
-    uniqueConstraints = {@UniqueConstraint(name = "upms_client_idx1", columnNames = "client_id")})
+    indexes = {@Index(name = "upms_client_idx1", columnList = "subject_id")},
+    uniqueConstraints = {@UniqueConstraint(name = "upms_client_uni1", columnNames = "client_id")})
 public class ClientEntity extends UpmsEntity {
   /** 应用id，应该全局唯一 */
   @Column(nullable = false)
@@ -103,7 +103,7 @@ public class ClientEntity extends UpmsEntity {
     super.preRemove();
 
     if (Objects.equals(isReserved, YesNoEnum.yes)) {
-      throw UpmsFeatureErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("clientId", clientId);
+      throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("clientName", clientName);
     }
   }
 }

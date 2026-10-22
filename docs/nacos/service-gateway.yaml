@@ -28,6 +28,13 @@ spring:
               filters:
                 - StripPrefix=2
 
+            - id: service-system-route
+              uri: lb://service-system
+              predicates:
+                - Path=/api/system/**
+              filters:
+                - StripPrefix=2
+
 
 # sa-token配置
 sa-token:

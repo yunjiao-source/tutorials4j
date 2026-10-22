@@ -1,6 +1,6 @@
 package tutorials4j.feature.upms.repository;
 
-import static tutorials4j.feature.upms.UpmsFeatureConsts.CACHE_NAME_CLIENTS;
+import static tutorials4j.feature.upms.UpmsFeatureConsts.CACHEABLE_CLIENT;
 
 import java.util.Optional;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +15,6 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
  */
 @Repository
 public interface ClientRepository extends BaseRepository<ClientEntity, String> {
-  @Cacheable(value = CACHE_NAME_CLIENTS, key = "#clientId")
+  @Cacheable(value = CACHEABLE_CLIENT, key = "#clientId")
   Optional<ClientEntity> findByClientId(String clientId);
 }

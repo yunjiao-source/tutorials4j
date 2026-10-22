@@ -27,6 +27,13 @@ public class AuthHistoryVO extends BaseIdVO<String> {
 
     AuthHistoryVO vo = new AuthHistoryVO();
     BeanUtils.copyProperties(entity, vo);
+    return vo;
+  }
+
+  public static AuthHistoryVO withUser(AuthHistoryEntity entity) {
+    Assert.notNull(entity, "entity must not be null");
+
+    AuthHistoryVO vo = of(entity);
     if (entity.getUser() != null) {
       vo.setUser(UserVO.of(entity.getUser()));
     }

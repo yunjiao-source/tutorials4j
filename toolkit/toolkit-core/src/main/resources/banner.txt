@@ -1,4 +1,4 @@
 ============================================
           t u t o r i a l s 4 j
 ============================================
-Powered by Spring Boot ${spring-boot.version}
+:: Spring Boot :: ${spring-boot.version}

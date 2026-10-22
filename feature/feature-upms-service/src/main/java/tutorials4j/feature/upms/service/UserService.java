@@ -1,6 +1,6 @@
 package tutorials4j.feature.upms.service;
 
-import static tutorials4j.feature.upms.UpmsFeatureConsts.CACHE_NAME_USERS;
+import static tutorials4j.feature.upms.UpmsFeatureConsts.CACHEABLE_USER;
 
 import jakarta.validation.Valid;
 import java.time.Instant;
@@ -12,14 +12,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import tutorials4j.feature.upms.autoconfigure.UpmsFeatureProperties;
+import tutorials4j.feature.core.properties.UpmsFeatureProperties;
 import tutorials4j.feature.upms.entity.RoleEntity;
 import tutorials4j.feature.upms.entity.UserEntity;
 import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
@@ -50,10 +48,6 @@ public class UserService implements BaseService<UserEntity, String> {
   @Override
   public BaseRepository<UserEntity, String> getRepository() {
     return userRepository;
-  }
-
-  public Page<UserEntity> findByPage(UserQuery query, Pageable pageable) {
-    return userRepository.findAll(query.buildSpecification(), pageable);
   }
 
   public UserEntity create(@Valid UserCreateDTO model) {
@@ -98,7 +92,7 @@ public class UserService implements BaseService<UserEntity, String> {
         .orElseThrow(UpmsFeatureErrorCode.ACCOUNT_NOT_FOUND::throwed);
   }
 
-  @Cacheable(value = CACHE_NAME_USERS, key = "#username")
+  @Cacheable(value = CACHEABLE_USER, key = "#username")
   public UserModel findUserModelByUserName(String username) {
     UserEntity entity = findByUsername(username);
     return ConverterUtils.getInstance().convertUserEntity.apply(entity);

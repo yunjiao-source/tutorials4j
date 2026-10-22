@@ -20,56 +20,31 @@ public class MenuSpecification {
   }
 
   public static Specification<MenuEntity> parentIdEqual(String parentId) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(parentId)) {
-        return cb.conjunction();
-      }
-      return cb.equal(root.get("parent").get("id"), parentId);
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(parentId) ? null : cb.equal(root.get("parentId"), parentId);
   }
 
   public static Specification<MenuEntity> enabledEqual(YesNoEnum enabled) {
-    return (root, query, cb) -> {
-      if (enabled == null) {
-        return cb.conjunction();
-      }
-      return cb.equal(root.get("enabled"), enabled);
-    };
+    return (root, query, cb) -> enabled == null ? null : cb.equal(root.get("enabled"), enabled);
   }
 
   public static Specification<MenuEntity> enabledIn(Collection<YesNoEnum> allEnabled) {
-    return (root, query, cb) -> {
-      if (allEnabled == null) {
-        return cb.conjunction();
-      }
-      return cb.in(root.get("enabled").in(allEnabled));
-    };
+    return (root, query, cb) ->
+        allEnabled == null ? null : cb.in(root.get("enabled").in(allEnabled));
   }
 
   public static Specification<MenuEntity> nameLike(String name) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(name)) {
-        return cb.conjunction();
-      }
-      return cb.like(root.get("name"), like(name));
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(name) ? null : cb.like(root.get("name"), like(name));
   }
 
   public static Specification<MenuEntity> pathLike(String path) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(path)) {
-        return cb.conjunction();
-      }
-      return cb.like(root.get("path"), like(path));
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(path) ? null : cb.like(root.get("path"), like(path));
   }
 
   public static Specification<MenuEntity> titleLike(String title) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(title)) {
-        return cb.conjunction();
-      }
-      return cb.like(root.get("title"), like(title));
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(title) ? null : cb.like(root.get("title"), like(title));
   }
 }

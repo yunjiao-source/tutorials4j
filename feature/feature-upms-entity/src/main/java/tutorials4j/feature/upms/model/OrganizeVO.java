@@ -21,8 +21,6 @@ import tutorials4j.feature.upms.entity.OrganizeEntity;
 public class OrganizeVO extends UpmsVO {
   private String parentId;
 
-  private String parentName;
-
   private String name;
 
   private String shortName;
@@ -33,20 +31,11 @@ public class OrganizeVO extends UpmsVO {
 
   private OrganizeCategory category;
 
-  private CompanyVO company;
-
   public static OrganizeVO of(OrganizeEntity entity) {
     Assert.notNull(entity, "entity must not be null");
 
     OrganizeVO vo = new OrganizeVO();
     BeanUtils.copyProperties(entity, vo);
-    if (entity.getParent() != null) {
-      vo.setParentId(entity.getParent().getId());
-      vo.setParentName(entity.getParent().getName());
-    }
-    if (entity.getCompany() != null) {
-      vo.setCompany(CompanyVO.of(entity.getCompany()));
-    }
     return vo;
   }
 
@@ -70,12 +59,10 @@ public class OrganizeVO extends UpmsVO {
             tree.setWeight(organize.getRank());
           }
 
-          tree.putExtra("parentName", organize.getParentName());
           tree.putExtra("shortName", organize.getShortName());
           tree.putExtra("code", organize.getCode());
           tree.putExtra("rank", organize.getRank());
           tree.putExtra("category", organize.getCategory());
-          tree.putExtra("company", organize.getCompany());
         });
   }
 

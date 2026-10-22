@@ -1,4 +1,4 @@
-package tutorials4j.feature.upms.autoconfigure;
+package tutorials4j.feature.core.properties;
 
 import java.time.Duration;
 import lombok.Data;
@@ -15,6 +15,7 @@ import tutorials4j.toolkit.core.constant.PropertyConsts;
 public class UpmsFeatureProperties {
   private Duration accountExpire = Duration.ofDays(90);
   private Duration credentialsExpire = Duration.ofDays(90);
+  private Integer maxLoginFailCount = 5;
   private ClearAuthHistoryOptions clearAuthHistory = new ClearAuthHistoryOptions();
 
   @Data

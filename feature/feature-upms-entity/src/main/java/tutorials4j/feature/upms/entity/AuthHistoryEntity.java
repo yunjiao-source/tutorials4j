@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -24,7 +26,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
 @Entity
 @Table(
     name = "upms_auth_history",
-    indexes = {@Index(name = "upms_client_idx0", columnList = "user_id")})
+    indexes = {@Index(name = "upms_client_idx1", columnList = "user_id")})
 public class AuthHistoryEntity extends BaseIdEntity<String> {
   @Column
   @Enumerated(EnumType.STRING)
@@ -32,7 +34,13 @@ public class AuthHistoryEntity extends BaseIdEntity<String> {
 
   @Column private Instant createdTime;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id", nullable = false)
+  @Column(name = "user_id", insertable = false, updatable = false)
+  private String userId;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(
+      name = "user_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "upms_auth_history_fk1"))
   private UserEntity user;
 }

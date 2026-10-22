@@ -18,51 +18,30 @@ import tutorials4j.toolkit.core.model.UserStatus;
  */
 public class UserSpecification {
   public static Specification<UserEntity> nameLike(String name) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(name)) {
-        return cb.conjunction();
-      }
-      return cb.like(root.get("name"), like(name));
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(name) ? null : cb.like(root.get("name"), like(name));
   }
 
   public static Specification<UserEntity> genderEqual(GenderEnum gender) {
-    return (root, query, cb) -> {
-      if (gender == null) {
-        return cb.conjunction();
-      }
-      return cb.equal(root.get("gender"), gender);
-    };
+    return (root, query, cb) -> gender == null ? null : cb.equal(root.get("gender"), gender);
   }
 
-  public static Specification<UserEntity> statusIn(Collection<UserStatus> statuses) {
-    return (root, query, cb) -> {
-      if (statuses == null) {
-        return cb.conjunction();
-      }
-      return cb.in(root.get("status").in(statuses));
-    };
+  public static Specification<UserEntity> statusIn(Collection<UserStatus> allStatus) {
+    return (root, query, cb) -> allStatus == null ? null : cb.in(root.get("status").in(allStatus));
   }
 
   public static Specification<UserEntity> accountExpireAt(Duration accountExpire) {
-    return (root, query, cb) -> {
-      if (accountExpire == null) {
-        return cb.conjunction();
-      }
-
-      Instant endTime = Instant.now().plus(accountExpire);
-      return cb.lessThanOrEqualTo(root.get("accountExpireAt"), endTime);
-    };
+    return (root, query, cb) ->
+        accountExpire == null
+            ? null
+            : cb.lessThanOrEqualTo(root.get("accountExpireAt"), Instant.now().plus(accountExpire));
   }
 
   public static Specification<UserEntity> credentialsExpireAt(Duration credentialsExpire) {
-    return (root, query, cb) -> {
-      if (credentialsExpire == null) {
-        return cb.conjunction();
-      }
-
-      Instant endTime = Instant.now().plus(credentialsExpire);
-      return cb.lessThanOrEqualTo(root.get("credentialsExpireAt"), endTime);
-    };
+    return (root, query, cb) ->
+        credentialsExpire == null
+            ? null
+            : cb.lessThanOrEqualTo(
+                root.get("credentialsExpireAt"), Instant.now().plus(credentialsExpire));
   }
 }

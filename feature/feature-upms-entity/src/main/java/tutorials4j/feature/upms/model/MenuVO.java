@@ -21,8 +21,6 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
 public class MenuVO extends UpmsVO {
   private String parentId;
 
-  private String parentName;
-
   private String path;
 
   private String name;
@@ -53,10 +51,6 @@ public class MenuVO extends UpmsVO {
 
     MenuVO vo = new MenuVO();
     BeanUtils.copyProperties(entity, vo);
-    if (entity.getParent() != null) {
-      vo.setParentId(entity.getParent().getId());
-      vo.setParentName(entity.getParent().getName());
-    }
     return vo;
   }
 
@@ -80,7 +74,6 @@ public class MenuVO extends UpmsVO {
             tree.setWeight(menu.getRank());
           }
 
-          tree.putExtra("parentName", menu.getParentName());
           tree.putExtra("path", menu.getPath());
           tree.putExtra("component", menu.getComponent());
           tree.putExtra("redirect", menu.getRedirect());

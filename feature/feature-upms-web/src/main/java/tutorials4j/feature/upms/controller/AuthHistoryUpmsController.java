@@ -26,6 +26,6 @@ public class AuthHistoryUpmsController {
   @GetMapping("page")
   public PagedModel<AuthHistoryVO> getByPage(AuthHistoryQuery query, Pageable pageable) {
     Page<AuthHistoryEntity> entities = authHistoryService.findByPage(query, pageable);
-    return new PagedModel<>(entities.map(AuthHistoryVO::of));
+    return new PagedModel<>(entities.map(AuthHistoryVO::withUser));
   }
 }

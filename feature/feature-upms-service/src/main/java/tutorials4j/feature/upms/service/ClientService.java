@@ -4,8 +4,6 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -36,24 +34,20 @@ public class ClientService implements BaseService<ClientEntity, String> {
     return clientRepository;
   }
 
-  public Page<ClientEntity> findByPage(ClientQuery query, Pageable pageable) {
-    return clientRepository.findAll(query.buildSpecification(), pageable);
-  }
-
-  public ClientEntity create(@Valid ClientCreateDTO model) {
-    Assert.notNull(model, "model must not be null");
-    var entity = new ClientEntity();
-    BeanUtils.copyProperties(model, entity);
+  public ClientEntity create(@Valid ClientCreateDTO dto) {
+    Assert.notNull(dto, "dto must not be null");
+    ClientEntity entity = new ClientEntity();
+    BeanUtils.copyProperties(dto, entity);
     UpmsFeatureManager.getInstance().setClientEntityDefaultValue.accept(entity);
     return clientRepository.save(entity);
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public ClientEntity update(String id, @Valid ClientUpdateDTO model) {
-    Assert.notNull(model, "model must not be null");
+  public ClientEntity update(String id, @Valid ClientUpdateDTO dto) {
+    Assert.notNull(dto, "model must not be null");
 
-    var entity = findById(id);
-    BeanUtils.copyProperties(model, entity);
+    ClientEntity entity = findById(id);
+    BeanUtils.copyProperties(dto, entity);
     UpmsFeatureManager.getInstance().setClientEntityDefaultValue.accept(entity);
     return clientRepository.save(entity);
   }

@@ -19,7 +19,7 @@ public class AuthHistorySpecification {
   public static Specification<AuthHistoryEntity> userIdEqual(String userId) {
     return (root, query, cb) -> {
       if (StringUtils.isBlank(userId)) {
-        return cb.conjunction();
+        return null;
       }
       Join<AuthHistoryEntity, UserEntity> userJoin = leftJoin(root, "user");
       return cb.equal(userJoin.get("id"), userId);
@@ -27,29 +27,19 @@ public class AuthHistorySpecification {
   }
 
   public static Specification<AuthHistoryEntity> authStatusEqual(AuthStatus authStatus) {
-    return (root, query, cb) -> {
-      if (authStatus == null) {
-        return cb.conjunction();
-      }
-      return cb.equal(root.get("status"), authStatus);
-    };
+    return (root, query, cb) ->
+        authStatus == null ? null : cb.equal(root.get("authStatus"), authStatus);
   }
 
   public static Specification<AuthHistoryEntity> createdTimeGte(Instant createTimeBegin) {
-    return (root, query, cb) -> {
-      if (createTimeBegin == null) {
-        return cb.conjunction();
-      }
-      return cb.greaterThanOrEqualTo(root.get("createdTime"), createTimeBegin);
-    };
+    return (root, query, cb) ->
+        createTimeBegin == null
+            ? null
+            : cb.greaterThanOrEqualTo(root.get("createdTime"), createTimeBegin);
   }
 
   public static Specification<AuthHistoryEntity> createdTimeLte(Instant createTimeEnd) {
-    return (root, query, cb) -> {
-      if (createTimeEnd == null) {
-        return cb.conjunction();
-      }
-      return cb.lessThanOrEqualTo(root.get("createdTime"), createTimeEnd);
-    };
+    return (root, query, cb) ->
+        createTimeEnd == null ? null : cb.lessThanOrEqualTo(root.get("createdTime"), createTimeEnd);
   }
 }

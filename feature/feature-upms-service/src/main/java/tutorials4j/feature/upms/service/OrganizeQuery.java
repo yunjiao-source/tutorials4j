@@ -1,32 +1,36 @@
 package tutorials4j.feature.upms.service;
 
-import java.util.List;
-import java.util.Objects;
-import org.springframework.data.jpa.domain.Specification;
+import static tutorials4j.feature.upms.service.OrganizeSpecification.enabledEqual;
+import static tutorials4j.feature.upms.service.OrganizeSpecification.nameLike;
+import static tutorials4j.feature.upms.service.OrganizeSpecification.parentIdEqual;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tutorials4j.feature.upms.entity.OrganizeEntity;
 import tutorials4j.toolkit.core.model.YesNoEnum;
+import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-public class OrganizeQuery {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrganizeQuery extends BaseQuery<OrganizeEntity> {
   private String parentId;
   private String name;
 
   private YesNoEnum enabled;
 
-  public Specification<OrganizeEntity> buildSpecification() {
-    var specList =
-        List.of(
-            OrganizeSpecification.parentIdEqual(parentId),
-            OrganizeSpecification.nameLike(name),
-            OrganizeSpecification.enabledEqual(enabled));
-
-    return specList.stream()
-        .filter(Objects::nonNull)
-        .reduce(Specification::and)
-        .orElse((root, query, cb) -> cb.conjunction());
+  @Override
+  protected void addSpec() {
+    addSpec(parentIdEqual(parentId)).addSpec(nameLike(name)).addSpec(enabledEqual(enabled));
   }
 }

@@ -8,8 +8,6 @@ import tutorials4j.toolkit.core.exception.ErrorCode;
  * @author YunJiao Yang
  */
 public enum UpmsFeatureErrorCode implements ErrorCode {
-  RESERVED_DATA_CAN_NOT_REMOVE("保留数据，不能删除"),
-
   TOO_MANY_LOGIN_FAIL("频繁登录失败，请稍后重试"),
   USER_VALIDATE_FAIL("用户信息校验失败"),
   ACCOUNT_NOT_FOUND("账户不存在"),

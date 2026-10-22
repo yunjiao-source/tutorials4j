@@ -62,8 +62,7 @@ class ReadableServiceTest {
         .satisfies(
             throwable -> {
               ErrorCodeException exception = (ErrorCodeException) throwable;
-              assertThat(exception.getErrorCode())
-                  .isEqualTo(DataErrorCode.FIND_ENTITY_BY_ID_NOT_EXISTS);
+              assertThat(exception.getErrorCode()).isEqualTo(DataErrorCode.FIND_ENTITY_NOT_EXISTS);
               assertThat(exception.getParams()).containsEntry("id", 1L);
             });
   }

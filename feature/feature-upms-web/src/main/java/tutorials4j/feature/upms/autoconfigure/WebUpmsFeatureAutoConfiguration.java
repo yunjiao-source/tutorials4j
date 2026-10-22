@@ -12,8 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @Slf4j
 @AutoConfiguration
-@ComponentScan(
-    basePackages = {"tutorials4j.feature.upms.component", "tutorials4j.feature.upms.controller"})
+@ComponentScan(basePackages = {"tutorials4j.feature.upms.controller"})
 public class WebUpmsFeatureAutoConfiguration {
   @PostConstruct
   public void postConstruct() {

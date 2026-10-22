@@ -1,35 +1,40 @@
 package tutorials4j.feature.upms.service;
 
-import java.util.List;
-import java.util.Objects;
-import lombok.Data;
-import org.springframework.data.jpa.domain.Specification;
+import static tutorials4j.feature.upms.service.ClientSpecification.clientIdLike;
+import static tutorials4j.feature.upms.service.ClientSpecification.isAutoConfirmEqual;
+import static tutorials4j.feature.upms.service.ClientSpecification.isNewRefreshEqual;
+import static tutorials4j.feature.upms.service.ClientSpecification.subjectIdLike;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tutorials4j.feature.upms.entity.ClientEntity;
 import tutorials4j.toolkit.core.model.YesNoEnum;
+import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 
 /**
  * TODO
  *
  * @author YunJiao Yang
  */
-@Data
-public class ClientQuery {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ClientQuery extends BaseQuery<ClientEntity> {
   private String clientId;
   private String subjectId;
   private YesNoEnum isNewRefresh;
   private YesNoEnum isAutoConfirm;
 
-  public Specification<ClientEntity> buildSpecification() {
-    var specList =
-        List.of(
-            ClientSpecification.clientIdLike(clientId),
-            ClientSpecification.subjectIdLike(subjectId),
-            ClientSpecification.isNewRefreshEqual(isNewRefresh),
-            ClientSpecification.isAutoConfirmEqual(isAutoConfirm));
-
-    return specList.stream()
-        .filter(Objects::nonNull)
-        .reduce(Specification::and)
-        .orElse((root, query, cb) -> cb.conjunction());
+  @Override
+  protected void addSpec() {
+    addSpec(clientIdLike(clientId))
+        .addSpec(subjectIdLike(subjectId))
+        .addSpec(isNewRefreshEqual(isNewRefresh))
+        .addSpec(isAutoConfirmEqual(isAutoConfirm));
   }
 }

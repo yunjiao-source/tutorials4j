@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
+import tutorials4j.feature.core.properties.UpmsFeatureProperties;
 
 /**
  * TODO
@@ -25,9 +26,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableConfigurationProperties({
   UpmsFeatureProperties.class,
 })
-public class UpmsFeatureAutoConfiguration {
+public class ServiceUpmsFeatureAutoConfiguration {
   @PostConstruct
   public void postConstruct() {
-    log.trace("[TOOLKIT-FEATURE-UPMS] UPMS Feature Auto Configuration");
+    log.trace("[TOOLKIT-FEATURE-UPMS-SERVICE] Service UPMS Feature Auto Configuration");
   }
 }

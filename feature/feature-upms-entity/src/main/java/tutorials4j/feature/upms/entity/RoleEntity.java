@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -17,10 +18,8 @@ import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import tutorials4j.feature.upms.exception.UpmsFeatureErrorCode;
 import tutorials4j.toolkit.core.model.YesNoEnum;
+import tutorials4j.toolkit.data.exception.DataErrorCode;
 
 /**
  * TODO
@@ -32,8 +31,8 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
 @Entity
 @Table(
     name = "upms_role",
-    indexes = {@Index(name = "upms_role_idx0", columnList = "code,enabled")},
-    uniqueConstraints = {@UniqueConstraint(name = "upms_role_id10", columnNames = "code")})
+    indexes = {@Index(name = "upms_role_idx1", columnList = "code,enabled")},
+    uniqueConstraints = {@UniqueConstraint(name = "upms_role_uni1", columnNames = "code")})
 public class RoleEntity extends UpmsEntity {
   @Column(nullable = false)
   private String code;
@@ -50,12 +49,21 @@ public class RoleEntity extends UpmsEntity {
   private Set<UserEntity> users = new HashSet<>();
 
   @ManyToMany
-  @Fetch(FetchMode.SUBSELECT)
   @JoinTable(
       name = "upms_role_permission",
-      joinColumns = {@JoinColumn(name = "role_id")},
-      inverseJoinColumns = {@JoinColumn(name = "permission_id")},
-      uniqueConstraints = {@UniqueConstraint(columnNames = {"role_id", "permission_id"})},
+      joinColumns = {
+        @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "upms_role_permission_fk1"))
+      },
+      inverseJoinColumns = {
+        @JoinColumn(
+            name = "permission_id",
+            foreignKey = @ForeignKey(name = "upms_role_permission_fk2"))
+      },
+      uniqueConstraints = {
+        @UniqueConstraint(
+            name = "upms_role_permission_uni1",
+            columnNames = {"role_id", "permission_id"})
+      },
       indexes = {
         @Index(name = "upms_role_permission_idx1", columnList = "role_id"),
         @Index(name = "upms_role_permission_idx2", columnList = "permission_id")
@@ -63,12 +71,19 @@ public class RoleEntity extends UpmsEntity {
   private Set<PermissionEntity> permissions = new HashSet<>();
 
   @ManyToMany
-  @Fetch(FetchMode.SUBSELECT)
   @JoinTable(
       name = "upms_role_menu",
-      joinColumns = {@JoinColumn(name = "role_id")},
-      inverseJoinColumns = {@JoinColumn(name = "meun_id")},
-      uniqueConstraints = {@UniqueConstraint(columnNames = {"role_id", "role_meun_idid"})},
+      joinColumns = {
+        @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "upms_role_menu_fk1"))
+      },
+      inverseJoinColumns = {
+        @JoinColumn(name = "menu_id", foreignKey = @ForeignKey(name = "upms_role_menu_fk2"))
+      },
+      uniqueConstraints = {
+        @UniqueConstraint(
+            name = "upms_role_menu_uni1",
+            columnNames = {"role_id", "menu_id"})
+      },
       indexes = {
         @Index(name = "upms_role_menu_idx1", columnList = "menu_id"),
         @Index(name = "upms_role_menu_idx2", columnList = "role_id")
@@ -76,12 +91,19 @@ public class RoleEntity extends UpmsEntity {
   private Set<MenuEntity> menus = new HashSet<>();
 
   @ManyToMany
-  @Fetch(FetchMode.SUBSELECT)
   @JoinTable(
       name = "upms_role_organize",
-      joinColumns = {@JoinColumn(name = "role_id")},
-      inverseJoinColumns = {@JoinColumn(name = "organize_id")},
-      uniqueConstraints = {@UniqueConstraint(columnNames = {"role_id", "organize_id"})},
+      joinColumns = {
+        @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "upms_role_organize_fk1"))
+      },
+      inverseJoinColumns = {
+        @JoinColumn(name = "organize_id", foreignKey = @ForeignKey(name = "upms_role_organize_fk2"))
+      },
+      uniqueConstraints = {
+        @UniqueConstraint(
+            name = "upms_role_organize_uni1",
+            columnNames = {"role_id", "organize_id"})
+      },
       indexes = {
         @Index(name = "upms_role_organize_idx1", columnList = "organize_id"),
         @Index(name = "upms_role_organize_idx2", columnList = "role_id")
@@ -102,7 +124,7 @@ public class RoleEntity extends UpmsEntity {
     super.preRemove();
 
     if (Objects.equals(isReserved, YesNoEnum.yes)) {
-      throw UpmsFeatureErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("code", code);
+      throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("name", name);
     }
   }
 }

@@ -22,6 +22,9 @@
         <module>feature-upms-service</module>
         <module>feature-upms-component</module>
         <module>feature-upms-web</module>
+        <module>feature-basic-entity</module>
+        <module>feature-basic-service</module>
+        <module>feature-basic-web</module>
     </modules>
 
 </project>

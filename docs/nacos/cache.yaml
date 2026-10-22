@@ -2,31 +2,43 @@ tutorials4j:
   toolkit:
     cache:
       type: redis
-      caffeine:
-        caches:
-          clients:
-            expire-after-write: 10m
-            maximum-size: 1000
-            initial-capacity: 100
-          users:
-            expire-after-write: 30m
-            maximum-size: 1000
-            initial-capacity: 100
-          login-fail-counter:
-            expire-after-write: 10m
-            maximum-size: 1000
-            initial-capacity: 100
+#      caffeine:
+#        caches:
+#          upms-client:
+#            expire-after-write: 10m
+#            maximum-size: 1000
+#            initial-capacity: 100
+#          upms-user:
+#            expire-after-write: 30m
+#            maximum-size: 1000
+#            initial-capacity: 100
+#          upms-login-fail-counter:
+#            expire-after-write: 10m
+#            maximum-size: 1000
+#            initial-capacity: 100
       redis:
         caches:
-          clients:
-            time-to-live: 10m
+          upms-client:
+            time-to-live: 30m
             caching-null-values: true
-            key-prefix: 'cacheable:upms:'
-          users:
-            time-to-live: 10m
+            key-prefix: 'cacheable:'
+          upms-users:
+            time-to-live: 30m
             caching-null-values: true
-            key-prefix: 'cacheable:upms:'
-          login-fail-counter:
-            time-to-live: 10m
+            key-prefix: 'cacheable:'
+          basic-company:
+            time-to-live: 30m
             caching-null-values: true
-            key-prefix: 'cache:upms:'
+            key-prefix: 'cacheable:'
+          basic-config:
+            time-to-live: 30m
+            caching-null-values: true
+            key-prefix: 'cacheable:'
+          basic-dict-data:
+            time-to-live: 30m
+            caching-null-values: true
+            key-prefix: 'cacheable:'
+          upms-login-fail-counter:
+            time-to-live: 30m
+            caching-null-values: true
+            key-prefix: 'cache:'

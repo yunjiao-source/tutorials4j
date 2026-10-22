@@ -2,5 +2,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
+      naming:
+        physical-strategy: tutorials4j.toolkit.data.hibernate.component.SuffixUnderscoreNamingStrategy
       ddl-auto: update
     show-sql: true

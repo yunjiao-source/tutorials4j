@@ -13,8 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tutorials4j.feature.core.event.local.AuthEvent;
-import tutorials4j.feature.upms.autoconfigure.UpmsFeatureProperties;
-import tutorials4j.feature.upms.autoconfigure.UpmsFeatureProperties.ClearAuthHistoryOptions;
+import tutorials4j.feature.core.properties.UpmsFeatureProperties;
+import tutorials4j.feature.core.properties.UpmsFeatureProperties.ClearAuthHistoryOptions;
 import tutorials4j.feature.upms.entity.AuthHistoryEntity;
 import tutorials4j.feature.upms.repository.AuthHistoryRepository;
 import tutorials4j.feature.upms.repository.UserRepository;
@@ -40,10 +40,6 @@ public class AuthHistoryService implements BaseService<AuthHistoryEntity, String
     return authHistoryRepository;
   }
 
-  public Page<AuthHistoryEntity> findByPage(AuthHistoryQuery query, Pageable pageable) {
-    return authHistoryRepository.findAll(query.buildSpecification(), pageable);
-  }
-
   @Transactional(rollbackFor = Exception.class)
   public void createBy(AuthEvent authEvent) {
     String userId = authEvent.getUserId();
@@ -63,12 +59,12 @@ public class AuthHistoryService implements BaseService<AuthHistoryEntity, String
   public int clearExpireData() {
     ClearAuthHistoryOptions options = properties.getClearAuthHistory();
     Instant createTimeEnd = Instant.now().minus(options.getDataExpired());
-    AuthHistoryQuery query = new AuthHistoryQuery();
-    query.setCreatedTimeEnd(createTimeEnd);
+    AuthHistoryQuery query = AuthHistoryQuery.builder().createdTimeEnd(createTimeEnd).build();
 
     Pageable pageable =
         PageRequest.of(0, options.getMaxSizePreLoop(), Sort.by("createdTime").descending());
 
+    // 只查询主键信息，其他字段不查询
     Page<StringIdOnly> page =
         authHistoryRepository.findBy(
             query.buildSpecification(), q -> q.as(StringIdOnly.class).project("id").page(pageable));

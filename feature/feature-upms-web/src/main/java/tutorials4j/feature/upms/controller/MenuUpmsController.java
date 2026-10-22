@@ -33,7 +33,7 @@ import tutorials4j.feature.upms.service.MenuSpecification;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("/upms/mens")
+@RequestMapping("/upms/menus")
 @RequiredArgsConstructor
 public class MenuUpmsController {
   private final MenuService menuService;

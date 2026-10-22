@@ -19,38 +19,21 @@ public class OrganizeSpecification {
   }
 
   public static Specification<OrganizeEntity> parentIdEqual(String parentId) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(parentId)) {
-        return cb.conjunction();
-      }
-      return cb.equal(root.get("parent").get("id"), parentId);
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(parentId) ? null : cb.equal(root.get("parentId"), parentId);
   }
 
   public static Specification<OrganizeEntity> enabledEqual(YesNoEnum enabled) {
-    return (root, query, cb) -> {
-      if (enabled == null) {
-        return cb.conjunction();
-      }
-      return cb.equal(root.get("enabled"), enabled);
-    };
+    return (root, query, cb) -> enabled == null ? null : cb.equal(root.get("enabled"), enabled);
   }
 
   public static Specification<OrganizeEntity> nameLike(String name) {
-    return (root, query, cb) -> {
-      if (StringUtils.isBlank(name)) {
-        return cb.conjunction();
-      }
-      return cb.like(root.get("name"), like(name));
-    };
+    return (root, query, cb) ->
+        StringUtils.isBlank(name) ? null : cb.like(root.get("name"), like(name));
   }
 
   public static Specification<OrganizeEntity> enabledIn(Collection<YesNoEnum> allEnabled) {
-    return (root, query, cb) -> {
-      if (allEnabled == null) {
-        return cb.conjunction();
-      }
-      return cb.in(root.get("enabled").in(allEnabled));
-    };
+    return (root, query, cb) ->
+        allEnabled == null ? null : cb.in(root.get("enabled").in(allEnabled));
   }
 }

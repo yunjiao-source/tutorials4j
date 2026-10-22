@@ -1,22 +1,21 @@
-package tutorials4j.feature.upms.model;
+package tutorials4j.feature.basic.model;
 
+import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.Assert;
-import tutorials4j.feature.upms.entity.CompanyEntity;
-import tutorials4j.toolkit.data.domain.BaseVO;
+import lombok.Data;
 
 /**
  * TODO
  *
  * @author Yun Jiao
  */
-@Getter
-@Setter
-public class CompanyVO extends BaseVO<String> {
+@Data
+public class CompanyDTO {
+  @NotBlank(message = "组织是必须的")
+  private String organizeId;
+
   // 公司性质
+  @NotBlank(message = "公司性质是必须的")
   private String companyType;
 
   // 所属行业
@@ -57,12 +56,4 @@ public class CompanyVO extends BaseVO<String> {
 
   // 经营范围
   private String businessScope;
-
-  public static CompanyVO of(CompanyEntity entity) {
-    Assert.notNull(entity, "entity must not be null");
-
-    CompanyVO vo = new CompanyVO();
-    BeanUtils.copyProperties(entity, vo);
-    return vo;
-  }
 }

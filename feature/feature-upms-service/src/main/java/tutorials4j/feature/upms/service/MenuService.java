@@ -7,8 +7,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -38,10 +36,6 @@ public class MenuService implements BaseService<MenuEntity, String> {
   @Override
   public BaseRepository<MenuEntity, String> getRepository() {
     return menuRepository;
-  }
-
-  public Page<MenuEntity> findByPage(MenuQuery query, Pageable pageable) {
-    return menuRepository.findAll(query.buildSpecification(), pageable);
   }
 
   public List<MenuEntity> findAllRoot(Collection<YesNoEnum> allEnabled) {

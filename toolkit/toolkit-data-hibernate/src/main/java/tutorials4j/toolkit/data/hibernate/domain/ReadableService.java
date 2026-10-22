@@ -34,7 +34,7 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
   default E findById(ID id) {
     return getRepository()
         .findById(id)
-        .orElseThrow(() -> DataErrorCode.FIND_ENTITY_BY_ID_NOT_EXISTS.throwed().param("id", id));
+        .orElseThrow(() -> DataErrorCode.FIND_ENTITY_NOT_EXISTS.throwed().param("id", id));
   }
 
   /**
@@ -217,5 +217,13 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
    */
   default Page<E> findByPage(int pageNumber, int pageSize, Sort.Direction direction) {
     return findByPage(PageRequest.of(pageNumber, pageSize, direction));
+  }
+
+  default Page<E> findByPage(BaseQuery<E> query, Pageable pageable) {
+    return getRepository().findAll(query, pageable);
+  }
+
+  default List<E> findByQuery(BaseQuery<E> query) {
+    return getRepository().findAll(query);
   }
 }
