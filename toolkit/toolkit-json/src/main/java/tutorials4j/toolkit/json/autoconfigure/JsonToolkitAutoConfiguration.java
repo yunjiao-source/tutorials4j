@@ -30,9 +30,10 @@ public class JsonToolkitAutoConfiguration {
   }
 
   @Bean
-  ObjectMapperCreator objectMapperCreator(ObjectMapper objectMapper) {
+  ObjectMapperCreator objectMapperCreator(
+      ObjectMapper objectMapper, JsonTypeWhiteListLoader jsonTypeWhiteListLoader) {
     log.trace("[TOOLKIT-JSON] Object Mapper Creator");
-    return new ObjectMapperCreator(objectMapper);
+    return new ObjectMapperCreator(objectMapper, jsonTypeWhiteListLoader);
   }
 
   @Bean

@@ -3,6 +3,7 @@ package tutorials4j.feature.basic.service;
 import static tutorials4j.feature.basic.BasicFeatureConsts.CACHEABLE_DICT_DATA;
 
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
@@ -64,14 +65,19 @@ public class DictDataService implements BaseService<DictDataEntity, String> {
   @Cacheable(value = CACHEABLE_DICT_DATA, key = "#dictTypeId")
   public List<DictDataVO> findByDictTypeIdAndEnabledIn(
       String dictTypeId, Set<YesNoEnum> allEnabled) {
+    List<DictDataVO> dictDataVOList;
+
     List<DictDataEntity> dictDataEntities = dictDataRepository.findByDictTypeId(dictTypeId);
     if (CollectionUtils.sizeIsEmpty(allEnabled)) {
-      return DictDataVO.of(dictDataEntities);
+      dictDataVOList = DictDataVO.of(dictDataEntities);
+    } else {
+      dictDataVOList =
+          dictDataEntities.stream()
+              .filter(e -> allEnabled.contains(e.getEnabled()))
+              .map(DictDataVO::of)
+              .toList();
     }
 
-    return dictDataEntities.stream()
-        .filter(e -> allEnabled.contains(e.getEnabled()))
-        .map(DictDataVO::of)
-        .toList();
+    return new ArrayList<>(dictDataVOList);
   }
 }

@@ -10,8 +10,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
-import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
 import tutorials4j.toolkit.cache.context.ConditionalOnRedisCacheType;
 import tutorials4j.toolkit.cache.redis.component.RedisCacheManagerCreator;
 import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheConfigurationCustomizer;
@@ -23,7 +21,7 @@ import tutorials4j.toolkit.cache.redis.lock.RedisLockService;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockableAspect;
 import tutorials4j.toolkit.cache.redis.script.RedisScriptExecutor;
 import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
-import tutorials4j.toolkit.json.component.JsonTypeWhiteListLoader;
+import tutorials4j.toolkit.json.component.ObjectMapperCreator;
 
 /**
  * TODO
@@ -60,33 +58,31 @@ public class RedisCacheToolkitAutoConfiguration {
 
   @Bean
   public GenericJacksonJsonRedisSerializer genericJacksonJsonRedisSerializer(
-      JsonTypeWhiteListLoader jsonTypeWhiteListLoader) {
-    PolymorphicTypeValidator typeValidator =
-        BasicPolymorphicTypeValidator.builder()
-            .allowIfSubType((ctx, clazz) -> jsonTypeWhiteListLoader.contains(clazz.getName()))
-            .build();
-
+      ObjectMapperCreator objectMapperCreator) {
     log.trace("[TOOLKIT-CACHE-REDIS] Generic Jackson Json Redis Serializer");
-    return GenericJacksonJsonRedisSerializer.builder()
-        .enableDefaultTyping(typeValidator)
-        .typePropertyName("@class")
-        .build();
+    return new GenericJacksonJsonRedisSerializer(objectMapperCreator.getInstance());
   }
 
   @Bean
   RedisTemplateDecorator redisTemplateDecorator(
-      RedisConnectionFactory redisConnectionFactory, RedisCacheToolkitProperties properties) {
+      RedisConnectionFactory redisConnectionFactory,
+      RedisCacheToolkitProperties properties,
+      GenericJacksonJsonRedisSerializer genericJacksonJsonRedisSerializer) {
     log.trace("[TOOLKIT-CACHE-REDIS] Redis Template Decorator");
 
     ToolkitKeySerializer serializer = new ToolkitKeySerializer(properties.getTemplateKeyPrefix());
     StringRedisTemplate stringRedisTemplate = new StringRedisTemplate(redisConnectionFactory);
+    stringRedisTemplate.setDefaultSerializer(serializer);
     stringRedisTemplate.setKeySerializer(serializer);
     stringRedisTemplate.setHashKeySerializer(serializer);
 
     RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setDefaultSerializer(serializer);
     redisTemplate.setConnectionFactory(redisConnectionFactory);
     redisTemplate.setKeySerializer(serializer);
+    redisTemplate.setValueSerializer(genericJacksonJsonRedisSerializer);
     redisTemplate.setHashKeySerializer(serializer);
+    redisTemplate.setHashValueSerializer(genericJacksonJsonRedisSerializer);
 
     RedisTemplateDecorator.instance.setRedisTemplate(redisTemplate);
     RedisTemplateDecorator.instance.setStringRedisTemplate(stringRedisTemplate);

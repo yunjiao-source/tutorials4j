@@ -1,6 +1,11 @@
 package tutorials4j.toolkit.json.component;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.RequiredArgsConstructor;
+import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
 import tutorials4j.toolkit.core.function.BeanCreator;
 
 /**
@@ -10,17 +15,12 @@ import tutorials4j.toolkit.core.function.BeanCreator;
  *
  * @author YunJiao Yang
  */
+@RequiredArgsConstructor
 public class ObjectMapperCreator implements BeanCreator<ObjectMapper> {
-  private final ObjectMapper defaultObjectMapper;
+  private final ObjectMapper objectMapper;
+  private final JsonTypeWhiteListLoader jsonTypeWhiteListLoader;
 
-  /**
-   * 以传入的 ObjectMapper 为基础创建创建器。
-   *
-   * @param objectMapper 默认的 ObjectMapper 实例（构造时拷贝一份作为基准）
-   */
-  public ObjectMapperCreator(ObjectMapper objectMapper) {
-    defaultObjectMapper = objectMapper.rebuild().build();
-  }
+  private ObjectMapper instance;
 
   /**
    * 获取默认的 ObjectMapper 实例（共享同一基准实例）。
@@ -29,7 +29,27 @@ public class ObjectMapperCreator implements BeanCreator<ObjectMapper> {
    */
   @Override
   public ObjectMapper getInstance() {
-    return defaultObjectMapper;
+    if (instance != null) {
+      return instance;
+    }
+
+    synchronized (this) {
+      if (instance != null) {
+        return instance;
+      }
+
+      PolymorphicTypeValidator typeValidator =
+          BasicPolymorphicTypeValidator.builder()
+              .allowIfSubType((ctx, clazz) -> jsonTypeWhiteListLoader.contains(clazz.getName()))
+              .build();
+      instance =
+          objectMapper
+              .rebuild()
+              .activateDefaultTyping(
+                  typeValidator, DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY)
+              .build();
+      return instance;
+    }
   }
 
   /**
@@ -39,7 +59,7 @@ public class ObjectMapperCreator implements BeanCreator<ObjectMapper> {
    */
   @Override
   public ObjectMapper newInstance() {
-    return defaultObjectMapper.rebuild().build();
+    return instance.rebuild().build();
   }
 
   /**

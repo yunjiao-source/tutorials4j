@@ -28,7 +28,19 @@ public class JsonTypeWhiteListLoader implements SmartInitializingSingleton {
   private final Set<String> classNames = new HashSet<>();
 
   public boolean contains(String className) {
-    return classNames.contains(className);
+    boolean exist = classNames.contains(className);
+    if (exist) {
+      return true;
+    }
+
+    for (String name : classNames) {
+      boolean isSubType = className.startsWith(name);
+      if (isSubType) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public Set<String> load() throws IOException {

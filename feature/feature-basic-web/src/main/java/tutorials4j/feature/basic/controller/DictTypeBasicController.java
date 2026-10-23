@@ -100,6 +100,7 @@ public class DictTypeBasicController {
       @PathVariable("id") String id,
       @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
     return dictDataService.findByDictTypeIdAndEnabledIn(id, allEnabled);
+    // return dictDataList.getDictDataVOList();
   }
 
   @GetMapping("/by-code/{code}/dict-data")

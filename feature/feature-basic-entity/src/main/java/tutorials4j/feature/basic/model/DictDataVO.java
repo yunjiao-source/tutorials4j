@@ -68,9 +68,8 @@ public class DictDataVO extends BasicVO {
           tree.putExtra("code", dictData.getCode());
           tree.putExtra("description", dictData.getDescription());
           tree.putExtra("dictTypeId", dictData.getDictTypeId());
-          if (dictData.getDictTypeVO() != null) {
-            tree.putExtra("dictType", dictData.getDictTypeVO());
-          }
+          tree.putExtra("jsonData", dictData.getJsonData());
+          tree.putExtra("dictType", dictData.getDictTypeVO());
         });
   }
 
