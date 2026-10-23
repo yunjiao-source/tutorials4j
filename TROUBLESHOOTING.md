@@ -499,7 +499,9 @@ Spring 中的 `BeanPostProcessor` 是用于对普通 Bean 进行加工（如代�
 ```java
 @Bean
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-public RedisCacheConfiguration redisCacheConfiguration() { ... }
+public RedisCacheConfiguration redisCacheConfiguration() { //
+  // 忽略代码 
+}
 ```
 
 ### 2. 延迟注入

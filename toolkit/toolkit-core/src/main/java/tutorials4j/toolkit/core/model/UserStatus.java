@@ -10,5 +10,5 @@ public enum UserStatus {
   disabled,
   locked,
 
-  expired;
+  expired
 }
