@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.xxljob;
+package tutorials4j.toolkit.xxljob.support;
 
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 

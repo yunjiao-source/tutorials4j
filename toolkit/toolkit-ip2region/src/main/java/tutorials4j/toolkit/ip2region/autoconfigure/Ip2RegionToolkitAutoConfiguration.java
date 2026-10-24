@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import tutorials4j.toolkit.ip2region.Ip2RegionSearcher;
+import tutorials4j.toolkit.ip2region.component.Ip2RegionSearcher;
 
 /**
  * TODO

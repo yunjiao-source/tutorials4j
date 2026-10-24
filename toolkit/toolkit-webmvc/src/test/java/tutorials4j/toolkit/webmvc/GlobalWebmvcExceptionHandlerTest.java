@@ -19,6 +19,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import tutorials4j.toolkit.core.exception.CommonErrorCode;
 import tutorials4j.toolkit.core.exception.ErrorDetail;
 import tutorials4j.toolkit.core.web.HandleException;
+import tutorials4j.toolkit.webmvc.component.GlobalWebmvcExceptionHandler;
 
 /**
  * {@link GlobalWebmvcExceptionHandler} 单元测试：Servlet MVC 场景下异常到 {@link ProblemDetail} 的转换。

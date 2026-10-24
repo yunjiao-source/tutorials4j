@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.data.mybatisplus;
+package tutorials4j.toolkit.data.mybatisplus.component;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import java.time.Instant;

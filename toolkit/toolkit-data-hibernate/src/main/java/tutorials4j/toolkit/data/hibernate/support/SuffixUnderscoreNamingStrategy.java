@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.data.hibernate.component;
+package tutorials4j.toolkit.data.hibernate.support;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;

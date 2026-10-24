@@ -5,6 +5,7 @@ import java.util.Objects;
 import lombok.Setter;
 import org.springframework.cache.CacheManager;
 import tutorials4j.toolkit.cache.CacheErrorCode;
+import tutorials4j.toolkit.cache.CacheManagerCreator;
 import tutorials4j.toolkit.cache.CacheType;
 
 /**

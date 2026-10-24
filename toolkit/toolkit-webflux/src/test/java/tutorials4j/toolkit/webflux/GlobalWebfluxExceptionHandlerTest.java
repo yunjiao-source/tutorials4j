@@ -24,6 +24,7 @@ import org.springframework.web.server.ServerWebExchange;
 import tutorials4j.toolkit.core.exception.CommonErrorCode;
 import tutorials4j.toolkit.core.exception.ErrorDetail;
 import tutorials4j.toolkit.core.web.HandleException;
+import tutorials4j.toolkit.webflux.component.GlobalWebfluxExceptionHandler;
 
 /**
  * {@link GlobalWebfluxExceptionHandler} 单元测试：WebFlux 场景下异常到 {@link ProblemDetail} 的转换。

@@ -11,7 +11,7 @@ import tutorials4j.feature.upms.service.RoleService;
 import tutorials4j.feature.upms.service.UserService;
 import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties;
-import tutorials4j.toolkit.satoken.component.ToolkitStpInterface;
+import tutorials4j.toolkit.satoken.support.ToolkitStpInterface;
 
 /**
  * TODO

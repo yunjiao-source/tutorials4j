@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.cache.redis.component;
+package tutorials4j.toolkit.cache.redis.support;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.serializer.SerializationException;

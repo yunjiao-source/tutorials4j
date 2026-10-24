@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tutorials4j.toolkit.data.mybatisplus.component.IdentifierMybatisPlusPropertiesCustomizer;
+import tutorials4j.toolkit.data.mybatisplus.support.SnowflakeIdentifierGenerator;
 
 /**
  * {@link IdentifierMybatisPlusPropertiesCustomizer} 单元测试：向全局配置注入雪花 ID 生成器。

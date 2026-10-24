@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tutorials4j.toolkit.data.mybatisplus.support.SnowflakeIdentifierGenerator;
 
 /**
  * {@link SnowflakeIdentifierGenerator} 单元测试：雪花算法 ID/UUID 生成。

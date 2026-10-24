@@ -19,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import tutorials4j.toolkit.data.mybatisplus.component.AuditMetaObjectHandler;
 
 /**
  * {@link AuditMetaObjectHandler} 单元测试：插入/更新时的审计字段自动填充。

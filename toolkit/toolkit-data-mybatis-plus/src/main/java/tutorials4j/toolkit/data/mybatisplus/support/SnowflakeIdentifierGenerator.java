@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.data.mybatisplus;
+package tutorials4j.toolkit.data.mybatisplus.support;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import tutorials4j.toolkit.core.util.SnowflakeUtils;

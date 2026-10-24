@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.webmvc;
+package tutorials4j.toolkit.webmvc.component;
 
 import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;

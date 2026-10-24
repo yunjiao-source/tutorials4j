@@ -1,4 +1,6 @@
-package tutorials4j.toolkit.cache.redis.component;
+package tutorials4j.toolkit.cache.redis.support;
+
+import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManager;
 
 /**
  * TODO

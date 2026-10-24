@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
-import tutorials4j.toolkit.webmvc.GlobalWebmvcExceptionHandler;
+import tutorials4j.toolkit.webmvc.component.GlobalWebmvcExceptionHandler;
 
 /**
  * TODO

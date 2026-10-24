@@ -15,6 +15,8 @@ import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializ
 import tutorials4j.toolkit.cache.CacheType;
 import tutorials4j.toolkit.cache.redis.autoconfigure.NamedCacheOptions;
 import tutorials4j.toolkit.cache.redis.autoconfigure.RedisCacheToolkitProperties;
+import tutorials4j.toolkit.cache.redis.support.RedisNamedCacheConfigurationCustomizer;
+import tutorials4j.toolkit.cache.redis.support.RedisNamedCacheManagerCustomizer;
 
 /**
  * {@link RedisCacheManagerCreator} 单元测试：缓存管理器创建与各类自定义扩展点。

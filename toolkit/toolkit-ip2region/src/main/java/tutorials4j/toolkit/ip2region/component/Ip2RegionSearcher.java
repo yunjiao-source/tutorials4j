@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.ip2region;
+package tutorials4j.toolkit.ip2region.component;
 
 import java.io.IOException;
 import java.time.Duration;

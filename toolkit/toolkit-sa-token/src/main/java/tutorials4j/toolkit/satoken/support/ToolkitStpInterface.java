@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.satoken.component;
+package tutorials4j.toolkit.satoken.support;
 
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.stp.StpInterface;

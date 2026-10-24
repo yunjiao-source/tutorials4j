@@ -7,7 +7,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import tutorials4j.toolkit.xxljob.XxlJobSpringExecutorCustomizer;
+import tutorials4j.toolkit.xxljob.support.XxlJobSpringExecutorCustomizer;
 
 /**
  * TODO

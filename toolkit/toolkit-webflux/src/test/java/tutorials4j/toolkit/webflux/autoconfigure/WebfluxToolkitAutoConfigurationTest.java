@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
-import tutorials4j.toolkit.webflux.GlobalWebfluxExceptionHandler;
+import tutorials4j.toolkit.webflux.component.GlobalWebfluxExceptionHandler;
 
 /**
  * TODO

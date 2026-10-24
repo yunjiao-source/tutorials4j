@@ -1,7 +1,6 @@
-package tutorials4j.toolkit.cache.component;
+package tutorials4j.toolkit.cache;
 
 import org.springframework.cache.CacheManager;
-import tutorials4j.toolkit.cache.CacheType;
 import tutorials4j.toolkit.core.function.BeanCreator;
 
 /**

@@ -12,14 +12,14 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import tutorials4j.toolkit.cache.context.ConditionalOnRedisCacheType;
 import tutorials4j.toolkit.cache.redis.component.RedisCacheManagerCreator;
-import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheConfigurationCustomizer;
 import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManager;
-import tutorials4j.toolkit.cache.redis.component.RedisNamedCacheManagerCustomizer;
 import tutorials4j.toolkit.cache.redis.component.RedisTemplateDecorator;
-import tutorials4j.toolkit.cache.redis.component.ToolkitKeySerializer;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockService;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockableAspect;
 import tutorials4j.toolkit.cache.redis.script.RedisScriptExecutor;
+import tutorials4j.toolkit.cache.redis.support.RedisNamedCacheConfigurationCustomizer;
+import tutorials4j.toolkit.cache.redis.support.RedisNamedCacheManagerCustomizer;
+import tutorials4j.toolkit.cache.redis.support.ToolkitKeySerializer;
 import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.toolkit.json.component.ObjectMapperCreator;
 

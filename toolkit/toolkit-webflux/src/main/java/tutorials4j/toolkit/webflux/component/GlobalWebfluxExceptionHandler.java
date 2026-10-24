@@ -1,4 +1,4 @@
-package tutorials4j.toolkit.webflux;
+package tutorials4j.toolkit.webflux.component;
 
 import io.micrometer.tracing.Tracer;
 import java.util.stream.Collectors;
