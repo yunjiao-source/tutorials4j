@@ -14,11 +14,11 @@
     <description>统一权限管理系统 组件模块</description>
 
     <dependencies>
-        <!--        <dependency>-->
-        <!--            <groupId>yunjiao-source.tutorials4j.feature</groupId>-->
-        <!--            <artifactId>feature-bus-event</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.feature</groupId>
+            <artifactId>feature-bus-event</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <dependency>
             <groupId>yunjiao-source.tutorials4j.feature</groupId>

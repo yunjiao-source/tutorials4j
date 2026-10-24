@@ -19,11 +19,11 @@
             <artifactId>toolkit-core</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>yunjiao-source.tutorials4j.assembly</groupId>-->
-        <!--            <artifactId>assembly-bus-amqp-starter</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.assembly</groupId>
+            <artifactId>assembly-bus-amqp-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
             <artifactId>toolkit-springdoc</artifactId>

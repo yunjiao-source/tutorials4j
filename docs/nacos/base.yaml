@@ -22,6 +22,13 @@ spring:
       enabled: true
       trace:
         enabled: true
+    stream:
+      bindings:
+        springCloudBusInput:
+          destination: springCloudBus
+          group: ${spring.application.name}
+        springCloudBusOutput:
+          destination: springCloudBus
 
   # 默认线程池配置
   task:
