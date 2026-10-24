@@ -3,6 +3,7 @@ env:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: 127.0.0.1
     port: 3306
+    database: tutorials4j
     username: root
     password: root
 

@@ -16,6 +16,11 @@
     <dependencies>
         <dependency>
             <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-aop</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
             <artifactId>toolkit-cache</artifactId>
             <version>${revision}</version>
         </dependency>

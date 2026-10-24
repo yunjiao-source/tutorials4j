@@ -23,7 +23,7 @@ public interface HandleException {
 
     ErrorDetail errorDetail = e.getErrorDetail().setTraceId(getTraceId());
     customizer.customize(errorDetail);
-    resoveException(e, pd, errorDetail, defaultHttpStatus);
+    resolveException(e, pd, errorDetail, defaultHttpStatus);
     return pd;
   }
 
@@ -38,7 +38,7 @@ public interface HandleException {
     ErrorDetail errorDetail = createErrorDetail(t).setCode(status.name());
 
     customizer.customize(errorDetail);
-    resoveException(t, pd, errorDetail, status);
+    resolveException(t, pd, errorDetail, status);
     return pd;
   }
 
@@ -56,7 +56,7 @@ public interface HandleException {
     return span != null ? span.context().traceId() : null;
   }
 
-  default void resoveException(
+  default void resolveException(
       Throwable t, ProblemDetail problemDetail, ErrorDetail errorDetail, HttpStatus httpStatus) {
     problemDetail.setProperty("errors", errorDetail);
 

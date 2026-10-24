@@ -85,7 +85,7 @@
         <wechatpay-java.version>0.2.17</wechatpay-java.version>
         <springdoc.version>3.1.1</springdoc.version>
         <redisson.version>4.7.0</redisson.version>
-        <resilience4j-retry.version>2.4.0</resilience4j-retry.version>
+        <resilience4j.version>2.4.0</resilience4j.version>
         <tianai-captcha.version>1.5.5</tianai-captcha.version>
         <uid-core.version>2.2</uid-core.version>
         <googleauth.version>1.5.0</googleauth.version>
@@ -371,8 +371,14 @@
 
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
-                <artifactId>resilience4j-retry</artifactId>
-                <version>${resilience4j-retry.version}</version>
+                <artifactId>resilience4j-all</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot4</artifactId>
+                <version>${resilience4j.version}</version>
             </dependency>
 
             <dependency>

@@ -58,8 +58,8 @@ public interface SaTokenUtils {
     return getLoginId(String.class);
   }
 
-  static <T> T getFromSession(String name, Class<T> clazz) {
-    var o = StpUtil.getSession().get(name);
+  static <T> T getFromSession(Object loginId, String name, Class<T> clazz) {
+    var o = StpUtil.getSessionByLoginId(loginId).get(name);
 
     if (o == null) {
       return null;
@@ -79,7 +79,12 @@ public interface SaTokenUtils {
   }
 
   static UserModel getUserFromSession() {
-    return getFromSession(ToolkitConsts.SESSION_NAME_USER_INFO, UserModel.class);
+    Object loginId = StpUtil.getLoginId();
+    return getFromSession(loginId, ToolkitConsts.SESSION_NAME_USER_INFO, UserModel.class);
+  }
+
+  static UserModel getUserFromSession(Object loginId) {
+    return getFromSession(loginId, ToolkitConsts.SESSION_NAME_USER_INFO, UserModel.class);
   }
 
   static boolean extractRememberMe() {
@@ -98,11 +103,20 @@ public interface SaTokenUtils {
   }
 
   static Set<String> getGrantedAuthorities() {
+    String loginId = StpUtil.getLoginId("");
+    if (StringUtils.isNotBlank(loginId)) {
+      return getGrantedAuthorities(loginId);
+    }
+
+    return new HashSet<>(0);
+  }
+
+  static Set<String> getGrantedAuthorities(String loginId) {
     List<String> roleAuthorities =
-        StpUtil.getRoleList().stream().map(e -> AUTHORITY_ROLE_PREFIX + e).toList();
+        StpUtil.getRoleList(loginId).stream().map(e -> AUTHORITY_ROLE_PREFIX + e).toList();
     Set<String> grantedAuthorities = new HashSet<>(roleAuthorities);
 
-    List<String> permissionAuthorities = StpUtil.getPermissionList().stream().toList();
+    List<String> permissionAuthorities = StpUtil.getPermissionList(loginId).stream().toList();
     grantedAuthorities.addAll(permissionAuthorities);
 
     return grantedAuthorities;

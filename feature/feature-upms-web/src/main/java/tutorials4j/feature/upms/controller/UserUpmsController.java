@@ -67,6 +67,12 @@ public class UserUpmsController {
     return UserVO.of(entity);
   }
 
+  @GetMapping("by-username/{username}")
+  public UserVO getByCode(@PathVariable("username") String username) {
+    UserEntity entity = userService.findByUsername(username);
+    return UserVO.of(entity);
+  }
+
   @GetMapping("{id}/roles")
   public List<RoleVO> getRolesById(@PathVariable("id") String id) {
     UserEntity entity = userService.findById(id);

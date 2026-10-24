@@ -19,6 +19,11 @@
             <artifactId>toolkit-core</artifactId>
             <version>${revision}</version>
         </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

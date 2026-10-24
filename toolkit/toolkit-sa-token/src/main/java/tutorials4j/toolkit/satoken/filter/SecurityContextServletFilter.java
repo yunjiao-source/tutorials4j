@@ -13,14 +13,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.core.model.UserModel;
 import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.webmvc.util.HeaderUtils;
 
 /**
  * TODO
@@ -63,7 +66,11 @@ public class SecurityContextServletFilter extends OncePerRequestFilter {
     try {
       SaRouterStaff saRouterStaff = SaRouter.match(includeList).notMatch(excludeList);
       if (saRouterStaff.isHit) {
-        isContextSet = setContext();
+        // 从请求头中获取登录id
+        String loginId = HeaderUtils.getHeader(request, DefaultConsts.HTTP_HEADER_LOGIN_ID);
+        if (StringUtils.isNotBlank(loginId)) {
+          isContextSet = setContext(loginId);
+        }
       }
       filterChain.doFilter(request, response);
     } finally {
@@ -73,12 +80,12 @@ public class SecurityContextServletFilter extends OncePerRequestFilter {
     }
   }
 
-  private boolean setContext() {
-    UserModel userModel = SaTokenUtils.getUserFromSession();
+  private boolean setContext(String loginId) {
+    UserModel userModel = SaTokenUtils.getUserFromSession(loginId);
     if (userModel != null) {
 
       Set<SimpleGrantedAuthority> grantedAuthorities =
-          SaTokenUtils.getGrantedAuthorities().stream()
+          SaTokenUtils.getGrantedAuthorities(loginId).stream()
               .map(SimpleGrantedAuthority::new)
               .collect(Collectors.toSet());
 

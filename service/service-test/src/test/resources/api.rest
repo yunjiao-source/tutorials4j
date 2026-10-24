@@ -1,0 +1,13 @@
+
+###
+GET http://localhost:9801/api/test/test2/1
+Content-Type: application/json
+satoken: 6a6514f9-3022-43bf-88b5-3e25702c13f7
+Authorization: Bearer IPJMOqWMq1689N1IztIOEgF45sCpbo967PVQC1CGwMIyDxel82ES02ActRWh
+
+###
+GET http://localhost:9801/api/test/test2/by-username/admin
+Content-Type: application/json
+satoken: 6a6514f9-3022-43bf-88b5-3e25702c13f7
+Authorization: Bearer IPJMOqWMq1689N1IztIOEgF45sCpbo967PVQC1CGwMIyDxel82ES02ActRWh
+

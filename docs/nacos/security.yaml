@@ -9,7 +9,7 @@ tutorials4j:
             - logging
 #            - blockUrls
 #            - whiteUrls
-            - checkLogin
+#            - checkLogin
             - sameToken
           before-auth-strategies:
 #            - cors

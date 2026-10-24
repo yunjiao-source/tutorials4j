@@ -33,6 +33,8 @@
         <module>toolkit-sa-token</module>
         <module>toolkit-bus</module>
         <module>toolkit-xxl-job</module>
+        <module>toolkit-http-service</module>
+        <module>toolkit-aop</module>
     </modules>
 
 </project>

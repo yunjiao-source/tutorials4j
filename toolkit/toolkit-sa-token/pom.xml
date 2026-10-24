@@ -19,6 +19,12 @@
             <artifactId>toolkit-core</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.toolkit</groupId>
+            <artifactId>toolkit-webmvc</artifactId>
+            <version>${revision}</version>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>cn.dev33</groupId>
@@ -44,11 +50,6 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-webmvc-v3v4-common</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
             <optional>true</optional>
         </dependency>
 

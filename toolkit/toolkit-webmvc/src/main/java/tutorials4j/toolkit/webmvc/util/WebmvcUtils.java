@@ -1,6 +1,6 @@
 package tutorials4j.toolkit.webmvc.util;
 
-import static tutorials4j.toolkit.core.constant.DefaultConsts.IP_HEADERS;
+import static tutorials4j.toolkit.core.constant.DefaultConsts.HTTP_HEADER_IP_LIST;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
@@ -34,7 +34,7 @@ public interface WebmvcUtils {
   }
 
   static String getClientIp(HttpServletRequest request) {
-    for (String header : IP_HEADERS) {
+    for (String header : HTTP_HEADER_IP_LIST) {
       String ip = request.getHeader(header);
       if (StringUtils.hasText(ip) && !"unknown".equalsIgnoreCase(ip)) {
         // 多级代理时，第一个是真实客户端 IP

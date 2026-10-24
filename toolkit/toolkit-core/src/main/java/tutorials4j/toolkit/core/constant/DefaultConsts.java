@@ -14,7 +14,7 @@ public interface DefaultConsts {
 
   String BEARER_TOKEN = "Bearer ";
 
-  List<String> IP_HEADERS =
+  List<String> HTTP_HEADER_IP_LIST =
       Arrays.asList(
           "X-Forwarded-For",
           "X-Real-IP",
@@ -22,4 +22,6 @@ public interface DefaultConsts {
           "WL-Proxy-Client-IP",
           "HTTP_CLIENT_IP",
           "HTTP_X_FORWARDED_FOR");
+
+  String HTTP_HEADER_LOGIN_ID = "X-Login-Id";
 }

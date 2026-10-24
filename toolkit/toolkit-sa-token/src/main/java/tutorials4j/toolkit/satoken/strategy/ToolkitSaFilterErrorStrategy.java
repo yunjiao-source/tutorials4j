@@ -2,6 +2,7 @@ package tutorials4j.toolkit.satoken.strategy;
 
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.context.model.SaResponse;
 import cn.dev33.satoken.exception.DisableServiceException;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
@@ -39,18 +40,18 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
 
   @Override
   public Object run(Throwable t) {
-    var problemDetail = handleThrowable(t);
+    ProblemDetail problemDetail = handleThrowable(t);
     // 获取响应对象，用于设置状态码和响应头
-    var response = SaHolder.getResponse();
+    SaResponse response = SaHolder.getResponse();
     response.setStatus(problemDetail.getStatus());
     return SaManager.getSaJsonTemplate().objectToJson(problemDetail);
   }
 
   private ProblemDetail handleThrowable(Throwable t) {
-    var deltail = "";
+    String deltail = "";
     // 获取响应对象，用于设置状态码和响应头
     if (t instanceof SaTokenException saTokenException) {
-      var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+      HttpStatus httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
       if (t instanceof NotLoginException notLoginException) {
         httpStatus = HttpStatus.UNAUTHORIZED;
         deltail =
@@ -71,7 +72,7 @@ public class ToolkitSaFilterErrorStrategy implements SaFilterErrorStrategy, Hand
         deltail = "没有访问权限，请联系管理员授权";
       }
 
-      var problemDetail =
+      ProblemDetail problemDetail =
           handleException(
               saTokenException,
               httpStatus,

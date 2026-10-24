@@ -36,3 +36,10 @@ spring:
       shutdown:
         await-termination: true   # 优雅关闭，等待任务完成
         await-termination-period: 30s # 等待超时
+
+  http:
+    serviceclient:
+      upms:
+        base-url: lb://service-uaa
+      basic:
+        base-url: lb://service-system
