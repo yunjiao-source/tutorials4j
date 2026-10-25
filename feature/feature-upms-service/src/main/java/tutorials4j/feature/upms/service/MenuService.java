@@ -1,5 +1,7 @@
 package tutorials4j.feature.upms.service;
 
+import static tutorials4j.feature.upms.service.MenuSpecification.typeNotIn;
+
 import jakarta.validation.Valid;
 import java.util.Collection;
 import java.util.List;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import tutorials4j.feature.upms.entity.MenuEntity;
+import tutorials4j.feature.upms.entity.MenuType;
 import tutorials4j.feature.upms.entity.RoleEntity;
 import tutorials4j.feature.upms.model.MenuDTO;
 import tutorials4j.feature.upms.repository.MenuRepository;
@@ -80,5 +83,9 @@ public class MenuService implements BaseService<MenuEntity, String> {
   @Transactional(rollbackFor = Exception.class)
   public void delete(String id) {
     menuRepository.findById(id).ifPresent(menuRepository::delete);
+  }
+
+  public List<MenuEntity> findRouter() {
+    return menuRepository.findAll(typeNotIn(List.of(MenuType.button)));
   }
 }

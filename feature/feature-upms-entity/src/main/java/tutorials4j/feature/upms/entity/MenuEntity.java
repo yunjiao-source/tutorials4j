@@ -50,7 +50,9 @@ public class MenuEntity extends UpmsEntity {
   @Column private String redirect;
 
   /** 类型：link-链接，embedded-内嵌，catalog-目录， button-按钮， menu-菜单 */
-  @Column private MenuType type;
+  @Column
+  @Enumerated(EnumType.STRING)
+  private MenuType type;
 
   /** 激活图标（菜单）; 用于配置页面的激活图标，会在菜单中显示。一般会配合图标库使用，如果是http链接，会自动加载图片 */
   @Column private String activeIcon;

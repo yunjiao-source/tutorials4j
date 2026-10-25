@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.feature.upms.entity.MenuEntity;
+import tutorials4j.feature.upms.entity.MenuType;
 import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
@@ -46,5 +47,13 @@ public class MenuSpecification {
   public static Specification<MenuEntity> titleLike(String title) {
     return (root, query, cb) ->
         StringUtils.isBlank(title) ? null : cb.like(root.get("title"), like(title));
+  }
+
+  public static Specification<MenuEntity> typeIn(Collection<MenuType> menuTypes) {
+    return (root, query, cb) -> menuTypes == null ? null : root.get("type").in(menuTypes);
+  }
+
+  public static Specification<MenuEntity> typeNotIn(Collection<MenuType> menuTypes) {
+    return Specification.not(typeIn(menuTypes));
   }
 }

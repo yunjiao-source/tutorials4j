@@ -125,6 +125,8 @@ public class MenuVO extends UpmsVO {
               .ifPresent(value -> tree.putExtra("component", value));
           Opt.ofBlankAble(menu.getRedirect()).ifPresent(value -> tree.putExtra("redirect", value));
           Opt.ofNullable(menu.getType()).ifPresent(value -> tree.putExtra("type", value.name()));
+          Opt.ofNullable(menu.getEnabled())
+              .ifPresent(value -> tree.putExtra("status", value.toInt()));
 
           Map<String, Object> metaMap = new HashMap<>();
           Opt.ofBlankAble(menu.getActiveIcon())

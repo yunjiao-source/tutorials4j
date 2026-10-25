@@ -88,6 +88,13 @@ public class MenuUpmsController {
     return MenuVO.toTree(MenuVO.of(entities));
   }
 
+  @GetMapping("router")
+  public List<Tree<String>> getRouterById() {
+    List<MenuEntity> entities = menuService.findRouter();
+
+    return MenuVO.toTree(MenuVO.of(entities));
+  }
+
   @GetMapping("page")
   public PagedModel<MenuVO> getByPage(MenuQuery query, Pageable pageable) {
     Page<MenuEntity> entities = menuService.findByPage(query, pageable);

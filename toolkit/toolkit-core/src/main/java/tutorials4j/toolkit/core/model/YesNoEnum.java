@@ -18,4 +18,8 @@ public enum YesNoEnum {
   public boolean isNo() {
     return Objects.equals(this, no);
   }
+
+  public int toInt() {
+    return isYes() ? 1 : 0;
+  }
 }
