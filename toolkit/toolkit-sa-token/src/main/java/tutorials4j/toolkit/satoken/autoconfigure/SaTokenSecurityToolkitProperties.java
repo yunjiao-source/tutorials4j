@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -37,17 +37,19 @@ public class SaTokenSecurityToolkitProperties {
     private List<String> blockUrls = new ArrayList<>();
     private List<String> authStrategies =
         List.of(
-            SaTokenUtils.LOGGING_AUTH_STRATEGY,
-            SaTokenUtils.BLOCK_URLS_AUTH_STRATEGY,
-            SaTokenUtils.WHITE_URL_AUTH_STRATEGY,
-            SaTokenUtils.CHECK_LOGIN_AUTH_STRATEGY);
+            SaTokenToolkitUtils.LOGGING_AUTH_STRATEGY,
+            SaTokenToolkitUtils.BLOCK_URLS_AUTH_STRATEGY,
+            SaTokenToolkitUtils.WHITE_URL_AUTH_STRATEGY,
+            SaTokenToolkitUtils.CHECK_LOGIN_AUTH_STRATEGY);
     private List<String> beforeAuthStrategies =
-        List.of(SaTokenUtils.CORS_AUTH_STRATEGY, SaTokenUtils.OPTIONS_METHOD_AUTH_STRATEGY);
+        List.of(
+            SaTokenToolkitUtils.CORS_AUTH_STRATEGY,
+            SaTokenToolkitUtils.OPTIONS_METHOD_AUTH_STRATEGY);
   }
 
   @Data
   public static class InterceptorOptions {
-    private List<String> paramFunctions = List.of(SaTokenUtils.CHECK_LOGIN_PARAM_FUNCTION);
+    private List<String> paramFunctions = List.of(SaTokenToolkitUtils.CHECK_LOGIN_PARAM_FUNCTION);
     private boolean handleAnnotation = true;
     private List<String> includePathPatterns = List.of("/**");
     private List<String> excludePathPatterns = new ArrayList<>();

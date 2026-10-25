@@ -25,5 +25,5 @@ public class DictTypeDTO {
 
   private String description;
 
-  private Integer rank;
+  private Integer ordered;
 }

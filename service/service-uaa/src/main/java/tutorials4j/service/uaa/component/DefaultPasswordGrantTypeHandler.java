@@ -1,7 +1,5 @@
 package tutorials4j.service.uaa.component;
 
-import static tutorials4j.toolkit.core.constant.ToolkitConsts.SESSION_NAME_USER_INFO;
-
 import cn.dev33.satoken.oauth2.granttype.handler.PasswordGrantTypeHandler;
 import cn.dev33.satoken.oauth2.granttype.handler.model.PasswordAuthResult;
 import cn.dev33.satoken.stp.StpUtil;
@@ -11,9 +9,10 @@ import tutorials4j.feature.core.event.local.AuthEvent;
 import tutorials4j.feature.core.model.AuthStatus;
 import tutorials4j.feature.upms.component.AuthComponent;
 import tutorials4j.feature.upms.service.UserService;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.core.model.UserModel;
 import tutorials4j.toolkit.core.util.SpringUtils;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -42,10 +41,10 @@ public class DefaultPasswordGrantTypeHandler extends PasswordGrantTypeHandler {
       throw e;
     }
 
-    boolean rememberMe = SaTokenUtils.extractRememberMe();
+    boolean rememberMe = SaTokenToolkitUtils.extractRememberMe();
     StpUtil.login(userModel.getUsername(), rememberMe);
 
-    StpUtil.getSession().set(SESSION_NAME_USER_INFO, userModel);
+    StpUtil.getSession().set(DefaultConsts.SESSION_NAME_USER_INFO, userModel);
     return new PasswordAuthResult(userModel.getUsername());
   }
 }

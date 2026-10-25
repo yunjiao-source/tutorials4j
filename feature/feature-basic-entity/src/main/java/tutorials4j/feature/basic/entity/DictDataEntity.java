@@ -53,7 +53,7 @@ public class DictDataEntity extends BasicEntity {
 
   @Column private String description;
 
-  @Column private Integer rank;
+  @Column private Integer ordered;
 
   @Column(name = "dict_type_id", insertable = false, updatable = false)
   private String dictTypeId;
@@ -63,7 +63,7 @@ public class DictDataEntity extends BasicEntity {
   private Map<String, String> jsonData = new HashMap<>();
 
   @OneToMany(mappedBy = "parent")
-  @OrderBy("rank ASC")
+  @OrderBy("ordered ASC")
   private List<DictDataEntity> children = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)

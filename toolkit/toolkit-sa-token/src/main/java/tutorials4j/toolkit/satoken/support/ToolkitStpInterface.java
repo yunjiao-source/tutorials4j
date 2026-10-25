@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitProperties.PermissionOptions;
 
 /**
@@ -36,7 +36,7 @@ public abstract class ToolkitStpInterface implements StpInterface {
       var permissionList = (List<String>) SaManager.getSaTokenDao().getObject(roleKey);
       if (permissionList == null) {
         // 从数据库查询这个角色 id 所拥有的权限列表
-        if (ToolkitConsts.ADMIN_NAME.equals(roleId)) {
+        if (DefaultConsts.ADMIN_NAME.equals(roleId)) {
           // 超级角色
           permissionList = getAllPermissions();
         } else {

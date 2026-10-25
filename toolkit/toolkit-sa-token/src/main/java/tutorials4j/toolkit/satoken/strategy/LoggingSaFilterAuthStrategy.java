@@ -2,7 +2,7 @@ package tutorials4j.toolkit.satoken.strategy;
 
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.context.SaHolder;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -18,6 +18,6 @@ public class LoggingSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
 
   @Override
   public String getName() {
-    return SaTokenUtils.LOGGING_AUTH_STRATEGY;
+    return SaTokenToolkitUtils.LOGGING_AUTH_STRATEGY;
   }
 }

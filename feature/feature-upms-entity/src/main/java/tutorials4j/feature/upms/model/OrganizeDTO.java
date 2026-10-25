@@ -23,7 +23,7 @@ public class OrganizeDTO {
   private String code;
 
   @NotBlank(message = "序号是必须的")
-  private Integer rank;
+  private Integer ordered;
 
   @NotNull(message = "分类是必须的")
   private OrganizeCategory category;

@@ -29,7 +29,7 @@ public class DictDataVO extends BasicVO {
 
   private String description;
 
-  private Integer rank;
+  private Integer ordered;
 
   private String dictTypeId;
 
@@ -61,8 +61,8 @@ public class DictDataVO extends BasicVO {
           tree.setId(dictData.getId());
           tree.setParentId(dictData.getParentId());
           tree.setName(dictData.getName());
-          if (dictData.getRank() != null) {
-            tree.setWeight(dictData.getRank());
+          if (dictData.getOrdered() != null) {
+            tree.setWeight(dictData.getOrdered());
           }
 
           tree.putExtra("code", dictData.getCode());

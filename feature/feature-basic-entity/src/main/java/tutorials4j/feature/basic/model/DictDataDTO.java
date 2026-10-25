@@ -20,7 +20,7 @@ public class DictDataDTO {
   private String code;
 
   private String description;
-  private Integer rank;
+  private Integer ordered;
 
   @NotBlank(message = "字典类型是必须的")
   private String dictTypeId;

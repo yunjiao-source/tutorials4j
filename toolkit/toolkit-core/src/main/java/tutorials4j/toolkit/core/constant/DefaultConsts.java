@@ -24,4 +24,14 @@ public interface DefaultConsts {
           "HTTP_X_FORWARDED_FOR");
 
   String HTTP_HEADER_LOGIN_ID = "X-Login-Id";
+
+  String ADMIN_NAME = "admin";
+
+  String META_TUTORIALS4J_DIR = "META-INF/tutorials4j";
+
+  String LOCKABLE_REDIS_KEY_PREFIX = "lockable:";
+
+  String SESSION_NAME_USER_INFO = "userModel";
+
+  String ROLE_PREFIX = "ROLE_";
 }

@@ -1,7 +1,7 @@
 package tutorials4j.toolkit.satoken.strategy;
 
 import cn.dev33.satoken.stp.StpUtil;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -17,6 +17,6 @@ public class CheckLoginSaFilterAuthStrategy implements NamedSaFilterAuthStrategy
 
   @Override
   public String getName() {
-    return SaTokenUtils.CHECK_LOGIN_AUTH_STRATEGY;
+    return SaTokenToolkitUtils.CHECK_LOGIN_AUTH_STRATEGY;
   }
 }

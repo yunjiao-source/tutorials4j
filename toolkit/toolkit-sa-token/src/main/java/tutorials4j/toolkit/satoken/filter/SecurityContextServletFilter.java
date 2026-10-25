@@ -11,18 +11,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.core.model.UserModel;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 import tutorials4j.toolkit.webmvc.util.HeaderUtils;
 
 /**
@@ -81,13 +79,11 @@ public class SecurityContextServletFilter extends OncePerRequestFilter {
   }
 
   private boolean setContext(String loginId) {
-    UserModel userModel = SaTokenUtils.getUserFromSession(loginId);
+    UserModel userModel = SaTokenToolkitUtils.getUserFromSession(loginId);
     if (userModel != null) {
 
-      Set<SimpleGrantedAuthority> grantedAuthorities =
-          SaTokenUtils.getGrantedAuthorities(loginId).stream()
-              .map(SimpleGrantedAuthority::new)
-              .collect(Collectors.toSet());
+      List<GrantedAuthority> grantedAuthorities =
+          SaTokenToolkitUtils.getGrantedAuthorityList(loginId);
 
       SecurityContext context = SecurityContextHolder.createEmptyContext();
       context.setAuthentication(

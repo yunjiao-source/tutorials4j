@@ -1,7 +1,5 @@
 package tutorials4j.toolkit.json.component;
 
-import static tutorials4j.toolkit.core.constant.ToolkitConsts.META_TUTORIALS4J_DIR;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 
 /**
  * TODO
@@ -23,7 +22,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 public class JsonTypeWhiteListLoader implements SmartInitializingSingleton {
   private static final String FILE_NAME = "json-type-white-list.conf";
   private static final String LOCATION_PATTERN =
-      "classpath*:/" + META_TUTORIALS4J_DIR + "/" + FILE_NAME;
+      "classpath*:/" + DefaultConsts.META_TUTORIALS4J_DIR + "/" + FILE_NAME;
 
   private final Set<String> classNames = new HashSet<>();
 

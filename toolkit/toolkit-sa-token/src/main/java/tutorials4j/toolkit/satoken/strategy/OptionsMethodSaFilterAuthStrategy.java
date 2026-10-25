@@ -2,7 +2,7 @@ package tutorials4j.toolkit.satoken.strategy;
 
 import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -18,6 +18,6 @@ public class OptionsMethodSaFilterAuthStrategy implements NamedSaFilterAuthStrat
 
   @Override
   public String getName() {
-    return SaTokenUtils.OPTIONS_METHOD_AUTH_STRATEGY;
+    return SaTokenToolkitUtils.OPTIONS_METHOD_AUTH_STRATEGY;
   }
 }

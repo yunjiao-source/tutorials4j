@@ -3,7 +3,7 @@ package tutorials4j.toolkit.cache.redis.schedule;
 import java.time.Duration;
 import java.util.Map;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockService;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.core.function.Lockable;
 import tutorials4j.toolkit.core.function.TaskRunner;
 
@@ -19,7 +19,7 @@ public interface FixedLeaseLockTaskRunner extends TaskRunner, Lockable {
       RedisLockService.instance
           .fixedLease()
           .doInLock(
-              ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + prefix() + key(params),
+              DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + prefix() + key(params),
               expireTime(),
               () -> doRun(params));
     } catch (Exception e) {

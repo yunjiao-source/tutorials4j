@@ -10,7 +10,7 @@ import tutorials4j.feature.core.model.AuthStatus;
 import tutorials4j.service.uaa.component.LoginEventCreatorComponent;
 import tutorials4j.toolkit.core.model.UserModel;
 import tutorials4j.toolkit.core.util.SpringUtils;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -60,7 +60,7 @@ public class OpenapiUaaController {
 
   @RequestMapping("logout")
   public void logout() {
-    UserModel userModel = SaTokenUtils.getUserFromSession();
+    UserModel userModel = SaTokenToolkitUtils.getUserFromSession();
     StpUtil.logout();
 
     AuthEvent authEvent = loginEventCreatorComponent.create(userModel);

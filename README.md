@@ -4,6 +4,10 @@
 
 `tutorials4j`（Java 教程）是一个面向 **Java 21** 的多模块教学与实战工程：既有可复用、可扩展的框架代码（缓存、数据、多租户、验证码、加解密、调度、消息、认证授权、对象存储等能力域），也有 12 个**开箱即用的示例工程**与 3 个**微服务演示服务**；每个组件都在 `docs/blog` 配有源码级技术文章、在 `docs/images` 配有演示截图，适合作为 Spring Boot 业务框架的设计参考与脚手架。
 
+## 源代码
+
+* 本项目源码仓库： [gitee](https://gitee.com/yunjiao-source/tutorials4j),[gitcode](https://gitcode.com/yun-jiao/tutorials4j),[github](https://github.com/yunjiao-source/tutorials4j)
+* 前端代码源码仓库(基于vue-vben-admin)：[gitee](https://gitee.com/yunjiao-source/tutorials4j_vue),[gitcode](https://gitcode.com/yun-jiao/tutorials4j_vue),[github](https://github.com/yunjiao-source/tutorials4j_vue)
 
 ## 公众号
 

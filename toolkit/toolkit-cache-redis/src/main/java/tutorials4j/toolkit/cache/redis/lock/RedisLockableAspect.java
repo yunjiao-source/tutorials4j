@@ -8,7 +8,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
 
 /**
@@ -50,6 +50,6 @@ public class RedisLockableAspect {
   }
 
   private String generateKey(RedisLockable redisLockable, String argValues) {
-    return ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + redisLockable.prefix() + argValues;
+    return DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + redisLockable.prefix() + argValues;
   }
 }

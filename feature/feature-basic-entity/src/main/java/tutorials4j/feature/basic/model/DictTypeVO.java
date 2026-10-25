@@ -26,7 +26,7 @@ public class DictTypeVO extends BasicVO {
 
   private String description;
 
-  private Integer rank;
+  private Integer ordered;
 
   private YesNoEnum isTree;
 
@@ -54,8 +54,8 @@ public class DictTypeVO extends BasicVO {
           tree.setId(dictType.getId());
           tree.setParentId(dictType.getParentId());
           tree.setName(dictType.getName());
-          if (dictType.getRank() != null) {
-            tree.setWeight(dictType.getRank());
+          if (dictType.getOrdered() != null) {
+            tree.setWeight(dictType.getOrdered());
           }
 
           tree.putExtra("code", dictType.getCode());

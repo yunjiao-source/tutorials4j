@@ -19,7 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockServiceTestFixture;
 import tutorials4j.toolkit.cache.redis.script.RedisScriptExecutor;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 
 /**
  * {@link FixedLeaseLockTaskRunner} 单元测试：固定租期锁下的任务执行与异常处理。
@@ -27,7 +27,7 @@ import tutorials4j.toolkit.core.constant.ToolkitConsts;
  * @author YunJiao Yang
  */
 class FixedLeaseLockTaskRunnerTest {
-  private static final String LOCK_KEY = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";
+  private static final String LOCK_KEY = DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";
   private static final long EXPIRE_MILLIS = 60_000L;
 
   private final RedisScriptExecutor scriptExecutor = mock(RedisScriptExecutor.class);

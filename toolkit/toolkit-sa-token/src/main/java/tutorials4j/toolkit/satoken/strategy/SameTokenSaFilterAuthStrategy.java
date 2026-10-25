@@ -1,6 +1,6 @@
 package tutorials4j.toolkit.satoken.strategy;
 
-import static tutorials4j.toolkit.satoken.util.SaTokenUtils.SAME_TOKEN_AUTH_STRATEGY;
+import static tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils.SAME_TOKEN_AUTH_STRATEGY;
 
 import cn.dev33.satoken.same.SaSameUtil;
 

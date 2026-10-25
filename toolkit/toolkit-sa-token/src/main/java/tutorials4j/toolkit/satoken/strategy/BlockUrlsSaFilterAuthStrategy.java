@@ -5,7 +5,7 @@ import cn.dev33.satoken.router.SaRouter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import tutorials4j.toolkit.satoken.exception.BlockUrlException;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -27,6 +27,6 @@ public class BlockUrlsSaFilterAuthStrategy implements NamedSaFilterAuthStrategy 
 
   @Override
   public String getName() {
-    return SaTokenUtils.BLOCK_URLS_AUTH_STRATEGY;
+    return SaTokenToolkitUtils.BLOCK_URLS_AUTH_STRATEGY;
   }
 }

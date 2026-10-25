@@ -3,6 +3,7 @@ package tutorials4j.toolkit.core.model;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Locale;
 import lombok.Data;
 
@@ -27,6 +28,7 @@ public class UserInfo {
   private ZoneId zoneInfo;
   private Locale locale;
   private Instant updated_at;
+  private List<String> roles;
 
   public void fillByProfile(UserModel userModel) {
     this.name = userModel.getName();

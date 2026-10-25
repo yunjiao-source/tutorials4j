@@ -49,13 +49,13 @@ public class DictTypeEntity extends BasicEntity {
 
   @Column private String description;
 
-  @Column private Integer rank;
+  @Column private Integer ordered;
 
   @OneToMany(mappedBy = "parent")
-  @OrderBy("rank ASC")
+  @OrderBy("ordered ASC")
   private List<DictTypeEntity> children = new ArrayList<>();
 
   @OneToMany(mappedBy = "dictType")
-  @OrderBy("rank ASC")
+  @OrderBy("ordered ASC")
   private List<DictDataEntity> dictDataList = new ArrayList<>();
 }

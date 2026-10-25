@@ -2,7 +2,7 @@ package tutorials4j.toolkit.redisson.schedule;
 
 import java.time.Duration;
 import java.util.Map;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.core.function.Lockable;
 import tutorials4j.toolkit.core.function.TaskRunner;
 import tutorials4j.toolkit.redisson.lock.RedissonBlockLockService;
@@ -19,7 +19,7 @@ public interface FixedLeaseBlockLockTaskRunner extends TaskRunner, Lockable {
       RedissonBlockLockService.instance
           .fixedLease()
           .doInLock(
-              ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + prefix() + key(params),
+              DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + prefix() + key(params),
               expireTime(),
               () -> doRun(params));
     } catch (Exception e) {

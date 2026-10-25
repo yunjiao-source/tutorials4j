@@ -3,7 +3,7 @@ package tutorials4j.toolkit.satoken.strategy;
 import cn.dev33.satoken.router.SaRouter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -20,6 +20,6 @@ public class WhiteUrlsSaFilterAuthStrategy implements NamedSaFilterAuthStrategy 
   }
 
   public String getName() {
-    return SaTokenUtils.WHITE_URL_AUTH_STRATEGY;
+    return SaTokenToolkitUtils.WHITE_URL_AUTH_STRATEGY;
   }
 }

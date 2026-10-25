@@ -1,7 +1,7 @@
 package tutorials4j.toolkit.satoken.func;
 
 import cn.dev33.satoken.fun.SaParamFunction;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -12,6 +12,6 @@ import tutorials4j.toolkit.satoken.util.SaTokenUtils;
 public interface NamedSaParamFunction extends SaParamFunction<Object> {
 
   default String getName() {
-    return SaTokenUtils.CHECK_LOGIN_PARAM_FUNCTION;
+    return SaTokenToolkitUtils.CHECK_LOGIN_PARAM_FUNCTION;
   }
 }

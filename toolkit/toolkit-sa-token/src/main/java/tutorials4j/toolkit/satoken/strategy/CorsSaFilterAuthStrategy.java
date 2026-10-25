@@ -2,7 +2,7 @@ package tutorials4j.toolkit.satoken.strategy;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.context.model.SaResponse;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -23,6 +23,6 @@ public class CorsSaFilterAuthStrategy implements NamedSaFilterAuthStrategy {
 
   @Override
   public String getName() {
-    return SaTokenUtils.CORS_AUTH_STRATEGY;
+    return SaTokenToolkitUtils.CORS_AUTH_STRATEGY;
   }
 }

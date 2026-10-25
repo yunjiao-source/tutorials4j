@@ -2,6 +2,7 @@ package tutorials4j.feature.upms.model;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import tutorials4j.feature.upms.entity.MenuType;
 import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
@@ -23,21 +24,59 @@ public class MenuDTO {
 
   private String redirect;
 
-  private String title;
+  private MenuType type;
 
-  private String type;
+  private String activeIcon;
+
+  private String activePath;
+
+  private YesNoEnum breadcrumbUseActivePath;
+
+  private YesNoEnum affixTab;
+
+  private Integer affixTabOrder;
+
+  private String authority;
+
+  private String badge;
+
+  private String badgeType;
+
+  private String badgeVariants;
+
+  private YesNoEnum fullPathKey;
+
+  private YesNoEnum hideChildrenInMenu;
+
+  private YesNoEnum hideInBreadcrumb;
+
+  private YesNoEnum hideInMenu;
+
+  private YesNoEnum hideInTab;
 
   private String icon;
 
-  private YesNoEnum haveChild;
+  private String iframeSrc;
 
-  private YesNoEnum notKeepAlive;
+  private YesNoEnum ignoreAccess;
 
-  private YesNoEnum hideAllChild;
+  private YesNoEnum keepAlive;
 
-  private YesNoEnum detailContent;
+  private String link;
 
-  private YesNoEnum ignoreAuth;
+  private Integer maxNumOfOpenTab;
 
-  private Integer rank;
+  private YesNoEnum menuVisibleWithForbidden;
+
+  private YesNoEnum noBasicLayout;
+
+  private YesNoEnum openInNewWindow;
+
+  private Integer order;
+
+  private String query;
+
+  private String title;
+
+  private YesNoEnum domCached;
 }

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.redisson.lock.RedissonLockServiceTestFixture;
 
 /**
@@ -30,7 +30,7 @@ import tutorials4j.toolkit.redisson.lock.RedissonLockServiceTestFixture;
  * @author YunJiao Yang
  */
 class BlockLockTaskRunnerTest {
-  private static final String LOCK_KEY = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";
+  private static final String LOCK_KEY = DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "job:1";
 
   private final RedissonClient redissonClient = mock(RedissonClient.class);
   private final RLock lock = mock(RLock.class);

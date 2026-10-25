@@ -27,7 +27,7 @@ public class OrganizeVO extends UpmsVO {
 
   private String code;
 
-  private Integer rank;
+  private Integer ordered;
 
   private OrganizeCategory category;
 
@@ -55,13 +55,13 @@ public class OrganizeVO extends UpmsVO {
           tree.setId(organize.getId());
           tree.setParentId(organize.getParentId());
           tree.setName(organize.getName());
-          if (organize.getRank() != null) {
-            tree.setWeight(organize.getRank());
+          if (organize.getOrdered() != null) {
+            tree.setWeight(organize.getOrdered());
           }
 
           tree.putExtra("shortName", organize.getShortName());
           tree.putExtra("code", organize.getCode());
-          tree.putExtra("rank", organize.getRank());
+          tree.putExtra("ordered", organize.getOrdered());
           tree.putExtra("category", organize.getCategory());
         });
   }

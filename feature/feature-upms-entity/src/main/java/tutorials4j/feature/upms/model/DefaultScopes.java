@@ -22,6 +22,7 @@ public enum DefaultScopes {
   email("电子邮件地址", false),
   address("地址信息", false),
   phone("手机号码", false),
+  role("角色", false),
   offline_access("离线访问", false);
 
   private final boolean isDefault;

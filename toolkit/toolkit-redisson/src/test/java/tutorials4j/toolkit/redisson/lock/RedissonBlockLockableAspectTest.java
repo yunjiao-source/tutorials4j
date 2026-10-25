@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import tutorials4j.toolkit.core.constant.ToolkitConsts;
+import tutorials4j.toolkit.core.constant.DefaultConsts;
 import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.toolkit.core.function.ThrowingCallable;
 
@@ -89,7 +89,7 @@ class RedissonBlockLockableAspectTest {
   @Test
   @DisplayName("未配置过期时间时使用看门狗续期锁，密钥由注解前缀 + SpEL 结果拼接")
   void shouldUseAutoRenewalWhenExpireTimeNotConfigured() throws Throwable {
-    String key = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "user:7";
+    String key = DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "user:7";
 
     ProceedingJoinPoint joinPoint = joinPointOf("autoRenewalMethod", 7L);
     when(autoRenewal.doInLock(eq(key), anyCallable())).thenReturn("result");
@@ -106,7 +106,7 @@ class RedissonBlockLockableAspectTest {
   void shouldUseFixedLeaseWhenExpireTimeConfigured() throws Throwable {
     ProceedingJoinPoint joinPoint = joinPointOf("fixedLeaseMethod", 7L);
     when(fixedLease.doInLock(
-            eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:7"),
+            eq(DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:7"),
             eq(Duration.ofSeconds(5)),
             anyCallable()))
         .thenReturn("result");
@@ -116,7 +116,7 @@ class RedissonBlockLockableAspectTest {
     assertThat(result).isEqualTo("result");
     verify(fixedLease)
         .doInLock(
-            eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:7"),
+            eq(DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:7"),
             eq(Duration.ofSeconds(5)),
             anyCallable());
     verify(lockService, never()).autoRenewal();
@@ -125,7 +125,7 @@ class RedissonBlockLockableAspectTest {
   @Test
   @DisplayName("expireTime 为 0 时仍走看门狗续期锁（判断条件为 expireTime > 0）")
   void shouldUseAutoRenewalWhenExpireTimeIsZero() throws Throwable {
-    String key = ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "7";
+    String key = DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "7";
 
     ProceedingJoinPoint joinPoint = joinPointOf("zeroExpireTimeMethod", 7L);
     when(autoRenewal.doInLock(eq(key), anyCallable())).thenReturn("result");
@@ -149,7 +149,7 @@ class RedissonBlockLockableAspectTest {
     Object[] args = joinPoint.getArgs();
     RedissonBlockLockable annotation = annotationOf("autoRenewalMethod");
     when(evaluator.getValue(method, args, annotation.key(), String.class)).thenReturn("value");
-    when(autoRenewal.doInLock(eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "value"), anyCallable()))
+    when(autoRenewal.doInLock(eq(DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "value"), anyCallable()))
         .thenReturn("result");
 
     Object result = mockedAspect.around(joinPoint, annotation);
@@ -164,7 +164,7 @@ class RedissonBlockLockableAspectTest {
     ProceedingJoinPoint joinPoint = joinPointOf("fixedLeaseMethod", 3L);
     when(joinPoint.proceed()).thenReturn("proceeded");
     when(fixedLease.doInLock(
-            eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:3"),
+            eq(DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "biz:3"),
             any(Duration.class),
             anyCallable()))
         .thenAnswer(invocation -> ((ThrowingCallable<?>) invocation.getArgument(2)).call());
@@ -181,7 +181,7 @@ class RedissonBlockLockableAspectTest {
     ProceedingJoinPoint joinPoint = joinPointOf("autoRenewalMethod", 3L);
     when(joinPoint.proceed()).thenThrow(new IllegalStateException("boom"));
     when(autoRenewal.doInLock(
-            eq(ToolkitConsts.LOCKABLE_REDIS_KEY_PREFIX + "user:3"), anyCallable()))
+            eq(DefaultConsts.LOCKABLE_REDIS_KEY_PREFIX + "user:3"), anyCallable()))
         .thenAnswer(invocation -> ((ThrowingCallable<?>) invocation.getArgument(1)).call());
 
     assertThatThrownBy(() -> aspect.around(joinPoint, annotationOf("autoRenewalMethod")))

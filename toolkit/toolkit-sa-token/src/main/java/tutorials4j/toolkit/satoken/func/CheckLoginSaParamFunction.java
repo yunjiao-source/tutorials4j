@@ -1,7 +1,7 @@
 package tutorials4j.toolkit.satoken.func;
 
 import cn.dev33.satoken.stp.StpUtil;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -17,6 +17,6 @@ public class CheckLoginSaParamFunction implements NamedSaParamFunction {
 
   @Override
   public String getName() {
-    return SaTokenUtils.CHECK_LOGIN_PARAM_FUNCTION;
+    return SaTokenToolkitUtils.CHECK_LOGIN_PARAM_FUNCTION;
   }
 }

@@ -3,13 +3,13 @@ package tutorials4j.service.uaa.controller;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.oauth2.SaOAuth2Manager;
 import cn.dev33.satoken.oauth2.consts.SaOAuth2Consts;
+import cn.dev33.satoken.oauth2.data.model.AccessTokenModel;
 import cn.dev33.satoken.oauth2.error.SaOAuth2ErrorCode;
 import cn.dev33.satoken.oauth2.exception.SaOAuth2Exception;
 import cn.dev33.satoken.oauth2.processor.SaOAuth2ServerProcessor;
 import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
-import cn.dev33.satoken.oauth2.template.SaOAuth2Util;
 import cn.dev33.satoken.util.SaResult;
-import java.util.Set;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ import tutorials4j.feature.upms.service.UserService;
 import tutorials4j.toolkit.core.exception.UnauthorizedException;
 import tutorials4j.toolkit.core.model.UserInfo;
 import tutorials4j.toolkit.core.model.UserModel;
-import tutorials4j.toolkit.satoken.util.SaTokenUtils;
+import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -33,21 +33,20 @@ public class AccountUaaController {
   private final UserService userService;
 
   @RequestMapping("/codes")
-  public Set<String> codes() {
-    return SaTokenUtils.getGrantedAuthorities();
+  public List<String> codes() {
+    return SaTokenToolkitUtils.getPermissionList();
   }
 
   @RequestMapping("userinfo")
   public UserInfo userinfo() {
-    // 获取 Access-Token 对应的账号id
-    String accessToken = SaOAuth2Manager.getDataResolver().readAccessToken(SaHolder.getRequest());
-    Object loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
+    String accessToken = SaTokenToolkitUtils.OAuth2.getAccessToken();
+    Object loginId = SaTokenToolkitUtils.OAuth2.getLoginIdByAccessToken(accessToken);
 
     UserModel userModel = userService.findUserModelByUserName(loginId.toString());
     UserInfo userInfo = new UserInfo();
     userInfo.setSub(userModel.getUserId());
 
-    var accessTokenModel = SaOAuth2Util.getAccessToken(accessToken);
+    AccessTokenModel accessTokenModel = SaTokenToolkitUtils.OAuth2.getAccessToken(accessToken);
     if (accessTokenModel.getScopes().contains(DefaultScopes.profile.name())) {
       userInfo.fillByProfile(userModel);
     }
@@ -58,6 +57,10 @@ public class AccountUaaController {
 
     if (accessTokenModel.getScopes().contains(DefaultScopes.phone.name())) {
       userInfo.setPhoneNumber(userModel.getPhoneNumber());
+    }
+
+    if (accessTokenModel.getScopes().contains(DefaultScopes.role.name())) {
+      userInfo.setRoles(SaTokenToolkitUtils.getRoleList());
     }
 
     return userInfo;

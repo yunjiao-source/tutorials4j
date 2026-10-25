@@ -45,14 +45,14 @@ public class OrganizeEntity extends UpmsEntity {
 
   @Column private String code;
 
-  @Column private Integer rank;
+  @Column private Integer ordered;
 
   @Column
   @Enumerated(EnumType.STRING)
   private OrganizeCategory category;
 
   @OneToMany(mappedBy = "parent")
-  @OrderBy("rank ASC")
+  @OrderBy("ordered ASC")
   private List<OrganizeEntity> children = new ArrayList<>();
 
   @ManyToMany(mappedBy = "organizes")
