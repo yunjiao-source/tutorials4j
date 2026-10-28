@@ -2,7 +2,6 @@ package tutorials4j.feature.basic.service;
 
 import static tutorials4j.toolkit.data.util.JPAUtils.like;
 
-import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.feature.basic.entity.ConfigEntity;
@@ -39,10 +38,5 @@ public class ConfigSpecification {
 
   public static Specification<ConfigEntity> enabledEqual(YesNoEnum enabled) {
     return (root, query, cb) -> enabled == null ? null : cb.equal(root.get("enabled"), enabled);
-  }
-
-  public static Specification<ConfigEntity> enabledIn(Collection<YesNoEnum> allEnabled) {
-    return (root, query, cb) ->
-        allEnabled == null ? null : cb.in(root.get("enabled").in(allEnabled));
   }
 }

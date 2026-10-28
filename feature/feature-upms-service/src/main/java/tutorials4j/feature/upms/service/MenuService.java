@@ -1,9 +1,6 @@
 package tutorials4j.feature.upms.service;
 
-import static tutorials4j.feature.upms.service.MenuSpecification.typeNotIn;
-
 import jakarta.validation.Valid;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
@@ -41,16 +38,6 @@ public class MenuService implements BaseService<MenuEntity, String> {
     return menuRepository;
   }
 
-  public List<MenuEntity> findAllRoot(Collection<YesNoEnum> allEnabled) {
-    return menuRepository.findAll(
-        MenuSpecification.allRoot().and(MenuSpecification.enabledIn(allEnabled)));
-  }
-
-  public List<MenuEntity> findAllChild(String parentId, Collection<YesNoEnum> allEnabled) {
-    return menuRepository.findAll(
-        MenuSpecification.parentIdEqual(parentId).and(MenuSpecification.enabledIn(allEnabled)));
-  }
-
   @Transactional(rollbackFor = Exception.class)
   public Set<RoleEntity> findRolesById(String parentId) {
     MenuEntity entity = findById(parentId);
@@ -86,6 +73,13 @@ public class MenuService implements BaseService<MenuEntity, String> {
   }
 
   public List<MenuEntity> findRouter() {
-    return menuRepository.findAll(typeNotIn(List.of(MenuType.button)));
+    MenuQuery query =
+        MenuQuery.builder().typesNotIn(Set.of(MenuType.button)).enabled(YesNoEnum.yes).build();
+    return findByQuery(query);
+  }
+
+  public List<MenuEntity> findAllValid() {
+    MenuQuery query = MenuQuery.builder().enabled(YesNoEnum.yes).build();
+    return findByQuery(query);
   }
 }

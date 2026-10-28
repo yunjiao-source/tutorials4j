@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.util.ClassUtils;
+import tools.jackson.databind.ObjectMapper;
 import tutorials4j.toolkit.cache.redis.component.RedisCacheManagerCreator;
 import tutorials4j.toolkit.cache.redis.component.RedisTemplateDecorator;
 import tutorials4j.toolkit.cache.redis.lock.RedisLockService;
@@ -26,6 +28,7 @@ import tutorials4j.toolkit.cache.redis.support.ToolkitKeySerializer;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
 import tutorials4j.toolkit.core.context.SpelMethodBasedExpressionEvaluator;
 import tutorials4j.toolkit.json.component.JsonTypeWhiteListLoader;
+import tutorials4j.toolkit.json.component.ObjectMapperCreator;
 
 /**
  * {@link RedisCacheToolkitAutoConfiguration} 自动装配测试。
@@ -41,7 +44,11 @@ class RedisCacheToolkitAutoConfigurationTest {
       new ApplicationContextRunner()
           .withConfiguration(AutoConfigurations.of(RedisCacheToolkitAutoConfiguration.class))
           .withBean(RedisConnectionFactory.class, () -> connectionFactory)
+          .withBean(ObjectMapper.class, ObjectMapper::new)
           .withBean(JsonTypeWhiteListLoader.class, JsonTypeWhiteListLoader::new)
+          .withBean(
+              ObjectMapperCreator.class,
+              new ObjectMapperCreator(new ObjectMapper(), new JsonTypeWhiteListLoader()))
           .withBean(
               SpelMethodBasedExpressionEvaluator.class, SpelMethodBasedExpressionEvaluator::new);
 
@@ -192,7 +199,8 @@ class RedisCacheToolkitAutoConfigurationTest {
         context -> {
           GenericJacksonJsonRedisSerializer serializer =
               context.getBean(GenericJacksonJsonRedisSerializer.class);
-          byte[] payload = "{\"@class\":\"java.util.HashMap\",\"name\":\"alice\"}".getBytes(UTF_8);
+          byte[] payload =
+              ("{\"@class\":" + MyHashMap.class.getName() + ",\"name\":\"alice\"}").getBytes(UTF_8);
 
           assertThatThrownBy(() -> serializer.deserialize(payload))
               .isInstanceOf(SerializationException.class);
@@ -216,4 +224,6 @@ class RedisCacheToolkitAutoConfigurationTest {
         .anyMatch(className -> className.equals(expectedName));
     assertThat(ClassUtils.resolveClassName(expectedName, classLoader)).isNotNull();
   }
+
+  public static class MyHashMap extends HashMap<String, String> {}
 }

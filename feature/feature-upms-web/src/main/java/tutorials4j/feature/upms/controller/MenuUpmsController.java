@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.feature.upms.entity.MenuEntity;
+import tutorials4j.feature.upms.entity.MenuType;
 import tutorials4j.feature.upms.entity.RoleEntity;
 import tutorials4j.feature.upms.model.MenuDTO;
 import tutorials4j.feature.upms.model.MenuVO;
 import tutorials4j.feature.upms.model.RoleVO;
 import tutorials4j.feature.upms.service.MenuQuery;
 import tutorials4j.feature.upms.service.MenuService;
-import tutorials4j.feature.upms.service.MenuSpecification;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -38,7 +39,7 @@ import tutorials4j.feature.upms.service.MenuSpecification;
 public class MenuUpmsController {
   private final MenuService menuService;
 
-  @PostMapping("create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public MenuVO create(@Valid @RequestBody MenuDTO dto) {
     MenuEntity entity = menuService.create(dto);
@@ -76,21 +77,23 @@ public class MenuUpmsController {
   }
 
   @GetMapping("root")
-  public List<MenuVO> getRootById() {
-    List<MenuEntity> entities = menuService.findAll(MenuSpecification.allRoot());
+  public List<MenuVO> getRoot(MenuQuery query) {
+    query.setAllRoot(YesNoEnum.yes);
+    List<MenuEntity> entities = menuService.findByQuery(query);
     return MenuVO.of(entities);
   }
 
-  @GetMapping("tree")
-  public List<Tree<String>> getTreeById() {
-    List<MenuEntity> entities = menuService.findAll();
+  @GetMapping("list")
+  public List<MenuVO> getList(MenuQuery query) {
+    List<MenuEntity> entities = menuService.findByQuery(query);
 
-    return MenuVO.toTree(MenuVO.of(entities));
+    return MenuVO.of(entities);
   }
 
   @GetMapping("router")
-  public List<Tree<String>> getRouterById() {
-    List<MenuEntity> entities = menuService.findRouter();
+  public List<Tree<String>> getRouter(MenuQuery query) {
+    query.setTypesNotIn(Set.of(MenuType.button));
+    List<MenuEntity> entities = menuService.findByQuery(query);
 
     return MenuVO.toTree(MenuVO.of(entities));
   }

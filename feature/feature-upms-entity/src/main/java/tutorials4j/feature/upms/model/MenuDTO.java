@@ -30,8 +30,6 @@ public class MenuDTO {
 
   private String activePath;
 
-  private YesNoEnum breadcrumbUseActivePath;
-
   private YesNoEnum affixTab;
 
   private Integer affixTabOrder;
@@ -43,8 +41,6 @@ public class MenuDTO {
   private String badgeType;
 
   private String badgeVariants;
-
-  private YesNoEnum fullPathKey;
 
   private YesNoEnum hideChildrenInMenu;
 
@@ -58,15 +54,11 @@ public class MenuDTO {
 
   private String iframeSrc;
 
-  private YesNoEnum ignoreAccess;
-
   private YesNoEnum keepAlive;
 
   private String link;
 
   private Integer maxNumOfOpenTab;
-
-  private YesNoEnum menuVisibleWithForbidden;
 
   private YesNoEnum noBasicLayout;
 
@@ -77,6 +69,4 @@ public class MenuDTO {
   private String query;
 
   private String title;
-
-  private YesNoEnum domCached;
 }

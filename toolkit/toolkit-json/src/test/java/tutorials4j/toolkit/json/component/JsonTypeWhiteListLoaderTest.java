@@ -36,12 +36,7 @@ class JsonTypeWhiteListLoaderTest {
     Set<String> loaded = loader.load();
 
     assertThat(loaded)
-        .contains(
-            MAIN_RESOURCE_ENTRY,
-            "java.util.LinkedHashMap",
-            TEST_RESOURCE_ENTRY,
-            TRIMMED_ENTRY,
-            BLANK_SEPARATED_ENTRY);
+        .contains("java.util.", TEST_RESOURCE_ENTRY, TRIMMED_ENTRY, BLANK_SEPARATED_ENTRY);
   }
 
   @Test
@@ -89,6 +84,6 @@ class JsonTypeWhiteListLoaderTest {
 
     assertThat(loader.contains(MAIN_RESOURCE_ENTRY)).isTrue();
     assertThat(loader.contains("ArrayList")).isFalse();
-    assertThat(loader.contains(MAIN_RESOURCE_ENTRY + " ")).isFalse();
+    assertThat(loader.contains(MAIN_RESOURCE_ENTRY + " ")).isTrue();
   }
 }

@@ -22,6 +22,8 @@ import tutorials4j.toolkit.data.domain.BaseVO;
 @Getter
 @Setter
 public class UserVO extends BaseVO<String> {
+  private String organizeId;
+
   private String username;
 
   private String name;
@@ -50,13 +52,25 @@ public class UserVO extends BaseVO<String> {
 
   private UserStatus status;
 
-  private YesNoEnum isReserved;
+  private YesNoEnum reserved;
+
+  private OrganizeVO organize;
 
   public static UserVO of(UserEntity entity) {
     Assert.notNull(entity, "entity must not be null");
 
     UserVO vo = new UserVO();
     BeanUtils.copyProperties(entity, vo);
+    return vo;
+  }
+
+  public static UserVO withOrganize(UserEntity entity) {
+    Assert.notNull(entity, "entity must not be null");
+
+    UserVO vo = of(entity);
+    if (entity.getOrganize() != null) {
+      vo.setOrganize(OrganizeVO.of(entity.getOrganize()));
+    }
     return vo;
   }
 }

@@ -36,7 +36,7 @@ import tutorials4j.feature.upms.service.UserService;
 public class UserUpmsController {
   private final UserService userService;
 
-  @PostMapping("create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public UserVO create(@Valid @RequestBody UserCreateDTO dto) {
     UserEntity entity = userService.create(dto);
@@ -82,6 +82,6 @@ public class UserUpmsController {
   @GetMapping("page")
   public PagedModel<UserVO> getByPage(UserQuery query, Pageable pageable) {
     Page<UserEntity> entities = userService.findByPage(query, pageable);
-    return new PagedModel<>(entities.map(UserVO::of));
+    return new PagedModel<>(entities.map(UserVO::withOrganize));
   }
 }

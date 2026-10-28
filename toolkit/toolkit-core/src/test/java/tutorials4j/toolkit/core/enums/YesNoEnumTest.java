@@ -18,28 +18,28 @@ class YesNoEnumTest {
   @Test
   @DisplayName("枚举项为 yes / no")
   void shouldExposeTwoValues() {
-    assertThat(Arrays.stream(YesNoEnum.values()).map(Enum::name)).containsExactly("yes", "no");
+    assertThat(Arrays.stream(YesNoEnum.values()).map(Enum::name)).containsExactly("no", "yes");
   }
 
   @Test
   @DisplayName("isYes 仅对 yes 返回 true")
   void shouldIdentifyYes() {
-    assertThat(YesNoEnum.yes.isYes()).isTrue();
-    assertThat(YesNoEnum.no.isYes()).isFalse();
+    assertThat(YesNoEnum.yes.isTrue()).isTrue();
+    assertThat(YesNoEnum.no.isTrue()).isFalse();
   }
 
   @Test
   @DisplayName("isNo 仅对 no 返回 true")
   void shouldIdentifyNo() {
-    assertThat(YesNoEnum.no.isNo()).isTrue();
-    assertThat(YesNoEnum.yes.isNo()).isFalse();
+    assertThat(YesNoEnum.no.isFalse()).isTrue();
+    assertThat(YesNoEnum.yes.isFalse()).isFalse();
   }
 
   @Test
   @DisplayName("isYes 与 isNo 互斥")
   void shouldBeMutuallyExclusive() {
     for (YesNoEnum value : YesNoEnum.values()) {
-      assertThat(value.isYes()).isNotEqualTo(value.isNo());
+      assertThat(value.isTrue()).isNotEqualTo(value.isFalse());
     }
   }
 

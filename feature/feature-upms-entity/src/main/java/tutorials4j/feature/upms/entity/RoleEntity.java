@@ -2,8 +2,6 @@ package tutorials4j.feature.upms.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -14,12 +12,9 @@ import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import tutorials4j.toolkit.core.model.YesNoEnum;
-import tutorials4j.toolkit.data.exception.DataErrorCode;
 
 /**
  * TODO
@@ -40,10 +35,6 @@ public class RoleEntity extends UpmsEntity {
   @Column private String name;
 
   @Column private String description;
-
-  @Column
-  @Enumerated(EnumType.STRING)
-  private YesNoEnum isReserved;
 
   @ManyToMany(mappedBy = "roles")
   private Set<UserEntity> users = new HashSet<>();
@@ -109,22 +100,4 @@ public class RoleEntity extends UpmsEntity {
         @Index(name = "upms_role_organize_idx2", columnList = "role_id")
       })
   private List<OrganizeEntity> organizes = new ArrayList<>();
-
-  @Override
-  protected void prePersist() {
-    super.prePersist();
-
-    if (isReserved == null) {
-      isReserved = YesNoEnum.no;
-    }
-  }
-
-  @Override
-  protected void preRemove() {
-    super.preRemove();
-
-    if (Objects.equals(isReserved, YesNoEnum.yes)) {
-      throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("name", name);
-    }
-  }
 }

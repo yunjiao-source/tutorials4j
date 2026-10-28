@@ -16,6 +16,6 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 @Repository
 public interface CompanyRepository extends BaseRepository<CompanyEntity, String> {
 
-  @Cacheable(value = CACHEABLE_COMPANY, key = "#organizeId")
-  Optional<CompanyEntity> findByOrganizeId(String organizeId);
+  @Cacheable(value = CACHEABLE_COMPANY, key = "#organizeCode")
+  Optional<CompanyEntity> findByOrganizeCode(String organizeCode);
 }

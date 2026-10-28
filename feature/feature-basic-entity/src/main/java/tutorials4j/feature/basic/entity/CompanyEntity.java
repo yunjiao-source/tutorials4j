@@ -7,7 +7,6 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
-import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -20,10 +19,14 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
 @Table(
     name = "basic_company",
     uniqueConstraints = {
-      @UniqueConstraint(name = "basic_company_uni1", columnNames = "organize_id")
+      @UniqueConstraint(name = "basic_company_uni1", columnNames = "organize_code")
     })
 public class CompanyEntity extends BasicEntity {
-  @Column private String organizeId;
+  @Column private String organizeCode;
+
+  @Column private String name;
+
+  @Column private String shortName;
 
   // 公司性质
   @Column private String companyType;
@@ -66,12 +69,4 @@ public class CompanyEntity extends BasicEntity {
 
   // 经营范围
   @Column private String businessScope;
-
-  @Override
-  protected void prePersist() {
-    if (this.getIsReserved() == null) {
-      this.setIsReserved(YesNoEnum.yes);
-    }
-    super.prePersist();
-  }
 }

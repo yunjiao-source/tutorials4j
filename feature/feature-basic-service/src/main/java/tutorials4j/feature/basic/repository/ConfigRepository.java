@@ -14,7 +14,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 @Repository
 public interface ConfigRepository extends BaseRepository<ConfigEntity, String> {
 
-  Optional<ConfigEntity> findByKey(String key);
+  Optional<ConfigEntity> findByCode(String code);
 
   List<ConfigEntity> findByCategory(String category);
 }

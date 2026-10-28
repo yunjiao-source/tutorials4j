@@ -1,5 +1,6 @@
 package tutorials4j.feature.upms.service;
 
+import static tutorials4j.feature.upms.service.OrganizeSpecification.allRoot;
 import static tutorials4j.feature.upms.service.OrganizeSpecification.enabledEqual;
 import static tutorials4j.feature.upms.service.OrganizeSpecification.nameLike;
 import static tutorials4j.feature.upms.service.OrganizeSpecification.parentIdEqual;
@@ -24,6 +25,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrganizeQuery extends BaseQuery<OrganizeEntity> {
+  private YesNoEnum allRoot;
   private String parentId;
   private String name;
 
@@ -31,6 +33,9 @@ public class OrganizeQuery extends BaseQuery<OrganizeEntity> {
 
   @Override
   protected void addSpec() {
-    addSpec(parentIdEqual(parentId)).addSpec(nameLike(name)).addSpec(enabledEqual(enabled));
+    addSpec(parentIdEqual(parentId))
+        .addSpec(YesNoEnum.isTrue(allRoot), allRoot())
+        .addSpec(nameLike(name))
+        .addSpec(enabledEqual(enabled));
   }
 }

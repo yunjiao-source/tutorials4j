@@ -14,7 +14,7 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
 @Setter
 public class ConfigCreateDTO extends ConfigUpdateDTO {
   @NotBlank(message = "关键字是必须的")
-  private String key;
+  private String code;
 
-  private YesNoEnum isReserved;
+  private YesNoEnum reserved;
 }

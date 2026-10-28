@@ -31,7 +31,7 @@ public class BaseEntity<ID extends Serializable> extends BaseIdEntity<ID>
   /** 创建时间，插入后不可更新。 */
   @Column(updatable = false)
   @CreatedDate
-  private Instant createDate = Instant.now();
+  private Instant createdDate = Instant.now();
 
   /** 最后修改时间。 */
   @Column @LastModifiedDate private Instant lastModifiedDate = Instant.now();
@@ -39,7 +39,7 @@ public class BaseEntity<ID extends Serializable> extends BaseIdEntity<ID>
   /** 创建人。 */
   @Column(length = 36)
   @CreatedBy
-  private String createBy;
+  private String createdBy;
 
   /** 最后修改人。 */
   @Column(length = 36)
@@ -49,13 +49,13 @@ public class BaseEntity<ID extends Serializable> extends BaseIdEntity<ID>
   /** 获取创建人。 */
   @Override
   public String getCreatedBy() {
-    return createBy;
+    return createdBy;
   }
 
   /** 获取创建时间。 */
   @Override
   public Instant getCreatedDate() {
-    return createDate;
+    return createdDate;
   }
 
   /** 获取最后修改人。 */
@@ -73,13 +73,13 @@ public class BaseEntity<ID extends Serializable> extends BaseIdEntity<ID>
   /** 设置创建人。 */
   @Override
   public void setCreatedBy(String createdBy) {
-    this.createBy = createdBy;
+    this.createdBy = createdBy;
   }
 
   /** 设置创建时间。 */
   @Override
   public void setCreatedDate(Instant createdDate) {
-    this.createDate = createdDate;
+    this.createdDate = createdDate;
   }
 
   /** 设置最后修改人。 */

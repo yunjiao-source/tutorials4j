@@ -14,5 +14,5 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
 public class ClientCreateDTO extends ClientUpdateDTO {
   private String clientId;
 
-  private YesNoEnum isReserved;
+  private YesNoEnum reserved;
 }

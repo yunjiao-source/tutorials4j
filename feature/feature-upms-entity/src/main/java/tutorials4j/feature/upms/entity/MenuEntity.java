@@ -60,14 +60,6 @@ public class MenuEntity extends UpmsEntity {
   /** 当前激活的菜单，有时候不想激活现有菜单，需要激活父级菜单时使用; 用于配置当前激活的菜单，有时候页面没有显示在菜单内，需要激活父级菜单时使用。 */
   @Column private String activePath;
 
-  /**
-   * 是否使用 activePath 对应的路由层级生成面包屑 默认 false; 设置为 true 时，面包屑会使用 activePath
-   * 对应的路由层级补充当前路由的匹配记录。适用于详情页等未嵌套在目标菜单路由下，但仍需要展示完整面包屑层级的页面。
-   */
-  @Column
-  @Enumerated(EnumType.STRING)
-  private YesNoEnum breadcrumbUseActivePath;
-
   /** 是否固定标签页;用 于配置页面是否固定标签页，固定后页面不可关闭。 默认 false */
   @Column
   @Enumerated(EnumType.STRING)
@@ -87,11 +79,6 @@ public class MenuEntity extends UpmsEntity {
 
   /** 徽标颜色: 'default' | 'destructive' | 'primary' | 'success' | 'warning'; 用于配置页面的徽标颜色。 */
   @Column private String badgeVariants;
-
-  /** 路由的完整路径作为key（默认true）; 是否将路由的完整路径作为tab key（默认true） */
-  @Column
-  @Enumerated(EnumType.STRING)
-  private YesNoEnum fullPathKey;
 
   /** 当前路由的子级在菜单中不展现; 用于配置页面的子页面是否在菜单中隐藏，隐藏后子页面不会在菜单中显示。 默认 false */
   @Column
@@ -119,11 +106,6 @@ public class MenuEntity extends UpmsEntity {
   /** iframe 地址; 用于配置内嵌页面的 iframe 地址，设置后会在当前页面内嵌对应的页面。 */
   @Column private String iframeSrc;
 
-  /** 忽略权限，直接可以访问; 用于配置页面是否忽略权限，直接可以访问。 默认 false */
-  @Column
-  @Enumerated(EnumType.STRING)
-  private YesNoEnum ignoreAccess;
-
   /** 开启KeepAlive缓存，默认false; 用于配置页面是否开启缓存，开启后页面会缓存，不会重新加载，仅在标签页启用时有效。 */
   @Column
   @Enumerated(EnumType.STRING)
@@ -133,12 +115,9 @@ public class MenuEntity extends UpmsEntity {
   @Column private String link;
 
   /** 标签页最大打开数量; 用于配置标签页最大打开数量，设置后会在打开新标签页时自动关闭最早打开的标签页(仅在打开同名标签页时生效)。 默认 false */
-  @Column private Integer maxNumOfOpenTab;
-
-  /** 菜单可以看到，但是访问会被重定向到403; 用于配置页面在菜单可以看到，但是访问会被重定向到403。 */
   @Column
   @Enumerated(EnumType.STRING)
-  private YesNoEnum menuVisibleWithForbidden;
+  private YesNoEnum maxNumOfOpenTab;
 
   /**
    * 当前路由不使用基础布局（仅在顶级生效）;
@@ -162,14 +141,6 @@ public class MenuEntity extends UpmsEntity {
 
   /** 标题名称 */
   @Column private String title;
-
-  /**
-   * 用于配置当前路由是否要将route对应dom元素缓存起来。对于一些复杂页面切换tab浏览器回流/重绘会导致卡顿， domCached 设为
-   * true可解决该问题，但是也有代价：1、内存占用升高 2、vue的部分生命周期不会触发
-   */
-  @Column
-  @Enumerated(EnumType.STRING)
-  private YesNoEnum domCached;
 
   @OneToMany(mappedBy = "parent")
   @OrderBy("path ASC")

@@ -14,4 +14,6 @@ import tutorials4j.toolkit.data.domain.BaseVO;
 @Setter
 public class UpmsVO extends BaseVO<String> {
   private YesNoEnum enabled;
+
+  private YesNoEnum reserved;
 }

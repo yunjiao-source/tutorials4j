@@ -102,22 +102,22 @@ class BaseEntityTest {
   @Test
   @DisplayName("审计字段标注 Spring Data 审计注解")
   void shouldAnnotateAuditingFields() throws NoSuchFieldException {
-    assertThat(field("createDate").getAnnotation(CreatedDate.class)).isNotNull();
+    assertThat(field("createdDate").getAnnotation(CreatedDate.class)).isNotNull();
     assertThat(field("lastModifiedDate").getAnnotation(LastModifiedDate.class)).isNotNull();
-    assertThat(field("createBy").getAnnotation(CreatedBy.class)).isNotNull();
+    assertThat(field("createdBy").getAnnotation(CreatedBy.class)).isNotNull();
     assertThat(field("lastModifiedBy").getAnnotation(LastModifiedBy.class)).isNotNull();
   }
 
   @Test
   @DisplayName("创建时间不可更新，审计人字段长度为 36")
   void shouldDeclareColumnConstraints() throws NoSuchFieldException {
-    Column createDate = field("createDate").getAnnotation(Column.class);
-    assertThat(createDate).isNotNull();
-    assertThat(createDate.updatable()).isFalse();
+    Column createdDate = field("createdDate").getAnnotation(Column.class);
+    assertThat(createdDate).isNotNull();
+    assertThat(createdDate.updatable()).isFalse();
 
     assertThat(field("lastModifiedDate").getAnnotation(Column.class)).isNotNull();
 
-    assertThat(field("createBy").getAnnotation(Column.class).length()).isEqualTo(36);
+    assertThat(field("createdBy").getAnnotation(Column.class).length()).isEqualTo(36);
     assertThat(field("lastModifiedBy").getAnnotation(Column.class).length()).isEqualTo(36);
   }
 }

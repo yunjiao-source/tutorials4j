@@ -2,11 +2,10 @@ package tutorials4j.feature.basic.service;
 
 import static tutorials4j.feature.basic.service.ConfigSpecification.categoryEqual;
 import static tutorials4j.feature.basic.service.ConfigSpecification.descriptionLike;
-import static tutorials4j.feature.basic.service.ConfigSpecification.enabledIn;
+import static tutorials4j.feature.basic.service.ConfigSpecification.enabledEqual;
 import static tutorials4j.feature.basic.service.ConfigSpecification.keyLike;
 import static tutorials4j.feature.basic.service.ConfigSpecification.nameLike;
 
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +30,7 @@ public class ConfigQuery extends BaseQuery<ConfigEntity> {
   private String key;
   private String category;
   private String description;
-  private Set<YesNoEnum> allEnabled;
+  private YesNoEnum enabled;
 
   @Override
   protected void addSpec() {
@@ -39,6 +38,6 @@ public class ConfigQuery extends BaseQuery<ConfigEntity> {
         .addSpec(keyLike(key))
         .addSpec(categoryEqual(category))
         .addSpec(descriptionLike(description))
-        .addSpec(enabledIn(allEnabled));
+        .addSpec(enabledEqual(enabled));
   }
 }

@@ -23,8 +23,8 @@ public abstract class BaseQuery<T> {
     return this;
   }
 
-  public BaseQuery<T> addSpec(boolean condition, Specification<T> spec) {
-    if (!condition) {
+  public BaseQuery<T> addSpec(Boolean condition, Specification<T> spec) {
+    if (condition == null || !condition) {
       return this;
     }
 

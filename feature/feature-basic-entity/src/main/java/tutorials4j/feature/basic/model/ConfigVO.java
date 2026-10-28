@@ -15,7 +15,7 @@ import tutorials4j.feature.basic.entity.ConfigEntity;
 @Setter
 public class ConfigVO extends BasicVO {
   private String name;
-  private String key;
+  private String code;
   private String value;
   private String category;
   private String description;

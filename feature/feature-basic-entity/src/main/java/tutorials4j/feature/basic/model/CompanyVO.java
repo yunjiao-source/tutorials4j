@@ -15,7 +15,11 @@ import tutorials4j.feature.basic.entity.CompanyEntity;
 @Getter
 @Setter
 public class CompanyVO extends BasicVO {
-  private String organizeId;
+  private String organizeCode;
+
+  private String name;
+
+  private String shortName;
 
   // 公司性质
   private String companyType;

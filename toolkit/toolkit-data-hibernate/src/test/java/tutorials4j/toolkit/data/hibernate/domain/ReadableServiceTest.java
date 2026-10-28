@@ -160,10 +160,10 @@ class ReadableServiceTest {
   @DisplayName("findByPage(pageNumber, pageSize, direction, properties) 组装带方向的 PageRequest")
   void shouldFindByPageNumberSizeDirectionAndProperties() {
     Page<TestEntity> page = new PageImpl<>(List.of(new TestEntity()));
-    Pageable expected = PageRequest.of(2, 15, Sort.Direction.DESC, "createDate", "id");
+    Pageable expected = PageRequest.of(2, 15, Sort.Direction.DESC, "createdDate", "id");
     when(repository.findAll(expected)).thenReturn(page);
 
-    assertThat(service.findByPage(2, 15, Sort.Direction.DESC, "createDate", "id")).isSameAs(page);
+    assertThat(service.findByPage(2, 15, Sort.Direction.DESC, "createdDate", "id")).isSameAs(page);
 
     verify(repository).findAll(expected);
   }

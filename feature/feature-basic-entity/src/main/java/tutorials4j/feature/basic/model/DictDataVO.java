@@ -35,7 +35,7 @@ public class DictDataVO extends BasicVO {
 
   private Map<String, String> jsonData;
 
-  private DictTypeVO dictTypeVO;
+  private DictTypeVO dictType;
 
   public static DictDataVO of(DictDataEntity entity) {
     Assert.notNull(entity, "entity must not be null");
@@ -69,7 +69,7 @@ public class DictDataVO extends BasicVO {
           tree.putExtra("description", dictData.getDescription());
           tree.putExtra("dictTypeId", dictData.getDictTypeId());
           tree.putExtra("jsonData", dictData.getJsonData());
-          tree.putExtra("dictType", dictData.getDictTypeVO());
+          tree.putExtra("dictType", dictData.getDictType());
         });
   }
 
@@ -80,7 +80,7 @@ public class DictDataVO extends BasicVO {
   public static DictDataVO withDictType(DictDataEntity dictDataEntity) {
     DictDataVO dictDataVO = of(dictDataEntity);
     if (dictDataEntity.getDictType() != null) {
-      dictDataVO.setDictTypeVO(DictTypeVO.of(dictDataEntity.getDictType()));
+      dictDataVO.setDictType(DictTypeVO.of(dictDataEntity.getDictType()));
     }
     return dictDataVO;
   }

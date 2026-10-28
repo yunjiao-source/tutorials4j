@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import tutorials4j.feature.upms.entity.RoleEntity;
-import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -21,7 +20,7 @@ public class RoleVO extends UpmsVO {
 
   private String name;
 
-  private YesNoEnum isReserved;
+  private String description;
 
   public static RoleVO of(RoleEntity entity) {
     Assert.notNull(entity, "entity must not be null");

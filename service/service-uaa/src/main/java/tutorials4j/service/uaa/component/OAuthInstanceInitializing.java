@@ -4,7 +4,6 @@ import cn.dev33.satoken.oauth2.SaOAuth2Manager;
 import cn.dev33.satoken.oauth2.config.SaOAuth2ServerConfig;
 import cn.dev33.satoken.oauth2.strategy.SaOAuth2Strategy;
 import cn.hutool.core.util.IdUtil;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -51,11 +50,7 @@ public class OAuthInstanceInitializing implements SmartInitializingSingleton {
             clientEntity.setMaxClientTokenCount(config.getMaxClientTokenCount());
           }
           if (clientEntity.getIsNewRefresh() == null) {
-            YesNoEnum isNewRefresh =
-                Objects.equals(config.getIsNewRefresh(), Boolean.TRUE)
-                    ? YesNoEnum.yes
-                    : YesNoEnum.no;
-            clientEntity.setIsNewRefresh(isNewRefresh);
+            clientEntity.setIsNewRefresh(YesNoEnum.valueOf(config.getIsNewRefresh()));
           }
         };
   }

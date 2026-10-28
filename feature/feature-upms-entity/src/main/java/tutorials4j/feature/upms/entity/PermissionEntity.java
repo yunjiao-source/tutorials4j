@@ -29,12 +29,6 @@ public class PermissionEntity extends UpmsEntity {
 
   @Column private String name;
 
-  /** 资源类型 */
-  @Column private String resource;
-
-  /** 操作类型 */
-  @Column private String action;
-
   @Column private String description;
 
   @ManyToMany(mappedBy = "permissions")

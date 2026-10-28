@@ -14,9 +14,5 @@ public class PermissionUpdateDTO {
   @NotBlank(message = "名称是必须的")
   private String name;
 
-  private String resource;
-
-  private String action;
-
   private String description;
 }

@@ -1,6 +1,5 @@
 package tutorials4j.feature.upms.controller;
 
-import cn.hutool.core.lang.tree.Tree;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +38,7 @@ import tutorials4j.feature.upms.service.RoleService;
 public class RoleUpmsController {
   private final RoleService roleService;
 
-  @PostMapping("create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public RoleVO create(@Valid @RequestBody RoleCreateDTO dto) {
     RoleEntity entity = roleService.create(dto);
@@ -53,20 +52,20 @@ public class RoleUpmsController {
   }
 
   @PutMapping("{id}/permissions")
-  public RoleVO addPermissions(@PathVariable("id") String id, Set<String> permissions) {
-    RoleEntity entity = roleService.addPermissions(id, permissions);
+  public RoleVO addPermissions(@PathVariable("id") String id, Set<String> permissionCodes) {
+    RoleEntity entity = roleService.addPermissions(id, permissionCodes);
     return RoleVO.of(entity);
   }
 
   @PutMapping("{id}/menus")
-  public RoleVO addMenus(@PathVariable("id") String id, Set<String> menus) {
-    RoleEntity entity = roleService.addMenus(id, menus);
+  public RoleVO addMenus(@PathVariable("id") String id, Set<String> menuIds) {
+    RoleEntity entity = roleService.addMenus(id, menuIds);
     return RoleVO.of(entity);
   }
 
   @PutMapping("{id}/organizes")
-  public RoleVO addOrganizes(@PathVariable("id") String id, Set<String> organizes) {
-    RoleEntity entity = roleService.addOrganizes(id, organizes);
+  public RoleVO addOrganizes(@PathVariable("id") String id, Set<String> organizeIds) {
+    RoleEntity entity = roleService.addOrganizes(id, organizeIds);
     return RoleVO.of(entity);
   }
 
@@ -94,22 +93,10 @@ public class RoleUpmsController {
     return MenuVO.of(entity.getMenus());
   }
 
-  @GetMapping("{id}/menus/tree")
-  public List<Tree<String>> getMenusTreeById(@PathVariable("id") String id) {
-    List<MenuVO> menuVOS = getMenusById(id);
-    return MenuVO.toTree(menuVOS, null);
-  }
-
   @GetMapping("{id}/organizes")
   public List<OrganizeVO> getOrganizesById(@PathVariable("id") String id) {
     RoleEntity entity = roleService.findById(id);
     return OrganizeVO.of(entity.getOrganizes());
-  }
-
-  @GetMapping("{id}/organizes/tree")
-  public List<Tree<String>> getOrganizesTreeById(@PathVariable("id") String id) {
-    List<OrganizeVO> organizeVOS = getOrganizesById(id);
-    return OrganizeVO.toTree(organizeVOS);
   }
 
   @GetMapping("page")

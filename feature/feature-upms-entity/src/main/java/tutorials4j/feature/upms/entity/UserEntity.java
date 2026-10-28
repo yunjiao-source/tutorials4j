@@ -5,11 +5,13 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
@@ -17,7 +19,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -99,7 +100,17 @@ public class UserEntity extends BaseEntity<String> {
 
   @Column
   @Enumerated(EnumType.STRING)
-  private YesNoEnum isReserved;
+  private YesNoEnum reserved;
+
+  @Column(name = "organize_id", insertable = false, updatable = false)
+  private String organizeId;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(
+      name = "organize_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "upms_user_fk1"))
+  private OrganizeEntity organize;
 
   @ManyToMany
   @JoinTable(
@@ -125,12 +136,8 @@ public class UserEntity extends BaseEntity<String> {
   protected void prePersist() {
     super.prePersist();
 
-    if (status == null) {
-      status = UserStatus.active;
-    }
-
-    if (isReserved == null) {
-      isReserved = YesNoEnum.no;
+    if (reserved == null) {
+      reserved = YesNoEnum.no;
     }
   }
 
@@ -138,8 +145,10 @@ public class UserEntity extends BaseEntity<String> {
   protected void preRemove() {
     super.preRemove();
 
-    if (Objects.equals(isReserved, YesNoEnum.yes)) {
-      throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("username", username);
+    if (YesNoEnum.isTrue(reserved)) {
+      throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE
+          .throwed()
+          .param("className", getClass().getName());
     }
   }
 }

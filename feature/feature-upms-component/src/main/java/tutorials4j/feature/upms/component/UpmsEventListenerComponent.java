@@ -30,7 +30,7 @@ public class UpmsEventListenerComponent {
       log.debug("发布事件：{}", authEvent);
     }
 
-    authHistoryService.createBy(authEvent);
+    authHistoryService.createByAuthEvent(authEvent);
 
     AuthRemoteEvent are = new AuthRemoteEvent(this, busProperties.getId(), authEvent);
     SpringUtils.getApplicationContext().publishEvent(are);

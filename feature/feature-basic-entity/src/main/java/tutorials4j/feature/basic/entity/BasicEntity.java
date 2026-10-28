@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,7 +24,7 @@ public class BasicEntity extends BaseEntity<String> {
 
   @Column
   @Enumerated(EnumType.STRING)
-  private YesNoEnum isReserved;
+  private YesNoEnum reserved;
 
   @Column
   @Enumerated(EnumType.STRING)
@@ -35,8 +34,8 @@ public class BasicEntity extends BaseEntity<String> {
   protected void prePersist() {
     super.prePersist();
 
-    if (isReserved == null) {
-      isReserved = YesNoEnum.no;
+    if (reserved == null) {
+      reserved = YesNoEnum.no;
     }
 
     if (enabled == null) {
@@ -48,7 +47,7 @@ public class BasicEntity extends BaseEntity<String> {
   protected void preRemove() {
     super.preRemove();
 
-    if (Objects.equals(isReserved, YesNoEnum.yes)) {
+    if (YesNoEnum.isTrue(reserved)) {
       throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE
           .throwed()
           .param("class", this.getClass().getName());

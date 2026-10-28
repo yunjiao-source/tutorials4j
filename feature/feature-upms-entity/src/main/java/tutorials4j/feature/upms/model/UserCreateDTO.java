@@ -18,5 +18,5 @@ public class UserCreateDTO extends UserUpdateDTO {
 
   private String password;
 
-  private YesNoEnum isReserved;
+  private YesNoEnum reserved;
 }

@@ -6,8 +6,8 @@
 
 ## 源代码
 
-* 本项目源码仓库： [gitee](https://gitee.com/yunjiao-source/tutorials4j),[gitcode](https://gitcode.com/yun-jiao/tutorials4j),[github](https://github.com/yunjiao-source/tutorials4j)
-* 前端代码源码仓库(基于vue-vben-admin)：[gitee](https://gitee.com/yunjiao-source/tutorials4j_vue),[gitcode](https://gitcode.com/yun-jiao/tutorials4j_vue),[github](https://github.com/yunjiao-source/tutorials4j_vue)
+* 本项目其他源码仓库： [gitee](https://gitee.com/yunjiao-source/tutorials4j),[gitcode](https://gitcode.com/yun-jiao/tutorials4j),[github](https://github.com/yunjiao-source/tutorials4j)
+* 前端代码源码仓库(基于vue-vben-admin-5.7.0)：[gitee](https://gitee.com/yunjiao-source/tutorials4j_vue),[gitcode](https://gitcode.com/yun-jiao/tutorials4j_vue),[github](https://github.com/yunjiao-source/tutorials4j_vue)
 
 ## 公众号
 

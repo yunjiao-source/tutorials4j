@@ -79,4 +79,9 @@ public class OrganizeService implements BaseService<OrganizeEntity, String> {
     OrganizeEntity entity = findById(parentId);
     return entity.getRoles();
   }
+
+  public List<OrganizeEntity> findAllValid() {
+    OrganizeQuery query = OrganizeQuery.builder().enabled(YesNoEnum.yes).build();
+    return findByQuery(query);
+  }
 }

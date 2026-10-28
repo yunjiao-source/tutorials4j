@@ -31,7 +31,7 @@ import tutorials4j.feature.upms.service.ClientService;
 public class ClientUpmsController {
   private final ClientService clientService;
 
-  @PostMapping("create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ClientEntity create(@Valid @RequestBody ClientCreateDTO dto) {
     return clientService.create(dto);

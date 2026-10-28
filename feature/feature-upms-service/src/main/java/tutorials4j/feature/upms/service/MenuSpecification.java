@@ -29,11 +29,6 @@ public class MenuSpecification {
     return (root, query, cb) -> enabled == null ? null : cb.equal(root.get("enabled"), enabled);
   }
 
-  public static Specification<MenuEntity> enabledIn(Collection<YesNoEnum> allEnabled) {
-    return (root, query, cb) ->
-        allEnabled == null ? null : cb.in(root.get("enabled").in(allEnabled));
-  }
-
   public static Specification<MenuEntity> nameLike(String name) {
     return (root, query, cb) ->
         StringUtils.isBlank(name) ? null : cb.like(root.get("name"), like(name));

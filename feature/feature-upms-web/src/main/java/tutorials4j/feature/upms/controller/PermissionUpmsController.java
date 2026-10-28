@@ -37,7 +37,7 @@ import tutorials4j.feature.upms.service.PermissionService;
 public class PermissionUpmsController {
   private final PermissionService permissionService;
 
-  @PostMapping("create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public PermissionVO create(@Valid @RequestBody PermissionCreateDTO dto) {
     PermissionEntity entity = permissionService.create(dto);

@@ -59,19 +59,12 @@ public class ConfigBasicController {
     return ConfigVO.of(entity);
   }
 
-  @GetMapping("/by-key/{key}")
-  public ConfigVO getByKey(@PathVariable("key") String key) {
-    return configService.getConfigRepository().findByKey(key).map(ConfigVO::of).orElse(null);
+  @GetMapping("/by-code/{code}")
+  public ConfigVO getByCode(@PathVariable("code") String code) {
+    return configService.getConfigRepository().findByCode(code).map(ConfigVO::of).orElse(null);
   }
 
   @GetMapping("/by-category/{category}")
-  public List<ConfigVO> getByCategory(@PathVariable("category") String category) {
-    return configService.getConfigRepository().findByCategory(category).stream()
-        .map(ConfigVO::of)
-        .toList();
-  }
-
-  @GetMapping("/by-category/{category}/valid")
   public List<ConfigVO> getValidByCategory(@PathVariable("category") String category) {
     return configService.findValidByCategory(category).stream().map(ConfigVO::of).toList();
   }

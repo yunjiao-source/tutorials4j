@@ -32,7 +32,7 @@ import tutorials4j.feature.basic.service.DictDataService;
 public class DictDataBasicController {
   private final DictDataService dictDataService;
 
-  @PostMapping("create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public DictDataVO create(@Valid @RequestBody DictDataDTO dto) {
     DictDataEntity entity = dictDataService.create(dto);

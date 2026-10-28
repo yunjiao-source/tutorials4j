@@ -19,8 +19,6 @@ public class PermissionVO extends UpmsVO {
   private String code;
 
   private String name;
-  private String resource;
-  private String action;
   private String description;
 
   public static PermissionVO of(PermissionEntity entity) {

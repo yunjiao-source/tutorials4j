@@ -8,18 +8,43 @@ import java.util.Objects;
  * @author YunJiao Yang
  */
 public enum YesNoEnum {
-  yes,
-  no;
+  no,
+  yes;
 
-  public boolean isYes() {
+  public boolean isTrue() {
     return Objects.equals(this, yes);
   }
 
-  public boolean isNo() {
+  public boolean isFalse() {
     return Objects.equals(this, no);
   }
 
   public int toInt() {
-    return isYes() ? 1 : 0;
+    return ordinal();
+  }
+
+  public static YesNoEnum formInt(int ordinal) {
+    if (ordinal == 1) {
+      return yes;
+    } else if (ordinal == 0) {
+      return no;
+    }
+    throw new IllegalArgumentException("Unknown YesNoEnum ordinal: " + ordinal);
+  }
+
+  public static boolean isTrue(YesNoEnum yesNoEnum) {
+    return Objects.equals(YesNoEnum.yes, yesNoEnum);
+  }
+
+  public static boolean isFalse(YesNoEnum yesNoEnum) {
+    return Objects.equals(YesNoEnum.no, yesNoEnum);
+  }
+
+  public static YesNoEnum valueOf(Boolean b) {
+    if (b == null) {
+      return null;
+    }
+
+    return b ? yes : no;
   }
 }

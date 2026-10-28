@@ -15,6 +15,6 @@ import tutorials4j.toolkit.data.domain.BaseVO;
 @Setter
 @ToString(callSuper = true)
 public class BasicVO extends BaseVO<String> {
-  private YesNoEnum isReserved;
+  private YesNoEnum reserved;
   private YesNoEnum enabled;
 }

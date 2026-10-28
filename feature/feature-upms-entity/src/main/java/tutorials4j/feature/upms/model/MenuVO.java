@@ -39,8 +39,6 @@ public class MenuVO extends UpmsVO {
 
   private String activePath;
 
-  private YesNoEnum breadcrumbUseActivePath;
-
   private YesNoEnum affixTab;
 
   private Integer affixTabOrder;
@@ -52,8 +50,6 @@ public class MenuVO extends UpmsVO {
   private String badgeType;
 
   private String badgeVariants;
-
-  private YesNoEnum fullPathKey;
 
   private YesNoEnum hideChildrenInMenu;
 
@@ -67,15 +63,11 @@ public class MenuVO extends UpmsVO {
 
   private String iframeSrc;
 
-  private YesNoEnum ignoreAccess;
-
   private YesNoEnum keepAlive;
 
   private String link;
 
   private Integer maxNumOfOpenTab;
-
-  private YesNoEnum menuVisibleWithForbidden;
 
   private YesNoEnum noBasicLayout;
 
@@ -86,8 +78,6 @@ public class MenuVO extends UpmsVO {
   private String query;
 
   private String title;
-
-  private YesNoEnum domCached;
 
   public static MenuVO of(MenuEntity entity) {
     Assert.notNull(entity, "entity must not be null");
@@ -125,18 +115,13 @@ public class MenuVO extends UpmsVO {
               .ifPresent(value -> tree.putExtra("component", value));
           Opt.ofBlankAble(menu.getRedirect()).ifPresent(value -> tree.putExtra("redirect", value));
           Opt.ofNullable(menu.getType()).ifPresent(value -> tree.putExtra("type", value.name()));
-          Opt.ofNullable(menu.getEnabled())
-              .ifPresent(value -> tree.putExtra("status", value.toInt()));
 
           Map<String, Object> metaMap = new HashMap<>();
           Opt.ofBlankAble(menu.getActiveIcon())
               .ifPresent(value -> metaMap.put("activeIcon", value));
           Opt.ofBlankAble(menu.getActivePath())
               .ifPresent(value -> metaMap.put("activePath", value));
-          Opt.ofNullable(menu.getBreadcrumbUseActivePath())
-              .ifPresent(value -> metaMap.put("breadcrumbUseActivePath", value.isYes()));
-          Opt.ofNullable(menu.getAffixTab())
-              .ifPresent(value -> metaMap.put("affixTab", value.isYes()));
+          Opt.ofNullable(menu.getAffixTab()).ifPresent(value -> metaMap.put("affixTab", value));
           Opt.ofNullable(menu.getAffixTabOrder())
               .ifPresent(value -> metaMap.put("affixTabOrder", value));
           Opt.ofBlankAble(menu.getAuthority())
@@ -145,36 +130,25 @@ public class MenuVO extends UpmsVO {
           Opt.ofBlankAble(menu.getBadgeType()).ifPresent(value -> metaMap.put("badgeType", value));
           Opt.ofBlankAble(menu.getBadgeVariants())
               .ifPresent(value -> metaMap.put("badgeVariants", value));
-          Opt.ofNullable(menu.getFullPathKey())
-              .ifPresent(value -> metaMap.put("fullPathKey", value.isYes()));
           Opt.ofNullable(menu.getHideChildrenInMenu())
-              .ifPresent(value -> metaMap.put("hideChildrenInMenu", value.isYes()));
+              .ifPresent(value -> metaMap.put("hideChildrenInMenu", value));
           Opt.ofNullable(menu.getHideInBreadcrumb())
-              .ifPresent(value -> metaMap.put("hideInBreadcrumb", value.isYes()));
-          Opt.ofNullable(menu.getHideInMenu())
-              .ifPresent(value -> metaMap.put("hideInMenu", value.isYes()));
-          Opt.ofNullable(menu.getHideInTab())
-              .ifPresent(value -> metaMap.put("hideInTab", value.isYes()));
+              .ifPresent(value -> metaMap.put("hideInBreadcrumb", value));
+          Opt.ofNullable(menu.getHideInMenu()).ifPresent(value -> metaMap.put("hideInMenu", value));
+          Opt.ofNullable(menu.getHideInTab()).ifPresent(value -> metaMap.put("hideInTab", value));
           Opt.ofBlankAble(menu.getIcon()).ifPresent(value -> metaMap.put("icon", value));
           Opt.ofBlankAble(menu.getIframeSrc()).ifPresent(value -> metaMap.put("iframeSrc", value));
-          Opt.ofNullable(menu.getIgnoreAccess())
-              .ifPresent(value -> metaMap.put("ignoreAccess", value.isYes()));
-          Opt.ofNullable(menu.getKeepAlive())
-              .ifPresent(value -> metaMap.put("keepAlive", value.isYes()));
+          Opt.ofNullable(menu.getKeepAlive()).ifPresent(value -> metaMap.put("keepAlive", value));
           Opt.ofBlankAble(menu.getLink()).ifPresent(value -> metaMap.put("link", value));
           Opt.ofNullable(menu.getMaxNumOfOpenTab())
               .ifPresent(value -> metaMap.put("maxNumOfOpenTab", value));
-          Opt.ofNullable(menu.getMenuVisibleWithForbidden())
-              .ifPresent(value -> metaMap.put("menuVisibleWithForbidden", value.isYes()));
           Opt.ofNullable(menu.getNoBasicLayout())
-              .ifPresent(value -> metaMap.put("noBasicLayout", value.isYes()));
+              .ifPresent(value -> metaMap.put("noBasicLayout", value));
           Opt.ofNullable(menu.getOpenInNewWindow())
-              .ifPresent(value -> metaMap.put("openInNewWindow", value.isYes()));
+              .ifPresent(value -> metaMap.put("openInNewWindow", value));
           Opt.ofNullable(menu.getOrder()).ifPresent(value -> metaMap.put("order", value));
           Opt.ofBlankAble(menu.getQuery()).ifPresent(value -> metaMap.put("query", value));
           Opt.ofBlankAble(menu.getTitle()).ifPresent(value -> metaMap.put("title", value));
-          Opt.ofNullable(menu.getDomCached())
-              .ifPresent(value -> metaMap.put("domCached", value.isYes()));
 
           tree.putExtra("meta", metaMap);
         });

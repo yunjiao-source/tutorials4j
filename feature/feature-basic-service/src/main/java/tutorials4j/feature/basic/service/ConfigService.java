@@ -4,7 +4,6 @@ import static tutorials4j.feature.basic.BasicFeatureConsts.CACHEABLE_CONFIG;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -38,13 +37,6 @@ public class ConfigService implements BaseService<ConfigEntity, String> {
     return configRepository;
   }
 
-  public List<ConfigEntity> findByCategory(String category, Set<YesNoEnum> allEnabled) {
-    Assert.notNull(category, "category must not be null");
-
-    ConfigQuery query = ConfigQuery.builder().category(category).allEnabled(allEnabled).build();
-    return findByQuery(query);
-  }
-
   public ConfigEntity create(@Valid ConfigCreateDTO dto) {
     Assert.notNull(dto, "dto must not be null");
     ConfigEntity entity = new ConfigEntity();
@@ -70,6 +62,8 @@ public class ConfigService implements BaseService<ConfigEntity, String> {
   @Cacheable(value = CACHEABLE_CONFIG, key = "#category")
   public List<ConfigEntity> findValidByCategory(String category) {
     Assert.notNull(category, "category must not be null");
-    return findByCategory(category, Set.of(YesNoEnum.yes));
+
+    ConfigQuery query = ConfigQuery.builder().category(category).enabled(YesNoEnum.yes).build();
+    return findByQuery(query);
   }
 }

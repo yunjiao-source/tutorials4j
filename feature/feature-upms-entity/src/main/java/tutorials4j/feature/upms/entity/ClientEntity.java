@@ -10,13 +10,11 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.List;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.convert.ListAttributeConverter;
-import tutorials4j.toolkit.data.exception.DataErrorCode;
 
 /**
  * TODO
@@ -38,6 +36,7 @@ public class ClientEntity extends UpmsEntity {
   /** 应用秘钥 */
   @Column private String clientSecret;
 
+  /** 应用名称 */
   @Column(nullable = false)
   private String clientName;
 
@@ -87,10 +86,6 @@ public class ClientEntity extends UpmsEntity {
   @Enumerated(EnumType.STRING)
   private YesNoEnum isAutoConfirm;
 
-  @Column
-  @Enumerated(EnumType.STRING)
-  private YesNoEnum isReserved;
-
   @Override
   protected void prePersist() {
     super.prePersist();
@@ -109,18 +104,6 @@ public class ClientEntity extends UpmsEntity {
     }
     if (contractScopes == null) {
       contractScopes = List.of();
-    }
-    if (isReserved == null) {
-      isReserved = YesNoEnum.no;
-    }
-  }
-
-  @Override
-  protected void preRemove() {
-    super.preRemove();
-
-    if (Objects.equals(isReserved, YesNoEnum.yes)) {
-      throw DataErrorCode.RESERVED_DATA_CAN_NOT_REMOVE.throwed().param("clientName", clientName);
     }
   }
 }

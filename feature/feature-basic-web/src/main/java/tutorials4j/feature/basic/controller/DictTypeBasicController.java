@@ -3,7 +3,6 @@ package tutorials4j.feature.basic.controller;
 import cn.hutool.core.lang.tree.Tree;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.feature.basic.entity.DictDataEntity;
 import tutorials4j.feature.basic.entity.DictTypeEntity;
 import tutorials4j.feature.basic.model.DictDataVO;
 import tutorials4j.feature.basic.model.DictTypeDTO;
 import tutorials4j.feature.basic.model.DictTypeVO;
+import tutorials4j.feature.basic.service.DictDataQuery;
 import tutorials4j.feature.basic.service.DictDataService;
 import tutorials4j.feature.basic.service.DictTypeQuery;
 import tutorials4j.feature.basic.service.DictTypeService;
@@ -40,7 +41,7 @@ public class DictTypeBasicController {
   private final DictTypeService dictTypeService;
   private final DictDataService dictDataService;
 
-  @PostMapping("create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public DictTypeVO create(@Valid @RequestBody DictTypeDTO dto) {
     DictTypeEntity entity = dictTypeService.create(dto);
@@ -72,58 +73,56 @@ public class DictTypeBasicController {
   }
 
   @GetMapping("root")
-  public List<DictTypeVO> getRoot(
-      @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
-    return dictTypeService.findRootByEnabled(allEnabled).stream().map(DictTypeVO::of).toList();
+  public List<DictTypeVO> getRoot(@RequestParam("query") DictTypeQuery query) {
+    query.setAllRoot(YesNoEnum.yes);
+    List<DictTypeEntity> entities = dictTypeService.findByQuery(query);
+    return DictTypeVO.of(entities);
   }
 
   @GetMapping("{id}/children")
   public List<DictTypeVO> getChildren(
-      @PathVariable("id") String id,
-      @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
-    return dictTypeService.findChildrenByEnabled(id, allEnabled).stream()
-        .map(DictTypeVO::of)
-        .toList();
+      @PathVariable("id") String id, @RequestParam("query") DictTypeQuery query) {
+    query.setParentId(id);
+    query.setAllRoot(YesNoEnum.no);
+    List<DictTypeEntity> entities = dictTypeService.findByQuery(query);
+    return DictTypeVO.of(entities);
   }
 
   @GetMapping("tree")
-  public List<Tree<String>> getTree(
-      @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
-    DictTypeQuery query = DictTypeQuery.builder().allEnabled(allEnabled).build();
+  public List<Tree<String>> getTree(@RequestParam("query") DictTypeQuery query) {
     List<DictTypeEntity> entities = dictTypeService.findByQuery(query);
-
     return DictTypeVO.toTree(DictTypeVO.of(entities));
   }
 
   @GetMapping("/by-id/{id}/dict-data")
   public List<DictDataVO> getDictDataById(
-      @PathVariable("id") String id,
-      @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
-    return dictDataService.findByDictTypeIdAndEnabledIn(id, allEnabled);
-    // return dictDataList.getDictDataVOList();
+      @PathVariable("id") String id, @RequestParam("query") DictDataQuery query) {
+    query.setDictTypeId(id);
+    List<DictDataEntity> entities = dictDataService.findByQuery(query);
+    return DictDataVO.of(entities);
   }
 
   @GetMapping("/by-code/{code}/dict-data")
   public List<DictDataVO> getDictDataByCode(
-      @PathVariable("code") String code,
-      @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
+      @PathVariable("code") String code, @RequestParam("query") DictDataQuery query) {
     DictTypeEntity dictTypeEntity = dictTypeService.findByCode(code);
-    return getDictDataById(dictTypeEntity.getId(), allEnabled);
+    query.setDictTypeId(dictTypeEntity.getId());
+
+    List<DictDataEntity> entities = dictDataService.findByQuery(query);
+    return DictDataVO.of(entities);
   }
 
   @GetMapping("/by-id/{id}/dict-data/tree")
   public List<Tree<String>> getDictDataTreeById(
-      @PathVariable("id") String id,
-      @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
-    List<DictDataVO> vos = getDictDataById(id, allEnabled);
+      @PathVariable("id") String id, @RequestParam("query") DictDataQuery query) {
+    List<DictDataVO> vos = getDictDataById(id, query);
     return DictDataVO.toTree(vos);
   }
 
   @GetMapping("/by-code/{code}/dict-data/tree")
   public List<Tree<String>> getDictDataTreeByCode(
-      @PathVariable("code") String code,
-      @RequestParam(name = "allEnabled", required = false) Set<YesNoEnum> allEnabled) {
-    DictTypeEntity dictTypeEntity = dictTypeService.findByCode(code);
-    return getDictDataTreeById(dictTypeEntity.getId(), allEnabled);
+      @PathVariable("code") String code, @RequestParam("query") DictDataQuery query) {
+    List<DictDataVO> vos = getDictDataByCode(code, query);
+    return DictDataVO.toTree(vos);
   }
 }

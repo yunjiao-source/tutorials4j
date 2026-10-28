@@ -3,6 +3,7 @@ package tutorials4j.feature.basic.model;
 import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
 import lombok.Data;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -12,10 +13,14 @@ import lombok.Data;
 @Data
 public class CompanyDTO {
   @NotBlank(message = "组织是必须的")
-  private String organizeId;
+  private String organizeCode;
+
+  @NotBlank(message = "公司名称是必须的")
+  private String name;
+
+  private String shortName;
 
   // 公司性质
-  @NotBlank(message = "公司性质是必须的")
   private String companyType;
 
   // 所属行业
@@ -56,4 +61,8 @@ public class CompanyDTO {
 
   // 经营范围
   private String businessScope;
+
+  private YesNoEnum reserved;
+
+  private YesNoEnum enabled;
 }

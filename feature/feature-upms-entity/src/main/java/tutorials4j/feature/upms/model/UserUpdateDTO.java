@@ -22,6 +22,9 @@ public class UserUpdateDTO {
   @NotBlank(message = "名称是必须的")
   private String name;
 
+  @NotBlank(message = "组织是必须的")
+  private String organizeId;
+
   private String nickname;
 
   private String phoneNumber;

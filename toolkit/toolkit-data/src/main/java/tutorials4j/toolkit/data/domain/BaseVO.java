@@ -15,8 +15,8 @@ import lombok.ToString;
 @Setter
 @ToString(callSuper = true)
 public class BaseVO<ID extends Serializable> extends BaseIdVO<ID> {
-  private Instant createDate;
-  private String createBy;
+  private Instant createdDate;
+  private String createdBy;
 
   private Instant lastModifiedDate;
   private String lastModifiedBy;

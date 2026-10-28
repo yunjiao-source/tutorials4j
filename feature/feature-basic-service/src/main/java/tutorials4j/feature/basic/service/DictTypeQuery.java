@@ -3,12 +3,10 @@ package tutorials4j.feature.basic.service;
 import static tutorials4j.feature.basic.service.DictTypeSpecification.allRoot;
 import static tutorials4j.feature.basic.service.DictTypeSpecification.codeLike;
 import static tutorials4j.feature.basic.service.DictTypeSpecification.descriptionLike;
-import static tutorials4j.feature.basic.service.DictTypeSpecification.enabledIn;
+import static tutorials4j.feature.basic.service.DictTypeSpecification.enabledEqual;
 import static tutorials4j.feature.basic.service.DictTypeSpecification.nameLike;
 import static tutorials4j.feature.basic.service.DictTypeSpecification.parentIdEqual;
 
-import java.util.Objects;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +27,7 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseQuery;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DictTypeQuery extends BaseQuery<DictTypeEntity> {
-  private Boolean allRoot;
+  private YesNoEnum allRoot;
 
   private String parentId;
 
@@ -38,15 +36,15 @@ public class DictTypeQuery extends BaseQuery<DictTypeEntity> {
 
   private String description;
 
-  private Set<YesNoEnum> allEnabled;
+  private YesNoEnum enabled;
 
   @Override
   protected void addSpec() {
-    addSpec(Objects.equals(allRoot, Boolean.TRUE), allRoot())
+    addSpec(YesNoEnum.isTrue(allRoot), allRoot())
         .addSpec(parentIdEqual(parentId))
         .addSpec(nameLike(name))
         .addSpec(codeLike(code))
         .addSpec(descriptionLike(description))
-        .addSpec(enabledIn(allEnabled));
+        .addSpec(enabledEqual(enabled));
   }
 }

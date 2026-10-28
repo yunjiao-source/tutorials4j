@@ -49,7 +49,7 @@ public class UserModel {
 
   private UserStatus status;
 
-  private Instant createDate;
+  private Instant createdDate;
 
   private Instant lastModifiedDate;
 }

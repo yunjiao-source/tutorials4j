@@ -41,7 +41,7 @@ public class AuthHistoryService implements BaseService<AuthHistoryEntity, String
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public void createBy(AuthEvent authEvent) {
+  public void createByAuthEvent(AuthEvent authEvent) {
     String userId = authEvent.getUserId();
     userRepository
         .findById(userId)

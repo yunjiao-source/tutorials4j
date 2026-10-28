@@ -20,4 +20,6 @@ public class RoleUpdateDTO {
   private YesNoEnum status;
 
   private String description;
+
+  private YesNoEnum enabled;
 }

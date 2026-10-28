@@ -1,8 +1,6 @@
 package tutorials4j.feature.basic.service;
 
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -13,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import tutorials4j.feature.basic.entity.DictTypeEntity;
 import tutorials4j.feature.basic.model.DictTypeDTO;
 import tutorials4j.feature.basic.repository.DictTypeRepository;
-import tutorials4j.toolkit.core.model.YesNoEnum;
 import tutorials4j.toolkit.data.exception.DataErrorCode;
 import tutorials4j.toolkit.data.hibernate.domain.BaseRepository;
 import tutorials4j.toolkit.data.hibernate.domain.BaseService;
@@ -41,20 +38,6 @@ public class DictTypeService implements BaseService<DictTypeEntity, String> {
     BeanUtils.copyProperties(dto, entity);
 
     return dictTypeRepository.save(entity);
-  }
-
-  public List<DictTypeEntity> findRootByEnabled(Set<YesNoEnum> allEnabled) {
-    Assert.notNull(allEnabled, "allEnabled must not be null");
-
-    DictTypeQuery query = DictTypeQuery.builder().allRoot(true).allEnabled(allEnabled).build();
-    return findByQuery(query);
-  }
-
-  public List<DictTypeEntity> findChildrenByEnabled(String parentId, Set<YesNoEnum> allEnabled) {
-    Assert.notNull(allEnabled, "allEnabled must not be null");
-
-    DictTypeQuery query = DictTypeQuery.builder().parentId(parentId).allEnabled(allEnabled).build();
-    return findByQuery(query);
   }
 
   @Transactional(rollbackFor = Exception.class)
