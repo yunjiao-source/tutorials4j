@@ -1,14 +1,13 @@
 package tutorials4j.feature.upms.service;
 
-import static tutorials4j.toolkit.data.util.JPAUtils.leftJoin;
+import static tutorials4j.toolkit.data.util.JPAUtils.like;
 
-import jakarta.persistence.criteria.Join;
 import java.time.Instant;
+import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.feature.core.model.AuthStatus;
 import tutorials4j.feature.upms.entity.AuthHistoryEntity;
-import tutorials4j.feature.upms.entity.UserEntity;
 
 /**
  * TODO
@@ -16,19 +15,38 @@ import tutorials4j.feature.upms.entity.UserEntity;
  * @author YunJiao Yang
  */
 public class AuthHistorySpecification {
-  public static Specification<AuthHistoryEntity> userIdEqual(String userId) {
+
+  public static Specification<AuthHistoryEntity> userFullNameLike(String userFullName) {
     return (root, query, cb) -> {
-      if (StringUtils.isBlank(userId)) {
+      if (StringUtils.isBlank(userFullName)) {
         return null;
       }
-      Join<AuthHistoryEntity, UserEntity> userJoin = leftJoin(root, "user");
-      return cb.equal(userJoin.get("id"), userId);
+      return cb.like(root.get("user").get("name"), like(userFullName));
     };
+  }
+
+  public static Specification<AuthHistoryEntity> usernameEqual(String username) {
+    return (root, query, cb) -> {
+      if (StringUtils.isBlank(username)) {
+        return null;
+      }
+      return cb.equal(root.get("user").get("username"), username);
+    };
+  }
+
+  public static Specification<AuthHistoryEntity> userIdEqual(String userId) {
+    return (root, query, cb) -> userId == null ? null : cb.equal(root.get("user_id"), userId);
   }
 
   public static Specification<AuthHistoryEntity> authStatusEqual(AuthStatus authStatus) {
     return (root, query, cb) ->
         authStatus == null ? null : cb.equal(root.get("authStatus"), authStatus);
+  }
+
+  public static Specification<AuthHistoryEntity> authStatusIn(
+      Collection<AuthStatus> authStatusSet) {
+    return (root, query, cb) ->
+        authStatusSet == null ? null : root.get("authStatus").in(authStatusSet);
   }
 
   public static Specification<AuthHistoryEntity> createdTimeGte(Instant createTimeBegin) {

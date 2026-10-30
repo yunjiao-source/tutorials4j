@@ -28,6 +28,14 @@ import tutorials4j.toolkit.data.hibernate.domain.BaseIdEntity;
     name = "upms_auth_history",
     indexes = {@Index(name = "upms_client_idx1", columnList = "user_id")})
 public class AuthHistoryEntity extends BaseIdEntity<String> {
+  @Column private String ipAddress;
+
+  @Column private String region;
+
+  @Column private String platform;
+
+  @Column private String browser;
+
   @Column
   @Enumerated(EnumType.STRING)
   private AuthStatus authStatus;

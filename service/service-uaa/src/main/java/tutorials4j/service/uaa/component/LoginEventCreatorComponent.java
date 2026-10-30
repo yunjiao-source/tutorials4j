@@ -37,7 +37,7 @@ public class LoginEventCreatorComponent {
 
     UserAgent userAgent = UserAgentUtil.parse(HeaderUtils.getUserAgent(request));
     if (userAgent != null) {
-      authEvent.setPlatForm(userAgent.getPlatform().getName() + " " + userAgent.getOsVersion());
+      authEvent.setPlatform(userAgent.getPlatform().getName() + " " + userAgent.getOsVersion());
       authEvent.setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getVersion());
     }
 

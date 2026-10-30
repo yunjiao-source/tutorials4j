@@ -49,6 +49,10 @@ public class AuthHistoryService implements BaseService<AuthHistoryEntity, String
             entity -> {
               AuthHistoryEntity authHistoryEntity = new AuthHistoryEntity();
               authHistoryEntity.setUser(entity);
+              authHistoryEntity.setIpAddress(authEvent.getIpAddress());
+              authHistoryEntity.setRegion(authEvent.getRegion());
+              authHistoryEntity.setPlatform(authEvent.getPlatform());
+              authHistoryEntity.setBrowser(authEvent.getBrowser());
               authHistoryEntity.setAuthStatus(authEvent.getStatus());
               authHistoryEntity.setCreatedTime(Instant.now());
               authHistoryRepository.save(authHistoryEntity);

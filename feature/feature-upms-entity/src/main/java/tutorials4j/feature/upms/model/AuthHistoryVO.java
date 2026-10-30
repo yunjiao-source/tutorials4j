@@ -17,6 +17,13 @@ import tutorials4j.toolkit.data.domain.BaseIdVO;
 @Getter
 @Setter
 public class AuthHistoryVO extends BaseIdVO<String> {
+  private String ipAddress;
+
+  private String region;
+
+  private String platform;
+
+  private String browser;
   private AuthStatus authStatus;
   private Instant createdTime;
 

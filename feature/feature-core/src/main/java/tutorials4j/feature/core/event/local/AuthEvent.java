@@ -20,11 +20,11 @@ public class AuthEvent {
 
   private String email;
 
-  private String IpAddress;
+  private String ipAddress;
 
   private String region;
 
-  private String platForm;
+  private String platform;
 
   private String browser;
 
