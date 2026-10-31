@@ -45,56 +45,56 @@ public class RoleUpmsController {
     return RoleVO.of(entity);
   }
 
-  @PutMapping("{id}")
-  public RoleVO update(@PathVariable("id") String id, @Valid @RequestBody RoleUpdateDTO dto) {
+  @PutMapping("{role-id}")
+  public RoleVO update(@PathVariable("role-id") String id, @Valid @RequestBody RoleUpdateDTO dto) {
     RoleEntity entity = roleService.update(id, dto);
     return RoleVO.of(entity);
   }
 
-  @PutMapping("{id}/permissions")
-  public RoleVO addPermissions(@PathVariable("id") String id, Set<String> permissionCodes) {
+  @PutMapping("{role-id}/permissions")
+  public RoleVO addPermissions(@PathVariable("role-id") String id, Set<String> permissionCodes) {
     RoleEntity entity = roleService.addPermissions(id, permissionCodes);
     return RoleVO.of(entity);
   }
 
-  @PutMapping("{id}/menus")
-  public RoleVO addMenus(@PathVariable("id") String id, Set<String> menuIds) {
+  @PutMapping("{role-id}/menus")
+  public RoleVO addMenus(@PathVariable("role-id") String id, Set<String> menuIds) {
     RoleEntity entity = roleService.addMenus(id, menuIds);
     return RoleVO.of(entity);
   }
 
-  @PutMapping("{id}/organizes")
-  public RoleVO addOrganizes(@PathVariable("id") String id, Set<String> organizeIds) {
+  @PutMapping("{role-id}/organizes")
+  public RoleVO addOrganizes(@PathVariable("role-id") String id, Set<String> organizeIds) {
     RoleEntity entity = roleService.addOrganizes(id, organizeIds);
     return RoleVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{role-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("role-id") String id) {
     roleService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public RoleVO getById(@PathVariable("id") String id) {
+  @GetMapping("{role-id}")
+  public RoleVO getById(@PathVariable("role-id") String id) {
     RoleEntity entity = roleService.findById(id);
     return RoleVO.of(entity);
   }
 
-  @GetMapping("{id}/permissions")
-  public List<PermissionVO> getPermissionsById(@PathVariable("id") String id) {
+  @GetMapping("{role-id}/permissions")
+  public List<PermissionVO> getPermissionsById(@PathVariable("role-id") String id) {
     RoleEntity entity = roleService.findById(id);
     return PermissionVO.of(entity.getPermissions());
   }
 
-  @GetMapping("{id}/menus")
-  public List<MenuVO> getMenusById(@PathVariable("id") String id) {
+  @GetMapping("{role-id}/menus")
+  public List<MenuVO> getMenusById(@PathVariable("role-id") String id) {
     RoleEntity entity = roleService.findById(id);
     return MenuVO.of(entity.getMenus());
   }
 
-  @GetMapping("{id}/organizes")
-  public List<OrganizeVO> getOrganizesById(@PathVariable("id") String id) {
+  @GetMapping("{role-id}/organizes")
+  public List<OrganizeVO> getOrganizesById(@PathVariable("role-id") String id) {
     RoleEntity entity = roleService.findById(id);
     return OrganizeVO.of(entity.getOrganizes());
   }

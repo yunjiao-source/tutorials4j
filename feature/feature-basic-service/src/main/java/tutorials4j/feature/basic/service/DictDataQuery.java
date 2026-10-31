@@ -1,13 +1,13 @@
 package tutorials4j.feature.basic.service;
 
 import static tutorials4j.feature.basic.service.DictDataSpecification.allRoot;
-import static tutorials4j.feature.basic.service.DictDataSpecification.codeLike;
+import static tutorials4j.feature.basic.service.DictDataSpecification.codeEqual;
 import static tutorials4j.feature.basic.service.DictDataSpecification.descriptionLike;
+import static tutorials4j.feature.basic.service.DictDataSpecification.dictTypeIdEqual;
 import static tutorials4j.feature.basic.service.DictDataSpecification.enabledEqual;
 import static tutorials4j.feature.basic.service.DictDataSpecification.nameLike;
 import static tutorials4j.feature.basic.service.DictDataSpecification.parentIdEqual;
 
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,16 +37,17 @@ public class DictDataQuery extends BaseQuery<DictDataEntity> {
 
   private String description;
 
-  private boolean enabled;
+  private YesNoEnum enabled;
 
   private String dictTypeId;
 
   @Override
   protected void addSpec() {
-    addSpec(Objects.equals(allRoot, Boolean.TRUE), allRoot())
+    addSpec(YesNoEnum.isTrue(allRoot), allRoot())
         .addSpec(parentIdEqual(parentId))
         .addSpec(nameLike(name))
-        .addSpec(codeLike(code))
+        .addSpec(codeEqual(code))
+        .addSpec(dictTypeIdEqual(dictTypeId))
         .addSpec(descriptionLike(description))
         .addSpec(enabledEqual(enabled));
   }

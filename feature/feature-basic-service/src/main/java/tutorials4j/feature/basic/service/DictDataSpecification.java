@@ -5,6 +5,7 @@ import static tutorials4j.toolkit.data.util.JPAUtils.like;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import tutorials4j.feature.basic.entity.DictDataEntity;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -26,7 +27,7 @@ public class DictDataSpecification {
         StringUtils.isBlank(dictTypeId) ? null : cb.equal(root.get("dictTypeId"), dictTypeId);
   }
 
-  public static Specification<DictDataEntity> enabledEqual(Boolean enabled) {
+  public static Specification<DictDataEntity> enabledEqual(YesNoEnum enabled) {
     return (root, query, cb) -> enabled == null ? null : cb.equal(root.get("enabled"), enabled);
   }
 
@@ -35,9 +36,8 @@ public class DictDataSpecification {
         StringUtils.isBlank(name) ? null : cb.like(root.get("name"), like(name));
   }
 
-  public static Specification<DictDataEntity> codeLike(String code) {
-    return (root, query, cb) ->
-        StringUtils.isBlank(code) ? null : cb.like(root.get("code"), like(code));
+  public static Specification<DictDataEntity> codeEqual(String code) {
+    return (root, query, cb) -> StringUtils.isBlank(code) ? null : cb.equal(root.get("code"), code);
   }
 
   public static Specification<DictDataEntity> descriptionLike(String description) {

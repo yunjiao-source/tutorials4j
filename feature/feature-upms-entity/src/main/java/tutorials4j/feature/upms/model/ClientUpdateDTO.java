@@ -19,8 +19,6 @@ public class ClientUpdateDTO {
   @NotBlank(message = "名称是必须的")
   private String clientName;
 
-  private String clientSecret;
-
   @NotEmpty(message = "应用签约的所有权限是必须的")
   private List<String> contractScopes;
 

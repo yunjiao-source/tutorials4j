@@ -45,20 +45,21 @@ public class OrganizeUpmsController {
     return OrganizeVO.of(entity);
   }
 
-  @PutMapping("{id}")
-  public OrganizeVO update(@PathVariable("id") String id, @Valid @RequestBody OrganizeDTO dto) {
+  @PutMapping("{organize-id}")
+  public OrganizeVO update(
+      @PathVariable("organize-id") String id, @Valid @RequestBody OrganizeDTO dto) {
     OrganizeEntity entity = organizeService.update(id, dto);
     return OrganizeVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{organize-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("organize-id") String id) {
     organizeService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public OrganizeVO getById(@PathVariable("id") String id) {
+  @GetMapping("{organize-id}")
+  public OrganizeVO getById(@PathVariable("organize-id") String id) {
     OrganizeEntity entity = organizeService.findById(id);
     return OrganizeVO.of(entity);
   }
@@ -69,14 +70,14 @@ public class OrganizeUpmsController {
     return new PagedModel<>(entities.map(OrganizeVO::of));
   }
 
-  @GetMapping("{id}/roles")
-  public List<RoleVO> getRolesById(@PathVariable("id") String id) {
+  @GetMapping("{organize-id}/roles")
+  public List<RoleVO> getRolesById(@PathVariable("organize-id") String id) {
     Set<RoleEntity> entities = organizeService.findRolesById(id);
     return RoleVO.of(entities);
   }
 
-  @GetMapping("{id}/children")
-  public List<OrganizeVO> getChildrenById(@PathVariable("id") String id) {
+  @GetMapping("{organize-id}/children")
+  public List<OrganizeVO> getChildrenById(@PathVariable("organize-id") String id) {
     List<OrganizeEntity> entities = organizeService.findChildrenById(id);
     return OrganizeVO.of(entities);
   }
@@ -85,13 +86,6 @@ public class OrganizeUpmsController {
   public List<OrganizeVO> getRoot(OrganizeQuery query) {
     query.setAllRoot(YesNoEnum.yes);
     List<OrganizeEntity> entities = organizeService.findByQuery(query);
-    return OrganizeVO.of(entities);
-  }
-
-  @GetMapping("list")
-  public List<OrganizeVO> getList(OrganizeQuery query) {
-    List<OrganizeEntity> entities = organizeService.findByQuery(query);
-
     return OrganizeVO.of(entities);
   }
 

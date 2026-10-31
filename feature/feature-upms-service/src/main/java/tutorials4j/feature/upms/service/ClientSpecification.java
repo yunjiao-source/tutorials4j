@@ -13,14 +13,19 @@ import tutorials4j.toolkit.core.model.YesNoEnum;
  * @author YunJiao Yang
  */
 public class ClientSpecification {
-  public static Specification<ClientEntity> clientIdLike(String clientId) {
+  public static Specification<ClientEntity> clientNameLike(String clientName) {
     return (root, query, cb) ->
-        StringUtils.isBlank(clientId) ? null : cb.like(root.get("clientId"), like(clientId));
+        StringUtils.isBlank(clientName) ? null : cb.like(root.get("clientName"), like(clientName));
   }
 
-  public static Specification<ClientEntity> subjectIdLike(String subjectId) {
+  public static Specification<ClientEntity> clientIdEqual(String clientId) {
     return (root, query, cb) ->
-        StringUtils.isBlank(subjectId) ? null : cb.like(root.get("subjectId"), like(subjectId));
+        StringUtils.isBlank(clientId) ? null : cb.equal(root.get("clientId"), clientId);
+  }
+
+  public static Specification<ClientEntity> subjectIdEqual(String subjectId) {
+    return (root, query, cb) ->
+        StringUtils.isBlank(subjectId) ? null : cb.equal(root.get("subjectId"), subjectId);
   }
 
   public static Specification<ClientEntity> isNewRefreshEqual(YesNoEnum isNewRefresh) {
@@ -31,5 +36,13 @@ public class ClientSpecification {
   public static Specification<ClientEntity> isAutoConfirmEqual(YesNoEnum isAutoConfirm) {
     return (root, query, cb) ->
         isAutoConfirm == null ? null : cb.equal(root.get("isAutoConfirm"), isAutoConfirm);
+  }
+
+  public static Specification<ClientEntity> enabledEqual(YesNoEnum enabled) {
+    return (root, query, cb) -> enabled == null ? null : cb.equal(root.get("enabled"), enabled);
+  }
+
+  public static Specification<ClientEntity> reservedEqual(YesNoEnum reserved) {
+    return (root, query, cb) -> reserved == null ? null : cb.equal(root.get("reserved"), reserved);
   }
 }

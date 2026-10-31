@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import tutorials4j.feature.basic.entity.DictDataEntity;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -37,11 +38,20 @@ public class DictDataVO extends BasicVO {
 
   private DictTypeVO dictType;
 
+  private String label;
+
+  private String value;
+
+  private boolean disabled;
+
   public static DictDataVO of(DictDataEntity entity) {
     Assert.notNull(entity, "entity must not be null");
 
     DictDataVO vo = new DictDataVO();
     BeanUtils.copyProperties(entity, vo);
+    vo.setLabel(entity.getName() + "[" + entity.getCode() + "]");
+    vo.setValue(entity.getCode());
+    vo.setDisabled(YesNoEnum.isTrue(entity.getEnabled()));
     return vo;
   }
 
@@ -65,6 +75,9 @@ public class DictDataVO extends BasicVO {
             tree.setWeight(dictData.getOrdered());
           }
 
+          tree.putExtra("label", dictData.getLabel());
+          tree.putExtra("value", dictData.getValue());
+          tree.putExtra("disabled", dictData.isDisabled());
           tree.putExtra("code", dictData.getCode());
           tree.putExtra("description", dictData.getDescription());
           tree.putExtra("dictTypeId", dictData.getDictTypeId());

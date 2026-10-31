@@ -41,31 +41,32 @@ public class ConfigBasicController {
     return ConfigVO.of(entity);
   }
 
-  @PutMapping("{id}")
-  public ConfigVO update(@PathVariable("id") String id, @Valid @RequestBody ConfigUpdateDTO dto) {
+  @PutMapping("{config-id}")
+  public ConfigVO update(
+      @PathVariable("config-id") String id, @Valid @RequestBody ConfigUpdateDTO dto) {
     ConfigEntity entity = configService.update(id, dto);
     return ConfigVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{config-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("config-id") String id) {
     configService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public ConfigVO getById(@PathVariable("id") String id) {
+  @GetMapping("{config-id}")
+  public ConfigVO getById(@PathVariable("config-id") String id) {
     ConfigEntity entity = configService.findById(id);
     return ConfigVO.of(entity);
   }
 
-  @GetMapping("/by-code/{code}")
-  public ConfigVO getByCode(@PathVariable("code") String code) {
+  @GetMapping("/by-code/{config-code}")
+  public ConfigVO getByCode(@PathVariable("config-code") String code) {
     return configService.getConfigRepository().findByCode(code).map(ConfigVO::of).orElse(null);
   }
 
-  @GetMapping("/by-category/{category}")
-  public List<ConfigVO> getValidByCategory(@PathVariable("category") String category) {
+  @GetMapping("/by-category/{config-category}")
+  public List<ConfigVO> getValidByCategory(@PathVariable("config-category") String category) {
     return configService.findValidByCategory(category).stream().map(ConfigVO::of).toList();
   }
 

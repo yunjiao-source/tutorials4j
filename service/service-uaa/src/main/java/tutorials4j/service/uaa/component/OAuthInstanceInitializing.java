@@ -30,6 +30,10 @@ public class OAuthInstanceInitializing implements SmartInitializingSingleton {
             clientEntity.setClientId(IdUtil.fastUUID());
           }
 
+          if (StringUtils.isBlank(clientEntity.getClientSecret())) {
+            clientEntity.setClientSecret(IdUtil.fastUUID());
+          }
+
           SaOAuth2ServerConfig config = SaOAuth2Manager.getServerConfig();
           if (clientEntity.getAccessTokenTimeout() == null) {
             clientEntity.setAccessTokenTimeout(config.getAccessTokenTimeout());

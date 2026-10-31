@@ -43,38 +43,38 @@ public class UserUpmsController {
     return UserVO.of(entity);
   }
 
-  @PutMapping("{id}")
-  public UserVO update(@PathVariable("id") String id, @Valid @RequestBody UserUpdateDTO dto) {
+  @PutMapping("{user-id}")
+  public UserVO update(@PathVariable("user-id") String id, @Valid @RequestBody UserUpdateDTO dto) {
     UserEntity entity = userService.update(id, dto);
     return UserVO.of(entity);
   }
 
-  @PutMapping("{id}/roles")
-  public UserVO addRoles(@PathVariable("id") String id, Set<String> roles) {
+  @PutMapping("{user-id}/roles")
+  public UserVO addRoles(@PathVariable("user-id") String id, Set<String> roles) {
     UserEntity entity = userService.addRoles(id, roles);
     return UserVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{user-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("user-id") String id) {
     userService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public UserVO getById(@PathVariable("id") String id) {
+  @GetMapping("{user-id}")
+  public UserVO getById(@PathVariable("user-id") String id) {
     UserEntity entity = userService.findById(id);
     return UserVO.of(entity);
   }
 
   @GetMapping("by-username/{username}")
-  public UserVO getByCode(@PathVariable("username") String username) {
+  public UserVO getByUsername(@PathVariable("username") String username) {
     UserEntity entity = userService.findByUsername(username);
     return UserVO.of(entity);
   }
 
-  @GetMapping("{id}/roles")
-  public List<RoleVO> getRolesById(@PathVariable("id") String id) {
+  @GetMapping("{user-id}/roles")
+  public List<RoleVO> getRolesById(@PathVariable("user-id") String id) {
     UserEntity entity = userService.findById(id);
     return RoleVO.of(entity.getRoles());
   }

@@ -58,8 +58,11 @@ public class DictTypeVO extends BasicVO {
             tree.setWeight(dictType.getOrdered());
           }
 
+          tree.putExtra("isTree", dictType.getIsTree());
           tree.putExtra("code", dictType.getCode());
           tree.putExtra("description", dictType.getDescription());
+          tree.putExtra("label", dictType.getName());
+          tree.putExtra("value", dictType.getCode());
         });
   }
 

@@ -39,20 +39,21 @@ public class CompanyBasicController {
     return CompanyVO.of(entity);
   }
 
-  @PutMapping("{id}")
-  public CompanyVO update(@PathVariable("id") String id, @Valid @RequestBody CompanyDTO dto) {
+  @PutMapping("{company-id}")
+  public CompanyVO update(
+      @PathVariable("company-id") String id, @Valid @RequestBody CompanyDTO dto) {
     CompanyEntity entity = companyService.update(id, dto);
     return CompanyVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{company-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("company-id") String id) {
     companyService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public CompanyVO getById(@PathVariable("id") String id) {
+  @GetMapping("{company-id}")
+  public CompanyVO getById(@PathVariable("company-id") String id) {
     CompanyEntity entity = companyService.findById(id);
     return CompanyVO.of(entity);
   }
@@ -63,8 +64,8 @@ public class CompanyBasicController {
     return new PagedModel<>(entities.map(CompanyVO::of));
   }
 
-  @GetMapping("/by-organize-code/{organizeCode}")
-  public CompanyVO getByOrganizeId(@PathVariable("organizeCode") String organizeCode) {
+  @GetMapping("/by-organize-code/{organize-code}")
+  public CompanyVO getByOrganizeId(@PathVariable("organize-code") String organizeCode) {
     return companyService
         .getCompanyRepository()
         .findByOrganizeCode(organizeCode)

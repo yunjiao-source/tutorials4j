@@ -37,20 +37,20 @@ public class ClientUpmsController {
     return clientService.create(dto);
   }
 
-  @PutMapping("{id}")
+  @PutMapping("{menu-id}")
   public ClientEntity update(
-      @PathVariable("id") String id, @Valid @RequestBody ClientUpdateDTO dto) {
+      @PathVariable("menu-id") String id, @Valid @RequestBody ClientUpdateDTO dto) {
     return clientService.update(id, dto);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{menu-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("menu-id") String id) {
     clientService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public ClientEntity getById(@PathVariable("id") String id) {
+  @GetMapping("{menu-id}")
+  public ClientEntity getById(@PathVariable("menu-id") String id) {
     return clientService.findById(id);
   }
 

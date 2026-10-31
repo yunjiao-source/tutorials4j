@@ -39,20 +39,21 @@ public class DictDataBasicController {
     return DictDataVO.of(entity);
   }
 
-  @PutMapping("{id}")
-  public DictDataVO update(@PathVariable("id") String id, @Valid @RequestBody DictDataDTO dto) {
+  @PutMapping("{dict-data-id}")
+  public DictDataVO update(
+      @PathVariable("dict-data-id") String id, @Valid @RequestBody DictDataDTO dto) {
     DictDataEntity entity = dictDataService.update(id, dto);
     return DictDataVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{dict-data-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("dict-data-id") String id) {
     dictDataService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public DictDataVO getById(@PathVariable("id") String id) {
+  @GetMapping("{dict-data-id}")
+  public DictDataVO getById(@PathVariable("dict-data-id") String id) {
     DictDataEntity entity = dictDataService.findById(id);
     return DictDataVO.of(entity);
   }

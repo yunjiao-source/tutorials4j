@@ -46,32 +46,32 @@ public class MenuUpmsController {
     return MenuVO.of(entity);
   }
 
-  @PutMapping("{id}")
-  public MenuVO update(@PathVariable("id") String id, @Valid @RequestBody MenuDTO dto) {
+  @PutMapping("{menu-id}")
+  public MenuVO update(@PathVariable("menu-id") String id, @Valid @RequestBody MenuDTO dto) {
     MenuEntity entity = menuService.update(id, dto);
     return MenuVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{menu-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("menu-id") String id) {
     menuService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public MenuVO getById(@PathVariable("id") String id) {
+  @GetMapping("{menu-id}")
+  public MenuVO getById(@PathVariable("menu-id") String id) {
     MenuEntity entity = menuService.findById(id);
     return MenuVO.of(entity);
   }
 
-  @GetMapping("{id}/roles")
-  public List<RoleVO> getRolesById(@PathVariable("id") String id) {
+  @GetMapping("{menu-id}/roles")
+  public List<RoleVO> getRolesById(@PathVariable("menu-id") String id) {
     Set<RoleEntity> entities = menuService.findRolesById(id);
     return RoleVO.of(entities);
   }
 
-  @GetMapping("{id}/children")
-  public List<MenuVO> getChildrenById(@PathVariable("id") String id) {
+  @GetMapping("{menu-id}/children")
+  public List<MenuVO> getChildrenById(@PathVariable("menu-id") String id) {
     List<MenuEntity> entities = menuService.findChildrenById(id);
     return MenuVO.of(entities);
   }
@@ -79,14 +79,8 @@ public class MenuUpmsController {
   @GetMapping("root")
   public List<MenuVO> getRoot(MenuQuery query) {
     query.setAllRoot(YesNoEnum.yes);
+    query.setTypesNotIn(Set.of(MenuType.button));
     List<MenuEntity> entities = menuService.findByQuery(query);
-    return MenuVO.of(entities);
-  }
-
-  @GetMapping("list")
-  public List<MenuVO> getList(MenuQuery query) {
-    List<MenuEntity> entities = menuService.findByQuery(query);
-
     return MenuVO.of(entities);
   }
 

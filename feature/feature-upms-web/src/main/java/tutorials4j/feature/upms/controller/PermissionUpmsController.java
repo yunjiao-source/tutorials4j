@@ -44,27 +44,27 @@ public class PermissionUpmsController {
     return PermissionVO.of(entity);
   }
 
-  @PutMapping("{id}")
+  @PutMapping("{permission-id}")
   public PermissionVO update(
-      @PathVariable("id") String id, @Valid @RequestBody PermissionUpdateDTO dto) {
+      @PathVariable("permission-id") String id, @Valid @RequestBody PermissionUpdateDTO dto) {
     PermissionEntity entity = permissionService.update(id, dto);
     return PermissionVO.of(entity);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("{permission-id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") String id) {
+  public void delete(@PathVariable("permission-id") String id) {
     permissionService.delete(id);
   }
 
-  @GetMapping("{id}")
-  public PermissionVO getById(@PathVariable("id") String id) {
+  @GetMapping("{permission-id}")
+  public PermissionVO getById(@PathVariable("permission-id") String id) {
     PermissionEntity entity = permissionService.findById(id);
     return PermissionVO.of(entity);
   }
 
-  @GetMapping("{id}/roles")
-  public List<RoleVO> getRolesById(@PathVariable("id") String id) {
+  @GetMapping("{permission-id}/roles")
+  public List<RoleVO> getRolesById(@PathVariable("permission-id") String id) {
     Set<RoleEntity> entities = permissionService.findRolesById(id);
     return RoleVO.of(entities);
   }

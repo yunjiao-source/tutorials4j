@@ -61,10 +61,12 @@ public class OpenapiUaaController {
   @RequestMapping("logout")
   public void logout() {
     UserModel userModel = SaTokenToolkitUtils.getUserFromSession();
-    StpUtil.logout();
+    if (userModel != null) {
+      StpUtil.logout();
 
-    AuthEvent authEvent = loginEventCreatorComponent.create(userModel);
-    authEvent.setStatus(AuthStatus.logout);
-    SpringUtils.getApplicationContext().publishEvent(authEvent);
+      AuthEvent authEvent = loginEventCreatorComponent.create(userModel);
+      authEvent.setStatus(AuthStatus.logout);
+      SpringUtils.getApplicationContext().publishEvent(authEvent);
+    }
   }
 }
