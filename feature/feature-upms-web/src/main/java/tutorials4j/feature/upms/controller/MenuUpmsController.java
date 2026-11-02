@@ -92,6 +92,18 @@ public class MenuUpmsController {
     return MenuVO.toTree(MenuVO.of(entities));
   }
 
+  @GetMapping("list")
+  public List<MenuVO> getList(MenuQuery query) {
+    List<MenuEntity> entities = menuService.findByQuery(query);
+    return MenuVO.of(entities);
+  }
+
+  @GetMapping("tree")
+  public List<Tree<String>> getTree(MenuQuery query) {
+    List<MenuEntity> entities = menuService.findByQuery(query);
+    return MenuVO.toTree(MenuVO.of(entities));
+  }
+
   @GetMapping("page")
   public PagedModel<MenuVO> getByPage(MenuQuery query, Pageable pageable) {
     Page<MenuEntity> entities = menuService.findByPage(query, pageable);

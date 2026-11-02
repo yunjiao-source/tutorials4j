@@ -79,6 +79,10 @@ public class MenuVO extends UpmsVO {
 
   private String title;
 
+  private YesNoEnum enabled;
+
+  private YesNoEnum reserved;
+
   public static MenuVO of(MenuEntity entity) {
     Assert.notNull(entity, "entity must not be null");
 
@@ -108,13 +112,13 @@ public class MenuVO extends UpmsVO {
           }
 
           tree.putExtra("pid", menu.getParentId());
-
-          Opt.ofBlankAble(menu.getPath()).ifPresent(value -> tree.putExtra("path", value));
-          Opt.ofBlankAble(menu.getName()).ifPresent(value -> tree.putExtra("name", value));
-          Opt.ofBlankAble(menu.getComponent())
-              .ifPresent(value -> tree.putExtra("component", value));
-          Opt.ofBlankAble(menu.getRedirect()).ifPresent(value -> tree.putExtra("redirect", value));
-          Opt.ofNullable(menu.getType()).ifPresent(value -> tree.putExtra("type", value.name()));
+          tree.putExtra("path", menu.getPath());
+          tree.putExtra("name", menu.getName());
+          tree.putExtra("component", menu.getComponent());
+          tree.putExtra("redirect", menu.getRedirect());
+          tree.putExtra("type", menu.getType());
+          tree.putExtra("reserved", menu.getReserved());
+          tree.putExtra("enabled", menu.getEnabled());
 
           Map<String, Object> metaMap = new HashMap<>();
           Opt.ofBlankAble(menu.getActiveIcon())
