@@ -80,27 +80,32 @@ public class MenuUpmsController {
   public List<MenuVO> getRoot(MenuQuery query) {
     query.setAllRoot(YesNoEnum.yes);
     query.setTypesNotIn(Set.of(MenuType.button));
-    List<MenuEntity> entities = menuService.findByQuery(query);
+    List<MenuEntity> entities = menuService.findAll(query);
     return MenuVO.of(entities);
   }
 
   @GetMapping("router")
   public List<Tree<String>> getRouter(MenuQuery query) {
     query.setTypesNotIn(Set.of(MenuType.button));
-    List<MenuEntity> entities = menuService.findByQuery(query);
+    List<MenuEntity> entities = menuService.findAll(query);
 
     return MenuVO.toTree(MenuVO.of(entities));
   }
 
   @GetMapping("list")
   public List<MenuVO> getList(MenuQuery query) {
-    List<MenuEntity> entities = menuService.findByQuery(query);
+    List<MenuEntity> entities = menuService.findAll(query);
     return MenuVO.of(entities);
+  }
+
+  @GetMapping("count")
+  public long getCount(MenuQuery query) {
+    return menuService.count(query);
   }
 
   @GetMapping("tree")
   public List<Tree<String>> getTree(MenuQuery query) {
-    List<MenuEntity> entities = menuService.findByQuery(query);
+    List<MenuEntity> entities = menuService.findAll(query);
     return MenuVO.toTree(MenuVO.of(entities));
   }
 

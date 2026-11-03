@@ -82,6 +82,6 @@ public class OrganizeService implements BaseService<OrganizeEntity, String> {
 
   public List<OrganizeEntity> findAllValid() {
     OrganizeQuery query = OrganizeQuery.builder().enabled(YesNoEnum.yes).build();
-    return findByQuery(query);
+    return findAll(query);
   }
 }

@@ -223,7 +223,11 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
     return getRepository().findAll(query, pageable);
   }
 
-  default List<E> findByQuery(BaseQuery<E> query) {
+  default List<E> findAll(BaseQuery<E> query) {
     return getRepository().findAll(query);
+  }
+
+  default long count(BaseQuery<E> query) {
+    return getRepository().count(query);
   }
 }

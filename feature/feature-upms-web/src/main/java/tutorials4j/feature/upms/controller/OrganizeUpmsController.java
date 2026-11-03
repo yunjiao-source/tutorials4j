@@ -85,13 +85,13 @@ public class OrganizeUpmsController {
   @GetMapping("root")
   public List<OrganizeVO> getRoot(OrganizeQuery query) {
     query.setAllRoot(YesNoEnum.yes);
-    List<OrganizeEntity> entities = organizeService.findByQuery(query);
+    List<OrganizeEntity> entities = organizeService.findAll(query);
     return OrganizeVO.of(entities);
   }
 
   @GetMapping("tree")
   public List<Tree<String>> getTree(OrganizeQuery query) {
-    List<OrganizeEntity> entities = organizeService.findByQuery(query);
+    List<OrganizeEntity> entities = organizeService.findAll(query);
 
     return OrganizeVO.toTree(OrganizeVO.of(entities));
   }

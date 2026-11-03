@@ -64,6 +64,6 @@ public class ConfigService implements BaseService<ConfigEntity, String> {
     Assert.notNull(category, "category must not be null");
 
     ConfigQuery query = ConfigQuery.builder().category(category).enabled(YesNoEnum.yes).build();
-    return findByQuery(query);
+    return findAll(query);
   }
 }

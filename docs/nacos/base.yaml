@@ -14,6 +14,15 @@ tutorials4j:
           user-key-prefix: 'satoken:user-find-role:'
           user-key-duration: 30m
 
+    data:
+      jpa:
+        entity-base-packages:
+          - tutorials4j.feature.basic.entity
+          - tutorials4j.feature.upms.entity
+        repository-base-packages:
+          - tutorials4j.feature.upms.repository
+          - tutorials4j.feature.basic.repository
+
 spring:
   cloud:
     bus:

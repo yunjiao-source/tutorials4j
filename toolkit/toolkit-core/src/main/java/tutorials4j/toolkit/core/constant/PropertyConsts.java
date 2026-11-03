@@ -25,6 +25,14 @@ public interface PropertyConsts {
 
   String PROPERTY_TOOLKIT_DATA_MYBATIS_PLUS = PROPERTY_TOOLKIT_DATA + ".mybatis-plus";
 
+  String PROPERTY_TOOLKIT_DATA_JPA = PROPERTY_TOOLKIT_DATA + ".jpa";
+
+  String PROPERTY_TOOLKIT_DATA_JPA_REPOSITORY_BASE_PACKAGES =
+      PROPERTY_TOOLKIT_DATA_JPA + ".repository-base-packages";
+
+  String PROPERTY_TOOLKIT_DATA_JPA_ENTITY_BASE_PACKAGES =
+      PROPERTY_TOOLKIT_DATA_JPA + ".entity-base-packages";
+
   /** cache */
   String PROPERTY_TOOLKIT_CACHE = PROPERTY_TOOLKIT + ".cache";
 

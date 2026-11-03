@@ -75,11 +75,11 @@ public class MenuService implements BaseService<MenuEntity, String> {
   public List<MenuEntity> findRouter() {
     MenuQuery query =
         MenuQuery.builder().typesNotIn(Set.of(MenuType.button)).enabled(YesNoEnum.yes).build();
-    return findByQuery(query);
+    return findAll(query);
   }
 
   public List<MenuEntity> findAllValid() {
     MenuQuery query = MenuQuery.builder().enabled(YesNoEnum.yes).build();
-    return findByQuery(query);
+    return findAll(query);
   }
 }

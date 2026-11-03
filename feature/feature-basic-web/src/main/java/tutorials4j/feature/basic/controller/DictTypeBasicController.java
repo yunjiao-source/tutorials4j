@@ -75,7 +75,7 @@ public class DictTypeBasicController {
   @GetMapping("root")
   public List<DictTypeVO> getRoot(DictTypeQuery query) {
     query.setAllRoot(YesNoEnum.yes);
-    List<DictTypeEntity> entities = dictTypeService.findByQuery(query);
+    List<DictTypeEntity> entities = dictTypeService.findAll(query);
     return DictTypeVO.of(entities);
   }
 
@@ -84,13 +84,13 @@ public class DictTypeBasicController {
       @PathVariable("dict-type-id") String id, DictTypeQuery query) {
     query.setParentId(id);
     query.setAllRoot(YesNoEnum.no);
-    List<DictTypeEntity> entities = dictTypeService.findByQuery(query);
+    List<DictTypeEntity> entities = dictTypeService.findAll(query);
     return DictTypeVO.of(entities);
   }
 
   @GetMapping("tree")
   public List<Tree<String>> getTree(DictTypeQuery query) {
-    List<DictTypeEntity> entities = dictTypeService.findByQuery(query);
+    List<DictTypeEntity> entities = dictTypeService.findAll(query);
     return DictTypeVO.toTree(DictTypeVO.of(entities));
   }
 

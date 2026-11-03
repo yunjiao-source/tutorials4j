@@ -9,6 +9,7 @@ import java.util.List;
  * @author YunJiao Yang
  */
 public interface DefaultConsts {
+  int MAX_JPA_FIND_COUNT_BY_QUERY = 4000;
 
   String REMEMBER_ME = "remember-me";
 
