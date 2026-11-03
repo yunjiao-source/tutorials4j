@@ -3,13 +3,16 @@ package tutorials4j.service.gateway.config;
 import io.micrometer.tracing.Tracer;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import tutorials4j.service.gateway.sentinel.SentinelExceptionHandler;
+import tutorials4j.toolkit.data.hibernate.domain.QueryRepositoryImpl;
 
 /**
  * TODO
@@ -18,6 +21,10 @@ import tutorials4j.service.gateway.sentinel.SentinelExceptionHandler;
  */
 @Slf4j
 @Configuration
+@EntityScan(basePackages = "tutorials4j.feature.upms.entity")
+@EnableJpaRepositories(
+    basePackages = "tutorials4j.feature.upms.repository",
+    repositoryBaseClass = QueryRepositoryImpl.class)
 public class GatewayServiceConfiguration {
   @PostConstruct
   public void postConstruct() {
