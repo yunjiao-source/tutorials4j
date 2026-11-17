@@ -1,0 +1,100 @@
+package tutorials4j.toolkit.satoken.strategy;
+
+import cn.dev33.satoken.SaManager;
+import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.context.model.SaResponse;
+import cn.dev33.satoken.exception.DisableServiceException;
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
+import cn.dev33.satoken.exception.SaTokenException;
+import cn.dev33.satoken.exception.SameTokenInvalidException;
+import cn.dev33.satoken.filter.SaFilterErrorStrategy;
+import io.micrometer.tracing.Tracer;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tutorials4j.toolkit.core.web.HandleException;
+import tutorials4j.toolkit.satoken.exception.BlockUrlException;
+
+/**
+ * TODO
+ *
+ * @author YunJiao Yang
+ */
+@Order(Ordered.HIGHEST_PRECEDENCE)
+@RestControllerAdvice
+@RequiredArgsConstructor
+public class CommonFilterErrorStrategy implements SaFilterErrorStrategy, HandleException {
+  private final Tracer tracer;
+
+  @ExceptionHandler(SaTokenException.class)
+  public ProblemDetail handlerSaTokenException(SaTokenException e) {
+    return handleThrowable(e);
+  }
+
+  @Override
+  public Object run(Throwable t) {
+    ProblemDetail problemDetail = handleThrowable(t);
+    // 获取响应对象，用于设置状态码和响应头
+    SaResponse response = SaHolder.getResponse();
+    response.setStatus(problemDetail.getStatus());
+    return SaManager.getSaJsonTemplate().objectToJson(problemDetail);
+  }
+
+  protected ProblemDetail handleThrowable(Throwable t) {
+    String deltail = "";
+    // 获取响应对象，用于设置状态码和响应头
+    if (t instanceof SaTokenException saTokenException) {
+      HttpStatus httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
+      if (t instanceof NotLoginException notLoginException) {
+        httpStatus = HttpStatus.UNAUTHORIZED;
+        deltail =
+            switch (notLoginException.getType()) {
+              case NotLoginException.TOKEN_TIMEOUT, NotLoginException.TOKEN_FREEZE -> "登录已过期，请重新登录";
+              case NotLoginException.BE_REPLACED -> "当前账号已在其他设备登录，您已被强制下线";
+              case NotLoginException.KICK_OUT -> "账号已被管理员强制下线";
+              default -> "登录状态异常，请重新登录";
+            };
+      } else if (t instanceof NotPermissionException
+          || t instanceof NotRoleException
+          || t instanceof DisableServiceException
+          || t instanceof BlockUrlException) {
+        httpStatus = HttpStatus.FORBIDDEN;
+        deltail = "没有访问权限，请联系管理员授权";
+      } else if (t instanceof SameTokenInvalidException) {
+        httpStatus = HttpStatus.FORBIDDEN;
+        deltail = "无效Same-Token：禁止直接访问后端服务";
+      }
+
+      return createProblemDetail(saTokenException, httpStatus, deltail);
+    }
+
+    return handleException(t, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  protected ProblemDetail createProblemDetail(
+      SaTokenException saTokenException, HttpStatus httpStatus, String deltail) {
+    ProblemDetail problemDetail =
+        handleException(
+            saTokenException,
+            httpStatus,
+            (errorDetail -> {
+              errorDetail.addParam("code", saTokenException.getCode());
+            }));
+    if (StringUtils.isNotBlank(deltail)) {
+      problemDetail.setDetail(deltail);
+    }
+    return problemDetail;
+  }
+
+  @Override
+  public Tracer getTrace() {
+    return tracer;
+  }
+}

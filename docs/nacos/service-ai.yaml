@@ -1,0 +1,6 @@
+spring:
+  ai:
+    deepseek:
+      api-key: ${DS_API_KEY}
+      chat:
+        model: deepseek-flash
