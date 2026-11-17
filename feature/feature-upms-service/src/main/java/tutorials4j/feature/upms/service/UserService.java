@@ -75,7 +75,7 @@ public class UserService implements BaseService<UserEntity, String> {
   public UserEntity update(String id, @Valid UserUpdateDTO dto) {
     Assert.notNull(dto, "dto must not be null");
 
-    UserEntity entity = findById(id);
+    UserEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return userRepository.save(entity);
   }
@@ -101,7 +101,7 @@ public class UserService implements BaseService<UserEntity, String> {
 
   @Transactional(rollbackFor = Exception.class)
   public UserEntity addRoles(String id, Collection<String> roles) {
-    UserEntity entity = findById(id);
+    UserEntity entity = fetchById(id);
 
     Set<RoleEntity> roleEntities = roleRepository.findByCodeIn(roles);
     entity.setRoles(roleEntities);

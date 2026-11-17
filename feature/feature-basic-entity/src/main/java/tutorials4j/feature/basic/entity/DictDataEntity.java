@@ -55,6 +55,8 @@ public class DictDataEntity extends BasicEntity {
 
   @Column private Integer ordered;
 
+  @Column private String fullName;
+
   @Column(name = "dict_type_id", insertable = false, updatable = false)
   private String dictTypeId;
 
@@ -69,4 +71,24 @@ public class DictDataEntity extends BasicEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "dict_type_id", foreignKey = @ForeignKey(name = "basic_dict_data_fk2"))
   private DictTypeEntity dictType;
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+    setFullNameDefault();
+  }
+
+  @Override
+  protected void preUpdate() {
+    super.preUpdate();
+    setFullNameDefault();
+  }
+
+  protected void setFullNameDefault() {
+    if (parent != null) {
+      fullName = parent.getFullName() + "/" + name;
+    } else {
+      fullName = name;
+    }
+  }
 }

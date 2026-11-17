@@ -77,25 +77,25 @@ public class RoleUpmsController {
 
   @GetMapping("{role-id}")
   public RoleVO getById(@PathVariable("role-id") String id) {
-    RoleEntity entity = roleService.findById(id);
+    RoleEntity entity = roleService.fetchById(id);
     return RoleVO.of(entity);
   }
 
   @GetMapping("{role-id}/permissions")
   public List<PermissionVO> getPermissionsById(@PathVariable("role-id") String id) {
-    RoleEntity entity = roleService.findById(id);
+    RoleEntity entity = roleService.fetchById(id);
     return PermissionVO.of(entity.getPermissions());
   }
 
   @GetMapping("{role-id}/menus")
   public List<MenuVO> getMenusById(@PathVariable("role-id") String id) {
-    RoleEntity entity = roleService.findById(id);
+    RoleEntity entity = roleService.fetchById(id);
     return MenuVO.of(entity.getMenus());
   }
 
   @GetMapping("{role-id}/organizes")
   public List<OrganizeVO> getOrganizesById(@PathVariable("role-id") String id) {
-    RoleEntity entity = roleService.findById(id);
+    RoleEntity entity = roleService.fetchById(id);
     return OrganizeVO.of(entity.getOrganizes());
   }
 

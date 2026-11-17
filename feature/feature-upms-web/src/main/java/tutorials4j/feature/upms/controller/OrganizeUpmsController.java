@@ -60,14 +60,14 @@ public class OrganizeUpmsController {
 
   @GetMapping("{organize-id}")
   public OrganizeVO getById(@PathVariable("organize-id") String id) {
-    OrganizeEntity entity = organizeService.findById(id);
+    OrganizeEntity entity = organizeService.fetchById(id);
     return OrganizeVO.of(entity);
   }
 
   @GetMapping("page")
   public PagedModel<OrganizeVO> getByPage(OrganizeQuery query, Pageable pageable) {
     Page<OrganizeEntity> entities = organizeService.findByPage(query, pageable);
-    return new PagedModel<>(entities.map(OrganizeVO::of));
+    return new PagedModel<>(entities.map(OrganizeVO::withParent));
   }
 
   @GetMapping("{organize-id}/roles")
@@ -85,6 +85,12 @@ public class OrganizeUpmsController {
   @GetMapping("root")
   public List<OrganizeVO> getRoot(OrganizeQuery query) {
     query.setAllRoot(YesNoEnum.yes);
+    List<OrganizeEntity> entities = organizeService.findAll(query);
+    return OrganizeVO.of(entities);
+  }
+
+  @GetMapping("list")
+  public List<OrganizeVO> getList(OrganizeQuery query) {
     List<OrganizeEntity> entities = organizeService.findAll(query);
     return OrganizeVO.of(entities);
   }

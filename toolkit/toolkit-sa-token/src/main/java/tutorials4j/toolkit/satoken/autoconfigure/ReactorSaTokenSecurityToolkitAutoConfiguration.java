@@ -1,5 +1,6 @@
 package tutorials4j.toolkit.satoken.autoconfigure;
 
+import cn.dev33.satoken.filter.SaFilterErrorStrategy;
 import cn.dev33.satoken.reactor.filter.SaReactorFilter;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.context.annotation.Bean;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 
 /**
  * TODO
@@ -28,7 +28,7 @@ public class ReactorSaTokenSecurityToolkitAutoConfiguration {
 
   @Bean
   SaReactorFilter saReactorFilter(
-      ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy,
+      SaFilterErrorStrategy saFilterErrorStrategy,
       CompositeSaFilterAuthStrategy strategy,
       SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SA-TOKEN] Sa Reactor Filter");
@@ -38,6 +38,6 @@ public class ReactorSaTokenSecurityToolkitAutoConfiguration {
         .addExclude(options.getExcludeUrls().toArray(new String[] {}))
         .setAuth(strategy.newInstanceBy(options.getAuthStrategies()))
         .setBeforeAuth(strategy.newInstanceBy(options.getBeforeAuthStrategies()))
-        .setError(toolkitSaFilterErrorStrategy);
+        .setError(saFilterErrorStrategy);
   }
 }

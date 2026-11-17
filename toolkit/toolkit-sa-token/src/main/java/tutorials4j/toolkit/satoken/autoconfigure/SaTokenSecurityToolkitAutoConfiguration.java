@@ -1,5 +1,6 @@
 package tutorials4j.toolkit.satoken.autoconfigure;
 
+import cn.dev33.satoken.filter.SaFilterErrorStrategy;
 import io.micrometer.tracing.Tracer;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
@@ -7,21 +8,25 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import tutorials4j.toolkit.satoken.component.SaLogForSlf4j;
 import tutorials4j.toolkit.satoken.func.CheckLoginSaParamFunction;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.func.NamedSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.BlockUrlsSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CheckLoginSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.CommonFilterErrorStrategy;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.CorsSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.LoggingSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.NamedSaFilterAuthStrategy;
+import tutorials4j.toolkit.satoken.strategy.OAuth2FilterErrorStrategy;
 import tutorials4j.toolkit.satoken.strategy.OptionsMethodSaFilterAuthStrategy;
 import tutorials4j.toolkit.satoken.strategy.SameTokenSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 import tutorials4j.toolkit.satoken.strategy.WhiteUrlsSaFilterAuthStrategy;
 
 /**
@@ -44,12 +49,6 @@ public class SaTokenSecurityToolkitAutoConfiguration {
   SaLogForSlf4j saLogForSlf4j() {
     log.trace("[TOOLKIT-SA-TOKEN] Sa Log For Slf4j");
     return new SaLogForSlf4j();
-  }
-
-  @Bean
-  ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy(Tracer tracer) {
-    log.trace("[TOOLKIT-SA-TOKEN] Toolkit Sa Filter Error Strategy");
-    return new ToolkitSaFilterErrorStrategy(tracer);
   }
 
   @Bean
@@ -132,5 +131,25 @@ public class SaTokenSecurityToolkitAutoConfiguration {
   CorsSaFilterAuthStrategy corsBeforeSaFilterAuthStrategy() {
     log.trace("[TOOLKIT-SA-TOKEN] Cors Before Sa Filter Auth Strategy");
     return new CorsSaFilterAuthStrategy();
+  }
+
+  @Configuration(proxyBeanMethods = false)
+  @ConditionalOnMissingClass("cn.dev33.satoken.exception.SaOAuth2Exception")
+  static class CommonStrategyConfig {
+    @Bean
+    SaFilterErrorStrategy commonFilterErrorStrategy(Tracer tracer) {
+      log.trace("[TOOLKIT-SA-TOKEN] Common Sa Filter Error Strategy");
+      return new CommonFilterErrorStrategy(tracer);
+    }
+  }
+
+  @Configuration(proxyBeanMethods = false)
+  @ConditionalOnClass(name = "cn.dev33.satoken.exception.SaOAuth2Exception")
+  static class OAuth2StrategyConfig {
+    @Bean
+    SaFilterErrorStrategy oauth2FilterErrorStrategy(Tracer tracer) {
+      log.trace("[TOOLKIT-SA-TOKEN] OAuth2 Sa Filter Error Strategy");
+      return new OAuth2FilterErrorStrategy(tracer);
+    }
   }
 }

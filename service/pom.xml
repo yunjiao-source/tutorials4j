@@ -20,7 +20,7 @@
         <module>service-uaa</module>
         <module>service-system</module>
         <module>service-test</module>
-
+        <module>service-ai</module>
     </modules>
 
     <build>

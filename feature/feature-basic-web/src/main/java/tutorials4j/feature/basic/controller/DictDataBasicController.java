@@ -54,7 +54,7 @@ public class DictDataBasicController {
 
   @GetMapping("{dict-data-id}")
   public DictDataVO getById(@PathVariable("dict-data-id") String id) {
-    DictDataEntity entity = dictDataService.findById(id);
+    DictDataEntity entity = dictDataService.fetchById(id);
     return DictDataVO.of(entity);
   }
 

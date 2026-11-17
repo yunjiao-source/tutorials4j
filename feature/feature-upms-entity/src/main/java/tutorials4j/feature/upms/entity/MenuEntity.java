@@ -142,10 +142,32 @@ public class MenuEntity extends UpmsEntity {
   /** 标题名称 */
   @Column private String title;
 
+  @Column private String fullTitle;
+
   @OneToMany(mappedBy = "parent")
   @OrderBy("path ASC")
   private List<MenuEntity> children = new ArrayList<>();
 
   @ManyToMany(mappedBy = "menus")
   private Set<RoleEntity> roles = new HashSet<>();
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+    setFullTitleDefault();
+  }
+
+  @Override
+  protected void preUpdate() {
+    super.preUpdate();
+    setFullTitleDefault();
+  }
+
+  protected void setFullTitleDefault() {
+    if (parent != null) {
+      fullTitle = parent.getFullTitle() + "/" + title;
+    } else {
+      fullTitle = title;
+    }
+  }
 }

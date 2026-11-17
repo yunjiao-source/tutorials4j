@@ -46,7 +46,7 @@ public class ClientService implements BaseService<ClientEntity, String> {
   public ClientEntity update(String id, @Valid ClientUpdateDTO dto) {
     Assert.notNull(dto, "model must not be null");
 
-    ClientEntity entity = findById(id);
+    ClientEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     UpmsFeatureManager.getInstance().setClientEntityDefaultValue.accept(entity);
     return clientRepository.save(entity);

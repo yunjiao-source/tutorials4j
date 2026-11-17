@@ -45,11 +45,13 @@ public class OrganizeEntity extends UpmsEntity {
 
   @Column private String code;
 
-  @Column private Integer ordered;
-
   @Column
   @Enumerated(EnumType.STRING)
   private OrganizeCategory category;
+
+  @Column private Integer ordered;
+
+  @Column private String fullName;
 
   @OneToMany(mappedBy = "parent")
   @OrderBy("ordered ASC")
@@ -57,4 +59,24 @@ public class OrganizeEntity extends UpmsEntity {
 
   @ManyToMany(mappedBy = "organizes")
   private Set<RoleEntity> roles = new HashSet<>();
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+    setFullNameDefault();
+  }
+
+  @Override
+  protected void preUpdate() {
+    super.preUpdate();
+    setFullNameDefault();
+  }
+
+  protected void setFullNameDefault() {
+    if (parent != null) {
+      fullName = parent.getFullName() + "/" + name;
+    } else {
+      fullName = name;
+    }
+  }
 }

@@ -43,20 +43,20 @@ class ReadableServiceTest {
   }
 
   @Test
-  @DisplayName("findById 命中时返回实体")
-  void shouldFindById() {
+  @DisplayName("fetchById 命中时返回实体")
+  void shouldFetchById() {
     TestEntity expected = new TestEntity();
     when(repository.findById(1L)).thenReturn(Optional.of(expected));
 
-    assertThat(service.findById(1L)).isSameAs(expected);
+    assertThat(service.fetchById(1L)).isSameAs(expected);
   }
 
   @Test
-  @DisplayName("findById 未命中时抛出带错误码与主键参数的异常")
+  @DisplayName("fetchById 未命中时抛出带错误码与主键参数的异常")
   void shouldThrowWhenEntityNotFound() {
     when(repository.findById(1L)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> service.findById(1L))
+    assertThatThrownBy(() -> service.fetchById(1L))
         .isInstanceOf(ErrorCodeException.class)
         .hasMessage("查询实体不存在")
         .satisfies(

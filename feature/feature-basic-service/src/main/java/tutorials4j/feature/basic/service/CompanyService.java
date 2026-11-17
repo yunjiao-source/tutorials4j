@@ -43,7 +43,7 @@ public class CompanyService implements BaseService<CompanyEntity, String> {
   public CompanyEntity update(String id, @Valid CompanyDTO dto) {
     Assert.notNull(dto, "dto must not be null");
 
-    CompanyEntity entity = findById(id);
+    CompanyEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return companyRepository.save(entity);
   }

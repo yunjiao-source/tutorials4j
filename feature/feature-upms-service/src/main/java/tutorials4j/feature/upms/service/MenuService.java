@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,13 +41,13 @@ public class MenuService implements BaseService<MenuEntity, String> {
 
   @Transactional(rollbackFor = Exception.class)
   public Set<RoleEntity> findRolesById(String parentId) {
-    MenuEntity entity = findById(parentId);
+    MenuEntity entity = fetchById(parentId);
     return entity.getRoles();
   }
 
   @Transactional(rollbackFor = Exception.class)
   public List<MenuEntity> findChildrenById(String parentId) {
-    MenuEntity entity = findById(parentId);
+    MenuEntity entity = fetchById(parentId);
     return entity.getChildren();
   }
 
@@ -54,7 +55,10 @@ public class MenuService implements BaseService<MenuEntity, String> {
     Assert.notNull(dto, "dto must not be null");
     MenuEntity entity = new MenuEntity();
     BeanUtils.copyProperties(dto, entity);
-
+    if (StringUtils.isNotBlank(dto.getParentId())) {
+      MenuEntity parentEntity = this.fetchById(dto.getParentId());
+      entity.setParent(parentEntity);
+    }
     return menuRepository.save(entity);
   }
 
@@ -62,7 +66,7 @@ public class MenuService implements BaseService<MenuEntity, String> {
   public MenuEntity update(String id, @Valid MenuDTO dto) {
     Assert.notNull(dto, "dto must not be null");
 
-    MenuEntity entity = findById(id);
+    MenuEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return menuRepository.save(entity);
   }

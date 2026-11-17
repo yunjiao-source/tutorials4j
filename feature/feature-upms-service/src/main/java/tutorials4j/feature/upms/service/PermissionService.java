@@ -34,7 +34,7 @@ public class PermissionService implements BaseService<PermissionEntity, String> 
 
   @Transactional(rollbackFor = Exception.class)
   public Set<RoleEntity> findRolesById(String parentId) {
-    PermissionEntity entity = findById(parentId);
+    PermissionEntity entity = fetchById(parentId);
     return entity.getRoles();
   }
 
@@ -50,7 +50,7 @@ public class PermissionService implements BaseService<PermissionEntity, String> 
   public PermissionEntity update(String id, @Valid PermissionUpdateDTO dto) {
     Assert.notNull(dto, "dto must not be null");
 
-    PermissionEntity entity = findById(id);
+    PermissionEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return permissionRepository.save(entity);
   }

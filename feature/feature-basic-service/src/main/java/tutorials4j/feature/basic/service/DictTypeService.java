@@ -3,6 +3,7 @@ package tutorials4j.feature.basic.service;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,10 @@ public class DictTypeService implements BaseService<DictTypeEntity, String> {
     Assert.notNull(dto, "dto must not be null");
     DictTypeEntity entity = new DictTypeEntity();
     BeanUtils.copyProperties(dto, entity);
-
+    if (StringUtils.isNotBlank(dto.getParentId())) {
+      DictTypeEntity parentEntity = this.fetchById(dto.getParentId());
+      entity.setParent(parentEntity);
+    }
     return dictTypeRepository.save(entity);
   }
 
@@ -44,7 +48,7 @@ public class DictTypeService implements BaseService<DictTypeEntity, String> {
   public DictTypeEntity update(String id, @Valid DictTypeDTO dto) {
     Assert.notNull(dto, "dto must not be null");
 
-    DictTypeEntity entity = findById(id);
+    DictTypeEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return dictTypeRepository.save(entity);
   }

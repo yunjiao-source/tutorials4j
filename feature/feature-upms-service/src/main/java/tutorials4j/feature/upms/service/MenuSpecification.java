@@ -20,6 +20,10 @@ public class MenuSpecification {
     return (root, query, cb) -> cb.isNull(root.get("parent"));
   }
 
+  public static Specification<MenuEntity> idEqual(String id) {
+    return (root, query, cb) -> StringUtils.isBlank(id) ? null : cb.equal(root.get("id"), id);
+  }
+
   public static Specification<MenuEntity> parentIdEqual(String parentId) {
     return (root, query, cb) ->
         StringUtils.isBlank(parentId) ? null : cb.equal(root.get("parentId"), parentId);
@@ -29,9 +33,17 @@ public class MenuSpecification {
     return (root, query, cb) -> enabled == null ? null : cb.equal(root.get("enabled"), enabled);
   }
 
+  public static Specification<MenuEntity> nameEqual(String name) {
+    return (root, query, cb) -> StringUtils.isBlank(name) ? null : cb.equal(root.get("name"), name);
+  }
+
   public static Specification<MenuEntity> nameLike(String name) {
     return (root, query, cb) ->
         StringUtils.isBlank(name) ? null : cb.like(root.get("name"), like(name));
+  }
+
+  public static Specification<MenuEntity> pathEqual(String path) {
+    return (root, query, cb) -> StringUtils.isBlank(path) ? null : cb.equal(root.get("path"), path);
   }
 
   public static Specification<MenuEntity> pathLike(String path) {

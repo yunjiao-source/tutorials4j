@@ -1,5 +1,6 @@
 package tutorials4j.toolkit.satoken.autoconfigure;
 
+import cn.dev33.satoken.filter.SaFilterErrorStrategy;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import jakarta.annotation.PostConstruct;
@@ -18,7 +19,6 @@ import tutorials4j.toolkit.satoken.autoconfigure.SaTokenSecurityToolkitPropertie
 import tutorials4j.toolkit.satoken.filter.SecurityContextServletFilter;
 import tutorials4j.toolkit.satoken.func.CompositeSaParamFunction;
 import tutorials4j.toolkit.satoken.strategy.CompositeSaFilterAuthStrategy;
-import tutorials4j.toolkit.satoken.strategy.ToolkitSaFilterErrorStrategy;
 
 /**
  * TODO
@@ -37,7 +37,7 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
 
   @Bean
   SaServletFilter saServletFilter(
-      ToolkitSaFilterErrorStrategy toolkitSaFilterErrorStrategy,
+      SaFilterErrorStrategy saFilterErrorStrategy,
       CompositeSaFilterAuthStrategy compositeSaFilterAuthStrategy,
       SaTokenSecurityToolkitProperties properties) {
     log.trace("[TOOLKIT-SA-TOKEN] Sa Servlet Filter");
@@ -48,7 +48,7 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
         .setAuth(compositeSaFilterAuthStrategy.newInstanceBy(options.getAuthStrategies()))
         .setBeforeAuth(
             compositeSaFilterAuthStrategy.newInstanceBy(options.getBeforeAuthStrategies()))
-        .setError(toolkitSaFilterErrorStrategy);
+        .setError(saFilterErrorStrategy);
   }
 
   @Bean
@@ -72,7 +72,9 @@ public class WebmvcSaTokenSecurityToolkitAutoConfiguration {
       InterceptorOptions options = properties.getInterceptor();
       registry
           .addInterceptor(
-              new SaInterceptor(compositeSaParamFunction)
+              new SaInterceptor(
+                      compositeSaParamFunction.newInstanceBy(
+                          properties.getInterceptor().getParamFunctions()))
                   .isAnnotation(options.isHandleAnnotation()))
           .addPathPatterns(options.getIncludePathPatterns())
           .excludePathPatterns(options.getExcludePathPatterns());

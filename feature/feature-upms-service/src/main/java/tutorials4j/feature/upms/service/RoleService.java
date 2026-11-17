@@ -58,7 +58,7 @@ public class RoleService implements BaseService<RoleEntity, String> {
   public RoleEntity update(String id, @Valid RoleUpdateDTO dto) {
     Assert.notNull(dto, "dto must not be null");
 
-    RoleEntity entity = findById(id);
+    RoleEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return roleRepository.save(entity);
   }
@@ -70,7 +70,7 @@ public class RoleService implements BaseService<RoleEntity, String> {
 
   @Transactional(rollbackFor = Exception.class)
   public RoleEntity addPermissions(String id, Collection<String> permissions) {
-    RoleEntity roleEntity = findById(id);
+    RoleEntity roleEntity = fetchById(id);
 
     Set<PermissionEntity> entities = permissionRepository.findByCodeIn(permissions);
     roleEntity.setPermissions(entities);
@@ -78,7 +78,7 @@ public class RoleService implements BaseService<RoleEntity, String> {
   }
 
   public RoleEntity addMenus(String id, Set<String> menus) {
-    RoleEntity roleEntity = findById(id);
+    RoleEntity roleEntity = fetchById(id);
 
     List<MenuEntity> entities = menuRepository.findAllById(menus);
     roleEntity.setMenus(new HashSet<>(entities));
@@ -86,7 +86,7 @@ public class RoleService implements BaseService<RoleEntity, String> {
   }
 
   public RoleEntity addOrganizes(String id, Set<String> organizes) {
-    RoleEntity roleEntity = findById(id);
+    RoleEntity roleEntity = fetchById(id);
 
     List<OrganizeEntity> entities = organizeRepository.findAllById(organizes);
     roleEntity.setOrganizes(entities);

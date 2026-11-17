@@ -54,7 +54,7 @@ public class CompanyBasicController {
 
   @GetMapping("{company-id}")
   public CompanyVO getById(@PathVariable("company-id") String id) {
-    CompanyEntity entity = companyService.findById(id);
+    CompanyEntity entity = companyService.fetchById(id);
     return CompanyVO.of(entity);
   }
 

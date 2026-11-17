@@ -30,7 +30,11 @@
             <artifactId>assembly-resource-service-starter</artifactId>
             <version>${revision}</version>
         </dependency>
-
+        <dependency>
+            <groupId>yunjiao-source.tutorials4j.assembly</groupId>
+            <artifactId>assembly-bus-amqp-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
         <!-- Sa-Token OAuth2.0 模块 -->
         <dependency>
             <groupId>cn.dev33</groupId>

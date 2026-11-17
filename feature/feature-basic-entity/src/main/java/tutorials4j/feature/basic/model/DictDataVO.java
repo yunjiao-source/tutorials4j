@@ -2,6 +2,7 @@ package tutorials4j.feature.basic.model;
 
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
+import jakarta.persistence.Column;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
@@ -44,6 +45,8 @@ public class DictDataVO extends BasicVO {
 
   private boolean disabled;
 
+  @Column private String fullName;
+
   public static DictDataVO of(DictDataEntity entity) {
     Assert.notNull(entity, "entity must not be null");
 
@@ -77,6 +80,7 @@ public class DictDataVO extends BasicVO {
 
           tree.putExtra("label", dictData.getLabel());
           tree.putExtra("value", dictData.getValue());
+          tree.putExtra("fullName", dictData.getFullName());
           tree.putExtra("disabled", dictData.isDisabled());
           tree.putExtra("code", dictData.getCode());
           tree.putExtra("description", dictData.getDescription());

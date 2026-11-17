@@ -11,6 +11,8 @@ public enum UpmsFeatureErrorCode implements ErrorCode {
   TOO_MANY_LOGIN_FAIL("频繁登录失败，请稍后重试"),
   USER_VALIDATE_FAIL("用户信息校验失败"),
 
+  ORGANIZE_HAS_CHILDREN_REMOVE_FAIL("组织存在下级组织, 删除失败"),
+
   ROLE_NOT_FOUND("角色不存在"),
 
   PERMISSION_NOT_FOUND("权限不存在"),

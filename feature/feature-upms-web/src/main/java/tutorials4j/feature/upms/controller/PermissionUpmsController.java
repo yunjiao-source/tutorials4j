@@ -59,7 +59,7 @@ public class PermissionUpmsController {
 
   @GetMapping("{permission-id}")
   public PermissionVO getById(@PathVariable("permission-id") String id) {
-    PermissionEntity entity = permissionService.findById(id);
+    PermissionEntity entity = permissionService.fetchById(id);
     return PermissionVO.of(entity);
   }
 

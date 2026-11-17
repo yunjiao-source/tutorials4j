@@ -54,7 +54,7 @@ class BaseServiceTest {
     when(repository.count()).thenReturn(1L);
 
     assertThat(service.save(entity)).isSameAs(entity);
-    assertThat(service.findById(1L)).isSameAs(entity);
+    assertThat(service.fetchById(1L)).isSameAs(entity);
     assertThat(service.count()).isEqualTo(1L);
 
     verify(repository).save(entity);

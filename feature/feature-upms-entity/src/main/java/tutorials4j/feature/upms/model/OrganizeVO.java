@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import tutorials4j.feature.upms.entity.OrganizeCategory;
 import tutorials4j.feature.upms.entity.OrganizeEntity;
+import tutorials4j.toolkit.core.model.YesNoEnum;
 
 /**
  * TODO
@@ -31,6 +32,10 @@ public class OrganizeVO extends UpmsVO {
 
   private OrganizeCategory category;
 
+  private String fullName;
+
+  private OrganizeVO parent;
+
   public static OrganizeVO of(OrganizeEntity entity) {
     Assert.notNull(entity, "entity must not be null");
 
@@ -43,6 +48,23 @@ public class OrganizeVO extends UpmsVO {
     Assert.notNull(entities, "entity must not be null");
 
     return entities.stream().map(OrganizeVO::of).toList();
+  }
+
+  public static OrganizeVO withParent(OrganizeEntity entity) {
+    Assert.notNull(entity, "entity must not be null");
+
+    OrganizeVO vo = new OrganizeVO();
+    if (entity.getParent() != null) {
+      vo.setParent(of(entity.getParent()));
+    }
+    BeanUtils.copyProperties(entity, vo);
+    return vo;
+  }
+
+  public static List<OrganizeVO> withParent(Collection<OrganizeEntity> entities) {
+    Assert.notNull(entities, "entity must not be null");
+
+    return entities.stream().map(OrganizeVO::withParent).toList();
   }
 
   public static List<Tree<String>> toTree(List<OrganizeVO> organizes, String rootId) {
@@ -59,7 +81,9 @@ public class OrganizeVO extends UpmsVO {
             tree.setWeight(organize.getOrdered());
           }
 
+          tree.putExtra("disabled", YesNoEnum.isTrue(organize.getEnabled()));
           tree.putExtra("shortName", organize.getShortName());
+          tree.putExtra("fullName", organize.getFullName());
           tree.putExtra("code", organize.getCode());
           tree.putExtra("ordered", organize.getOrdered());
           tree.putExtra("category", organize.getCategory());

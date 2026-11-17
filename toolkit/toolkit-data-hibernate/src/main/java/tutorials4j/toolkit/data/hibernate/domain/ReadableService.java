@@ -2,6 +2,7 @@ package tutorials4j.toolkit.data.hibernate.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,10 +32,14 @@ public interface ReadableService<E extends Entity, ID extends Serializable> {
    * @param id 主键
    * @return 实体
    */
-  default E findById(ID id) {
+  default E fetchById(ID id) {
     return getRepository()
         .findById(id)
         .orElseThrow(() -> DataErrorCode.FIND_ENTITY_NOT_EXISTS.throwed().param("id", id));
+  }
+
+  default Optional<E> findById(ID id) {
+    return getRepository().findById(id);
   }
 
   /**

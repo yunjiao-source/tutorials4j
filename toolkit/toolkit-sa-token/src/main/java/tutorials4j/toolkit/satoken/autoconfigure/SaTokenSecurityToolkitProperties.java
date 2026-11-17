@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import tutorials4j.toolkit.core.constant.PropertyConsts;
-import tutorials4j.toolkit.satoken.util.SaTokenToolkitUtils;
 
 /**
  * TODO
@@ -35,21 +34,13 @@ public class SaTokenSecurityToolkitProperties {
     private List<String> excludeUrls = new ArrayList<>();
     private List<String> whiteUrls = new ArrayList<>();
     private List<String> blockUrls = new ArrayList<>();
-    private List<String> authStrategies =
-        List.of(
-            SaTokenToolkitUtils.LOGGING_AUTH_STRATEGY,
-            SaTokenToolkitUtils.BLOCK_URLS_AUTH_STRATEGY,
-            SaTokenToolkitUtils.WHITE_URL_AUTH_STRATEGY,
-            SaTokenToolkitUtils.CHECK_LOGIN_AUTH_STRATEGY);
-    private List<String> beforeAuthStrategies =
-        List.of(
-            SaTokenToolkitUtils.CORS_AUTH_STRATEGY,
-            SaTokenToolkitUtils.OPTIONS_METHOD_AUTH_STRATEGY);
+    private List<String> authStrategies = new ArrayList<>();
+    private List<String> beforeAuthStrategies = new ArrayList<>();
   }
 
   @Data
   public static class InterceptorOptions {
-    private List<String> paramFunctions = List.of(SaTokenToolkitUtils.CHECK_LOGIN_PARAM_FUNCTION);
+    private List<String> paramFunctions = new ArrayList<>();
     private boolean handleAnnotation = true;
     private List<String> includePathPatterns = List.of("/**");
     private List<String> excludePathPatterns = new ArrayList<>();

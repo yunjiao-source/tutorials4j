@@ -51,6 +51,8 @@ public class DictTypeEntity extends BasicEntity {
 
   @Column private Integer ordered;
 
+  @Column private String fullName;
+
   @OneToMany(mappedBy = "parent")
   @OrderBy("ordered ASC")
   private List<DictTypeEntity> children = new ArrayList<>();
@@ -58,4 +60,24 @@ public class DictTypeEntity extends BasicEntity {
   @OneToMany(mappedBy = "dictType")
   @OrderBy("ordered ASC")
   private List<DictDataEntity> dictDataList = new ArrayList<>();
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+    setFullNameDefault();
+  }
+
+  @Override
+  protected void preUpdate() {
+    super.preUpdate();
+    setFullNameDefault();
+  }
+
+  protected void setFullNameDefault() {
+    if (parent != null) {
+      fullName = parent.getFullName() + "/" + name;
+    } else {
+      fullName = name;
+    }
+  }
 }

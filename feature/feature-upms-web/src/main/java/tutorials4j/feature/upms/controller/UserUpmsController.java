@@ -63,7 +63,7 @@ public class UserUpmsController {
 
   @GetMapping("{user-id}")
   public UserVO getById(@PathVariable("user-id") String id) {
-    UserEntity entity = userService.findById(id);
+    UserEntity entity = userService.fetchById(id);
     return UserVO.of(entity);
   }
 
@@ -75,7 +75,7 @@ public class UserUpmsController {
 
   @GetMapping("{user-id}/roles")
   public List<RoleVO> getRolesById(@PathVariable("user-id") String id) {
-    UserEntity entity = userService.findById(id);
+    UserEntity entity = userService.fetchById(id);
     return RoleVO.of(entity.getRoles());
   }
 

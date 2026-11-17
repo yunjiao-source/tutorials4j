@@ -56,7 +56,7 @@ public class ConfigBasicController {
 
   @GetMapping("{config-id}")
   public ConfigVO getById(@PathVariable("config-id") String id) {
-    ConfigEntity entity = configService.findById(id);
+    ConfigEntity entity = configService.fetchById(id);
     return ConfigVO.of(entity);
   }
 

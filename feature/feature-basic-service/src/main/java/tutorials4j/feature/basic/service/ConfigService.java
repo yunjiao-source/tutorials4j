@@ -49,7 +49,7 @@ public class ConfigService implements BaseService<ConfigEntity, String> {
   public ConfigEntity update(String id, @Valid ConfigUpdateDTO dto) {
     Assert.notNull(dto, "model must not be null");
 
-    ConfigEntity entity = findById(id);
+    ConfigEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return configRepository.save(entity);
   }

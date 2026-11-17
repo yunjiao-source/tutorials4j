@@ -60,7 +60,7 @@ public class MenuUpmsController {
 
   @GetMapping("{menu-id}")
   public MenuVO getById(@PathVariable("menu-id") String id) {
-    MenuEntity entity = menuService.findById(id);
+    MenuEntity entity = menuService.fetchById(id);
     return MenuVO.of(entity);
   }
 

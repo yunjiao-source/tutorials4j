@@ -40,4 +40,6 @@ public interface PropertyConsts {
   String PROPERTY_SERVICE = PROPERTY_TUTORIALS4J + ".service";
 
   String PROPERTY_SERVICE_UPMS = PROPERTY_SERVICE + ".upms";
+
+  String PROPERTY_SERVICE_AI = PROPERTY_SERVICE + ".ai";
 }

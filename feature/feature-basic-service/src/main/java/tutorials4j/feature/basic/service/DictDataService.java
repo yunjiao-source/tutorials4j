@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,10 @@ public class DictDataService implements BaseService<DictDataEntity, String> {
     Assert.notNull(dto, "dto must not be null");
     DictDataEntity entity = new DictDataEntity();
     BeanUtils.copyProperties(dto, entity);
-
+    if (StringUtils.isNotBlank(dto.getParentId())) {
+      DictDataEntity parentEntity = this.fetchById(dto.getParentId());
+      entity.setParent(parentEntity);
+    }
     return dictDataRepository.save(entity);
   }
 
@@ -49,7 +53,7 @@ public class DictDataService implements BaseService<DictDataEntity, String> {
   public DictDataEntity update(String id, @Valid DictDataDTO dto) {
     Assert.notNull(dto, "dto must not be null");
 
-    DictDataEntity entity = findById(id);
+    DictDataEntity entity = fetchById(id);
     BeanUtils.copyProperties(dto, entity);
     return dictDataRepository.save(entity);
   }

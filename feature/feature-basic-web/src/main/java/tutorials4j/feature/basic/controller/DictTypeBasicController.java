@@ -62,7 +62,7 @@ public class DictTypeBasicController {
 
   @GetMapping("{dict-type-id}")
   public DictTypeVO getById(@PathVariable("dict-type-id") String id) {
-    DictTypeEntity entity = dictTypeService.findById(id);
+    DictTypeEntity entity = dictTypeService.fetchById(id);
     return DictTypeVO.of(entity);
   }
 

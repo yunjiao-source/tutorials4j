@@ -22,7 +22,7 @@ public class OrganizeDTO {
   @NotBlank(message = "代码是必须的")
   private String code;
 
-  @NotBlank(message = "序号是必须的")
+  @NotNull(message = "序号是必须的")
   private Integer ordered;
 
   @NotNull(message = "分类是必须的")

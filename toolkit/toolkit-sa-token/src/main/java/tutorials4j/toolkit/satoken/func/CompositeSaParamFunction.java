@@ -4,6 +4,7 @@ import cn.dev33.satoken.fun.SaParamFunction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -21,6 +22,22 @@ public class CompositeSaParamFunction implements SaParamFunction<Object> {
   public CompositeSaParamFunction(Collection<? extends NamedSaParamFunction> saParamFunctions) {
     Assert.notNull(saParamFunctions, "saParamFunctions must not be null");
     this.functions = new ArrayList<>(saParamFunctions);
+  }
+
+  public CompositeSaParamFunction newInstanceBy(List<String> paramFunctionNames) {
+    Assert.notNull(paramFunctionNames, "authStrategyNames must not be null");
+
+    var newFunctions = new ArrayList<NamedSaParamFunction>();
+    paramFunctionNames.forEach(
+        name -> {
+          for (NamedSaParamFunction function : this.functions) {
+            if (Objects.equals(function.getName(), name)) {
+              newFunctions.add(function);
+              break;
+            }
+          }
+        });
+    return new CompositeSaParamFunction(newFunctions);
   }
 
   @Override

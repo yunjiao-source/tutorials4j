@@ -30,6 +30,23 @@ public interface SaTokenToolkitUtils {
 
   String CHECK_LOGIN_PARAM_FUNCTION = "checkLogin";
 
+  static List<String> getAllAuthStrategies() {
+    return List.of(
+        SaTokenToolkitUtils.LOGGING_AUTH_STRATEGY,
+        SaTokenToolkitUtils.BLOCK_URLS_AUTH_STRATEGY,
+        SaTokenToolkitUtils.WHITE_URL_AUTH_STRATEGY,
+        SaTokenToolkitUtils.CHECK_LOGIN_AUTH_STRATEGY);
+  }
+
+  static List<String> getAllBeforeAuthStrategies() {
+    return List.of(
+        SaTokenToolkitUtils.CORS_AUTH_STRATEGY, SaTokenToolkitUtils.OPTIONS_METHOD_AUTH_STRATEGY);
+  }
+
+  static List<String> getAllParamFunctions() {
+    return List.of(SaTokenToolkitUtils.CHECK_LOGIN_PARAM_FUNCTION);
+  }
+
   static <T> T getLoginId(Class<T> clazz) {
     var o = StpUtil.getLoginId();
 

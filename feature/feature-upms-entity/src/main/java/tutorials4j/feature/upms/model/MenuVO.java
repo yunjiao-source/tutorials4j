@@ -79,6 +79,8 @@ public class MenuVO extends UpmsVO {
 
   private String title;
 
+  private String fullTitle;
+
   private YesNoEnum enabled;
 
   private YesNoEnum reserved;
@@ -114,6 +116,7 @@ public class MenuVO extends UpmsVO {
           tree.putExtra("pid", menu.getParentId());
           tree.putExtra("path", menu.getPath());
           tree.putExtra("name", menu.getName());
+          tree.putExtra("fullTitle", menu.getFullTitle());
           tree.putExtra("component", menu.getComponent());
           tree.putExtra("redirect", menu.getRedirect());
           tree.putExtra("type", menu.getType());

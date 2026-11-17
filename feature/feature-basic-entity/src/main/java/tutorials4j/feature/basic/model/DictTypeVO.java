@@ -30,6 +30,8 @@ public class DictTypeVO extends BasicVO {
 
   private YesNoEnum isTree;
 
+  private String fullName;
+
   public static DictTypeVO of(DictTypeEntity entity) {
     Assert.notNull(entity, "entity must not be null");
 
@@ -60,6 +62,7 @@ public class DictTypeVO extends BasicVO {
 
           tree.putExtra("isTree", dictType.getIsTree());
           tree.putExtra("code", dictType.getCode());
+          tree.putExtra("fullName", dictType.getFullName());
           tree.putExtra("description", dictType.getDescription());
           tree.putExtra("label", dictType.getName());
           tree.putExtra("value", dictType.getCode());

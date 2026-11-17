@@ -51,7 +51,7 @@ public class ClientUpmsController {
 
   @GetMapping("{menu-id}")
   public ClientEntity getById(@PathVariable("menu-id") String id) {
-    return clientService.findById(id);
+    return clientService.fetchById(id);
   }
 
   @GetMapping("page")
