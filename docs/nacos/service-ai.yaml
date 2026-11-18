@@ -3,7 +3,8 @@ spring:
     chat:
       client:
         tool-calling:
-#          enabled: false   # Set ‘false’ to disable auto-registration for every call
+          enabled: false   # 设置为 false 可对所有调用禁用 ToolCallingAdvisor 自动注册。工具仍会下发给模型，但不会自动执行工具调用。
+          advisor-order: 0    # 自动注册的 ToolCallingAdvisor 在链中的位置。
     openai:
       api-key: ${OPENAI_API_KEY:123456}
     deepseek:
