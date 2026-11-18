@@ -1,5 +1,11 @@
 spring:
   ai:
+    chat:
+      client:
+        tool-calling:
+#          enabled: false   # Set ‘false’ to disable auto-registration for every call
+    openai:
+      api-key: ${OPENAI_API_KEY:123456}
     deepseek:
       api-key: ${DS_API_KEY}
       chat:

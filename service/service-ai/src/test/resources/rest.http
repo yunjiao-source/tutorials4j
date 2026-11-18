@@ -1,9 +1,9 @@
 @host = http://localhost:9804
 
 ### 1.
-GET {{host}}/default-system-text/simple
+GET {{host}}/ai/default-system-text
 Accept: application/json
 
 ### 2.
-GET {{host}}/default-system-text-with-parameters/simple?voice=teacher
+GET {{host}}/ai/default-system-text-with-parameters?voice=teacher
 Accept: application/json

@@ -6,7 +6,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.service.ai.support.ChatClientBuilderProvider;
+import tutorials4j.service.ai.support.ChatClientCache;
 
 /**
  * TODO
@@ -25,21 +25,25 @@ public class AIServiceConfiguration {
   }
 
   @Bean
-  public ChatClient chatClient(ChatClientBuilderProvider provider) {
-    return provider
-        .getBuilderDefault()
-        .create()
-        // Default System Text
-        //        .defaultSystem(s -> s.text("You are a helpful assistant")
-        //            .metadata("assistantType", "general")
-        //            .metadata("version", "1.0"))
+  public ChatClient chatClient(ChatClientCache chatClientCache) {
+    return chatClientCache.getDefaultChatClient(
+        builder -> {
+          // Default System Text
+          //          builder
+          //              .defaultSystem(
+          //                  s ->
+          //                      s.text("You are a helpful assistant")
+          //                          .metadata("assistantType", "general")
+          //                          .metadata("version", "1.0"))
 
-        // Default System Text with parameters
-        // .defaultSystem("You are a friendly chat bot that answers question in the voice of a
-        // {voice}")
+          // Default System Text with parameters
+          //              .defaultSystem(
+          //                  "You are a friendly chat bot that answers question in the voice of
+          // {voice}")
 
-        //        .defaultUser(u -> u.text("Default user context")
-        //            .metadata("sessionId", "default-session"))
-        .build();
+          //              .defaultUser(
+          //                  u -> u.text("Default user context").metadata("sessionId",
+          // "default-session"));
+        });
   }
 }

@@ -1,7 +1,6 @@
 package tutorials4j.service.ai.support;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.client.ChatClient.Builder;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.deepseek.DeepSeekChatModel;
 import org.springframework.stereotype.Component;
 
@@ -11,25 +10,18 @@ import org.springframework.stereotype.Component;
  * @author Yun Jiao
  */
 @Component
-@RequiredArgsConstructor
-public class DeepSeekChatClientBuilder implements ChatClientBuilder {
+public class DeepSeekChatClientBuilder extends AbstractChatClientBuilder {
   private final DeepSeekChatModel deepSeekChatModel;
-  private final ChatClientBuilderCreater chatClientBuilderCreater;
 
-  private Builder builder;
+  public DeepSeekChatClientBuilder(
+      ChatClientBuilderCreater chatClientBuilderCreater, DeepSeekChatModel deepSeekChatModel) {
+    super(chatClientBuilderCreater);
+    this.deepSeekChatModel = deepSeekChatModel;
+  }
 
   @Override
-  public Builder create() {
-    if (builder != null) {
-      return builder.clone();
-    }
-
-    synchronized (this) {
-      if (builder == null) {
-        builder = chatClientBuilderCreater.create(deepSeekChatModel);
-      }
-    }
-    return builder.clone();
+  protected ChatModel getChatModel() {
+    return deepSeekChatModel;
   }
 
   @Override

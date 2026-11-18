@@ -1,10 +1,12 @@
 package tutorials4j.service.ai.support;
 
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tutorials4j.service.ai.config.AIServiceProperties;
 
@@ -13,11 +15,17 @@ import tutorials4j.service.ai.config.AIServiceProperties;
  *
  * @author Yun Jiao
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ChatClientBuilderProvider {
   private final AIServiceProperties properties;
   private final List<ChatClientBuilder> builders;
+
+  @PostConstruct
+  public void postConstruct() {
+    log.trace("[SERVICE-AI] All supported model type: {}", supportModelType());
+  }
 
   public ChatClientBuilder getBuilderDefault() {
     return getBuilder(properties.getDefaultModelType());
