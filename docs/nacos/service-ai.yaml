@@ -1,10 +1,17 @@
 spring:
   ai:
     chat:
-#      client:
+      client:
+        observations:
+          # 记录 ChatClient 层的提示内容（完整的对话消息列表）
+          log-prompt: true
+          # 记录模型返回的完成内容
+          log-completion: true
 #        tool-calling:
-#          enabled: false   # 设置为 false 可对所有调用禁用 ToolCallingAdvisor 自动注册。工具仍会下发给模型，但不会自动执行工具调用。
-#          advisor-order: 0    # 自动注册的 ToolCallingAdvisor 在链中的位置。
+           # 设置为 false 可对所有调用禁用 ToolCallingAdvisor 自动注册。工具仍会下发给模型，但不会自动执行工具调用。
+#          enabled: false
+            # 自动注册的 ToolCallingAdvisor 在链中的位置。
+#          advisor-order: 0
     ollama:
       base-url: http://192.168.3.174:11434  # 本地部署的模型
       chat:

@@ -20,7 +20,7 @@ public class OllamaChatClientBuilder extends AbstractChatClientBuilder {
   }
 
   @Override
-  protected ChatModel getChatModel() {
+  public ChatModel getChatModel() {
     return ollamaChatModel;
   }
 

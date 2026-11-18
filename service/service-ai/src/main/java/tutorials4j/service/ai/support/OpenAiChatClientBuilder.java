@@ -20,7 +20,7 @@ public class OpenAiChatClientBuilder extends AbstractChatClientBuilder {
   }
 
   @Override
-  protected ChatModel getChatModel() {
+  public ChatModel getChatModel() {
     return openAiChatModel;
   }
 

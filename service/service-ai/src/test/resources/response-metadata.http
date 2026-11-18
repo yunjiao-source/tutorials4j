@@ -1,0 +1,9 @@
+@host = http://localhost:9804/response-metadata
+
+### 1. metadata
+GET {{host}}/metadata
+Accept: application/json
+
+### 1. multi-step-usage
+GET {{host}}/multi-step-usage
+Accept: application/json

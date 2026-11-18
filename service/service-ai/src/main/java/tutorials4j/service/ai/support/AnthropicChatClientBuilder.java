@@ -20,7 +20,7 @@ public class AnthropicChatClientBuilder extends AbstractChatClientBuilder {
   }
 
   @Override
-  protected ChatModel getChatModel() {
+  public ChatModel getChatModel() {
     return anthropicChatModel;
   }
 

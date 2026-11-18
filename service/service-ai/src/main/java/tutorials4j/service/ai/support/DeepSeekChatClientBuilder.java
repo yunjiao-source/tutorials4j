@@ -20,7 +20,7 @@ public class DeepSeekChatClientBuilder extends AbstractChatClientBuilder {
   }
 
   @Override
-  protected ChatModel getChatModel() {
+  public ChatModel getChatModel() {
     return deepSeekChatModel;
   }
 
