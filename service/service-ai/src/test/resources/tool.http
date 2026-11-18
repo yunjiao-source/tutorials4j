@@ -1,0 +1,9 @@
+@host = http://localhost:9804/tool
+
+### 1. tool-calling
+GET {{host}}/tool-calling
+Accept: application/json
+
+### 2. per-tool-calling
+GET {{host}}/per-tool-calling
+Accept: application/json

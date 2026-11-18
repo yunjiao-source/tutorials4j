@@ -8,5 +8,7 @@ package tutorials4j.service.ai.support;
 public enum ModelType {
   deepseek,
   openai,
-  anthropic
+  anthropic,
+
+  ollama
 }

@@ -26,7 +26,7 @@ public class AIServiceConfiguration {
 
   @Bean
   public ChatClient chatClient(ChatClientCache chatClientCache) {
-    return chatClientCache.getDefaultChatClient(
+    return chatClientCache.getDefault(
         builder -> {
           // Default System Text
           //          builder

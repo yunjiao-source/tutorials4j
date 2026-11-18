@@ -1,0 +1,5 @@
+@host = http://localhost:9804/ollama
+
+### 1. simple
+GET {{host}}/simple
+Accept: application/json

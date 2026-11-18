@@ -3,7 +3,6 @@ package tutorials4j.service.ai.controller;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.client.AdvisorParams;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -15,10 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.service.ai.support.ChatClientCache;
-import tutorials4j.service.ai.tools.DateTimeTools;
 
 /**
  * TODO
@@ -26,11 +22,10 @@ import tutorials4j.service.ai.tools.DateTimeTools;
  * @author Yun Jiao
  */
 @RestController
-@RequestMapping("ai")
+@RequestMapping("prompt-template")
 @RequiredArgsConstructor
-public class SimpleAiController {
+public class PromptTemplateController {
   private final ChatClient defaultChatClient;
-  private final ChatClientCache chatClientCache;
 
   @Value("classpath:/prompts/system-message.st")
   private Resource systemResource;
@@ -76,6 +71,7 @@ public class SimpleAiController {
   """;
 
     SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemText);
+    // 或使用外部文件注入
     // SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemResource);
     Message systemMessage =
         systemPromptTemplate.createMessage(
@@ -96,66 +92,5 @@ public class SimpleAiController {
 
     String content = defaultChatClient.prompt(prompt).call().content();
     return Map.of("completion", content);
-  }
-
-  @GetMapping("tool-calling")
-  public Map<String, String> toolCalling() {
-
-    String content =
-        defaultChatClient
-            .prompt("What day is tomorrow?")
-            .tools(new DateTimeTools())
-            .call()
-            .content();
-    return Map.of("completion", content);
-  }
-
-  @GetMapping("per-tool-calling")
-  public Map<String, String> perToolCalling() {
-
-    String content =
-        defaultChatClient
-            .prompt("What day is tomorrow?")
-            .tools(new DateTimeTools())
-            .advisors(AdvisorParams.toolCallingAdvisorAutoRegister(false))
-            .call()
-            .content();
-    return Map.of("completion", content);
-  }
-
-  @GetMapping("default-system-text")
-  public Map<String, String> defualtSystemText(
-      @RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
-    ChatClient chatClient = getDefualtSystemTextChatClient();
-    String content = chatClient.prompt().user(message).call().content();
-    return Map.of("completion", content);
-  }
-
-  @GetMapping("default-system-text-with-parameters")
-  public Map<String, String> defaultSystemTextWithParameters(
-      @RequestParam(value = "message", defaultValue = "Tell me a joke") String message,
-      String voice) {
-    ChatClient chatClient = getDefaultSystemTextWithParametersChatClient();
-    String content =
-        chatClient.prompt().system(sp -> sp.param("voice", voice)).user(message).call().content();
-    return Map.of("completion", content);
-  }
-
-  private ChatClient getDefaultSystemTextWithParametersChatClient() {
-    return chatClientCache.getDefaultChatClient(
-        "default-system-text-with-parameters",
-        builder -> {
-          builder.defaultSystem(
-              "You are a friendly chat bot that answers question in the voice of a {voice}");
-        });
-  }
-
-  private ChatClient getDefualtSystemTextChatClient() {
-    return chatClientCache.getDefaultChatClient(
-        "default-system-text",
-        builder -> {
-          builder.defaultSystem(
-              "You are a friendly chat bot that answers question in the voice of a Pirate");
-        });
   }
 }

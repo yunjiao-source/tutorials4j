@@ -1,0 +1,9 @@
+@host = http://localhost:9804/default-system
+
+### 1. default-system-text
+GET {{host}}/default-system-text
+Accept: application/json
+
+### 2. default-system-text-with-parameters
+GET {{host}}/default-system-text-with-parameters?voice=teacher
+Accept: application/json

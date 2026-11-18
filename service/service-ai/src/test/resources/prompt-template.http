@@ -1,0 +1,13 @@
+@host = http://localhost:9804/prompt-template
+
+### 1. using-a-custom-template-renderer
+GET {{host}}/using-a-custom-template-renderer
+Accept: application/json
+
+### 2. workshop-on-roles
+GET {{host}}/workshop-on-roles
+Accept: application/json
+
+### 3. workshop-on-prompt-templates
+GET {{host}}/workshop-on-prompt-templates
+Accept: application/json

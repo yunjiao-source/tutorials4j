@@ -1,0 +1,5 @@
+@host = http://localhost:9804/stream
+
+### 1. simple
+GET {{host}}/simple
+Accept: text/event-stream
