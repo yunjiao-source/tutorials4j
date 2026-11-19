@@ -1,6 +1,7 @@
 package tutorials4j.service.ai.util;
 
-import org.springframework.ai.chat.client.ChatClient;
+import org.slf4j.Logger;
+import tutorials4j.service.ai.support.ChatFacade;
 
 /**
  * TODO
@@ -8,7 +9,14 @@ import org.springframework.ai.chat.client.ChatClient;
  * @author Yun Jiao
  */
 public interface Utils {
-  static String multiStepWorkflow(ChatClient chatClient, String rawInput) {
+  String GREEN = "\u001B[32m";
+  String RESET = "\u001B[0m";
+
+  static void greenLogInfo(Logger log, String message, Object... args) {
+    log.info(GREEN + message + RESET, args);
+  }
+
+  static String multiStepWorkflow(ChatFacade chatFacade, String rawInput) {
     // 步骤 1: 从杂乱文本中提取数值和指标
     String step1Prompt =
         """
@@ -16,7 +24,7 @@ public interface Utils {
                 文本：%s
                 """
             .formatted(rawInput);
-    String extractedValues = chatClient.prompt(step1Prompt).call().content();
+    String extractedValues = chatFacade.client().prompt(step1Prompt).call().content();
 
     // 步骤 2: 将数值统一标准化为百分比格式（如果适用）
     String step2Prompt =
@@ -26,7 +34,7 @@ public interface Utils {
                 %s
                 """;
     String standardizedValues =
-        chatClient.prompt(String.format(step2Prompt, extractedValues)).call().content();
+        chatFacade.client().prompt(String.format(step2Prompt, extractedValues)).call().content();
 
     // 步骤 3: 按数值降序排序
     String step3Prompt =
@@ -36,7 +44,7 @@ public interface Utils {
                 %s
                 """
             .formatted(standardizedValues);
-    String sortedValues = chatClient.prompt(step3Prompt).call().content();
+    String sortedValues = chatFacade.client().prompt(step3Prompt).call().content();
 
     // 步骤 4: 格式化为 Markdown 表格
     String step4Prompt =
@@ -46,6 +54,6 @@ public interface Utils {
                 %s
                 """
             .formatted(sortedValues);
-    return chatClient.prompt(step4Prompt).call().content();
+    return chatFacade.client().prompt(step4Prompt).call().content();
   }
 }

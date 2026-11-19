@@ -1,0 +1,13 @@
+@host = http://localhost:9804/prompt-engineering
+
+### 1. zero-shot-prompting
+GET {{host}}/zero-shot-prompting
+Accept: application/json
+
+### 2. few-shot-prompting
+GET {{host}}/few-shot-prompting
+Accept: application/json
+
+### 3. system-prompting
+GET {{host}}/system-prompting
+Accept: application/json

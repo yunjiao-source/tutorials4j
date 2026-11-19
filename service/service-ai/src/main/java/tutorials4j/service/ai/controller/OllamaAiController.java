@@ -2,11 +2,11 @@ package tutorials4j.service.ai.controller;
 
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tutorials4j.service.ai.support.ChatClientCache;
+import tutorials4j.service.ai.support.ChatFacade;
+import tutorials4j.service.ai.support.ChatFacadeCache;
 
 /**
  * TODO
@@ -17,12 +17,12 @@ import tutorials4j.service.ai.support.ChatClientCache;
 @RequestMapping("ollama")
 @RequiredArgsConstructor
 public class OllamaAiController {
-  private final ChatClientCache chatClientCache;
+  private final ChatFacadeCache chatFacadeCache;
 
   @GetMapping("simple")
   public Map<String, String> simple() {
-    ChatClient chatClient = chatClientCache.getOllama();
-    String content = chatClient.prompt("Tell me a joke").call().content();
+    ChatFacade chatFacade = chatFacadeCache.getOllama();
+    String content = chatFacade.client().prompt("Tell me a joke").call().content();
     return Map.of("completion", content);
   }
 }

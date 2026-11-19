@@ -2,11 +2,11 @@ package tutorials4j.service.ai.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tutorials4j.service.ai.support.ChatClientCache;
+import tutorials4j.service.ai.support.ChatFacade;
+import tutorials4j.service.ai.support.ChatFacadeCache;
 
 /**
  * TODO
@@ -25,8 +25,8 @@ public class AIServiceConfiguration {
   }
 
   @Bean
-  public ChatClient chatClient(ChatClientCache chatClientCache) {
-    return chatClientCache.getDefault(
+  public ChatFacade chatFacade(ChatFacadeCache chatFacadeCache) {
+    return chatFacadeCache.getDefault(
         builder -> {
           // Default System Text
           //          builder

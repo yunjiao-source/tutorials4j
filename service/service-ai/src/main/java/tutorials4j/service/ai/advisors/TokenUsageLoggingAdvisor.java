@@ -7,6 +7,7 @@ import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatResponse;
+import tutorials4j.service.ai.util.Utils;
 
 /**
  * 拦截响应并提取 response.getMetadata().getUsage() 信息，是实现 Token 消耗监控、成本核算的常用手段
@@ -15,9 +16,6 @@ import org.springframework.ai.chat.model.ChatResponse;
  */
 @Slf4j
 public class TokenUsageLoggingAdvisor implements CallAdvisor {
-  public static final String GREEN = "\u001B[32m";
-  public static final String RESET = "\u001B[0m";
-
   @Override
   public String getName() {
     return "TokenUsageLoggingAdvisor";
@@ -39,8 +37,9 @@ public class TokenUsageLoggingAdvisor implements CallAdvisor {
     ChatResponse chatResponse = chatClientResponse.chatResponse();
     if (chatResponse != null) {
       Usage usage = chatResponse.getMetadata().getUsage();
-      log.info(
-          GREEN + "Token Usage - Prompt: {}, Completion: {}, Total: {}" + RESET,
+      Utils.greenLogInfo(
+          log,
+          "Token Usage - Prompt: {}, Completion: {}, Total: {}",
           usage.getPromptTokens(),
           usage.getCompletionTokens(),
           usage.getTotalTokens());

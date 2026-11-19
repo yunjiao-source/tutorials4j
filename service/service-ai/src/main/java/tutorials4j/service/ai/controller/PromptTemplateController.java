@@ -3,7 +3,6 @@ package tutorials4j.service.ai.controller;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -15,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tutorials4j.service.ai.support.ChatFacade;
 
 /**
  * TODO
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("prompt-template")
 @RequiredArgsConstructor
 public class PromptTemplateController {
-  private final ChatClient defaultChatClient;
+  private final ChatFacade chatFacade;
 
   @Value("classpath:/prompts/system-message.st")
   private Resource systemResource;
@@ -48,7 +48,7 @@ public class PromptTemplateController {
 
     String prompt = promptTemplate.render(Map.of("composer", "John Williams"));
 
-    String content = defaultChatClient.prompt(prompt).call().content();
+    String content = chatFacade.client().prompt(prompt).call().content();
     return Map.of("completion", content);
   }
 
@@ -79,7 +79,7 @@ public class PromptTemplateController {
 
     Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
 
-    String content = defaultChatClient.prompt(prompt).call().content();
+    String content = chatFacade.client().prompt(prompt).call().content();
     return Map.of("completion", content);
   }
 
@@ -90,7 +90,7 @@ public class PromptTemplateController {
 
     Prompt prompt = promptTemplate.create(Map.of("adjective", "cold", "topic", "programmers"));
 
-    String content = defaultChatClient.prompt(prompt).call().content();
+    String content = chatFacade.client().prompt(prompt).call().content();
     return Map.of("completion", content);
   }
 }

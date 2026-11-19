@@ -17,7 +17,11 @@ spring:
       chat:
         model: deepseek-r1:7b
     openai:
-      api-key: ${OPENAI_API_KEY:123456}
+      api-key: ${DS_API_KEY}
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-flash
     deepseek:
       api-key: ${DS_API_KEY}
       chat:

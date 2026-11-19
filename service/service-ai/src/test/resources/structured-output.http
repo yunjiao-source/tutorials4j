@@ -1,0 +1,45 @@
+@host = http://localhost:9804/structured-output
+
+### 1. typed-response
+GET {{host}}/typed-response
+Accept: application/json
+
+### 2. generic-types
+GET {{host}}/generic-types
+Accept: application/json
+
+### 3. getting-the-full-response
+GET {{host}}/getting-the-full-response
+Accept: application/json
+
+### 4. customizing-the-advisor
+GET {{host}}/customizing-the-advisor
+Accept: application/json
+
+### 5. typed-response-converter
+GET {{host}}/typed-response-converter
+Accept: application/json
+
+### 6. generic-types-converter
+GET {{host}}/generic-types-converter
+Accept: application/json
+
+### 7. map-output
+GET {{host}}/map-output
+Accept: application/json
+
+### 8. map-output-converter
+GET {{host}}/map-output-converter
+Accept: application/json
+
+### 9. list-output
+GET {{host}}/list-output
+Accept: application/json
+
+### 10. list-output-converter
+GET {{host}}/list-output-converter
+Accept: application/json
+
+### 11. custom-converter
+GET {{host}}/custom-converter
+Accept: application/json

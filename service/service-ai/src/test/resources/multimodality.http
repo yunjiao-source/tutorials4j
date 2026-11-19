@@ -1,0 +1,9 @@
+@host = http://localhost:9804/multimodality
+
+### 1. deepseek
+GET {{host}}/deepseek
+Accept: application/json
+
+### 2. openai
+GET {{host}}/deepseek
+Accept: application/json
