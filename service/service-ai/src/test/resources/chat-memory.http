@@ -1,0 +1,17 @@
+@host = http://localhost:9804/chat-memory
+
+### 1. jdbc
+GET {{host}}/jdbc?message=我国庆想去武汉&chatId=YunJiao1
+Accept: application/json
+
+### 2. jdbc
+GET {{host}}/jdbc?message=推荐一些特殊美食&chatId=YunJiao1
+Accept: application/json
+
+### 3. redis
+GET {{host}}/redis?message=我国庆想去武汉&chatId=YunJiao2
+Accept: application/json
+
+### 4. redis
+GET {{host}}/redis?message=推荐一些特殊美食&chatId=YunJiao2
+Accept: application/json

@@ -1,6 +1,19 @@
 spring:
   ai:
     chat:
+      memory:
+        repository:
+          jdbc:
+            platform: mysql
+            initialize-schema: always
+          redis:
+            host: ${env.redis.host}
+            port: ${env.redis.port}
+            database: ${env.redis.database}
+            username: ${env.redis.username}
+            password: ${env.redis.password}
+#            initialize-schema: false
+            time-to-live: 10m
       client:
         observations:
           # 记录 ChatClient 层的提示内容（完整的对话消息列表）

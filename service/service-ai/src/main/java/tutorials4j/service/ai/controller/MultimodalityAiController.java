@@ -55,7 +55,7 @@ public class MultimodalityAiController {
 
     String content =
         chatFacadeCache
-            .getOpenai("multimodality")
+            .getOpenai()
             .client()
             .prompt()
             .user(
