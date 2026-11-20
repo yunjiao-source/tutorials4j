@@ -66,7 +66,7 @@
         <springboot.version>4.1.1</springboot.version>
         <springcloud.version>2025.1.3</springcloud.version>
         <alibaba-cloud.version>2025.1.0.0</alibaba-cloud.version>
-        <spring-ai.version>2.0.2</spring-ai.version>
+        <spring-ai.version>2.1.0-RC2</spring-ai.version>
 
         <javafaker.version>1.0.2</javafaker.version>
         <commons-io.version>2.21.0</commons-io.version>

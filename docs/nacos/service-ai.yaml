@@ -1,5 +1,22 @@
 spring:
   ai:
+    session:
+      # 会话默认过期时间，生产按需调整（默认 60d）
+      time-to-live: 7d
+
+      # 生产环境不要让模型自行决定系统消息，保持 false 由代码控制
+      allow-system-messages: false
+
+      repository:
+        jdbc:
+          # 生产环境不建议使用 always，应通过数据库迁移工具统一管理
+          # 仅开发/测试环境设为 always
+          initialize-schema: always
+
+          # 若需要按 metadata 查询（如 parentSessionId），在此声明需要索引的键
+          indexed-attributes:
+            - parentSessionId
+
     chat:
       memory:
         repository:

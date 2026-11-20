@@ -1,0 +1,32 @@
+@host = http://localhost:9804/session
+
+### 1. 创建会话
+POST {{host}}
+X-User: alice
+
+### 2. 第一轮对话
+POST {{host}}/ff65a4b2-2b1e-43c6-bddb-cd8b1ba3310f/chat
+X-User: alice
+Content-Type: application/json
+
+{
+  "message": "我国庆想去武汉"
+}
+
+### 3. 第二轮对话
+POST {{host}}/ff65a4b2-2b1e-43c6-bddb-cd8b1ba3310f/chat
+X-User: alice
+Content-Type: application/json
+
+{
+  "message": "推荐一些特殊美食"
+}
+
+### 4. 会话历史查询
+GET {{host}}/ff65a4b2-2b1e-43c6-bddb-cd8b1ba3310f/history
+X-User: alice
+
+
+### 5. 异常
+GET {{host}}/ff65a4b2-2b1e-43c6-bddb-cd8b1ba3310f/history
+X-User: alice1
