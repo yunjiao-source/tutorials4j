@@ -1,6 +1,5 @@
 package tutorials4j.service.ai.util;
 
-import org.slf4j.Logger;
 import tutorials4j.service.ai.support.ChatFacade;
 
 /**
@@ -12,8 +11,8 @@ public interface Utils {
   String GREEN = "\u001B[32m";
   String RESET = "\u001B[0m";
 
-  static void greenLogInfo(Logger log, String message, Object... args) {
-    log.info(GREEN + message + RESET, args);
+  static void greenSystemOut(String message) {
+    System.out.println(GREEN + message + RESET);
   }
 
   static String multiStepWorkflow(ChatFacade chatFacade, String rawInput) {

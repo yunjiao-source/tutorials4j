@@ -1,7 +1,5 @@
 package tutorials4j.service.ai.controller;
 
-import static kotlin.reflect.jvm.internal.impl.builtins.StandardNames.FqNames.list;
-
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tutorials4j.service.ai.converter.LenientJsonOutputConverter;
-import tutorials4j.service.ai.entity.ActorsFilms;
+import tutorials4j.service.ai.model.ActorsFilms;
 import tutorials4j.service.ai.support.ChatFacade;
 import tutorials4j.service.ai.support.ChatFacadeCache;
+import tutorials4j.service.ai.util.DefaultChatFacadeUtils;
 
 /**
  * TODO
@@ -87,7 +86,8 @@ public class StructuredOutputAiController {
   public Map<String, ActorsFilms> customizingTheAdvisor() {
 
     ActorsFilms films =
-        getCustomizAdvisorChatFacade()
+        DefaultChatFacadeUtils.instance
+            .customizAdvisor()
             .client()
             .prompt()
             .user("Generate the filmography for a random actor.")

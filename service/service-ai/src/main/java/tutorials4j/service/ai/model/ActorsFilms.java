@@ -1,4 +1,4 @@
-package tutorials4j.service.ai.entity;
+package tutorials4j.service.ai.model;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;

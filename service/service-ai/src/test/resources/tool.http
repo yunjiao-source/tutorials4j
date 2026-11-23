@@ -7,3 +7,36 @@ Accept: application/json
 ### 2. per-tool-calling
 GET {{host}}/per-tool-calling
 Accept: application/json
+
+### 3. quick-start
+GET {{host}}/quick-start
+Accept: application/json
+
+### 3. /weather/ask
+GET {{host}}/weather/ask?question=北京今天天气怎么样
+Accept: application/json
+
+
+### 4. 首先在session.http中获取会话id,然后运行这个
+GET {{host}}/e161c992-89af-4a20-9b69-5a11be46ef9a/weather/ask?question=北京今天天气怎么样
+X-User: alice
+
+### 4-1. 继续问
+GET {{host}}/e161c992-89af-4a20-9b69-5a11be46ef9a/weather/ask?question=上海今天天气怎么样
+X-User: alice
+
+### 4-2. 继续问
+GET {{host}}/e161c992-89af-4a20-9b69-5a11be46ef9a/weather/ask?question=西安今天天气怎么样
+X-User: alice
+
+### 5. search
+GET {{host}}/search
+Accept: application/json
+
+### 6. tool-call-confirmation
+POST {{host}}/tool-call-confirmation
+Content-Type: application/json
+
+{
+  "message": "先查一下 张三 的邮箱，然后给他发一封感谢邮件"
+}

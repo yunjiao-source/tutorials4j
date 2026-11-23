@@ -1,5 +1,6 @@
 package tutorials4j.service.ai.advisors;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.client.ChatClientResponse;
@@ -37,12 +38,12 @@ public class TokenUsageLoggingAdvisor implements CallAdvisor {
     ChatResponse chatResponse = chatClientResponse.chatResponse();
     if (chatResponse != null) {
       Usage usage = chatResponse.getMetadata().getUsage();
-      Utils.greenLogInfo(
-          log,
-          "Token Usage - Prompt: {}, Completion: {}, Total: {}",
-          usage.getPromptTokens(),
-          usage.getCompletionTokens(),
-          usage.getTotalTokens());
+      Utils.greenSystemOut(
+          StrUtil.format(
+              "Token Usage - Prompt: {}, Completion: {}, Total: {}",
+              usage.getPromptTokens(),
+              usage.getCompletionTokens(),
+              usage.getTotalTokens()));
     }
     return chatClientResponse;
   }
