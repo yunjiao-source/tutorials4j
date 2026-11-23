@@ -1,0 +1,28 @@
+@host = http://localhost:9804/order
+
+### 1. 创建会话
+POST {{host}}
+X-User: yunjiao
+
+### 2. 第一轮对话
+GET {{host}}/997e1759-8528-4d45-bf53-973dbe0385f4/chat?userId=zhangs&orderId=ORD_123
+X-User: yunjiao
+Accept: application/json
+
+
+### 3. 第二轮对话
+GET {{host}}/997e1759-8528-4d45-bf53-973dbe0385f4/ask?question=香蕉怎么5天才送到
+X-User: yunjiao
+Accept: text/event-stream
+
+
+### 4. 第三轮对话
+GET {{host}}/997e1759-8528-4d45-bf53-973dbe0385f4/ask?question=能不能给点补偿
+X-User: yunjiao
+Accept: text/event-stream
+
+### 5. 第四轮对话
+GET {{host}}/997e1759-8528-4d45-bf53-973dbe0385f4/ask?question=我要去香蕉全额退款，因为全都烂掉了
+X-User: yunjiao
+Accept: text/event-stream
+
