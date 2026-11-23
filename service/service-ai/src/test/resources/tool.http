@@ -40,3 +40,15 @@ Content-Type: application/json
 {
   "message": "先查一下 张三 的邮箱，然后给他发一封感谢邮件"
 }
+
+### 7. /chatmodel/per-request-Tools
+GET {{host}}/chatmodel/per-request-Tools
+Accept: application/json
+
+### 8. /chatmodel/blocking
+GET {{host}}/chatmodel/blocking
+Accept: application/json
+
+### 9. /chatmodel/stream
+GET {{host}}/chatmodel/stream
+Accept: text/event-stream

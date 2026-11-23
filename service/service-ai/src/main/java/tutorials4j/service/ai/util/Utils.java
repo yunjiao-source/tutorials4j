@@ -1,5 +1,9 @@
 package tutorials4j.service.ai.util;
 
+import java.io.IOException;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tutorials4j.service.ai.support.ChatFacade;
 
 /**
@@ -13,6 +17,34 @@ public interface Utils {
 
   static void greenSystemOut(String message) {
     System.out.println(GREEN + message + RESET);
+  }
+
+  static void forwardToSse(ChatResponse chunk, SseEmitter emitter) {
+    // 从 ChatResponse 中提取文本 token
+    if (chunk.getResult() != null
+        && chunk.getResult().getOutput() != null
+        && chunk.getResult().getOutput().getText() != null) {
+
+      String token = chunk.getResult().getOutput().getText();
+      try {
+        // 逐 token 推送
+        emitter.send(SseEmitter.event().data(token));
+      } catch (IOException e) {
+        // 客户端断开连接，抛出以终止流
+        throw new RuntimeException("SSE connection closed", e);
+      }
+    }
+  }
+
+  static ServerSentEvent<String> forwardToSse(ChatResponse chunk) {
+    if (chunk.getResult() != null
+        && chunk.getResult().getOutput() != null
+        && chunk.getResult().getOutput().getText() != null) {
+
+      String token = chunk.getResult().getOutput().getText();
+      return ServerSentEvent.<String>builder().data(token).build();
+    }
+    return null; // 或返回一个空的 ServerSentEvent
   }
 
   static String multiStepWorkflow(ChatFacade chatFacade, String rawInput) {
