@@ -1,0 +1,7 @@
+@host = http://localhost:9804/time
+
+
+### 1。 now
+GET {{host}}/now?city=纽约
+Accept: application/json
+
