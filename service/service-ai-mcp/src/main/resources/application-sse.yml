@@ -1,0 +1,16 @@
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: weather-sse-server
+        version: 1.0.0
+        type: SYNC
+        capabilities:
+          tool: true
+          resource: false
+          prompt: false
+          completion: false
+        sse-message-endpoint: /mcp/messages   # 客户端向 MCP Server 发送指令（"写信"）
+        sse-endpoint: /sse                    # 客户端订阅服务器推送消息（"听收音机"）
+#        base-url: /test

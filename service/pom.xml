@@ -21,6 +21,7 @@
         <module>service-system</module>
         <module>service-test</module>
         <module>service-ai</module>
+        <module>service-ai-mcp</module>
     </modules>
 
     <build>

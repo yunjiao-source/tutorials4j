@@ -1,0 +1,12 @@
+server:
+  port: 9805
+  shutdown: graceful
+
+spring:
+  application:
+    name: service-ai-mcp
+
+  profiles:
+#    active: stdio
+#    active: sse
+    active: streamable

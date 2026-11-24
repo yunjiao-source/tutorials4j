@@ -1,0 +1,21 @@
+spring:
+  ai:
+    mcp:
+      server:
+        protocol: STREAMABLE  # STATELESS
+        name: streamable-mcp-server
+        version: 1.0.0
+        type: SYNC
+        instructions: "这个服务是用来查询城市天气的。"
+        resource-change-notification: true
+        tool-change-notification: true
+        prompt-change-notification: true
+        annotation-scanner:
+          enabled: true
+        streamable-http:
+          mcp-endpoint: /api/mcp
+          keep-alive-interval: 60s
+
+logging:
+  level:
+    root: info

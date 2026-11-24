@@ -1,0 +1,48 @@
+@host = http://localhost:9805
+
+
+### 1. 初始化阶段
+POST {{host}}/api/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "roots": {
+        "listChanged": true
+      },
+      "sampling": {},
+      "elicitation": {}
+    },
+    "clientInfo": {
+      "name": "ExampleClient",
+      "title": "Example Client Display Name",
+      "version": "1.0.0"
+    }
+  }
+}
+
+
+
+### 2. 调用阶段：执行具体工具
+POST {{host}}/api/mcp
+Mcp-Session-Id: 1b354619-a307-414c-a0df-2e57bfb84120
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "getWeather",
+    "arguments": {
+      "city": "北京"
+    }
+  },
+  "id": 1
+}

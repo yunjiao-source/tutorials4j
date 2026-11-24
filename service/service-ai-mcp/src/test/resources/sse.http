@@ -1,0 +1,77 @@
+@host = http://localhost:9805
+
+### 1. sse, 记录sessionId是第一步返回值，后续步骤用到
+GET {{host}}/sse
+Accept: application/json
+
+
+### 2. 初始化阶段：建立连接与能力协商
+POST {{host}}/mcp/messages?sessionId=a59223e4-4bb1-4f0b-8328-a9ad5bd1ec57
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "roots": {
+        "listChanged": true
+      },
+      "sampling": {},
+      "elicitation": {}
+    },
+    "clientInfo": {
+      "name": "ExampleClient",
+      "title": "Example Client Display Name",
+      "version": "1.0.0"
+    }
+  }
+}
+
+### 3. 发送 initialized 通知，表明客户端已准备就绪
+POST {{host}}/mcp/messages?sessionId=a59223e4-4bb1-4f0b-8328-a9ad5bd1ec57
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized"
+}
+
+### 4. 查询工具列表
+POST {{host}}/mcp/messages?sessionId=a59223e4-4bb1-4f0b-8328-a9ad5bd1ec57
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/list",
+  "params": {},
+  "id": 1
+}
+
+### 5. 调用阶段：执行具体工具
+POST {{host}}/mcp/messages?sessionId=a59223e4-4bb1-4f0b-8328-a9ad5bd1ec57
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "getWeather",
+    "arguments": {
+      "city": "北京"
+    }
+  },
+  "id": 1
+}
+
+### 6. 工具变更阶段：处理工具列表更新
+POST {{host}}/mcp/messages?sessionId=a59223e4-4bb1-4f0b-8328-a9ad5bd1ec57
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/tools/list_changed",
+  "params": {}
+}

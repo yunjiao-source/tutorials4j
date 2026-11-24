@@ -11,8 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @EnableScheduling
 @SpringBootApplication
-public class AIServiceApplication {
+public class AiServiceApplication {
   public static void main(String[] args) {
-    SpringApplication.run(AIServiceApplication.class, args);
+    SpringApplication.run(AiServiceApplication.class, args);
   }
 }
