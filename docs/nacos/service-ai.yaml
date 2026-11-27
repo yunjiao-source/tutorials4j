@@ -56,3 +56,29 @@ spring:
       api-key: ${DS_API_KEY}
       chat:
         model: deepseek-flash
+
+    mcp:
+      client:
+        enabled: true
+        name: my-mcp-client
+        version: 1.0.0
+        request-timeout: 60s
+        type: SYNC
+        stdio:
+          connections:
+            weather-stdio:
+              command: java
+              args:
+                - -jar
+                - "D:\\repository\\common\\yunjiao-source\\tutorials4j\\service\\service-ai-mcp\\4.1.1.1\\service-ai-mcp-4.1.1.1.jar"
+        ##          servers-configuration: classpath:/mcp-servers.json
+#        sse:
+#          connections:
+#            weather-sse:
+#              url: http://127.0.0.1:9805/
+#              sse-endpoint: sse
+#        streamable-http:
+#          connections:
+#            weather-streamable:
+#              url: http://127.0.0.1:9805/
+#              endpoint: api/mcp

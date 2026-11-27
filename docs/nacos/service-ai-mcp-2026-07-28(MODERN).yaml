@@ -1,0 +1,23 @@
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: true
+        protocol: MODERN
+        name: service-ai-mcp
+        version: 1.0.0
+        # MODERN 当前仅支持 SYNC（不支持 ASYNC）
+        type: SYNC
+        instructions: "查询城市天气, 工单查询，工单创建。"
+        annotation-scanner:
+          enabled: true
+
+        modern:
+          mcp-endpoint: /mcp
+          # 连接保活（仅对流式响应生效，非长连接会话）
+          keep-alive-interval: 30s
+          # 生产环境必须显式设置，用于密封 MRTR 的 requestState
+          # 多实例部署时必须保持一致，否则重试可能路由到无状态的错误实例
+          request-state-secret: "your-32-byte-minimum-secret-here"
+          # 变更通知由 subscriptions/listen 流统一承载，默认已开启
+          subscriptions: true

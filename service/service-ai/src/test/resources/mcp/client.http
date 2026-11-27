@@ -1,0 +1,13 @@
+@host = http://localhost:9804/client
+
+### 1. call-tool
+GET {{host}}/call-tool?city=北京
+Accept: application/json
+
+### 1. chat
+GET {{host}}/chat?query=2026-11-25日武汉市洪山区东亭街道天气如何？
+Accept: application/json
+
+### 2. chat
+GET {{host}}/chat?query=南京天气如何？
+Accept: application/json

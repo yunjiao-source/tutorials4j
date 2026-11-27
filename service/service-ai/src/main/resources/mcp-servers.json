@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "weather-stdio": {
+      "command": "java",
+      "args": ["-jar", "D:\\repository\\common\\yunjiao-source\\tutorials4j\\service\\service-ai-mcp\\4.1.1.1\\service-ai-mcp-4.1.1.1.jar"]
+    }
+  }
+}

@@ -35,6 +35,13 @@ spring:
               filters:
                 - StripPrefix=2
 
+            - id: service-ai-mcp
+              uri: lb://service-ai-mcp
+              predicates:
+                - Path=/api/ai-mcp/**
+              filters:
+                - StripPrefix=2
+
 tutorials4j:
   toolkit:
     security:
@@ -52,7 +59,7 @@ tutorials4j:
           include-urls: /**
 
           exclude-urls:
-            - /api/uaa/openapi/**
+            - /api/*/openapi/**
 
           white-urls:
             - /xxxx/**

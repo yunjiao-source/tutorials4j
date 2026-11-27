@@ -1,8 +1,8 @@
-package tutorials4j.service.ai.mcp.service;
+package tutorials4j.service.ai.mcp.tool;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.tool.annotation.Tool;
-import org.springframework.stereotype.Service;
+import org.springframework.ai.mcp.annotation.McpTool;
+import org.springframework.stereotype.Component;
 import tutorials4j.service.ai.mcp.mdoel.WeatherRequest;
 import tutorials4j.service.ai.mcp.mdoel.WeatherResponse;
 
@@ -12,9 +12,9 @@ import tutorials4j.service.ai.mcp.mdoel.WeatherResponse;
  * @author Yun Jiao
  */
 @Slf4j
-@Service
-public class WeatherService {
-  @Tool(name = "getWeather", description = "根据城市名称查询天气信息")
+@Component
+public class WeatherTools {
+  @McpTool(name = "getWeather", description = "根据城市名称查询天气信息")
   public String getWeather(String city) {
     if (city == null) {
       return "请提供城市名称";
@@ -27,8 +27,8 @@ public class WeatherService {
     };
   }
 
-  @Tool(name = "query_weather_by_city_date", description = "根据城市和日期获取天气信息")
-  public WeatherResponse queryWeather(WeatherRequest request) {
+  @McpTool(name = "queryWeatherByCityDate", description = "根据城市和日期获取天气信息")
+  public WeatherResponse queryWeatherByCityDate(WeatherRequest request) {
     log.info("query weather for city:{}", request);
     try {
       // 模拟调用api
